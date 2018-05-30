@@ -4,7 +4,7 @@ const HEIGHT = 35;
 
 const styles = {
     scroll: {
-        row: (props) => {
+        row2: props => {
             const style = {};
 
             if (props.n_fixed_columns) {
@@ -19,10 +19,9 @@ const styles = {
 
             if (props.n_fixed_columns && column_index < props.n_fixed_columns) {
                 style.position = 'absolute';
-                style.left = R.sum(R.pluck(
-                    'width',
-                    R.slice(0, column_index, props.columns)
-                ));
+                style.left = R.sum(
+                    R.pluck('width', R.slice(0, column_index, props.columns))
+                );
                 style.top = 'auto';
                 style.overflowY = 'hidden';
                 style.height = 35;
@@ -51,16 +50,22 @@ const styles = {
             return style;
         },
 
-        containerDiv: (props) => {
+        containerDiv: props => {
             const style = {};
 
             if (props.n_fixed_columns) {
                 style.overflowX = 'scroll';
                 style.width = props.width;
-                style.marginLeft = R.sum(R.pluck(
-                    'width',
-                    R.slice(0, props.n_fixed_columns, props.columns)
-                )) - 1; /* taking into account some border somewhere */
+
+                // taking into account some border somewhere
+                const BORDER_FIX = -1;
+                style.marginLeft =
+                    R.sum(
+                        R.pluck(
+                            'width',
+                            R.slice(0, props.n_fixed_columns, props.columns)
+                        )
+                    ) + BORDER_FIX;
             }
 
             if (props.n_fixed_rows) {
@@ -72,12 +77,12 @@ const styles = {
             return style;
         },
 
-        table: (props, column_index) => {
+        table: () => {
             const style = {};
 
             return style;
         },
-    }
-}
+    },
+};
 
 export default styles;

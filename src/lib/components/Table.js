@@ -1,308 +1,400 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import * as R from 'ramda';
-import {keys, merge} from 'ramda';
 import SheetClip from 'sheetclip';
+import Row from './Row.js';
+import Header from './Header.js';
+import {colIsEditable} from './derivedState';
+import {
+    KEY_CODES,
+    isCtrlMetaKey,
+    isCtrlDown,
+    isMetaKey,
+    isNavKey,
+} from '../utils/unicode';
+import {selectionCycle} from '../utils/navigation';
+import computedStyles from './computedStyles';
 
 import 'react-select/dist/react-select.css';
 import './Table.css';
 import './Dropdown.css';
-import Cell from './Cell.js';
-import Row from './Row.js';
-import Header from './Header.js';
-import {colIsEditable} from './derivedState';
-import computedStyles from './computedStyles';
 
-function deepMerge(a, b) {
-  return (R.is(Object, a) && R.is(Object, b)) ? R.mergeWith(deepMerge, a, b) : b;
-}
-
-const KEY_CODES = {
-    LEFT: 37,
-    ESC: 27,
-    UP: 38,
-    RIGHT: 39,
-    TAB: 9,
-    DOWN: 40,
-    BACKSPACE: 8,
-    DELETE: 46,
-    V: 85,
-    ENTER: 13,
-    C: 67
-}
-
-export default class EditableTable extends Component {
+export default class Table extends Component {
     constructor(props) {
         super(props);
 
         this.handleKeyDown = this.handleKeyDown.bind(this);
-        this.handleClickOutside = this.handleClickOutside.bind(this);
         this.collectRows = this.collectRows.bind(this);
-
+        this.onPaste = this.onPaste.bind(this);
     }
 
-    handleClickOutside(event) {
-        const domNode = ReactDOM.findDOMNode(this);
-
-        if ((!domNode || !domNode.contains(event.target))) {
-            console.warn('handleClickOutside');
-            this.props.setProps({
-                selected_cell: [[]],
-                is_focused: false
-            })
+    componentDidMount() {
+        if (
+            this.props.selected_cell.length &&
+            !R.contains(this.props.active_cell, this.props.selected_cell)
+        ) {
+            this.props.setProps({active_cell: this.props.selected_cell[0]});
         }
     }
 
     handleKeyDown(e) {
         const {
+            active_cell,
             columns,
-            dataframe,
-            end_cell,
-            selected_cell,
             setProps,
-            start_cell,
             is_focused,
-            editable
+            editable,
         } = this.props;
-        console.warn(`handleKeyDown: ${e.keyCode}`);
-        // TODO - keyCode is deprecated?
 
-        const vci = [];  // visible col indices
-        columns.forEach((c, i) => {if(!c.hidden) vci.push(i)});
+        console.warn(`handleKeyDown: ${e.key}`);
+
+        const ctrlDown = isCtrlDown(e);
+
+        // if this is the initial CtrlMeta keydown with no modifiers then pass
+        if (isCtrlMetaKey(e.keyCode)) {
+            return;
+        }
+
+        // if paste event onPaste handler registered in Table jsx handles it
+        if (ctrlDown && e.keyCode === KEY_CODES.V) {
+            return;
+        }
 
         // copy
-        if (e.keyCode === KEY_CODES.C && (e.metaKey || e.ctrlKey) &&
-                !is_focused) {
-            e.preventDefault();
-            const el = document.createElement('textarea');
-            const selectedRows = R.uniq(R.pluck(0, selected_cell).sort());
-            const selectedCols = R.uniq(R.pluck(1, selected_cell).sort());
-            const selectedTabularData = R.slice(
-                R.head(selectedRows),
-                R.last(selectedRows) + 1,
-                dataframe
-            ).map(row => R.props(
-                selectedCols,
-                R.props(R.pluck('name', columns), row)
-            ));
-
-            el.value = selectedTabularData.map(
-                row => R.values(row).join('\t')
-            ).join('\r\n');
-
-            // (Adapted from https://hackernoon.com/copying-text-to-clipboard-with-javascript-df4d4988697f)
-            // Make it readonly to be tamper-proof
-            el.setAttribute('readonly', '');
-            // el.style.position = 'absolute';
-            // Move outside the screen to make it invisible
-            // el.style.left = '-9999px';
-            // Append the <textarea> element to the HTML document
-            document.body.appendChild(el);
-            const selected =
-            // Check if there is any content selected previously
-              document.getSelection().rangeCount > 0
-            // Store selection if found
-                ? document.getSelection().getRangeAt(0)
-            // Mark as false to know no selection existed before
-                : false;
-            // Select the <textarea> content
-            el.select();
-            // Copy - only works as a result of a user action (e.g. click events)
-            document.execCommand('copy');
-            // Remove the <textarea> element
-            document.body.removeChild(el);
-            // If a selection existed before copying
-            if (selected) {
-                // Unselect everything on the HTML document
-                document.getSelection().removeAllRanges();
-                // Restore the original selection
-                document.getSelection().addRange(selected);
-            }
-            // refocus on the table so that onPaste can be fired immediately
-            // on the same table
-            // note that this requires tabIndex to be set on the <table/>
-            this._table.focus();
+        if (e.keyCode === KEY_CODES.C && ctrlDown && !is_focused) {
+            this.onCopy(e);
             return;
         }
 
-        if (e.keyCode === KEY_CODES.ESC) {
-            // escape
+        if (e.keyCode === KEY_CODES.ESCAPE) {
             setProps({is_focused: false});
-        }
-
-        const Left = [
-            end_cell[0],
-            R.max(vci[0], vci[R.indexOf(end_cell[1], vci) - 1])
-        ];
-        const Right = [
-            end_cell[0],
-            R.min(R.last(vci), vci[R.indexOf(end_cell[1], vci) + 1])
-        ];
-
-        const Up = [R.max(0, end_cell[0] - 1), end_cell[1]];
-        const Down = [
-            R.min(dataframe.length - 1, end_cell[0] + 1),
-            end_cell[1]
-        ];
-
-        const switchCell = (newCell) => {
-            if (!e.shiftKey) {
-                setProps({
-                    is_focused: false,
-                    start_cell: newCell,
-                    end_cell: newCell,
-                    selected_cell: [newCell]
-                });
-            } else {
-                /*
-                 * the active element might be a rogue, unfocused input:
-                 * blur it so that it doesn't display a selection while
-                 * selecting multiple cells
-                 */
-                document.activeElement.blur();
-                let targetCells;
-                let removeCells = null;
-
-                const sortNumerical = R.sort((a, b) => a-b);
-                const selectedRows = sortNumerical(R.uniq(R.pluck(0, selected_cell)));
-                const selectedCols = sortNumerical(R.uniq(R.pluck(1, selected_cell)));
-
-                if ((e.keyCode === KEY_CODES.UP ||
-                     e.keyCode === KEY_CODES.DOWN)) {
-                    targetCells = selectedCols.map(col =>
-                        [newCell[0], col]);
-                    if (R.intersection(targetCells, selected_cell).length &&
-                            newCell[0] !== 0 &&
-                            newCell[0] !== (dataframe.length - 1)) {
-                        if (e.keyCode === KEY_CODES.DOWN) {
-                            removeCells = targetCells.map(c => [c[0] - 1, c[1]]);
-                        } else if (e.keyCode === KEY_CODES.UP) {
-                            removeCells = targetCells.map(c => [c[0] + 1, c[1]]);
-                        }
-                    }
-                } else if ((e.keyCode === KEY_CODES.LEFT ||
-                            e.keyCode === KEY_CODES.RIGHT)) {
-                    targetCells = selectedRows.map(row =>
-                        [row, newCell[1]]);
-                    if (R.intersection(targetCells, selected_cell).length &&
-                            newCell[1] !== vci[0] &&
-                            newCell[1] !== R.last(vci)) {
-                        if (e.keyCode === KEY_CODES.LEFT) {
-                            removeCells = targetCells.map(c => [c[0], c[1] + 1]);
-                        } else if (e.keyCode === KEY_CODES.RIGHT) {
-                            removeCells = targetCells.map(c => [c[0], c[1] - 1]);
-                        }
-                    }
-                } else {
-                    targetCells = [newCell];
-                }
-
-                let newSelectedCell = R.concat(targetCells, selected_cell);
-                if (removeCells) {
-                    newSelectedCell = R.without(removeCells, newSelectedCell);
-                }
-
-                setProps({
-                    is_focused: false,
-                    end_cell: newCell,
-                    selected_cell: R.uniq(newSelectedCell)
-                });
-
-            }
-        }
-
-        if (e.keyCode === KEY_CODES.ENTER) {
-            if (is_focused) {
-                switchCell(Down);
-            } else {
-                if (colIsEditable(editable, columns[end_cell[1]])) {
-                    setProps({is_focused: true});
-                }
-
-            }
-        }
-
-        if (is_focused && e.keyCode !== KEY_CODES.TAB) {
             return;
         }
 
-        if (e.keyCode === KEY_CODES.LEFT) {
-            switchCell(Left);
-        } else if (e.keyCode === KEY_CODES.UP) {
-            switchCell(Up);
-        } else if (e.keyCode === KEY_CODES.RIGHT ||
-                   e.keyCode === KEY_CODES.TAB) {
-            switchCell(Right);
-        } else if (e.keyCode === KEY_CODES.DOWN) {
-            switchCell(Down);
-        } else if (e.keyCode === 8 || e.keyCode === 46) {
-            // backspace or delete
-            e.preventDefault();
-            const {selected_cell, columns} = this.props;
-            let newDataframe = dataframe;
-            selected_cell.forEach(cell => {
-                if (colIsEditable(editable, columns[cell[1]])) {
-                    newDataframe = R.set(R.lensPath([
-                        cell[0], columns[cell[1]].name
-                    ]), '', newDataframe);
-                }
-            });
+        if (
+            e.keyCode === KEY_CODES.ENTER &&
+            !is_focused &&
+            colIsEditable(editable, columns[active_cell[1]])
+        ) {
+            setProps({is_focused: true});
+            return;
+        }
 
-            setProps({
-                dataframe: newDataframe
-            });
+        if (
+            is_focused &&
+            (e.keyCode !== KEY_CODES.TAB && e.keyCode !== KEY_CODES.ENTER)
+        ) {
+            return;
+        }
 
-        } else if (
-            // pressing other letters focusses the event
+        if (isNavKey(e.keyCode)) {
+            this.switchCell(e);
+            return;
+        }
+
+        if (
+            e.keyCode === KEY_CODES.BACKSPACE ||
+            e.keyCode === KEY_CODES.DELETE
+        ) {
+            this.deleteCell(e);
+        }
+        // if we have any non-meta key enter editable mode
+        else if (
             !this.props.is_focused &&
-            // except if we're copying and pasting
-            !(e.metaKey && KEY_CODES.V) &&
-            // except if we're selecting cells
-            !e.shiftKey &&
-            // except if the column isn't editable
-            colIsEditable(editable, columns[end_cell[1]])
+            colIsEditable(editable, columns[active_cell[1]]) &&
+            !isMetaKey(e.keyCode)
         ) {
             setProps({is_focused: true});
         }
-        return e;
 
+        return;
     }
 
-    componentDidMount() {
-        console.warn('adding event listener');
-        document.addEventListener(
-            'click',
-            this.handleClickOutside.bind(this),
-            true
+    switchCell(event) {
+        const e = event;
+        const {
+            active_cell,
+            columns,
+            dataframe,
+            selected_cell,
+            setProps,
+        } = this.props;
+
+        const hasSelection = selected_cell.length > 1;
+        const isEnterOrTab =
+            e.keyCode === KEY_CODES.ENTER || e.keyCode === KEY_CODES.TAB;
+
+        // If we have a multi-cell selection and are using ENTER or TAB
+        // move active cell within the selection context.
+        if (hasSelection && isEnterOrTab) {
+            const nextCell = this.getNextCell(e, {
+                currentCell: active_cell,
+                restrictToSelection: true,
+            });
+            setProps({
+                is_focused: false,
+                active_cell: nextCell,
+            });
+            return;
+        }
+
+        // If we are not extending selection with shift and are
+        // moving with navigation keys cancel selection and move.
+        else if (!e.shiftKey) {
+            const nextCell = this.getNextCell(e, {
+                currentCell: active_cell,
+                restrictToSelection: false,
+            });
+            setProps({
+                is_focused: false,
+                selected_cell: [nextCell],
+                active_cell: nextCell,
+            });
+            return;
+        }
+
+        // else we are navigating with arrow keys and extending selection
+        // with shift.
+        let targetCells = [];
+        let removeCells = [];
+        const selectedRows = R.uniq(R.pluck(0, selected_cell)).sort();
+        const selectedCols = R.uniq(R.pluck(1, selected_cell)).sort();
+
+        const minRow = selectedRows[0];
+        const minCol = selectedCols[0];
+        const maxRow = selectedRows[selectedRows.length - 1];
+        const maxCol = selectedCols[selectedCols.length - 1];
+
+        // visible col indices
+        const vci = [];
+        columns.forEach((c, i) => {
+            if (!c.hidden) {
+                vci.push(i);
+            }
+        });
+
+        const selectingDown =
+            e.keyCode === KEY_CODES.ARROW_DOWN || e.keyCode === KEY_CODES.ENTER;
+        const selectingUp = e.keyCode === KEY_CODES.ARROW_UP;
+        const selectingRight =
+            e.keyCode === KEY_CODES.ARROW_RIGHT || e.keyCode === KEY_CODES.TAB;
+        const selectingLeft = e.keyCode === KEY_CODES.ARROW_LEFT;
+
+        // If there are selections above the active cell and we are
+        // selecting down then pull down the top selection towards
+        // the active cell.
+        if (selectingDown && active_cell[0] > minRow) {
+            removeCells = selectedCols.map(col => [minRow, col]);
+        }
+
+        // Otherwise if we are selecting down select the next row if possible.
+        else if (selectingDown && maxRow !== dataframe.length - 1) {
+            targetCells = selectedCols.map(col => [maxRow + 1, col]);
+        }
+
+        // If there are selections below the active cell and we are selecting
+        // up remove lower row.
+        else if (selectingUp && active_cell[0] < maxRow) {
+            removeCells = selectedCols.map(col => [maxRow, col]);
+        }
+
+        // Otherwise if we are selecting up select next row if possible.
+        else if (selectingUp && minRow > 0) {
+            targetCells = selectedCols.map(col => [minRow - 1, col]);
+        }
+
+        // If there are selections to the right of the active cell and
+        // we are selecting left, move the right side closer to active_cell
+        else if (selectingLeft && active_cell[1] < maxCol) {
+            removeCells = selectedRows.map(row => [row, maxCol]);
+        }
+
+        // Otherwise increase the selection left if possible
+        else if (selectingLeft && minCol > 0) {
+            targetCells = selectedRows.map(row => [row, minCol - 1]);
+        }
+
+        // If there are selections to the left of the active cell and
+        // we are selecting right, move the left side closer to active_cell
+        else if (selectingRight && active_cell[1] > minCol) {
+            removeCells = selectedRows.map(row => [row, minCol]);
+        }
+
+        // Otherwise move selection right if possible
+        else if (selectingRight && maxCol + 1 <= R.last(vci)) {
+            targetCells = selectedRows.map(row => [row, maxCol + 1]);
+        }
+
+        const newSelectedCell = R.without(
+            removeCells,
+            R.uniq(R.concat(targetCells, selected_cell))
         );
-        document.addEventListener('keydown', e => {
-            const t0 = performance.now();
-            console.debug(`==start`);
-            this.handleKeyDown(e);
-            const t1 = performance.now();
-            console.debug(`==${t1 - t0}ms`);
+        setProps({
+            is_focused: false,
+            selected_cell: newSelectedCell,
         });
     }
 
-    componentWillUnmount() {
-        document.removeEventListener('keydown', this.handleKeyDown);
-        document.removeEventListener(
-            'click',
-            this.handleClickOutside.bind(this),
-            true
-        );
+    deleteCell(event) {
+        const {
+            columns,
+            dataframe,
+            editable,
+            selected_cell,
+            setProps,
+        } = this.props;
+
+        event.preventDefault();
+
+        let newDataframe = dataframe;
+        selected_cell.forEach(cell => {
+            if (colIsEditable(editable, columns[cell[1]])) {
+                newDataframe = R.set(
+                    R.lensPath([cell[0], columns[cell[1]].id]),
+                    '',
+                    newDataframe
+                );
+            }
+        });
+
+        setProps({
+            dataframe: newDataframe,
+        });
     }
 
-    onPaste = (e) => {
+    getNextCell(event, {restrictToSelection, currentCell}) {
+        const {dataframe, columns, selected_cell} = this.props;
+        const e = event;
+        const vci = [];
+
+        if (!restrictToSelection) {
+            columns.forEach((c, i) => {
+                if (!c.hidden) {
+                    vci.push(i);
+                }
+            });
+        }
+
+        switch (e.keyCode) {
+            case KEY_CODES.ARROW_LEFT:
+                return restrictToSelection
+                    ? selectionCycle(
+                          [currentCell[0], currentCell[1] - 1],
+                          selected_cell
+                      )
+                    : [
+                          currentCell[0],
+                          R.max(
+                              vci[0],
+                              vci[R.indexOf(currentCell[1], vci) - 1]
+                          ),
+                      ];
+
+            case KEY_CODES.ARROW_RIGHT:
+            case KEY_CODES.TAB:
+                return restrictToSelection
+                    ? selectionCycle(
+                          [currentCell[0], currentCell[1] + 1],
+                          selected_cell
+                      )
+                    : [
+                          currentCell[0],
+                          R.min(
+                              R.last(vci),
+                              vci[R.indexOf(currentCell[1], vci) + 1]
+                          ),
+                      ];
+
+            case KEY_CODES.ARROW_UP:
+                return restrictToSelection
+                    ? selectionCycle(
+                          [currentCell[0] - 1, currentCell[1]],
+                          selected_cell
+                      )
+                    : [R.max(0, currentCell[0] - 1), currentCell[1]];
+
+            case KEY_CODES.ARROW_DOWN:
+            case KEY_CODES.ENTER:
+                return restrictToSelection
+                    ? selectionCycle(
+                          [currentCell[0] + 1, currentCell[1]],
+                          selected_cell
+                      )
+                    : [
+                          R.min(dataframe.length - 1, currentCell[0] + 1),
+                          currentCell[1],
+                      ];
+
+            default:
+                throw new Error(
+                    `Table.getNextCell: unknown navigation keycode ${e.keyCode}`
+                );
+        }
+    }
+
+    onCopy(e) {
+        const {columns, dataframe, selected_cell} = this.props;
+
+        e.preventDefault();
+        const el = document.createElement('textarea');
+        const selectedRows = R.uniq(R.pluck(0, selected_cell).sort());
+        const selectedCols = R.uniq(R.pluck(1, selected_cell).sort());
+        const selectedTabularData = R.slice(
+            R.head(selectedRows),
+            R.last(selectedRows) + 1,
+            dataframe
+        ).map(row =>
+            R.props(selectedCols, R.props(R.pluck('id', columns), row))
+        );
+
+        el.value = selectedTabularData
+            .map(row => R.values(row).join('\t'))
+            .join('\r\n');
+
+        // (Adapted from https://hackernoon.com/copying-text-to-clipboard-with-javascript-df4d4988697f)
+        // Make it readonly to be tamper-proof
+        el.setAttribute('readonly', '');
+        // el.style.position = 'absolute';
+        // Move outside the screen to make it invisible
+        // el.style.left = '-9999px';
+        // Append the <textarea> element to the HTML document
+        document.body.appendChild(el);
+
+        // Check if there is any content selected previously
+        let selected = false;
+        if (document.getSelection().rangeCount > 0) {
+            // Store selection if found
+            selected = document.getSelection().getRangeAt(0);
+        }
+
+        // Select the <textarea> content
+        el.select();
+        // Copy - only works as a result of a user action (e.g. click events)
+        document.execCommand('copy');
+        // Remove the <textarea> element
+        document.body.removeChild(el);
+        // If a selection existed before copying
+        if (selected) {
+            // Unselect everything on the HTML document
+            document.getSelection().removeAllRanges();
+            // Restore the original selection
+            document.getSelection().addRange(selected);
+        }
+        // refocus on the table so that onPaste can be fired immediately
+        // on the same table
+        // note that this requires tabIndex to be set on the <table/>
+        this._table.focus();
+        return;
+    }
+
+    onPaste(e) {
         const {
             columns,
             dataframe,
             editable,
             setProps,
-            selected_cell,
-            end_cell,
-            is_focused
+            is_focused,
+            active_cell,
         } = this.props;
 
         if (e && e.clipboardData && !is_focused) {
@@ -311,51 +403,52 @@ export default class EditableTable extends Component {
                 const values = SheetClip.prototype.parse(text);
 
                 let newDataframe = dataframe;
-                let newColumns = columns;
+                const newColumns = columns;
 
-                if (values[0].length + end_cell[1] >= columns.length) {
-                    for (let i = columns.length;
-                             i < values[0].length + end_cell[1];
-                             i++) {
+                if (values[0].length + active_cell[1] >= columns.length) {
+                    for (
+                        let i = columns.length;
+                        i < values[0].length + active_cell[1];
+                        i++
+                    ) {
                         newColumns.push({
-                            'name': `Column ${i + 1}`,
-                            'type': 'numeric',
+                            id: `Column ${i + 1}`,
+                            type: 'numeric',
                         });
-                        newDataframe.forEach(
-                            row => row[`Column ${i}`] = ''
-                        );
+                        newDataframe.forEach(row => (row[`Column ${i}`] = ''));
                     }
                 }
 
-                if ((values.length + end_cell[0]) >= dataframe.length) {
+                if (values.length + active_cell[0] >= dataframe.length) {
                     const emptyRow = {};
-                    columns.forEach(c => emptyRow[c.name] = '');
+                    columns.forEach(c => (emptyRow[c.name] = ''));
                     newDataframe = R.concat(
                         newDataframe,
-                        R.repeat(emptyRow, (
-                            values.length +
-                            end_cell[0] -
-                            dataframe.length
-                        ))
+                        R.repeat(
+                            emptyRow,
+                            values.length + active_cell[0] - dataframe.length
+                        )
                     );
                 }
 
-                values.forEach((row, i) => row.forEach((cell, j) => {
-                    const iOffset = end_cell[0] + i;
-                    const jOffset = end_cell[1] + j;
-                    // let newDataframe = dataframe;
-                    const col = newColumns[jOffset];
-                    if (colIsEditable(editable, col)) {
-                        newDataframe = R.set(
-                            R.lensPath([iOffset, col.name]),
-                            cell,
-                            newDataframe
-                        );
-                    }
-                }));
+                values.forEach((row, i) =>
+                    row.forEach((cell, j) => {
+                        const iOffset = active_cell[0] + i;
+                        const jOffset = active_cell[1] + j;
+                        // let newDataframe = dataframe;
+                        const col = newColumns[jOffset];
+                        if (colIsEditable(editable, col)) {
+                            newDataframe = R.set(
+                                R.lensPath([iOffset, col.id]),
+                                cell,
+                                newDataframe
+                            );
+                        }
+                    })
+                );
                 setProps({
                     dataframe: newDataframe,
-                    columns: newColumns
+                    columns: newColumns,
                 });
             }
         }
@@ -364,24 +457,22 @@ export default class EditableTable extends Component {
     collectRows(slicedDf, start) {
         const {collapsable, columns, expanded_rows} = this.props;
         const rows = [];
-        for(let i=0; i<slicedDf.length; i++) {
+        for (let i = 0; i < slicedDf.length; i++) {
             const row = slicedDf[i];
-            rows.push(<Row
-                key={start + i}
-                row={row}
-                idx={start + i}
-                {...this.props}
-            />);
+            rows.push(
+                <Row
+                    key={start + i}
+                    row={row}
+                    idx={start + i}
+                    {...this.props}
+                />
+            );
             if (collapsable && R.contains(start + i, expanded_rows)) {
                 rows.push(
                     <tr>
-                        <td className="expanded-row--empty-cell"/>
-                        <td colSpan={columns.length}
-                            className='expanded-row'
-                        >
-                            <h1>
-                                {`More About Row ${start + i}`}
-                            </h1>
+                        <td className="expanded-row--empty-cell" />
+                        <td colSpan={columns.length} className="expanded-row">
+                            <h1>{`More About Row ${start + i}`}</h1>
                         </td>
                     </tr>
                 );
@@ -395,106 +486,120 @@ export default class EditableTable extends Component {
             collapsable,
             columns,
             dataframe,
-            setProps,
             display_row_count: n,
             display_tail_count: m,
             table_style,
             n_fixed_columns,
-            n_fixed_rows
+            n_fixed_rows,
         } = this.props;
 
         const table_component = (
             <table
-                ref={el => this._table = el}
+                ref={el => (this._table = el)}
                 onPaste={this.onPaste}
                 tabIndex={-1}
                 style={table_style}
             >
-
-                <Header {...this.props}/>
+                <Header {...this.props} />
 
                 <tbody>
-                {this.collectRows(dataframe.slice(0, n), 0)}
+                    {this.collectRows(dataframe.slice(0, n), 0)}
 
-                {dataframe.length < (n+m) ? null :
-                    <tr>
-                        {!collapsable ? null:
-                            <td className="expanded-row--empty-cell"/>
-                        }
-                        <td
-                            className="elip"
-                            colSpan={columns.length}
-                        >{'...'}</td>
-                    </tr>
-                }
+                    {dataframe.length < n + m ? null : (
+                        <tr>
+                            {!collapsable ? null : (
+                                <td className="expanded-row--empty-cell" />
+                            )}
+                            <td className="elip" colSpan={columns.length}>
+                                {'...'}
+                            </td>
+                        </tr>
+                    )}
 
-                {dataframe.length < n ? null :
-                    this.collectRows(dataframe.slice(
-                        R.max(dataframe.length - m, n),
-                        dataframe.length
-                    ), R.max(dataframe.length - m, n))}
-
+                    {dataframe.length < n
+                        ? null
+                        : this.collectRows(
+                              dataframe.slice(
+                                  R.max(dataframe.length - m, n),
+                                  dataframe.length
+                              ),
+                              R.max(dataframe.length - m, n)
+                          )}
                 </tbody>
-
             </table>
         );
 
+        let tableStyle = null;
         if (n_fixed_columns || n_fixed_rows) {
-            return (
-                <div
-                    className="dash-spreadsheet"
-                    style={computedStyles.scroll.containerDiv(this.props)}>
-                    {table_component}
-                </div>
-            );
-        } else {
-            return (
-                <div className="dash-spreadsheet">
-                    {table_component}
-                </div>
-            )
+            tableStyle = computedStyles.scroll.containerDiv(this.props);
         }
+        return (
+            <div
+                className="dash-spreadsheet"
+                style={tableStyle}
+                onKeyDown={this.handleKeyDown}
+            >
+                {table_component}
+            </div>
+        );
     }
 }
 
-EditableTable.defaultProps = {
+Table.defaultProps = {
     changed_data: {},
     editable: false,
+    active_cell: [0, 0],
     index_name: '',
     types: {},
     merged_styles: {},
+    selected_cell: [],
+    display_row_count: 20,
+    display_tail_count: 5,
     base_styles: {
-        'numeric': {
+        numeric: {
             'text-align': 'right',
-            'font-family': '\'Droid Sans Mono\', Courier, monospace'
+            'font-family': "'Droid Sans Mono', Courier, monospace",
         },
 
-        'string': {
-            'text-align': 'left'
+        string: {
+            'text-align': 'left',
         },
 
-        'input': {
-            'padding': 0,
-            'margin': 0,
-            'width': '80px',
-            'border': 'none',
-            'font-size': '1rem'
+        input: {
+            padding: 0,
+            margin: 0,
+            width: '80px',
+            border: 'none',
+            'font-size': '1rem',
         },
 
         'input-active': {
-            'outline': '#7FDBFF auto 3px'
+            outline: '#7FDBFF auto 3px',
         },
 
-        'table': {
-        },
+        table: {},
 
-        'thead': {
-        },
+        thead: {},
 
-        'th': {
-        },
+        th: {},
 
-        'td': {
-        }
-    }
-}
+        td: {},
+    },
+};
+
+Table.propTypes = {
+    collapsable: PropTypes.any,
+    columns: PropTypes.any,
+    dataframe: PropTypes.any,
+    display_row_count: PropTypes.any,
+    display_tail_count: PropTypes.any,
+    editable: PropTypes.any,
+    expanded_rows: PropTypes.any,
+    is_focused: PropTypes.any,
+    n_fixed_columns: PropTypes.any,
+    n_fixed_rows: PropTypes.any,
+    selected_cell: PropTypes.any,
+    setProps: PropTypes.any,
+    table_style: PropTypes.any,
+    active_cell: PropTypes.array,
+};
