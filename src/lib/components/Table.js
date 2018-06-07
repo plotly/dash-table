@@ -153,6 +153,12 @@ class ControlledTable extends Component {
             setProps,
         } = this.props;
 
+        // This is mostly to prevent TABing also triggering native HTML tab
+        // navigation. If the preventDefault is too greedy here we must
+        // continue to use it for at least the case we are navigating with
+        // TAB
+        event.preventDefault();
+
         const hasSelection = selected_cell.length > 1;
         const isEnterOrTab =
             e.keyCode === KEY_CODES.ENTER || e.keyCode === KEY_CODES.TAB;
