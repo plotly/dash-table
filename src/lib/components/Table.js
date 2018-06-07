@@ -19,6 +19,8 @@ import 'react-select/dist/react-select.css';
 import './Table.css';
 import './Dropdown.css';
 
+const sortNumerical = R.sort((a, b) => a - b);
+
 export default class Table extends Component {
     constructor(props) {
         super(props);
@@ -35,20 +37,20 @@ export default class Table extends Component {
                 },
             ]);
             return <ControlledTable {...newProps} />;
-        } else {
-            return (
-                <ControlledTable
-                    {...R.merge(this.props, {
-                        setProps: newProps => {
-                            if (R.has('dataframe', newProps)) {
-                                newProps.dataframe_timestamp = Date.now();
-                            }
-                            this.props.setProps(newProps);
-                        },
-                    })}
-                />
-            );
         }
+
+        return (
+            <ControlledTable
+                {...R.merge(this.props, {
+                    setProps: newProps => {
+                        if (R.has('dataframe', newProps)) {
+                            newProps.dataframe_timestamp = Date.now();
+                        }
+                        this.props.setProps(newProps);
+                    },
+                })}
+            />
+        );
     }
 }
 
@@ -202,8 +204,8 @@ class ControlledTable extends Component {
         // with shift.
         let targetCells = [];
         let removeCells = [];
-        const selectedRows = R.uniq(R.pluck(0, selected_cell)).sort();
-        const selectedCols = R.uniq(R.pluck(1, selected_cell)).sort();
+        const selectedRows = sortNumerical(R.uniq(R.pluck(0, selected_cell)));
+        const selectedCols = sortNumerical(R.uniq(R.pluck(1, selected_cell)));
 
         const minRow = selectedRows[0];
         const minCol = selectedCols[0];
