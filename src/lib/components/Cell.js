@@ -87,7 +87,7 @@ export default class Cell extends Component {
     }
 
     handleDoubleClick(e) {
-        const {setProps, idx, i, is_focused} = this.props;
+        const {editable, setProps, idx, i, is_focused} = this.props;
 
         if (!editable) {
             return;

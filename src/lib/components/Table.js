@@ -159,6 +159,12 @@ class ControlledTable extends Component {
         // TAB
         event.preventDefault();
 
+        // If we are moving yank focus away from whatever input may still have
+        // focus.
+        // TODO There is a better way to handle native focus being out of sync
+        // with the "is_focused" prop. We should find the better way.
+        this._table.focus();
+
         const hasSelection = selected_cell.length > 1;
         const isEnterOrTab =
             e.keyCode === KEY_CODES.ENTER || e.keyCode === KEY_CODES.TAB;
