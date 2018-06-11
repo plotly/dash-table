@@ -39,7 +39,7 @@ const styles = {
             return style;
         },
 
-        borderStyle: (args) => {
+        borderStyle: args => {
             const {
                 i: ci,
                 idx: ri,
@@ -50,7 +50,7 @@ const styles = {
                 expanded_rows,
                 active_cell,
                 row_selectable,
-                style_as_list_view
+                style_as_list_view,
             } = args;
 
             // visible col indices
@@ -73,8 +73,12 @@ const styles = {
             const doBottom = (c, t) => `inset 0px -${t}px 0px 0px ${c}`;
 
             const sortNumerical = R.sort((a, b) => a - b);
-            const selectedRows = sortNumerical(R.uniq(R.pluck(0, selected_cell)));
-            const selectedCols = sortNumerical(R.uniq(R.pluck(1, selected_cell)));
+            const selectedRows = sortNumerical(
+                R.uniq(R.pluck(0, selected_cell))
+            );
+            const selectedCols = sortNumerical(
+                R.uniq(R.pluck(1, selected_cell))
+            );
 
             const showInsideLeftEdge = isActive
                 ? true
@@ -102,7 +106,8 @@ const styles = {
             const isBottommost = ri === dataframe.length - 1;
             const isNeighborToExpanded =
                 collapsable && R.contains(ri, expanded_rows) && ci === vci[0];
-            const isAboveExpanded = collapsable && R.contains(ri, expanded_rows);
+            const isAboveExpanded =
+                collapsable && R.contains(ri, expanded_rows);
             const isSelectedColumn = R.contains(ci, selectedCols);
             const isSelectedRow = R.contains(ri, selectedRows);
 
