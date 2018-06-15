@@ -1,0 +1,52 @@
+version: 2
+
+workflows:
+    version: 2
+    test:
+        jobs:
+            # TODO - Add Python 2.7
+            - test-3.6
+
+jobs:
+    test-3.6:
+        docker:
+            - image: circleci/python:3.6-browsers
+            - image: redis
+        working_directory: ~/repo
+
+        steps:
+            - checkout
+
+            - restore_cache:
+                key: deps1-{{ .Branch }}-{{ checksum "test/requirements.txt" }}
+
+            - run:
+                name: Create virtualenv
+                command: |
+                    python3 -m venv venv
+
+            - run:
+                name: Install requirements
+                command: |
+                    . venv/bin/activate
+                    pip install -r test/requirements.txt --quiet
+
+            - save_cache:
+                key: deps1-{{ .Branch }}-{{ checksum "test/requirements.txt" }}
+                paths:
+                    - "venv"
+
+            - run:
+                name: Run lint
+                command: |
+                    . venv/bin/activate
+                    flake8 test
+                    pylint test --rcfile .pylintrc
+                when: always
+
+            - run:
+                name: Integration Tests
+                command: |
+                    . venv/bin/activate
+                    python -m unittest tests.test_render
+                when: always
