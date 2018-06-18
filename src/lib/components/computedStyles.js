@@ -1,3 +1,4 @@
+import React from 'react';
 import * as R from 'ramda';
 
 const HEIGHT = 35;
@@ -79,48 +80,55 @@ const styles = {
             const selectedCols = sortNumerical(
                 R.uniq(R.pluck(1, selected_cell))
             );
+            const firstCol = R.head(selectedCols);
+            const lastCol = R.last(selectedCols);
+            const firstRow = R.head(selectedRows);
+            const lastRow = R.last(selectedRows);
 
-            const showInsideLeftEdge = isActive
-                ? true
-                : ci === R.head(selectedCols) &&
-                  !row_selectable &&
-                  R.contains(ri, selectedRows);
-            const showInsideTopEdge = isActive
-                ? true
-                : ri === R.head(selectedRows) && R.contains(ci, selectedCols);
-            const showInsideRightEdge = isActive
-                ? true
-                : ci === R.last(selectedCols) && R.contains(ri, selectedRows);
-            const showBottomEdge = isActive
-                ? true
-                : (ri === R.last(selectedRows) || false) &&
-                  R.contains(ci, selectedCols);
+            const isWithinRowSelections = R.contains(ri, selectedRows);
+            const isWithinColSelections = R.contains(ci, selectedCols);
+
+            let showLeftEdge = isActive;
+            let showTopEdge = isActive;
+            const showInsideRightEdge = isActive;
+            const showInsideBottomEdge = isActive;
+
+            if (
+                (active_cell[0] === ri && active_cell[1] + 1 === ci) ||
+                (isWithinRowSelections &&
+                    (firstCol === ci || lastCol + 1 === ci))
+            ) {
+                showLeftEdge = true;
+            }
+            if (
+                (active_cell[0] + 1 === ri && active_cell[1] === ci) ||
+                (isWithinColSelections &&
+                    (firstRow === ri || lastRow + 1 === ri))
+            ) {
+                showTopEdge = true;
+            }
 
             const isRightmost = ci === R.last(vci);
 
             // -1 refers to meta columns like the row-select checkbox column
-            const isLeftmost = row_selectable
-                ? ci === -1
-                : ci === R.head(vci);
+            const isLeftmost = row_selectable ? ci === -1 : ci === R.head(vci);
             const isTopmost = ri === 0;
             const isBottommost = ri === dataframe.length - 1;
             const isNeighborToExpanded =
                 collapsable && R.contains(ri, expanded_rows) && ci === vci[0];
             const isAboveExpanded =
                 collapsable && R.contains(ri, expanded_rows);
-            const isSelectedColumn = R.contains(ci, selectedCols);
-            const isSelectedRow = R.contains(ri, selectedRows);
 
             // rules are applied in the order that they are supplied
             const boxShadowRules = [
-                showInsideLeftEdge || isNeighborToExpanded
+                showLeftEdge || isNeighborToExpanded
                     ? doLeft(ACCENT, isActive ? 2 : 1)
                     : null,
-                showInsideTopEdge ? doTop(ACCENT, isActive ? 2 : 1) : null,
-                showBottomEdge ? doBottom(ACCENT, isActive ? 2 : 1) : null,
-                showInsideRightEdge ? doRight(ACCENT, isActive ? 2 : 1) : null,
-                isSelectedColumn && isTopmost ? doTop(ACCENT, 1) : null,
-                isSelectedRow && isLeftmost ? doLeft(ACCENT, 1) : null,
+                showTopEdge ? doTop(ACCENT, isActive ? 2 : 1) : null,
+                showInsideBottomEdge ? doBottom(ACCENT, 1) : null,
+                showInsideRightEdge ? doRight(ACCENT, 1) : null,
+                isWithinColSelections && isTopmost ? doTop(ACCENT, 1) : null,
+                isWithinRowSelections && isLeftmost ? doLeft(ACCENT, 1) : null,
 
                 !style_as_list_view || ci === -1 ? doLeft(BORDER, 1) : null,
                 doTop(BORDER, 1),
@@ -138,7 +146,19 @@ const styles = {
                 boxShadow: `${sortedBoxRules.join(', ')}`,
             };
 
-            return style;
+            let borderFixDiv = null;
+            if (
+                (ci === lastCol + 1 && ri === lastRow + 1) ||
+                (active_cell[0] + 1 === ri && active_cell[1] + 1 === ci)
+            ) {
+                borderFixDiv = (
+                    <div
+                        className={`selected-square selected-square-bottom-right`}
+                    />
+                );
+            }
+
+            return {style, borderFixDiv};
         },
 
         row: (props, row_index) => {
