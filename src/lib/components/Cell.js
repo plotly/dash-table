@@ -175,20 +175,33 @@ export default class Cell extends Component {
                 />
             );
         } else if (columns[i].type === 'dropdown') {
+            let dropdownValue;
+            let dropdownOptions;
+            let cellPath;
+
+            if (R.type(value) === 'Object') {
+                dropdownValue = value.value;
+                dropdownOptions = value.options;
+                cellPath = [idx, c.id, 'value'];
+            } else {
+                dropdownValue = value;
+                dropdownOptions = columns[i].options;
+                cellPath = [idx, c.id];
+            }
             innerCell = (
                 <Dropdown
                     placeholder={''}
-                    options={columns[i].options}
+                    options={dropdownOptions}
                     onChange={newOption => {
                         const newDataframe = R.set(
-                            R.lensPath([idx, c.id]),
+                            R.lensPath(cellPath),
                             newOption ? newOption.value : newOption,
                             dataframe
                         );
                         setProps({dataframe: newDataframe});
                     }}
                     clearable={columns[i].clearable}
-                    value={value}
+                    value={dropdownValue}
                 />
             );
         } else {

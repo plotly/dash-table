@@ -173,6 +173,56 @@
     },
 
     {
+        "name": "dropdown with per-cell options",
+        "props": {
+            "columns": [
+                {
+                    "name": "Columnar Options",
+                    "type": "dropdown",
+                    "id": "col1",
+                    "options": [
+                        {
+                            "label": "Montréal",
+                            "value": "mtl"
+                        },
+                        {
+                            "label": "San Francisco",
+                            "value": "sf"
+                        }
+                    ]
+                },
+                {
+                    "name": "Cell Options",
+                    "type": "dropdown",
+                    "id": "col2"
+                }
+            ],
+            "dataframe": [
+                {
+                    "col1": "mtl",
+                    "col2": {
+                        "options": [
+                            {"label": "blue sky", "value": "blue"},
+                            {"label": "orange fruit", "value": "orange"}
+                        ],
+                        "value": "blue"
+                    }
+                },
+                {
+                    "col1": "sf",
+                    "col2": {
+                        "options": [
+                            {"label": "chairs", "value": "chairs"},
+                            {"label": "sofas", "value": "sofas"}
+                        ],
+                        "value": "chairs"
+                    }
+                }
+            ]
+        }
+    },
+
+    {
         "name": "multi-line headers",
         "props": {
             "columns": [
