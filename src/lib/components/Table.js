@@ -395,7 +395,10 @@ class ControlledTable extends Component {
                 selectedCols,
                 R.props(
                     R.pluck('id', columns),
-                    R.map(R.ifElse(is(Object), R.prop('value'), R.identity))
+                    R.map(
+                        R.ifElse(R.is(Object), R.prop('value'), R.identity),
+                        row
+                    )
                 )
             )
         );

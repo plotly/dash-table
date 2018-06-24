@@ -38,11 +38,11 @@ export default class Header extends Component {
 
         const rowValueofColumn = col => {
             return function getValue(row) {
-                if (R.is(Object, R.prop(col, row))) {  // dropdown cells
+                // handle dropdown cells
+                if (R.is(Object, R.prop(col, row))) {
                     return R.path([col, 'value'], row);
-                } else {
-                    return R.prop(col, row);
                 }
+                return R.prop(col, row);
             }
         }
 
