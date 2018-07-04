@@ -36,6 +36,16 @@ export default class Header extends Component {
 
         newSort = newSort.filter(R.complement(R.isEmpty));
 
+        const rowValueofColumn = col => {
+            return function getValue(row) {
+                // handle dropdown cells
+                if (R.is(Object, R.prop(col, row))) {
+                    return R.path([col, 'value'], row);
+                }
+                return R.prop(col, row);
+            }
+        }
+
         setProps({
             sort: newSort.filter(R.complement(R.not)),
 
@@ -43,8 +53,8 @@ export default class Header extends Component {
                 newSort.map(
                     s =>
                         s.direction === 'desc'
-                            ? R.descend(R.prop(s.column))
-                            : R.ascend(R.prop(s.column))
+                            ? R.descend(rowValueofColumn(s.column))
+                            : R.ascend(rowValueofColumn(s.column))
                 ),
                 dataframe
             ),

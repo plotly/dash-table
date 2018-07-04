@@ -384,14 +384,23 @@ class ControlledTable extends Component {
 
         e.preventDefault();
         const el = document.createElement('textarea');
-        const selectedRows = R.uniq(R.pluck(0, selected_cell).sort());
-        const selectedCols = R.uniq(R.pluck(1, selected_cell).sort());
+        const selectedRows = sortNumerical(R.uniq(R.pluck(0, selected_cell)));
+        const selectedCols = sortNumerical(R.uniq(R.pluck(1, selected_cell)));
         const selectedTabularData = R.slice(
             R.head(selectedRows),
             R.last(selectedRows) + 1,
             dataframe
         ).map(row =>
-            R.props(selectedCols, R.props(R.pluck('id', columns), row))
+            R.props(
+                selectedCols,
+                R.props(
+                    R.pluck('id', columns),
+                    R.map(
+                        R.ifElse(R.is(Object), R.prop('value'), R.identity),
+                        row
+                    )
+                )
+            )
         );
 
         el.value = selectedTabularData
