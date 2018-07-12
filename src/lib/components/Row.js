@@ -104,7 +104,6 @@ export default class Row extends Component {
             );
         });
 
-        // TODO calculate in lifecycle function
         const headerDepth = Math.max.apply(Math, columns.map(getColLength));
         return (
             <tr

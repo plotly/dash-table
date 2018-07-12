@@ -720,6 +720,7 @@ Table.propTypes = {
 
     editable: PropTypes.bool,
     end_cell: PropTypes.arrayOf(PropTypes.number),
+    // TODO - Remove `expanded_rows`
     expanded_rows: PropTypes.array,
     id: PropTypes.string,
     is_focused: PropTypes.bool,
