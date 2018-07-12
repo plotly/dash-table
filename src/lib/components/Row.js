@@ -49,7 +49,7 @@ export default class Row extends Component {
         const rowSelectable = !row_selectable ? null : (
             <td style={R.merge(
                 computedStyles.scroll.borderStyle(
-                    R.merge({i: -1}, this.props)),
+                    R.merge({i: -1}, this.props)).style,
                     {'width': 30}
             )}>
                 <input
@@ -77,6 +77,15 @@ export default class Row extends Component {
 
         const deleteCell = !row_deletable ? null : (
             <td className='delete-cell'
+                style={R.merge(
+                computedStyles.scroll.borderStyle(
+                    R.merge({i: -1}, this.props)).style,
+                    {
+                        'width': 35,
+                        'minWidth': 35,
+                        'maxWidth': 35,
+                        'padding': 0
+                    })}
                 onClick={() => setProps(actions.deleteRow(idx, this.props))}
             >
                 {'×'}

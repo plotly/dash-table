@@ -214,7 +214,7 @@ th:hover .filter {
 }
 
 .dash-spreadsheet .delete-cell {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     text-align: center;
     cursor: pointer;
     color: var(--muted);
