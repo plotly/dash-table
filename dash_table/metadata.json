@@ -200,6 +200,13 @@
         "required": false,
         "description": ""
       },
+      "row_deletable": {
+        "type": {
+          "name": "bool"
+        },
+        "required": false,
+        "description": ""
+      },
       "row_selectable": {
         "type": {
           "name": "enum",
