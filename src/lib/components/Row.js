@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import * as R from 'ramda';
 import Cell from './Cell';
 import computedStyles from './computedStyles';
+import * as actions from '../utils/actions';
 
 const getColLength = c => (Array.isArray(c.name) ? c.name.length : 1);
 
@@ -18,6 +19,7 @@ export default class Row extends Component {
             selected_rows,
             collapsable,
             expanded_rows,
+            row_deletable,
             row_selectable
         } = this.props;
 
@@ -73,6 +75,13 @@ export default class Row extends Component {
             </td>
         );
 
+        const deleteCell = !row_deletable ? null : (
+            <td className='delete-cell'
+                onClick={() => setProps(actions.deleteRow(idx, this.props))}
+            >
+                {'×'}
+            </td>
+        );
 
         const cells = columns.map((c, i) => {
             if (c.hidden) {
@@ -102,6 +111,7 @@ export default class Row extends Component {
                 style={computedStyles.scroll.row(this.props, idx + headerDepth)}
                 className={R.contains(idx, selected_rows) ? 'selected-row' : ''}
             >
+                {deleteCell}
                 {collapsableCell}
                 {rowSelectable}
 

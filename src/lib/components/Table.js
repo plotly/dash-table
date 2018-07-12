@@ -726,6 +726,7 @@ Table.propTypes = {
     merge_duplicate_headers: PropTypes.bool,
     n_fixed_columns: PropTypes.number,
     n_fixed_rows: PropTypes.number,
+    row_deletable: PropTypes.bool,
     row_selectable: PropTypes.oneOf(['single', 'multi']),
     selected_cell: PropTypes.arrayOf(PropTypes.number),
     selected_rows: PropTypes.arrayOf(PropTypes.number),
