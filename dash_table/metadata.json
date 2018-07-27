@@ -169,7 +169,7 @@
         "type": {
           "name": "string"
         },
-        "required": false,
+        "required": true,
         "description": ""
       },
       "is_focused": {
