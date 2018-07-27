@@ -583,6 +583,7 @@ class ControlledTable extends Component {
             dataframe,
             display_row_count: n,
             display_tail_count: m,
+            id,
             table_style,
             n_fixed_columns,
             n_fixed_rows,
@@ -592,6 +593,7 @@ class ControlledTable extends Component {
         const table_component = (
             <table
                 ref={this.assignRef}
+                key={`${id}-table`}
                 onPaste={this.onPaste}
                 tabIndex={-1}
                 style={table_style}
@@ -639,6 +641,7 @@ class ControlledTable extends Component {
                 className="dash-spreadsheet"
                 style={tableStyle}
                 onKeyDown={this.handleKeyDown}
+                key={`${id}-table-container`}
             >
                 {table_component}
             </div>
