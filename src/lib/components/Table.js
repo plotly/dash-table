@@ -572,6 +572,10 @@ class ControlledTable extends Component {
         return rows;
     }
 
+    assignRef(el) {
+        this._table = el
+    }
+
     render() {
         const {
             collapsable,
@@ -587,7 +591,7 @@ class ControlledTable extends Component {
 
         const table_component = (
             <table
-                ref={el => (this._table = el)}
+                ref={this.assignRef}
                 onPaste={this.onPaste}
                 tabIndex={-1}
                 style={table_style}
