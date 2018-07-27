@@ -140,5 +140,6 @@ Row.propTypes = {
     expanded_rows: PropTypes.any,
     active_cell: PropTypes.any,
     selected_rows: PropTypes.any,
+    row_deletable: PropTypes.bool,
     row_selectable: PropTypes.any
 };
