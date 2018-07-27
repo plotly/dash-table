@@ -186,22 +186,26 @@ export default class Cell extends Component {
             } else {
                 options = columns[i].options;
             }
-            innerCell = (
-                <Dropdown
-                    placeholder={''}
-                    options={options}
-                    onChange={newOption => {
-                        const newDataframe = R.set(
-                            R.lensPath([idx, c.id]),
-                            newOption ? newOption.value : newOption,
-                            dataframe
-                        );
-                        setProps({dataframe: newDataframe});
-                    }}
-                    clearable={columns[i].clearable}
-                    value={value}
-                />
-            );
+            if (!options) {
+                innerCell = value;
+            } else {
+                innerCell = (
+                    <Dropdown
+                        placeholder={''}
+                        options={options}
+                        onChange={newOption => {
+                            const newDataframe = R.set(
+                                R.lensPath([idx, c.id]),
+                                newOption ? newOption.value : newOption,
+                                dataframe
+                            );
+                            setProps({dataframe: newDataframe});
+                        }}
+                        clearable={columns[i].clearable}
+                        value={value}
+                    />
+                );
+            }
         } else {
             innerCell = value;
         }
