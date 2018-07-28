@@ -170,19 +170,23 @@ export default class Header extends Component {
                         ''
                     )}
 
-                    <span
-                        style={{'float': 'left'}}
-                        onClick={this.editColumnName(c.id, columnRowIndex)}
-                    >
-                        {`✎`}
-                    </span>
+                    {c.editable_name ? (
+                        <span
+                            className="column-header--edit"
+                            onClick={this.editColumnName(c.id, columnRowIndex)}
+                        >
+                            {`✎`}
+                        </span>
+                    ) : ''}
 
-                    <span
-                        style={{'float': 'left'}}
-                        onClick={this.deleteColumn(c.id)}
-                    >
-                        {`x`}
-                    </span>
+                    {c.deletable ? (
+                        <span
+                            className="column-header--delete"
+                            onClick={this.deleteColumn(c.id)}
+                        >
+                            {'×'}
+                        </span>
+                    ) : ''}
 
                     <span>{labels[i]}</span>
                 </th>
