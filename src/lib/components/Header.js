@@ -51,7 +51,40 @@ export default class Header extends Component {
         });
     }
 
-    renderHeaderCells({labels, rowIsSortable, mergeCells}) {
+    editColumnName(column_id, columnRowIndex) {
+        return () => {
+            const {columns, setProps} = this.props;
+            const namePath = [
+                R.findIndex(R.propEq('id', column_id), columns),
+                'name'
+            ];
+            if (R.type(R.find(R.propEq('id', column_id), columns).name) === 'Array') {
+                namePath.push(columnRowIndex)
+            }
+            setProps({
+                columns: R.set(
+                    R.lensPath(namePath),
+                    window.prompt('Enter a new column name'),
+                    columns
+                )
+            });
+        }
+    }
+
+    deleteColumn(column_id) {
+        return () => {
+            const {columns, setProps} = this.props;
+            setProps({
+                columns: R.reject(
+                    R.propEq('id', column_id),
+                    this.props.columns
+                ),
+                // TODO - delete rows and other stuff as well
+            });
+        }
+    }
+
+    renderHeaderCells({labels, rowIsSortable, mergeCells, columnRowIndex}) {
         const {columns, sort} = this.props;
         let columnIndices;
         if (!mergeCells) {
@@ -142,6 +175,20 @@ export default class Header extends Component {
                         ''
                     )}
 
+                    <span
+                        style={{'float': 'left'}}
+                        onClick={this.editColumnName(c.id, columnRowIndex)}
+                    >
+                        {`✎`}
+                    </span>
+
+                    <span
+                        style={{'float': 'left'}}
+                        onClick={this.deleteColumn(c.id)}
+                    >
+                        {`x`}
+                    </span>
+
                     <span>{labels[i]}</span>
                 </th>
             );
@@ -185,6 +232,7 @@ export default class Header extends Component {
                     {this.renderHeaderCells({
                         labels: R.pluck('name', columns),
                         rowIsSortable: sortable,
+                        columnRowIndex: 0
                     })}
                 </tr>
             );
@@ -208,6 +256,7 @@ export default class Header extends Component {
                             mergeCells:
                                 merge_duplicate_headers &&
                                 i + 1 !== headerDepth,
+                            columnRowIndex: i
                         })}
                     </tr>
                 );
