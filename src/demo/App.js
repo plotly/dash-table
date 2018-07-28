@@ -20,6 +20,8 @@ class App extends Component {
                 editable: true,
                 row_selectable: 'multi',
                 selected_rows: [5, 10, 15],
+                sortable: true,
+                sort: []
             },
             selectedFixture: null,
         };
