@@ -297,6 +297,7 @@
     {
         "name": "selection-borders-active-NE",
         "props": {
+            "id": "table",
             "editable": true,
             "selected_cell": [[1, 1], [1, 0], [0, 1], [0, 0]],
             "columns": [
