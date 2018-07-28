@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import * as R from 'ramda';
 import computedStyles from './computedStyles';
+import * as actions from '../utils/actions';
 
 const getColLength = c => (Array.isArray(c.name) ? c.name.length : 1);
 const getColNameAt = (c, i) => (Array.isArray(c.name) ? c.name[i] : '');
@@ -73,14 +74,8 @@ export default class Header extends Component {
 
     deleteColumn(column_id) {
         return () => {
-            const {columns, setProps} = this.props;
-            setProps({
-                columns: R.reject(
-                    R.propEq('id', column_id),
-                    this.props.columns
-                ),
-                // TODO - delete rows and other stuff as well
-            });
+            const {setProps} = this.props;
+            setProps(actions.deleteColumn(column_id, this.props));
         }
     }
 

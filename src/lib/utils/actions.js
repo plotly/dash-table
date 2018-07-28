@@ -30,3 +30,15 @@ export function deleteRow(rowIndex, props) {
     }
     return newProps;
 }
+
+export function deleteColumn(column_id, props) {
+    const {columns, dataframe, setProps} = props;
+    return {
+        columns: R.reject(
+            R.propEq('id', column_id),
+            columns
+        ),
+        dataframe: R.map(R.omit([column_id]), dataframe)
+        // TODO - delete selected_cell, end_cell, etc as above
+    }
+}
