@@ -504,5 +504,51 @@
                 ]
             }
         }
+    },
+
+    {
+        "name": "sortable, deletable, renamable columns",
+        "props": {
+            "id": "table",
+            "columns": [
+                {
+                    "name": ["City", "NYC"],
+                    "id": "city-nyc",
+                    "deletable": true,
+                    "editable_name": true
+                },
+                {
+                    "name": ["City", "SF"],
+                    "id": "city-sf",
+                    "deletable": true
+                },
+                {
+                    "name": ["Weather", "Rainy"],
+                    "id": "weather-rainy",
+                    "editable_name": true
+                },
+                {
+                    "name": ["Weather", "Sunny"],
+                    "id": "weather-sunny"
+                }
+            ],
+            "dataframe": [
+                {
+                    "city-nyc": 3,
+                    "city-sf": 10,
+                    "weather-rainy": 15,
+                    "weather-sunny": 20
+                },
+                {
+                    "city-nyc": 3,
+                    "city-sf": 10,
+                    "weather-rainy": 15,
+                    "weather-sunny": 20
+                }
+            ],
+            "merge_duplicate_headers": true,
+            "sortable": true,
+            "sort": []
+        }
     }
 ]
