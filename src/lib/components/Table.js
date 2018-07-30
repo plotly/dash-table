@@ -12,6 +12,7 @@ import {
     isMetaKey,
     isNavKey,
 } from '../utils/unicode';
+import { isDescendant } from '../utils/dom.js';
 import {selectionCycle} from '../utils/navigation';
 import computedStyles from './computedStyles';
 
@@ -97,6 +98,18 @@ class ControlledTable extends Component {
             this.props.setProps({active_cell: this.props.selected_cell[0]});
         }
         document.addEventListener('mousedown', this.handleClickOutside);
+
+        // Fallback method for paste handling in Chrome
+        // when no input element has focused inside the table
+        document.addEventListener('paste', e => {
+            // no need to check for target type is this will only be called if
+            // a child fails to handle the paste event (e.g table, table input)
+
+            // make sure the active element is in the scope of the component
+            if (isDescendant(document.activeElement, this.refs.table)) {
+                this.onPaste(e);
+            }
+        });
     }
 
     componentWillUnmount() {
@@ -640,7 +653,7 @@ class ControlledTable extends Component {
             tableStyle = computedStyles.scroll.containerDiv(this.props);
         }
         return (
-            <div
+            <div ref='table'
                 className="dash-spreadsheet"
                 style={tableStyle}
                 onKeyDown={this.handleKeyDown}
