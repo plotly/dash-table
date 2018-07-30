@@ -12,7 +12,6 @@ import {
     isMetaKey,
     isNavKey,
 } from '../utils/unicode';
-import { isDescendant } from '../utils/dom.js';
 import {selectionCycle} from '../utils/navigation';
 import computedStyles from './computedStyles';
 
@@ -102,11 +101,13 @@ class ControlledTable extends Component {
         // Fallback method for paste handling in Chrome
         // when no input element has focused inside the table
         document.addEventListener('paste', e => {
-            // no need to check for target type is this will only be called if
+            // no need to check for target as this will only be called if
             // a child fails to handle the paste event (e.g table, table input)
 
             // make sure the active element is in the scope of the component
-            if (isDescendant(document.activeElement, this.refs.table)) {
+            const el = this.getDomElement();
+
+            if(el && el.contains(document.activeElement)) {
                 this.onPaste(e);
             }
         });
