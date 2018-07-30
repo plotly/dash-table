@@ -654,7 +654,7 @@ class ControlledTable extends Component {
             tableStyle = computedStyles.scroll.containerDiv(this.props);
         }
         return (
-            <div ref='table'
+            <div
                 className="dash-spreadsheet"
                 style={tableStyle}
                 onKeyDown={this.handleKeyDown}
