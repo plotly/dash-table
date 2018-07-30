@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {Table} from '../lib';
-import {mockData} from './data.js';
+import {mockData} from './data';
 import Dropdown from 'react-select';
 import TestFixtures from '../../tests/fixtures.json';
 import {merge} from 'ramda';

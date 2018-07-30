@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist",
+        "allowJs": true,
+        "allowSyntheticDefaultImports": true,
+        "baseUrl": ".",
+        "emitDecoratorMetadata": false,
+        "experimentalDecorators": true,
+        "jsx": "react",
+        "module": "esnext",
+        "moduleResolution": "node",
+        "noImplicitAny": true,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "paths": {
+            "lib/*": [
+                "*"
+            ],
+        },
+        "sourceMap": false,
+        "strict": true,
+        "strictPropertyInitialization": false,
+        "target": "esnext",
+        "traceResolution": true
+    }
+}

@@ -4,27 +4,28 @@ import * as R from 'ramda';
 import SheetClip from 'sheetclip';
 import Row from './Row.js';
 import Header from './Header.js';
-import {colIsEditable} from './derivedState';
+import {colIsEditable} from './derivedState.js';
 import {
     KEY_CODES,
     isCtrlMetaKey,
     isCtrlDown,
     isMetaKey,
     isNavKey,
-} from '../utils/unicode';
-import {selectionCycle} from '../utils/navigation';
-import computedStyles from './computedStyles';
+} from '../utils/unicode.js';
+import {selectionCycle} from '../utils/navigation.js';
+import computedStyles from './computedStyles.js';
 
 import 'react-select/dist/react-select.css';
 import './Table.css';
 import './Dropdown.css';
+import NoVirtualizationStrategy from '../virtualization/NoStrategy';
+import FrontEndPageStrategy from '../virtualization/FrontEndPageStrategy';
 
 const sortNumerical = R.sort((a, b) => a - b);
 
 export default class Table extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
     }
 
     render() {
@@ -78,7 +79,7 @@ export default class Table extends Component {
     }
 }
 
-class ControlledTable extends Component {
+export class ControlledTable extends Component {
     constructor(props) {
         super(props);
 
@@ -87,6 +88,47 @@ class ControlledTable extends Component {
         this.onPaste = this.onPaste.bind(this);
         this.handleClickOutside = this.handleClickOutside.bind(this);
         this.getDomElement = this.getDomElement.bind(this);
+
+        this.getVirtualizer = this.getVirtualizer.bind(this);
+        this.loadNext = this.loadNext.bind(this);
+        this.loadPrevious = this.loadPrevious.bind(this);
+
+        this.state = {
+            data: [],
+            virtualizer: null
+        };
+    }
+
+    getVirtualizer(props) {
+        const {
+            dataframe,
+            virtualization,
+            v_fe_page_options
+        } = props;
+
+        switch (virtualization) {
+            case 'none':
+                return new NoVirtualizationStrategy(this);
+            case 'fe':
+                if (v_fe_page_options) {
+                    return new FrontEndPageStrategy(this, dataframe, v_fe_page_options);
+                }
+
+                throw new Error(`No virtualization options provided for 'fe' strategy. Define v_fe_page or v_fe_scroll`);
+            case 'be':
+                throw new Error(`The 'be' virtualization strategy is not implemented yet`);
+            default:
+                throw new Error(`Unknown virtualization strategy: '${virtualization}'`);
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { dataframe } = this.props;
+        const { dataframe: nextDataframe } = nextProps;
+
+        if (dataframe !== nextDataframe) {
+            this.state.virtualizer.setDataframe(nextDataframe);
+        }
     }
 
     componentDidMount() {
@@ -94,9 +136,13 @@ class ControlledTable extends Component {
             this.props.selected_cell.length &&
             !R.contains(this.props.active_cell, this.props.selected_cell)
         ) {
-            this.props.setProps({active_cell: this.props.selected_cell[0]});
+            this.props.setProps({ active_cell: this.props.selected_cell[0] });
         }
         document.addEventListener('mousedown', this.handleClickOutside);
+
+        this.setState({
+            virtualizer: this.getVirtualizer(this.props)
+        });
     }
 
     componentWillUnmount() {
@@ -579,6 +625,24 @@ class ControlledTable extends Component {
         return rows;
     }
 
+    get displayPagination() {
+        const { virtualization, v_fe_page_options } = this.props;
+
+        return virtualization === 'fe' && Boolean(v_fe_page_options);
+    }
+
+    loadNext() {
+        const { virtualizer } = this.state;
+
+        virtualizer.loadNext();
+    }
+
+    loadPrevious() {
+        const { virtualizer } = this.state;
+
+        virtualizer.loadPrevious();
+    }
+
     render() {
         const {
             collapsable,
@@ -622,6 +686,13 @@ class ControlledTable extends Component {
                         </tr>
                     )}
 
+                    {!this.displayPagination ? null : (
+                        <div>
+                            <button onClick={this.loadPrevious}>Previous</button>
+                            <button onClick={this.loadNext}>Next</button>
+                        </div>
+                    )}
+
                     {dataframe.length < n
                         ? null
                         : this.collectRows(
@@ -652,7 +723,13 @@ class ControlledTable extends Component {
     }
 }
 
+
 Table.defaultProps = {
+    virtualization: 'fe',
+    v_fe_page_options: {
+        pageSize: 100
+    },
+
     changed_data: {},
     dataframe: [],
     columns: [],
@@ -747,6 +824,11 @@ Table.propTypes = {
     start_cell: PropTypes.arrayOf(PropTypes.number),
     style_as_list_view: PropTypes.bool,
     table_style: PropTypes.any,
+
+    virtualization: PropTypes.string,
+    v_fe_page_options: PropTypes.shape({
+        pageSize: PropTypes.number
+    })
 };
 
 ControlledTable.propTypes = Table.propTypes;

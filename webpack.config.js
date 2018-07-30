@@ -19,6 +19,14 @@ module.exports = {
     module: {
         rules: [
             {
+                test: /\.ts$/,
+                exclude: /node_modules/,
+                use: [
+                    { loader: 'babel-loader' },
+                    { loader: 'ts-loader' }
+                ]
+            },
+            {
                 test: /\.js$/,
                 exclude: /node_modules/,
                 use: {
@@ -38,4 +46,10 @@ module.exports = {
             },
         ],
     },
+    resolve: {
+        alias: {
+            lib: path.resolve('/lib')
+        },
+        extensions: ['.js', '.ts']
+    }
 };
