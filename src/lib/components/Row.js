@@ -99,7 +99,7 @@ export default class Row extends Component {
 
             return (
                 <Cell
-                    key={`${c}-${i}`}
+                    key={`${c.id}-${i}`}
                     value={dataframe[idx][c.id]}
                     type={c.type}
                     editable={editable}
