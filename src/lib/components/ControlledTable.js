@@ -21,7 +21,6 @@ import FrontEndPageStrategy from '../virtualization/FrontEndPageStrategy';
 
 const sortNumerical = R.sort((a, b) => a - b);
 
-
 export default class ControlledTable extends Component {
     constructor(props) {
         super(props);
@@ -38,7 +37,7 @@ export default class ControlledTable extends Component {
         this.loadPrevious = this.loadPrevious.bind(this);
 
         this.state = {
-            data: [],
+            dataframe: [],
             virtualizer: null
         };
     }
@@ -52,7 +51,7 @@ export default class ControlledTable extends Component {
 
         switch (virtualization) {
             case 'none':
-                return new NoVirtualizationStrategy(this);
+                return new NoVirtualizationStrategy(this, dataframe);
             case 'fe':
                 if (v_fe_page_options) {
                     return new FrontEndPageStrategy(this, dataframe, v_fe_page_options);
@@ -67,11 +66,31 @@ export default class ControlledTable extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const { dataframe } = this.props;
-        const { dataframe: nextDataframe } = nextProps;
+        const {
+            dataframe,
+            v_fe_page_options,
+            virtualization
+        } = this.props;
+
+        const {
+            dataframe: nextDataframe,
+            v_fe_page_options: next_v_fe_page_options,
+            virtualization: nextVirtualization
+        } = nextProps;
+
+        if (virtualization !== nextVirtualization) {
+            this.setState({
+                virtualizer: this.getVirtualizer(this.props)
+            });
+            return;
+        }
 
         if (dataframe !== nextDataframe) {
             this.state.virtualizer.setDataframe(nextDataframe);
+        }
+
+        if (v_fe_page_options !== next_v_fe_page_options) {
+            this.state.virtualizer.setOptions(next_v_fe_page_options);
         }
     }
 
@@ -197,10 +216,10 @@ export default class ControlledTable extends Component {
         const {
             active_cell,
             columns,
-            dataframe,
             selected_cell,
             setProps,
         } = this.props;
+        const { dataframe } = this.state;
 
         // This is mostly to prevent TABing also triggering native HTML tab
         // navigation. If the preventDefault is too greedy here we must
@@ -332,11 +351,11 @@ export default class ControlledTable extends Component {
     deleteCell(event) {
         const {
             columns,
-            dataframe,
             editable,
             selected_cell,
             setProps,
         } = this.props;
+        const { dataframe } = this.state;
 
         event.preventDefault();
 
@@ -357,7 +376,9 @@ export default class ControlledTable extends Component {
     }
 
     getNextCell(event, { restrictToSelection, currentCell }) {
-        const { dataframe, columns, selected_cell } = this.props;
+        const { columns, selected_cell } = this.props;
+        const { dataframe } = this.state;
+
         const e = event;
         const vci = [];
 
@@ -427,7 +448,8 @@ export default class ControlledTable extends Component {
     }
 
     onCopy(e) {
-        const { columns, dataframe, selected_cell } = this.props;
+        const { columns, selected_cell } = this.props;
+        const { dataframe } = this.state;
 
         e.preventDefault();
         const el = document.createElement('textarea');
@@ -484,12 +506,12 @@ export default class ControlledTable extends Component {
     onPaste(e) {
         const {
             columns,
-            dataframe,
             editable,
             setProps,
             is_focused,
             active_cell,
         } = this.props;
+        const { dataframe } = this.state;
 
         if (e && e.clipboardData && !is_focused) {
             const text = e.clipboardData.getData('text/plain');
@@ -556,14 +578,19 @@ export default class ControlledTable extends Component {
             expanded_rows,
             row_selectable,
         } = this.props;
+
+        const {
+            virtualizer
+        } = this.state;
+
         const rows = [];
         for (let i = 0; i < slicedDf.length; i++) {
             const row = slicedDf[i];
             rows.push(
                 <Row
-                    key={start + i}
+                    key={virtualizer.offset + start + i}
                     row={row}
-                    idx={start + i}
+                    idx={virtualizer.offset + start + i}
                     {...this.props}
                 />
             );
@@ -604,17 +631,17 @@ export default class ControlledTable extends Component {
 
     render() {
         const {
-            collapsable,
-            columns,
-            dataframe,
-            display_row_count: n,
-            display_tail_count: m,
+            // collapsable,
+            // columns,
+            // display_row_count: n,
+            // display_tail_count: m,
             id,
             table_style,
             n_fixed_columns,
             n_fixed_rows,
-            row_selectable,
+            // row_selectable,
         } = this.props;
+        const {dataframe} = this.state;
 
         const table_component = (
             <table
@@ -627,9 +654,9 @@ export default class ControlledTable extends Component {
                 <Header {...this.props} />
 
                 <tbody>
-                    {this.collectRows(dataframe.slice(0, n), 0)}
+                    {this.collectRows(dataframe, 0)}
 
-                    {dataframe.length < n + m ? null : (
+                    {/* {dataframe.length < n + m ? null : (
                         <tr>
                             {!collapsable ? null : (
                                 <td className="expanded-row--empty-cell" />
@@ -643,7 +670,7 @@ export default class ControlledTable extends Component {
                                 {'...'}
                             </td>
                         </tr>
-                    )}
+                    )} */}
 
                     {!this.displayPagination ? null : (
                         <div>
@@ -652,7 +679,7 @@ export default class ControlledTable extends Component {
                         </div>
                     )}
 
-                    {dataframe.length < n
+                    {/* {dataframe.length < n
                         ? null
                         : this.collectRows(
                             dataframe.slice(
@@ -660,7 +687,7 @@ export default class ControlledTable extends Component {
                                 dataframe.length
                             ),
                             R.max(dataframe.length - m, n)
-                        )}
+                        )} */}
                 </tbody>
             </table>
         );

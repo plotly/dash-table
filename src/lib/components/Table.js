@@ -65,9 +65,9 @@ export default class Table extends Component {
 }
 
 export const defaultProps = {
-    virtualization: 'fe',
+    virtualization: 'none',
     v_fe_page_options: {
-        pageSize: 100
+        pageSize: 20
     },
 
     changed_data: {},

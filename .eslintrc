@@ -58,7 +58,7 @@
     "no-extend-native": ["error"],
     "no-extra-bind": ["error"],
     "no-extra-boolean-cast": ["error"],
-    "no-inline-comments": ["error"],
+    "no-inline-comments": 0,
     "no-implicit-coercion": ["error"],
     "no-implied-eval": ["error"],
     "no-inner-declarations": ["off"],
@@ -104,7 +104,7 @@
     "yoda": ["error"],
     "spaced-comment": ["error", "always", {
       "block": {
-        exceptions: ["*"]
+        "exceptions": ["*"]
       }
     }],
     "no-unused-vars": ["error", {

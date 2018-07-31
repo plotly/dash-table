@@ -12,6 +12,7 @@
   "author": "Chris P <chris@plot.ly",
   "license": "MIT",
   "dependencies": {
+    "@types/react": "^0.14.27",
     "ramda": "^0.25.0",
     "react": "15.4.2",
     "react-dom": "15.4.2",
