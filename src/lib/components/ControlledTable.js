@@ -595,7 +595,7 @@ export default class ControlledTable extends Component {
     get displayPagination() {
         const { virtualization } = this.props;
 
-        return virtualization.type === 'fe' && virtualization.subType === 'page'
+        return virtualization.subType === 'page'
     }
 
     loadNext() {
@@ -612,15 +612,11 @@ export default class ControlledTable extends Component {
 
     render() {
         const {
-            collapsable,
-            columns,
             display_row_count: n,
-            display_tail_count: m,
             id,
             table_style,
             n_fixed_columns,
             n_fixed_rows,
-            row_selectable,
         } = this.props;
 
         const { virtualizer } = this.state;
@@ -644,32 +640,6 @@ export default class ControlledTable extends Component {
 
                     <tbody>
                         {this.collectRows(rowsDataframe, 0)}
-
-                        {virtualizer.isNull && dataframe.length < n + m ? null : (
-                            <tr>
-                                {!collapsable ? null : (
-                                    <td className="expanded-row--empty-cell" />
-                                )}
-                                <td
-                                    className="elip"
-                                    colSpan={
-                                        columns.length + (row_selectable ? 1 : 0)
-                                    }
-                                >
-                                    {'...'}
-                                </td>
-                            </tr>
-                        )}
-
-                        {virtualizer.isNull && dataframe.length < n
-                            ? null
-                            : this.collectRows(
-                                dataframe.slice(
-                                    R.max(dataframe.length - m, n),
-                                    dataframe.length
-                                ),
-                                R.max(dataframe.length - m, n)
-                            )}
                     </tbody>
                 </table>
                 {!this.displayPagination ? null : (

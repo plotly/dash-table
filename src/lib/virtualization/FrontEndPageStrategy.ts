@@ -1,7 +1,8 @@
 import AbstractStrategy, { Dataframe, IVirtualTable, IVirtualizationOptions } from './AbstractStrategy';
 
 interface IFrontPageOptions extends IVirtualizationOptions {
-    type: 'fe_page';
+    type: 'fe';
+    subType: 'page';
     options: {
         currentPage: number;
         pageSize: number;

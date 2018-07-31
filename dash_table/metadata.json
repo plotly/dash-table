@@ -78,28 +78,6 @@
           "computed": false
         }
       },
-      "display_row_count": {
-        "type": {
-          "name": "number"
-        },
-        "required": false,
-        "description": "",
-        "defaultValue": {
-          "value": "20",
-          "computed": false
-        }
-      },
-      "display_tail_count": {
-        "type": {
-          "name": "number"
-        },
-        "required": false,
-        "description": "",
-        "defaultValue": {
-          "value": "5",
-          "computed": false
-        }
-      },
       "dropdown_properties": {
         "type": {
           "name": "objectOf",
@@ -300,6 +278,37 @@
         },
         "required": false,
         "description": ""
+      },
+      "virtualization": {
+        "type": {
+          "name": "shape",
+          "value": {
+            "type": {
+              "name": "string",
+              "required": false
+            },
+            "subType": {
+              "name": "string",
+              "required": false
+            },
+            "options": {
+              "name": "shape",
+              "value": {
+                "pageSize": {
+                  "name": "number",
+                  "required": false
+                }
+              },
+              "required": false
+            }
+          }
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "{\n    type: 'fe',\n    subType: 'page',\n    options: {\n        currentPage: 0,\n        pageSize: 500\n    }\n}",
+          "computed": false
+        }
       },
       "changed_data": {
         "defaultValue": {

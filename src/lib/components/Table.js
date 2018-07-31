@@ -66,13 +66,12 @@ export default class Table extends Component {
 
 export const defaultProps = {
     virtualization: {
-        type: 'legacy'
-        // type: 'fe',
-        // subType: 'page',
-        // options: {
-        //     currentPage: 0,
-        //     pageSize: 500
-        // }
+        type: 'fe',
+        subType: 'page',
+        options: {
+            currentPage: 0,
+            pageSize: 500
+        }
     },
 
     changed_data: {},
@@ -86,8 +85,6 @@ export const defaultProps = {
     selected_cell: [[]],
     selected_rows: [],
     row_selectable: false,
-    display_row_count: 20,
-    display_tail_count: 5,
     base_styles: {
         numeric: {
             'text-align': 'right',
@@ -134,9 +131,6 @@ export const propTypes = {
      * when the cell is unfocused ()
      */
     update_on_unfocus: PropTypes.bool,
-
-    display_row_count: PropTypes.number,
-    display_tail_count: PropTypes.number,
 
     dropdown_properties: PropTypes.objectOf(
         PropTypes.arrayOf(PropTypes.shape({
