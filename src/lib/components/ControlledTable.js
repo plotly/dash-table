@@ -61,7 +61,7 @@ export default class ControlledTable extends Component {
 
         if (
             virtualization.type !== nextVirtualization.type ||
-            virtualization.subType !== nextVirtualization.type
+            virtualization.subType !== nextVirtualization.subType
         ) {
             virtualizer = this.getVirtualizer(nextProps);
 
@@ -612,7 +612,6 @@ export default class ControlledTable extends Component {
     }
 
     render() {
-        console.log('render');
         const {
             // collapsable,
             // columns,
