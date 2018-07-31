@@ -564,16 +564,14 @@ export default class ControlledTable extends Component {
             virtualizer
         } = this.state;
 
-        const offset = virtualizer ? virtualizer.offset : 0;
-
         const rows = [];
         for (let i = 0; i < slicedDf.length; i++) {
             const row = slicedDf[i];
             rows.push(
                 <Row
-                    key={offset + start + i}
+                    key={virtualizer.offset + start + i}
                     row={row}
-                    idx={offset + start + i}
+                    idx={virtualizer.offset + start + i}
                     {...this.props}
                 />
             );
@@ -626,8 +624,12 @@ export default class ControlledTable extends Component {
         } = this.props;
 
         const { virtualizer } = this.state;
-        const dataframe = virtualizer ? this.state.dataframe : this.props.dataframe;
-        const rowsDataframe = virtualizer ? dataframe : dataframe.slice(0, n);
+        if (!virtualizer) {
+            return null;
+        }
+
+        const dataframe = virtualizer.isNull ? this.props.dataframe: this.state.dataframe;
+        const rowsDataframe = virtualizer.isNull ? dataframe.slice(0, n) : dataframe;
 
         const table_component = (
             <div>
@@ -643,7 +645,7 @@ export default class ControlledTable extends Component {
                     <tbody>
                         {this.collectRows(rowsDataframe, 0)}
 
-                        {!virtualizer && dataframe.length < n + m ? null : (
+                        {virtualizer.isNull && dataframe.length < n + m ? null : (
                             <tr>
                                 {!collapsable ? null : (
                                     <td className="expanded-row--empty-cell" />
@@ -659,7 +661,7 @@ export default class ControlledTable extends Component {
                             </tr>
                         )}
 
-                        {!virtualizer && dataframe.length < n
+                        {virtualizer.isNull && dataframe.length < n
                             ? null
                             : this.collectRows(
                                 dataframe.slice(

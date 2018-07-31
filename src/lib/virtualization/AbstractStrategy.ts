@@ -33,6 +33,10 @@ export default abstract class AbstractVirtualizationStrategy
         this.onNextProps(target.props);
     }
 
+    public get isNull(): boolean {
+        return false;
+    }
+
     public onNextProps(nextProps: any) {
         this.__dataframe = nextProps.dataframe;
         this.__virtualization = nextProps.virtualization;

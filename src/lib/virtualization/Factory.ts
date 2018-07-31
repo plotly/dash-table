@@ -1,7 +1,8 @@
 import { IVirtualizationOptions } from './AbstractStrategy';
 
-import NoVirtualizationStrategy from '../virtualization/NoStrategy';
-import FrontEndPageStrategy from '../virtualization/FrontEndPageStrategy';
+import FrontEndPageStrategy from './FrontEndPageStrategy';
+import LegacyStrategy from './LegacyStrategy';
+import NoVirtualizationStrategy from './NoStrategy';
 
 export default class VirtualizationFactory {
     public static getVirtualizer(target: any, options: IVirtualizationOptions) {
@@ -9,7 +10,7 @@ export default class VirtualizationFactory {
             case 'none':
                 return new NoVirtualizationStrategy(target);
             case 'legacy':
-                return null;
+                return new LegacyStrategy(target);
             case 'fe':
                 switch (options.subType) {
                     case 'page':
