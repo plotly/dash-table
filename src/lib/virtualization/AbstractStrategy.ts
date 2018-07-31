@@ -16,9 +16,10 @@ export interface IVirtualTableState {
 
 export interface IVirtualTable {
     setState: (state: Partial<IVirtualTableState>) => {};
-    setProps: (props: Partial<IVirtualTableProps>) => {};
 
-    props: IVirtualTableProps;
+    props: IVirtualTableProps & {
+        setProps: (props: Partial<IVirtualTableProps>) => {};
+    };
     state: IVirtualTableState;
 }
 

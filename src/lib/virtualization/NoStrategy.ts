@@ -13,7 +13,7 @@ export default class NoStrategy extends AbstractStrategy<INoneOptions> {
         this.refresh();
     }
 
-    public refresh() {
+    protected refresh() {
         this.target.setState({
             dataframe: this.dataframe
         });

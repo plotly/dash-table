@@ -3,6 +3,7 @@ import AbstractStrategy, { Dataframe, IVirtualTable, IVirtualizationOptions } fr
 interface IFrontPageOptions extends IVirtualizationOptions {
     type: 'fe_page';
     options: {
+        currentPage: number;
         pageSize: number;
     };
 }
@@ -29,10 +30,18 @@ export default class FrontEndPageStrategy extends AbstractStrategy<IFrontPageOpt
     constructor(target: IVirtualTable) {
         super(target);
 
-        this.loadPage(0);
+        this.loadPage(this.options.currentPage);
     }
 
-    public refresh() {
+    protected refresh() {
+        if (this.currentPage === this.options.currentPage) {
+            return;
+        }
+
+        this.loadPage(this.options.currentPage);
+    }
+
+    private update() {
         let page = this.dataframe.slice(
             this.firstIndex,
             this.lastIndex
@@ -68,6 +77,17 @@ export default class FrontEndPageStrategy extends AbstractStrategy<IFrontPageOpt
         this.target.setState({
             dataframe: this.proxy
         });
+
+        if (this.currentPage !== this.options.currentPage) {
+            this.options.currentPage = this.currentPage;
+            this.target.props.setProps({
+                virtualization: this.virtualization
+            });
+        }
+    }
+
+    public get currentPage() {
+        return this.firstIndex / this.options.pageSize;
     }
 
     public get offset() {
@@ -85,7 +105,7 @@ export default class FrontEndPageStrategy extends AbstractStrategy<IFrontPageOpt
             this.dataframe.length
         );
 
-        this.refresh();
+        this.update();
     }
 
     public async loadPrevious() {
@@ -99,7 +119,7 @@ export default class FrontEndPageStrategy extends AbstractStrategy<IFrontPageOpt
             this.firstIndex - this.options.pageSize
         );
 
-        this.refresh();
+        this.update();
     }
 
     protected loadPage(page: number) {
@@ -115,7 +135,7 @@ export default class FrontEndPageStrategy extends AbstractStrategy<IFrontPageOpt
             this.dataframe.length
         );
 
-        this.refresh();
+        this.update();
     }
 
     private get options() {
