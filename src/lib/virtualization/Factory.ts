@@ -8,6 +8,8 @@ export default class VirtualizationFactory {
         switch (options.type) {
             case 'none':
                 return new NoVirtualizationStrategy(target);
+            case 'legacy':
+                return null;
             case 'fe':
                 switch (options.subType) {
                     case 'page':

@@ -66,11 +66,13 @@ export default class Table extends Component {
 
 export const defaultProps = {
     virtualization: {
-        type: 'fe',
-        subType: 'page',
-        options: {
-            pageSize: 100
-        }
+        type: 'legacy'
+        // type: 'fe',
+        // subType: 'page',
+        // options: {
+        //     currentPage: 0,
+        //     pageSize: 500
+        // }
     },
 
     changed_data: {},

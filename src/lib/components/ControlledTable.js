@@ -564,14 +564,16 @@ export default class ControlledTable extends Component {
             virtualizer
         } = this.state;
 
+        const offset = virtualizer ? virtualizer.offset : 0;
+
         const rows = [];
         for (let i = 0; i < slicedDf.length; i++) {
             const row = slicedDf[i];
             rows.push(
                 <Row
-                    key={virtualizer.offset + start + i}
+                    key={offset + start + i}
                     row={row}
-                    idx={virtualizer.offset + start + i}
+                    idx={offset + start + i}
                     {...this.props}
                 />
             );
@@ -612,65 +614,69 @@ export default class ControlledTable extends Component {
 
     render() {
         const {
-            // collapsable,
-            // columns,
-            // display_row_count: n,
-            // display_tail_count: m,
+            collapsable,
+            columns,
+            display_row_count: n,
+            display_tail_count: m,
             id,
             table_style,
             n_fixed_columns,
             n_fixed_rows,
-            // row_selectable,
+            row_selectable,
         } = this.props;
-        const {dataframe} = this.state;
+
+        const { virtualizer } = this.state;
+        const dataframe = virtualizer ? this.state.dataframe : this.props.dataframe;
+        const rowsDataframe = virtualizer ? dataframe : dataframe.slice(0, n);
 
         const table_component = (
-            <table
-                id={id}
-                key={`${id}-table`}
-                onPaste={this.onPaste}
-                tabIndex={-1}
-                style={table_style}
-            >
-                <Header {...this.props} />
+            <div>
+                <table
+                    id={id}
+                    key={`${id}-table`}
+                    onPaste={this.onPaste}
+                    tabIndex={-1}
+                    style={table_style}
+                >
+                    <Header {...this.props} />
 
-                <tbody>
-                    {this.collectRows(dataframe, 0)}
+                    <tbody>
+                        {this.collectRows(rowsDataframe, 0)}
 
-                    {/* {dataframe.length < n + m ? null : (
-                        <tr>
-                            {!collapsable ? null : (
-                                <td className="expanded-row--empty-cell" />
+                        {!virtualizer && dataframe.length < n + m ? null : (
+                            <tr>
+                                {!collapsable ? null : (
+                                    <td className="expanded-row--empty-cell" />
+                                )}
+                                <td
+                                    className="elip"
+                                    colSpan={
+                                        columns.length + (row_selectable ? 1 : 0)
+                                    }
+                                >
+                                    {'...'}
+                                </td>
+                            </tr>
+                        )}
+
+                        {!virtualizer && dataframe.length < n
+                            ? null
+                            : this.collectRows(
+                                dataframe.slice(
+                                    R.max(dataframe.length - m, n),
+                                    dataframe.length
+                                ),
+                                R.max(dataframe.length - m, n)
                             )}
-                            <td
-                                className="elip"
-                                colSpan={
-                                    columns.length + (row_selectable ? 1 : 0)
-                                }
-                            >
-                                {'...'}
-                            </td>
-                        </tr>
-                    )} */}
-
-                    {!this.displayPagination ? null : (
-                        <div>
-                            <button onClick={this.loadPrevious}>Previous</button>
-                            <button onClick={this.loadNext}>Next</button>
-                        </div>
-                    )}
-
-                    {/* {dataframe.length < n
-                        ? null
-                        : this.collectRows(
-                            dataframe.slice(
-                                R.max(dataframe.length - m, n),
-                                dataframe.length
-                            ),
-                            R.max(dataframe.length - m, n)
-                        )} */}
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+                {!this.displayPagination ? null : (
+                    <div>
+                        <button onClick={this.loadPrevious}>Previous</button>
+                        <button onClick={this.loadNext}>Next</button>
+                    </div>
+                )}
+            </div>
         );
 
         let tableStyle = null;
