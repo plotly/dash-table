@@ -65,9 +65,12 @@ export default class Table extends Component {
 }
 
 export const defaultProps = {
-    virtualization: 'none',
-    v_fe_page_options: {
-        pageSize: 20
+    virtualization: {
+        type: 'fe',
+        subType: 'page',
+        options: {
+            pageSize: 100
+        }
     },
 
     changed_data: {},
@@ -165,9 +168,12 @@ export const propTypes = {
     style_as_list_view: PropTypes.bool,
     table_style: PropTypes.any,
 
-    virtualization: PropTypes.string,
-    v_fe_page_options: PropTypes.shape({
-        pageSize: PropTypes.number
+    virtualization: PropTypes.shape({
+        type: PropTypes.string,
+        subType: PropTypes.string,
+        options: PropTypes.shape({
+            pageSize: PropTypes.number
+        })
     })
 };
 

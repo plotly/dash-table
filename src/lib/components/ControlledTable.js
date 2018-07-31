@@ -15,9 +15,7 @@ import { selectionCycle } from '../utils/navigation.js';
 import computedStyles from './computedStyles.js';
 
 import { propTypes } from './Table';
-
-import NoVirtualizationStrategy from '../virtualization/NoStrategy';
-import FrontEndPageStrategy from '../virtualization/FrontEndPageStrategy';
+import VirtualizationFactory from '../virtualization/Factory';
 
 const sortNumerical = R.sort((a, b) => a - b);
 
@@ -28,11 +26,11 @@ export default class ControlledTable extends Component {
         this.handleKeyDown = this.handleKeyDown.bind(this);
         this.collectRows = this.collectRows.bind(this);
         this.onPaste = this.onPaste.bind(this);
+        this.getVirtualizer = this.getVirtualizer.bind(this);
         this.handleClickOutside = this.handleClickOutside.bind(this);
         this.handlePaste = this.handlePaste.bind(this);
         this.getDomElement = this.getDomElement.bind(this);
 
-        this.getVirtualizer = this.getVirtualizer.bind(this);
         this.loadNext = this.loadNext.bind(this);
         this.loadPrevious = this.loadPrevious.bind(this);
 
@@ -42,55 +40,39 @@ export default class ControlledTable extends Component {
         };
     }
 
-    getVirtualizer(props) {
-        const {
-            dataframe,
-            virtualization,
-            v_fe_page_options
-        } = props;
+    getVirtualizer(props = this.props) {
+        const { virtualization } = props;
 
-        switch (virtualization) {
-            case 'none':
-                return new NoVirtualizationStrategy(this, dataframe);
-            case 'fe':
-                if (v_fe_page_options) {
-                    return new FrontEndPageStrategy(this, dataframe, v_fe_page_options);
-                }
-
-                throw new Error(`No virtualization options provided for 'fe' strategy. Define v_fe_page or v_fe_scroll`);
-            case 'be':
-                throw new Error(`The 'be' virtualization strategy is not implemented yet`);
-            default:
-                throw new Error(`Unknown virtualization strategy: '${virtualization}'`);
-        }
+        return VirtualizationFactory.getVirtualizer(this, virtualization);
     }
 
     componentWillReceiveProps(nextProps) {
         const {
             dataframe,
-            v_fe_page_options,
             virtualization
         } = this.props;
 
         const {
             dataframe: nextDataframe,
-            v_fe_page_options: next_v_fe_page_options,
             virtualization: nextVirtualization
         } = nextProps;
 
-        if (virtualization !== nextVirtualization) {
-            this.setState({
-                virtualizer: this.getVirtualizer(this.props)
-            });
-            return;
+        let virtualizer = this.state.virtualizer;
+
+        if (
+            virtualization.type !== nextVirtualization.type ||
+            virtualization.subType !== nextVirtualization.type
+        ) {
+            virtualizer = this.getVirtualizer(nextProps);
+
+            this.setState({ virtualizer });
         }
 
-        if (dataframe !== nextDataframe) {
-            this.state.virtualizer.setDataframe(nextDataframe);
-        }
-
-        if (v_fe_page_options !== next_v_fe_page_options) {
-            this.state.virtualizer.setOptions(next_v_fe_page_options);
+        if (
+            dataframe !== nextDataframe ||
+            virtualization !== nextVirtualization
+        ) {
+            virtualizer.onNextProps(nextProps);
         }
     }
 
@@ -108,7 +90,7 @@ export default class ControlledTable extends Component {
         document.addEventListener('paste', this.handlePaste);
 
         this.setState({
-            virtualizer: this.getVirtualizer(this.props)
+            virtualizer: this.getVirtualizer()
         });
     }
 
@@ -612,9 +594,9 @@ export default class ControlledTable extends Component {
     }
 
     get displayPagination() {
-        const { virtualization, v_fe_page_options } = this.props;
+        const { virtualization } = this.props;
 
-        return virtualization === 'fe' && Boolean(v_fe_page_options);
+        return virtualization.type === 'fe' && virtualization.subType === 'page'
     }
 
     loadNext() {
@@ -630,6 +612,7 @@ export default class ControlledTable extends Component {
     }
 
     render() {
+        console.log('render');
         const {
             // collapsable,
             // columns,

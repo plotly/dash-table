@@ -1,28 +1,57 @@
 export type Dataframe = any[];
 
-export default abstract class AbstractVirtualizationStrategy<TOptions extends object> {
-    constructor(
-        protected readonly table: any,
-        protected dataframe: Dataframe,
-        protected options: TOptions
-    ) {
+export interface IVirtualizationOptions {
+    type: string;
+    subType?: string;
+    options: any;
+}
+export interface IVirtualTableProps {
+    dataframe: Dataframe;
+    virtualization: IVirtualizationOptions;
+}
 
+export interface IVirtualTableState {
+    dataframe: Dataframe;
+}
+
+export interface IVirtualTable {
+    setState: (state: Partial<IVirtualTableState>) => {};
+    setProps: (props: Partial<IVirtualTableProps>) => {};
+
+    props: IVirtualTableProps;
+    state: IVirtualTableState;
+}
+
+export default abstract class AbstractVirtualizationStrategy
+    <TVirtualizationOptions extends IVirtualizationOptions>
+{
+    private __dataframe: Dataframe;
+    private __virtualization: TVirtualizationOptions;
+
+    constructor(protected readonly target: IVirtualTable) {
+        this.onNextProps(target.props);
     }
 
-    public setDataframe(dataframe: Dataframe): void {
-        this.dataframe = dataframe;
-        this.update();
+    public onNextProps(nextProps: any) {
+        this.__dataframe = nextProps.dataframe;
+        this.__virtualization = nextProps.virtualization;
+
+        this.refresh();
     }
 
-    public setOptions(options: any): void {
-        this.options = options;
-        this.update();
+    protected get dataframe(): Dataframe {
+        return this.__dataframe;
     }
 
+    protected get virtualization(): TVirtualizationOptions {
+        return this.__virtualization;
+    }
+
+    // Abstract
     public abstract get offset(): number;
 
     public abstract loadNext(): Promise<void>;
     public abstract loadPrevious(): Promise<void>;
 
-    protected abstract update(): void;
+    protected abstract refresh(): void;
 }

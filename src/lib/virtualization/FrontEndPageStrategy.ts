@@ -1,7 +1,10 @@
-import AbstractStrategy, { Dataframe } from './AbstractStrategy';
+import AbstractStrategy, { Dataframe, IVirtualTable, IVirtualizationOptions } from './AbstractStrategy';
 
-interface IOptions {
-    pageSize: number;
+interface IFrontPageOptions extends IVirtualizationOptions {
+    type: 'fe_page';
+    options: {
+        pageSize: number;
+    };
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/prototype
@@ -18,25 +21,18 @@ const ARRAY_MUTATORS: ReadonlyArray<string> = Object.freeze([
     'unshift'
 ]);
 
-export default class FrontEndPageStrategy extends AbstractStrategy<IOptions> {
+export default class FrontEndPageStrategy extends AbstractStrategy<IFrontPageOptions> {
     private firstIndex: number;
     private lastIndex: number;
     private proxy: Dataframe;
 
-    constructor(
-        table: any,
-        dataframe: Dataframe,
-        options: IOptions
-    ) {
-        super(table, dataframe, options);
+    constructor(target: IVirtualTable) {
+        super(target);
 
-        this.firstIndex = 0;
-        this.lastIndex = Math.min(options.pageSize, dataframe.length);
-
-        this.update();
+        this.loadPage(0);
     }
 
-    protected update() {
+    public refresh() {
         let page = this.dataframe.slice(
             this.firstIndex,
             this.lastIndex
@@ -69,7 +65,7 @@ export default class FrontEndPageStrategy extends AbstractStrategy<IOptions> {
             }
         });
 
-        this.table.setState({
+        this.target.setState({
             dataframe: this.proxy
         });
     }
@@ -89,7 +85,7 @@ export default class FrontEndPageStrategy extends AbstractStrategy<IOptions> {
             this.dataframe.length
         );
 
-        this.update();
+        this.refresh();
     }
 
     public async loadPrevious() {
@@ -103,6 +99,26 @@ export default class FrontEndPageStrategy extends AbstractStrategy<IOptions> {
             this.firstIndex - this.options.pageSize
         );
 
-        this.update();
+        this.refresh();
+    }
+
+    protected loadPage(page: number) {
+        let maxPage = Math.min(
+            page,
+            Math.floor(this.dataframe.length / this.options.pageSize)
+        );
+
+        this.firstIndex = this.options.pageSize * maxPage;
+
+        this.lastIndex = Math.min(
+            this.firstIndex + this.options.pageSize,
+            this.dataframe.length
+        );
+
+        this.refresh();
+    }
+
+    private get options() {
+        return this.virtualization.options;
     }
 }
