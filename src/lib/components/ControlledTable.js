@@ -492,9 +492,8 @@ export default class ControlledTable extends Component {
             setProps,
             is_focused,
             active_cell,
+            dataframe
         } = this.props;
-        const { dataframe } = this.state;
-
         if (e && e.clipboardData && !is_focused) {
             const text = e.clipboardData.getData('text/plain');
             console.warn('clipboard data: ', text);
