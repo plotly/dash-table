@@ -15,7 +15,7 @@ export default class BackEndPageStrategy extends AbstractStrategy<IBackEndPageOp
     protected getDataframe() {
         let { dataframe } = this.target;
 
-        return dataframe;
+        return { dataframe, indices: R.range(0, dataframe.length) };
     }
 
     public get offset() {

@@ -10,7 +10,9 @@ export default class NoStrategy extends AbstractStrategy<undefined> {
     }
 
     protected getDataframe() {
-        return this.target.dataframe;
+        let { dataframe } = this.target;
+
+        return { dataframe, indices: R.range(0, dataframe.length) };
     }
 
     public get offset() {

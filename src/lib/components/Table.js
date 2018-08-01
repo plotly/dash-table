@@ -28,7 +28,6 @@ export default class Table extends Component {
     }
 
     render() {
-        console.log('table render');
         this.virtualizer.refresh();
 
         if (!this.props.setProps) {

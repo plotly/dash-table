@@ -30,10 +30,13 @@ export default class FrontEndPageStrategy extends AbstractStrategy<IFrontEndPage
             dataframe.length
         );
 
-        return dataframe.slice(
-            this.firstIndex,
-            this.lastIndex
-        );
+        return {
+            dataframe: dataframe.slice(
+                this.firstIndex,
+                this.lastIndex
+            ),
+            indices: R.range(this.firstIndex, this.lastIndex)
+        };
     }
 
     public get offset() {
