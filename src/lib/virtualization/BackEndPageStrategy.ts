@@ -1,3 +1,5 @@
+import * as R from 'ramda';
+
 import AbstractStrategy, { Dataframe, ITarget } from './AbstractStrategy';
 
 interface IBackEndPageOptions {
@@ -9,12 +11,15 @@ export default class BackEndPageStrategy extends AbstractStrategy<IBackEndPageOp
     constructor(target: ITarget<IBackEndPageOptions>) {
         super(target);
 
-        this.loadPage(this.options.currentPage);
+        this.loadPage(this.settings.options.currentPage);
     }
 
     protected refresh() {
         this.target.update({
-            dataframe: this.dataframe
+            dataframe: this.dataframe,
+            viewportDataframe: this.dataframe,
+            viewportIndices: R.range(0, this.dataframe.length)
+
         });
     }
 
@@ -25,7 +30,7 @@ export default class BackEndPageStrategy extends AbstractStrategy<IBackEndPageOp
     }
 
     public get currentPage() {
-        return this.options.currentPage;
+        return this.settings.options.currentPage;
     }
 
     public get offset() {
@@ -49,9 +54,5 @@ export default class BackEndPageStrategy extends AbstractStrategy<IBackEndPageOp
             this.settings.options.currentPage = page;
             this.update();
         }
-    }
-
-    private get options() {
-        return this.settings.options;
     }
 }

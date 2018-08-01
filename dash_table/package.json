@@ -20,6 +20,7 @@
     "sheetclip": "^0.3.0"
   },
   "devDependencies": {
+    "@types/ramda": "^0.25.36",
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.3",
     "babel-loader": "^7.1.4",

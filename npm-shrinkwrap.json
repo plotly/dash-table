@@ -207,6 +207,12 @@
       "integrity": "sha512-ONhaKPIufzzrlNbqtWFFd+jlnemX6lJAgq9ZeiZtS7I1PIf/la7CW4m83rTXRnVnsMbW2k56pGYu7AUFJD9Pow==",
       "dev": true
     },
+    "@types/ramda": {
+      "version": "0.25.36",
+      "resolved": "https://registry.npmjs.org/@types/ramda/-/ramda-0.25.36.tgz",
+      "integrity": "sha512-LAeBECPU9IG+K0pRdGl2L9lxanb0CKgue0IGpdn9nmpmKefDrCglrYwkxFYoQxCtY0w/mTxpJaQ4VAChcSIN+A==",
+      "dev": true
+    },
     "@types/react": {
       "version": "0.14.27",
       "resolved": "https://registry.npmjs.org/@types/react/-/react-0.14.27.tgz",

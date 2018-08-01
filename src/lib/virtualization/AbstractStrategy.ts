@@ -9,6 +9,9 @@ export interface ISettings<TOptions> {
 export interface IViewport<TOptions> {
     readonly dataframe: Dataframe;
     readonly settings: ISettings<TOptions>;
+
+    readonly viewportDataframe: Dataframe;
+    readonly viewportIndices: number[];
 }
 
 export interface ITarget<TOptions> extends IViewport<TOptions> {
@@ -38,6 +41,10 @@ export default abstract class AbstractVirtualizationStrategy<TOptions>
     }
 
     public onUpdate(viewport: IViewport<TOptions>) {
+        if (this.__dataframe === viewport.dataframe && this.settings === viewport.settings) {
+            return;
+        }
+
         this.__dataframe = viewport.dataframe;
         this.__settings = viewport.settings;
         this.refresh();

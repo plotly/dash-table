@@ -1,3 +1,5 @@
+import * as R from 'ramda';
+
 import AbstractStrategy, { ITarget } from './AbstractStrategy';
 
 export default class NoStrategy extends AbstractStrategy<undefined> {
@@ -9,7 +11,10 @@ export default class NoStrategy extends AbstractStrategy<undefined> {
 
     protected refresh() {
         this.target.update({
-            dataframe: this.dataframe
+            dataframe: this.dataframe,
+            viewportDataframe: this.dataframe,
+            viewportIndices: R.range(0, this.dataframe.length)
+
         });
     }
 

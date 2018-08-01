@@ -15,15 +15,36 @@ export default class VirtualizationFactory {
                 return target.props.virtualization;
             },
 
+            get viewportDataframe(): Dataframe {
+                return target.props.virtual_dataframe;
+            },
+
+            get viewportIndices(): number[] {
+                return target.props.virtual_dataframe_indices;
+            },
+
             update(viewport: any) {
-                let { dataframe, settings } = viewport;
+                const {
+                    dataframe,
+                    settings,
+                    viewportDataframe,
+                    viewportIndices
+                } = viewport;
 
                 if (dataframe) {
                     target.setState({ dataframe });
                 }
 
                 if (settings) {
-                    target.props.setProps({ settings });
+                    target.props.setProps({ virtualization: settings });
+                }
+
+                if (viewportDataframe) {
+                    target.props.setProps({ virtual_dataframe: viewportDataframe });
+                }
+
+                if (viewportIndices) {
+                    target.props.setProps({ virtual_dataframe_indices: viewportIndices });
                 }
             },
 
