@@ -120,7 +120,6 @@ export const defaultProps = {
 
 export const propTypes = {
     active_cell: PropTypes.array,
-    collapsable: PropTypes.bool,
     columns: PropTypes.arrayOf(PropTypes.object),
 
     dataframe: PropTypes.arrayOf(PropTypes.object),
@@ -146,8 +145,6 @@ export const propTypes = {
 
     editable: PropTypes.bool,
     end_cell: PropTypes.arrayOf(PropTypes.number),
-    // TODO - Remove `expanded_rows`
-    expanded_rows: PropTypes.array,
     id: PropTypes.string.isRequired,
     is_focused: PropTypes.bool,
     merge_duplicate_headers: PropTypes.bool,

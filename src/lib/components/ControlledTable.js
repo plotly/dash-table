@@ -554,9 +554,7 @@ export default class ControlledTable extends Component {
 
     collectRows(slicedDf, start) {
         const {
-            collapsable,
             columns,
-            expanded_rows,
             row_selectable,
         } = this.props;
 
@@ -575,19 +573,6 @@ export default class ControlledTable extends Component {
                     {...this.props}
                 />
             );
-            if (collapsable && R.contains(start + i, expanded_rows)) {
-                rows.push(
-                    <tr>
-                        <td className="expanded-row--empty-cell" />
-                        <td
-                            colSpan={columns.length + (row_selectable ? 1 : 0)}
-                            className="expanded-row"
-                        >
-                            <h1>{`More About Row ${start + i}`}</h1>
-                        </td>
-                    </tr>
-                );
-            }
         }
         return rows;
     }

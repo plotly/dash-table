@@ -238,12 +238,10 @@ export default class Cell extends Component {
 
 Cell.propTypes = {
     c: PropTypes.any,
-    collapsable: PropTypes.any,
     columns: PropTypes.any,
     dataframe: PropTypes.any,
     dropdown_properties: PropTypes.any,
     editable: PropTypes.any,
-    expanded_rows: PropTypes.any,
     i: PropTypes.any,
     idx: PropTypes.any,
     isSelected: PropTypes.any,

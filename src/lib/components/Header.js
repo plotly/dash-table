@@ -150,7 +150,6 @@ export default class Header extends Component {
 
     render() {
         const {
-            collapsable,
             columns,
             sortable,
             merge_duplicate_headers,
@@ -160,9 +159,6 @@ export default class Header extends Component {
 
         let headerRows;
 
-        const collapsableCell = !collapsable ? null : (
-            <th className="expanded-row--empty-cell" />
-        );
         const selectableCell = !row_selectable ? null : (
             <th className="expanded-row--empty-cell"
                 style={{'width': 30}}
@@ -180,7 +176,6 @@ export default class Header extends Component {
             const rowStyle = computedStyles.scroll.row(this.props, 0);
             headerRows = (
                 <tr style={rowStyle}>
-                    {collapsableCell}
                     {selectableCell}
                     {this.renderHeaderCells({
                         labels: R.pluck('name', columns),
@@ -195,7 +190,6 @@ export default class Header extends Component {
                 headerRows.push(
                     <tr style={rowStyle}>
                         {deletableCell}
-                        {collapsableCell}
                         {selectableCell}
                         {this.renderHeaderCells({
                             labels: columns.map(
@@ -219,7 +213,6 @@ export default class Header extends Component {
 }
 
 Header.propTypes = {
-    collapsable: PropTypes.any,
     columns: PropTypes.any,
     sortable: PropTypes.any,
     merge_duplicate_headers: PropTypes.any,

@@ -47,8 +47,6 @@ const styles = {
                 columns,
                 selected_cell,
                 dataframe,
-                collapsable,
-                expanded_rows,
                 active_cell,
                 row_deletable,
                 row_selectable,
@@ -117,10 +115,6 @@ const styles = {
                 ci === -1 : ci === R.head(vci));
             const isTopmost = ri === 0;
             const isBottommost = ri === dataframe.length - 1;
-            const isNeighborToExpanded =
-                collapsable && R.contains(ri, expanded_rows) && ci === vci[0];
-            const isAboveExpanded =
-                collapsable && R.contains(ri, expanded_rows);
 
             let leftEdgeThickness = 1;
             if (isActive && !isLeftmost) {
@@ -134,7 +128,7 @@ const styles = {
 
             // rules are applied in the order that they are supplied
             const boxShadowRules = [
-                showLeftEdge || isNeighborToExpanded
+                showLeftEdge
                     ? doLeft(ACCENT, leftEdgeThickness)
                     : null,
                 showTopEdge ? doTop(ACCENT, topEdgeThickness) : null,
@@ -145,7 +139,7 @@ const styles = {
                 !style_as_list_view || ci === -1 ? doLeft(BORDER, 1) : null,
                 doTop(BORDER, 1),
 
-                isBottommost || isAboveExpanded ? doBottom(BORDER, 1) : null,
+                isBottommost ? doBottom(BORDER, 1) : null,
                 isRightmost ? doRight(BORDER, 1) : null,
             ].filter(R.complement(R.not));
 

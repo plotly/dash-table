@@ -15,13 +15,6 @@
           "computed": false
         }
       },
-      "collapsable": {
-        "type": {
-          "name": "bool"
-        },
-        "required": false,
-        "description": ""
-      },
       "columns": {
         "type": {
           "name": "arrayOf",
@@ -132,13 +125,6 @@
           "value": {
             "name": "number"
           }
-        },
-        "required": false,
-        "description": ""
-      },
-      "expanded_rows": {
-        "type": {
-          "name": "array"
         },
         "required": false,
         "description": ""
