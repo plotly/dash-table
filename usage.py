@@ -71,5 +71,15 @@ def display_data(*args):
 def updateDataframe(virtualization):
     return dataframe2
 
+@app.callback(
+    Output('table', 'selected_cell'),
+    [Input('table', 'virtual_dataframe'), Input('table', 'virtual_dataframe_indices')],
+    [State('table', 'selected_cell')]
+)
+def pouet(virtual_dataframe, virtual_dataframe_indices, selected_cell):
+    print 'virtual_dataframe size: ' + str(len(virtual_dataframe))
+    print 'virtual_indices: ' + str(virtual_dataframe_indices)
+    return selected_cell
+
 if __name__ == '__main__':
     app.run_server(debug=True)

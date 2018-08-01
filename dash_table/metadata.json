@@ -289,7 +289,7 @@
         "required": false,
         "description": "",
         "defaultValue": {
-          "value": "{\n    type: 'be',\n    subType: 'page',\n    options: {\n        currentPage: 0,\n        pageSize: 500\n    }\n}",
+          "value": "{\n    type: 'fe',\n    subType: 'page',\n    options: {\n        currentPage: 0,\n        pageSize: 500\n    }\n}",
           "computed": false
         }
       },
