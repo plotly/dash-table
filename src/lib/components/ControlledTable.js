@@ -554,11 +554,6 @@ export default class ControlledTable extends Component {
 
     collectRows(slicedDf, start) {
         const {
-            columns,
-            row_selectable,
-        } = this.props;
-
-        const {
             virtualizer
         } = this.state;
 
