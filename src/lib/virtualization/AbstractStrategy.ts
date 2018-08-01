@@ -1,46 +1,45 @@
 export type Dataframe = any[];
 
-export interface IVirtualizationOptions {
+export interface ISettings<TOptions> {
     type: string;
     subType?: string;
-    options: any;
-}
-export interface IVirtualTableProps {
-    dataframe: Dataframe;
-    virtualization: IVirtualizationOptions;
+    options: TOptions;
 }
 
-export interface IVirtualTableState {
-    dataframe: Dataframe;
+export interface IViewport<TOptions> {
+    readonly dataframe: Dataframe;
+    readonly settings: ISettings<TOptions>;
 }
 
-export interface IVirtualTable {
-    setState: (state: Partial<IVirtualTableState>) => {};
-
-    props: IVirtualTableProps & {
-        setProps: (props: Partial<IVirtualTableProps>) => {};
-    };
-    state: IVirtualTableState;
+export interface ITarget<TOptions> extends IViewport<TOptions> {
+    update: (viewport: Partial<IViewport<TOptions>>) => void;
+    onUpdate: (callback: (nextProps: IViewport<TOptions>) => void) => (() => void);
 }
 
-export default abstract class AbstractVirtualizationStrategy
-    <TVirtualizationOptions extends IVirtualizationOptions>
+export default abstract class AbstractVirtualizationStrategy<TOptions>
 {
     private __dataframe: Dataframe;
-    private __virtualization: TVirtualizationOptions;
+    private __settings: ISettings<TOptions>;
 
-    constructor(protected readonly target: IVirtualTable) {
-        this.onNextProps(target.props);
+    private listenerHandle: () => void;
+
+    constructor(
+        protected readonly target: ITarget<TOptions>
+    ) {
+        this.listenerHandle = this.target.onUpdate(this.onUpdate.bind(this));
+
+        this.__dataframe = target.dataframe;
+        this.__settings = target.settings;
+        this.refresh();
     }
 
-    public get isNull(): boolean {
-        return false;
+    destroy() {
+        this.listenerHandle();
     }
 
-    public onNextProps(nextProps: any) {
-        this.__dataframe = nextProps.dataframe;
-        this.__virtualization = nextProps.virtualization;
-
+    public onUpdate(viewport: IViewport<TOptions>) {
+        this.__dataframe = viewport.dataframe;
+        this.__settings = viewport.settings;
         this.refresh();
     }
 
@@ -48,8 +47,8 @@ export default abstract class AbstractVirtualizationStrategy
         return this.__dataframe;
     }
 
-    protected get virtualization(): TVirtualizationOptions {
-        return this.__virtualization;
+    protected get settings(): ISettings<TOptions> {
+        return this.__settings;
     }
 
     // Abstract

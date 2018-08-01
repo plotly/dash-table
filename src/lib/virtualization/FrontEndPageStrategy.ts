@@ -1,12 +1,8 @@
-import AbstractStrategy, { Dataframe, IVirtualTable, IVirtualizationOptions } from './AbstractStrategy';
+import AbstractStrategy, { Dataframe, ITarget } from './AbstractStrategy';
 
-interface IFrontPageOptions extends IVirtualizationOptions {
-    type: 'fe';
-    subType: 'page';
-    options: {
-        currentPage: number;
-        pageSize: number;
-    };
+interface IFrontEndPageOptions {
+    currentPage: number;
+    pageSize: number;
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/prototype
@@ -23,23 +19,23 @@ const ARRAY_MUTATORS: ReadonlyArray<string> = Object.freeze([
     'unshift'
 ]);
 
-export default class FrontEndPageStrategy extends AbstractStrategy<IFrontPageOptions> {
+export default class FrontEndPageStrategy extends AbstractStrategy<IFrontEndPageOptions> {
     private firstIndex: number;
     private lastIndex: number;
     private proxy: Dataframe;
 
-    constructor(target: IVirtualTable) {
+    constructor(target: ITarget<IFrontEndPageOptions>) {
         super(target);
 
-        this.loadPage(this.options.currentPage);
+        this.loadPage(this.settings.options.currentPage);
     }
 
     protected refresh() {
-        if (this.currentPage === this.options.currentPage) {
+        if (this.currentPage === this.settings.options.currentPage) {
             return;
         }
 
-        this.loadPage(this.options.currentPage);
+        this.loadPage(this.settings.options.currentPage);
     }
 
     private update() {
@@ -75,20 +71,20 @@ export default class FrontEndPageStrategy extends AbstractStrategy<IFrontPageOpt
             }
         });
 
-        this.target.setState({
+        this.target.update({
             dataframe: this.proxy
         });
 
-        if (this.currentPage !== this.options.currentPage) {
-            this.options.currentPage = this.currentPage;
-            this.target.props.setProps({
-                virtualization: this.virtualization
+        if (this.currentPage !== this.settings.options.currentPage) {
+            this.settings.options.currentPage = this.currentPage;
+            this.target.update({
+                settings: this.settings
             });
         }
     }
 
     public get currentPage() {
-        return this.firstIndex / this.options.pageSize;
+        return this.firstIndex / this.settings.options.pageSize;
     }
 
     public get offset() {
@@ -102,7 +98,7 @@ export default class FrontEndPageStrategy extends AbstractStrategy<IFrontPageOpt
 
         this.firstIndex = this.lastIndex;
         this.lastIndex = Math.min(
-            this.lastIndex + this.options.pageSize,
+            this.lastIndex + this.settings.options.pageSize,
             this.dataframe.length
         );
 
@@ -117,7 +113,7 @@ export default class FrontEndPageStrategy extends AbstractStrategy<IFrontPageOpt
         this.lastIndex = this.firstIndex;
         this.firstIndex = Math.max(
             0,
-            this.firstIndex - this.options.pageSize
+            this.firstIndex - this.settings.options.pageSize
         );
 
         this.update();
@@ -126,20 +122,16 @@ export default class FrontEndPageStrategy extends AbstractStrategy<IFrontPageOpt
     protected loadPage(page: number) {
         let maxPage = Math.min(
             page,
-            Math.floor(this.dataframe.length / this.options.pageSize)
+            Math.floor(this.dataframe.length / this.settings.options.pageSize)
         );
 
-        this.firstIndex = this.options.pageSize * maxPage;
+        this.firstIndex = this.settings.options.pageSize * maxPage;
 
         this.lastIndex = Math.min(
-            this.firstIndex + this.options.pageSize,
+            this.firstIndex + this.settings.options.pageSize,
             this.dataframe.length
         );
 
         this.update();
-    }
-
-    private get options() {
-        return this.virtualization.options;
     }
 }

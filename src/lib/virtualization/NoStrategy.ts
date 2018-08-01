@@ -1,20 +1,14 @@
-import React from 'react';
-import AbstractStrategy, { IVirtualTable, IVirtualizationOptions } from './AbstractStrategy';
+import AbstractStrategy, { ITarget } from './AbstractStrategy';
 
-interface INoneOptions extends IVirtualizationOptions {
-    type: 'none';
-    options: undefined;
-}
-
-export default class NoStrategy extends AbstractStrategy<INoneOptions> {
-    constructor(target: IVirtualTable) {
+export default class NoStrategy extends AbstractStrategy<undefined> {
+    constructor(target: ITarget<undefined>) {
         super(target);
 
         this.refresh();
     }
 
     protected refresh() {
-        this.target.setState({
+        this.target.update({
             dataframe: this.dataframe
         });
     }

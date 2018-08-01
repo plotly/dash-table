@@ -1,31 +1,26 @@
-import AbstractStrategy, { Dataframe, IVirtualTable, IVirtualizationOptions } from './AbstractStrategy';
+import AbstractStrategy, { Dataframe, ITarget } from './AbstractStrategy';
 
-interface IFrontPageOptions extends IVirtualizationOptions {
-    type: 'be';
-    subType: 'page';
-    options: {
-        currentPage: number;
-        pageSize: number;
-    };
+interface IBackEndPageOptions {
+    currentPage: number;
+    pageSize: number;
 }
 
-export default class BackEndPageStrategy extends AbstractStrategy<IFrontPageOptions> {
-    constructor(target: IVirtualTable) {
+export default class BackEndPageStrategy extends AbstractStrategy<IBackEndPageOptions> {
+    constructor(target: ITarget<IBackEndPageOptions>) {
         super(target);
 
         this.loadPage(this.options.currentPage);
     }
 
     protected refresh() {
-        this.target.setState({
+        this.target.update({
             dataframe: this.dataframe
         });
     }
 
     private update() {
-        this.target.props.setProps({
-            dataframe: this.dataframe,
-            virtualization: this.virtualization
+        this.target.update({
+            settings: this.settings
         });
     }
 
@@ -38,25 +33,25 @@ export default class BackEndPageStrategy extends AbstractStrategy<IFrontPageOpti
     }
 
     public async loadNext() {
-        this.virtualization.options.currentPage++;
+        this.settings.options.currentPage++;
         this.update();
     }
 
     public async loadPrevious() {
-        if (this.virtualization.options.currentPage > 0) {
-            this.virtualization.options.currentPage--;
+        if (this.settings.options.currentPage > 0) {
+            this.settings.options.currentPage--;
             this.update();
         }
     }
 
     protected loadPage(page: number) {
-        if (this.virtualization.options.currentPage !== page) {
-            this.virtualization.options.currentPage = page;
+        if (this.settings.options.currentPage !== page) {
+            this.settings.options.currentPage = page;
             this.update();
         }
     }
 
     private get options() {
-        return this.virtualization.options;
+        return this.settings.options;
     }
 }

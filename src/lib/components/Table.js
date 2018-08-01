@@ -73,6 +73,16 @@ export const defaultProps = {
             pageSize: 500
         }
     },
+    filtering: {
+        type: 'fe'
+    },
+    sorting: {
+        type: 'fe'
+    },
+    filter: [],
+    sort: [],
+    virtual_dataframe: [],
+    virtual_dataframe_indices: [],
 
     changed_data: {},
     dataframe: [],
@@ -155,7 +165,6 @@ export const propTypes = {
     selected_cell: PropTypes.arrayOf(PropTypes.number),
     selected_rows: PropTypes.arrayOf(PropTypes.number),
     setProps: PropTypes.any,
-    sort: PropTypes.array,
     sortable: PropTypes.bool,
     start_cell: PropTypes.arrayOf(PropTypes.number),
     style_as_list_view: PropTypes.bool,
@@ -165,9 +174,32 @@ export const propTypes = {
         type: PropTypes.string,
         subType: PropTypes.string,
         options: PropTypes.shape({
+            currentPage: PropTypes.number,
             pageSize: PropTypes.number
         })
-    })
+    }),
+    filtering: PropTypes.shape({
+        type: PropTypes.string
+    }),
+    sorting: PropTypes.shape({
+        type: PropTypes.string
+    }),
+
+    filter: PropTypes.arrayOf(
+        PropTypes.shape({
+            field: PropTypes.string,
+            rule: PropTypes.any
+        })
+    ),
+    sort: PropTypes.arrayOf(
+        PropTypes.shape({
+            field: PropTypes.string,
+            ascending: PropTypes.boolean
+        })
+    ),
+
+    virtual_dataframe: PropTypes.arrayOf(PropTypes.object),
+    virtual_dataframe_indices: PropTypes.arrayOf(PropTypes.number),
 };
 
 Table.defaultProps = defaultProps;

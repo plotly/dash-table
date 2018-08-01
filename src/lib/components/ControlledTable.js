@@ -34,6 +34,8 @@ export default class ControlledTable extends Component {
         this.loadNext = this.loadNext.bind(this);
         this.loadPrevious = this.loadPrevious.bind(this);
 
+        this.listeners = {};
+
         this.state = {
             dataframe: [],
             virtualizer: null
@@ -46,14 +48,25 @@ export default class ControlledTable extends Component {
         return VirtualizationFactory.getVirtualizer(this, virtualization);
     }
 
+
+    addNextPropsListener(callback) {
+        const listeners = this.listeners.nextProps = this.listeners.nextProps || []
+        listeners.push(callback);
+
+        return () => {
+            const index = listeners.indexOf(callback);
+            if (index >= 0) {
+                listeners.splice(index, 1);
+            }
+        };
+    }
+
     componentWillReceiveProps(nextProps) {
         const {
-            dataframe,
             virtualization
         } = this.props;
 
         const {
-            dataframe: nextDataframe,
             virtualization: nextVirtualization
         } = nextProps;
 
@@ -63,17 +76,16 @@ export default class ControlledTable extends Component {
             virtualization.type !== nextVirtualization.type ||
             virtualization.subType !== nextVirtualization.subType
         ) {
+            if (virtualizer) {
+                virtualizer.destroy();
+            }
+
             virtualizer = this.getVirtualizer(nextProps);
 
             this.setState({ virtualizer });
         }
 
-        if (
-            dataframe !== nextDataframe ||
-            virtualization !== nextVirtualization
-        ) {
-            virtualizer.onNextProps(nextProps);
-        }
+        (this.listeners.nextProps || []).forEach(listener => listener(nextProps));
     }
 
     componentDidMount() {

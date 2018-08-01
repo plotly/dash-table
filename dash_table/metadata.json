@@ -227,13 +227,6 @@
         "required": false,
         "description": ""
       },
-      "sort": {
-        "type": {
-          "name": "array"
-        },
-        "required": false,
-        "description": ""
-      },
       "sortable": {
         "type": {
           "name": "bool"
@@ -280,6 +273,10 @@
             "options": {
               "name": "shape",
               "value": {
+                "currentPage": {
+                  "name": "number",
+                  "required": false
+                },
                 "pageSize": {
                   "name": "number",
                   "required": false
@@ -292,7 +289,118 @@
         "required": false,
         "description": "",
         "defaultValue": {
-          "value": "{\n    type: 'fe',\n    subType: 'page',\n    options: {\n        currentPage: 0,\n        pageSize: 500\n    }\n}",
+          "value": "{\n    type: 'be',\n    subType: 'page',\n    options: {\n        currentPage: 0,\n        pageSize: 500\n    }\n}",
+          "computed": false
+        }
+      },
+      "filtering": {
+        "type": {
+          "name": "shape",
+          "value": {
+            "type": {
+              "name": "string",
+              "required": false
+            }
+          }
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "{\n    type: 'fe'\n}",
+          "computed": false
+        }
+      },
+      "sorting": {
+        "type": {
+          "name": "shape",
+          "value": {
+            "type": {
+              "name": "string",
+              "required": false
+            }
+          }
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "{\n    type: 'fe'\n}",
+          "computed": false
+        }
+      },
+      "filter": {
+        "type": {
+          "name": "arrayOf",
+          "value": {
+            "name": "shape",
+            "value": {
+              "field": {
+                "name": "string",
+                "required": false
+              },
+              "rule": {
+                "name": "any",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "[]",
+          "computed": false
+        }
+      },
+      "sort": {
+        "type": {
+          "name": "arrayOf",
+          "value": {
+            "name": "shape",
+            "value": {
+              "field": {
+                "name": "string",
+                "required": false
+              },
+              "ascending": {
+                "name": "custom",
+                "raw": "PropTypes.boolean",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "[]",
+          "computed": false
+        }
+      },
+      "virtual_dataframe": {
+        "type": {
+          "name": "arrayOf",
+          "value": {
+            "name": "object"
+          }
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "[]",
+          "computed": false
+        }
+      },
+      "virtual_dataframe_indices": {
+        "type": {
+          "name": "arrayOf",
+          "value": {
+            "name": "number"
+          }
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "[]",
           "computed": false
         }
       },
