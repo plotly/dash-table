@@ -300,13 +300,30 @@
             "type": {
               "name": "string",
               "required": false
+            },
+            "options": {
+              "name": "arrayOf",
+              "value": {
+                "name": "shape",
+                "value": {
+                  "field": {
+                    "name": "string",
+                    "required": false
+                  },
+                  "rule": {
+                    "name": "any",
+                    "required": false
+                  }
+                }
+              },
+              "required": false
             }
           }
         },
         "required": false,
         "description": "",
         "defaultValue": {
-          "value": "{\n    type: 'fe'\n}",
+          "value": "{\n    type: 'fe',\n    options: []\n}",
           "computed": false
         }
       },
@@ -317,62 +334,31 @@
             "type": {
               "name": "string",
               "required": false
-            }
-          }
-        },
-        "required": false,
-        "description": "",
-        "defaultValue": {
-          "value": "{\n    type: 'fe'\n}",
-          "computed": false
-        }
-      },
-      "filter": {
-        "type": {
-          "name": "arrayOf",
-          "value": {
-            "name": "shape",
-            "value": {
-              "field": {
-                "name": "string",
-                "required": false
+            },
+            "options": {
+              "name": "arrayOf",
+              "value": {
+                "name": "shape",
+                "value": {
+                  "field": {
+                    "name": "string",
+                    "required": false
+                  },
+                  "ascending": {
+                    "name": "custom",
+                    "raw": "PropTypes.boolean",
+                    "required": false
+                  }
+                }
               },
-              "rule": {
-                "name": "any",
-                "required": false
-              }
+              "required": false
             }
           }
         },
         "required": false,
         "description": "",
         "defaultValue": {
-          "value": "[]",
-          "computed": false
-        }
-      },
-      "sort": {
-        "type": {
-          "name": "arrayOf",
-          "value": {
-            "name": "shape",
-            "value": {
-              "field": {
-                "name": "string",
-                "required": false
-              },
-              "ascending": {
-                "name": "custom",
-                "raw": "PropTypes.boolean",
-                "required": false
-              }
-            }
-          }
-        },
-        "required": false,
-        "description": "",
-        "defaultValue": {
-          "value": "[]",
+          "value": "{\n    type: 'fe',\n    options: []\n}",
           "computed": false
         }
       },

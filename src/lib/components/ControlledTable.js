@@ -15,7 +15,6 @@ import { selectionCycle } from '../utils/navigation.js';
 import computedStyles from './computedStyles.js';
 
 import { propTypes } from './Table';
-import VirtualizationFactory from '../virtualization/Factory';
 
 const sortNumerical = R.sort((a, b) => a - b);
 
@@ -26,7 +25,6 @@ export default class ControlledTable extends Component {
         this.handleKeyDown = this.handleKeyDown.bind(this);
         this.collectRows = this.collectRows.bind(this);
         this.onPaste = this.onPaste.bind(this);
-        this.getVirtualizer = this.getVirtualizer.bind(this);
         this.handleClickOutside = this.handleClickOutside.bind(this);
         this.handlePaste = this.handlePaste.bind(this);
         this.getDomElement = this.getDomElement.bind(this);
@@ -35,57 +33,6 @@ export default class ControlledTable extends Component {
         this.loadPrevious = this.loadPrevious.bind(this);
 
         this.listeners = {};
-
-        this.state = {
-            dataframe: [],
-            virtualizer: null
-        };
-    }
-
-    getVirtualizer(props = this.props) {
-        const { virtualization } = props;
-
-        return VirtualizationFactory.getVirtualizer(this, virtualization);
-    }
-
-
-    addNextPropsListener(callback) {
-        const listeners = this.listeners.nextProps = this.listeners.nextProps || []
-        listeners.push(callback);
-
-        return () => {
-            const index = listeners.indexOf(callback);
-            if (index >= 0) {
-                listeners.splice(index, 1);
-            }
-        };
-    }
-
-    componentWillReceiveProps(nextProps) {
-        const {
-            virtualization
-        } = this.props;
-
-        const {
-            virtualization: nextVirtualization
-        } = nextProps;
-
-        let virtualizer = this.state.virtualizer;
-
-        if (
-            virtualization.type !== nextVirtualization.type ||
-            virtualization.subType !== nextVirtualization.subType
-        ) {
-            if (virtualizer) {
-                virtualizer.destroy();
-            }
-
-            virtualizer = this.getVirtualizer(nextProps);
-
-            this.setState({ virtualizer });
-        }
-
-        (this.listeners.nextProps || []).forEach(listener => listener(nextProps));
     }
 
     componentDidMount() {
@@ -100,10 +47,6 @@ export default class ControlledTable extends Component {
         // Fallback method for paste handling in Chrome
         // when no input element has focused inside the table
         document.addEventListener('paste', this.handlePaste);
-
-        this.setState({
-            virtualizer: this.getVirtualizer()
-        });
     }
 
     componentWillUnmount() {
@@ -212,8 +155,10 @@ export default class ControlledTable extends Component {
             columns,
             selected_cell,
             setProps,
+            virtualizer
         } = this.props;
-        const { dataframe } = this.state;
+
+        const dataframe = virtualizer.dataframe;
 
         // This is mostly to prevent TABing also triggering native HTML tab
         // navigation. If the preventDefault is too greedy here we must
@@ -348,8 +293,10 @@ export default class ControlledTable extends Component {
             editable,
             selected_cell,
             setProps,
+            virtualizer
         } = this.props;
-        const { dataframe } = this.state;
+
+        const dataframe = virtualizer.dataframe;
 
         event.preventDefault();
 
@@ -370,8 +317,8 @@ export default class ControlledTable extends Component {
     }
 
     getNextCell(event, { restrictToSelection, currentCell }) {
-        const { columns, selected_cell } = this.props;
-        const { dataframe } = this.state;
+        const { columns, selected_cell, virtualizer } = this.props;
+        const dataframe = virtualizer.dataframe;
 
         const e = event;
         const vci = [];
@@ -442,8 +389,8 @@ export default class ControlledTable extends Component {
     }
 
     onCopy(e) {
-        const { columns, selected_cell } = this.props;
-        const { dataframe } = this.state;
+        const { columns, selected_cell, virtualizer } = this.props;
+        const dataframe = virtualizer.dataframe;
 
         e.preventDefault();
         const el = document.createElement('textarea');
@@ -565,9 +512,7 @@ export default class ControlledTable extends Component {
     }
 
     collectRows(slicedDf, start) {
-        const {
-            virtualizer
-        } = this.state;
+        const { virtualizer } = this.props;
 
         const rows = [];
         for (let i = 0; i < slicedDf.length; i++) {
@@ -591,33 +536,31 @@ export default class ControlledTable extends Component {
     }
 
     loadNext() {
-        const { virtualizer } = this.state;
+        const { virtualizer } = this.props;
 
         virtualizer.loadNext();
     }
 
     loadPrevious() {
-        const { virtualizer } = this.state;
+        const { virtualizer } = this.props;
 
         virtualizer.loadPrevious();
     }
 
     render() {
         const {
-            display_row_count: n,
             id,
             table_style,
             n_fixed_columns,
             n_fixed_rows,
+            virtualizer
         } = this.props;
 
-        const { virtualizer } = this.state;
+        const dataframe = virtualizer.dataframe;
+
         if (!virtualizer) {
             return null;
         }
-
-        const dataframe = virtualizer.isNull ? this.props.dataframe: this.state.dataframe;
-        const rowsDataframe = virtualizer.isNull ? dataframe.slice(0, n) : dataframe;
 
         const table_component = (
             <div>
@@ -631,7 +574,7 @@ export default class ControlledTable extends Component {
                     <Header {...this.props} />
 
                     <tbody>
-                        {this.collectRows(rowsDataframe, 0)}
+                        {this.collectRows(dataframe, 0)}
                     </tbody>
                 </table>
                 {!this.displayPagination ? null : (

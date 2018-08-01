@@ -8,17 +8,35 @@ import 'react-select/dist/react-select.css';
 import './Table.css';
 import './Dropdown.css';
 
+import VirtualizationFactory from '../virtualization/Factory';
+
+import { memoizeOne } from '../utils/memoizer';
+
 export default class Table extends Component {
     constructor(props) {
         super(props);
+
+        this.getVirtualizer = memoizeOne((target, virtualization) => {
+            return VirtualizationFactory.getVirtualizer(target, virtualization);
+        });
+
+        Object.defineProperty(this, 'virtualizer', {
+            get: () => {
+                return this.getVirtualizer(this, this.props.virtualization);
+            }
+        });
     }
 
     render() {
+        console.log('table render');
+        this.virtualizer.refresh();
+
         if (!this.props.setProps) {
             const newProps = R.mergeAll([
                 this.props,
                 this.state,
                 {
+                    virtualizer: this.virtualizer,
                     setProps: newProps => this.setState(newProps),
                 },
             ]);
@@ -28,6 +46,8 @@ export default class Table extends Component {
         return (
             <ControlledTable
                 {...R.merge(this.props, {
+                    virtualizer: this.virtualizer,
+
                     setProps: newProps => {
 
                         // !is_focused -> is_focused: save the current dataframe
@@ -56,7 +76,6 @@ export default class Table extends Component {
                         }
 
                         this.props.setProps(newProps);
-
                     },
                 })}
             />
@@ -74,13 +93,14 @@ export const defaultProps = {
         }
     },
     filtering: {
-        type: 'fe'
+        type: 'fe',
+        options: []
     },
     sorting: {
-        type: 'fe'
+        type: 'fe',
+        options: []
     },
-    filter: [],
-    sort: [],
+
     virtual_dataframe: [],
     virtual_dataframe_indices: [],
 
@@ -179,24 +199,23 @@ export const propTypes = {
         })
     }),
     filtering: PropTypes.shape({
-        type: PropTypes.string
+        type: PropTypes.string,
+        options: PropTypes.arrayOf(
+            PropTypes.shape({
+                field: PropTypes.string,
+                rule: PropTypes.any
+            })
+        )
     }),
     sorting: PropTypes.shape({
-        type: PropTypes.string
+        type: PropTypes.string,
+        options: PropTypes.arrayOf(
+            PropTypes.shape({
+                field: PropTypes.string,
+                ascending: PropTypes.boolean
+            })
+        )
     }),
-
-    filter: PropTypes.arrayOf(
-        PropTypes.shape({
-            field: PropTypes.string,
-            rule: PropTypes.any
-        })
-    ),
-    sort: PropTypes.arrayOf(
-        PropTypes.shape({
-            field: PropTypes.string,
-            ascending: PropTypes.boolean
-        })
-    ),
 
     virtual_dataframe: PropTypes.arrayOf(PropTypes.object),
     virtual_dataframe_indices: PropTypes.arrayOf(PropTypes.number),

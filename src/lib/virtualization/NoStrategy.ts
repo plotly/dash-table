@@ -9,24 +9,19 @@ export default class NoStrategy extends AbstractStrategy<undefined> {
         this.refresh();
     }
 
-    protected refresh() {
-        this.target.update({
-            dataframe: this.dataframe,
-            viewportDataframe: this.dataframe,
-            viewportIndices: R.range(0, this.dataframe.length)
-
-        });
+    protected getDataframe() {
+        return this.target.dataframe;
     }
 
     public get offset() {
         return 0;
     }
 
-    public async loadNext() {
+    public loadNext() {
 
     }
 
-    public async loadPrevious() {
+    public loadPrevious() {
 
     }
 }

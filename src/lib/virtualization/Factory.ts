@@ -25,40 +25,24 @@ export default class VirtualizationFactory {
 
             update(viewport: any) {
                 const {
-                    dataframe,
                     settings,
                     viewportDataframe,
                     viewportIndices
                 } = viewport;
 
-                if (dataframe) {
-                    target.setState({ dataframe });
-                }
+                setTimeout(() => {
+                    if (settings) {
+                        target.props.setProps({ virtualization: settings });
+                    }
 
-                if (settings) {
-                    target.props.setProps({ virtualization: settings });
-                }
+                    if (viewportDataframe) {
+                        target.props.setProps({ virtual_dataframe: viewportDataframe });
+                    }
 
-                if (viewportDataframe) {
-                    target.props.setProps({ virtual_dataframe: viewportDataframe });
-                }
-
-                if (viewportIndices) {
-                    target.props.setProps({ virtual_dataframe_indices: viewportIndices });
-                }
-            },
-
-            onUpdate(callback: (nextProps: any) => void): () => void {
-                let cb = (nextProps: any) => {
-                    let { dataframe, virtualization } = nextProps;
-
-                    callback({
-                        dataframe,
-                        settings: virtualization
-                    });
-                };
-
-                return target.addNextPropsListener(cb);
+                    if (viewportIndices) {
+                        target.props.setProps({ virtual_dataframe_indices: viewportIndices });
+                    }
+                }, 0);
             }
         };
     }
