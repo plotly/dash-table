@@ -1,14 +1,9 @@
 import * as R from 'ramda';
 
-import AbstractStrategy, { ITarget } from './AbstractStrategy';
+import AbstractStrategy, { ITarget } from 'dash-table/virtualization/AbstractStrategy';
 
-interface IBackEndPageOptions {
-    currentPage: number;
-    pageSize: number;
-}
-
-export default class BackEndPageStrategy extends AbstractStrategy<IBackEndPageOptions> {
-    constructor(target: ITarget<IBackEndPageOptions>) {
+export default class BackEndPageStrategy extends AbstractStrategy {
+    constructor(target: ITarget) {
         super(target);
     }
 
@@ -25,18 +20,18 @@ export default class BackEndPageStrategy extends AbstractStrategy<IBackEndPageOp
     public loadNext() {
         let { settings } = this.target;
 
-        settings.options.currentPage++;
+        settings.currentPage++;
         this.target.update({ settings });
     }
 
     public loadPrevious() {
         let { settings } = this.target;
 
-        if (settings.options.currentPage <= 0) {
+        if (settings.currentPage <= 0) {
             return;
         }
 
-        settings.options.currentPage--;
+        settings.currentPage--;
         this.target.update({ settings });
     }
 }

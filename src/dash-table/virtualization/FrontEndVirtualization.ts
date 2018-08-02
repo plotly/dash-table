@@ -1,17 +1,12 @@
 import * as R from 'ramda';
 
-import AbstractStrategy, { ITarget } from './AbstractStrategy';
+import AbstractStrategy, { ITarget } from 'dash-table/virtualization/AbstractStrategy';
 
-interface IFrontEndPageOptions {
-    currentPage: number;
-    pageSize: number;
-}
-
-export default class FrontEndPageStrategy extends AbstractStrategy<IFrontEndPageOptions> {
+export default class FrontEndPageStrategy extends AbstractStrategy {
     private firstIndex: number;
     private lastIndex: number;
 
-    constructor(target: ITarget<IFrontEndPageOptions>) {
+    constructor(target: ITarget) {
         super(target);
     }
 
@@ -19,14 +14,14 @@ export default class FrontEndPageStrategy extends AbstractStrategy<IFrontEndPage
         let { settings, dataframe } = this.target;
 
         let currentPage = Math.min(
-            settings.options.currentPage,
-            Math.floor(dataframe.length / settings.options.pageSize)
+            settings.currentPage,
+            Math.floor(dataframe.length / settings.pageSize)
         );
 
-        this.firstIndex = settings.options.pageSize * currentPage;
+        this.firstIndex = settings.pageSize * currentPage;
 
         this.lastIndex = Math.min(
-            this.firstIndex + settings.options.pageSize,
+            this.firstIndex + settings.displayedPages * settings.pageSize,
             dataframe.length
         );
 
@@ -46,24 +41,24 @@ export default class FrontEndPageStrategy extends AbstractStrategy<IFrontEndPage
     public loadNext() {
         let { settings, dataframe } = this.target;
 
-        let maxPage = Math.floor(dataframe.length / settings.options.pageSize);
+        let maxPage = Math.floor(dataframe.length / settings.pageSize);
 
-        if (settings.options.currentPage >= maxPage) {
+        if (settings.currentPage >= maxPage) {
             return;
         }
 
-        settings.options.currentPage++;
+        settings.currentPage++;
         this.target.update({ settings });
     }
 
     public loadPrevious() {
         let { settings } = this.target;
 
-        if (settings.options.currentPage <= 0) {
+        if (settings.currentPage <= 0) {
             return;
         }
 
-        settings.options.currentPage--;
+        settings.currentPage--;
         this.target.update({ settings });
     }
 }

@@ -1,5 +1,5 @@
 {
-  "src/dash-table/components/Table.js": {
+  "src/dash-table/components/Table/index.js": {
     "description": "",
     "displayName": "Table",
     "methods": [],
@@ -260,28 +260,33 @@
       },
       "virtualization": {
         "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "'fe'",
+          "computed": false
+        }
+      },
+      "virtualization_settings": {
+        "type": {
           "name": "shape",
           "value": {
-            "type": {
-              "name": "string",
+            "displayedPages": {
+              "name": "number",
               "required": false
             },
-            "subType": {
-              "name": "string",
+            "currentPage": {
+              "name": "number",
               "required": false
             },
-            "options": {
-              "name": "shape",
-              "value": {
-                "currentPage": {
-                  "name": "number",
-                  "required": false
-                },
-                "pageSize": {
-                  "name": "number",
-                  "required": false
-                }
-              },
+            "entries": {
+              "name": "number",
+              "required": false
+            },
+            "pageSize": {
+              "name": "number",
               "required": false
             }
           }
@@ -289,7 +294,18 @@
         "required": false,
         "description": "",
         "defaultValue": {
-          "value": "{\n    type: 'fe',\n    subType: 'page',\n    options: {\n        currentPage: 0,\n        pageSize: 500\n    }\n}",
+          "value": "{\n    displayedPages: 1,\n    currentPage: 0,\n    entries: NaN,\n    pageSize: 500\n}",
+          "computed": false
+        }
+      },
+      "navigation": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "'page'",
           "computed": false
         }
       },

@@ -1,9 +1,9 @@
 import * as R from 'ramda';
 
-import AbstractStrategy, { ITarget } from './AbstractStrategy';
+import AbstractStrategy, { ITarget } from 'dash-table/virtualization/AbstractStrategy';
 
-export default class NoStrategy extends AbstractStrategy<undefined> {
-    constructor(target: ITarget<undefined>) {
+export default class NoStrategy extends AbstractStrategy {
+    constructor(target: ITarget) {
         super(target);
 
         this.refresh();

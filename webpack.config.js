@@ -49,7 +49,8 @@ module.exports = {
     resolve: {
         alias: {
             'dash-table': path.resolve('./src/dash-table'),
-            'core': path.resolve('./src/core')
+            'core': path.resolve('./src/core'),
+            'tests': path.resolve('./tests')
         },
         extensions: ['.js', '.ts']
     }

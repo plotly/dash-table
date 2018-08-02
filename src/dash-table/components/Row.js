@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import * as R from 'ramda';
-import Cell from './Cell';
-import computedStyles from './computedStyles';
-import * as actions from '../utils/actions';
+import Cell from 'dash-table/components/Cell';
+import computedStyles from 'dash-table/components/computedStyles';
+import * as actions from 'dash-table/utils/actions';
 
 const getColLength = c => (Array.isArray(c.name) ? c.name.length : 1);
 

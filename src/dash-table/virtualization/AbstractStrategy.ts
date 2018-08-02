@@ -2,29 +2,32 @@ import * as R from 'ramda';
 
 export type Dataframe = any[];
 
-export interface ISettings<TOptions> {
-    type: string;
-    subType?: string;
-    options: TOptions;
+export interface ISettings {
+    displayedPages: number;
+    currentPage: number;
+    entries: number;
+    pageSize: number;
 }
 
-export interface IViewport<TOptions> {
+export interface IViewport {
     readonly dataframe: Dataframe;
-    readonly settings: ISettings<TOptions>;
+    readonly settings: ISettings;
+    readonly virtualization: string;
 
     readonly viewportDataframe: Dataframe;
     readonly viewportIndices: number[];
 }
 
-export interface ITarget<TOptions> extends IViewport<TOptions> {
-    update: (viewport: Partial<IViewport<TOptions>>) => void;
+export interface ITarget extends IViewport {
+
+    update: (viewport: Partial<IViewport>) => void;
 }
 
-export default abstract class AbstractVirtualizationStrategy<TOptions>
+export default abstract class AbstractVirtualizationStrategy
 {
     protected __dataframe: Dataframe;
 
-    constructor(protected readonly target: ITarget<TOptions>) {
+    constructor(protected readonly target: ITarget) {
 
     }
 

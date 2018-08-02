@@ -3,7 +3,7 @@
         "outDir": "./dist",
         "allowJs": true,
         "allowSyntheticDefaultImports": true,
-        "baseUrl": "./src",
+        "baseUrl": ".",
         "emitDecoratorMetadata": false,
         "experimentalDecorators": true,
         "jsx": "react",
@@ -13,8 +13,9 @@
         "noUnusedLocals": false,
         "noUnusedParameters": false,
         "paths": {
-            "core/*": ["core/*"],
-            "dash-table/*": ["dash-table/*"]
+            "core/*": ["src/core/*"],
+            "dash-table/*": ["src/dash-table/*"],
+            "tests": ["src/tests"]
         },
         "sourceMap": false,
         "strict": true,

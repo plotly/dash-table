@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
 import * as R from 'ramda';
 import SheetClip from 'sheetclip';
-import Row from './Row.js';
-import Header from './Header.js';
-import { colIsEditable } from './derivedState.js';
+import Row from 'dash-table/components/Row';
+import Header from 'dash-table/components/Header';
+import { colIsEditable } from 'dash-table/components/derivedState';
 import {
     KEY_CODES,
     isCtrlMetaKey,
     isCtrlDown,
     isMetaKey,
     isNavKey,
-} from '../utils/unicode.js';
-import { selectionCycle } from '../utils/navigation.js';
-import computedStyles from './computedStyles.js';
+} from 'dash-table/utils/unicode';
+import { selectionCycle } from 'dash-table/utils/navigation';
+import computedStyles from 'dash-table/components/computedStyles';
 
-import { propTypes } from './Table.js';
+import { propTypes } from 'dash-table/components/Table';
 
 const sortNumerical = R.sort((a, b) => a - b);
 
@@ -530,9 +530,9 @@ export default class ControlledTable extends Component {
     }
 
     get displayPagination() {
-        const { virtualization } = this.props;
+        const { navigation } = this.props;
 
-        return virtualization.subType === 'page'
+        return navigation === 'page'
     }
 
     loadNext() {
@@ -557,10 +557,6 @@ export default class ControlledTable extends Component {
         } = this.props;
 
         const dataframe = virtualizer.dataframe;
-
-        if (!virtualizer) {
-            return null;
-        }
 
         const table_component = (
             <div>

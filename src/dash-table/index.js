@@ -1,4 +1,4 @@
-import Table from './components/Table';
+import Table from 'dash-table/components/Table';
 
 export {
     Table

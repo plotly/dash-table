@@ -2,32 +2,34 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import * as R from 'ramda';
 
-import ControlledTable from './ControlledTable';
+import ControlledTable from 'dash-table/components/ControlledTable';
 
 import 'react-select/dist/react-select.css';
 import './Table.css';
 import './Dropdown.css';
 
-import VirtualizationFactory from '../virtualization/Factory';
+import VirtualizationFactory from 'dash-table/virtualization/Factory';
 
 import { memoizeOne } from 'core/memoizer';
+import VirtualizationAdapter from 'dash-table/components/Table/VirtualizationAdapter';
 
 export default class Table extends Component {
     constructor(props) {
         super(props);
 
-        this.getVirtualizer = memoizeOne((target, virtualization) => {
+        const getVirtualizer = memoizeOne((target, virtualization) => {
             return VirtualizationFactory.getVirtualizer(target, virtualization);
         });
 
+        const getAdapter = memoizeOne(target => new VirtualizationAdapter(target));
+
         Object.defineProperty(this, 'virtualizer', {
-            get: () => {
-                return this.getVirtualizer(this, this.props.virtualization);
-            }
+            get: () => getVirtualizer(getAdapter(this))
         });
     }
 
     render() {
+        console.log('render table');
         this.virtualizer.refresh();
 
         if (!this.props.setProps) {
@@ -83,14 +85,15 @@ export default class Table extends Component {
 }
 
 export const defaultProps = {
-    virtualization: {
-        type: 'fe',
-        subType: 'page',
-        options: {
-            currentPage: 0,
-            pageSize: 500
-        }
+    virtualization: 'fe',
+    virtualization_settings: {
+        displayedPages: 1,
+        currentPage: 0,
+        entries: NaN,
+        pageSize: 500
     },
+    navigation: 'page',
+
     filtering: {
         type: 'fe',
         options: []
@@ -189,14 +192,15 @@ export const propTypes = {
     style_as_list_view: PropTypes.bool,
     table_style: PropTypes.any,
 
-    virtualization: PropTypes.shape({
-        type: PropTypes.string,
-        subType: PropTypes.string,
-        options: PropTypes.shape({
-            currentPage: PropTypes.number,
-            pageSize: PropTypes.number
-        })
+    virtualization: PropTypes.string,
+    virtualization_settings: PropTypes.shape({
+        displayedPages: PropTypes.number, // number of pages to display
+        currentPage: PropTypes.number, // first page to display
+        entries: PropTypes.number, // number of entries
+        pageSize: PropTypes.number // page size
     }),
+    navigation: PropTypes.string,
+
     filtering: PropTypes.shape({
         type: PropTypes.string,
         options: PropTypes.arrayOf(

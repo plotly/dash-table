@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import * as R from 'ramda';
-import computedStyles from './computedStyles';
+import computedStyles from 'dash-table/components/computedStyles';
 
 const getColLength = c => (Array.isArray(c.name) ? c.name.length : 1);
 const getColNameAt = (c, i) => (Array.isArray(c.name) ? c.name[i] : '');
