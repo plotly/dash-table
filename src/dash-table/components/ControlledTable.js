@@ -14,7 +14,7 @@ import {
 import { selectionCycle } from '../utils/navigation.js';
 import computedStyles from './computedStyles.js';
 
-import { propTypes } from './Table';
+import { propTypes } from './Table.js';
 
 const sortNumerical = R.sort((a, b) => a - b);
 

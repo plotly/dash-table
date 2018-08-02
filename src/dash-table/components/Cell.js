@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import * as R from 'ramda';
 import Dropdown from 'react-select';
 
-import {colIsEditable} from './derivedState';
-import computedStyles from './computedStyles';
+import {colIsEditable} from 'dash-table/components/derivedState';
+import computedStyles from 'dash-table/components/computedStyles';
 
 export default class Cell extends Component {
     constructor(props) {

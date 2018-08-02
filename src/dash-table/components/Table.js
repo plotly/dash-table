@@ -10,7 +10,7 @@ import './Dropdown.css';
 
 import VirtualizationFactory from '../virtualization/Factory';
 
-import { memoizeOne } from '../utils/memoizer';
+import { memoizeOne } from 'core/memoizer';
 
 export default class Table extends Component {
     constructor(props) {
