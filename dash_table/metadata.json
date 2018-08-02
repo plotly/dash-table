@@ -1,5 +1,5 @@
 {
-  "src/lib/components/Table.js": {
+  "src/components/Table.js": {
     "description": "",
     "displayName": "Table",
     "methods": [],

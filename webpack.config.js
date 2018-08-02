@@ -4,7 +4,7 @@ const packagejson = require('./package.json');
 const dashLibraryName = packagejson.name.replace(/-/g, '_');
 
 module.exports = {
-    entry: {main: './src/lib/index.js'},
+    entry: {main: './src/index.js'},
     output: {
         path: path.resolve(__dirname, dashLibraryName),
         filename: 'bundle.js',
@@ -48,7 +48,7 @@ module.exports = {
     },
     resolve: {
         alias: {
-            lib: path.resolve('/lib')
+            'dash-table': path.resolve('./src')
         },
         extensions: ['.js', '.ts']
     }
