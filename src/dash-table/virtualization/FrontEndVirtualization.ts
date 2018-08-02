@@ -12,6 +12,7 @@ export default class FrontEndPageStrategy extends AbstractStrategy {
 
     protected getDataframe() {
         let { settings, dataframe } = this.target;
+        console.log('getDataframe', settings);
 
         let currentPage = Math.min(
             settings.currentPage,
@@ -41,13 +42,14 @@ export default class FrontEndPageStrategy extends AbstractStrategy {
     public loadNext() {
         let { settings, dataframe } = this.target;
 
-        let maxPage = Math.floor(dataframe.length / settings.pageSize);
+        let maxPageIndex = Math.floor(dataframe.length / settings.pageSize);
 
-        if (settings.currentPage >= maxPage) {
+        if (settings.currentPage >= maxPageIndex) {
             return;
         }
 
         settings.currentPage++;
+        console.log('loadNext', settings);
         this.target.update({ settings });
     }
 

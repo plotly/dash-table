@@ -1,5 +1,5 @@
 {
-  "src/dash-table/components/Table/index.js": {
+  "src/dash-table/components/Table.js": {
     "description": "",
     "displayName": "Table",
     "methods": [],
@@ -281,10 +281,6 @@
               "name": "number",
               "required": false
             },
-            "entries": {
-              "name": "number",
-              "required": false
-            },
             "pageSize": {
               "name": "number",
               "required": false
@@ -294,7 +290,7 @@
         "required": false,
         "description": "",
         "defaultValue": {
-          "value": "{\n    displayedPages: 1,\n    currentPage: 0,\n    entries: NaN,\n    pageSize: 500\n}",
+          "value": "{\n    displayedPages: 1,\n    currentPage: 0,\n    pageSize: 500\n}",
           "computed": false
         }
       },

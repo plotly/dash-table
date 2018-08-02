@@ -5,7 +5,6 @@ export type Dataframe = any[];
 export interface ISettings {
     displayedPages: number;
     currentPage: number;
-    entries: number;
     pageSize: number;
 }
 

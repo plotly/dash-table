@@ -5,8 +5,8 @@ import * as R from 'ramda';
 import ControlledTable from 'dash-table/components/ControlledTable';
 
 import 'react-select/dist/react-select.css';
-import './Table.css';
-import './Dropdown.css';
+import './Table/Table.css';
+import './Table/Dropdown.css';
 
 import VirtualizationFactory from 'dash-table/virtualization/Factory';
 
@@ -17,6 +17,10 @@ export default class Table extends Component {
     constructor(props) {
         super(props);
 
+        const setProps = memoizeOne(target => {
+            return this.props.setProps || (newProps => target.setState(newProps));
+        });
+
         const getVirtualizer = memoizeOne((target, virtualization) => {
             return VirtualizationFactory.getVirtualizer(target, virtualization);
         });
@@ -25,6 +29,10 @@ export default class Table extends Component {
 
         Object.defineProperty(this, 'virtualizer', {
             get: () => getVirtualizer(getAdapter(this))
+        });
+
+        Object.defineProperty(this, 'setProps', {
+            get: () => setProps(this)
         });
     }
 
@@ -38,7 +46,7 @@ export default class Table extends Component {
                 this.state,
                 {
                     virtualizer: this.virtualizer,
-                    setProps: newProps => this.setState(newProps),
+                    setProps: this.setProps,
                 },
             ]);
             return <ControlledTable {...newProps} />;
@@ -89,7 +97,6 @@ export const defaultProps = {
     virtualization_settings: {
         displayedPages: 1,
         currentPage: 0,
-        entries: NaN,
         pageSize: 500
     },
     navigation: 'page',
@@ -196,7 +203,6 @@ export const propTypes = {
     virtualization_settings: PropTypes.shape({
         displayedPages: PropTypes.number, // number of pages to display
         currentPage: PropTypes.number, // first page to display
-        entries: PropTypes.number, // number of entries
         pageSize: PropTypes.number // page size
     }),
     navigation: PropTypes.string,

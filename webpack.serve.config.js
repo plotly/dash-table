@@ -1,4 +1,4 @@
-const config = require('webpack.config');
+const config = require('./webpack.config');
 
 config.entry = {main: './demo/index.js'};
 config.output = {filename: 'output.js'};

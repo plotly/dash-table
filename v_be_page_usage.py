@@ -15,14 +15,12 @@ app.scripts.config.serve_locally = True
 app.layout = html.Div([
     dash_table.Table(
         id='table',
-        dataframe=df,
-        virtualization={
-            'type': 'be',
-            'subType': 'page',
-            'options': {
-                'currentPage': 0,
-                'pageSize': 500
-            }
+        dataframe=[],
+        virtualization='be',
+        virtualization_settings={
+            'displayedPages': 1,
+            'currentPage': 0,
+            'pageSize': 500
         },
         columns=[
             {'id': 0, 'name': 'Complaint ID'},
@@ -46,14 +44,18 @@ app.layout = html.Div([
 
 @app.callback(
     Output('table', 'dataframe'),
-    [Input('table', 'virtualization')]
+    [Input('table', 'virtualization_settings')]
 )
-def updateDataframe(virtualization):
-    currentPage = virtualization['options']['currentPage']
-    pageSize = virtualization['options']['pageSize']
+def updateDataframe(virtualization_settings):
+    print virtualization_settings
+
+    currentPage = virtualization_settings['currentPage']
+    displayedPages = virtualization_settings['displayedPages']
+    pageSize = virtualization_settings['pageSize']
 
     startIndex = currentPage * pageSize
-    endIndex = startIndex + pageSize
+    endIndex = startIndex + displayedPages * pageSize
+    print str(startIndex) + ',' + str(endIndex)
 
     return df[startIndex:endIndex]
 

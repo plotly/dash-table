@@ -26,9 +26,7 @@ export default class VirtualizationAdapter implements ITarget {
     }
 
     update(viewport: any) {
-        if (!this.target.props.setProps) {
-            return;
-        }
+        const setProps = this.target.setProps;
 
         const {
             settings,
@@ -38,23 +36,11 @@ export default class VirtualizationAdapter implements ITarget {
 
         let props = Object.assign(
             {},
-            settings ? { settings } : {},
+            settings ? { virtualization_settings: settings } : {},
             viewportDataframe ? { virtual_dataframe: viewportDataframe } : {},
             viewportIndices ? { virtual_dataframe_indices: viewportIndices } : {}
         );
 
-        setTimeout(() => {
-            if (settings) {
-                this.target.props.setProps(props);
-            }
-
-            if (viewportDataframe) {
-                this.target.props.setProps({ virtual_dataframe: viewportDataframe });
-            }
-
-            if (viewportIndices) {
-                this.target.props.setProps({ virtual_dataframe_indices: viewportIndices });
-            }
-        }, 0);
+        setTimeout(() => { setProps(props); }, 0);
     }
 }

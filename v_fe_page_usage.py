@@ -16,13 +16,11 @@ app.layout = html.Div([
     dash_table.Table(
         id='table',
         dataframe=df,
-        virtualization={
-            'type': 'fe',
-            'subType': 'page',
-            'options': {
-                'currentPage': 0,
-                'pageSize': 500
-            }
+        virtualization='fe',
+        virtualization_settings={
+            'currentPage': 0,
+            'displayedPages': 1,
+            'pageSize': 500
         },
         columns=[
             {'id': 0, 'name': 'Complaint ID'},
