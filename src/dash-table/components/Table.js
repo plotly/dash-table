@@ -200,9 +200,9 @@ export const propTypes = {
 
     virtualization: PropTypes.string,
     virtualization_settings: PropTypes.shape({
-        displayedPages: PropTypes.number, // number of pages to display
-        currentPage: PropTypes.number, // first page to display
-        pageSize: PropTypes.number // page size
+        displayedPages: PropTypes.number,
+        currentPage: PropTypes.number,
+        pageSize: PropTypes.number
     }),
     navigation: PropTypes.string,
 
