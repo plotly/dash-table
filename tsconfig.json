@@ -3,7 +3,7 @@
         "outDir": "./dist",
         "allowJs": true,
         "allowSyntheticDefaultImports": true,
-        "baseUrl": ".",
+        "baseUrl": "./src",
         "emitDecoratorMetadata": false,
         "experimentalDecorators": true,
         "jsx": "react",
@@ -13,9 +13,8 @@
         "noUnusedLocals": false,
         "noUnusedParameters": false,
         "paths": {
-            "lib/*": [
-                "*"
-            ],
+            "core/*": ["core/*"],
+            "dash-table/*": ["dash-table/*"]
         },
         "sourceMap": false,
         "strict": true,

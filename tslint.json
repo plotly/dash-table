@@ -21,7 +21,7 @@
         "no-conditional-assignment": false,
         "no-empty": false,
         "no-unused-expression": [true, "allow-new"],
-        "no-unused-variable": false,
+        "no-unused-variable": true,
         "object-literal-sort-keys": false,
         "object-literal-shorthand": false,
         "one-line": [true,

@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 
-import AbstractStrategy, { Dataframe, ITarget } from './AbstractStrategy';
+import AbstractStrategy, { ITarget } from './AbstractStrategy';
 
 interface IBackEndPageOptions {
     currentPage: number;
