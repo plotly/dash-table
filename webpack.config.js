@@ -4,10 +4,13 @@ const packagejson = require('./package.json');
 const dashLibraryName = packagejson.name.replace(/-/g, '_');
 
 module.exports = {
-    entry: {main: './src/dash-table/index.js'},
+    entry: {
+        bundle: './src/dash-table/index.js',
+        demo: './demo/index.js',
+    },
     output: {
         path: path.resolve(__dirname, dashLibraryName),
-        filename: 'bundle.js',
+        filename: '[name].js',
         library: dashLibraryName,
         libraryTarget: 'window',
     },

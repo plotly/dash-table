@@ -13,6 +13,10 @@ app.css.config.serve_locally = True
 app.scripts.config.serve_locally = True
 
 app.layout = html.Div([
+    html.Div(
+        id='container',
+        children='Hello World'
+    ),
     dash_table.Table(
         id='table',
         dataframe=[],
@@ -20,7 +24,7 @@ app.layout = html.Div([
         virtualization_settings={
             'displayedPages': 1,
             'currentPage': 0,
-            'pageSize': 500
+            'pageSize': 5
         },
         columns=[
             {'id': 0, 'name': 'Complaint ID'},
@@ -58,6 +62,20 @@ def updateDataframe(virtualization_settings):
     print str(startIndex) + ',' + str(endIndex)
 
     return df[startIndex:endIndex]
+
+hidden = False
+@app.callback(
+    Output('container', 'hidden'),
+    [Input('table', 'virtual_dataframe'), Input('table', 'virtual_dataframe_indices')]
+)
+def updateVirtualDataframe(virtual_dataframe, virtual_dataframe_indices):
+    print virtual_dataframe_indices[0]
+    print len(virtual_dataframe)
+
+    global hidden
+
+    hidden = not hidden
+    return hidden
 
 if __name__ == '__main__':
     app.run_server(debug=True)
