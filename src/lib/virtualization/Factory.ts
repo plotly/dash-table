@@ -24,6 +24,10 @@ export default class VirtualizationFactory {
             },
 
             update(viewport: any) {
+                if (!target.props.setProps) {
+                    return;
+                }
+
                 const {
                     settings,
                     viewportDataframe,
