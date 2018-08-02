@@ -12,7 +12,6 @@ export default class FrontEndPageStrategy extends AbstractStrategy {
 
     protected getDataframe() {
         let { settings, dataframe } = this.target;
-        console.log('getDataframe', settings);
 
         let currentPage = Math.min(
             settings.currentPage,
@@ -49,7 +48,6 @@ export default class FrontEndPageStrategy extends AbstractStrategy {
         }
 
         settings.currentPage++;
-        console.log('loadNext', settings);
         this.target.update({ settings });
     }
 
