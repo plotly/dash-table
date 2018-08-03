@@ -1,8 +1,7 @@
 import dash
-from dash.dependencies import Input, Output, State
+from dash.dependencies import Input, Output
 import dash_table
 import dash_html_components as html
-import json
 
 app = dash.Dash()
 
@@ -60,15 +59,18 @@ app.layout = html.Div([
     Output('table', 'dataframe'),
     [Input('table', 'virtualization')]
 )
-def updateDataframe(virtualization):
+def updateDataframe():
     return dataframe2
 
 
 @app.callback(
     Output('container', 'children'),
-    [Input('table', 'virtual_dataframe'), Input('table', 'virtual_dataframe_indices')]
+    [
+        Input('table', 'virtual_dataframe'),
+        Input('table', 'virtual_dataframe_indices')
+    ]
 )
-def updateContainer(virtual_dataframe, virtual_dataframe_indices):
+def updateContainer():
     return html.Pre('<div>Hello</div>')
 
 
