@@ -9,13 +9,13 @@ app = dash.Dash()
 app.css.config.serve_locally = True
 app.scripts.config.serve_locally = True
 
-dataframe=[
+dataframe = [
     {'ind': 0, 'temp': 80, 'climate': 'Tropical'},
     {'ind': 1, 'temp': 30, 'climate': 'Snowy'},
     {'ind': 2, 'temp': 20, 'climate': 'Rain Forests'},
 ]
 
-dataframe2=[
+dataframe2 = [
     {'ind': 0, 'temp': 80, 'climate': 'Tropical'},
     {'ind': 1, 'temp': 30, 'climate': 'Snowy'},
     {'ind': 2, 'temp': 20, 'climate': 'Rain Forests'},
@@ -55,6 +55,7 @@ app.layout = html.Div([
     html.Div(id='container')
 ])
 
+
 @app.callback(
     Output('table', 'dataframe'),
     [Input('table', 'virtualization')]
@@ -62,14 +63,14 @@ app.layout = html.Div([
 def updateDataframe(virtualization):
     return dataframe2
 
+
 @app.callback(
     Output('container', 'children'),
     [Input('table', 'virtual_dataframe'), Input('table', 'virtual_dataframe_indices')]
 )
-def pouet(virtual_dataframe, virtual_dataframe_indices):
-    print 'virtual_dataframe size: ' + str(len(virtual_dataframe))
-    print 'virtual_indices: ' + str(virtual_dataframe_indices)
+def updateContainer(virtual_dataframe, virtual_dataframe_indices):
     return html.Pre('<div>Hello</div>')
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)
