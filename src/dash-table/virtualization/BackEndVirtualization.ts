@@ -20,18 +20,18 @@ export default class BackEndPageStrategy extends AbstractStrategy {
     public loadNext() {
         let { settings } = this.target;
 
-        settings.currentPage++;
+        settings.current_page++;
         this.target.update({ settings });
     }
 
     public loadPrevious() {
         let { settings } = this.target;
 
-        if (settings.currentPage <= 0) {
+        if (settings.current_page <= 0) {
             return;
         }
 
-        settings.currentPage--;
+        settings.current_page--;
         this.target.update({ settings });
     }
 }

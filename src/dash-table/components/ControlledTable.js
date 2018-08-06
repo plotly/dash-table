@@ -538,8 +538,10 @@ export default class ControlledTable extends Component {
         } = this.props;
 
         return navigation === 'page' &&
-            virtualization === 'fe' &&
-            virtualization_settings.pageSize < dataframe.length;
+            (
+                (virtualization === 'fe' && virtualization_settings.page_size < dataframe.length) ||
+                virtualization === 'be'
+            );
     }
 
     loadNext() {

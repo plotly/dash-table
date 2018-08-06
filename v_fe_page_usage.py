@@ -18,9 +18,9 @@ app.layout = html.Div([
         dataframe=df,
         virtualization='fe',
         virtualization_settings={
-            'currentPage': 0,
-            'displayedPages': 1,
-            'pageSize': 500
+            'current_page': 0,
+            'displayed_pages': 1,
+            'page_size': 500
         },
         columns=[
             {'id': 0, 'name': 'Complaint ID'},

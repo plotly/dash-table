@@ -3,9 +3,9 @@ import * as R from 'ramda';
 export type Dataframe = any[];
 
 export interface ISettings {
-    displayedPages: number;
-    currentPage: number;
-    pageSize: number;
+    displayed_pages: number;
+    current_page: number;
+    page_size: number;
 }
 
 export interface IViewport {
@@ -18,7 +18,6 @@ export interface IViewport {
 }
 
 export interface ITarget extends IViewport {
-
     update: (viewport: Partial<IViewport>) => void;
 }
 

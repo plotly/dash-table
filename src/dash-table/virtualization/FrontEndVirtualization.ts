@@ -14,14 +14,14 @@ export default class FrontEndPageStrategy extends AbstractStrategy {
         let { settings, dataframe } = this.target;
 
         let currentPage = Math.min(
-            settings.currentPage,
-            Math.floor(dataframe.length / settings.pageSize)
+            settings.current_page,
+            Math.floor(dataframe.length / settings.page_size)
         );
 
-        this.firstIndex = settings.pageSize * currentPage;
+        this.firstIndex = settings.page_size * currentPage;
 
         this.lastIndex = Math.min(
-            this.firstIndex + settings.displayedPages * settings.pageSize,
+            this.firstIndex + settings.displayed_pages * settings.page_size,
             dataframe.length
         );
 
@@ -41,24 +41,24 @@ export default class FrontEndPageStrategy extends AbstractStrategy {
     public loadNext() {
         let { settings, dataframe } = this.target;
 
-        let maxPageIndex = Math.floor(dataframe.length / settings.pageSize);
+        let maxPageIndex = Math.floor(dataframe.length / settings.page_size);
 
-        if (settings.currentPage >= maxPageIndex) {
+        if (settings.current_page >= maxPageIndex) {
             return;
         }
 
-        settings.currentPage++;
+        settings.current_page++;
         this.target.update({ settings });
     }
 
     public loadPrevious() {
         let { settings } = this.target;
 
-        if (settings.currentPage <= 0) {
+        if (settings.current_page <= 0) {
             return;
         }
 
-        settings.currentPage--;
+        settings.current_page--;
         this.target.update({ settings });
     }
 }

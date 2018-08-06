@@ -22,10 +22,11 @@ app.layout = html.Div([
         dataframe=[],
         virtualization='be',
         virtualization_settings={
-            'displayedPages': 1,
-            'currentPage': 0,
-            'pageSize': 5
+            'displayed_pages': 1,
+            'current_page': 0,
+            'page_size': 5
         },
+        navigation='page',
         columns=[
             {'id': 0, 'name': 'Complaint ID'},
             {'id': 1, 'name': 'Product'},
@@ -53,15 +54,15 @@ app.layout = html.Div([
 def updateDataframe(virtualization_settings):
     print virtualization_settings
 
-    currentPage = virtualization_settings['currentPage']
-    displayedPages = virtualization_settings['displayedPages']
-    pageSize = virtualization_settings['pageSize']
+    current_page = virtualization_settings['current_page']
+    displayed_pages = virtualization_settings['displayed_pages']
+    page_size = virtualization_settings['page_size']
 
-    startIndex = currentPage * pageSize
-    endIndex = startIndex + displayedPages * pageSize
-    print str(startIndex) + ',' + str(endIndex)
+    start_index = current_page * page_size
+    end_index = start_index + displayed_pages * page_size
+    print str(start_index) + ',' + str(end_index)
 
-    return df[startIndex:endIndex]
+    return df[start_index:end_index]
 
 hidden = False
 @app.callback(
@@ -69,8 +70,7 @@ hidden = False
     [Input('table', 'virtual_dataframe'), Input('table', 'virtual_dataframe_indices')]
 )
 def updateVirtualDataframe(virtual_dataframe, virtual_dataframe_indices):
-    print virtual_dataframe_indices[0]
-    print len(virtual_dataframe)
+    print virtual_dataframe
 
     global hidden
 

@@ -27,14 +27,13 @@ app.layout = html.Div([
     dash_table.Table(
         id='table',
         dataframe=dataframe,
-        virtualization={
-            'type': 'be',
-            'subType': 'page',
-            'options': {
-                'currentPage': 0,
-                'pageSize': 100
-            }
-        },
+        virtualization='be',
+        virtualization_settings={
+            'displayed_pages': 1,
+            'current_page': 0,
+            'page_size': 100
+        }
+        navigation='page',
         columns=[
             {
                 'id': 'ind',

@@ -1,4 +1,6 @@
-import { Dataframe, ISettings, ITarget } from 'dash-table/virtualization/AbstractStrategy';
+import * as R from 'ramda';
+
+import { Dataframe, ISettings, ITarget, IViewport } from 'dash-table/virtualization/AbstractStrategy';
 
 export default class VirtualizationAdapter implements ITarget {
     constructor(private readonly target: any) {
@@ -25,7 +27,7 @@ export default class VirtualizationAdapter implements ITarget {
         return this.target.props.virtual_dataframe_indices;
     }
 
-    update(viewport: any) {
+    update(viewport: Partial<IViewport>) {
         const setProps = this.target.setProps;
 
         const {
@@ -34,12 +36,11 @@ export default class VirtualizationAdapter implements ITarget {
             viewportIndices
         } = viewport;
 
-        let props = Object.assign(
-            {},
+        let props = R.mergeAll([
             settings ? { virtualization_settings: settings } : {},
             viewportDataframe ? { virtual_dataframe: viewportDataframe } : {},
             viewportIndices ? { virtual_dataframe_indices: viewportIndices } : {}
-        );
+        ]);
 
         setTimeout(() => { setProps(props); }, 0);
     }

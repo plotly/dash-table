@@ -94,9 +94,9 @@ export default class Table extends Component {
 export const defaultProps = {
     virtualization: 'fe',
     virtualization_settings: {
-        displayedPages: 1,
-        currentPage: 0,
-        pageSize: 500
+        displayed_pages: 1,
+        current_page: 0,
+        page_size: 500
     },
     navigation: 'page',
 
@@ -200,9 +200,9 @@ export const propTypes = {
 
     virtualization: PropTypes.string,
     virtualization_settings: PropTypes.shape({
-        displayedPages: PropTypes.number,
-        currentPage: PropTypes.number,
-        pageSize: PropTypes.number
+        displayed_pages: PropTypes.number,
+        current_page: PropTypes.number,
+        page_size: PropTypes.number
     }),
     navigation: PropTypes.string,
 
