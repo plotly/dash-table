@@ -32,7 +32,7 @@ app.layout = html.Div([
             'displayed_pages': 1,
             'current_page': 0,
             'page_size': 100
-        }
+        },
         navigation='page',
         columns=[
             {
