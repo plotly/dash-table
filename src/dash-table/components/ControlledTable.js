@@ -530,9 +530,16 @@ export default class ControlledTable extends Component {
     }
 
     get displayPagination() {
-        const { navigation } = this.props;
+        const {
+            dataframe,
+            navigation,
+            virtualization,
+            virtualization_settings
+        } = this.props;
 
-        return navigation === 'page'
+        return navigation === 'page' &&
+            virtualization === 'fe' &&
+            virtualization_settings.pageSize < dataframe.length;
     }
 
     loadNext() {
