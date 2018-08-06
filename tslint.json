@@ -8,7 +8,6 @@
             "cypress/**"
         ]
     },
-    "jsRules": {},
     "rules": {
         "array-type": false,
         "arrow-parens": [true, "ban-single-arg-parens"],
@@ -21,7 +20,6 @@
         "no-conditional-assignment": false,
         "no-empty": false,
         "no-unused-expression": [true, "allow-new"],
-        "no-unused-variable": true,
         "object-literal-sort-keys": false,
         "object-literal-shorthand": false,
         "one-line": [true,

@@ -1,5 +1,3 @@
-import * as R from 'ramda';
-
 export type Dataframe = any[];
 
 export interface ISettings {
