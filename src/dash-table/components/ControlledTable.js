@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import * as R from 'ramda';
 import SheetClip from 'sheetclip';
 import { colIsEditable } from 'dash-table/components/derivedState';
