@@ -161,7 +161,8 @@ export default class Header extends Component {
                     )}
 
                     {((c.editable_name && R.type(c.editable_name) === 'Boolean') ||
-                       c.editable_name === columnRowIndex) ? (
+                      (R.type(c.editable_name) === 'Number' &&
+                       c.editable_name === columnRowIndex)) ? (
                         <span
                             className="column-header--edit"
                             onClick={this.editColumnName(c, columnRowIndex)}
@@ -170,7 +171,9 @@ export default class Header extends Component {
                         </span>
                     ) : ''}
 
-                    {c.deletable ? (
+                    {((c.deletable && R.type(c.deletable) === 'Boolean') ||
+                     (R.type(c.deletable) === 'Number' &&
+                      c.deletable === columnRowIndex)) ? (
                         <span
                             className="column-header--delete"
                             onClick={this.deleteColumn(

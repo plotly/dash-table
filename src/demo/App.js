@@ -17,8 +17,8 @@ class App extends Component {
                 id: 'table',
                 dataframe: clone(mockData.dataframe),
                 columns: clone(mockData.columns).map(col => merge(col, {
-                    editable_name: true,
-                    deletable: true,
+                    editable_name: 1,
+                    deletable: 1,
                     type: 'dropdown'
                 })),
                 editable: false,
