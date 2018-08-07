@@ -4,10 +4,13 @@ const packagejson = require('./package.json');
 const dashLibraryName = packagejson.name.replace(/-/g, '_');
 
 module.exports = {
-    entry: {main: './src/lib/index.js'},
+    entry: {
+        bundle: './src/dash-table/index.js',
+        demo: './demo/index.js',
+    },
     output: {
         path: path.resolve(__dirname, dashLibraryName),
-        filename: 'bundle.js',
+        filename: '[name].js',
         library: dashLibraryName,
         libraryTarget: 'window',
     },
@@ -18,6 +21,14 @@ module.exports = {
     },
     module: {
         rules: [
+            {
+                test: /\.ts$/,
+                exclude: /node_modules/,
+                use: [
+                    { loader: 'babel-loader' },
+                    { loader: 'ts-loader' }
+                ]
+            },
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
@@ -38,4 +49,12 @@ module.exports = {
             },
         ],
     },
+    resolve: {
+        alias: {
+            'dash-table': path.resolve('./src/dash-table'),
+            'core': path.resolve('./src/core'),
+            'tests': path.resolve('./tests')
+        },
+        extensions: ['.js', '.ts']
+    }
 };

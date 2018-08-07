@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import * as R from 'ramda';
 import Dropdown from 'react-select';
 
-import {colIsEditable} from './derivedState';
-import computedStyles from './computedStyles';
+import {colIsEditable} from 'dash-table/components/derivedState';
+import computedStyles from 'dash-table/components/computedStyles';
+import { memoizeOne } from 'core/memoizer';
 
 export default class Cell extends Component {
     constructor(props) {
@@ -13,16 +14,8 @@ export default class Cell extends Component {
         this.handleClick = this.handleClick.bind(this);
         this.handleDoubleClick = this.handleDoubleClick.bind(this);
 
-        const {editable, columns, i} = props;
-        this.state = {
-            notEditable: !colIsEditable(editable, columns[i]),
-        };
-    }
-
-    componentWillReceiveProps(nextProps) {
-        const {editable, columns, i} = nextProps;
-        this.setState({
-            notEditable: !colIsEditable(editable, columns[i]),
+        this.notEditable = memoizeOne((editable, columns, i) => {
+            return !colIsEditable(editable, columns[i]);
         });
     }
 
@@ -119,6 +112,7 @@ export default class Cell extends Component {
     render() {
         const {
             c,
+            editable,
             dropdown_properties,
             i,
             idx,
@@ -132,7 +126,7 @@ export default class Cell extends Component {
             active_cell,
         } = this.props;
 
-        const {notEditable} = this.state;
+        const notEditable = this.notEditable(editable, columns, i);
         const isActive = active_cell[0] === idx && active_cell[1] === i;
 
         let innerCell;
@@ -238,12 +232,10 @@ export default class Cell extends Component {
 
 Cell.propTypes = {
     c: PropTypes.any,
-    collapsable: PropTypes.any,
     columns: PropTypes.any,
     dataframe: PropTypes.any,
     dropdown_properties: PropTypes.any,
     editable: PropTypes.any,
-    expanded_rows: PropTypes.any,
     i: PropTypes.any,
     idx: PropTypes.any,
     isSelected: PropTypes.any,

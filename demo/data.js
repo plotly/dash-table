@@ -1,7 +1,7 @@
 /* eslint no-magic-numbers: 0 */
 import * as R from 'ramda';
 
-const N_DATA = 50;
+const N_DATA = 5000;
 
 export const mockData = unpackIntoColumnsAndDataFrames([
     {

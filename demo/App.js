@@ -1,17 +1,21 @@
 /* eslint no-magic-numbers: 0 */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {Table} from '../lib';
-import {mockData} from './data.js';
+import {Table} from 'dash-table';
+import {mockData} from './data';
 import Dropdown from 'react-select';
-import TestFixtures from '../../tests/fixtures.json';
+import TestFixtures from 'tests/fixtures.json';
 import {merge} from 'ramda';
+import { memoizeOne } from 'core/memoizer';
 
 const clone = o => JSON.parse(JSON.stringify(o));
 
 class App extends Component {
     constructor() {
         super();
+
+        this.onChange = this.onChange.bind(this);
+
         this.state = {
             tableProps: {
                 id: 'table',
@@ -23,27 +27,50 @@ class App extends Component {
             },
             selectedFixture: null,
         };
+
+        const getOptions = memoizeOne(fixtures => {
+            return fixtures.map(t => ({
+                label: t.name,
+                value: JSON.stringify(t.props),
+            }));
+        });
+
+        const setProps = memoizeOne(() => {
+            return newProps => {
+                console.info('--->', newProps);
+                this.setState({
+                    tableProps: merge(this.state.tableProps, newProps),
+                });
+            };
+        });
+
+        Object.defineProperty(this, 'options', {
+            get: () => getOptions(TestFixtures)
+        });
+
+        Object.defineProperty(this, 'setProps', {
+            get: () => setProps()
+        });
+    }
+
+    onChange(e) {
+        this.setState({
+            tableProps: JSON.parse(e.value),
+            selectedFixture: e.value,
+        })
     }
 
     render() {
         return (
             <div>
-                <div>
+                {<div>
                     <label>Load test case</label>
                     <Dropdown
-                        options={TestFixtures.map(t => ({
-                            label: t.name,
-                            value: JSON.stringify(t.props),
-                        }))}
-                        onChange={e =>
-                            this.setState({
-                                tableProps: JSON.parse(e.value),
-                                selectedFixture: e.value,
-                            })
-                        }
+                        options={this.options}
+                        onChange={this.onChange}
                         value={this.state.selectedFixture}
                     />
-                </div>
+                </div>}
 
                 <hr />
                 <label>test events:{'\u00A0\u00A0'}</label>
@@ -53,12 +80,7 @@ class App extends Component {
                 <hr />
 
                 <Table
-                    setProps={newProps => {
-                        console.info('--->', newProps);
-                        this.setState({
-                            tableProps: merge(this.state.tableProps, newProps),
-                        });
-                    }}
+                    setProps={this.setProps}
                     {...this.state.tableProps}
                 />
             </div>

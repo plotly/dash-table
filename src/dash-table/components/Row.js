@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import * as R from 'ramda';
-import Cell from './Cell';
-import computedStyles from './computedStyles';
-import * as actions from '../utils/actions';
+import Cell from 'dash-table/components/Cell';
+import computedStyles from 'dash-table/components/computedStyles';
+import * as actions from 'dash-table/utils/actions';
 
 const getColLength = c => (Array.isArray(c.name) ? c.name.length : 1);
 
@@ -17,34 +17,9 @@ export default class Row extends Component {
             setProps,
             selected_cell,
             selected_rows,
-            collapsable,
-            expanded_rows,
             row_deletable,
             row_selectable
         } = this.props;
-
-        const collapsableCell = !collapsable ? null : (
-            <td
-                className={`toggle-row
-                ${
-                    R.contains(idx, expanded_rows) ? 'toggle-row--expanded' : ''
-                }`}
-                onClick={() => {
-                    console.info(`Click ${idx}, ${expanded_rows}`);
-                    if (R.contains(idx, expanded_rows)) {
-                        setProps({
-                            expanded_rows: R.without([idx], expanded_rows),
-                        });
-                    } else {
-                        setProps({
-                            expanded_rows: R.append(idx, expanded_rows),
-                        });
-                    }
-                }}
-            >
-                {R.contains(idx, expanded_rows) ? '^' : '>'}
-            </td>
-        );
 
         const rowSelectable = !row_selectable ? null : (
             <td style={R.merge(
@@ -99,7 +74,7 @@ export default class Row extends Component {
 
             return (
                 <Cell
-                    key={`${c}-${i}`}
+                    key={`${c.id}-${i}`}
                     value={dataframe[idx][c.id]}
                     type={c.type}
                     editable={editable}
@@ -120,7 +95,6 @@ export default class Row extends Component {
                 className={R.contains(idx, selected_rows) ? 'selected-row' : ''}
             >
                 {deleteCell}
-                {collapsableCell}
                 {rowSelectable}
 
                 {cells}
@@ -136,8 +110,6 @@ Row.propTypes = {
     editable: PropTypes.any,
     setProps: PropTypes.any,
     selected_cell: PropTypes.any,
-    collapsable: PropTypes.any,
-    expanded_rows: PropTypes.any,
     active_cell: PropTypes.any,
     selected_rows: PropTypes.any,
     row_deletable: PropTypes.bool,
