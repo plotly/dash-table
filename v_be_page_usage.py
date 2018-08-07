@@ -52,7 +52,7 @@ app.layout = html.Div([
     [Input('table', 'virtualization_settings')]
 )
 def updateDataframe(virtualization_settings):
-    print virtualization_settings
+    print(virtualization_settings)
 
     current_page = virtualization_settings['current_page']
     displayed_pages = virtualization_settings['displayed_pages']
@@ -60,7 +60,7 @@ def updateDataframe(virtualization_settings):
 
     start_index = current_page * page_size
     end_index = start_index + displayed_pages * page_size
-    print str(start_index) + ',' + str(end_index)
+    print(str(start_index) + ',' + str(end_index))
 
     return df[start_index:end_index]
 
@@ -70,7 +70,7 @@ hidden = False
     [Input('table', 'virtual_dataframe'), Input('table', 'virtual_dataframe_indices')]
 )
 def updateVirtualDataframe(virtual_dataframe, virtual_dataframe_indices):
-    print virtual_dataframe
+    print(virtual_dataframe)
 
     global hidden
 

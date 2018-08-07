@@ -196,7 +196,10 @@
         "type": {
           "name": "arrayOf",
           "value": {
-            "name": "number"
+            "name": "arrayOf",
+            "value": {
+              "name": "number"
+            }
           }
         },
         "required": false,
