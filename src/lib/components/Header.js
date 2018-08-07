@@ -12,6 +12,8 @@ export default class Header extends Component {
         super();
         this.sort = this.sort.bind(this);
         this.renderHeaderCells = this.renderHeaderCells.bind(this);
+        this.editColumnName = this.editColumnName.bind(this);
+        this.deleteColumn = this.deleteColumn.bind(this);
     }
 
     sort(colId) {
@@ -52,30 +54,17 @@ export default class Header extends Component {
         });
     }
 
-    editColumnName(column_id, columnRowIndex) {
+    editColumnName(column, columnRowIndex) {
         return () => {
-            const {columns, setProps} = this.props;
-            const namePath = [
-                R.findIndex(R.propEq('id', column_id), columns),
-                'name'
-            ];
-            if (R.type(R.find(R.propEq('id', column_id), columns).name) === 'Array') {
-                namePath.push(columnRowIndex)
-            }
-            setProps({
-                columns: R.set(
-                    R.lensPath(namePath),
-                    window.prompt('Enter a new column name'),
-                    columns
-                )
-            });
+            const {setProps} = this.props;
+            setProps(actions.editColumnName(column, columnRowIndex, this.props));
         }
     }
 
-    deleteColumn(column_id) {
+    deleteColumn(column, columnRowIndex) {
         return () => {
             const {setProps} = this.props;
-            setProps(actions.deleteColumn(column_id, this.props));
+            setProps(actions.deleteColumn(column, columnRowIndex, this.props));
         }
     }
 
@@ -154,6 +143,7 @@ export default class Header extends Component {
                             : ''
                     }`}
                 >
+
                     {rowIsSortable ? (
                         <span
                             className="filter"
@@ -170,10 +160,11 @@ export default class Header extends Component {
                         ''
                     )}
 
-                    {c.editable_name ? (
+                    {((c.editable_name && R.type(c.editable_name) === 'Boolean') ||
+                       c.editable_name === columnRowIndex) ? (
                         <span
                             className="column-header--edit"
-                            onClick={this.editColumnName(c.id, columnRowIndex)}
+                            onClick={this.editColumnName(c, columnRowIndex)}
                         >
                             {`✎`}
                         </span>
@@ -182,13 +173,15 @@ export default class Header extends Component {
                     {c.deletable ? (
                         <span
                             className="column-header--delete"
-                            onClick={this.deleteColumn(c.id)}
+                            onClick={this.deleteColumn(
+                                c, columnRowIndex)}
                         >
                             {'×'}
                         </span>
                     ) : ''}
 
                     <span>{labels[i]}</span>
+
                 </th>
             );
         });
