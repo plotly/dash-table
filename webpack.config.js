@@ -26,7 +26,7 @@ module.exports = {
                 loader: 'file-loader?name=index.[ext]'
             },
             {
-                test: /\.ts$/,
+                test: /\.ts(x?)$/,
                 exclude: /node_modules/,
                 use: [
                     { loader: 'babel-loader' },
@@ -63,6 +63,6 @@ module.exports = {
             'core': path.resolve('./src/core'),
             'tests': path.resolve('./tests')
         },
-        extensions: ['.js', '.ts']
+        extensions: ['.js', '.ts', '.tsx']
     }
 };

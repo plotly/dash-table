@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import * as R from 'ramda';
 import SheetClip from 'sheetclip';
-import Row from 'dash-table/components/Row';
-import HeaderFactory from 'dash-table/components/HeaderFactory';
 import { colIsEditable } from 'dash-table/components/derivedState';
 import {
     KEY_CODES,
@@ -15,6 +13,9 @@ import { selectionCycle } from 'dash-table/utils/navigation';
 
 import { propTypes } from 'dash-table/components/Table';
 
+import HeaderFactory from 'dash-table/components/HeaderFactory';
+import RowFactory from 'dash-table/components/RowFactory';
+
 const sortNumerical = R.sort((a, b) => a - b);
 
 export default class ControlledTable extends Component {
@@ -22,7 +23,6 @@ export default class ControlledTable extends Component {
         super(props);
 
         this.handleKeyDown = this.handleKeyDown.bind(this);
-        this.collectRows = this.collectRows.bind(this);
         this.onPaste = this.onPaste.bind(this);
         this.handleClickOutside = this.handleClickOutside.bind(this);
         this.handlePaste = this.handlePaste.bind(this);
@@ -510,24 +510,6 @@ export default class ControlledTable extends Component {
         }
     }
 
-    collectRows(slicedDf, start) {
-        const { virtualizer } = this.props;
-
-        const rows = [];
-        for (let i = 0; i < slicedDf.length; i++) {
-            const row = slicedDf[i];
-            rows.push(
-                <Row
-                    key={virtualizer.offset + start + i}
-                    row={row}
-                    idx={virtualizer.offset + start + i}
-                    {...this.props}
-                />
-            );
-        }
-        return rows;
-    }
-
     get displayPagination() {
         const {
             dataframe,
@@ -569,19 +551,15 @@ export default class ControlledTable extends Component {
             table_style,
             // n_fixed_columns,
             n_fixed_rows,
-            virtualizer
         } = this.props;
 
-        const dataframe = virtualizer.dataframe;
-
         const rows = [
-            ...new HeaderFactory(this.props).createHeaders(),
-            ...this.collectRows(dataframe, 0)
+            ...HeaderFactory.createHeaders(this.props),
+            ...RowFactory.createRows(this.props)
         ];
 
         const fixedRows = rows.splice(0, n_fixed_rows);
         const hasFixedRows = fixedRows.length !== 0;
-        console.log('n_fixed_rows', n_fixed_rows, hasFixedRows, fixedRows);
 
         const table_component = (
             <div
