@@ -211,7 +211,7 @@ export default class Cell extends Component {
             this.props
         );
 
-        let fixedIndex = i +
+        const fixedIndex = i +
             (row_deletable ? 1 : 0) +
             (row_selectable ? 1 : 0);
 

@@ -6,13 +6,13 @@ interface ICellOptions {
     columns: any[];
     labels: any[];
     mergeCells?: boolean;
+    n_fixed_columns: number;
     rowIsSortable: boolean;
     sort: any;
 }
 
 interface IOptions extends ICellOptions {
     merge_duplicate_headers: boolean;
-    n_fixed_columns: number;
     n_fixed_rows: number;
     row_deletable: boolean;
     row_selectable: boolean;
@@ -23,8 +23,8 @@ const getColLength = (c: any) => (Array.isArray(c.name) ? c.name.length : 1);
 const getColNameAt = (c: any, i: number) => (Array.isArray(c.name) ? c.name[i] : '');
 
 export default class HeaderFactory {
-    private static createHeaderCells(options: ICellOptions) {
-        const { columns, labels, mergeCells, rowIsSortable, sort } = options;
+    private static createHeaderCells(options: ICellOptions, indexOffset: number) {
+        const { columns, labels, mergeCells, n_fixed_columns, rowIsSortable, sort } = options;
 
         let columnIndices: any[] = [];
 
@@ -95,11 +95,11 @@ export default class HeaderFactory {
                     key={`header-cell-${i}`}
                     colSpan={colSpan}
                     style={style}
-                    className={`${
-                        i === columns.length - 1 || i === R.last(columnIndices)
-                            ? 'cell--right-last'
-                            : ''
-                    }`}
+                    className={
+                        (i === columns.length - 1 || i === R.last(columnIndices) ? 'cell--right-last ' : '') +
+                        (i + indexOffset < n_fixed_columns ? `frozen-left frozen-left-${i + indexOffset}` : '')
+
+                    }
                 >
                     {rowIsSortable ? (
                         <span
@@ -128,24 +128,45 @@ export default class HeaderFactory {
             columns,
             sortable,
             merge_duplicate_headers,
+            n_fixed_columns,
             row_deletable,
             row_selectable,
             sort
         } = options;
 
         const deletableCell = !row_deletable ? null : (
-            <th className='expanded-row--empty-cell'
-                style={{ width: 30 }}
+            <th
+                className={
+                    'expanded-row--empty-cell ' +
+                    (n_fixed_columns > 0 ? 'frozen-left frozen-left-0' : '')
+                }
+                style={R.merge(
+                    computedStyles.scroll.cell(options, 0),
+                    { width: 30 }
+                )}
             />
         );
 
+        const rowSelectableFixedIndex = row_deletable ? 1 : 0;
+
         const selectableCell = !row_selectable ? null : (
-            <th className='expanded-row--empty-cell'
-                style={{ width: 30 }}
+            <th
+                className={
+                    'expanded-row--empty-cell ' +
+                    (n_fixed_columns > rowSelectableFixedIndex ? `frozen-left frozen-left-${rowSelectableFixedIndex}` : '')
+                }
+                style={R.merge(
+                    computedStyles.scroll.cell(options, rowSelectableFixedIndex),
+                    { width: 30 }
+                )}
             />
         );
 
         const headerDepth = Math.max.apply(Math, columns.map(getColLength));
+        const indexOffset =
+            (row_deletable ? 1 : 0) +
+            (row_selectable ? 1 : 0);
+
         if (headerDepth === 1) {
             return [(
                 <tr key={`header-0`}>
@@ -153,9 +174,10 @@ export default class HeaderFactory {
                     {HeaderFactory.createHeaderCells({
                         columns,
                         labels: R.pluck('name', columns),
+                        n_fixed_columns,
                         rowIsSortable: sortable,
                         sort
-                    })}
+                    }, indexOffset)}
                 </tr>
             )];
         } else {
@@ -171,79 +193,15 @@ export default class HeaderFactory {
                                     ? c.id
                                     : getColNameAt(c, i)
                         ),
+                        n_fixed_columns,
                         rowIsSortable: sortable && i + 1 === headerDepth,
                         mergeCells:
                             merge_duplicate_headers &&
                             i + 1 !== headerDepth,
                         sort
-                    })}
+                    }, indexOffset)}
                 </tr>
             ));
         }
-//         const selectableCell = !row_selectable ? null : (
-//             <th className= "expanded-row--empty-cell"
-//         style = {{ 'width': 30 }
-//     }
-//              />
-//         );
-// const deletableCell = !row_deletable ? null : (
-//     <th className= "expanded-row--empty-cell"
-// style = {{ 'width': 30 }}
-// />
-//         )
-
-// // TODO calculate in lifecycle function
-// const headerDepth = Math.max.apply(Math, columns.map(getColLength));
-// if (headerDepth === 1) {
-//     h
-//         } else {
-//
-// });
-//         }
-
-// return headerRows;
     }
-
-    // sort(colId) {
-    //     const {dataframe, setProps, sort} = this.props;
-
-    //     let newSort = sort;
-    //     const colSort = R.find(R.propEq('column', colId))(sort);
-
-    //     if (colSort) {
-    //         if (colSort.direction === 'desc') {
-    //             colSort.direction = 'asc';
-    //         } else if (colSort.direction === 'asc') {
-    //             newSort = newSort.filter(
-    //                 R.complement(R.propEq('column', colId))
-    //             );
-    //         }
-    //     } else {
-    //         newSort.push({
-    //             column: colId,
-    //             direction: 'desc',
-    //         });
-    //     }
-
-    //     newSort = newSort.filter(R.complement(R.isEmpty));
-
-    //     setProps({
-    //         sort: newSort.filter(R.complement(R.not)),
-
-    //         dataframe: R.sortWith(
-    //             newSort.map(
-    //                 s =>
-    //                     s.direction === 'desc'
-    //                         ? R.descend(R.prop(s.column))
-    //                         : R.ascend(R.prop(s.column))
-    //             ),
-    //             dataframe
-    //         ),
-    //     });
-    // }
-
-    // renderHeaderCells({labels, rowIsSortable, mergeCells}) {
-
-    // }
-
 }
