@@ -190,7 +190,7 @@ export const propTypes = {
     n_fixed_rows: PropTypes.number,
     row_deletable: PropTypes.bool,
     row_selectable: PropTypes.oneOf(['single', 'multi']),
-    selected_cell: PropTypes.arrayOf(PropTypes.number),
+    selected_cell: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
     selected_rows: PropTypes.arrayOf(PropTypes.number),
     setProps: PropTypes.any,
     sortable: PropTypes.bool,

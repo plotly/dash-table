@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import * as R from 'ramda';
 import SheetClip from 'sheetclip';
 import Row from 'dash-table/components/Row';
@@ -567,43 +567,47 @@ export default class ControlledTable extends Component {
 
         const dataframe = virtualizer.dataframe;
 
-        const table_component = (
-            <div>
-                <table
-                    id={id}
-                    key={`${id}-table`}
-                    onPaste={this.onPaste}
-                    tabIndex={-1}
-                    style={table_style}
-                >
-                    <Header {...this.props} />
+        let tableStyle = null;
+        if (n_fixed_columns || n_fixed_rows) {
+            tableStyle = computedStyles.scroll.containerDiv(this.props);
+        }
 
-                    <tbody>
-                        {this.collectRows(dataframe, 0)}
-                    </tbody>
-                </table>
+        const table_component = (
+            <Fragment>
+                <div
+                    className="dash-spreadsheet"
+                    style={tableStyle}
+                    onKeyDown={this.handleKeyDown}
+                    key={`${id}-table-container`}
+                >
+                    <table
+                        id={id}
+                        key={`${id}-table`}
+                        onPaste={this.onPaste}
+                        tabIndex={-1}
+                        style={table_style}
+                    >
+                        <Header {...this.props} />
+
+                        <tbody>
+                            {this.collectRows(dataframe, 0)}
+                        </tbody>
+                    </table>
+
+                </div>
+            </Fragment>
+        );
+
+        return (
+            <Fragment>
+                {table_component}
                 {!this.displayPagination ? null : (
                     <div>
                         <button onClick={this.loadPrevious}>Previous</button>
                         <button onClick={this.loadNext}>Next</button>
                     </div>
                 )}
-            </div>
-        );
-
-        let tableStyle = null;
-        if (n_fixed_columns || n_fixed_rows) {
-            tableStyle = computedStyles.scroll.containerDiv(this.props);
-        }
-        return (
-            <div
-                className="dash-spreadsheet"
-                style={tableStyle}
-                onKeyDown={this.handleKeyDown}
-                key={`${id}-table-container`}
-            >
-                {table_component}
-            </div>
+            </Fragment>
         );
     }
 }

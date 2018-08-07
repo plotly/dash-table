@@ -6,7 +6,7 @@ const dashLibraryName = packagejson.name.replace(/-/g, '_');
 module.exports = {
     entry: {
         bundle: './src/dash-table/index.js',
-        demo: './demo/index.js',
+        demo: ['./demo/index.js', './demo/index.html'],
     },
     output: {
         path: path.resolve(__dirname, dashLibraryName),
@@ -21,6 +21,10 @@ module.exports = {
     },
     module: {
         rules: [
+            {
+                test: /demo[/]index.html?$/,
+                loader: 'file-loader?name=index.[ext]'
+            },
             {
                 test: /\.ts$/,
                 exclude: /node_modules/,
@@ -39,12 +43,8 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [
-                    {
-                        loader: 'style-loader',
-                    },
-                    {
-                        loader: 'css-loader',
-                    },
+                    { loader: 'style-loader' },
+                    { loader: 'css-loader' }
                 ],
             },
         ],
