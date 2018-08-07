@@ -5,7 +5,7 @@ import * as R from 'ramda';
 import ControlledTable from 'dash-table/components/ControlledTable';
 
 import 'react-select/dist/react-select.css';
-import './Table/Table.css';
+import './Table/Table.less';
 import './Table/Dropdown.css';
 
 import VirtualizationFactory from 'dash-table/virtualization/Factory';

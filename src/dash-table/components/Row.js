@@ -5,8 +5,6 @@ import Cell from 'dash-table/components/Cell';
 import computedStyles from 'dash-table/components/computedStyles';
 import * as actions from 'dash-table/utils/actions';
 
-const getColLength = c => (Array.isArray(c.name) ? c.name.length : 1);
-
 export default class Row extends Component {
     render() {
         const {
@@ -88,10 +86,8 @@ export default class Row extends Component {
             );
         });
 
-        const headerDepth = Math.max.apply(Math, columns.map(getColLength));
         return (
             <tr
-                style={computedStyles.scroll.row(this.props, idx + headerDepth)}
                 className={R.contains(idx, selected_rows) ? 'selected-row' : ''}
             >
                 {deleteCell}

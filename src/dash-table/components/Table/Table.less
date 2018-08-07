@@ -1,10 +1,32 @@
-.dash-spreadsheet {
-    box-sizing: border-box;
-}
-.dash-spreadsheet *,
-.dash-spreadsheet *:before,
-.dash-spreadsheet *:after {
-    box-sizing: inherit;
+.dash-spreadsheet-container {
+    position: relative;
+
+    .dash-spreadsheet {
+        box-sizing: border-box;
+
+        *,
+        *:after,
+        *:before {
+            box-sizing: inherit;
+        }
+
+        &.freeze-left {
+            overflow-x: auto;
+            width: 500px;
+        }
+
+        &.freeze-top {
+            overflow-y: auto;
+            height: 500px;
+        }
+
+        .frozen-top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+    }
 }
 
 .dash-spreadsheet textarea {

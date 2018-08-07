@@ -1,14 +1,14 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import * as R from 'ramda';
 import computedStyles from 'dash-table/components/computedStyles';
 
 const getColLength = c => (Array.isArray(c.name) ? c.name.length : 1);
 const getColNameAt = (c, i) => (Array.isArray(c.name) ? c.name[i] : '');
 
-export default class Header extends Component {
-    constructor() {
-        super();
+export default class HeaderFactory {
+    constructor(props) {
+        this.props = props;
+
         this.sort = this.sort.bind(this);
         this.renderHeaderCells = this.renderHeaderCells.bind(this);
     }
@@ -118,6 +118,7 @@ export default class Header extends Component {
 
             return (
                 <th
+                    key={`header-cell-${i}`}
                     colSpan={colSpan}
                     style={style}
                     className={`${
@@ -148,7 +149,7 @@ export default class Header extends Component {
         });
     }
 
-    render() {
+    createHeaders() {
         const {
             columns,
             sortable,
@@ -157,7 +158,7 @@ export default class Header extends Component {
             row_selectable
         } = this.props;
 
-        let headerRows;
+        const headerRows = [];
 
         const selectableCell = !row_selectable ? null : (
             <th className="expanded-row--empty-cell"
@@ -173,22 +174,19 @@ export default class Header extends Component {
         // TODO calculate in lifecycle function
         const headerDepth = Math.max.apply(Math, columns.map(getColLength));
         if (headerDepth === 1) {
-            const rowStyle = computedStyles.scroll.row(this.props, 0);
-            headerRows = (
-                <tr style={rowStyle}>
+            headerRows.push((
+                <tr key={`header-0`}>
                     {selectableCell}
                     {this.renderHeaderCells({
                         labels: R.pluck('name', columns),
                         rowIsSortable: sortable,
                     })}
                 </tr>
-            );
+            ));
         } else {
-            headerRows = [];
             R.range(0, headerDepth).forEach(i => {
-                const rowStyle = computedStyles.scroll.row(this.props, i);
                 headerRows.push(
-                    <tr style={rowStyle}>
+                    <tr key={`header-${i}`}>
                         {deletableCell}
                         {selectableCell}
                         {this.renderHeaderCells({
@@ -208,17 +206,6 @@ export default class Header extends Component {
             });
         }
 
-        return <thead>{headerRows}</thead>;
+        return headerRows;
     }
 }
-
-Header.propTypes = {
-    columns: PropTypes.any,
-    sortable: PropTypes.any,
-    merge_duplicate_headers: PropTypes.any,
-    dataframe: PropTypes.any,
-    setProps: PropTypes.any,
-    sort: PropTypes.any,
-    row_deletable: PropTypes.bool,
-    row_selectable: PropTypes.any
-};

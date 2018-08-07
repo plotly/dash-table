@@ -1,8 +1,8 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import * as R from 'ramda';
 import SheetClip from 'sheetclip';
 import Row from 'dash-table/components/Row';
-import Header from 'dash-table/components/Header';
+import HeaderFactory from 'dash-table/components/HeaderFactory';
 import { colIsEditable } from 'dash-table/components/derivedState';
 import {
     KEY_CODES,
@@ -12,7 +12,6 @@ import {
     isNavKey,
 } from 'dash-table/utils/unicode';
 import { selectionCycle } from 'dash-table/utils/navigation';
-import computedStyles from 'dash-table/components/computedStyles';
 
 import { propTypes } from 'dash-table/components/Table';
 
@@ -556,50 +555,64 @@ export default class ControlledTable extends Component {
         virtualizer.loadPrevious();
     }
 
+    componentDidUpdate() {
+        const { container, frozenTop } = this.refs;
+
+        container.style['padding-top'] = frozenTop ?
+            `${frozenTop.clientHeight}px` :
+            0;
+    }
+
     render() {
         const {
             id,
             table_style,
-            n_fixed_columns,
+            // n_fixed_columns,
             n_fixed_rows,
             virtualizer
         } = this.props;
 
         const dataframe = virtualizer.dataframe;
 
-        let tableStyle = null;
-        if (n_fixed_columns || n_fixed_rows) {
-            tableStyle = computedStyles.scroll.containerDiv(this.props);
-        }
+        const rows = [
+            ...new HeaderFactory(this.props).createHeaders(),
+            ...this.collectRows(dataframe, 0)
+        ];
+
+        const fixedRows = rows.splice(0, n_fixed_rows);
+        const hasFixedRows = fixedRows.length !== 0;
+        console.log('n_fixed_rows', n_fixed_rows, hasFixedRows, fixedRows);
 
         const table_component = (
-            <Fragment>
-                <div
-                    className="dash-spreadsheet"
-                    style={tableStyle}
-                    onKeyDown={this.handleKeyDown}
-                    key={`${id}-table-container`}
+            <div
+                className={[
+                    'dash-spreadsheet',
+                    ...(hasFixedRows ? ['freeze-top'] : [])
+                ].join(' ')}
+                onKeyDown={this.handleKeyDown}
+                key={`${id}-table-container`}
+            >
+                <table
+                    id={id}
+                    key={`${id}-table`}
+                    onPaste={this.onPaste}
+                    tabIndex={-1}
+                    style={table_style}
                 >
-                    <table
-                        id={id}
-                        key={`${id}-table`}
-                        onPaste={this.onPaste}
-                        tabIndex={-1}
-                        style={table_style}
-                    >
-                        <Header {...this.props} />
-
-                        <tbody>
-                            {this.collectRows(dataframe, 0)}
-                        </tbody>
-                    </table>
-
-                </div>
-            </Fragment>
+                    {fixedRows ? <thead
+                        className={'frozen-top'}
+                        ref='frozenTop'
+                    >{fixedRows}</thead> : null}
+                    {<tbody>{rows}</tbody>}
+                </table>
+            </div>
         );
 
         return (
-            <Fragment>
+            <section
+                className='dash-spreadsheet-container'
+                ref='container'
+            >
                 {table_component}
                 {!this.displayPagination ? null : (
                     <div>
@@ -607,7 +620,7 @@ export default class ControlledTable extends Component {
                         <button onClick={this.loadNext}>Next</button>
                     </div>
                 )}
-            </Fragment>
+            </section>
         );
     }
 }
