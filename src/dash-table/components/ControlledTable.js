@@ -636,7 +636,7 @@ export default class ControlledTable extends Component {
         );
 
         return (
-            <Fragment>
+            <div>
                 <section
                     className='dash-spreadsheet-container'
                     ref='container'
@@ -650,7 +650,7 @@ export default class ControlledTable extends Component {
                         <button onClick={this.loadNext}>Next</button>
                     </div>
                 )}
-            </Fragment>
+            </div>
         );
     }
 }
