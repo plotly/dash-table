@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import * as R from 'ramda';
 import SheetClip from 'sheetclip';
 import { colIsEditable } from 'dash-table/components/derivedState';
@@ -537,19 +537,67 @@ export default class ControlledTable extends Component {
         virtualizer.loadPrevious();
     }
 
+    getDynamicStylesheet() {
+        return (this.__fixedCss = this.__fixedCss || (() => {
+            const style = document.createElement('style');
+            style.type = 'text/css';
+            document.getElementsByTagName('head')[0].appendChild(style);
+
+            return style;
+        })()).sheet;
+    }
+
+    updateRule(selector: string, style: string) {
+        const sheet = this.getDynamicStylesheet();
+
+        const ruleIndex = R.findIndex(
+            rule => rule.selectorText === selector,
+            Array.from(sheet.rules)
+        );
+
+
+        if (ruleIndex !== -1) {
+            sheet.deleteRule(ruleIndex);
+        }
+
+        sheet.addRule(selector, style);
+    }
+
     componentDidUpdate() {
+        const { n_fixed_columns } = this.props;
+        if (!n_fixed_columns) {
+            return;
+        }
+
         const { container, frozenTop } = this.refs;
 
-        container.style['padding-top'] = frozenTop ?
-            `${frozenTop.clientHeight}px` :
-            0;
+        let xOffset = 0;
+        R.range(0, n_fixed_columns).forEach(index => {
+            this.updateRule(`.frozen-left-${index}`, `margin-left: ${xOffset}px;`);
+
+            const fixedCell = container.querySelector(`.frozen-left-${index}`);
+            if (fixedCell) {
+                xOffset += fixedCell.clientWidth;
+            }
+        });
+
+        this.updateRule(`.dash-spreadsheet`, `padding-left: ${xOffset}px; padding-top: ${frozenTop ? frozenTop.clientHeight : 0}px;`);
+    }
+
+    onContainerScroll(ev) {
+        const { n_fixed_columns } = this.props;
+        if (!n_fixed_columns) {
+            return;
+        }
+
+        this.updateRule(`.frozen-left`, `margin-top: ${-ev.target.scrollTop}px;`);
     }
 
     render() {
         const {
             id,
             table_style,
-            // n_fixed_columns,
+            n_fixed_columns,
             n_fixed_rows,
         } = this.props;
 
@@ -565,7 +613,8 @@ export default class ControlledTable extends Component {
             <div
                 className={[
                     'dash-spreadsheet',
-                    ...(hasFixedRows ? ['freeze-top'] : [])
+                    ...(hasFixedRows ? ['freeze-top'] : []),
+                    ...(n_fixed_columns ? ['freeze-left'] : [])
                 ].join(' ')}
                 onKeyDown={this.handleKeyDown}
                 key={`${id}-table-container`}
@@ -587,18 +636,21 @@ export default class ControlledTable extends Component {
         );
 
         return (
-            <section
-                className='dash-spreadsheet-container'
-                ref='container'
-            >
-                {table_component}
+            <Fragment>
+                <section
+                    className='dash-spreadsheet-container'
+                    ref='container'
+                    onScroll={this.onContainerScroll.bind(this)}
+                >
+                    {table_component}
+                </section>
                 {!this.displayPagination ? null : (
                     <div>
                         <button onClick={this.loadPrevious}>Previous</button>
                         <button onClick={this.loadNext}>Next</button>
                     </div>
                 )}
-            </section>
+            </Fragment>
         );
     }
 }

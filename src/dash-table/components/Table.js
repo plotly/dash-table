@@ -96,7 +96,7 @@ export const defaultProps = {
     virtualization_settings: {
         displayed_pages: 1,
         current_page: 0,
-        page_size: 500
+        page_size: 250
     },
     navigation: 'page',
 

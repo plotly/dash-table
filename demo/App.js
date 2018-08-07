@@ -23,6 +23,7 @@ class App extends Component {
                 columns: clone(mockData.columns),
                 editable: true,
                 n_fixed_rows: 3,
+                n_fixed_columns: 2,
                 row_selectable: 'multi',
                 selected_rows: [5, 10, 15],
             },

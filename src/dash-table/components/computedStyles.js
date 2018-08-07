@@ -16,18 +16,18 @@ const styles = {
         cell: (props, column_index) => {
             const style = {};
 
-            if (props.n_fixed_columns && column_index < props.n_fixed_columns) {
-                style.position = 'absolute';
-                style.left = R.sum(
-                    R.pluck('width', R.slice(0, column_index, props.columns))
-                );
-                style.top = 'auto';
-                style.overflowY = 'hidden';
-                style.height = 35;
-                style.width = props.columns[column_index].width;
-                style.maxWidth = props.columns[column_index].width;
-                style.minWidth = props.columns[column_index].width;
-            }
+            // if (props.n_fixed_columns && column_index < props.n_fixed_columns) {
+            //     style.position = 'absolute';
+            //     style.left = R.sum(
+            //         R.pluck('width', R.slice(0, column_index, props.columns))
+            //     );
+            //     style.top = 'auto';
+            //     style.overflowY = 'hidden';
+            //     style.height = 35;
+            //     style.width = props.columns[column_index].width;
+            //     style.maxWidth = props.columns[column_index].width;
+            //     style.minWidth = props.columns[column_index].width;
+            // }
 
             if (props.n_fixed_rows) {
                 style.width = props.columns[column_index].width;

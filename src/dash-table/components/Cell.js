@@ -121,6 +121,9 @@ export default class Cell extends Component {
             setProps,
             dataframe,
             is_focused,
+            n_fixed_columns,
+            row_deletable,
+            row_selectable,
             columns,
             selected_cell,
             active_cell,
@@ -208,6 +211,10 @@ export default class Cell extends Component {
             this.props
         );
 
+        let fixedIndex = i +
+            (row_deletable ? 1 : 0) +
+            (row_selectable ? 1 : 0);
+
         return (
             <td
                 style={R.merge(
@@ -220,7 +227,8 @@ export default class Cell extends Component {
                         : '') +
                     (is_focused && isActive ? 'focused ' : '') +
                     (notEditable ? 'cell--uneditable ' : '') +
-                    (columns[i].type === 'dropdown' ? 'dropdown ' : '')
+                    (columns[i].type === 'dropdown' ? 'dropdown ' : '') +
+                    (fixedIndex < n_fixed_columns ? `frozen-left frozen-left-${fixedIndex}` : '')
                 }
             >
                 {innerCell}
@@ -240,6 +248,9 @@ Cell.propTypes = {
     idx: PropTypes.any,
     isSelected: PropTypes.any,
     is_focused: PropTypes.any,
+    n_fixed_columns: PropTypes.any,
+    row_deletable: PropTypes.any,
+    row_selectable: PropTypes.any,
     selected_cell: PropTypes.any,
     setProps: PropTypes.any,
     value: PropTypes.any,

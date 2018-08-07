@@ -12,6 +12,7 @@ export default class Row extends Component {
             dataframe,
             idx,
             editable,
+            n_fixed_columns,
             setProps,
             selected_cell,
             selected_rows,
@@ -19,8 +20,15 @@ export default class Row extends Component {
             row_selectable
         } = this.props;
 
+        const rowSelectableFixedIndex = row_deletable ? 1 : 0;
+
         const rowSelectable = !row_selectable ? null : (
-            <td style={R.merge(
+            <td
+                className={
+                    'select-cell ' +
+                    (n_fixed_columns > rowSelectableFixedIndex ? `frozen-left frozen-left-${rowSelectableFixedIndex}`: '')
+                }
+                style={R.merge(
                 computedStyles.scroll.borderStyle(
                     R.merge({i: -1}, this.props)).style,
                     {'width': 30}
@@ -49,7 +57,10 @@ export default class Row extends Component {
         );
 
         const deleteCell = !row_deletable ? null : (
-            <td className='delete-cell'
+            <td className={
+                'delete-cell ' +
+                (n_fixed_columns > 0 ? 'frozen-left frozen-left-0': '')
+            }
                 style={R.merge(
                 computedStyles.scroll.borderStyle(
                     R.merge({i: -1}, this.props)).style,
@@ -107,6 +118,7 @@ Row.propTypes = {
     setProps: PropTypes.any,
     selected_cell: PropTypes.any,
     active_cell: PropTypes.any,
+    n_fixed_columns: PropTypes.any,
     selected_rows: PropTypes.any,
     row_deletable: PropTypes.bool,
     row_selectable: PropTypes.any

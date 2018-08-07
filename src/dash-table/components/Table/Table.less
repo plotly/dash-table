@@ -1,5 +1,6 @@
 .dash-spreadsheet-container {
     position: relative;
+    overflow: hidden;
 
     .dash-spreadsheet {
         box-sizing: border-box;
@@ -12,7 +13,7 @@
 
         &.freeze-left {
             overflow-x: auto;
-            width: 500px;
+            width: 100%;
         }
 
         &.freeze-top {
@@ -24,8 +25,23 @@
             position: absolute;
             top: 0;
             left: 0;
-            z-index: 1;
+            z-index: 2;
         }
+
+        .frozen-left {
+            position: absolute;
+            z-index: 1;
+            // top: 0;
+            left: 0;
+        }
+    }
+
+    tr {
+        position: relative;
+    }
+
+    td {
+        background-color: white;
     }
 }
 
@@ -232,7 +248,10 @@ th:hover .filter {
 }
 
 .dash-spreadsheet .selected-row {
-    background-color: var(--selected-row);
+    td,
+    th {
+        background-color: var(--selected-row);
+    }
 }
 
 .dash-spreadsheet .delete-cell {
