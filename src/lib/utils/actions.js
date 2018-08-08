@@ -35,7 +35,7 @@ export function deleteRow(rowIndex, props) {
 function getGroupedColumnIndices(column, headerRowIndex, props) {
     // Find the set of column indices that share the same name and are adjacent
     // as the given column ("group")
-    const {columns, dataframe, setProps} = props;
+    const {columns} = props;
 
     // if the columns are merged, then deleting will delete all of the
     // merged columns
@@ -54,20 +54,12 @@ function getGroupedColumnIndices(column, headerRowIndex, props) {
     const columnIndex = R.findIndex(R.propEq('id', column.id), columns);
     let groupIndexFirst = columnIndex;
     let groupIndexLast = columnIndex;
-    while(true) {
-        if (names[groupIndexFirst - 1] === columnName) {
-            groupIndexFirst--;
-        } else {
-            break;
-        }
+    while(names[groupIndexFirst - 1] === columnName) {
+        groupIndexFirst--;
     }
 
-    while(true) {
-        if (names[groupIndexLast + 1] === columnName) {
-            groupIndexLast++;
-        } else {
-            break;
-        }
+    while(names[groupIndexLast + 1] === columnName) {
+        groupIndexLast++;
     }
 
     return {groupIndexFirst, groupIndexLast};
@@ -106,6 +98,7 @@ export function editColumnName(column, headerRowIndex, props) {
     const {groupIndexFirst, groupIndexLast} = getGroupedColumnIndices(
         column, headerRowIndex, props
     );
+    /* eslint no-alert: 0 */
     const newColumnName = window.prompt('Enter a new column name');
     let newColumns = R.clone(columns);
     R.range(groupIndexFirst, groupIndexLast+1).map(i => {
