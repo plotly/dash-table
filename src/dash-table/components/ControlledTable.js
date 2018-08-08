@@ -564,34 +564,33 @@ export default class ControlledTable extends Component {
     }
 
     componentDidUpdate() {
-        const { n_fixed_columns = 0, n_fixed_rows = 0 } = this.props;
+        const { n_fixed_columns = 0, n_fixed_rows = 0, id } = this.props;
         if (!n_fixed_columns && !n_fixed_rows) {
             return;
         }
 
         const { container, frozenTop } = this.refs;
-        console.log('frozenTop', frozenTop);
 
         let xOffset = 0;
         R.range(0, n_fixed_columns).forEach(index => {
-            this.updateRule(`.frozen-left-${index}`, `margin-left: ${xOffset}px;`);
+            this.updateRule(`#${id} .frozen-left-${index}`, `margin-left: ${xOffset}px;`);
 
             const fixedCell = container.querySelector(`.frozen-left-${index}`);
             if (fixedCell) {
-                xOffset += fixedCell.clientWidth;
+                xOffset += (fixedCell.clientWidth || parseInt(getComputedStyle(fixedCell).width, 10));
             }
         });
 
-        this.updateRule(`.dash-spreadsheet`, `padding-left: ${xOffset}px; padding-top: ${frozenTop ? frozenTop.clientHeight : 0}px;`);
+        this.updateRule(`#${id} .dash-spreadsheet`, `padding-left: ${xOffset}px; padding-top: ${frozenTop ? frozenTop.clientHeight : 0}px;`);
     }
 
     onContainerScroll(ev) {
-        const { n_fixed_columns } = this.props;
+        const { id, n_fixed_columns } = this.props;
         if (!n_fixed_columns) {
             return;
         }
 
-        this.updateRule(`.frozen-left`, `margin-top: ${-ev.target.scrollTop}px;`);
+        this.updateRule(`#${id} .frozen-left`, `margin-top: ${-ev.target.scrollTop}px;`);
     }
 
     render() {
