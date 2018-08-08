@@ -27,6 +27,7 @@ export default class ControlledTable extends Component {
         this.handleClickOutside = this.handleClickOutside.bind(this);
         this.handlePaste = this.handlePaste.bind(this);
         this.getDomElement = this.getDomElement.bind(this);
+        this.onContainerScroll = this.onContainerScroll.bind(this);
 
         this.loadNext = this.loadNext.bind(this);
         this.loadPrevious = this.loadPrevious.bind(this);
@@ -678,7 +679,7 @@ export default class ControlledTable extends Component {
                 <section
                     className='dash-spreadsheet-container'
                     ref='container'
-                    onScroll={this.onContainerScroll.bind(this)}
+                    onScroll={this.onContainerScroll}
                 >
                     {table_component}
                 </section>
