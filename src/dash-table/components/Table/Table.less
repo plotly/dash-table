@@ -1,47 +1,146 @@
+@null-shadow: inset 0 0 0 0 transparent;
+
+@left-shadow: inset 1px 0px 0px 0px var(--border);
+@top-shadow: inset 0px 1px 0px 0px var(--border);
+@right-shadow: inset -1px 0px 0px 0px var(--border);
+@bottom-shadow: inset 0px -1px 0px 0px var(--border);
+
+.inset-shadow(@color, @left, @top, @right, @bottom) {
+    box-shadow: inset @left 0px 0px 0px @color,
+        inset 0px @top 0px 0px @color,
+        inset @right 0px 0px @color,
+        inset 0px @bottom 0px 0px @color;
+}
+
+.outline-shadow(@color, @left, @top, @right, @bottom) {
+    box-shadow: @left 0px 0px 0px @color,
+        0px @top 0px 0px @color,
+        @right 0px 0px @color,
+        0px @bottom 0px 0px @color;
+}
+
 .dash-spreadsheet-container {
     position: relative;
     overflow: hidden;
+}
 
-    .dash-spreadsheet {
-        box-sizing: border-box;
+.dash-spreadsheet {
+    box-sizing: border-box;
 
-        *,
-        *:after,
-        *:before {
-            box-sizing: inherit;
+    // freeze columns
+    &.freeze-left {
+        overflow-x: scroll;
+
+        .frozen-left {
+            position: absolute;
+            z-index: 1000;
+            left: 0;
         }
+    }
 
-        &.freeze-left {
-            overflow-x: auto;
-            width: 100%;
-        }
+    // freeze rows
+    &.freeze-top {
+        overflow-y: auto;
+        height: 150px;
 
-        &.freeze-top {
-            overflow-y: auto;
-            height: 500px;
+        table {
+            width: 0 !important;
         }
 
         .frozen-top {
             position: absolute;
             top: 0;
             left: 0;
-            z-index: 2;
-        }
-
-        .frozen-left {
-            position: absolute;
-            z-index: 1;
-            // top: 0;
-            left: 0;
+            z-index: 2000;
         }
     }
 
-    tr {
-        position: relative;
+    *,
+    *:after,
+    *:before {
+        box-sizing: inherit;
+    }
+
+    .marker-row {
+        tr {
+            visibility: hidden !important;
+        }
+
+        td, th {
+            height: 0 !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+    }
+
+    table {
+        table-layout: fixed;
+    }
+
+    // cell border styling
+    tbody {
+        tr {
+            td, th {
+                .inset-shadow(var(--border), 1px, 0px, 0px, -1px);
+
+                &.focused + td {
+                    .inset-shadow(var(--border), 0px, 0px, 0px, -1px);
+                }
+
+                &:last-of-type {
+                    .inset-shadow(var(--border), 1px, 0px, -1px, -1px);
+                }
+            }
+        }
+
+        &:first-of-type {
+            tr:first-of-type {
+                td, th {
+                    .inset-shadow(var(--border), 1px, 1px, 0px, -1px);
+
+                    &:last-of-type {
+                        .inset-shadow(var(--border), 1px, 1px, -1px, -1px);
+                    }
+                }
+            }
+        }
+    }
+
+    .selected-row {
+        td, th {
+            background-color: var(--selected-row);
+        }
     }
 
     td {
         background-color: white;
+
+        &.cell--selected {
+            background-color: var(--selected-background);
+        }
+
+        &.focused {
+            // .shadow(red, 1px, 1px, 0, 0);
+            .outline-shadow(var(--accent), 1px, 1px, 0, 0);
+            border: 1px solid var(--accent);
+            margin: -1px;
+            z-index: 500;
+        }
+    }
+
+    // cell content styling
+    td, th {
+        padding-left: 2px;
+        padding-right: 2px;
+        padding-bottom: 2px;
+        padding-top: 2px;
+        white-space: nowrap;
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+
+        height: 30px;
+
+        text-align: right;
     }
 }
 
@@ -51,7 +150,6 @@
 
 .dash-spreadsheet table {
     border-collapse: collapse;
-    table-layout: fixed;
     font-size: 1rem;
 
     font-family: monospace;
@@ -81,22 +179,6 @@
     text-align: center;
     width: 100%;
     background-color: var(--background-color-ellipses);
-}
-
-.dash-spreadsheet td,
-.dash-spreadsheet th {
-    padding-left: 2px;
-    padding-right: 2px;
-    padding-bottom: 2px;
-    padding-top: 2px;
-    white-space: nowrap;
-    overflow-x: hidden;
-    text-overflow: ellipsis;
-
-    height: 30px;
-    line-height: 30px;
-
-    text-align: right;
 }
 
 .dash-spreadsheet td.dropdown {
@@ -189,28 +271,6 @@ tr:hover input :not(.cell--selected) {
     position: relative;
 }
 
-.cell--bottom-last {
-    box-shadow: inset 1px 0px 0px 0px var(--border),
-        inset 0px 1px 0px 0px var(--border),
-        inset 0px -1px 0px 0px var(--border);
-}
-
-.cell--right-last {
-    box-shadow: inset 1px 0px 0px 0px var(--border),
-        inset 0px 1px 0px 0px var(--border),
-        inset -1px 0px 0px 0px var(--border);
-}
-
-.cell--right-last.cell--bottom-last {
-    box-shadow: inset 1px 0px 0px 0px var(--border),
-        inset 0px 1px 0px 0px var(--border),
-        inset -1px 0px 0px 0px var(--border),
-        inset 0px -1px 0px 0px var(--border);
-}
-
-.cell--selected {
-    background-color: var(--selected-background);
-}
 
 .cell--uneditable,
 .cell--uneditable input {
@@ -221,17 +281,6 @@ tr:hover input :not(.cell--selected) {
     box-shadow: inset 2px 0px 0px 0px var(--accent),
         inset -1px 0px 0px 0px var(--border);
     /* inset 0px 1px 0px 0px var(--border); */
-}
-
-.selected-square {
-    position: absolute;
-    width: 2px;
-    height: 2px;
-    background-color: var(--accent);
-}
-.selected-square-bottom-right {
-    top: -1px;
-    left: -1px;
 }
 
 .filter {
@@ -245,13 +294,6 @@ th:hover .filter {
 }
 .filter:hover {
     text-decoration: underline;
-}
-
-.dash-spreadsheet .selected-row {
-    td,
-    th {
-        background-color: var(--selected-row);
-    }
 }
 
 .dash-spreadsheet .delete-cell {

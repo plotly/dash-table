@@ -1,6 +1,5 @@
 import React from 'react';
 import * as R from 'ramda';
-import computedStyles from 'dash-table/components/computedStyles';
 
 interface ICellOptions {
     columns: any[];
@@ -47,7 +46,7 @@ export default class HeaderFactory {
             if (c.hidden) {
                 return null;
             }
-            let style = R.merge({}, c.style) || {};
+            // let style = R.merge({}, c.style) || {};
 
             let colSpan;
             if (!mergeCells) {
@@ -63,43 +62,18 @@ export default class HeaderFactory {
                     colSpan = columnIndices[j + 1] - i - nHiddenColumns;
                 }
             }
-
-            if (c.width && colSpan === 1) {
-                style.width = c.width;
-                style.maxWidth = c.width;
-                style.minWidth = c.width;
-            }
-
-            style = R.merge(
-                style,
-                computedStyles.scroll.cell(options, i)
-            );
-
-            if (colSpan !== 1) {
-                const widths = R.range(
-                    i,
-                    R.min(i + colSpan, labels.length)
-                ).map(
-                    k =>
-                        R.type(columns[k].width) === 'Number'
-                            ? `${columns[k].width}px`
-                            : columns[k].width
-                );
-                style.width = `calc(${widths.join(' + ')})`;
-                style.maxWidth = style.width;
-                style.minWidth = style.width;
-            }
-
             return (
                 <th
                     key={`header-cell-${i}`}
                     colSpan={colSpan}
-                    style={style}
                     className={
                         (i === columns.length - 1 || i === R.last(columnIndices) ? 'cell--right-last ' : '') +
                         (i + indexOffset < n_fixed_columns ? `frozen-left frozen-left-${i + indexOffset}` : '')
 
                     }
+                    style={i + indexOffset < n_fixed_columns ? {
+                        width: `${c.width || 100}px`
+                    } : {}}
                 >
                     {rowIsSortable ? (
                         <span
@@ -140,10 +114,8 @@ export default class HeaderFactory {
                     'expanded-row--empty-cell ' +
                     (n_fixed_columns > 0 ? 'frozen-left frozen-left-0' : '')
                 }
-                style={R.merge(
-                    computedStyles.scroll.cell(options, 0),
-                    { width: 30 }
-                )}
+                style={n_fixed_columns > 0 ? { width: `30px` } : {}}
+
             />
         );
 
@@ -155,10 +127,7 @@ export default class HeaderFactory {
                     'expanded-row--empty-cell ' +
                     (n_fixed_columns > rowSelectableFixedIndex ? `frozen-left frozen-left-${rowSelectableFixedIndex}` : '')
                 }
-                style={R.merge(
-                    computedStyles.scroll.cell(options, rowSelectableFixedIndex),
-                    { width: 30 }
-                )}
+                style={n_fixed_columns > rowSelectableFixedIndex ? { width: `30px` } : {}}
             />
         );
 

@@ -564,12 +564,13 @@ export default class ControlledTable extends Component {
     }
 
     componentDidUpdate() {
-        const { n_fixed_columns } = this.props;
-        if (!n_fixed_columns) {
+        const { n_fixed_columns = 0, n_fixed_rows = 0 } = this.props;
+        if (!n_fixed_columns && !n_fixed_rows) {
             return;
         }
 
         const { container, frozenTop } = this.refs;
+        console.log('frozenTop', frozenTop);
 
         let xOffset = 0;
         R.range(0, n_fixed_columns).forEach(index => {
@@ -596,9 +597,12 @@ export default class ControlledTable extends Component {
     render() {
         const {
             id,
-            table_style,
+            // table_style,
+            columns,
             n_fixed_columns,
             n_fixed_rows,
+            row_deletable,
+            row_selectable
         } = this.props;
 
         const rows = [
@@ -608,6 +612,34 @@ export default class ControlledTable extends Component {
 
         const fixedRows = rows.splice(0, n_fixed_rows);
         const hasFixedRows = fixedRows.length !== 0;
+
+        let fixedColumn = 0;
+        const markerRows = [
+            ...(row_deletable ? [(<td
+                key='deletable'
+                style={fixedColumn++ < n_fixed_columns ? {} : {
+                    width: `30px`,
+                    maxWidth: `30px`,
+                    minWidth: `30px`
+                }}
+            />)] : []),
+            ...(row_selectable ? [(<td
+                key='selectable'
+                style={fixedColumn++ < n_fixed_columns ? {} : {
+                    width: `30px`,
+                    maxWidth: `30px`,
+                    minWidth: `30px`
+                }}
+            />)] : []),
+            ...R.map(column => (<td
+                key={`${column.id}`}
+                style={fixedColumn++ < n_fixed_columns ? {} : {
+                    width: `${column.width || 100}px`,
+                    maxWidth: `${column.width || 100}px`,
+                    minWidth: `${column.width || 100}px`
+                }}
+            />), columns)
+        ];
 
         const table_component = (
             <div
@@ -624,12 +656,19 @@ export default class ControlledTable extends Component {
                     key={`${id}-table`}
                     onPaste={this.onPaste}
                     tabIndex={-1}
-                    style={table_style}
                 >
-                    {fixedRows ? <thead
+                    <thead className='marker-row'>
+                        <tr>{markerRows}</tr>
+                    </thead>
+
+                    {hasFixedRows ? <tbody
                         className={'frozen-top'}
                         ref='frozenTop'
-                    >{fixedRows}</thead> : null}
+                    >
+                        {fixedRows}
+                        <tr className='marker-row'>{markerRows}</tr>
+                    </tbody> : null}
+
                     {<tbody>{rows}</tbody>}
                 </table>
             </div>

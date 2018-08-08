@@ -4,7 +4,6 @@ import * as R from 'ramda';
 import Dropdown from 'react-select';
 
 import {colIsEditable} from 'dash-table/components/derivedState';
-import computedStyles from 'dash-table/components/computedStyles';
 import { memoizeOne } from 'core/memoizer';
 
 export default class Cell extends Component {
@@ -207,32 +206,26 @@ export default class Cell extends Component {
             innerCell = value;
         }
 
-        const {style, borderFixDiv} = computedStyles.scroll.borderStyle(
-            this.props
-        );
-
         const fixedIndex = i +
             (row_deletable ? 1 : 0) +
             (row_selectable ? 1 : 0);
 
         return (
             <td
-                style={R.merge(
-                    style,
-                    computedStyles.scroll.cell(this.props, i)
-                )}
                 className={
                     (isSelected && selected_cell.length > 1
                         ? 'cell--selected '
                         : '') +
-                    (is_focused && isActive ? 'focused ' : '') +
+                    (isActive ? 'focused ' : '') +
                     (notEditable ? 'cell--uneditable ' : '') +
                     (columns[i].type === 'dropdown' ? 'dropdown ' : '') +
                     (fixedIndex < n_fixed_columns ? `frozen-left frozen-left-${fixedIndex}` : '')
                 }
+                style={fixedIndex < n_fixed_columns ? {
+                    width: `${c.width || 100}px`
+                } : {}}
             >
                 {innerCell}
-                {borderFixDiv}
             </td>
         );
     }

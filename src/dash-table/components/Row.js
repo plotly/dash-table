@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import * as R from 'ramda';
 import Cell from 'dash-table/components/Cell';
-import computedStyles from 'dash-table/components/computedStyles';
 import * as actions from 'dash-table/utils/actions';
 
 export default class Row extends Component {
@@ -28,20 +27,13 @@ export default class Row extends Component {
                     'select-cell ' +
                     (n_fixed_columns > rowSelectableFixedIndex ? `frozen-left frozen-left-${rowSelectableFixedIndex}`: '')
                 }
-                style={R.merge(
-                computedStyles.scroll.borderStyle(
-                    R.merge({i: -1}, this.props)).style,
-                    {'width': 30}
-            )}>
+                style={n_fixed_columns > rowSelectableFixedIndex ? {
+                    width: `30px`
+                } : {}}
+            >
                 <input
                     type={row_selectable === 'single' ? 'radio' : 'checkbox'}
                     name="row-select"
-                    style={{
-                        'marginLeft': 'auto',
-                        'marginRight': 'auto',
-                        'width': 15,
-                        'display': 'block'
-                    }}
                     checked={R.contains(idx, selected_rows)}
                     onChange={() => setProps({selected_rows:
                         row_selectable === 'single' ?
@@ -57,20 +49,15 @@ export default class Row extends Component {
         );
 
         const deleteCell = !row_deletable ? null : (
-            <td className={
-                'delete-cell ' +
-                (n_fixed_columns > 0 ? 'frozen-left frozen-left-0': '')
-            }
-                style={R.merge(
-                computedStyles.scroll.borderStyle(
-                    R.merge({i: -1}, this.props)).style,
-                    {
-                        'width': 35,
-                        'minWidth': 35,
-                        'maxWidth': 35,
-                        'padding': 0
-                    })}
+            <td
+                className={
+                    'delete-cell ' +
+                    (n_fixed_columns > 0 ? 'frozen-left frozen-left-0' : '')
+                }
                 onClick={() => setProps(actions.deleteRow(idx, this.props))}
+                style={n_fixed_columns > 0 ? {
+                    width: `30px`
+                } : {}}
             >
                 {'×'}
             </td>
