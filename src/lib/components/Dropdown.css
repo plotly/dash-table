@@ -12,6 +12,11 @@
     line-height: inherit;
 }
 
+.dash-spreadsheet .Select.has-value.Select--single > .Select-control .Select-value .Select-value-label,
+.dash-spreadsheet .Select.has-value.is-pseudo-focused.Select--single > .Select-control .Select-value .Select-value-label {
+    color: var(--text-color);
+}
+
 .dash-spreadsheet .Select:hover,
 .dash-spreadsheet .Select-control:hover {
     border: none;
