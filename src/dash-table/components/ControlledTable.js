@@ -581,8 +581,12 @@ export default class ControlledTable extends Component {
                 xOffset += (fixedCell.clientWidth || parseInt(getComputedStyle(fixedCell).width, 10));
             }
         });
-
         this.updateRule(`#${id} .dash-spreadsheet`, `padding-left: ${xOffset}px; padding-top: ${frozenTop ? frozenTop.clientHeight : 0}px;`);
+
+        R.forEach(
+            cell => { cell.style.height = cell.parentElement.clientHeight },
+            container.querySelectorAll('tr th.frozen-left')
+        );
     }
 
     onContainerScroll(ev) {
@@ -675,7 +679,7 @@ export default class ControlledTable extends Component {
         );
 
         return (
-            <div>
+            <div id={id}>
                 <section
                     className='dash-spreadsheet-container'
                     ref='container'
