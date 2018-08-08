@@ -1,6 +1,8 @@
 import React from 'react';
 import * as R from 'ramda';
 
+import { DEFAULT_CELL_WIDTH } from './Cell';
+
 interface ICellOptions {
     columns: any[];
     labels: any[];
@@ -72,7 +74,7 @@ export default class HeaderFactory {
 
                     }
                     style={i + indexOffset < n_fixed_columns ? {
-                        width: `${c.width || 100}px`
+                        width: `${c.width || DEFAULT_CELL_WIDTH}px`
                     } : {}}
                 >
                     {rowIsSortable ? (

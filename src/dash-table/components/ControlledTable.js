@@ -15,6 +15,7 @@ import { propTypes } from 'dash-table/components/Table';
 
 import HeaderFactory from 'dash-table/components/HeaderFactory';
 import RowFactory from 'dash-table/components/RowFactory';
+import { DEFAULT_CELL_WIDTH } from './Cell';
 
 const sortNumerical = R.sort((a, b) => a - b);
 
@@ -638,9 +639,9 @@ export default class ControlledTable extends Component {
             ...R.map(column => (<td
                 key={`${column.id}`}
                 style={fixedColumn++ < n_fixed_columns ? {} : {
-                    width: `${column.width || 100}px`,
-                    maxWidth: `${column.width || 100}px`,
-                    minWidth: `${column.width || 100}px`
+                    width: `${column.width || DEFAULT_CELL_WIDTH}px`,
+                    maxWidth: `${column.width || DEFAULT_CELL_WIDTH}px`,
+                    minWidth: `${column.width || DEFAULT_CELL_WIDTH}px`
                 }}
             />), columns)
         ];

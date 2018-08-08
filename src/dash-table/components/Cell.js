@@ -6,6 +6,8 @@ import Dropdown from 'react-select';
 import {colIsEditable} from 'dash-table/components/derivedState';
 import { memoizeOne } from 'core/memoizer';
 
+export const DEFAULT_CELL_WIDTH = 200;
+
 export default class Cell extends Component {
     constructor(props) {
         super(props);
@@ -222,7 +224,7 @@ export default class Cell extends Component {
                     (fixedIndex < n_fixed_columns ? `frozen-left frozen-left-${fixedIndex}` : '')
                 }
                 style={fixedIndex < n_fixed_columns ? {
-                    width: `${c.width || 100}px`
+                    width: `${c.width || DEFAULT_CELL_WIDTH}px`
                 } : {}}
             >
                 {innerCell}
