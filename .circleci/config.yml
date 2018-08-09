@@ -22,6 +22,8 @@ jobs:
       - run:
           name: Run tests
           command: npm run test
+
+
     "node":
         docker:
             - image: circleci/node:8.11.3
