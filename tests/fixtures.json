@@ -27,10 +27,10 @@
                 {"column-1": "boston"}
             ],
             "n_fixed_rows": 1,
-            "style": {
+            "table_style": [{
                 "selector": ".dash-spreadsheet.freeze-top",
                 "rule": "height: 100px;"
-            }
+            }]
         }
     },
     {

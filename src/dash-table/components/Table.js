@@ -123,6 +123,7 @@ export const defaultProps = {
     selected_cell: [[]],
     selected_rows: [],
     row_selectable: false,
+    table_style: [],
     base_styles: {
         numeric: {
             'text-align': 'right',
@@ -196,7 +197,10 @@ export const propTypes = {
     sortable: PropTypes.bool,
     start_cell: PropTypes.arrayOf(PropTypes.number),
     style_as_list_view: PropTypes.bool,
-    table_style: PropTypes.any,
+    table_style: PropTypes.arrayOf(PropTypes.shape({
+        selector: PropTypes.string,
+        rule: PropTypes.string
+    })),
 
     virtualization: PropTypes.string,
     virtualization_settings: PropTypes.shape({

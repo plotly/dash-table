@@ -566,11 +566,11 @@ export default class ControlledTable extends Component {
     }
 
     componentWillUpdate() {
-        const { style } = this.props;
+        const { id, table_style } = this.props;
 
-        if (style && style.selector && style.rule) {
-            this.updateRule(style.selector, style.rule);
-        }
+        R.forEach(({selector, rule}) => {
+            this.updateRule(`#${id} ${selector}`, rule);
+        }, table_style);
     }
 
     componentDidUpdate() {
@@ -610,7 +610,6 @@ export default class ControlledTable extends Component {
     render() {
         const {
             id,
-            // table_style,
             columns,
             n_fixed_columns,
             n_fixed_rows,

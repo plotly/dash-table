@@ -256,10 +256,27 @@
       },
       "table_style": {
         "type": {
-          "name": "any"
+          "name": "arrayOf",
+          "value": {
+            "name": "shape",
+            "value": {
+              "selector": {
+                "name": "string",
+                "required": false
+              },
+              "rule": {
+                "name": "string",
+                "required": false
+              }
+            }
+          }
         },
         "required": false,
-        "description": ""
+        "description": "",
+        "defaultValue": {
+          "value": "[]",
+          "computed": false
+        }
       },
       "virtualization": {
         "type": {
