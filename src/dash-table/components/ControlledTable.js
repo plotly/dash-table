@@ -554,15 +554,20 @@ export default class ControlledTable extends Component {
 
         const ruleIndex = R.findIndex(
             rule => rule.selectorText === selector,
-            Array.from(sheet.rules)
+            Array.from(sheet.rules || sheet.cssRules)
         );
-
 
         if (ruleIndex !== -1) {
             sheet.deleteRule(ruleIndex);
         }
 
-        sheet.addRule(selector, style);
+        if (sheet.addRule) {
+            // Chrome, Safari
+            sheet.addRule(selector, style);
+        } else {
+            // Firefox
+            sheet.insertRule(`${selector} { ${style} }`, 0);
+        }
     }
 
     componentWillUpdate() {
