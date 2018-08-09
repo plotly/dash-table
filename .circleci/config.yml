@@ -18,14 +18,13 @@ jobs:
                 paths:
                     - node_modules
 
-      - run:
-          name: Run build
-          command: npm run build:js
+            - run:
+                name: Run build
+                command: npm run build:js
 
-      - run:
-          name: Run tests
-          command: npm run test
-
+            - run:
+                name: Run tests
+                command: npm run test
 
     "node":
         docker:
