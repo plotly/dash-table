@@ -14,10 +14,31 @@ export default class Cell extends Component {
 
         this.handleClick = this.handleClick.bind(this);
         this.handleDoubleClick = this.handleDoubleClick.bind(this);
+        this.onOpenDropdown = this.onOpenDropdown.bind(this);
 
         this.notEditable = memoizeOne((editable, columns, i) => {
             return !colIsEditable(editable, columns[i]);
         });
+    }
+
+    onOpenDropdown() {
+        const { dropdown } = this.refs;
+
+        const menu = dropdown.wrapper.querySelector('.Select-menu-outer');
+
+        const parentElement = menu.parentElement;
+
+        let relativeParent = parentElement;
+        while (getComputedStyle(relativeParent).position !== 'relative' && relativeParent.parentElement) {
+            relativeParent = relativeParent.parentElement;
+        }
+
+        const relativeBoundingRect = relativeParent.getBoundingClientRect();
+        const parentBoundingRect = parentElement.getBoundingClientRect();
+
+        menu.style.top = (parentBoundingRect.y + parentBoundingRect.height) - relativeBoundingRect.y;
+        menu.style.left = parentBoundingRect.x - relativeBoundingRect.x;
+        menu.style.width = parentBoundingRect.width;
     }
 
     handleClick(e) {
@@ -189,6 +210,7 @@ export default class Cell extends Component {
             } else {
                 innerCell = (
                     <Dropdown
+                        ref='dropdown'
                         placeholder={''}
                         options={options}
                         onChange={newOption => {
@@ -199,6 +221,7 @@ export default class Cell extends Component {
                             );
                             setProps({dataframe: newDataframe});
                         }}
+                        onOpen={this.onOpenDropdown}
                         clearable={columns[i].clearable}
                         value={value}
                     />

@@ -565,6 +565,14 @@ export default class ControlledTable extends Component {
         sheet.addRule(selector, style);
     }
 
+    componentWillUpdate() {
+        const { style } = this.props;
+
+        if (style && style.selector && style.rule) {
+            this.updateRule(style.selector, style.rule);
+        }
+    }
+
     componentDidUpdate() {
         const { n_fixed_columns = 0, n_fixed_rows = 0, id } = this.props;
         if (!n_fixed_columns && !n_fixed_rows) {
