@@ -1,6 +1,27 @@
 version: 2
 
 jobs:
+    "test":
+        docker:
+            - image: circleci/node:8.9.4-browsers
+            - image: cypress/base:8
+        steps:
+            - checkout
+            - restore_cache:
+                key: deps1-{{ .Branch }}-{{ checksum "npm-shrinkwrap.json" }}-{{ checksum "package.json" }}
+            - run:
+                name: Install npm packages
+                command: npm install
+            - save_cache:
+                key: deps1-{{ .Branch }}-{{ checksum "npm-shrinkwrap.json" }}-{{ checksum "package.json" }}
+                paths:
+                    - node_modules
+      - run:
+          name: Run build
+          command: npm run build:js
+      - run:
+          name: Run tests
+          command: npm run test
     "node":
         docker:
             - image: circleci/node:8.11.3
@@ -83,3 +104,4 @@ workflows:
         jobs:
             - "python-3.6"
             - "node"
+            - "test"
