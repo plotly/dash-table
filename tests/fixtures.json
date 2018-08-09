@@ -1,8 +1,8 @@
 [
     {
-        "id": "table",
         "name": "fixed rows -> dropdown",
         "props": {
+            "id": "table",
             "columns": [
                 {
                     "name": "Column 1",
