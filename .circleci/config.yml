@@ -5,6 +5,7 @@ jobs:
         docker:
             - image: circleci/node:8.9.4-browsers
             - image: cypress/base:8
+
         steps:
             - checkout
             - restore_cache:
@@ -16,9 +17,11 @@ jobs:
                 key: deps1-{{ .Branch }}-{{ checksum "npm-shrinkwrap.json" }}-{{ checksum "package.json" }}
                 paths:
                     - node_modules
+
       - run:
           name: Run build
           command: npm run build:js
+
       - run:
           name: Run tests
           command: npm run test
