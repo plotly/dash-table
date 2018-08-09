@@ -17,6 +17,7 @@ jobs:
                 key: deps1-{{ .Branch }}-{{ checksum "npm-shrinkwrap.json" }}-{{ checksum "package.json" }}
                 paths:
                     - node_modules
+                    - /home/circleci/.cache/Cypress
 
             - run:
                 name: Run build
