@@ -196,7 +196,10 @@
         "type": {
           "name": "arrayOf",
           "value": {
-            "name": "number"
+            "name": "arrayOf",
+            "value": {
+              "name": "number"
+            }
           }
         },
         "required": false,
@@ -253,10 +256,27 @@
       },
       "table_style": {
         "type": {
-          "name": "any"
+          "name": "arrayOf",
+          "value": {
+            "name": "shape",
+            "value": {
+              "selector": {
+                "name": "string",
+                "required": false
+              },
+              "rule": {
+                "name": "string",
+                "required": false
+              }
+            }
+          }
         },
         "required": false,
-        "description": ""
+        "description": "",
+        "defaultValue": {
+          "value": "[]",
+          "computed": false
+        }
       },
       "virtualization": {
         "type": {
@@ -290,7 +310,7 @@
         "required": false,
         "description": "",
         "defaultValue": {
-          "value": "{\n    displayed_pages: 1,\n    current_page: 0,\n    page_size: 500\n}",
+          "value": "{\n    displayed_pages: 1,\n    current_page: 0,\n    page_size: 250\n}",
           "computed": false
         }
       },

@@ -5,7 +5,7 @@ import * as R from 'ramda';
 import ControlledTable from 'dash-table/components/ControlledTable';
 
 import 'react-select/dist/react-select.css';
-import './Table/Table.css';
+import './Table/Table.less';
 import './Table/Dropdown.css';
 
 import VirtualizationFactory from 'dash-table/virtualization/Factory';
@@ -96,7 +96,7 @@ export const defaultProps = {
     virtualization_settings: {
         displayed_pages: 1,
         current_page: 0,
-        page_size: 500
+        page_size: 250
     },
     navigation: 'page',
 
@@ -123,6 +123,7 @@ export const defaultProps = {
     selected_cell: [[]],
     selected_rows: [],
     row_selectable: false,
+    table_style: [],
     base_styles: {
         numeric: {
             'text-align': 'right',
@@ -190,13 +191,16 @@ export const propTypes = {
     n_fixed_rows: PropTypes.number,
     row_deletable: PropTypes.bool,
     row_selectable: PropTypes.oneOf(['single', 'multi']),
-    selected_cell: PropTypes.arrayOf(PropTypes.number),
+    selected_cell: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
     selected_rows: PropTypes.arrayOf(PropTypes.number),
     setProps: PropTypes.any,
     sortable: PropTypes.bool,
     start_cell: PropTypes.arrayOf(PropTypes.number),
     style_as_list_view: PropTypes.bool,
-    table_style: PropTypes.any,
+    table_style: PropTypes.arrayOf(PropTypes.shape({
+        selector: PropTypes.string,
+        rule: PropTypes.string
+    })),
 
     virtualization: PropTypes.string,
     virtualization_settings: PropTypes.shape({

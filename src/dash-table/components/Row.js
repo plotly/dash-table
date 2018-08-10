@@ -2,10 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import * as R from 'ramda';
 import Cell from 'dash-table/components/Cell';
-import computedStyles from 'dash-table/components/computedStyles';
 import * as actions from 'dash-table/utils/actions';
-
-const getColLength = c => (Array.isArray(c.name) ? c.name.length : 1);
 
 export default class Row extends Component {
     render() {
@@ -14,6 +11,7 @@ export default class Row extends Component {
             dataframe,
             idx,
             editable,
+            n_fixed_columns,
             setProps,
             selected_cell,
             selected_rows,
@@ -21,21 +19,21 @@ export default class Row extends Component {
             row_selectable
         } = this.props;
 
+        const rowSelectableFixedIndex = row_deletable ? 1 : 0;
+
         const rowSelectable = !row_selectable ? null : (
-            <td style={R.merge(
-                computedStyles.scroll.borderStyle(
-                    R.merge({i: -1}, this.props)).style,
-                    {'width': 30}
-            )}>
+            <td
+                className={
+                    'select-cell ' +
+                    (n_fixed_columns > rowSelectableFixedIndex ? `frozen-left frozen-left-${rowSelectableFixedIndex}`: '')
+                }
+                style={n_fixed_columns > rowSelectableFixedIndex ? {
+                    width: `30px`
+                } : {}}
+            >
                 <input
                     type={row_selectable === 'single' ? 'radio' : 'checkbox'}
                     name="row-select"
-                    style={{
-                        'marginLeft': 'auto',
-                        'marginRight': 'auto',
-                        'width': 15,
-                        'display': 'block'
-                    }}
                     checked={R.contains(idx, selected_rows)}
                     onChange={() => setProps({selected_rows:
                         row_selectable === 'single' ?
@@ -51,17 +49,15 @@ export default class Row extends Component {
         );
 
         const deleteCell = !row_deletable ? null : (
-            <td className='delete-cell'
-                style={R.merge(
-                computedStyles.scroll.borderStyle(
-                    R.merge({i: -1}, this.props)).style,
-                    {
-                        'width': 35,
-                        'minWidth': 35,
-                        'maxWidth': 35,
-                        'padding': 0
-                    })}
+            <td
+                className={
+                    'delete-cell ' +
+                    (n_fixed_columns > 0 ? 'frozen-left frozen-left-0' : '')
+                }
                 onClick={() => setProps(actions.deleteRow(idx, this.props))}
+                style={n_fixed_columns > 0 ? {
+                    width: `30px`
+                } : {}}
             >
                 {'×'}
             </td>
@@ -88,10 +84,8 @@ export default class Row extends Component {
             );
         });
 
-        const headerDepth = Math.max.apply(Math, columns.map(getColLength));
         return (
             <tr
-                style={computedStyles.scroll.row(this.props, idx + headerDepth)}
                 className={R.contains(idx, selected_rows) ? 'selected-row' : ''}
             >
                 {deleteCell}
@@ -111,6 +105,7 @@ Row.propTypes = {
     setProps: PropTypes.any,
     selected_cell: PropTypes.any,
     active_cell: PropTypes.any,
+    n_fixed_columns: PropTypes.any,
     selected_rows: PropTypes.any,
     row_deletable: PropTypes.bool,
     row_selectable: PropTypes.any

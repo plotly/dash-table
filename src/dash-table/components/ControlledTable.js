@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import * as R from 'ramda';
 import SheetClip from 'sheetclip';
-import Row from 'dash-table/components/Row';
-import Header from 'dash-table/components/Header';
 import { colIsEditable } from 'dash-table/components/derivedState';
 import {
     KEY_CODES,
@@ -12,9 +10,12 @@ import {
     isNavKey,
 } from 'dash-table/utils/unicode';
 import { selectionCycle } from 'dash-table/utils/navigation';
-import computedStyles from 'dash-table/components/computedStyles';
 
 import { propTypes } from 'dash-table/components/Table';
+
+import HeaderFactory from 'dash-table/components/HeaderFactory';
+import RowFactory from 'dash-table/components/RowFactory';
+import { DEFAULT_CELL_WIDTH } from './Cell';
 
 const sortNumerical = R.sort((a, b) => a - b);
 
@@ -23,11 +24,11 @@ export default class ControlledTable extends Component {
         super(props);
 
         this.handleKeyDown = this.handleKeyDown.bind(this);
-        this.collectRows = this.collectRows.bind(this);
         this.onPaste = this.onPaste.bind(this);
         this.handleClickOutside = this.handleClickOutside.bind(this);
         this.handlePaste = this.handlePaste.bind(this);
         this.getDomElement = this.getDomElement.bind(this);
+        this.onContainerScroll = this.onContainerScroll.bind(this);
 
         this.loadNext = this.loadNext.bind(this);
         this.loadPrevious = this.loadPrevious.bind(this);
@@ -511,24 +512,6 @@ export default class ControlledTable extends Component {
         }
     }
 
-    collectRows(slicedDf, start) {
-        const { virtualizer } = this.props;
-
-        const rows = [];
-        for (let i = 0; i < slicedDf.length; i++) {
-            const row = slicedDf[i];
-            rows.push(
-                <Row
-                    key={virtualizer.offset + start + i}
-                    row={row}
-                    idx={virtualizer.offset + start + i}
-                    {...this.props}
-                />
-            );
-        }
-        return rows;
-    }
-
     get displayPagination() {
         const {
             dataframe,
@@ -556,53 +539,185 @@ export default class ControlledTable extends Component {
         virtualizer.loadPrevious();
     }
 
+    getDynamicStylesheet() {
+        return (this.__fixedCss = this.__fixedCss || (() => {
+            const style = document.createElement('style');
+            style.type = 'text/css';
+            document.getElementsByTagName('head')[0].appendChild(style);
+
+            return style;
+        })()).sheet;
+    }
+
+    updateRule(selector: string, style: string) {
+        const sheet = this.getDynamicStylesheet();
+
+        const ruleIndex = R.findIndex(
+            rule => rule.selectorText === selector,
+            Array.from(sheet.rules || sheet.cssRules)
+        );
+
+        if (ruleIndex !== -1) {
+            sheet.deleteRule(ruleIndex);
+        }
+
+        if (sheet.addRule) {
+            // Chrome, Safari
+            sheet.addRule(selector, style);
+        } else {
+            // Firefox
+            sheet.insertRule(`${selector} { ${style} }`, 0);
+        }
+    }
+
+    componentWillUpdate() {
+        const { id, table_style } = this.props;
+
+        R.forEach(({selector, rule}) => {
+            this.updateRule(`#${id} ${selector}`, rule);
+        }, table_style);
+    }
+
+    componentDidUpdate() {
+        const { n_fixed_columns = 0, n_fixed_rows = 0, id } = this.props;
+        if (!n_fixed_columns && !n_fixed_rows) {
+            return;
+        }
+
+        const { container, frozenTop } = this.refs;
+
+        let xOffset = 0;
+        R.range(0, n_fixed_columns).forEach(index => {
+            this.updateRule(`#${id} .frozen-left-${index}`, `margin-left: ${xOffset}px;`);
+
+            const fixedCell = container.querySelector(`.frozen-left-${index}`);
+            if (fixedCell) {
+                xOffset += (fixedCell.clientWidth || parseInt(getComputedStyle(fixedCell).width, 10));
+            }
+        });
+        this.updateRule(`#${id} .dash-spreadsheet`, `padding-left: ${xOffset}px; padding-top: ${frozenTop ? frozenTop.clientHeight : 0}px;`);
+
+        R.forEach(
+            cell => { cell.style.height = cell.parentElement.clientHeight },
+            container.querySelectorAll('tr th.frozen-left')
+        );
+    }
+
+    onContainerScroll(ev) {
+        const { id, n_fixed_columns } = this.props;
+        if (!n_fixed_columns) {
+            return;
+        }
+
+        const { spreadsheet } = this.refs;
+        if (ev.target !== spreadsheet) {
+            return;
+        }
+
+        this.updateRule(`#${id} .frozen-left`, `margin-top: ${-ev.target.scrollTop}px;`);
+    }
+
     render() {
         const {
             id,
-            table_style,
+            columns,
             n_fixed_columns,
             n_fixed_rows,
-            virtualizer
+            row_deletable,
+            row_selectable
         } = this.props;
 
-        const dataframe = virtualizer.dataframe;
+        const rows = [
+            ...HeaderFactory.createHeaders(this.props),
+            ...RowFactory.createRows(this.props)
+        ];
+
+        const fixedRows = rows.splice(0, n_fixed_rows);
+        const hasFixedRows = fixedRows.length !== 0;
+
+        let fixedColumn = 0;
+        const markerRows = [
+            ...(row_deletable ? [(<td
+                key='deletable'
+                style={fixedColumn++ < n_fixed_columns ? {} : {
+                    width: `30px`,
+                    maxWidth: `30px`,
+                    minWidth: `30px`
+                }}
+            />)] : []),
+            ...(row_selectable ? [(<td
+                key='selectable'
+                style={fixedColumn++ < n_fixed_columns ? {} : {
+                    width: `30px`,
+                    maxWidth: `30px`,
+                    minWidth: `30px`
+                }}
+            />)] : []),
+            ...R.map(column => (<td
+                key={`${column.id}`}
+                style={fixedColumn++ < n_fixed_columns ? {} : {
+                    width: `${column.width || DEFAULT_CELL_WIDTH}px`,
+                    maxWidth: `${column.width || DEFAULT_CELL_WIDTH}px`,
+                    minWidth: `${column.width || DEFAULT_CELL_WIDTH}px`
+                }}
+            />), columns)
+        ];
 
         const table_component = (
-            <div>
+            <div
+                className={[
+                    'dash-spreadsheet',
+                    ...(hasFixedRows ? ['freeze-top'] : []),
+                    ...(n_fixed_columns ? ['freeze-left'] : [])
+                ].join(' ')}
+                onKeyDown={this.handleKeyDown}
+                onScroll={this.onContainerScroll}
+                key={`${id}-table-container`}
+                ref='spreadsheet'
+            >
                 <table
                     id={id}
                     key={`${id}-table`}
                     onPaste={this.onPaste}
                     tabIndex={-1}
-                    style={table_style}
                 >
-                    <Header {...this.props} />
+                    <thead className='marker-row'>
+                        <tr>{markerRows}</tr>
+                    </thead>
 
-                    <tbody>
-                        {this.collectRows(dataframe, 0)}
-                    </tbody>
+                    {hasFixedRows ? <tbody
+                        className={'frozen-top'}
+                        ref='frozenTop'
+                    >
+                        {fixedRows}
+                        <tr className='marker-row'>{markerRows}</tr>
+                    </tbody> : null}
+
+                    {<tbody>{rows}</tbody>}
                 </table>
+            </div>
+        );
+
+        return (
+            <div id={id}>
+                <div className={[
+                    'dash-spreadsheet-clipper',
+                    ...(hasFixedRows ? ['freeze-top'] : []),
+                    ...(n_fixed_columns ? ['freeze-left'] : [])
+                ].join(' ')}>
+                    <div
+                        className='dash-spreadsheet-container'
+                        ref='container'
+                    >
+                        {table_component}
+                    </div>
+                </div>
                 {!this.displayPagination ? null : (
                     <div>
                         <button onClick={this.loadPrevious}>Previous</button>
                         <button onClick={this.loadNext}>Next</button>
                     </div>
                 )}
-            </div>
-        );
-
-        let tableStyle = null;
-        if (n_fixed_columns || n_fixed_rows) {
-            tableStyle = computedStyles.scroll.containerDiv(this.props);
-        }
-        return (
-            <div
-                className="dash-spreadsheet"
-                style={tableStyle}
-                onKeyDown={this.handleKeyDown}
-                key={`${id}-table-container`}
-            >
-                {table_component}
             </div>
         );
     }

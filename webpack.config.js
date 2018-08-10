@@ -6,7 +6,7 @@ const dashLibraryName = packagejson.name.replace(/-/g, '_');
 module.exports = {
     entry: {
         bundle: './src/dash-table/index.js',
-        demo: './demo/index.js',
+        demo: ['./demo/index.js', './demo/index.html'],
     },
     output: {
         path: path.resolve(__dirname, dashLibraryName),
@@ -22,7 +22,11 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.ts$/,
+                test: /demo[/]index.html?$/,
+                loader: 'file-loader?name=index.[ext]'
+            },
+            {
+                test: /\.ts(x?)$/,
                 exclude: /node_modules/,
                 use: [
                     { loader: 'babel-loader' },
@@ -39,12 +43,16 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [
-                    {
-                        loader: 'style-loader',
-                    },
-                    {
-                        loader: 'css-loader',
-                    },
+                    { loader: 'style-loader' },
+                    { loader: 'css-loader' }
+                ],
+            },
+            {
+                test: /\.less$/,
+                use: [
+                    { loader: 'style-loader' },
+                    { loader: 'css-loader' },
+                    { loader: 'less-loader' }
                 ],
             },
         ],
@@ -55,6 +63,6 @@ module.exports = {
             'core': path.resolve('./src/core'),
             'tests': path.resolve('./tests')
         },
-        extensions: ['.js', '.ts']
+        extensions: ['.js', '.ts', '.tsx']
     }
 };

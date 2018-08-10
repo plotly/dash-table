@@ -4,8 +4,9 @@ import * as R from 'ramda';
 import Dropdown from 'react-select';
 
 import {colIsEditable} from 'dash-table/components/derivedState';
-import computedStyles from 'dash-table/components/computedStyles';
 import { memoizeOne } from 'core/memoizer';
+
+export const DEFAULT_CELL_WIDTH = 200;
 
 export default class Cell extends Component {
     constructor(props) {
@@ -13,10 +14,24 @@ export default class Cell extends Component {
 
         this.handleClick = this.handleClick.bind(this);
         this.handleDoubleClick = this.handleDoubleClick.bind(this);
+        this.onOpenDropdown = this.onOpenDropdown.bind(this);
 
         this.notEditable = memoizeOne((editable, columns, i) => {
             return !colIsEditable(editable, columns[i]);
         });
+    }
+
+    onOpenDropdown() {
+        const { dropdown } = this.refs;
+
+        const menu = dropdown.wrapper.querySelector('.Select-menu-outer');
+
+        const parentBoundingRect = menu.parentElement.getBoundingClientRect();
+
+        menu.style.width = parentBoundingRect.width;
+        menu.style.top = `${parentBoundingRect.y + parentBoundingRect.height}px`;
+        menu.style.left = `${parentBoundingRect.x}px`;
+        menu.style.position = 'fixed';
     }
 
     handleClick(e) {
@@ -121,6 +136,9 @@ export default class Cell extends Component {
             setProps,
             dataframe,
             is_focused,
+            n_fixed_columns,
+            row_deletable,
+            row_selectable,
             columns,
             selected_cell,
             active_cell,
@@ -131,8 +149,8 @@ export default class Cell extends Component {
 
         let innerCell;
         if (
-            !R.has('type', columns[i]) ||
-            R.contains(columns[i].type, ['numeric', 'text'])
+            (!R.has('type', columns[i]) || R.contains(columns[i].type, ['numeric', 'text'])) &&
+            !notEditable
         ) {
             innerCell = (
                 <input
@@ -185,6 +203,7 @@ export default class Cell extends Component {
             } else {
                 innerCell = (
                     <Dropdown
+                        ref='dropdown'
                         placeholder={''}
                         options={options}
                         onChange={newOption => {
@@ -195,6 +214,7 @@ export default class Cell extends Component {
                             );
                             setProps({dataframe: newDataframe});
                         }}
+                        onOpen={this.onOpenDropdown}
                         clearable={columns[i].clearable}
                         value={value}
                     />
@@ -204,27 +224,26 @@ export default class Cell extends Component {
             innerCell = value;
         }
 
-        const {style, borderFixDiv} = computedStyles.scroll.borderStyle(
-            this.props
-        );
+        const fixedIndex = i +
+            (row_deletable ? 1 : 0) +
+            (row_selectable ? 1 : 0);
 
         return (
             <td
-                style={R.merge(
-                    style,
-                    computedStyles.scroll.cell(this.props, i)
-                )}
                 className={
                     (isSelected && selected_cell.length > 1
                         ? 'cell--selected '
                         : '') +
-                    (is_focused && isActive ? 'focused ' : '') +
+                    (isActive ? 'focused ' : '') +
                     (notEditable ? 'cell--uneditable ' : '') +
-                    (columns[i].type === 'dropdown' ? 'dropdown ' : '')
+                    (columns[i].type === 'dropdown' ? 'dropdown ' : '') +
+                    (fixedIndex < n_fixed_columns ? `frozen-left frozen-left-${fixedIndex}` : '')
                 }
+                style={fixedIndex < n_fixed_columns ? {
+                    width: `${c.width || DEFAULT_CELL_WIDTH}px`
+                } : {}}
             >
                 {innerCell}
-                {borderFixDiv}
             </td>
         );
     }
@@ -240,6 +259,9 @@ Cell.propTypes = {
     idx: PropTypes.any,
     isSelected: PropTypes.any,
     is_focused: PropTypes.any,
+    n_fixed_columns: PropTypes.any,
+    row_deletable: PropTypes.any,
+    row_selectable: PropTypes.any,
     selected_cell: PropTypes.any,
     setProps: PropTypes.any,
     value: PropTypes.any,

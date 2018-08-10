@@ -55,7 +55,7 @@ export const mockData = unpackIntoColumnsAndDataFrames([
         name: ['City', 'America', 'New York City'],
         type: 'numeric',
         style: {
-            'white-space': 'pre-line',
+            'whiteSpace': 'pre-line',
         },
         width: 150,
         data: gendata(i => i),
