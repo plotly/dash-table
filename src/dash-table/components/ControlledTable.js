@@ -609,6 +609,11 @@ export default class ControlledTable extends Component {
             return;
         }
 
+        const { spreadsheet } = this.refs;
+        if (ev.target !== spreadsheet) {
+            return;
+        }
+
         this.updateRule(`#${id} .frozen-left`, `margin-top: ${-ev.target.scrollTop}px;`);
     }
 
@@ -666,7 +671,9 @@ export default class ControlledTable extends Component {
                     ...(n_fixed_columns ? ['freeze-left'] : [])
                 ].join(' ')}
                 onKeyDown={this.handleKeyDown}
+                onScroll={this.onContainerScroll}
                 key={`${id}-table-container`}
+                ref='spreadsheet'
             >
                 <table
                     id={id}
@@ -693,13 +700,18 @@ export default class ControlledTable extends Component {
 
         return (
             <div id={id}>
-                <section
-                    className='dash-spreadsheet-container'
-                    ref='container'
-                    onScroll={this.onContainerScroll}
-                >
-                    {table_component}
-                </section>
+                <div className={[
+                    'dash-spreadsheet-clipper',
+                    ...(hasFixedRows ? ['freeze-top'] : []),
+                    ...(n_fixed_columns ? ['freeze-left'] : [])
+                ].join(' ')}>
+                    <div
+                        className='dash-spreadsheet-container'
+                        ref='container'
+                    >
+                        {table_component}
+                    </div>
+                </div>
                 {!this.displayPagination ? null : (
                     <div>
                         <button onClick={this.loadPrevious}>Previous</button>

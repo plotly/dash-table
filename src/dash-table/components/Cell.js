@@ -26,19 +26,12 @@ export default class Cell extends Component {
 
         const menu = dropdown.wrapper.querySelector('.Select-menu-outer');
 
-        const parentElement = menu.parentElement;
+        const parentBoundingRect = menu.parentElement.getBoundingClientRect();
 
-        let relativeParent = parentElement;
-        while (getComputedStyle(relativeParent).position !== 'relative' && relativeParent.parentElement) {
-            relativeParent = relativeParent.parentElement;
-        }
-
-        const relativeBoundingRect = relativeParent.getBoundingClientRect();
-        const parentBoundingRect = parentElement.getBoundingClientRect();
-
-        menu.style.top = (parentBoundingRect.y + parentBoundingRect.height) - relativeBoundingRect.y;
-        menu.style.left = parentBoundingRect.x - relativeBoundingRect.x;
         menu.style.width = parentBoundingRect.width;
+        menu.style.top = `${parentBoundingRect.y + parentBoundingRect.height}px`;
+        menu.style.left = `${parentBoundingRect.x}px`;
+        menu.style.position = 'fixed';
     }
 
     handleClick(e) {

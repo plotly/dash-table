@@ -12,6 +12,17 @@
         0px @bottom 0px 0px @color;
 }
 
+.dash-spreadsheet-clipper {
+    &.freeze-left {
+        overflow: hidden;
+    }
+
+    // freeze rows
+    &.freeze-top {
+        overflow: hidden;
+    }
+}
+
 .dash-spreadsheet-container {
     position: relative;
 }
@@ -22,8 +33,12 @@
     // freeze columns
     &.freeze-left {
         overflow-x: scroll;
+        overflow-y: scroll;
+        width: 500px;
+        height: 500px;
 
         .frozen-left {
+            overflow: hidden;
             position: absolute;
             z-index: 1000;
             left: 0;
