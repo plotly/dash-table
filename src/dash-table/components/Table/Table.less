@@ -242,6 +242,12 @@ tr:hover input :not(.cell--selected) {
     box-sizing: border-box;
     color: var(--text-color);
     background-color: transparent; /* so as to not overlay the box shadow */
+
+    /* browser's default text-shadow is `$color 0px 0px 0px;`
+     * for `input`, which makes it look a little bit heavier than dropdowns
+     * or bare `td`
+     */
+    text-shadow: none;
 }
 
 .dash-spreadsheet input.unfocused {
@@ -308,4 +314,30 @@ th:hover .filter {
 }
 .dash-spreadsheet .delete-cell:hover {
     color: var(--accent);
+}
+
+.dash-spreadsheet .column-header--edit {
+    float: left;
+    opacity: 0.1;
+    padding-left: 2px;
+    padding-right: 2px;
+    cursor: pointer;
+}
+
+.dash-spreadsheet th:hover .column-header--edit {
+    color: var(--accent);
+    opacity: 1;
+}
+
+.dash-spreadsheet .column-header--delete {
+    float: left;
+    opacity: 0.1;
+    padding-left: 2px;
+    padding-right: 2px;
+    cursor: pointer;
+}
+
+.dash-spreadsheet th:hover .column-header--delete {
+    color: var(--accent);
+    opacity: 1;
 }

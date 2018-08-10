@@ -1,15 +1,20 @@
 import React from 'react';
 import * as R from 'ramda';
+import * as actions from '../utils/actions';
 
 import { DEFAULT_CELL_WIDTH } from './Cell';
 
 interface ICellOptions {
     columns: any[];
+    columnRowIndex: any;
+    dataframe: any;
     labels: any[];
     mergeCells?: boolean;
     n_fixed_columns: number;
     rowIsSortable: boolean;
+    setProps: (...args: any[]) => any;
     sort: any;
+    virtualization: any;
 }
 
 interface IOptions extends ICellOptions {
@@ -23,9 +28,32 @@ interface IOptions extends ICellOptions {
 const getColLength = (c: any) => (Array.isArray(c.name) ? c.name.length : 1);
 const getColNameAt = (c: any, i: number) => (Array.isArray(c.name) ? c.name[i] : '');
 
+function editColumnName(column: any, columnRowIndex: any, options: ICellOptions) {
+    return () => {
+        const { setProps } = options;
+        setProps(actions.editColumnName(column, columnRowIndex, options));
+    };
+}
+
+function deleteColumn(column: any, columnRowIndex: any, options: ICellOptions) {
+    return () => {
+        const { setProps } = options;
+        setProps(actions.deleteColumn(column, columnRowIndex, options));
+    };
+}
+
 export default class HeaderFactory {
     private static createHeaderCells(options: ICellOptions, indexOffset: number) {
-        const { columns, labels, mergeCells, n_fixed_columns, rowIsSortable, sort } = options;
+        const {
+            columns,
+            columnRowIndex,
+            labels,
+            mergeCells,
+            n_fixed_columns,
+            rowIsSortable,
+            sort,
+            virtualization
+        } = options;
 
         let columnIndices: any[] = [];
 
@@ -48,7 +76,6 @@ export default class HeaderFactory {
             if (c.hidden) {
                 return null;
             }
-            // let style = R.merge({}, c.style) || {};
 
             let colSpan;
             if (!mergeCells) {
@@ -84,14 +111,35 @@ export default class HeaderFactory {
                         >
                             {R.find(R.propEq('column', c.id), sort)
                                 ? R.find(R.propEq('column', c.id), sort)
-                                      .direction === 'desc'
+                                    .direction === 'desc'
                                     ? '↑'
                                     : '↓'
                                 : '↕'}
-                        </span>
-                    ) : (
-                        ''
-                    )}
+                        </span>) : ('')
+                    }
+
+                    {((c.editable_name && R.type(c.editable_name) === 'Boolean') ||
+                        (R.type(c.editable_name) === 'Number' &&
+                            c.editable_name === i)) ? (
+                            <span
+                                className='column-header--edit'
+                                onClick={editColumnName(c, columnRowIndex, options)}
+                            >
+                                {`✎`}
+                            </span>
+                        ) : ''}
+
+                    {((c.deletable && virtualization !== 'be' && R.type(c.deletable) === 'Boolean') ||
+                        (R.type(c.deletable) === 'Number' &&
+                            c.deletable === i)) ? (
+                            <span
+                                className='column-header--delete'
+                                onClick={deleteColumn(
+                                    c, columnRowIndex, options)}
+                            >
+                                {'×'}
+                            </span>
+                        ) : ''}
 
                     <span>{labels[i]}</span>
                 </th>
@@ -102,12 +150,15 @@ export default class HeaderFactory {
     static createHeaders(options: IOptions) {
         let {
             columns,
+            dataframe,
             sortable,
             merge_duplicate_headers,
             n_fixed_columns,
             row_deletable,
             row_selectable,
-            sort
+            setProps,
+            sort,
+            virtualization
         } = options;
 
         const deletableCell = !row_deletable ? null : (
@@ -144,10 +195,14 @@ export default class HeaderFactory {
                     {selectableCell}
                     {HeaderFactory.createHeaderCells({
                         columns,
+                        columnRowIndex: 0,
+                        dataframe,
                         labels: R.pluck('name', columns),
                         n_fixed_columns,
                         rowIsSortable: sortable,
-                        sort
+                        setProps,
+                        sort,
+                        virtualization
                     }, indexOffset)}
                 </tr>
             )];
@@ -158,6 +213,8 @@ export default class HeaderFactory {
                     {selectableCell}
                     {HeaderFactory.createHeaderCells({
                         columns,
+                        columnRowIndex: i,
+                        dataframe,
                         labels: columns.map(
                             c =>
                                 R.isNil(c.name) && i === headerDepth - 1
@@ -169,7 +226,9 @@ export default class HeaderFactory {
                         mergeCells:
                             merge_duplicate_headers &&
                             i + 1 !== headerDepth,
-                        sort
+                        setProps,
+                        sort,
+                        virtualization
                     }, indexOffset)}
                 </tr>
             ));

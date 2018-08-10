@@ -479,7 +479,7 @@ export default class ControlledTable extends Component {
 
                 if (values.length + active_cell[0] >= dataframe.length) {
                     const emptyRow = {};
-                    columns.forEach(c => (emptyRow[c.name] = ''));
+                    columns.forEach(c => (emptyRow[c.id] = ''));
                     newDataframe = R.concat(
                         newDataframe,
                         R.repeat(
