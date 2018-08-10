@@ -230,6 +230,17 @@
         "required": false,
         "description": ""
       },
+      "sort": {
+        "type": {
+          "name": "array"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "[]",
+          "computed": false
+        }
+      },
       "sortable": {
         "type": {
           "name": "bool"
