@@ -156,8 +156,8 @@ export default class Cell extends Component {
 
         let innerCell;
         if (
-            !R.has('type', columns[i]) ||
-            R.contains(columns[i].type, ['numeric', 'text'])
+            (!R.has('type', columns[i]) || R.contains(columns[i].type, ['numeric', 'text'])) &&
+            !notEditable
         ) {
             innerCell = (
                 <input
