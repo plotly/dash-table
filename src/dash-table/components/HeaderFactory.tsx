@@ -42,6 +42,12 @@ function deleteColumn(column: any, columnRowIndex: any, options: ICellOptions) {
     };
 }
 
+function doSort(columnId: any, options: ICellOptions) {
+    return () => {
+        return actions.sort(columnId, options);
+    };
+}
+
 export default class HeaderFactory {
     private static createHeaderCells(options: ICellOptions, indexOffset: number) {
         const {
@@ -107,7 +113,7 @@ export default class HeaderFactory {
                     {rowIsSortable ? (
                         <span
                             className='filter'
-                            onClick={() => sort(c.id)}
+                            onClick={doSort(c.id, options)}
                         >
                             {R.find(R.propEq('column', c.id), sort)
                                 ? R.find(R.propEq('column', c.id), sort)
