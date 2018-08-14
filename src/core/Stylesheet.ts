@@ -66,7 +66,7 @@ export default class Stylesheet {
 
         const result = this.stylesheet.findRule(selector);
         if (result) {
-            if (result.rule.selectorText === selector) {
+            if (result.rule.cssText === css) {
                 return;
             } else {
                 this.stylesheet.deleteRule(result.index);
