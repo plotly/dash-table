@@ -22,5 +22,8 @@
         "strictPropertyInitialization": false,
         "target": "esnext",
         "traceResolution": true
-    }
+    },
+    "exclude": [
+        "cypress/*"
+    ]
 }

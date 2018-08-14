@@ -8,6 +8,7 @@
 
 # testing
 /coverage
+/cypress/screenshots/**
 
 # misc
 .DS_Store
