@@ -123,14 +123,14 @@ export default class Cell extends Component<IProps, IState> {
 
         return !active ?
             this.renderValue(attributes) :
-            (<div><input
+            (<input
                 ref='textInput'
                 type='text'
                 value={this.state.value}
                 onChange={this.handleChange}
                 onPaste={onPaste}
                 {...attributes}
-            /></div>);
+            />);
     }
 
     handleChange = (e: any) => {
