@@ -133,23 +133,6 @@ export default class Cell extends Component<IProps, IState> {
             />);
     }
 
-    handleChange = (e: any) => {
-        this.setState({ value: e.target.value });
-    }
-
-    handleOpenDropdown = () => {
-        const { dropdown }: { [key: string]: any } = this.refs;
-
-        const menu = dropdown.wrapper.querySelector('.Select-menu-outer');
-
-        const parentBoundingRect = menu.parentElement.getBoundingClientRect();
-
-        menu.style.width = parentBoundingRect.width;
-        menu.style.top = `${parentBoundingRect.y + parentBoundingRect.height}px`;
-        menu.style.left = `${parentBoundingRect.x}px`;
-        menu.style.position = 'fixed';
-    }
-
     private renderValue(attributes = {}) {
         const { value } = this.propsWithDefaults;
 
@@ -187,6 +170,23 @@ export default class Cell extends Component<IProps, IState> {
         >
             {this.renderInner()}
         </td>);
+    }
+
+    handleChange = (e: any) => {
+        this.setState({ value: e.target.value });
+    }
+
+    handleOpenDropdown = () => {
+        const { dropdown }: { [key: string]: any } = this.refs;
+
+        const menu = dropdown.wrapper.querySelector('.Select-menu-outer');
+
+        const parentBoundingRect = menu.parentElement.getBoundingClientRect();
+
+        menu.style.width = parentBoundingRect.width;
+        menu.style.top = `${parentBoundingRect.y + parentBoundingRect.height}px`;
+        menu.style.left = `${parentBoundingRect.x}px`;
+        menu.style.position = 'fixed';
     }
 
     componentWillReceiveProps(nextProps: IPropsWithDefaults) {
