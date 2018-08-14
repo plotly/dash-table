@@ -1,8 +1,8 @@
 import React from 'react';
 import * as R from 'ramda';
-import * as actions from '../utils/actions';
+import * as actions from 'dash-table/utils/actions';
 
-import { DEFAULT_CELL_WIDTH } from './Cell';
+import { DEFAULT_CELL_WIDTH } from 'dash-table/components/Row';
 
 interface ICellOptions {
     columns: any[];
