@@ -255,11 +255,11 @@ export default class Row extends Component {
                 (isFixed ? { width: `${c.width || DEFAULT_CELL_WIDTH}px` } : {})
             );
 
-            const dropdown = (
+            const dropdown = ((
                 dropdown_properties &&
                 dropdown_properties[c.id] &&
-                dropdown_properties[c.id][idx]
-            ) || c.options;
+                (dropdown_properties[c.id].length > idx ? dropdown_properties[c.id][idx] : null)
+            ) || c || {}).options;
 
             return (<Cell
                 key={`${c.id}-${i}`}
