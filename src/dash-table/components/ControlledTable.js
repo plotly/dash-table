@@ -479,7 +479,7 @@ export default class ControlledTable extends Component {
 
                 if (values.length + active_cell[0] >= dataframe.length) {
                     const emptyRow = {};
-                    columns.forEach(c => (emptyRow[c.name] = ''));
+                    columns.forEach(c => (emptyRow[c.id] = ''));
                     newDataframe = R.concat(
                         newDataframe,
                         R.repeat(
@@ -554,15 +554,20 @@ export default class ControlledTable extends Component {
 
         const ruleIndex = R.findIndex(
             rule => rule.selectorText === selector,
-            Array.from(sheet.rules)
+            Array.from(sheet.rules || sheet.cssRules)
         );
-
 
         if (ruleIndex !== -1) {
             sheet.deleteRule(ruleIndex);
         }
 
-        sheet.addRule(selector, style);
+        if (sheet.addRule) {
+            // Chrome, Safari
+            sheet.addRule(selector, style);
+        } else {
+            // Firefox
+            sheet.insertRule(`${selector} { ${style} }`, 0);
+        }
     }
 
     componentWillUpdate() {
@@ -601,6 +606,11 @@ export default class ControlledTable extends Component {
     onContainerScroll(ev) {
         const { id, n_fixed_columns } = this.props;
         if (!n_fixed_columns) {
+            return;
+        }
+
+        const { spreadsheet } = this.refs;
+        if (ev.target !== spreadsheet) {
             return;
         }
 
@@ -661,7 +671,9 @@ export default class ControlledTable extends Component {
                     ...(n_fixed_columns ? ['freeze-left'] : [])
                 ].join(' ')}
                 onKeyDown={this.handleKeyDown}
+                onScroll={this.onContainerScroll}
                 key={`${id}-table-container`}
+                ref='spreadsheet'
             >
                 <table
                     id={id}
@@ -688,13 +700,18 @@ export default class ControlledTable extends Component {
 
         return (
             <div id={id}>
-                <section
-                    className='dash-spreadsheet-container'
-                    ref='container'
-                    onScroll={this.onContainerScroll}
-                >
-                    {table_component}
-                </section>
+                <div className={[
+                    'dash-spreadsheet-clipper',
+                    ...(hasFixedRows ? ['freeze-top'] : []),
+                    ...(n_fixed_columns ? ['freeze-left'] : [])
+                ].join(' ')}>
+                    <div
+                        className='dash-spreadsheet-container'
+                        ref='container'
+                    >
+                        {table_component}
+                    </div>
+                </div>
                 {!this.displayPagination ? null : (
                     <div>
                         <button onClick={this.loadPrevious}>Previous</button>

@@ -123,6 +123,7 @@ export const defaultProps = {
     selected_cell: [[]],
     selected_rows: [],
     row_selectable: false,
+    sort: [],
     table_style: [],
     base_styles: {
         numeric: {
@@ -194,6 +195,7 @@ export const propTypes = {
     selected_cell: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
     selected_rows: PropTypes.arrayOf(PropTypes.number),
     setProps: PropTypes.any,
+    sort: PropTypes.array,
     sortable: PropTypes.bool,
     start_cell: PropTypes.arrayOf(PropTypes.number),
     style_as_list_view: PropTypes.bool,

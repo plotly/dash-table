@@ -20,3 +20,7 @@
     Limitations
         - performance is highly impacted if the table is in a scrollable container as the frozen columns position has to be recalculated on each scroll event; impact is minimal up to 50-100 items and makes the table difficult to use with 250-500 items
         - can't freeze rows and columns at the same time
+
+## Deletable Columns
+    Limitations
+        - there might be unintended side-effects if used with BE virtualization (the act of deleting a column / columns modifies the dataframe)
