@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import * as R from 'ramda';
 import SheetClip from 'sheetclip';
+import Stylesheet from 'core/Stylesheet';
 import { colIsEditable } from 'dash-table/components/derivedState';
 import {
     KEY_CODES,
@@ -15,7 +16,7 @@ import { propTypes } from 'dash-table/components/Table';
 
 import HeaderFactory from 'dash-table/components/HeaderFactory';
 import RowFactory from 'dash-table/components/RowFactory';
-import { DEFAULT_CELL_WIDTH } from './Cell';
+import { DEFAULT_CELL_WIDTH } from 'dash-table/components/Cell';
 
 const sortNumerical = R.sort((a, b) => a - b);
 
@@ -34,6 +35,8 @@ export default class ControlledTable extends Component {
         this.loadPrevious = this.loadPrevious.bind(this);
 
         this.listeners = {};
+
+        this.stylesheet = new Stylesheet(`#${props.id}`);
     }
 
     componentDidMount() {
@@ -539,47 +542,16 @@ export default class ControlledTable extends Component {
         virtualizer.loadPrevious();
     }
 
-    getDynamicStylesheet() {
-        return (this.__fixedCss = this.__fixedCss || (() => {
-            const style = document.createElement('style');
-            style.type = 'text/css';
-            document.getElementsByTagName('head')[0].appendChild(style);
-
-            return style;
-        })()).sheet;
-    }
-
-    updateRule(selector: string, style: string) {
-        const sheet = this.getDynamicStylesheet();
-
-        const ruleIndex = R.findIndex(
-            rule => rule.selectorText === selector,
-            Array.from(sheet.rules || sheet.cssRules)
-        );
-
-        if (ruleIndex !== -1) {
-            sheet.deleteRule(ruleIndex);
-        }
-
-        if (sheet.addRule) {
-            // Chrome, Safari
-            sheet.addRule(selector, style);
-        } else {
-            // Firefox
-            sheet.insertRule(`${selector} { ${style} }`, 0);
-        }
-    }
-
     componentWillUpdate() {
-        const { id, table_style } = this.props;
+        const { table_style } = this.props;
 
-        R.forEach(({selector, rule}) => {
-            this.updateRule(`#${id} ${selector}`, rule);
+        R.forEach(({ selector, rule }) => {
+            this.stylesheet.setRule(selector, rule);
         }, table_style);
     }
 
     componentDidUpdate() {
-        const { n_fixed_columns = 0, n_fixed_rows = 0, id } = this.props;
+        const { n_fixed_columns = 0, n_fixed_rows = 0 } = this.props;
         if (!n_fixed_columns && !n_fixed_rows) {
             return;
         }
@@ -588,14 +560,14 @@ export default class ControlledTable extends Component {
 
         let xOffset = 0;
         R.range(0, n_fixed_columns).forEach(index => {
-            this.updateRule(`#${id} .frozen-left-${index}`, `margin-left: ${xOffset}px;`);
+            this.stylesheet.setRule(`.frozen-left-${index}`, `margin-left: ${xOffset}px;`);
 
             const fixedCell = container.querySelector(`.frozen-left-${index}`);
             if (fixedCell) {
                 xOffset += (fixedCell.clientWidth || parseInt(getComputedStyle(fixedCell).width, 10));
             }
         });
-        this.updateRule(`#${id} .dash-spreadsheet`, `padding-left: ${xOffset}px; padding-top: ${frozenTop ? frozenTop.clientHeight : 0}px;`);
+        this.stylesheet.setRule(`.dash-spreadsheet`, `padding-left: ${xOffset}px; padding-top: ${frozenTop ? frozenTop.clientHeight : 0}px;`);
 
         R.forEach(
             cell => { cell.style.height = cell.parentElement.clientHeight },
@@ -604,7 +576,7 @@ export default class ControlledTable extends Component {
     }
 
     onContainerScroll(ev) {
-        const { id, n_fixed_columns } = this.props;
+        const { n_fixed_columns } = this.props;
         if (!n_fixed_columns) {
             return;
         }
@@ -614,7 +586,7 @@ export default class ControlledTable extends Component {
             return;
         }
 
-        this.updateRule(`#${id} .frozen-left`, `margin-top: ${-ev.target.scrollTop}px;`);
+        this.stylesheet.setRule(`.frozen-left`, `margin-top: ${-ev.target.scrollTop}px;`);
     }
 
     render() {
@@ -635,33 +607,28 @@ export default class ControlledTable extends Component {
         const fixedRows = rows.splice(0, n_fixed_rows);
         const hasFixedRows = fixedRows.length !== 0;
 
-        let fixedColumn = 0;
-        const markerRows = [
-            ...(row_deletable ? [(<td
-                key='deletable'
-                style={fixedColumn++ < n_fixed_columns ? {} : {
-                    width: `30px`,
-                    maxWidth: `30px`,
-                    minWidth: `30px`
-                }}
-            />)] : []),
-            ...(row_selectable ? [(<td
-                key='selectable'
-                style={fixedColumn++ < n_fixed_columns ? {} : {
-                    width: `30px`,
-                    maxWidth: `30px`,
-                    minWidth: `30px`
-                }}
-            />)] : []),
-            ...R.map(column => (<td
-                key={`${column.id}`}
-                style={fixedColumn++ < n_fixed_columns ? {} : {
-                    width: `${column.width || DEFAULT_CELL_WIDTH}px`,
-                    maxWidth: `${column.width || DEFAULT_CELL_WIDTH}px`,
-                    minWidth: `${column.width || DEFAULT_CELL_WIDTH}px`
-                }}
-            />), columns)
-        ];
+        let typeIndex = 0;
+        if (row_deletable) {
+            this.stylesheet.setRule(
+                `.dash-spreadsheet td:nth-of-type(${++typeIndex})`,
+                `width: 30px; max-width: 30px; min-width: 30px;`
+            );
+        }
+
+        if (row_selectable) {
+            this.stylesheet.setRule(
+                `.dash-spreadsheet td:nth-of-type(${++typeIndex})`,
+                `width: 30px; max-width: 30px; min-width: 30px;`
+            );
+        }
+
+        R.forEach(column => {
+            this.stylesheet.setRule(
+                `.dash-spreadsheet td:nth-of-type(${++typeIndex})`,
+                `width: ${column.width || DEFAULT_CELL_WIDTH}px; max-width: ${column.width || DEFAULT_CELL_WIDTH}px; min-width: ${column.width || DEFAULT_CELL_WIDTH}px;`
+            );
+        }, columns)
+
 
         const table_component = (
             <div
@@ -681,19 +648,16 @@ export default class ControlledTable extends Component {
                     onPaste={this.onPaste}
                     tabIndex={-1}
                 >
-                    <thead className='marker-row'>
-                        <tr>{markerRows}</tr>
-                    </thead>
-
                     {hasFixedRows ? <tbody
                         className={'frozen-top'}
                         ref='frozenTop'
                     >
                         {fixedRows}
-                        <tr className='marker-row'>{markerRows}</tr>
                     </tbody> : null}
 
-                    {<tbody>{rows}</tbody>}
+                    {<tbody>
+                        {rows}
+                    </tbody>}
                 </table>
             </div>
         );
