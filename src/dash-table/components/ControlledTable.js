@@ -678,8 +678,8 @@ export default class ControlledTable extends Component {
                 </div>
                 {!this.displayPagination ? null : (
                     <div>
-                        <button onClick={this.loadPrevious}>Previous</button>
-                        <button onClick={this.loadNext}>Next</button>
+                        <button className='previous-page' onClick={this.loadPrevious}>Previous</button>
+                        <button className='next-page' onClick={this.loadNext}>Next</button>
                     </div>
                 )}
             </div>

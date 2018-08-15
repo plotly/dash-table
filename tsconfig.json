@@ -24,6 +24,6 @@
         "traceResolution": true
     },
     "exclude": [
-        "cypress/*"
+        "tests/*"
     ]
 }
