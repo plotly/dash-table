@@ -92,6 +92,5 @@ export default class Stylesheet {
         }
 
         this.stylesheet.addRule(selector, css);
-        console.log('setRule', selector, css);
     }
 }
