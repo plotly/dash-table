@@ -1,4 +1,5 @@
 # pylint: disable=unsubscriptable-object
+# pylint: disable=global-statement
 import dash
 from dash.dependencies import Input, Output
 import dash_html_components as html
@@ -20,7 +21,11 @@ moduleNames = ['dash_table']
 modules = map(__import__, moduleNames)
 dash_table = modules[0]
 
-df = pd.read_csv('https://github.com/plotly/datasets/raw/master/26k-consumer-complaints.csv')
+url = (
+    'https://github.com/plotly/datasets/raw/master/'
+    '26k-consumer-complaints.csv'
+)
+df = pd.read_csv(url)
 df = df.values
 
 app = dash.Dash()
