@@ -4,6 +4,10 @@ interface IRule {
 }
 
 class StylesheetFacade {
+    constructor(private readonly name: string) {
+
+    }
+
     get rules(): IRule[] {
         const sheet = this.sheet;
 
@@ -38,6 +42,7 @@ class StylesheetFacade {
         return (this.__stylesheet = this.__stylesheet || (() => {
             const style = document.createElement('style');
             style.type = 'text/css';
+            style.id = this.name;
             document.getElementsByTagName('head')[0].appendChild(style);
 
             return style;
@@ -48,8 +53,21 @@ class StylesheetFacade {
 export default class Stylesheet {
     private stylesheet: StylesheetFacade;
 
+    static unit(dimension: any, defaultUnit: 'em' | 'rem' | 'px' = 'px') {
+        if (Stylesheet.hasUnit(dimension)) {
+            return dimension;
+        } else {
+            return `${dimension}${defaultUnit}`;
+        }
+    }
+
+    static hasUnit(dimension: any) {
+        return typeof dimension === 'string' &&
+            /^\d+(\.\d+)?(px|em|rem)$/.test(dimension);
+    }
+
     constructor(private readonly prefix: string) {
-        this.stylesheet = new StylesheetFacade();
+        this.stylesheet = new StylesheetFacade(`${prefix}-dynamic-inline.css`);
     }
 
     deleteRule(selector: string) {

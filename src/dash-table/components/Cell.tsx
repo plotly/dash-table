@@ -180,10 +180,9 @@ export default class Cell extends Component<IProps, IState> {
         const { dropdown }: { [key: string]: any } = this.refs;
 
         const menu = dropdown.wrapper.querySelector('.Select-menu-outer');
-
         const parentBoundingRect = menu.parentElement.getBoundingClientRect();
 
-        menu.style.width = parentBoundingRect.width;
+        menu.style.width = `${parentBoundingRect.width}px`;
         menu.style.top = `${parentBoundingRect.y + parentBoundingRect.height}px`;
         menu.style.left = `${parentBoundingRect.x}px`;
         menu.style.position = 'fixed';

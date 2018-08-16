@@ -12,6 +12,17 @@
         0px @bottom 0px 0px @color;
 }
 
+.dash-spreadsheet-clipper {
+    &.freeze-left {
+        overflow: hidden;
+    }
+
+    // freeze rows
+    &.freeze-top {
+        overflow: hidden;
+    }
+}
+
 .dash-spreadsheet-container {
     position: relative;
 }
@@ -22,8 +33,10 @@
     // freeze columns
     &.freeze-left {
         overflow-x: scroll;
+        overflow-y: scroll;
 
         .frozen-left {
+            overflow: hidden;
             position: absolute;
             z-index: 1000;
             left: 0;
@@ -33,7 +46,6 @@
     // freeze rows
     &.freeze-top {
         overflow-y: auto;
-        height: 500px;
 
         table {
             width: 0 !important;
@@ -54,6 +66,7 @@
     }
 
     .Select {
+        overflow: hidden;
         position: static;
     }
 
@@ -69,9 +82,6 @@
         }
     }
 
-    table {
-        table-layout: fixed;
-    }
 
     // cell border styling
     tbody {
@@ -132,7 +142,6 @@
         text-overflow: ellipsis;
 
         height: 30px;
-        line-height: 30px;
 
         text-align: right;
     }
@@ -144,7 +153,6 @@
 
 .dash-spreadsheet table {
     border-collapse: collapse;
-    font-size: 1rem;
 
     font-family: monospace;
     --accent: hotpink;
@@ -221,12 +229,17 @@ tr:hover input :not(.cell--selected) {
     width: calc(100% - 1px);
     line-height: 30px;
     border: none;
-    font-size: 1rem;
     font-family: inherit;
     text-align: right;
     box-sizing: border-box;
     color: var(--text-color);
     background-color: transparent; /* so as to not overlay the box shadow */
+
+    /* browser's default text-shadow is `$color 0px 0px 0px;`
+     * for `input`, which makes it look a little bit heavier than dropdowns
+     * or bare `td`
+     */
+    text-shadow: none;
 }
 
 .dash-spreadsheet input.unfocused {
@@ -293,4 +306,30 @@ th:hover .filter {
 }
 .dash-spreadsheet .delete-cell:hover {
     color: var(--accent);
+}
+
+.dash-spreadsheet .column-header--edit {
+    float: left;
+    opacity: 0.1;
+    padding-left: 2px;
+    padding-right: 2px;
+    cursor: pointer;
+}
+
+.dash-spreadsheet th:hover .column-header--edit {
+    color: var(--accent);
+    opacity: 1;
+}
+
+.dash-spreadsheet .column-header--delete {
+    float: left;
+    opacity: 0.1;
+    padding-left: 2px;
+    padding-right: 2px;
+    cursor: pointer;
+}
+
+.dash-spreadsheet th:hover .column-header--delete {
+    color: var(--accent);
+    opacity: 1;
 }
