@@ -86,8 +86,10 @@ hidden = False
 
 @app.callback(
     Output('container', 'hidden'),
-    [Input('table', 'virtual_dataframe'),
-    Input('table', 'virtual_dataframe_indices')]
+    [
+        Input('table', 'virtual_dataframe'),
+        Input('table', 'virtual_dataframe_indices')
+    ]
 )
 def updateVirtualDataframe(virtual_dataframe, virtual_dataframe_indices):
     print(virtual_dataframe)
