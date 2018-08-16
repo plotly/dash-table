@@ -1,4 +1,3 @@
-# pylint: disable=unsubscriptable-object
 # pylint: disable=global-statement
 import dash
 from dash.dependencies import Input, Output
@@ -18,7 +17,7 @@ sys.path.append(
     )
 )
 moduleNames = ['dash_table']
-modules = map(__import__, moduleNames)
+modules = list(map(__import__, moduleNames))
 dash_table = modules[0]
 
 url = (
