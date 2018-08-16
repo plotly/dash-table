@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as R from 'ramda';
+
+import Stylesheet from 'core/Stylesheet';
 import Cell from 'dash-table/components/Cell';
 import * as actions from 'dash-table/utils/actions';
 
@@ -252,7 +254,7 @@ export default class Row extends Component {
             ];
 
             const style = Object.assign({},
-                (isFixed ? { width: `${c.width || DEFAULT_CELL_WIDTH}px` } : {})
+                (isFixed ? { width: `${Stylesheet.unit(c.width || DEFAULT_CELL_WIDTH, 'px')}` } : {})
             );
 
             const dropdown = ((

@@ -642,13 +642,15 @@ export default class ControlledTable extends Component {
         }
 
         R.forEach(column => {
+            const width = Stylesheet.unit(column.width || DEFAULT_CELL_WIDTH, 'px');
+
             this.stylesheet.setRule(
                 `.dash-spreadsheet tr:last-of-type td:nth-of-type(${++typeIndex})`,
-                `width: ${column.width || DEFAULT_CELL_WIDTH}px; max-width: ${column.width || DEFAULT_CELL_WIDTH}px; min-width: ${column.width || DEFAULT_CELL_WIDTH}px;`
+                `width: ${width}; max-width: ${width}; min-width: ${width};`
             );
             this.stylesheet.setRule(
                 `.dash-spreadsheet th:nth-of-type(${typeIndex})`,
-                `width: ${column.width || DEFAULT_CELL_WIDTH}px; max-width: ${column.width || DEFAULT_CELL_WIDTH}px; min-width: ${column.width || DEFAULT_CELL_WIDTH}px;`
+                `width: ${width}; max-width: ${width}; min-width: ${width};`
             );
         }, columns)
 

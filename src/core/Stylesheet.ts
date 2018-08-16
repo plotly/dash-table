@@ -53,6 +53,19 @@ class StylesheetFacade {
 export default class Stylesheet {
     private stylesheet: StylesheetFacade;
 
+    static unit(dimension: any, defaultUnit: 'em' | 'rem' | 'px' = 'px') {
+        if (Stylesheet.hasUnit(dimension)) {
+            return dimension;
+        } else {
+            return `${dimension}${defaultUnit}`;
+        }
+    }
+
+    static hasUnit(dimension: any) {
+        return typeof dimension === 'string' &&
+            /^\d+(\.\d+)?(px|em|rem)$/.test(dimension);
+    }
+
     constructor(private readonly prefix: string) {
         this.stylesheet = new StylesheetFacade(`${prefix}-dynamic-inline.css`);
     }
@@ -79,5 +92,6 @@ export default class Stylesheet {
         }
 
         this.stylesheet.addRule(selector, css);
+        console.log('setRule', selector, css);
     }
 }
