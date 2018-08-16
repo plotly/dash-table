@@ -1,14 +1,13 @@
-import sys
-import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), os.pardir, os.pardir, os.pardir)))
-
 import dash
-from dash.dependencies import Input, Output, State
-
 import dash_html_components as html
 import dash_table
-
+from dash.dependencies import Input, Output
+import os
 import pandas as pd
+import sys
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), os.pardir, os.pardir, os.pardir)))
+
 df = pd.read_csv('https://github.com/plotly/datasets/raw/master/26k-consumer-complaints.csv')
 df = df.values
 
@@ -75,6 +74,7 @@ hidden = False
 )
 def updateVirtualDataframe(virtual_dataframe, virtual_dataframe_indices):
     print(virtual_dataframe)
+    print(virtual_dataframe_indices)
 
     global hidden
 
