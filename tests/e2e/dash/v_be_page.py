@@ -1,3 +1,4 @@
+# pylint: disable=unsubscriptable-object
 import dash
 from dash.dependencies import Input, Output
 import dash_html_components as html
@@ -5,7 +6,16 @@ import os
 import pandas as pd
 import sys
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), os.pardir, os.pardir, os.pardir)))
+sys.path.append(
+    os.path.abspath(
+        os.path.join(
+            os.path.dirname(sys.argv[0]),
+            os.pardir,
+            os.pardir,
+            os.pardir
+        )
+    )
+)
 moduleNames = ['dash_table']
 modules = map(__import__, moduleNames)
 dash_table = modules[0]
