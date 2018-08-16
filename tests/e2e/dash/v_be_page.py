@@ -1,7 +1,7 @@
 import dash
+from dash.dependencies import Input, Output
 import dash_html_components as html
 import dash_table
-from dash.dependencies import Input, Output
 import os
 import pandas as pd
 import sys
@@ -50,6 +50,7 @@ app.layout = html.Div([
     )
 ])
 
+
 @app.callback(
     Output('table', 'dataframe'),
     [Input('table', 'virtualization_settings')]
@@ -67,6 +68,7 @@ def updateDataframe(virtualization_settings):
 
     return df[start_index:end_index]
 
+
 hidden = False
 @app.callback(
     Output('container', 'hidden'),
@@ -80,6 +82,7 @@ def updateVirtualDataframe(virtual_dataframe, virtual_dataframe_indices):
 
     hidden = not hidden
     return hidden
+
 
 if __name__ == '__main__':
     app.run_server(port=8081, debug=False)
