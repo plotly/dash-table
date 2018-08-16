@@ -16,7 +16,7 @@ import { propTypes } from 'dash-table/components/Table';
 
 import HeaderFactory from 'dash-table/components/HeaderFactory';
 import RowFactory from 'dash-table/components/RowFactory';
-import { DEFAULT_CELL_WIDTH } from 'dash-table/components/Cell';
+import { DEFAULT_CELL_WIDTH } from 'dash-table/components/Row';
 
 const sortNumerical = R.sort((a, b) => a - b);
 
@@ -558,6 +558,17 @@ export default class ControlledTable extends Component {
 
         const { container, frozenTop } = this.refs;
 
+        if (n_fixed_columns > 0) {
+            const fixedTd = container.querySelector(`td.frozen-left`);
+            const tdHeight = parseInt(getComputedStyle(fixedTd.parentElement).height, 10);
+
+            const fixedTh = container.querySelector(`th.frozen-left`);
+            const thHeight = parseInt(getComputedStyle(fixedTh.parentElement).height, 10);
+
+            this.stylesheet.setRule(`td.frozen-left`, `height: ${tdHeight}px;`)
+            this.stylesheet.setRule(`th.frozen-left`, `height: ${thHeight}px;`)
+        }
+
         let xOffset = 0;
         R.range(0, n_fixed_columns).forEach(index => {
             this.stylesheet.setRule(`.frozen-left-${index}`, `margin-left: ${xOffset}px;`);
@@ -613,6 +624,10 @@ export default class ControlledTable extends Component {
                 `.dash-spreadsheet td:nth-of-type(${++typeIndex})`,
                 `width: 30px; max-width: 30px; min-width: 30px;`
             );
+            this.stylesheet.setRule(
+                `.dash-spreadsheet th:nth-of-type(${typeIndex})`,
+                `width: 30px; max-width: 30px; min-width: 30px;`
+            );
         }
 
         if (row_selectable) {
@@ -620,11 +635,19 @@ export default class ControlledTable extends Component {
                 `.dash-spreadsheet td:nth-of-type(${++typeIndex})`,
                 `width: 30px; max-width: 30px; min-width: 30px;`
             );
+            this.stylesheet.setRule(
+                `.dash-spreadsheet th:nth-of-type(${typeIndex})`,
+                `width: 30px; max-width: 30px; min-width: 30px;`
+            );
         }
 
         R.forEach(column => {
             this.stylesheet.setRule(
-                `.dash-spreadsheet td:nth-of-type(${++typeIndex})`,
+                `.dash-spreadsheet tr:last-of-type td:nth-of-type(${++typeIndex})`,
+                `width: ${column.width || DEFAULT_CELL_WIDTH}px; max-width: ${column.width || DEFAULT_CELL_WIDTH}px; min-width: ${column.width || DEFAULT_CELL_WIDTH}px;`
+            );
+            this.stylesheet.setRule(
+                `.dash-spreadsheet th:nth-of-type(${typeIndex})`,
                 `width: ${column.width || DEFAULT_CELL_WIDTH}px; max-width: ${column.width || DEFAULT_CELL_WIDTH}px; min-width: ${column.width || DEFAULT_CELL_WIDTH}px;`
             );
         }, columns)

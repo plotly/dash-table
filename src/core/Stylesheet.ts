@@ -4,6 +4,10 @@ interface IRule {
 }
 
 class StylesheetFacade {
+    constructor(private readonly name: string) {
+
+    }
+
     get rules(): IRule[] {
         const sheet = this.sheet;
 
@@ -38,6 +42,7 @@ class StylesheetFacade {
         return (this.__stylesheet = this.__stylesheet || (() => {
             const style = document.createElement('style');
             style.type = 'text/css';
+            style.id = this.name;
             document.getElementsByTagName('head')[0].appendChild(style);
 
             return style;
@@ -49,7 +54,7 @@ export default class Stylesheet {
     private stylesheet: StylesheetFacade;
 
     constructor(private readonly prefix: string) {
-        this.stylesheet = new StylesheetFacade();
+        this.stylesheet = new StylesheetFacade(`${prefix}-dynamic-inline.css`);
     }
 
     deleteRule(selector: string) {
