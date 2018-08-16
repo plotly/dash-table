@@ -78,8 +78,8 @@ export default class HeaderFactory {
             });
         }
 
-        return columnIndices.map((i, j) => {
-            const c = columns[i];
+        return columnIndices.map((columnId, spanId) => {
+            const c = columns[columnId];
             if (c.hidden) {
                 return null;
             }
@@ -89,25 +89,25 @@ export default class HeaderFactory {
                 colSpan = 1;
             } else {
                 const nHiddenColumns = (
-                    R.slice(i, columnIndices[j + 1] || Infinity, columns)
+                    R.slice(columnId, columnIndices[spanId + 1] || Infinity, columns)
                      .filter(R.propEq('hidden', true))
                      .length);
-                if (i === R.last(columnIndices)) {
-                    colSpan = labels.length - i - nHiddenColumns;
+                if (columnId === R.last(columnIndices)) {
+                    colSpan = labels.length - columnId - nHiddenColumns;
                 } else {
-                    colSpan = columnIndices[j + 1] - i - nHiddenColumns;
+                    colSpan = columnIndices[spanId + 1] - columnId - nHiddenColumns;
                 }
             }
             return (
                 <th
-                    key={`header-cell-${i}`}
+                    key={`header-cell-${columnId}`}
                     colSpan={colSpan}
                     className={
-                        (i === columns.length - 1 || i === R.last(columnIndices) ? 'cell--right-last ' : '') +
-                        (i + indexOffset < n_fixed_columns ? `frozen-left frozen-left-${i + indexOffset}` : '')
+                        (columnId === columns.length - 1 || columnId === R.last(columnIndices) ? 'cell--right-last ' : '') +
+                        (columnId + indexOffset < n_fixed_columns ? `frozen-left frozen-left-${columnId + indexOffset}` : '')
 
                     }
-                    style={i + indexOffset < n_fixed_columns ? {
+                    style={columnId + indexOffset < n_fixed_columns ? {
                         width: `${Stylesheet.unit(c.width || DEFAULT_CELL_WIDTH, 'px')}`
                     } : {}}
                 >
@@ -127,7 +127,7 @@ export default class HeaderFactory {
 
                     {((c.editable_name && R.type(c.editable_name) === 'Boolean') ||
                         (R.type(c.editable_name) === 'Number' &&
-                            c.editable_name === i)) ? (
+                        c.editable_name === columnRowIndex)) ? (
                             <span
                                 className='column-header--edit'
                                 onClick={editColumnName(c, columnRowIndex, options)}
@@ -138,7 +138,7 @@ export default class HeaderFactory {
 
                     {((c.deletable && virtualization !== 'be' && R.type(c.deletable) === 'Boolean') ||
                         (R.type(c.deletable) === 'Number' &&
-                            c.deletable === i)) ? (
+                        c.deletable === columnRowIndex)) ? (
                             <span
                                 className='column-header--delete'
                                 onClick={deleteColumn(
@@ -148,7 +148,7 @@ export default class HeaderFactory {
                             </span>
                         ) : ''}
 
-                    <span>{labels[i]}</span>
+                    <span>{labels[columnId]}</span>
                 </th>
             );
         });
