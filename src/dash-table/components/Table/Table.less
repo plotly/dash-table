@@ -34,8 +34,6 @@
     &.freeze-left {
         overflow-x: scroll;
         overflow-y: scroll;
-        width: 500px;
-        height: 500px;
 
         .frozen-left {
             overflow: hidden;
@@ -48,7 +46,6 @@
     // freeze rows
     &.freeze-top {
         overflow-y: auto;
-        height: 500px;
 
         table {
             width: 0 !important;
@@ -69,7 +66,15 @@
     }
 
     .Select {
+        overflow: hidden;
         position: static;
+    }
+
+    .Select-value {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-top: -2px;
     }
 
     .marker-row {
@@ -84,9 +89,6 @@
         }
     }
 
-    table {
-        table-layout: fixed;
-    }
 
     // cell border styling
     tbody {
@@ -137,14 +139,22 @@
             margin: -1px;
             z-index: 500;
         }
+
+        .cell-value {
+            height: 100%;
+            width: 100%;
+        }
+
+        div.cell-value {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
     }
 
     // cell content styling
     td, th {
-        padding-left: 2px;
-        padding-right: 2px;
-        padding-bottom: 2px;
-        padding-top: 2px;
+        padding: 2px;
         white-space: nowrap;
         overflow-x: hidden;
         text-overflow: ellipsis;
@@ -234,7 +244,7 @@ tr:hover input :not(.cell--selected) {
     padding: 0px;
     margin: 0px;
     height: calc(100% - 1px);
-    width: calc(100% - 1px); /* to account for box-shadow */
+    width: calc(100% - 1px);
     line-height: 30px;
     border: none;
     font-family: inherit;
