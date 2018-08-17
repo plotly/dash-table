@@ -114,15 +114,19 @@ export default class HeaderFactory {
             // This is not efficient and can be improved upon...
             // Fixed columns need to override the default cell behavior when they span multiple columns
             // Find all columns that fit the header's range [index, index+colspan[ and keep the fixed/visible ones
-            const spannedColumns = columns.filter((column, index) =>
+            const visibleColumnId = visibleColumns.indexOf(c);
+
+
+            const spannedColumns = visibleColumns.filter((column, index) =>
                 !column.hidden &&
-                index >= columnId &&
-                index < columnId + colSpan &&
-                visibleColumns.indexOf(column) + columnIndexOffset < n_fixed_columns
+                index >= visibleColumnId &&
+                index < visibleColumnId + colSpan &&
+                index + columnIndexOffset < n_fixed_columns
             );
 
             // Calculate the width of all those columns combined
             const width = `calc(${spannedColumns.map(column => Stylesheet.unit(column.width || DEFAULT_CELL_WIDTH, 'px')).join(' + ')})`;
+            console.log(c.name[columnRowIndex], columnId, colSpan, spannedColumns.length, width);
 
             return (<th
                 key={`header-cell-${columnId}`}
