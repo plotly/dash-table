@@ -256,8 +256,10 @@ export default class Row extends Component {
                 ...[`column-${visibleIndex}`]
             ];
 
+            const width = `${Stylesheet.unit(column.width || DEFAULT_CELL_WIDTH, 'px')}`;
+
             const style = Object.assign({},
-                (isFixed ? { width: `${Stylesheet.unit(column.width || DEFAULT_CELL_WIDTH, 'px')}` } : {})
+                (isFixed ? { maxWidth: width, minWidth: width, width: width } : {})
             );
 
             const dropdown = ((
