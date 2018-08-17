@@ -116,7 +116,6 @@ export default class HeaderFactory {
             // Find all columns that fit the header's range [index, index+colspan[ and keep the fixed/visible ones
             const visibleColumnId = visibleColumns.indexOf(c);
 
-
             const spannedColumns = visibleColumns.filter((column, index) =>
                 !column.hidden &&
                 index >= visibleColumnId &&
@@ -126,7 +125,6 @@ export default class HeaderFactory {
 
             // Calculate the width of all those columns combined
             const width = `calc(${spannedColumns.map(column => Stylesheet.unit(column.width || DEFAULT_CELL_WIDTH, 'px')).join(' + ')})`;
-            console.log(c.name[columnRowIndex], columnId, colSpan, spannedColumns.length, width);
 
             return (<th
                 key={`header-cell-${columnId}`}
