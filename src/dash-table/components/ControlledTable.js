@@ -577,7 +577,7 @@ export default class ControlledTable extends Component {
         R.range(0, n_fixed_columns).forEach(index => {
             this.stylesheet.setRule(`.frozen-left-${index}`, `margin-left: ${xOffset}px;`);
 
-            const fixedCell = container.querySelector(`.frozen-left-${index}`);
+            const fixedCell = container.querySelector(`td.frozen-left-${index}`);
             if (fixedCell) {
                 xOffset += (fixedCell.clientWidth || parseInt(getComputedStyle(fixedCell).width, 10));
             }
