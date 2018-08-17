@@ -559,6 +559,10 @@ export default class ControlledTable extends Component {
         const { container, frozenTop } = this.refs;
 
         if (n_fixed_columns > 0) {
+            // Find the height of the <tr /> of the first <td /> and <th />
+            // Assume that these table rows are representative in style with the rest of the table
+            // Use them to force the height of the fixed cells; base styling vs. rendering can be off
+
             const fixedTd = container.querySelector(`td.frozen-left`);
             const tdHeight = parseInt(getComputedStyle(fixedTd.parentElement).height, 10);
 
@@ -573,7 +577,7 @@ export default class ControlledTable extends Component {
         R.range(0, n_fixed_columns).forEach(index => {
             this.stylesheet.setRule(`.frozen-left-${index}`, `margin-left: ${xOffset}px;`);
 
-            const fixedCell = container.querySelector(`.frozen-left-${index}`);
+            const fixedCell = container.querySelector(`td.frozen-left-${index}`);
             if (fixedCell) {
                 xOffset += (fixedCell.clientWidth || parseInt(getComputedStyle(fixedCell).width, 10));
             }
@@ -703,8 +707,8 @@ export default class ControlledTable extends Component {
                 </div>
                 {!this.displayPagination ? null : (
                     <div>
-                        <button className='previous-page' onClick={this.loadPrevious}>Previous</button>
-                        <button className='next-page' onClick={this.loadNext}>Next</button>
+                        <button onClick={this.loadPrevious}>Previous</button>
+                        <button onClick={this.loadNext}>Next</button>
                     </div>
                 )}
             </div>

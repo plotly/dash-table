@@ -20,6 +20,8 @@
     Limitations
         - performance is highly impacted if the table is in a scrollable container as the frozen columns position has to be recalculated on each scroll event; impact is minimal up to 50-100 items and makes the table difficult to use with 250-500 items
         - can't freeze rows and columns at the same time
+        - when using merged headers, make sure that the number of fixed columns respects the merged headers, otherwise there will be some unresolved visual bugs/artefacts
+        - rows are assumed to all have the same height
 
 ## Deletable Columns
     Limitations

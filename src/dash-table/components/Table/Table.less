@@ -70,6 +70,13 @@
         position: static;
     }
 
+    .Select-value {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-top: -2px;
+    }
+
     .marker-row {
         tr {
             visibility: hidden !important;
@@ -131,6 +138,17 @@
             border: 1px solid var(--accent);
             margin: -1px;
             z-index: 500;
+        }
+
+        .cell-value {
+            height: 100%;
+            width: 100%;
+        }
+
+        div.cell-value {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
     }
 

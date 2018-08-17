@@ -112,7 +112,8 @@ export default class Cell extends Component<IProps, IState> {
 
         const classes = [
             ...(active ? ['input-active'] : []),
-            ...(focused ? ['focused'] : ['unfocused'])
+            ...(focused ? ['focused'] : ['unfocused']),
+            ...['cell-value']
         ];
 
         const attributes = {
