@@ -243,8 +243,6 @@ export default class Row extends Component {
             (row_deletable ? 1 : 0) +
             (row_selectable ? 1 : 0);
 
-            const isFixed = realIndex < n_fixed_columns;
-
         return columns.map((column, i) => {
             if (column.hidden) {
                 return null;
