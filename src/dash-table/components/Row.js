@@ -237,37 +237,42 @@ export default class Row extends Component {
             row_selectable
         } = this.props;
 
-        return columns.map((c, i) => {
-            if (c.hidden) {
-                return null;
-            }
+        const visibleColumns = columns.filter(column => !column.hidden);
 
-            const realIndex = i +
-                (row_deletable ? 1 : 0) +
-                (row_selectable ? 1 : 0);
+        const columnIndexOffset =
+            (row_deletable ? 1 : 0) +
+            (row_selectable ? 1 : 0);
 
             const isFixed = realIndex < n_fixed_columns;
 
+        return columns.map((column, i) => {
+            if (column.hidden) {
+                return null;
+            }
+
+            const visibleIndex = visibleColumns.indexOf(column) + columnIndexOffset;
+            const isFixed = visibleIndex < n_fixed_columns;
+
             const classes = [
-                ...(isFixed ? [`frozen-left`, `frozen-left-${realIndex}`] : []),
-                ...[`column-${realIndex}`]
+                ...(isFixed ? [`frozen-left`, `frozen-left-${visibleIndex}`] : []),
+                ...[`column-${visibleIndex}`]
             ];
 
             const style = Object.assign({},
-                (isFixed ? { width: `${Stylesheet.unit(c.width || DEFAULT_CELL_WIDTH, 'px')}` } : {})
+                (isFixed ? { width: `${Stylesheet.unit(column.width || DEFAULT_CELL_WIDTH, 'px')}` } : {})
             );
 
             const dropdown = ((
                 dropdown_properties &&
-                dropdown_properties[c.id] &&
-                (dropdown_properties[c.id].length > idx ? dropdown_properties[c.id][idx] : null)
-            ) || c || {}).options;
+                dropdown_properties[column.id] &&
+                (dropdown_properties[column.id].length > idx ? dropdown_properties[column.id][idx] : null)
+            ) || column || {}).options;
 
             return (<Cell
-                key={`${c.id}-${i}`}
+                key={`${column.id}-${i}`}
                 active={active_cell[0] === idx && active_cell[1] === i}
                 classes={classes}
-                clearable={c.clearable}
+                clearable={column.clearable}
                 dropdown={dropdown}
                 editable={editable}
                 focused={is_focused}
@@ -277,8 +282,8 @@ export default class Row extends Component {
                 onChange={this.getEventHandler(this.handleChange, idx, i)}
                 selected={this.isCellSelected(idx, i)}
                 style={style}
-                type={c.type}
-                value={dataframe[idx][c.id]}
+                type={column.type}
+                value={dataframe[idx][column.id]}
             />);
         });
     }

@@ -559,6 +559,10 @@ export default class ControlledTable extends Component {
         const { container, frozenTop } = this.refs;
 
         if (n_fixed_columns > 0) {
+            // Find the height of the <tr /> of the first <td /> and <th />
+            // Assume that these table rows are representative in style with the rest of the table
+            // Use them to force the height of the fixed cells; base styling vs. rendering can be off
+
             const fixedTd = container.querySelector(`td.frozen-left`);
             const tdHeight = parseInt(getComputedStyle(fixedTd.parentElement).height, 10);
 
