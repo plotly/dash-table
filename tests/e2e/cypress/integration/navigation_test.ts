@@ -2,9 +2,28 @@ import DashTable from 'cypress/DashTable';
 import DOM from 'cypress/DOM';
 import Key from 'cypress/Key';
 
+function resolve<T>(chain: Cypress.Chainable<T>) {
+    return new Cypress.Promise<Cypress.Chainable<T>>(r => r(chain));
+}
+
 describe('navigate', () => {
     beforeEach(() => {
         cy.visit('http://localhost:8080');
+    });
+
+    it.only('does not change column width', async () => {
+        const startWidth = await resolve<JQuery<HTMLElement>>(DashTable.getCell(3, 3)).then((res: any) => {
+            return (res as JQuery<HTMLElement>).outerWidth();
+        });
+
+        await resolve(DashTable.getCell(3, 3).click());
+
+        const endWidth = await resolve(DashTable.getCell(3, 3)).then((res: any) => {
+            return (res as JQuery<HTMLElement>).outerWidth();
+        });
+
+        expect(endWidth).to.equal(startWidth);
+
     });
 
     describe('with keyboard', () => {
