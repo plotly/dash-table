@@ -85,25 +85,5 @@ def updateDataframe(virtualization_settings):
     return df[start_index:end_index]
 
 
-hidden = False
-
-
-@app.callback(
-    Output('container', 'hidden'),
-    [
-        Input('table', 'virtual_dataframe'),
-        Input('table', 'virtual_dataframe_indices')
-    ]
-)
-def updateVirtualDataframe(virtual_dataframe, virtual_dataframe_indices):
-    print(virtual_dataframe)
-    print(virtual_dataframe_indices)
-
-    global hidden
-
-    hidden = not hidden
-    return hidden
-
-
 if __name__ == '__main__':
     app.run_server(port=8081, debug=False)

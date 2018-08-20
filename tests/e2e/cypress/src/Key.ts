@@ -4,6 +4,7 @@ enum Key {
     ArrowRight = '{rightarrow}',
     ArrowUp = '{uparrow}',
     Enter = '{enter}',
+    Escape = '{esc}',
     Shift = '{shift}'
 }
 

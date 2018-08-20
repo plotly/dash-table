@@ -23,3 +23,12 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('tab',
+    (subject, shiftKey = false, ctrlKey = false) => cy.focused().trigger('keydown', {
+        keyCode: 9,
+        which: 9,
+        shiftKey,
+        ctrlKey
+    })
+);

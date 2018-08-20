@@ -1,24 +1,21 @@
 import DashTable from 'cypress/DashTable';
 import DOM from 'cypress/DOM';
 import Key from 'cypress/Key';
-
-function resolve<T>(chain: Cypress.Chainable<T>) {
-    return new Cypress.Promise<Cypress.Chainable<T>>(r => r(chain));
-}
+import Resolve from 'cypress/Resolve';
 
 describe('navigate', () => {
     beforeEach(() => {
         cy.visit('http://localhost:8080');
     });
 
-    it.only('does not change column width', async () => {
-        const startWidth = await resolve<JQuery<HTMLElement>>(DashTable.getCell(3, 3)).then((res: any) => {
+    it('does not change column width', async () => {
+        const startWidth = await Resolve<JQuery<HTMLElement>>(DashTable.getCell(3, 3)).then((res: any) => {
             return (res as JQuery<HTMLElement>).outerWidth();
         });
 
-        await resolve(DashTable.getCell(3, 3).click());
+        await Resolve(DashTable.getCell(3, 3).click());
 
-        const endWidth = await resolve(DashTable.getCell(3, 3)).then((res: any) => {
+        const endWidth = await Resolve(DashTable.getCell(3, 3)).then((res: any) => {
             return (res as JQuery<HTMLElement>).outerWidth();
         });
 
@@ -29,6 +26,30 @@ describe('navigate', () => {
     describe('with keyboard', () => {
         beforeEach(() => {
             DashTable.getCell(3, 3).click();
+        });
+
+        describe('from a focused cell input', () => {
+            beforeEach(() => {
+                DOM.focused.type(Key.Enter);
+                DashTable.getCellInput(3, 3).should('have.class', 'focused');
+            });
+
+            it('does not focus on next cell input on "enter"', () => {
+                DOM.focused.type(Key.Enter);
+                DashTable.getCell(3, 3).should('not.have.class', 'focused');
+
+                DashTable.getCell(4, 3).should('have.class', 'focused');
+                DashTable.getCellInput(4, 3).should('not.have.class', 'focused');
+            });
+
+            it('does not focus on next cell input on "tab"', async () => {
+                cy.tab();
+
+                DashTable.getCell(3, 3).should('not.have.class', 'focused');
+
+                DashTable.getCell(3, 4).should('have.class', 'focused');
+                DashTable.getCellInput(3, 4).should('not.have.class', 'focused');
+            });
         });
 
         it('can move down', () => {
