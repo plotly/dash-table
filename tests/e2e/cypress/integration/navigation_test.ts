@@ -9,15 +9,11 @@ describe('navigate', () => {
     });
 
     it('does not change column width', async () => {
-        const startWidth = await Resolve<JQuery<HTMLElement>>(DashTable.getCell(3, 3)).then((res: any) => {
-            return (res as JQuery<HTMLElement>).outerWidth();
-        });
+        const startWidth = await Resolve(DashTable.getCell(3, 3)).then(res => res.outerWidth());
 
         await Resolve(DashTable.getCell(3, 3).click());
 
-        const endWidth = await Resolve(DashTable.getCell(3, 3)).then((res: any) => {
-            return (res as JQuery<HTMLElement>).outerWidth();
-        });
+        const endWidth = await Resolve(DashTable.getCell(3, 3).then(res => res.outerWidth()));
 
         expect(endWidth).to.equal(startWidth);
 
