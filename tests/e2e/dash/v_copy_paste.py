@@ -81,5 +81,6 @@ def updateDataframe(_timestamp, current, previous):
 
     return current
 
+
 if __name__ == '__main__':
     app.run_server(port=8082, debug=False)
