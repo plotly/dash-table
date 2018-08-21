@@ -8,8 +8,6 @@ const state = {
         dataframe: [],
         columns: [{ id: 'a', name: 'A' }],
         editable: true,
-        // n_fixed_rows: 3,
-        // n_fixed_columns: 2,
         sortable: false,
         sort: [],
         merge_duplicate_headers: true,
@@ -20,9 +18,7 @@ const state = {
 };
 
 const setProps = () => {
-    // this.setState({
-    //     tableProps: merge(state.tableProps, newProps),
-    // });
+
 };
 
 storiesOf('DashTable', module)
