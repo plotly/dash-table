@@ -56,7 +56,6 @@ export default class Table extends Component {
                 {...R.merge(this.props, {
                     virtualizer: this.virtualizer,
                     setProps: newProps => {
-                        console.log('setProps wrapper', this, newProps);
                         if (R.has('dataframe', newProps)) {
                             const { dataframe, dataframe_previous } = this.props;
 
