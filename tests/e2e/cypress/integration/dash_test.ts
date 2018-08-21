@@ -11,6 +11,5 @@ describe('dash_test', () => {
 
         cy.get('button.next-page').click();
         DashTable.getCellInput(0, 0).should('have.value', '250');
-        // DashTable.getCell(0, 0).should('have.class', 'focused');
     });
 });
