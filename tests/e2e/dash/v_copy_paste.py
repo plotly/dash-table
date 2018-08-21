@@ -69,7 +69,7 @@ app.layout = html.Div([
         State('table', 'dataframe_previous')
     ]
 )
-def updateDataframe(timestamp, current, previous):
+def updateDataframe(_timestamp, current, previous):
     if current is None or previous is None:
         return current
 
