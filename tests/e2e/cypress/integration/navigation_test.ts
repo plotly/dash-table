@@ -48,6 +48,23 @@ describe('navigate', () => {
             });
         });
 
+        describe('into a dropdown cell', () => {
+            beforeEach(() => {
+                DashTable.getCell(3, 7).click();
+            });
+
+            it('can move', () => {
+                DOM.focused.type(Key.ArrowRight);
+
+                DashTable.getCell(3, 8).should('have.class', 'focused');
+                DashTable.getCell(3, 8).get('.Select').should('exist');
+                DOM.focused.type(Key.ArrowLeft);
+
+                DashTable.getCell(3, 8).should('not.have.class', 'focused');
+                DashTable.getCell(3, 7).should('have.class', 'focused');
+            });
+        });
+
         it('can move down', () => {
             DOM.focused.type(Key.ArrowDown);
             DashTable.getCell(4, 3).should('have.class', 'focused');
