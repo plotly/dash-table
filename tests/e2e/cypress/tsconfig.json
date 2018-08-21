@@ -5,7 +5,6 @@
         "baseUrl": "./..",
         "emitDecoratorMetadata": false,
         "experimentalDecorators": true,
-        "jsx": "react",
         "lib": ["esnext", "dom"],
         "module": "esnext",
         "moduleResolution": "node",
@@ -14,7 +13,6 @@
         "noUnusedParameters": true,
         "paths": {
             "cypress/*": ["cypress/src/*"],
-            "dash-table/*": ["./../../src/dash-table/*"]
         },
         "sourceMap": false,
         "strict": true,

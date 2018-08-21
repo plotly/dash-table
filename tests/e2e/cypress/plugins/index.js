@@ -5,8 +5,5 @@ module.exports = (on) => {
         webpackOptions: require('../../../../webpack.config'),
     }
 
-    options.webpackOptions.externals = {};
-
-
     on('file:preprocessor', wp(options))
 }
