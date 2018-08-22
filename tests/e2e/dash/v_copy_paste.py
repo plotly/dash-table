@@ -71,7 +71,7 @@ app.layout = html.Div([
 )
 # pylint: disable=unused-argument
 def updateDataframe(timestamp, current, previous):
-# pylint: enable=unused-argument
+    # pylint: enable=unused-argument
     if current is None or previous is None:
         return current
 
