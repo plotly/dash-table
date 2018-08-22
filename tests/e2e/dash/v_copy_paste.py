@@ -69,7 +69,7 @@ app.layout = html.Div([
         State('table', 'dataframe_previous')
     ]
 )
-def updateDataframe(_timestamp, current, previous):
+def updateDataframe(timestamp, current, previous): #pylint: disable=unused-argument
     if current is None or previous is None:
         return current
 
