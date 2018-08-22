@@ -57,10 +57,10 @@ export default class Table extends Component {
                     virtualizer: this.virtualizer,
                     setProps: newProps => {
                         if (R.has('dataframe', newProps)) {
-                            const { dataframe, dataframe_previous } = this.props;
+                            const { dataframe } = this.props;
 
                             newProps.dataframe_timestamp = Date.now();
-                            newProps.dataframe_previous = dataframe_previous || dataframe;
+                            newProps.dataframe_previous = dataframe;
                         }
 
                         this.props.setProps(newProps);
