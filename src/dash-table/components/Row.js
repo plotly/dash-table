@@ -315,18 +315,19 @@ export default class Row extends Component {
         const cells = this.renderCells();
         const datum = dataframe[idx];
 
-        const mergedStyle = R.mergeAll(
-            R.concat(
-                [row_static_style],
-                R.map(
-                    cs => cs.style,
-                    R.filter(
-                        cs => new SyntaxTree(cs.condition).evaluate(datum),
-                        row_conditional_styles
+        const mergedStyle = row_static_style || row_conditional_styles.length ?
+            R.mergeAll(
+                R.concat(
+                    [row_static_style],
+                    R.map(
+                        cs => cs.style,
+                        R.filter(
+                            cs => new SyntaxTree(cs.condition).evaluate(datum),
+                            row_conditional_styles
+                        )
                     )
                 )
-            )
-        );
+            ) : undefined;
 
         return (
             <tr

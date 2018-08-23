@@ -188,18 +188,19 @@ export default class Cell extends Component<IProps, IState> {
             staticStyle
         } = this.propsWithDefaults;
 
-        const mergedStyle = R.mergeAll(
-            R.concat(
-                [staticStyle],
-                R.map(
-                    cs => cs.style,
-                    R.filter(
-                        cs => new SyntaxTree(cs.condition).evaluate(datum),
-                        conditionalStyles
+        const mergedStyle = staticStyle || conditionalStyles.length ?
+            R.mergeAll(
+                R.concat(
+                    [staticStyle],
+                    R.map(
+                        cs => cs.style,
+                        R.filter(
+                            cs => new SyntaxTree(cs.condition).evaluate(datum),
+                            conditionalStyles
+                        )
                     )
                 )
-            )
-        );
+            ) : undefined;
 
         return (<td
             ref='td'

@@ -9,9 +9,13 @@ export default class VirtualizationAdapter implements ITarget {
 
     }
 
-    private getDataframe = memoizeOne((dataframe: Dataframe, filter: string) => {
+    private getDataframe = memoizeOne((dataframe: Dataframe, filtering: string, filtering_settings: string) => {
+        if (filtering === 'be') {
+            return dataframe;
+        }
+
         try {
-            const tree = new SyntaxTree(filter);
+            const tree = new SyntaxTree(filtering_settings);
 
             dataframe = dataframe.filter(datum => tree.evaluate(datum));
         } catch (_) { }
@@ -20,9 +24,9 @@ export default class VirtualizationAdapter implements ITarget {
     });
 
     get dataframe(): Dataframe {
-        const { dataframe, filtering_settings } = this.target.props;
+        const { dataframe, filtering, filtering_settings } = this.target.props;
 
-        return this.getDataframe(dataframe, filtering_settings);
+        return this.getDataframe(dataframe, filtering, filtering_settings);
     }
 
     get settings(): ISettings {

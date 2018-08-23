@@ -80,10 +80,8 @@ export const defaultProps = {
     },
     navigation: 'page',
 
-    filtering: {
-        type: 'fe',
-        options: []
-    },
+    filtering: 'fe',
+    filtering_settings: '',
     sorting: {
         type: 'fe',
         options: []
@@ -93,7 +91,7 @@ export const defaultProps = {
     virtual_dataframe_indices: [],
 
     column_conditional_styles: [],
-    column_static_styles: [],
+    column_static_style: [],
 
     row_conditional_styles: [],
     row_static_style: {},
