@@ -280,7 +280,21 @@
       },
       "virtualization": {
         "type": {
-          "name": "string"
+          "name": "enum",
+          "value": [
+            {
+              "value": "'fe'",
+              "computed": false
+            },
+            {
+              "value": "'be'",
+              "computed": false
+            },
+            {
+              "value": "'none'",
+              "computed": false
+            }
+          ]
         },
         "required": false,
         "description": "",
@@ -376,7 +390,11 @@
           }
         },
         "required": false,
-        "description": ""
+        "description": "",
+        "defaultValue": {
+          "value": "[]",
+          "computed": false
+        }
       },
       "row_conditional_styles": {
         "type": {
@@ -415,35 +433,33 @@
       },
       "filtering": {
         "type": {
-          "name": "shape",
-          "value": {
-            "type": {
-              "name": "string",
-              "required": false
+          "name": "enum",
+          "value": [
+            {
+              "value": "'fe'",
+              "computed": false
             },
-            "options": {
-              "name": "arrayOf",
-              "value": {
-                "name": "shape",
-                "value": {
-                  "field": {
-                    "name": "string",
-                    "required": false
-                  },
-                  "rule": {
-                    "name": "any",
-                    "required": false
-                  }
-                }
-              },
-              "required": false
+            {
+              "value": "'be'",
+              "computed": false
             }
-          }
+          ]
         },
         "required": false,
         "description": "",
         "defaultValue": {
-          "value": "{\n    type: 'fe',\n    options: []\n}",
+          "value": "'fe'",
+          "computed": false
+        }
+      },
+      "filtering_settings": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "''",
           "computed": false
         }
       },
@@ -511,13 +527,6 @@
         }
       },
       "column_conditional_styles": {
-        "defaultValue": {
-          "value": "[]",
-          "computed": false
-        },
-        "required": false
-      },
-      "column_static_styles": {
         "defaultValue": {
           "value": "[]",
           "computed": false
