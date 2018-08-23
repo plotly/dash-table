@@ -1,5 +1,5 @@
-import { ISyntaxTree } from 'core/syntax-tree/syntaxer';
 import Logger from 'core/Logger';
+import { ISyntaxTree } from 'core/syntax-tree/syntaxer';
 
 export interface ILexeme {
     evaluate?: (target: any, tree: ISyntaxTree) => boolean;
@@ -91,10 +91,11 @@ const lexicon: ILexeme[] = [
 
             const opValue = t.left.lexeme.resolve(target, t.left);
             const expValue = t.right.lexeme.resolve(target, t.right);
-
+            Logger.debug(`opValue: ${opValue}, expValue: ${expValue}`);
             switch (tree.value.toLowerCase()) {
                 case 'eq':
                 case '=':
+                    Logger.debug(opValue === expValue);
                     return opValue === expValue;
                 default:
                     throw new Error();
@@ -116,20 +117,24 @@ const lexicon: ILexeme[] = [
             Logger.debug('evaluate -> unary', target, tree);
 
             const t = tree as any;
-            const opValue = t.left.lexeme.resolve(target, t.left);
+            const opValue = t.block.lexeme.resolve(target, t.block);
 
             switch (tree.value.toLowerCase()) {
+                case 'is even':
+                    return typeof opValue === 'number' && opValue % 2 === 0;
                 case 'is nil':
                     return opValue === undefined || opValue === null;
                 case 'is not nil':
                     return opValue !== undefined && opValue !== null;
+                case 'is odd':
+                    return typeof opValue === 'number' && opValue % 2 === 1;
                 default:
                     throw new Error();
             }
         },
         name: 'unary-operator',
         priority: 0,
-        regexp: /^(is nil)|(is not nil)/i,
+        regexp: /^(is nil)|(is not nil)|(is odd)|(is even)/i,
         syntaxer: (lexs: any[]) => {
             let [block, lexeme] = lexs;
 
@@ -143,12 +148,27 @@ const lexicon: ILexeme[] = [
 
             if (/^('.*')|(".*")$/.test(tree.value)) {
                 return tree.value.slice(1, tree.value.length - 1);
+            } else if (/^\w+\(.*\)$/.test(tree.value)) {
+                const res = tree.value.match(/^(\w+)\((.*)\)$/);
+                if (res) {
+                    const [, op, value] = res;
+
+                    switch (op) {
+                        case 'num':
+                            return parseInt(value, 10);
+                        case 'str':
+                        default:
+                            return value;
+                    }
+                } else {
+                    throw Error();
+                }
             } else {
                 return target[tree.value];
             }
         },
         name: 'expression',
-        regexp: /^[^\(\)\s]+|'([^\(\)\"]|\\')+'|"([^\(\)]|\\")+"/,
+        regexp: /^(\w+\([^()]*\))|[^\(\)\s]+|'([^()']|\\')+'|"([^()"]|\\")+/,
         when: ['binary-operator']
     }
 ];

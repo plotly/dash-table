@@ -92,6 +92,12 @@ export const defaultProps = {
     virtual_dataframe: [],
     virtual_dataframe_indices: [],
 
+    column_conditional_styles: [],
+    column_static_styles: [],
+
+    row_conditional_styles: [],
+    row_static_style: {},
+
     changed_data: {},
     dataframe: [],
     columns: [],
@@ -185,6 +191,24 @@ export const propTypes = {
         page_size: PropTypes.number
     }),
     navigation: PropTypes.string,
+
+    column_conditional_style: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.string,
+        styles: PropTypes.arrayOf(PropTypes.shape({
+            condition: PropTypes.string,
+            style: PropTypes.object
+        }))
+    })),
+    column_static_style: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.string,
+        style: PropTypes.object
+    })),
+
+    row_conditional_styles: PropTypes.arrayOf(PropTypes.shape({
+        condition: PropTypes.string,
+        style: PropTypes.object
+    })),
+    row_static_style: PropTypes.object,
 
     filtering: PropTypes.shape({
         type: PropTypes.string,

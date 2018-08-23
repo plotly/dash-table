@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import * as R from 'ramda';
 
 import Stylesheet from 'core/Stylesheet';
+import SyntaxTree from 'core/syntax-tree';
+
 import Cell from 'dash-table/components/Cell';
 import * as actions from 'dash-table/utils/actions';
 
@@ -225,6 +227,8 @@ export default class Row extends Component {
     renderCells() {
         const {
             active_cell,
+            column_conditional_styles,
+            column_static_style,
             columns,
             dataframe,
             dropdown_properties,
@@ -267,11 +271,18 @@ export default class Row extends Component {
                 (dropdown_properties[column.id].length > idx ? dropdown_properties[column.id][idx] : null)
             ) || column || {}).options;
 
+            let conditionalStyles = column_conditional_styles.find(cs => cs.id === column.id);
+            let staticStyle = column_static_style.find(ss => ss.id === column.id);
+
+            staticStyle = staticStyle && staticStyle.style;
+            conditionalStyles = conditionalStyles && conditionalStyles.styles;
+
             return (<Cell
                 key={`${column.id}-${i}`}
                 active={active_cell[0] === idx && active_cell[1] === i}
                 classes={classes}
                 clearable={column.clearable}
+                datum={dataframe[idx]}
                 dropdown={dropdown}
                 editable={editable}
                 focused={is_focused}
@@ -280,6 +291,8 @@ export default class Row extends Component {
                 onPaste={this.getEventHandler(this.handlePaste, idx, i)}
                 onChange={this.getEventHandler(this.handleChange, idx, i)}
                 selected={this.isCellSelected(idx, i)}
+                staticStyle={staticStyle}
+                conditionalStyles={conditionalStyles}
                 style={style}
                 type={column.type}
                 value={dataframe[idx][column.id]}
@@ -289,7 +302,10 @@ export default class Row extends Component {
 
     render() {
         const {
+            dataframe,
             idx,
+            row_conditional_styles,
+            row_static_style,
             selected_rows
         } = this.props;
 
@@ -297,10 +313,25 @@ export default class Row extends Component {
         const deleteCell = this.renderDeletableRow();
 
         const cells = this.renderCells();
+        const datum = dataframe[idx];
+
+        const mergedStyle = R.mergeAll(
+            R.concat(
+                [row_static_style],
+                R.map(
+                    cs => cs.style,
+                    R.filter(
+                        cs => new SyntaxTree(cs.condition).evaluate(datum),
+                        row_conditional_styles
+                    )
+                )
+            )
+        );
 
         return (
             <tr
                 className={R.contains(idx, selected_rows) ? 'selected-row' : ''}
+                style={mergedStyle}
             >
                 {deleteCell}
                 {rowSelectable}
@@ -323,5 +354,10 @@ Row.propTypes = {
     n_fixed_columns: PropTypes.any,
     selected_rows: PropTypes.any,
     row_deletable: PropTypes.bool,
-    row_selectable: PropTypes.any
+    row_selectable: PropTypes.any,
+
+    column_conditional_styles: PropTypes.any,
+    column_static_style: PropTypes.any,
+    row_conditional_styles: PropTypes.any,
+    row_static_style: PropTypes.any
 };

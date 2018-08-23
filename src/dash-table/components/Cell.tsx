@@ -1,3 +1,4 @@
+import * as R from 'ramda';
 import Dropdown from 'react-select';
 import React, {
     ChangeEvent,
@@ -5,15 +6,27 @@ import React, {
     Component,
     MouseEvent
 } from 'react';
+import SyntaxTree from 'core/syntax-tree';
 
 interface IDropdownOption {
     label: string;
     value: string;
 }
 
+interface IStyle {
+    target?: undefined;
+    style: Partial<CSSStyleDeclaration>;
+}
+
+interface IConditionalStyle extends IStyle {
+    condition: string;
+}
+
 interface IProps {
     active: boolean;
     clearable: boolean;
+    conditionalStyles?: IConditionalStyle[];
+    datum: any;
     dropdown: IDropdownOption[];
     editable: boolean;
     focused: boolean;
@@ -22,16 +35,17 @@ interface IProps {
     onDoubleClick: (e: MouseEvent) => void;
     onPaste: (e: ClipboardEvent) => void;
     selected: boolean;
+    staticStyle?: IStyle;
     value: any;
 
     classes?: string[];
-    style?: object;
     type?: string;
 }
 
 interface IDefaultProps {
     classes: string[];
-    style: object;
+    conditionalStyles: IConditionalStyle[];
+    staticStyle: Partial<CSSStyleDeclaration>;
     type: string;
 }
 
@@ -44,7 +58,8 @@ type IPropsWithDefaults = IProps & IDefaultProps;
 export default class Cell extends Component<IProps, IState> {
     public static defaultProps: IDefaultProps = {
         classes: [],
-        style: {},
+        conditionalStyles: [],
+        staticStyle: {},
         type: 'text'
     };
 
@@ -168,14 +183,29 @@ export default class Cell extends Component<IProps, IState> {
 
     render() {
         let {
-            style
-        } = this.props;
+            conditionalStyles,
+            datum,
+            staticStyle
+        } = this.propsWithDefaults;
+
+        const mergedStyle = R.mergeAll(
+            R.concat(
+                [staticStyle],
+                R.map(
+                    cs => cs.style,
+                    R.filter(
+                        cs => new SyntaxTree(cs.condition).evaluate(datum),
+                        conditionalStyles
+                    )
+                )
+            )
+        );
 
         return (<td
             ref='td'
             tabIndex={-1}
             className={this.classes.join(' ')}
-            style={style}
+            style={mergedStyle}
         >
             {this.renderInner()}
         </td>);
