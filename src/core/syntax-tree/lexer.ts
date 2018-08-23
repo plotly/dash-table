@@ -10,7 +10,7 @@ export default function lexer(query: string): ILexerResult[] {
 
     let res: ILexerResult[] = [];
     while (query.length) {
-        query = query.trimLeft();
+        query = query.replace(/^\s+/, '');
 
         let lexemes: ILexeme[] = Lexicon.filter(_lexeme =>
             lexeme &&
