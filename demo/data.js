@@ -56,7 +56,7 @@ export const mockData = unpackIntoColumnsAndDataFrames([
     {
         id: 'bbb',
         name: ['', 'Weather', 'Climate'],
-        type: 'text',
+        type: 'dropdown',
         options: ['Humid', 'Wet', 'Snowy', 'Tropical Beaches'].map(i => ({
             label: i,
             value: i,

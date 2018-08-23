@@ -302,7 +302,7 @@ export default class Row extends Component {
 
     render() {
         const {
-            dataframe,
+            datum,
             idx,
             row_conditional_styles,
             row_static_style,
@@ -313,7 +313,6 @@ export default class Row extends Component {
         const deleteCell = this.renderDeletableRow();
 
         const cells = this.renderCells();
-        const datum = dataframe[idx];
 
         const mergedStyle = row_static_style || row_conditional_styles.length ?
             R.mergeAll(
