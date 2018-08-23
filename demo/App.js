@@ -17,6 +17,7 @@ class App extends Component {
         this.onChange = this.onChange.bind(this);
 
         this.state = {
+            filter: '',
             tableProps: {
                 id: 'table',
                 dataframe: clone(mockData.dataframe),
@@ -88,9 +89,15 @@ class App extends Component {
                 <input type="text" />
                 <hr />
 
+                <input
+                    type='text'
+                    value={this.state.filter}
+                    onChange={e => this.setState({ filter: e.target.value })}
+                />
                 <Table
                     setProps={this.setProps}
                     {...this.state.tableProps}
+                    {...{ filtering: 'fe', filtering_settings: this.state.filter }}
                 />
             </div>
         );

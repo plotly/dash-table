@@ -230,10 +230,10 @@ export default class Row extends Component {
             column_conditional_styles,
             column_static_style,
             columns,
-            dataframe,
+            datum,
             dropdown_properties,
-            idx,
             editable,
+            idx,
             is_focused,
             n_fixed_columns,
             row_deletable,
@@ -282,7 +282,7 @@ export default class Row extends Component {
                 active={active_cell[0] === idx && active_cell[1] === i}
                 classes={classes}
                 clearable={column.clearable}
-                datum={dataframe[idx]}
+                datum={datum}
                 dropdown={dropdown}
                 editable={editable}
                 focused={is_focused}
@@ -295,7 +295,7 @@ export default class Row extends Component {
                 conditionalStyles={conditionalStyles}
                 style={style}
                 type={column.type}
-                value={dataframe[idx][column.id]}
+                value={datum[column.id]}
             />);
         });
     }
@@ -344,6 +344,7 @@ export default class Row extends Component {
 Row.propTypes = {
     columns: PropTypes.any,
     dataframe: PropTypes.any,
+    datum: PropTypes.any,
     idx: PropTypes.any,
     dropdown_properties: PropTypes.any,
     editable: PropTypes.any,

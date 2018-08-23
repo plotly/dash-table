@@ -8,7 +8,7 @@ function isEqualArgs(args1: any[] | null, args2: any[]): boolean {
     );
 }
 
-export const memoizeOne: ResultFn = (resultFn: ResultFn) => {
+export const memoizeOne: ((...args: any[]) => ResultFn) = (resultFn: ResultFn) => {
     let lastArgs: any[] | null = null;
     let lastResult: any;
 
@@ -19,7 +19,7 @@ export const memoizeOne: ResultFn = (resultFn: ResultFn) => {
     };
 };
 
-export const memoizeAll: ResultFn = (resultFn: ResultFn) => {
+export const memoizeAll: ((...args: any[]) => ResultFn) = (resultFn: ResultFn) => {
     let cache: { args: any[], result: any }[] = [];
 
     return (...args: any[]) => {

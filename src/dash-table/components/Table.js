@@ -184,7 +184,7 @@ export const propTypes = {
         rule: PropTypes.string
     })),
 
-    virtualization: PropTypes.string,
+    virtualization: PropTypes.oneOf(['fe', 'be', 'none']),
     virtualization_settings: PropTypes.shape({
         displayed_pages: PropTypes.number,
         current_page: PropTypes.number,
@@ -210,15 +210,9 @@ export const propTypes = {
     })),
     row_static_style: PropTypes.object,
 
-    filtering: PropTypes.shape({
-        type: PropTypes.string,
-        options: PropTypes.arrayOf(
-            PropTypes.shape({
-                field: PropTypes.string,
-                rule: PropTypes.any
-            })
-        )
-    }),
+    filtering: PropTypes.oneOf(['fe', 'be']),
+    filtering_settings: PropTypes.string,
+
     sorting: PropTypes.shape({
         type: PropTypes.string,
         options: PropTypes.arrayOf(

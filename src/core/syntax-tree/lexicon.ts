@@ -12,6 +12,40 @@ export interface ILexeme {
     when?: string[];
 }
 
+const isPrime = (c: number) => {
+    if (c < 2) { return false; }
+    for (let n = 2; n * n <= c; ++n) { if (c !== n && c % n === 0) { return false; } }
+    return true;
+};
+
+const baseOperand = {
+    resolve: (target: any, tree: ISyntaxTree) => {
+        Logger.debug('resolve -> exp', target, tree);
+
+        if (/^('.*')|(".*")$/.test(tree.value)) {
+            return tree.value.slice(1, tree.value.length - 1);
+        } else if (/^\w+\(.*\)$/.test(tree.value)) {
+            const res = tree.value.match(/^(\w+)\((.*)\)$/);
+            if (res) {
+                const [, op, value] = res;
+
+                switch (op) {
+                    case 'num':
+                        return parseInt(value, 10);
+                    case 'str':
+                    default:
+                        return value;
+                }
+            } else {
+                throw Error();
+            }
+        } else {
+            return target[tree.value];
+        }
+    },
+    regexp: /^((num|str)\([^()]*\))|[^\(\)\s]+|'([^()']|\\')+'|"([^()"]|\\")+/
+};
+
 const lexicon: ILexeme[] = [
     {
         evaluate: (target, tree) => {
@@ -70,19 +104,13 @@ const lexicon: ILexeme[] = [
         regexp: /^\(/,
         syntaxer: (lexs: any[]) => {
             return Object.assign({
-                block : lexs.slice(1, lexs.length - 1)
+                block: lexs.slice(1, lexs.length - 1)
             }, lexs[0]);
         }
     },
-    {
-        resolve: (target, tree) => {
-            Logger.debug('resolve -> op', target, tree);
-
-            return target[tree.value];
-        },
-        name: 'operand',
-        regexp: /^[^\(\)\'\"\s]+|'[^\(\)\'\"]+'|"[^\(\)\'\"]+"/
-    },
+    Object.assign({}, baseOperand, {
+        name: 'operand'
+    }),
     {
         evaluate: (target, tree) => {
             Logger.debug('evaluate -> binary', target, tree);
@@ -92,18 +120,33 @@ const lexicon: ILexeme[] = [
             const opValue = t.left.lexeme.resolve(target, t.left);
             const expValue = t.right.lexeme.resolve(target, t.right);
             Logger.debug(`opValue: ${opValue}, expValue: ${expValue}`);
+
             switch (tree.value.toLowerCase()) {
                 case 'eq':
                 case '=':
-                    Logger.debug(opValue === expValue);
                     return opValue === expValue;
+                case 'gt':
+                case '>':
+                    return opValue > expValue;
+                case 'ge':
+                case '>=':
+                    return opValue >= expValue;
+                case 'lt':
+                case '<':
+                    return opValue < expValue;
+                case 'le':
+                case '<=':
+                    return opValue <= expValue;
+                case 'ne':
+                case '!=':
+                    return opValue !== expValue;
                 default:
                     throw new Error();
             }
         },
-        name: 'binary-operator',
+        name: 'logical-binary-operator',
         priority: 0,
-        regexp: /^=|eq/i,
+        regexp: /^eq|=|gt|>|ge|>=|lt|<|le|<=|ne|!=/i,
         // regexp: /=|!=|>=|<=|eq|lt|gt|le|ge|ne/i,
         syntaxer: (lexs: any[]) => {
             let [left, lexeme, right] = lexs;
@@ -128,13 +171,17 @@ const lexicon: ILexeme[] = [
                     return opValue !== undefined && opValue !== null;
                 case 'is odd':
                     return typeof opValue === 'number' && opValue % 2 === 1;
+                case 'is prime':
+                    return typeof opValue === 'number' && isPrime(opValue);
+                case 'is not prime':
+                    return typeof opValue !== 'number' || !isPrime(opValue);
                 default:
                     throw new Error();
             }
         },
-        name: 'unary-operator',
+        name: 'logical-unary-operator',
         priority: 0,
-        regexp: /^(is nil)|(is not nil)|(is odd)|(is even)/i,
+        regexp: /^(is nil)|(is not nil)|(is odd)|(is even)|(is prime)|(is not prime)/i,
         syntaxer: (lexs: any[]) => {
             let [block, lexeme] = lexs;
 
@@ -142,35 +189,10 @@ const lexicon: ILexeme[] = [
         },
         when: ['operand']
     },
-    {
-        resolve: (target, tree) => {
-            Logger.debug('resolve -> exp', target, tree);
-
-            if (/^('.*')|(".*")$/.test(tree.value)) {
-                return tree.value.slice(1, tree.value.length - 1);
-            } else if (/^\w+\(.*\)$/.test(tree.value)) {
-                const res = tree.value.match(/^(\w+)\((.*)\)$/);
-                if (res) {
-                    const [, op, value] = res;
-
-                    switch (op) {
-                        case 'num':
-                            return parseInt(value, 10);
-                        case 'str':
-                        default:
-                            return value;
-                    }
-                } else {
-                    throw Error();
-                }
-            } else {
-                return target[tree.value];
-            }
-        },
+    Object.assign({}, baseOperand, {
         name: 'expression',
-        regexp: /^(\w+\([^()]*\))|[^\(\)\s]+|'([^()']|\\')+'|"([^()"]|\\")+/,
-        when: ['binary-operator']
-    }
+        when: ['logical-binary-operator']
+    })
 ];
 
 export default lexicon;

@@ -1,14 +1,28 @@
 import * as R from 'ramda';
 
 import { Dataframe, ISettings, ITarget, IViewport } from 'dash-table/virtualization/AbstractStrategy';
+import { memoizeOne } from 'core/memoizer';
+import SyntaxTree from 'core/syntax-tree';
 
 export default class VirtualizationAdapter implements ITarget {
     constructor(private readonly target: any) {
 
     }
 
+    private getDataframe = memoizeOne((dataframe: Dataframe, filter: string) => {
+        try {
+            const tree = new SyntaxTree(filter);
+
+            dataframe = dataframe.filter(datum => tree.evaluate(datum));
+        } catch (_) { }
+
+        return dataframe;
+    });
+
     get dataframe(): Dataframe {
-        return this.target.props.dataframe;
+        const { dataframe, filtering_settings } = this.target.props;
+
+        return this.getDataframe(dataframe, filtering_settings);
     }
 
     get settings(): ISettings {

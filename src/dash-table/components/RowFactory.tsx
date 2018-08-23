@@ -15,7 +15,7 @@ export default class RowFactory {
         return dataframe.map((datum, index) => (
             <Row
                 key={virtualizer.offset + index}
-                row={datum}
+                datum={datum}
                 idx={virtualizer.offset + index}
                 {...options}
             />
