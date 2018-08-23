@@ -325,6 +325,94 @@
           "computed": false
         }
       },
+      "column_conditional_style": {
+        "type": {
+          "name": "arrayOf",
+          "value": {
+            "name": "shape",
+            "value": {
+              "id": {
+                "name": "string",
+                "required": false
+              },
+              "styles": {
+                "name": "arrayOf",
+                "value": {
+                  "name": "shape",
+                  "value": {
+                    "condition": {
+                      "name": "string",
+                      "required": false
+                    },
+                    "style": {
+                      "name": "object",
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": false,
+        "description": ""
+      },
+      "column_static_style": {
+        "type": {
+          "name": "arrayOf",
+          "value": {
+            "name": "shape",
+            "value": {
+              "id": {
+                "name": "string",
+                "required": false
+              },
+              "style": {
+                "name": "object",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": false,
+        "description": ""
+      },
+      "row_conditional_styles": {
+        "type": {
+          "name": "arrayOf",
+          "value": {
+            "name": "shape",
+            "value": {
+              "condition": {
+                "name": "string",
+                "required": false
+              },
+              "style": {
+                "name": "object",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "[]",
+          "computed": false
+        }
+      },
+      "row_static_style": {
+        "type": {
+          "name": "object"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "{}",
+          "computed": false
+        }
+      },
       "filtering": {
         "type": {
           "name": "shape",
@@ -421,6 +509,20 @@
           "value": "[]",
           "computed": false
         }
+      },
+      "column_conditional_styles": {
+        "defaultValue": {
+          "value": "[]",
+          "computed": false
+        },
+        "required": false
+      },
+      "column_static_styles": {
+        "defaultValue": {
+          "value": "[]",
+          "computed": false
+        },
+        "required": false
       },
       "changed_data": {
         "defaultValue": {
