@@ -20,7 +20,7 @@ export const memoizeOne: ((...args: any[]) => ResultFn) = (resultFn: ResultFn) =
 };
 
 export const memoizeAll: ((...args: any[]) => ResultFn) = (resultFn: ResultFn) => {
-    let cache: { args: any[], result: any }[] = [];
+    const cache: { args: any[], result: any }[] = [];
 
     return (...args: any[]) => {
         let entry = cache.find(e => isEqualArgs(e.args, args));

@@ -14,13 +14,9 @@ export default class VirtualizationAdapter implements ITarget {
             return dataframe;
         }
 
-        try {
-            const tree = new SyntaxTree(filtering_settings);
+        const tree = new SyntaxTree(filtering_settings);
 
-            dataframe = dataframe.filter(datum => tree.evaluate(datum));
-        } catch (_) { }
-
-        return dataframe;
+        return tree.isValid ? tree.filter(dataframe) : dataframe;
     });
 
     get dataframe(): Dataframe {

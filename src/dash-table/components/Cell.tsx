@@ -6,7 +6,10 @@ import React, {
     Component,
     MouseEvent
 } from 'react';
+
+import MemoizerCache from 'core/MemoizerCache';
 import SyntaxTree from 'core/syntax-tree';
+import { memoizeOne } from 'core/memoizer';
 
 interface IDropdownOption {
     label: string;
@@ -24,6 +27,7 @@ interface IConditionalStyle extends IStyle {
 
 interface IProps {
     active: boolean;
+    classes?: string[];
     clearable: boolean;
     conditionalStyles?: IConditionalStyle[];
     datum: any;
@@ -34,12 +38,11 @@ interface IProps {
     onClick: (e: MouseEvent) => void;
     onDoubleClick: (e: MouseEvent) => void;
     onPaste: (e: ClipboardEvent) => void;
+    property: string | number;
     selected: boolean;
     staticStyle?: IStyle;
-    value: any;
-
-    classes?: string[];
     type?: string;
+    value: any;
 }
 
 interface IDefaultProps {
@@ -54,6 +57,10 @@ interface IState {
 }
 
 type IPropsWithDefaults = IProps & IDefaultProps;
+
+const astCache = new MemoizerCache<[string | number, number], [string], SyntaxTree>(
+    (query: string) => new SyntaxTree(query)
+);
 
 export default class Cell extends Component<IProps, IState> {
     public static defaultProps: IDefaultProps = {
@@ -181,32 +188,38 @@ export default class Cell extends Component<IProps, IState> {
         }
     }
 
-    render() {
+    private getStyle = memoizeOne((...styles: Partial<CSSStyleDeclaration>[]) => {
+        return styles.length ? R.mergeAll(styles) : undefined;
+    });
+
+    private get style() {
         let {
             conditionalStyles,
             datum,
+            property,
             staticStyle
         } = this.propsWithDefaults;
 
-        const mergedStyle = staticStyle || conditionalStyles.length ?
-            R.mergeAll(
-                R.concat(
-                    [staticStyle],
-                    R.map(
-                        cs => cs.style,
-                        R.filter(
-                            cs => new SyntaxTree(cs.condition).evaluate(datum),
-                            conditionalStyles
-                        )
-                    )
+        const styles = [staticStyle, ...R.map(
+            ([cs]) => cs.style,
+            R.filter(
+                ([cs, i]) => astCache.get([property, i], [cs.condition]).evaluate(datum),
+                R.addIndex<IConditionalStyle, [IConditionalStyle, number]>(R.map)(
+                    (cs, i) => [cs, i],
+                    conditionalStyles
                 )
-            ) : undefined;
+            )
+        )];
 
+        return this.getStyle(...styles);
+    }
+
+    render() {
         return (<td
             ref='td'
             tabIndex={-1}
             className={this.classes.join(' ')}
-            style={mergedStyle}
+            style={this.style}
         >
             {this.renderInner()}
         </td>);

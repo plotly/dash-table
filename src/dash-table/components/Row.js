@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as R from 'ramda';
 
+import { memoizeOne } from 'core/memoizer';
+import MemoizerCache from 'core/MemoizerCache';
 import Stylesheet from 'core/Stylesheet';
 import SyntaxTree from 'core/syntax-tree';
 
@@ -12,6 +14,10 @@ export const DEFAULT_CELL_WIDTH = 200;
 
 const handlers = new Map();
 
+const astCache: MemoizerCache = new MemoizerCache(
+    query => new SyntaxTree(query)
+);
+
 export default class Row extends Component {
     constructor(props) {
         super(props);
@@ -21,6 +27,8 @@ export default class Row extends Component {
         this.handleClick = this.handleClick.bind(this);
         this.handleDoubleClick = this.handleDoubleClick.bind(this);
         this.handlePaste = this.handlePaste.bind(this);
+
+        this.getStyle = memoizeOne((...styles) => styles.length ? R.mergeAll(styles) : undefined);
     }
 
     getEventHandler(fn, idx, i) {
@@ -282,6 +290,7 @@ export default class Row extends Component {
                 active={active_cell[0] === idx && active_cell[1] === i}
                 classes={classes}
                 clearable={column.clearable}
+                conditionalStyles={conditionalStyles}
                 datum={datum}
                 dropdown={dropdown}
                 editable={editable}
@@ -290,9 +299,9 @@ export default class Row extends Component {
                 onDoubleClick={this.getEventHandler(this.handleDoubleClick, idx, i)}
                 onPaste={this.getEventHandler(this.handlePaste, idx, i)}
                 onChange={this.getEventHandler(this.handleChange, idx, i)}
+                property={column.id}
                 selected={this.isCellSelected(idx, i)}
                 staticStyle={staticStyle}
-                conditionalStyles={conditionalStyles}
                 style={style}
                 type={column.type}
                 value={datum[column.id]}
@@ -300,12 +309,27 @@ export default class Row extends Component {
         });
     }
 
-    render() {
+    get style() {
         const {
             datum,
-            idx,
             row_conditional_styles,
             row_static_style,
+        } = this.props;
+
+        const styles = [row_static_style, ...R.map(
+            cs => cs.style,
+            R.filter(
+                cs => astCache.get([], [cs.condition]).evaluate(datum),
+                row_conditional_styles
+            )
+        )];
+
+        return this.getStyle(...styles);
+    }
+
+    render() {
+        const {
+            idx,
             selected_rows
         } = this.props;
 
@@ -314,24 +338,10 @@ export default class Row extends Component {
 
         const cells = this.renderCells();
 
-        const mergedStyle = row_static_style || row_conditional_styles.length ?
-            R.mergeAll(
-                R.concat(
-                    [row_static_style],
-                    R.map(
-                        cs => cs.style,
-                        R.filter(
-                            cs => new SyntaxTree(cs.condition).evaluate(datum),
-                            row_conditional_styles
-                        )
-                    )
-                )
-            ) : undefined;
-
         return (
             <tr
                 className={R.contains(idx, selected_rows) ? 'selected-row' : ''}
-                style={mergedStyle}
+                style={this.style}
             >
                 {deleteCell}
                 {rowSelectable}
