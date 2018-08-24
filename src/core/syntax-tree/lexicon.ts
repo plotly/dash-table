@@ -13,6 +13,7 @@ export interface ILexeme {
 }
 
 const isPrime = (c: number) => {
+    if (c === 2) { return true; }
     if (c < 2 || c % 2 === 0) { return false; }
     for (let n = 3; n * n <= c; n += 2) { if (c % n === 0) { return false; } }
     return true;
