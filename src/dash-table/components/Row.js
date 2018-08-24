@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import * as R from 'ramda';
 
 import { memoizeOne } from 'core/memoizer';
-import MemoizerCache from 'core/MemoizerCache';
+import memoizerCache from 'core/MemoizerCache';
 import Stylesheet from 'core/Stylesheet';
 import SyntaxTree from 'core/syntax-tree';
 
@@ -14,7 +14,7 @@ export const DEFAULT_CELL_WIDTH = 200;
 
 const handlers = new Map();
 
-const astCache: MemoizerCache = new MemoizerCache(
+const astCache = memoizerCache(
     query => new SyntaxTree(query)
 );
 
@@ -187,7 +187,7 @@ export default class Row extends Component {
                 }
                 style={n_fixed_columns > rowSelectableFixedIndex ? {
                     width: `30px`
-                } : {}}
+                } : undefined}
             >
                 <input
                     type={row_selectable === 'single' ? 'radio' : 'checkbox'}
@@ -225,7 +225,7 @@ export default class Row extends Component {
                 onClick={() => setProps(actions.deleteRow(idx, this.props))}
                 style={n_fixed_columns > 0 ? {
                     width: `30px`
-                } : {}}
+                } : undefined}
             >
                 {'×'}
             </td>
@@ -317,10 +317,13 @@ export default class Row extends Component {
         } = this.props;
 
         const styles = [row_static_style, ...R.map(
-            cs => cs.style,
+            ([cs]) => cs.style,
             R.filter(
-                cs => astCache.get([], [cs.condition]).evaluate(datum),
-                row_conditional_styles
+                ([cs, i]) => astCache([i], [cs.condition]).evaluate(datum),
+                R.addIndex(R.map)(
+                    (cs, i) => [cs, i],
+                    row_conditional_styles
+                )
             )
         )];
 

@@ -3,34 +3,29 @@ import { memoizeOne } from 'core/memoizer';
 
 type CacheKeyFragment = string | number | boolean;
 
-export default class MemoizerCache<
+function memoize<TArgs extends any[], TEntry>(fn: (...args: TArgs) => TEntry) {
+    return memoizeOne((...args: TArgs) => fn(...args));
+}
+
+export default function memoizerCache<
     TKey extends CacheKeyFragment[],
     TArgs extends any[],
-    TEntry>
+    TEntry
+    >(fn: (...args: TArgs) => TEntry)
 {
-    private cache = new Map<CacheKeyFragment, any>();
+    const cache = new Map<CacheKeyFragment, any>();
 
-    constructor(private readonly fn: (...args: TArgs) => TEntry) {
-
-    }
-
-    get(key: TKey, args: TArgs): TEntry {
-        return this.getFn(key)(...args);
-    }
-
-    private memoize() {
-        return memoizeOne((...args: TArgs) => this.fn(...args));
-    }
-
-    private getFn(key: TKey): (...args: TArgs) => TEntry {
+    return (key: TKey, args: TArgs): TEntry => {
         const lastKey = key.slice(-1)[0];
         const cacheKeys = key.slice(0, -1);
 
-        let fnCacne = R.reduce((c, fragment) => {
+        const fnCacne = R.reduce((c, fragment) => {
             return c.get(fragment) || c.set(fragment, new Map()).get(fragment);
-        }, this.cache, cacheKeys);
+        }, cache, cacheKeys);
 
-        return fnCacne.get(lastKey) ||
-            fnCacne.set(lastKey, this.memoize()).get(lastKey);
-    }
+        return (
+            fnCacne.get(lastKey) ||
+            fnCacne.set(lastKey, memoize<TArgs, TEntry>(fn)).get(lastKey)
+        )(...args);
+    };
 }

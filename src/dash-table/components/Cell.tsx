@@ -7,7 +7,7 @@ import React, {
     MouseEvent
 } from 'react';
 
-import MemoizerCache from 'core/MemoizerCache';
+import memoizerCache from 'core/MemoizerCache';
 import SyntaxTree from 'core/syntax-tree';
 import { memoizeOne } from 'core/memoizer';
 
@@ -58,7 +58,7 @@ interface IState {
 
 type IPropsWithDefaults = IProps & IDefaultProps;
 
-const astCache = new MemoizerCache<[string | number, number], [string], SyntaxTree>(
+const astCache = memoizerCache<[string | number, number], [string], SyntaxTree>(
     (query: string) => new SyntaxTree(query)
 );
 
@@ -203,7 +203,7 @@ export default class Cell extends Component<IProps, IState> {
         const styles = [staticStyle, ...R.map(
             ([cs]) => cs.style,
             R.filter(
-                ([cs, i]) => astCache.get([property, i], [cs.condition]).evaluate(datum),
+                ([cs, i]) => astCache([property, i], [cs.condition]).evaluate(datum),
                 R.addIndex<IConditionalStyle, [IConditionalStyle, number]>(R.map)(
                     (cs, i) => [cs, i],
                     conditionalStyles
