@@ -3,12 +3,13 @@ import AbstractVirtualizationStrategy from 'dash-table/virtualization/AbstractSt
 import Row from 'dash-table/components/Row';
 
 interface IOptions {
+    id: string;
     virtualizer: AbstractVirtualizationStrategy;
 }
 
 export default class RowFactory {
     static createRows(options: IOptions) {
-        const { virtualizer } = options;
+        const { id, virtualizer } = options;
 
         const dataframe = virtualizer.dataframe;
 
@@ -17,6 +18,7 @@ export default class RowFactory {
                 key={virtualizer.offset + index}
                 datum={datum}
                 idx={virtualizer.offset + index}
+                tableId={id}
                 {...options}
             />
         ));

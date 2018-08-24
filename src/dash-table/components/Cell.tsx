@@ -41,6 +41,7 @@ interface IProps {
     property: string | number;
     selected: boolean;
     staticStyle?: IStyle;
+    tableId: string;
     type?: string;
     value: any;
 }
@@ -58,7 +59,7 @@ interface IState {
 
 type IPropsWithDefaults = IProps & IDefaultProps;
 
-const astCache = memoizerCache<[string | number, number], [string], SyntaxTree>(
+const astCache = memoizerCache<[string, string | number, number], [string], SyntaxTree>(
     (query: string) => new SyntaxTree(query)
 );
 
@@ -197,13 +198,14 @@ export default class Cell extends Component<IProps, IState> {
             conditionalStyles,
             datum,
             property,
-            staticStyle
+            staticStyle,
+            tableId
         } = this.propsWithDefaults;
 
         const styles = [staticStyle, ...R.map(
             ([cs]) => cs.style,
             R.filter(
-                ([cs, i]) => astCache([property, i], [cs.condition]).evaluate(datum),
+                ([cs, i]) => astCache([tableId, property, i], [cs.condition]).evaluate(datum),
                 R.addIndex<IConditionalStyle, [IConditionalStyle, number]>(R.map)(
                     (cs, i) => [cs, i],
                     conditionalStyles

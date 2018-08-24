@@ -245,7 +245,8 @@ export default class Row extends Component {
             is_focused,
             n_fixed_columns,
             row_deletable,
-            row_selectable
+            row_selectable,
+            tableId
         } = this.props;
 
         const visibleColumns = columns.filter(column => !column.hidden);
@@ -303,6 +304,7 @@ export default class Row extends Component {
                 selected={this.isCellSelected(idx, i)}
                 staticStyle={staticStyle}
                 style={style}
+                tableId={tableId}
                 type={column.type}
                 value={datum[column.id]}
             />);
@@ -314,12 +316,13 @@ export default class Row extends Component {
             datum,
             row_conditional_styles,
             row_static_style,
+            tableId
         } = this.props;
 
         const styles = [row_static_style, ...R.map(
             ([cs]) => cs.style,
             R.filter(
-                ([cs, i]) => astCache([i], [cs.condition]).evaluate(datum),
+                ([cs, i]) => astCache([tableId, i], [cs.condition]).evaluate(datum),
                 R.addIndex(R.map)(
                     (cs, i) => [cs, i],
                     row_conditional_styles
@@ -369,6 +372,7 @@ Row.propTypes = {
     selected_rows: PropTypes.any,
     row_deletable: PropTypes.bool,
     row_selectable: PropTypes.any,
+    tableId: PropTypes.any,
 
     column_conditional_styles: PropTypes.any,
     column_static_style: PropTypes.any,
