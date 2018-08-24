@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 
 import { isEqual } from 'core/comparer';
-import memoizerCache from 'core/memoizerCache';
+import memoizerCache from 'core/__memoizerCache';
 import SyntaxTree from 'core/syntax-tree';
 import { memoizeOne } from 'core/memoizer';
 
