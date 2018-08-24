@@ -40,9 +40,13 @@
     New props
         - filtering -> ['fe', 'be'] (default: 'fe')
         - filtering_settings -> AST query string (default: '')
-        - column_conditional_style
+        - column_conditional_dropdowns
+        - column_static_dropdown
+        - column_conditional_styles
         - column_static_style
         - row_conditional_styles
         - row_static_style
     Deprecated
         - column style
+        - column options
+        - dropdown_properties
