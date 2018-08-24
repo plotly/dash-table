@@ -9,7 +9,7 @@ import React, {
 
 import memoizerCache from 'core/MemoizerCache';
 import SyntaxTree from 'core/syntax-tree';
-import { memoizeOne } from 'core/memoizer';
+import { isEqual, memoizeOne } from 'core/memoizer';
 
 interface IDropdownOption {
     label: string;
@@ -212,6 +212,14 @@ export default class Cell extends Component<IProps, IState> {
         )];
 
         return this.getStyle(...styles);
+    }
+
+    shouldComponentUpdate(nextProps: IPropsWithDefaults, nextState: IState) {
+        const props = this.props;
+        const state = this.state;
+
+        return !isEqual(props, nextProps, true) ||
+            !isEqual(state, nextState, true);
     }
 
     render() {
