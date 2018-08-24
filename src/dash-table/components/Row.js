@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import * as R from 'ramda';
 
 import { memoizeOne } from 'core/memoizer';
-import memoizerCache from 'core/__memoizerCache';
+import memoizerCache from 'core/memoizerCache';
 import Stylesheet from 'core/Stylesheet';
 import SyntaxTree from 'core/syntax-tree';
 
