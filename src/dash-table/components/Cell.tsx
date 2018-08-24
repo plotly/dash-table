@@ -286,15 +286,15 @@ export default class Cell extends Component<IProps, IState> {
     }
 
     handleOpenDropdown = () => {
-        const { dropdown }: { [key: string]: any } = this.refs;
+        const { dropdown, td }: { [key: string]: any } = this.refs;
 
         const menu = dropdown.wrapper.querySelector('.Select-menu-outer');
-        const parentBoundingRect = menu.parentElement.getBoundingClientRect();
+        const parentBoundingRect = td.getBoundingClientRect();
 
         menu.style.width = `${parentBoundingRect.width}px`;
         menu.style.top = `${parentBoundingRect.y + parentBoundingRect.height}px`;
         menu.style.left = `${parentBoundingRect.x}px`;
-        menu.style.position = 'fixed';
+        menu.style.position = 'absolute';
     }
 
     componentWillReceiveProps(nextProps: IPropsWithDefaults) {
