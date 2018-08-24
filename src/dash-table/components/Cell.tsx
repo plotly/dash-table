@@ -7,9 +7,10 @@ import React, {
     MouseEvent
 } from 'react';
 
-import memoizerCache from 'core/MemoizerCache';
+import { isEqual } from 'core/comparer';
+import memoizerCache from 'core/memoizerCache';
 import SyntaxTree from 'core/syntax-tree';
-import { isEqual, memoizeOne } from 'core/memoizer';
+import { memoizeOne } from 'core/memoizer';
 
 interface IDropdownOption {
     label: string;
