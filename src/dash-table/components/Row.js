@@ -235,11 +235,12 @@ export default class Row extends Component {
     renderCells() {
         const {
             active_cell,
+            column_conditional_dropdowns,
             column_conditional_styles,
+            column_static_dropdown,
             column_static_style,
             columns,
             datum,
-            dropdown_properties,
             editable,
             idx,
             is_focused,
@@ -274,26 +275,26 @@ export default class Row extends Component {
                 (isFixed ? { maxWidth: width, minWidth: width, width: width } : {})
             );
 
-            const dropdown = ((
-                dropdown_properties &&
-                dropdown_properties[column.id] &&
-                (dropdown_properties[column.id].length > idx ? dropdown_properties[column.id][idx] : null)
-            ) || column || {}).options;
+            let conditionalDropdowns = column_conditional_dropdowns.find(cd => cd.id === column.id);
+            let staticDropdown = column_static_dropdown.find(sd => sd.id === column.id);
+
+            conditionalDropdowns = conditionalDropdowns && conditionalDropdowns.dropdowns;
+            staticDropdown = staticDropdown && staticDropdown.dropdown;
 
             let conditionalStyles = column_conditional_styles.find(cs => cs.id === column.id);
             let staticStyle = column_static_style.find(ss => ss.id === column.id);
 
-            staticStyle = staticStyle && staticStyle.style;
             conditionalStyles = conditionalStyles && conditionalStyles.styles;
+            staticStyle = staticStyle && staticStyle.style;
 
             return (<Cell
                 key={`${column.id}-${i}`}
                 active={active_cell[0] === idx && active_cell[1] === i}
                 classes={classes}
                 clearable={column.clearable}
+                conditionalDropdowns={conditionalDropdowns}
                 conditionalStyles={conditionalStyles}
                 datum={datum}
-                dropdown={dropdown}
                 editable={editable}
                 focused={is_focused}
                 onClick={this.getEventHandler(this.handleClick, idx, i)}
@@ -302,6 +303,7 @@ export default class Row extends Component {
                 onChange={this.getEventHandler(this.handleChange, idx, i)}
                 property={column.id}
                 selected={this.isCellSelected(idx, i)}
+                staticDropdown={staticDropdown}
                 staticStyle={staticStyle}
                 style={style}
                 tableId={tableId}
@@ -362,7 +364,6 @@ Row.propTypes = {
     dataframe: PropTypes.any,
     datum: PropTypes.any,
     idx: PropTypes.any,
-    dropdown_properties: PropTypes.any,
     editable: PropTypes.any,
     is_focused: PropTypes.any,
     setProps: PropTypes.any,
@@ -374,7 +375,9 @@ Row.propTypes = {
     row_selectable: PropTypes.any,
     tableId: PropTypes.any,
 
+    column_conditional_dropdowns: PropTypes.any,
     column_conditional_styles: PropTypes.any,
+    column_static_dropdown: PropTypes.any,
     column_static_style: PropTypes.any,
     row_conditional_styles: PropTypes.any,
     row_static_style: PropTypes.any

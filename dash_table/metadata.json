@@ -60,43 +60,6 @@
         "required": false,
         "description": ""
       },
-      "dropdown_properties": {
-        "type": {
-          "name": "objectOf",
-          "value": {
-            "name": "arrayOf",
-            "value": {
-              "name": "shape",
-              "value": {
-                "options": {
-                  "name": "shape",
-                  "value": {
-                    "label": {
-                      "name": "string",
-                      "required": false
-                    },
-                    "value": {
-                      "name": "string",
-                      "required": false
-                    },
-                    "required": {
-                      "name": "bool",
-                      "required": false
-                    }
-                  },
-                  "required": false
-                },
-                "disabled": {
-                  "name": "bool",
-                  "required": false
-                }
-              }
-            }
-          }
-        },
-        "required": false,
-        "description": ""
-      },
       "editable": {
         "type": {
           "name": "bool"
@@ -336,6 +299,93 @@
         "description": "",
         "defaultValue": {
           "value": "'page'",
+          "computed": false
+        }
+      },
+      "column_conditional_dropdowns": {
+        "type": {
+          "name": "arrayOf",
+          "value": {
+            "name": "shape",
+            "value": {
+              "id": {
+                "name": "string",
+                "required": false
+              },
+              "dropdowns": {
+                "name": "arrayOf",
+                "value": {
+                  "name": "shape",
+                  "value": {
+                    "condition": {
+                      "name": "string",
+                      "required": false
+                    },
+                    "dropdown": {
+                      "name": "arrayOf",
+                      "value": {
+                        "name": "shape",
+                        "value": {
+                          "label": {
+                            "name": "string",
+                            "required": false
+                          },
+                          "value": {
+                            "name": "any",
+                            "required": false
+                          }
+                        }
+                      },
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "[]",
+          "computed": false
+        }
+      },
+      "column_static_dropdown": {
+        "type": {
+          "name": "arrayOf",
+          "value": {
+            "name": "shape",
+            "value": {
+              "id": {
+                "name": "string",
+                "required": false
+              },
+              "dropdown": {
+                "name": "arrayOf",
+                "value": {
+                  "name": "shape",
+                  "value": {
+                    "label": {
+                      "name": "string",
+                      "required": false
+                    },
+                    "value": {
+                      "name": "any",
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "[]",
           "computed": false
         }
       },

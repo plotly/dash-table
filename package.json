@@ -17,7 +17,7 @@
     "private::lint.ts": "tslint --project . src/**/*.ts",
     "private::opentests": "cypress open",
     "private::runtests": "cypress run",
-    "private::snapshots": "build-storybook && percy-storybook",
+    "private::snapshots": "build-storybook",
     "build.watch": "webpack-dev-server --content-base dash_table --mode development",
     "build:js-dev": "run-s \"private::build -- --mode development\"",
     "build:js": "run-s \"private::build -- --mode production\"",

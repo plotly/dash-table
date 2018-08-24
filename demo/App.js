@@ -34,6 +34,15 @@ class App extends Component {
                 merge_duplicate_headers: true,
                 row_deletable: true,
                 row_selectable: 'single',
+                column_static_dropdown: [
+                    {
+                        id: 'bbb',
+                        dropdown: ['Humid', 'Wet', 'Snowy', 'Tropical Beaches'].map(i => ({
+                            label: i,
+                            value: i,
+                        }))
+                    }
+                ],
             },
             selectedFixture: null,
         };

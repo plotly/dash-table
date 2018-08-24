@@ -90,6 +90,9 @@ export const defaultProps = {
     virtual_dataframe: [],
     virtual_dataframe_indices: [],
 
+    column_conditional_dropdowns: [],
+    column_static_dropdown: [],
+
     column_conditional_styles: [],
     column_static_style: [],
 
@@ -149,18 +152,6 @@ export const propTypes = {
     dataframe_previous: PropTypes.arrayOf(PropTypes.object),
     dataframe_timestamp: PropTypes.any,
 
-    dropdown_properties: PropTypes.objectOf(
-        PropTypes.arrayOf(PropTypes.shape({
-            'options': PropTypes.shape({
-                'label': PropTypes.string,
-                'value': PropTypes.string,
-                'required': PropTypes.bool
-            }),
-            'disabled': PropTypes.bool,
-            // And the rest of the dropdown props...
-        }))
-    ),
-
     editable: PropTypes.bool,
     end_cell: PropTypes.arrayOf(PropTypes.number),
     id: PropTypes.string.isRequired,
@@ -189,6 +180,24 @@ export const propTypes = {
         page_size: PropTypes.number
     }),
     navigation: PropTypes.string,
+
+    column_conditional_dropdowns: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.string,
+        dropdowns: PropTypes.arrayOf(PropTypes.shape({
+            condition: PropTypes.string,
+            dropdown: PropTypes.arrayOf(PropTypes.shape({
+                label: PropTypes.string,
+                value: PropTypes.any
+            }))
+        }))
+    })),
+    column_static_dropdown: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.string,
+        dropdown: PropTypes.arrayOf(PropTypes.shape({
+            label: PropTypes.string,
+            value: PropTypes.any
+        }))
+    })),
 
     column_conditional_style: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.string,

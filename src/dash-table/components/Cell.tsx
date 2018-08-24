@@ -4,7 +4,8 @@ import React, {
     ChangeEvent,
     ClipboardEvent,
     Component,
-    MouseEvent
+    CSSProperties,
+    MouseEvent,
 } from 'react';
 
 import { isEqual } from 'core/comparer';
@@ -17,9 +18,16 @@ interface IDropdownOption {
     value: string;
 }
 
+type IDropdownOptions = IDropdownOption[];
+
+interface IConditionalDropdown {
+    condition: string;
+    dropdown: IDropdownOptions;
+}
+
 interface IStyle {
     target?: undefined;
-    style: Partial<CSSStyleDeclaration>;
+    style: CSSProperties;
 }
 
 interface IConditionalStyle extends IStyle {
@@ -30,9 +38,9 @@ interface IProps {
     active: boolean;
     classes?: string[];
     clearable: boolean;
+    conditionalDropdowns?: IConditionalDropdown[];
     conditionalStyles?: IConditionalStyle[];
     datum: any;
-    dropdown: IDropdownOption[];
     editable: boolean;
     focused: boolean;
     onChange: (e: ChangeEvent) => void;
@@ -41,6 +49,7 @@ interface IProps {
     onPaste: (e: ClipboardEvent) => void;
     property: string | number;
     selected: boolean;
+    staticDropdown?: IDropdownOptions;
     staticStyle?: IStyle;
     tableId: string;
     type?: string;
@@ -49,8 +58,9 @@ interface IProps {
 
 interface IDefaultProps {
     classes: string[];
+    conditionalDropdowns: IConditionalDropdown[];
     conditionalStyles: IConditionalStyle[];
-    staticStyle: Partial<CSSStyleDeclaration>;
+    staticStyle: CSSProperties;
     type: string;
 }
 
@@ -60,13 +70,18 @@ interface IState {
 
 type IPropsWithDefaults = IProps & IDefaultProps;
 
-const astCache = memoizerCache<[string, string | number, number], [string], SyntaxTree>(
+const dropdownAstCache = memoizerCache<[string, string | number, number], [string], SyntaxTree>(
+    (query: string) => new SyntaxTree(query)
+);
+
+const styleAstCache = memoizerCache<[string, string | number, number], [string], SyntaxTree>(
     (query: string) => new SyntaxTree(query)
 );
 
 export default class Cell extends Component<IProps, IState> {
     public static defaultProps: IDefaultProps = {
         classes: [],
+        conditionalDropdowns: [],
         conditionalStyles: [],
         staticStyle: {},
         type: 'text'
@@ -105,10 +120,11 @@ export default class Cell extends Component<IProps, IState> {
     private renderDropdown() {
         const {
             clearable,
-            dropdown,
             onChange,
             value
         } = this.propsWithDefaults;
+
+        const dropdown = this.dropdown;
 
         return !dropdown ?
             this.renderValue() :
@@ -190,8 +206,37 @@ export default class Cell extends Component<IProps, IState> {
         }
     }
 
-    private getStyle = memoizeOne((...styles: Partial<CSSStyleDeclaration>[]) => {
-        return styles.length ? R.mergeAll(styles) : undefined;
+    private getDropdown = memoizeOne((...dropdowns: IDropdownOptions[]): IDropdownOptions | undefined => {
+        return dropdowns.length ? dropdowns.slice(-1)[0] : undefined;
+    });
+
+    private get dropdown() {
+        let {
+            conditionalDropdowns,
+            datum,
+            property,
+            staticDropdown,
+            tableId
+        } = this.propsWithDefaults;
+
+        const dropdowns = [
+            ...(staticDropdown ? [staticDropdown] : []),
+            ...R.map(
+                ([cd]) => cd.dropdown,
+                R.filter(
+                    ([cd, i]) => dropdownAstCache([tableId, property, i], [cd.condition]).evaluate(datum),
+                    R.addIndex<IConditionalDropdown, [IConditionalDropdown, number]>(R.map)(
+                        (cd, i) => [cd, i],
+                        conditionalDropdowns
+                    ))
+            )
+        ];
+
+        return this.getDropdown(...dropdowns);
+    }
+
+    private getStyle = memoizeOne((...styles: CSSProperties[]) => {
+        return styles.length ? R.mergeAll<CSSProperties>(styles) : undefined;
     });
 
     private get style() {
@@ -206,7 +251,7 @@ export default class Cell extends Component<IProps, IState> {
         const styles = [staticStyle, ...R.map(
             ([cs]) => cs.style,
             R.filter(
-                ([cs, i]) => astCache([tableId, property, i], [cs.condition]).evaluate(datum),
+                ([cs, i]) => styleAstCache([tableId, property, i], [cs.condition]).evaluate(datum),
                 R.addIndex<IConditionalStyle, [IConditionalStyle, number]>(R.map)(
                     (cs, i) => [cs, i],
                     conditionalStyles
