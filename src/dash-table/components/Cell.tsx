@@ -5,7 +5,7 @@ import React, {
     ClipboardEvent,
     Component,
     CSSProperties,
-    MouseEvent,
+    MouseEvent
 } from 'react';
 
 import { isEqual } from 'core/comparer';
