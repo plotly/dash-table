@@ -21,7 +21,7 @@ const isPrime = (c: number) => {
 
 const baseOperand = {
     resolve: (target: any, tree: ISyntaxTree) => {
-        Logger.debug('resolve -> exp', target, tree);
+        Logger.trace('resolve -> exp', target, tree);
 
         if (/^('.*')|(".*")$/.test(tree.value)) {
             return tree.value.slice(1, tree.value.length - 1);
@@ -50,7 +50,7 @@ const baseOperand = {
 const lexicon: ILexeme[] = [
     {
         evaluate: (target, tree) => {
-            Logger.debug('evalute -> &&', target, tree);
+            Logger.trace('evalute -> &&', target, tree);
 
             const t = tree as any;
             const lv = t.left.lexeme.evaluate(target, t.left);
@@ -69,7 +69,7 @@ const lexicon: ILexeme[] = [
     },
     {
         evaluate: (target, tree) => {
-            Logger.debug('evalute -> ||', target, tree);
+            Logger.trace('evalute -> ||', target, tree);
 
             const t = tree as any;
 
@@ -93,7 +93,7 @@ const lexicon: ILexeme[] = [
     },
     {
         evaluate: (target, tree) => {
-            Logger.debug('evaluate -> ()', target, tree);
+            Logger.trace('evaluate -> ()', target, tree);
 
             const t = tree as any;
 
@@ -114,13 +114,13 @@ const lexicon: ILexeme[] = [
     }),
     {
         evaluate: (target, tree) => {
-            Logger.debug('evaluate -> binary', target, tree);
+            Logger.trace('evaluate -> binary', target, tree);
 
             const t = tree as any;
 
             const opValue = t.left.lexeme.resolve(target, t.left);
             const expValue = t.right.lexeme.resolve(target, t.right);
-            Logger.debug(`opValue: ${opValue}, expValue: ${expValue}`);
+            Logger.trace(`opValue: ${opValue}, expValue: ${expValue}`);
 
             switch (tree.value.toLowerCase()) {
                 case 'eq':
@@ -158,7 +158,7 @@ const lexicon: ILexeme[] = [
     },
     {
         evaluate: (target, tree) => {
-            Logger.debug('evaluate -> unary', target, tree);
+            Logger.trace('evaluate -> unary', target, tree);
 
             const t = tree as any;
             const opValue = t.block.lexeme.resolve(target, t.block);

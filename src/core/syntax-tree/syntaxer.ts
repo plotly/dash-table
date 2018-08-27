@@ -23,11 +23,10 @@ export default function parser(lexs: ILexerResult[]): ISyntaxTree {
 
     // find lowest priority 0-nesting lex
     const pivot = nestedLexs
-        .filter(lex => lex.nesting === 0)
-        .filter(lex => typeof lex.lexeme.priority === 'number')
+        .filter(lex => lex.nesting === 0 && typeof lex.lexeme.priority === 'number')
         .sort((a, b) => (b.lexeme.priority || -1) - (a.lexeme.priority || -1))[0];
 
-    Logger.debug('parser -> pivot', pivot, lexs);
+    Logger.trace('parser -> pivot', pivot, lexs);
 
     const pivotIndex = nestedLexs.indexOf(pivot);
 

@@ -247,7 +247,6 @@ export default class Cell extends Component<ICellProps, ICellState> {
         const left = (parentBounds.left - relativeBounds.left) + relativeParent.scrollLeft;
         const top = (parentBounds.top - relativeBounds.top) + relativeParent.scrollTop + parentBounds.height;
 
-
         menu.style.width = `${parentBounds.width}px`;
         menu.style.top = `${top}px`;
         menu.style.left = `${left}px`;
