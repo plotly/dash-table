@@ -44,7 +44,7 @@ const baseOperand = {
             return target[tree.value];
         }
     },
-    regexp: /^((num|str)\([^()]*\))|[^\(\)\s]+|'([^()']|\\')+'|"([^()"]|\\")+/
+    regexp: /^(((num|str)\([^()]*\))|'([^()']|\\')+'|"([^()"]|\\")+"|\w+)/
 };
 
 const lexicon: ILexeme[] = [
@@ -107,11 +107,12 @@ const lexicon: ILexeme[] = [
             return Object.assign({
                 block: lexs.slice(1, lexs.length - 1)
             }, lexs[0]);
-        }
+        },
+        when: ['unary-not']
     },
-    Object.assign({}, baseOperand, {
+    Object.assign({
         name: 'operand'
-    }),
+    }, baseOperand),
     {
         evaluate: (target, tree) => {
             Logger.trace('evaluate -> binary', target, tree);
@@ -147,8 +148,7 @@ const lexicon: ILexeme[] = [
         },
         name: 'logical-binary-operator',
         priority: 0,
-        regexp: /^eq|=|gt|>|ge|>=|lt|<|le|<=|ne|!=/i,
-        // regexp: /=|!=|>=|<=|eq|lt|gt|le|ge|ne/i,
+        regexp: /^(>=|<=|>|<|!=|=|ge|le|gt|lt|eq|ne)/i,
         syntaxer: (lexs: any[]) => {
             let [left, lexeme, right] = lexs;
 
@@ -168,21 +168,27 @@ const lexicon: ILexeme[] = [
                     return typeof opValue === 'number' && opValue % 2 === 0;
                 case 'is nil':
                     return opValue === undefined || opValue === null;
-                case 'is not nil':
-                    return opValue !== undefined && opValue !== null;
+                case 'is bool':
+                    return typeof opValue === 'boolean';
                 case 'is odd':
                     return typeof opValue === 'number' && opValue % 2 === 1;
+                case 'is num':
+                    return typeof opValue === 'number';
+                case 'is object':
+                    return opValue !== null &&
+                        opValue !== undefined &&
+                        typeof opValue === 'object';
+                case 'is str':
+                    return typeof opValue === 'string';
                 case 'is prime':
                     return typeof opValue === 'number' && isPrime(opValue);
-                case 'is not prime':
-                    return typeof opValue !== 'number' || !isPrime(opValue);
                 default:
                     throw new Error();
             }
         },
         name: 'logical-unary-operator',
         priority: 0,
-        regexp: /^(is nil)|(is not nil)|(is odd)|(is even)|(is prime)|(is not prime)/i,
+        regexp: /^((is nil)|(is odd)|(is even)|(is bool)|(is num)|(is object)|(is str)|(is prime))/i,
         syntaxer: (lexs: any[]) => {
             let [block, lexeme] = lexs;
 
@@ -190,10 +196,28 @@ const lexicon: ILexeme[] = [
         },
         when: ['operand']
     },
-    Object.assign({}, baseOperand, {
+    {
+        evaluate: (target, tree) => {
+            Logger.debug('evaluate -> unary not', target, tree);
+
+            const t = tree as any;
+
+            return !t.block.lexeme.evaluate(target, t.block);
+        },
+        name: 'unary-not',
+        priority: 1.5,
+        regexp: /^!/,
+        syntaxer: (lexs: any[]) => {
+            return Object.assign({
+                block: lexs.slice(1, lexs.length)
+            }, lexs[0]);
+        },
+        when: ['unary-not']
+    },
+    Object.assign({
         name: 'expression',
         when: ['logical-binary-operator']
-    })
+    }, baseOperand)
 ];
 
 export default lexicon;
