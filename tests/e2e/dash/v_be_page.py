@@ -102,7 +102,7 @@ def findModifiedValue(dataframe, previous):
         row_prev = previous[y]
 
         for (x, col) in enumerate(row):
-            if (col != row_prev[x]):
+            if col != row_prev[x]:
                 modification = '[{}][{}] = {} -> {}'.format(
                     y, x, row_prev[x], col
                 )
