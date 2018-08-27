@@ -17,7 +17,7 @@ sys.path.append(
     )
 )
 module_names = ['dash_table']
-modules = [__import__(x) for x in module_names]
+modules = [__import__(module) for module in module_names]
 dash_table = modules[0]
 
 url = (
