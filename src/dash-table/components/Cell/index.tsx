@@ -230,12 +230,27 @@ export default class Cell extends Component<ICellProps, ICellState> {
     handleOpenDropdown = () => {
         const { dropdown, td }: { [key: string]: any } = this.refs;
 
-        const menu = dropdown.wrapper.querySelector('.Select-menu-outer');
-        const parentBoundingRect = td.getBoundingClientRect();
+        const menu: HTMLElement = dropdown.wrapper.querySelector('.Select-menu-outer');
+        const parentBounds = td.getBoundingClientRect();
 
-        menu.style.width = `${parentBoundingRect.width}px`;
-        menu.style.top = `${parentBoundingRect.y + parentBoundingRect.height}px`;
-        menu.style.left = `${parentBoundingRect.x}px`;
+        let relativeParent = menu;
+        while (getComputedStyle(relativeParent).position !== 'relative') {
+            if (!relativeParent.parentElement) {
+                break;
+            }
+
+            relativeParent = relativeParent.parentElement;
+        }
+
+        const relativeBounds = relativeParent.getBoundingClientRect();
+
+        const left = (parentBounds.left - relativeBounds.left) + relativeParent.scrollLeft;
+        const top = (parentBounds.top - relativeBounds.top) + relativeParent.scrollTop + parentBounds.height;
+
+
+        menu.style.width = `${parentBounds.width}px`;
+        menu.style.top = `${top}px`;
+        menu.style.left = `${left}px`;
         menu.style.position = 'absolute';
     }
 
