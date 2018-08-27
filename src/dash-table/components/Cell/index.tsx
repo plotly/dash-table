@@ -1,85 +1,35 @@
 import * as R from 'ramda';
+import React, { Component, CSSProperties } from 'react';
 import Dropdown from 'react-select';
-import React, {
-    ChangeEvent,
-    ClipboardEvent,
-    Component,
-    CSSProperties,
-    MouseEvent
-} from 'react';
 
 import { isEqual } from 'core/comparer';
+import { memoizeOne } from 'core/memoizer';
 import memoizerCache from 'core/memoizerCache';
 import SyntaxTree from 'core/syntax-tree';
-import { memoizeOne } from 'core/memoizer';
 
-interface IDropdownOption {
-    label: string;
-    value: string;
-}
+import {
+    ICellDefaultProps,
+    ICellProps,
+    ICellPropsWithDefaults,
+    ICellState
+} from 'dash-table/components/Cell/props';
 
-type IDropdownOptions = IDropdownOption[];
+import {
+    IDropdownOptions,
+    IConditionalDropdown,
+    IConditionalStyle
+} from 'dash-table/components/Cell/types';
 
-interface IConditionalDropdown {
-    condition: string;
-    dropdown: IDropdownOptions;
-}
+export default class Cell extends Component<ICellProps, ICellState> {
+    private static readonly dropdownAstCache = memoizerCache<[string, string | number, number], [string], SyntaxTree>(
+        (query: string) => new SyntaxTree(query)
+    );
 
-interface IStyle {
-    target?: undefined;
-    style: CSSProperties;
-}
+    private static readonly styleAstCache = memoizerCache<[string, string | number, number], [string], SyntaxTree>(
+        (query: string) => new SyntaxTree(query)
+    );
 
-interface IConditionalStyle extends IStyle {
-    condition: string;
-}
-
-interface IProps {
-    active: boolean;
-    classes?: string[];
-    clearable: boolean;
-    conditionalDropdowns?: IConditionalDropdown[];
-    conditionalStyles?: IConditionalStyle[];
-    datum: any;
-    editable: boolean;
-    focused: boolean;
-    onChange: (e: ChangeEvent) => void;
-    onClick: (e: MouseEvent) => void;
-    onDoubleClick: (e: MouseEvent) => void;
-    onPaste: (e: ClipboardEvent) => void;
-    property: string | number;
-    selected: boolean;
-    staticDropdown?: IDropdownOptions;
-    staticStyle?: IStyle;
-    tableId: string;
-    type?: string;
-    value: any;
-}
-
-interface IDefaultProps {
-    classes: string[];
-    conditionalDropdowns: IConditionalDropdown[];
-    conditionalStyles: IConditionalStyle[];
-    staticStyle: CSSProperties;
-    type: string;
-}
-
-interface IState {
-    value: any;
-}
-
-type IPropsWithDefaults = IProps & IDefaultProps;
-
-const dropdownAstCache = memoizerCache<[string, string | number, number], [string], SyntaxTree>(
-    (query: string) => new SyntaxTree(query)
-);
-
-const styleAstCache = memoizerCache<[string, string | number, number], [string], SyntaxTree>(
-    (query: string) => new SyntaxTree(query)
-);
-
-export default class Cell extends Component<IProps, IState> {
-    public static defaultProps: IDefaultProps = {
+    public static defaultProps: ICellDefaultProps = {
         classes: [],
         conditionalDropdowns: [],
         conditionalStyles: [],
@@ -87,7 +37,7 @@ export default class Cell extends Component<IProps, IState> {
         type: 'text'
     };
 
-    constructor(props: IProps) {
+    constructor(props: ICellProps) {
         super(props);
 
         this.state = {
@@ -95,7 +45,11 @@ export default class Cell extends Component<IProps, IState> {
         };
     }
 
-    get classes(): string[] {
+    private get propsWithDefaults(): ICellPropsWithDefaults {
+        return this.props as ICellPropsWithDefaults;
+    }
+
+    private get classes(): string[] {
         let {
             active,
             classes,
@@ -111,10 +65,6 @@ export default class Cell extends Component<IProps, IState> {
             ...(type === 'dropdown' ? ['dropdown'] : []),
             ...classes
         ];
-    }
-
-    get propsWithDefaults(): IPropsWithDefaults {
-        return this.props as IPropsWithDefaults;
     }
 
     private renderDropdown() {
@@ -224,7 +174,7 @@ export default class Cell extends Component<IProps, IState> {
             ...R.map(
                 ([cd]) => cd.dropdown,
                 R.filter(
-                    ([cd, i]) => dropdownAstCache([tableId, property, i], [cd.condition]).evaluate(datum),
+                    ([cd, i]) => Cell.dropdownAstCache([tableId, property, i], [cd.condition]).evaluate(datum),
                     R.addIndex<IConditionalDropdown, [IConditionalDropdown, number]>(R.map)(
                         (cd, i) => [cd, i],
                         conditionalDropdowns
@@ -251,7 +201,7 @@ export default class Cell extends Component<IProps, IState> {
         const styles = [staticStyle, ...R.map(
             ([cs]) => cs.style,
             R.filter(
-                ([cs, i]) => styleAstCache([tableId, property, i], [cs.condition]).evaluate(datum),
+                ([cs, i]) => Cell.styleAstCache([tableId, property, i], [cs.condition]).evaluate(datum),
                 R.addIndex<IConditionalStyle, [IConditionalStyle, number]>(R.map)(
                     (cs, i) => [cs, i],
                     conditionalStyles
@@ -260,14 +210,6 @@ export default class Cell extends Component<IProps, IState> {
         )];
 
         return this.getStyle(...styles);
-    }
-
-    shouldComponentUpdate(nextProps: IPropsWithDefaults, nextState: IState) {
-        const props = this.props;
-        const state = this.state;
-
-        return !isEqual(props, nextProps, true) ||
-            !isEqual(state, nextState, true);
     }
 
     render() {
@@ -297,7 +239,7 @@ export default class Cell extends Component<IProps, IState> {
         menu.style.position = 'absolute';
     }
 
-    componentWillReceiveProps(nextProps: IPropsWithDefaults) {
+    componentWillReceiveProps(nextProps: ICellPropsWithDefaults) {
         const { value } = this.props;
         const { value: nextValue } = nextProps;
 
@@ -326,5 +268,13 @@ export default class Cell extends Component<IProps, IState> {
                 }
             } as any);
         }
+    }
+
+    shouldComponentUpdate(nextProps: ICellPropsWithDefaults, nextState: ICellState) {
+        const props = this.props;
+        const state = this.state;
+
+        return !isEqual(props, nextProps, true) ||
+            !isEqual(state, nextState, true);
     }
 }

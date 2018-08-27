@@ -9,6 +9,7 @@ import SyntaxTree from 'core/syntax-tree';
 
 import Cell from 'dash-table/components/Cell';
 import * as actions from 'dash-table/utils/actions';
+import { isEqual } from 'core/comparer';
 
 export const DEFAULT_CELL_WIDTH = 200;
 
@@ -333,6 +334,78 @@ export default class Row extends Component {
         )];
 
         return this.getStyle(...styles);
+    }
+
+    inSelection(props) {
+        const { active_cell, selected_cell, idx } = props;
+
+        const range = [Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY];
+        if (active_cell.length) {
+            range[0] = Math.max(active_cell[0] - 1, 0);
+            range[1] = active_cell[0] + 1;
+        }
+
+        if (selected_cell.length) {
+            const minRow = R.reduce(
+                R.min,
+                Number.POSITIVE_INFINITY,
+                R.map(cell => cell[0], selected_cell)
+            );
+
+            const maxRow = R.reduce(
+                R.max,
+                Number.NEGATIVE_INFINITY,
+                R.map(cell => cell[0], selected_cell)
+            );
+
+            range[0] = Math.min(range[0], Math.max(minRow - 1, 0));
+            range[1] = Math.max(range[1], maxRow + 1);
+        }
+
+        return (
+            (range[0] <= idx || range[0] === Number.POSITIVE_INFINITY) &&
+            (range[1] >= idx || range[1] === Number.NEGATIVE_INFINITY)
+        );
+    }
+
+    shouldComponentUpdate(nextProps) {
+        const watchedProperties = [
+            'column_conditional_dropdowns',
+            'column_conditional_styles',
+            'column_static_dropdown',
+            'column_static_style',
+            'columns',
+            'datum',
+            'editable',
+            'idx',
+            'is_focused',
+            'n_fixed_columns',
+            'row_conditional_styles',
+            'row_deletable',
+            'row_selectable',
+            'row_static_style',
+            'selected_rows',
+            'tableId'
+        ];
+
+        // evals active_cell and selected_cell
+        const inSelection =
+            this.inSelection(this.props) ||
+            this.inSelection(nextProps);
+
+        return !isEqual(
+            Object.assign(
+                {},
+                R.pick(watchedProperties, this.props),
+                { inSelection: false }
+            ),
+            Object.assign(
+                {},
+                R.pick(watchedProperties, nextProps),
+                { inSelection }
+            ),
+            true
+        );
     }
 
     render() {
