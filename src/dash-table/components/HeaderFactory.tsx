@@ -1,9 +1,11 @@
 import React from 'react';
 import * as R from 'ramda';
-import * as actions from 'dash-table/utils/actions';
 
-import { DEFAULT_CELL_WIDTH } from 'dash-table/components/Row';
 import Stylesheet from 'core/Stylesheet';
+import { updateSettings, ISortSetting, SortDirection } from 'core/sorting';
+
+import * as actions from 'dash-table/utils/actions';
+import { DEFAULT_CELL_WIDTH } from 'dash-table/components/Row';
 
 interface ICellOptions {
     columns: any[];
@@ -14,16 +16,16 @@ interface ICellOptions {
     n_fixed_columns: number;
     row_deletable: boolean;
     row_selectable: boolean;
-    rowIsSortable: boolean;
+    rowSorting: string | boolean;
     setProps: (...args: any[]) => any;
-    sort: any;
+    sorting_settings: any;
     virtualization: any;
 }
 
 interface IOptions extends ICellOptions {
     merge_duplicate_headers: boolean;
     n_fixed_rows: number;
-    sortable: boolean;
+    sorting: string | boolean;
 }
 
 const getColLength = (c: any) => (Array.isArray(c.name) ? c.name.length : 1);
@@ -45,7 +47,9 @@ function deleteColumn(column: any, columnRowIndex: any, options: ICellOptions) {
 
 function doSort(columnId: any, options: ICellOptions) {
     return () => {
-        return actions.sort(columnId, options);
+        const sorting_settings = updateSettings(options.sorting_settings, columnId);
+
+        options.setProps({ sorting_settings });
     };
 }
 
@@ -59,8 +63,8 @@ export default class HeaderFactory {
             n_fixed_columns,
             row_deletable,
             row_selectable,
-            rowIsSortable,
-            sort,
+            rowSorting,
+            sorting_settings,
             virtualization
         } = options;
 
@@ -87,6 +91,16 @@ export default class HeaderFactory {
         const columnIndexOffset =
             (row_deletable ? 1 : 0) +
             (row_selectable ? 1 : 0);
+
+        const getSortingIcon = (columnId: string | number) => {
+            const setting = R.find((s: ISortSetting) => s.columnId === columnId, sorting_settings);
+
+            if (!setting) {
+                return '↕';
+            }
+
+            return setting.direction === SortDirection.Descending ? '↑' : '↓';
+        };
 
         return columnIndices.map((columnId, spanId) => {
             const c = columns[columnId];
@@ -140,17 +154,12 @@ export default class HeaderFactory {
                     width: width
                 } : undefined}
             >
-                {rowIsSortable ? (
+                {rowSorting ? (
                     <span
                         className='filter'
                         onClick={doSort(c.id, options)}
                     >
-                        {R.find(R.propEq('column', c.id), sort)
-                            ? R.find(R.propEq('column', c.id), sort)
-                                .direction === 'desc'
-                                ? '↑'
-                                : '↓'
-                            : '↕'}
+                        {getSortingIcon(c.id)}
                     </span>) : ('')
                 }
 
@@ -216,13 +225,13 @@ export default class HeaderFactory {
         let {
             columns,
             dataframe,
-            sortable,
+            sorting,
             merge_duplicate_headers,
             n_fixed_columns,
             row_deletable,
             row_selectable,
             setProps,
-            sort,
+            sorting_settings,
             virtualization
         } = options;
 
@@ -243,9 +252,9 @@ export default class HeaderFactory {
                         n_fixed_columns,
                         row_deletable,
                         row_selectable,
-                        rowIsSortable: sortable,
+                        rowSorting: sorting,
                         setProps,
-                        sort,
+                        sorting_settings,
                         virtualization
                     })}
                 </tr>
@@ -268,12 +277,12 @@ export default class HeaderFactory {
                         n_fixed_columns,
                         row_deletable,
                         row_selectable,
-                        rowIsSortable: sortable && i + 1 === headerDepth,
+                        rowSorting: !!sorting && i + 1 === headerDepth,
                         mergeCells:
                             merge_duplicate_headers &&
                             i + 1 !== headerDepth,
                         setProps,
-                        sort,
+                        sorting_settings,
                         virtualization
                     })}
                 </tr>

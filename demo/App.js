@@ -1,11 +1,11 @@
 /* eslint no-magic-numbers: 0 */
+import * as R from 'ramda';
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {Table} from 'dash-table';
 import {mockData} from './data';
 import Dropdown from 'react-select';
 import TestFixtures from 'tests/python_fixtures/fixtures.json';
-import {merge} from 'ramda';
 import { memoizeOne } from 'core/memoizer';
 
 const clone = o => JSON.parse(JSON.stringify(o));
@@ -16,21 +16,23 @@ class App extends Component {
 
         this.onChange = this.onChange.bind(this);
 
+        const dataframe: any[] = clone(mockData.dataframe);
+
         this.state = {
             filter: '',
             tableProps: {
                 id: 'table',
-                dataframe: clone(mockData.dataframe),
-                columns: clone(mockData.columns).map(col => merge(col, {
+                dataframe: dataframe,
+                columns: clone(mockData.columns).map(col => R.merge(col, {
                     editable_name: true,
                     deletable: true,
                 //     type: 'dropdown'
                 })),
                 editable: true,
+                filtering: true,
+                sorting: true,
                 // n_fixed_rows: 3,
                 // n_fixed_columns: 2,
-                sortable: false,
-                sort: [],
                 merge_duplicate_headers: true,
                 row_deletable: true,
                 row_selectable: 'single',
@@ -58,7 +60,7 @@ class App extends Component {
             return newProps => {
                 console.info('--->', newProps);
                 this.setState({
-                    tableProps: merge(this.state.tableProps, newProps),
+                    tableProps: R.merge(this.state.tableProps, newProps),
                 });
             };
         });
