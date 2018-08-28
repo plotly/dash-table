@@ -2,7 +2,7 @@ import React from 'react';
 import * as R from 'ramda';
 
 import Stylesheet from 'core/Stylesheet';
-import { updateSettings, ISortSetting, SortDirection } from 'core/sorting';
+import { updateSettings, SortDirection, SortSettings } from 'core/sorting';
 
 import * as actions from 'dash-table/utils/actions';
 import { DEFAULT_CELL_WIDTH } from 'dash-table/components/Row';
@@ -18,7 +18,7 @@ interface ICellOptions {
     row_selectable: boolean;
     rowSorting: string | boolean;
     setProps: (...args: any[]) => any;
-    sorting_settings: any;
+    sorting_settings: SortSettings;
     virtualization: any;
 }
 
@@ -45,15 +45,54 @@ function deleteColumn(column: any, columnRowIndex: any, options: ICellOptions) {
     };
 }
 
-function doSort(columnId: any, options: ICellOptions) {
-    return () => {
-        const sorting_settings = updateSettings(options.sorting_settings, columnId);
-
-        options.setProps({ sorting_settings });
-    };
-}
-
 export default class HeaderFactory {
+    private static getSorting(columnId: string | number, settings: SortSettings): SortDirection {
+        const setting = R.find(s => s.columnId === columnId, settings);
+
+        return setting ? setting.direction : SortDirection.None;
+    }
+
+    private static doSort(columnId: string | number, options: ICellOptions) {
+        return () => {
+            const { sorting_settings } = options;
+
+            let direction: SortDirection;
+            switch (HeaderFactory.getSorting(columnId, sorting_settings)) {
+                case SortDirection.Descending:
+                    direction = SortDirection.Ascending;
+                    break;
+                case SortDirection.Ascending:
+                    direction = SortDirection.None;
+                    break;
+                case SortDirection.None:
+                default:
+                    direction = SortDirection.Descending;
+                    break;
+            }
+
+            options.setProps({
+                sorting_settings: updateSettings(
+                    sorting_settings,
+                    { columnId, direction }
+                )
+            });
+        };
+    }
+
+    private static getSortingIcon(columnId: string | number, options: ICellOptions) {
+        const { sorting_settings } = options;
+
+        switch (HeaderFactory.getSorting(columnId, sorting_settings)) {
+            case SortDirection.Descending:
+                return '↑';
+            case SortDirection.Ascending:
+                return '↓';
+            case SortDirection.None:
+            default:
+                return '↕';
+        }
+    }
+
     private static createHeaderCells(options: ICellOptions) {
         const {
             columns,
@@ -64,7 +103,6 @@ export default class HeaderFactory {
             row_deletable,
             row_selectable,
             rowSorting,
-            sorting_settings,
             virtualization
         } = options;
 
@@ -91,16 +129,6 @@ export default class HeaderFactory {
         const columnIndexOffset =
             (row_deletable ? 1 : 0) +
             (row_selectable ? 1 : 0);
-
-        const getSortingIcon = (columnId: string | number) => {
-            const setting = R.find((s: ISortSetting) => s.columnId === columnId, sorting_settings);
-
-            if (!setting) {
-                return '↕';
-            }
-
-            return setting.direction === SortDirection.Descending ? '↑' : '↓';
-        };
 
         return columnIndices.map((columnId, spanId) => {
             const c = columns[columnId];
@@ -157,9 +185,9 @@ export default class HeaderFactory {
                 {rowSorting ? (
                     <span
                         className='filter'
-                        onClick={doSort(c.id, options)}
+                        onClick={HeaderFactory.doSort(c.id, options)}
                     >
-                        {getSortingIcon(c.id)}
+                        {HeaderFactory.getSortingIcon(c.id, options)}
                     </span>) : ('')
                 }
 
