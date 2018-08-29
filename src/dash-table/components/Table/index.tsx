@@ -18,6 +18,10 @@ export default class Table extends Component<PropsWithDefaults> {
         super(props);
     }
 
+    public get setProps() {
+        return this.__setProps();
+    }
+
     render() {
         const { setProps, virtualizer } = this;
 
@@ -34,10 +38,6 @@ export default class Table extends Component<PropsWithDefaults> {
 
     private get adapter() {
         return this.__adapter();
-    }
-
-    private get setProps() {
-        return this.__setProps();
     }
 
     private get virtualizer() {

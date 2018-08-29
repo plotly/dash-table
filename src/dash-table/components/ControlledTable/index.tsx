@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import * as R from 'ramda';
-import SheetClip from 'sheetclip';
 import Stylesheet from 'core/Stylesheet';
 import { colIsEditable } from 'dash-table/components/derivedState';
 import {
@@ -18,6 +17,7 @@ import { DEFAULT_CELL_WIDTH } from 'dash-table/components/Row';
 import { PropsWithDefaults } from 'dash-table/components/Table/props';
 import Logger from 'core/Logger';
 import AbstractVirtualizationStrategy from 'dash-table/virtualization/AbstractStrategy';
+import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
 
 const sortNumerical = R.sort<number>((a, b) => a - b);
 
@@ -430,55 +430,9 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         const dataframe = virtualizer.dataframe;
 
         e.preventDefault();
-        const el = document.createElement('textarea');
-        const selectedRows = R.uniq(R.pluck(0, selected_cell).sort());
-        const selectedCols: any = R.uniq(R.pluck(1, selected_cell).sort());
-        const selectedTabularData = R.slice(
-            R.head(selectedRows) as any,
-            R.last(selectedRows) as any + 1,
-            dataframe
-        ).map(row =>
-            R.props(selectedCols, R.props(R.pluck('id', columns) as any, row) as any)
-        );
 
-        el.value = selectedTabularData
-            .map(row => R.values(row).join('\t'))
-            .join('\r\n');
-
-        // (Adapted from https://hackernoon.com/copying-text-to-clipboard-with-javascript-df4d4988697f)
-        // Make it readonly to be tamper-proof
-        el.setAttribute('readonly', '');
-        // el.style.position = 'absolute';
-        // Move outside the screen to make it invisible
-        // el.style.left = '-9999px';
-        // Append the <textarea> element to the HTML document
-        document.body.appendChild(el);
-
-        // Check if there is any content selected previously
-        let selected;
-        if (document.getSelection().rangeCount > 0) {
-            // Store selection if found
-            selected = document.getSelection().getRangeAt(0);
-        }
-
-        // Select the <textarea> content
-        el.select();
-        // Copy - only works as a result of a user action (e.g. click events)
-        document.execCommand('copy');
-        // Remove the <textarea> element
-        document.body.removeChild(el);
-        // If a selection existed before copying
-        if (selected) {
-            // Unselect everything on the HTML document
-            document.getSelection().removeAllRanges();
-            // Restore the original selection
-            document.getSelection().addRange(selected);
-        }
-        // refocus on the table so that onPaste can be fired immediately
-        // on the same table
-        // note that this requires tabIndex to be set on the <table/>
+        TableClipboardHelper.toClipboard(selected_cell, columns, dataframe);
         this.$el.focus();
-        return;
     }
 
     onPaste = (e: any) => {
@@ -490,61 +444,21 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             active_cell,
             dataframe
         } = this.props;
-        if (e && e.clipboardData && !is_focused) {
-            const text = e.clipboardData.getData('text/plain');
-            Logger.warning('clipboard data: ', text);
-            if (text) {
-                const values = SheetClip.prototype.parse(text);
 
-                let newDataframe = dataframe;
-                const newColumns = columns;
+        if(is_focused) {
+            return;
+        }
 
-                if (values[0].length + active_cell[1] >= columns.length) {
-                    for (
-                        let i = columns.length;
-                        i < values[0].length + active_cell[1];
-                        i++
-                    ) {
-                        newColumns.push({
-                            id: `Column ${i + 1}`,
-                            type: 'numeric'
-                        });
-                        newDataframe.forEach(row => (row[`Column ${i}`] = ''));
-                    }
-                }
+        const result = TableClipboardHelper.fromClipboard(
+            e,
+            active_cell,
+            columns,
+            dataframe,
+            editable
+        );
 
-                if (values.length + active_cell[0] >= dataframe.length) {
-                    const emptyRow: any = {};
-                    columns.forEach(c => (emptyRow[c.id] = ''));
-                    newDataframe = R.concat(
-                        newDataframe,
-                        R.repeat(
-                            emptyRow,
-                            values.length + active_cell[0] - dataframe.length
-                        )
-                    );
-                }
-
-                values.forEach((row: any, i: any) =>
-                    row.forEach((cell: any, j: any) => {
-                        const iOffset = active_cell[0] + i;
-                        const jOffset = active_cell[1] + j;
-                        // let newDataframe = dataframe;
-                        const col = newColumns[jOffset];
-                        if (colIsEditable(editable, col)) {
-                            newDataframe = R.set(
-                                R.lensPath([iOffset, col.id]),
-                                cell,
-                                newDataframe
-                            );
-                        }
-                    })
-                );
-                setProps({
-                    dataframe: newDataframe,
-                    columns: newColumns
-                });
-            }
+        if (result) {
+            setProps(result);
         }
     }
 
