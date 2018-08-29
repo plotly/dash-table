@@ -7,7 +7,7 @@ import Logger from 'core/Logger';
 import { colIsEditable } from 'dash-table/components/derivedState';
 import { ActiveCell, Columns, Dataframe, SelectedCells } from 'dash-table/components/Table/props';
 
-export default class DataframeCopyPaste {
+export default class TableClipboardHelper {
     public static toClipboard(selectedCells: SelectedCells, columns: Columns, dataframe: Dataframe) {
         const selectedRows = R.uniq(R.pluck(0, selectedCells).sort());
         const selectedCols: any = R.uniq(R.pluck(1, selectedCells).sort());

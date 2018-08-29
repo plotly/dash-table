@@ -5,7 +5,7 @@ import { memoizeOne } from 'core/memoizer';
 import sort, { SortSettings } from 'core/sorting';
 import SyntaxTree from 'core/syntax-tree';
 import Table from 'dash-table/components/Table';
-import { Dataframe, IVirtualizationSettings } from 'dash-table/components/Table/props';
+import { Dataframe, IVirtualizationSettings, Virtualization } from 'dash-table/components/Table/props';
 
 export default class VirtualizationAdapter implements ITarget {
     constructor(private readonly target: Table) {
@@ -56,7 +56,7 @@ export default class VirtualizationAdapter implements ITarget {
         return this.target.props.virtualization_settings;
     }
 
-    get virtualization(): 'fe' | 'be' | boolean {
+    get virtualization(): Virtualization {
         return this.target.props.virtualization;
     }
 
