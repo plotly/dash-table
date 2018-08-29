@@ -2,7 +2,7 @@
 import * as R from 'ramda';
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {Table} from 'dash-table';
+import { DashComponent } from 'dash-table';
 import {mockData} from './data';
 import { memoizeOne } from 'core/memoizer';
 
@@ -59,7 +59,7 @@ class App extends Component {
     }
 
     render() {
-        return (<Table
+        return (<DashComponent
             setProps={this.setProps}
             {...this.state.tableProps}
             {...{ filtering: 'fe', filtering_settings: this.state.filter }}
