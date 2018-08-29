@@ -1,5 +1,5 @@
-import DashTable from 'dash-table/component';
+import Table from 'dash-table/component';
 
 export {
-    DashTable
+    Table
 };

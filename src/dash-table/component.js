@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import Table from 'dash-table/components/Table';
+import RealTable from 'dash-table/components/Table';
 
 import 'dash-table/style/component.less';
 
-export default class DashComponent extends Component {
+export default class Table extends Component {
     render() {
-        return (<Table {...this.props} />);
+        return (<RealTable {...this.props} />);
     }
 }
 
@@ -166,5 +166,5 @@ export const propTypes = {
     virtual_dataframe_indices: PropTypes.arrayOf(PropTypes.number)
 };
 
-DashComponent.defaultProps = defaultProps;
-DashComponent.propTypes = propTypes;
+Table.defaultProps = defaultProps;
+Table.propTypes = propTypes;
