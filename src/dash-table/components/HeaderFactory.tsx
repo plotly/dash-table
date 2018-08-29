@@ -22,10 +22,20 @@ interface ICellOptions {
     virtualization: any;
 }
 
-interface IOptions extends ICellOptions {
+interface IOptions {
+    columns: any[];
+    dataframe: any;
+    mergeCells?: boolean;
     merge_duplicate_headers: boolean;
+    n_fixed_columns: number;
     n_fixed_rows: number;
+    row_deletable: boolean;
+    row_selectable: boolean;
+    setProps: (...args: any[]) => any;
     sorting: string | boolean;
+    sorting_settings: SortSettings;
+    virtualization: any;
+
 }
 
 const getColLength = (c: any) => (Array.isArray(c.name) ? c.name.length : 1);

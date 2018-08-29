@@ -1,3 +1,5 @@
+import { SortSettings } from 'core/sorting';
+
 export interface IProps {
     dataframe_previous?: any[];
     dataframe_timestamp?: number;
@@ -7,7 +9,7 @@ export interface IProps {
 
     id: string;
 
-    active_cell?: [number, number] | undefined;
+    active_cell?: [number, number] | [];
     columns?: any[];
     column_conditional_dropdowns?: any[];
     column_conditional_styles?: any[];
@@ -17,7 +19,7 @@ export interface IProps {
     editable?: boolean;
     filtering?: 'fe' | 'be' | boolean;
     filtering_settings?: string;
-    merge_duplicated_headers?: boolean;
+    merge_duplicate_headers?: boolean;
     navigation?: 'page';
     n_fixed_columns?: number;
     n_fixed_rows?: number;
@@ -29,13 +31,14 @@ export interface IProps {
     selected_rows?: number[];
     setProps?: (...args: any[]) => any;
     sorting?: 'fe' | 'be' | boolean;
-    sorting_settings?: { columnId: string | number, direction: 'asc' | 'desc' | 'none' }[];
+    sorting_settings?: SortSettings;
+    table_style?: { selector: string, rule: string }[];
     virtualization?: 'fe' | 'be' | boolean;
     virtualization_settings?: { displayed_pages: number, current_page: number, page_size: number };
 }
 
 export interface IDefaultProps {
-    active_cell: [number, number] | undefined;
+    active_cell: [number, number] | [];
     columns: any[];
     column_conditional_dropdowns: any[];
     column_conditional_styles: any[];
@@ -45,7 +48,7 @@ export interface IDefaultProps {
     editable: boolean;
     filtering: 'fe' | 'be' | boolean;
     filtering_settings: string;
-    merge_duplicated_headers: boolean;
+    merge_duplicate_headers: boolean;
     navigation: 'page';
     n_fixed_columns: number;
     n_fixed_rows: number;
@@ -56,7 +59,8 @@ export interface IDefaultProps {
     selected_cell: [number, number][];
     selected_rows: number[];
     sorting: 'fe' | 'be' | boolean;
-    sorting_settings: { columnId: string | number, direction: 'asc' | 'desc' | 'none' }[];
+    sorting_settings: SortSettings;
+    table_style: { selector: string, rule: string }[];
     virtual_dataframe: any[];
     virtual_dataframe_indices: number[];
     virtualization: 'fe' | 'be' | boolean;
