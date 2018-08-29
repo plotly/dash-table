@@ -445,7 +445,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             dataframe
         } = this.props;
 
-        if(is_focused) {
+        if (is_focused || !editable) {
             return;
         }
 
@@ -453,8 +453,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             e,
             active_cell,
             columns,
-            dataframe,
-            editable
+            dataframe
         );
 
         if (result) {

@@ -28,8 +28,7 @@ export default class DataframeCopyPaste {
         ev: ClipboardEvent,
         activeCell: ActiveCell,
         columns: Columns,
-        dataframe: Dataframe,
-        editable: boolean
+        dataframe: Dataframe
     ): { dataframe: Dataframe, columns: Columns } | void {
         const text = Clipboard.get(ev);
         Logger.warning('clipboard data: ', text);
@@ -75,7 +74,7 @@ export default class DataframeCopyPaste {
                 const jOffset = activeCell[1] + j;
                 // let newDataframe = dataframe;
                 const col = newColumns[jOffset];
-                if (colIsEditable(editable, col)) {
+                if (colIsEditable(true, col)) {
                     newDataframe = R.set(
                         R.lensPath([iOffset, col.id]),
                         cell,
