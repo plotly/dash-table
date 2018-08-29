@@ -5,7 +5,7 @@ import { memoizeOne } from 'core/memoizer';
 
 import VirtualizationFactory from 'dash-table/virtualization/Factory';
 
-import ControlledTable from './ControlledTable';
+import ControlledTable from 'dash-table/components/ControlledTable';
 import { PropsWithDefaults } from './props';
 import VirtualizationAdapter from './VirtualizationAdapter';
 

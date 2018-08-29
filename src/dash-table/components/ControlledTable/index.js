@@ -12,7 +12,7 @@ import {
 } from 'dash-table/utils/unicode';
 import { selectionCycle } from 'dash-table/utils/navigation';
 
-import { propTypes } from 'dash-table/component';
+import { propTypes } from 'dash-table/Table';
 
 import HeaderFactory from 'dash-table/components/HeaderFactory';
 import RowFactory from 'dash-table/components/RowFactory';

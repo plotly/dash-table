@@ -1,5 +1,5 @@
 {
-  "src/dash-table/component.js": {
+  "src/dash-table/Table.js": {
     "description": "",
     "displayName": "Table",
     "methods": [],
