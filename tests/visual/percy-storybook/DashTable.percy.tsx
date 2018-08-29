@@ -1,6 +1,6 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import DashTable from 'dash-table/component';
+import DashTable from 'dash-table/Table';
 
 import fixtures from './fixtures';
 
