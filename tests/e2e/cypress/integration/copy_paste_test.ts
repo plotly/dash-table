@@ -13,10 +13,11 @@ describe('copy paste', () => {
 
         DashTable
             .getCell(0, 0)
-            .within(() => cy.get('.cell-value').should('have.html', '10'));
-
-        DashTable.getCell(0, 1)
-            .within(() => cy.get('.cell-value').should('have.html', 'MODIFIED'));
+            .within(() => cy.get('.cell-value').should('have.html', '10'))
+            .then(() => {
+                DashTable.getCell(0, 1)
+                    .within(() => cy.get('.cell-value').should('have.html', 'MODIFIED'));
+            });
     });
 
     it('can do BE roundtrip on copy-paste', () => {

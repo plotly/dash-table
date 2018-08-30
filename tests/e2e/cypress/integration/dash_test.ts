@@ -22,12 +22,12 @@ describe('dash basic', () => {
         DOM.focused.then($input => {
             const initialValue = $input.val();
 
-            DOM.focused.type(`abc${Key.Enter}`);
-
-            cy.get('#container').should(
-                'have.value',
-                `[249][0] = ${initialValue} -> abc${initialValue}`
-            );
+            DOM.focused.type(`abc${Key.Enter}`).then(() => {
+                cy.get('#container').should(
+                    'have.value',
+                    `[249][0] = ${initialValue} -> abc${initialValue}`
+                );
+            });
         });
     });
 });
