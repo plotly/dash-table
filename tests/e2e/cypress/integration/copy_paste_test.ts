@@ -1,7 +1,6 @@
 import DashTable from 'cypress/DashTable';
 import DOM from 'cypress/DOM';
 import Key from 'cypress/Key';
-import Resolve from 'cypress/Resolve';
 
 describe('copy paste', () => {
     beforeEach(() => {
@@ -21,11 +20,11 @@ describe('copy paste', () => {
     });
 
     it('can do BE roundtrip on copy-paste', async () => {
-        await Resolve(DashTable.getCell(0, 0).click());
-        await Resolve(DOM.focused.type(`${Key.Control}c`));
+        DashTable.getCell(0, 0).click();
+        DOM.focused.type(`${Key.Control}c`);
 
-        await Resolve(DashTable.getCell(1, 0).click());
-        await Resolve(DOM.focused.type(`${Key.Control}v`));
+        DashTable.getCell(1, 0).click();
+        DOM.focused.type(`${Key.Control}v`);
 
         DashTable
             .getCell(1, 1)

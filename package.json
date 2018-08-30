@@ -16,7 +16,7 @@
     "private::lint.js": "eslint src",
     "private::lint.ts": "tslint --project . src/**/*.ts",
     "private::opentests": "cypress open",
-    "private::runtests": "cypress run",
+    "private::runtests": "cypress run --browser chrome",
     "private::test-e2e": "run-p --race private::host* private::runtests",
     "private::test-visual": "build-storybook && percy-storybook",
     "build.watch": "webpack-dev-server --content-base dash_table --mode development",
