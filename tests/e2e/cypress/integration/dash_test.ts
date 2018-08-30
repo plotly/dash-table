@@ -18,15 +18,13 @@ describe('dash basic', () => {
     // https://github.com/plotly/dash-table/issues/50
     it('can edit last and update dataframe on "enter"', () => {
         DashTable.getCell(249, 0).click();
-
         DOM.focused.then($input => {
             const initialValue = $input.val();
 
-            DOM.focused.type(`abc${Key.Enter}`).then(() => {
-                cy.get('#container').should(
-                    'have.value',
-                    `[249][0] = ${initialValue} -> abc${initialValue}`
-                );
+            DOM.focused.type(`abc${Key.Enter}`);
+
+            cy.get('#container').should($container => {
+                expect($container.first()[0].innerText).to.equal(`[249][0] = ${initialValue} -> abc${initialValue}`);
             });
         });
     });
