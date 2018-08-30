@@ -7,7 +7,7 @@ describe('navigate', () => {
         cy.visit('http://localhost:8080');
     });
 
-    it('does not change column width', async () => {
+    it('does not change column width', () => {
         DashTable.getCell(3, 3).then(startCell => {
             const startWidth = startCell.outerWidth();
 
@@ -38,7 +38,7 @@ describe('navigate', () => {
                 DashTable.getCell(4, 3).within(() => cy.get('.cell-value').should('not.have.class', 'focused'));
             });
 
-            it('does not focus on next cell input on "tab"', async () => {
+            it('does not focus on next cell input on "tab"', () => {
                 cy.tab();
 
                 DashTable.getCell(3, 3).should('not.have.class', 'focused');

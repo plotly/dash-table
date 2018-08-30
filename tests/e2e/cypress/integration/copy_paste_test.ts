@@ -19,7 +19,7 @@ describe('copy paste', () => {
             .within(() => cy.get('.cell-value').should('have.html', 'MODIFIED'));
     });
 
-    it('can do BE roundtrip on copy-paste', async () => {
+    it('can do BE roundtrip on copy-paste', () => {
         DashTable.getCell(0, 0).click();
         DOM.focused.type(`${Key.Control}c`);
 

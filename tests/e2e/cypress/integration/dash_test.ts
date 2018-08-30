@@ -16,7 +16,7 @@ describe('dash basic', () => {
     });
 
     // https://github.com/plotly/dash-table/issues/50
-    it('can edit last and update dataframe on "enter"', async () => {
+    it('can edit last and update dataframe on "enter"', () => {
         DashTable.getCell(249, 0).click();
 
         DOM.focused.then($input => {
