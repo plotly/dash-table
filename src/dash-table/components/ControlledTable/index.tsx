@@ -592,7 +592,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
                 key={`${id}-table-container`}
                 ref='spreadsheet'
             >
-                {fixedColumns && (<table className='fixed-columns' style={{ border: '1px dashed red' }}>
+                {fixedColumns && (<table className='fixed-columns'>
                     <tbody>
                         {fixedColumns.map(((row, idx) => <tr
                             key={`row-${idx}`}
@@ -603,7 +603,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
                 </table>)}
 
                 <div className='dash-spreadsheet-right'>
-                    {fixedRows && (<table className='fixed-rows' style={{ border: '1px dashed blue' }}>
+                    {fixedRows && (<table className='fixed-rows'>
                         <tbody>
                             {fixedRows.map(((row, idx) => <tr
                                 key={`row-${idx}`}
@@ -617,7 +617,6 @@ export default class ControlledTable extends Component<ControlledTableProps> {
                         className='content'
                         key={`${id}-table`}
                         onPaste={this.onPaste}
-                        style={{ border: '1px dashed lightgreen' }}
                         tabIndex={-1}
                     >
                         {/* {hasFixedRows ? <tbody
