@@ -28,6 +28,17 @@
 }
 
 .dash-spreadsheet {
+    display: flex;
+    flex-direction: row;
+
+    .dash-spreadsheet-right {
+        display: flex;
+        flex-direction: column;
+    }
+
+}
+
+.dash-spreadsheet {
     box-sizing: border-box;
 
     // freeze columns
@@ -46,6 +57,8 @@
     // freeze rows
     &.freeze-top {
         overflow-y: auto;
+        // height:500px;
+        // width: 100px;
 
         table {
             width: 0 !important;

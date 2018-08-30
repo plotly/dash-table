@@ -11,13 +11,12 @@ import {
 } from 'dash-table/utils/unicode';
 import { selectionCycle } from 'dash-table/utils/navigation';
 
-import HeaderFactory from 'dash-table/components/HeaderFactory';
-import RowFactory from 'dash-table/components/RowFactory';
-import { DEFAULT_CELL_WIDTH } from 'dash-table/components/Row';
+import HeaderCellFactory, { DEFAULT_CELL_WIDTH } from 'dash-table/components/HeaderCellFactory';
 import { PropsWithDefaults } from 'dash-table/components/Table/props';
 import Logger from 'core/Logger';
 import AbstractVirtualizationStrategy from 'dash-table/virtualization/AbstractStrategy';
 import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
+import CellFactory from 'dash-table/components/CellFactory';
 
 const sortNumerical = R.sort<number>((a, b) => a - b);
 
@@ -28,10 +27,12 @@ type ControlledTableProps = PropsWithDefaults & {
 
 export default class ControlledTable extends Component<ControlledTableProps> {
     private stylesheet: Stylesheet;
+    private cellFactory: CellFactory;
 
     constructor(props: ControlledTableProps) {
         super(props);
 
+        this.cellFactory = new CellFactory();
         this.stylesheet = new Stylesheet(`#${props.id}`);
     }
 
@@ -205,6 +206,8 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         const {
             active_cell,
             columns,
+            row_deletable,
+            row_selectable,
             selected_cell,
             setProps,
             virtualizer
@@ -269,10 +272,14 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         const maxCol = selectedCols[selectedCols.length - 1];
 
         // visible col indices
+        const columnIndexOffset =
+            (row_deletable ? 1 : 0) +
+            (row_selectable ? 1 : 0);
+
         const vci: any[] = [];
         columns.forEach((c, i) => {
             if (!c.hidden) {
-                vci.push(i);
+                vci.push(i + columnIndexOffset);
             }
         });
 
@@ -354,16 +361,20 @@ export default class ControlledTable extends Component<ControlledTableProps> {
     }
 
     getNextCell = (event: any, { restrictToSelection, currentCell }: any) => {
-        const { columns, selected_cell, virtualizer } = this.props;
+        const { columns, row_deletable, row_selectable, selected_cell, virtualizer } = this.props;
         const dataframe = virtualizer.dataframe;
 
         const e = event;
         const vci: any[] = [];
 
+        const columnIndexOffset =
+            (row_deletable ? 1 : 0) +
+            (row_selectable ? 1 : 0);
+
         if (!restrictToSelection) {
             columns.forEach((c, i) => {
                 if (!c.hidden) {
-                    vci.push(i);
+                    vci.push(i + columnIndexOffset);
                 }
             });
         }
@@ -512,14 +523,6 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             row_selectable
         } = this.props;
 
-        const rows = [
-            ...HeaderFactory.createHeaders(this.props),
-            ...RowFactory.createRows(this.props)
-        ];
-
-        const fixedRows = rows.splice(0, n_fixed_rows);
-        const hasFixedRows = fixedRows.length !== 0;
-
         let typeIndex = 0;
         if (row_deletable) {
             this.stylesheet.setRule(
@@ -556,6 +559,27 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             );
         }, columns);
 
+        const { virtualizer } = this.props;
+        const dataframe = virtualizer.dataframe;
+
+        const cells = [
+            ...HeaderCellFactory.createHeaders(this.props),
+            ...this.cellFactory.createCells(
+                R.merge(this.props, { dataframe })
+            )];
+
+        // slice out fixed columns
+        const fixedColumns = n_fixed_columns ?
+            R.map(row => row.splice(0, n_fixed_columns), cells) :
+            null;
+
+        // slice out fixed rows
+        const fixedRows = n_fixed_rows ?
+            cells.splice(0, n_fixed_rows) :
+            null;
+
+        const hasFixedRows = fixedRows && fixedRows.length !== 0;
+
         const table_component = (
             <div
                 className={[
@@ -568,23 +592,50 @@ export default class ControlledTable extends Component<ControlledTableProps> {
                 key={`${id}-table-container`}
                 ref='spreadsheet'
             >
-                <table
-                    id={id}
-                    key={`${id}-table`}
-                    onPaste={this.onPaste}
-                    tabIndex={-1}
-                >
-                    {hasFixedRows ? <tbody
+                {fixedColumns && (<table className='fixed-columns' style={{ border: '1px dashed red' }}>
+                    <tbody>
+                        {fixedColumns.map(((row, idx) => <tr
+                            key={`row-${idx}`}
+                        >
+                            {row}
+                        </tr>))}
+                    </tbody>
+                </table>)}
+
+                <div className='dash-spreadsheet-right'>
+                    {fixedRows && (<table className='fixed-rows' style={{ border: '1px dashed blue' }}>
+                        <tbody>
+                            {fixedRows.map(((row, idx) => <tr
+                                key={`row-${idx}`}
+                            >
+                                {row}
+                            </tr>))}
+                        </tbody>
+                    </table>)}
+
+                    <table
+                        className='content'
+                        key={`${id}-table`}
+                        onPaste={this.onPaste}
+                        style={{ border: '1px dashed lightgreen' }}
+                        tabIndex={-1}
+                    >
+                        {/* {hasFixedRows ? <tbody
                         className={'frozen-top'}
                         ref='frozenTop'
                     >
                         {fixedRows}
-                    </tbody> : null}
+                    </tbody> : null} */}
 
-                    {<tbody>
-                        {rows}
-                    </tbody>}
-                </table>
+                        <tbody>
+                            {cells.map((rowOfCells, idx) => (<tr
+                                key={`row-${idx}`}
+                            >
+                                {rowOfCells}
+                            </tr>))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         );
 

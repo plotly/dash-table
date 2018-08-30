@@ -97,7 +97,7 @@ export const propTypes = {
     n_fixed_columns: PropTypes.number,
     n_fixed_rows: PropTypes.number,
     row_deletable: PropTypes.bool,
-    row_selectable: PropTypes.oneOf(['single', 'multi']),
+    row_selectable: PropTypes.oneOf(['single', 'multi', false]),
     selected_cell: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
     selected_rows: PropTypes.arrayOf(PropTypes.number),
     setProps: PropTypes.any,
@@ -108,7 +108,7 @@ export const propTypes = {
         rule: PropTypes.string
     })),
 
-    virtualization: PropTypes.oneOf(['fe', 'be', 'none']),
+    virtualization: PropTypes.oneOf(['fe', 'be', true, false]),
     virtualization_settings: PropTypes.shape({
         displayed_pages: PropTypes.number,
         current_page: PropTypes.number,

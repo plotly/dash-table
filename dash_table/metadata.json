@@ -134,6 +134,10 @@
             {
               "value": "'multi'",
               "computed": false
+            },
+            {
+              "value": "false",
+              "computed": false
             }
           ]
         },
@@ -236,7 +240,11 @@
               "computed": false
             },
             {
-              "value": "'none'",
+              "value": "true",
+              "computed": false
+            },
+            {
+              "value": "false",
               "computed": false
             }
           ]
