@@ -476,13 +476,13 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             );
     }
 
-    loadNext() {
+    loadNext = () => {
         const { virtualizer } = this.props;
 
         virtualizer.loadNext();
     }
 
-    loadPrevious() {
+    loadPrevious = () => {
         const { virtualizer } = this.props;
 
         virtualizer.loadPrevious();
