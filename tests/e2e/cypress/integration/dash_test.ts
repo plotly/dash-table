@@ -1,7 +1,6 @@
 import DashTable from 'cypress/DashTable';
 import DOM from 'cypress/DOM';
 import Key from 'cypress/Key';
-import Resolve from 'cypress/Resolve';
 
 describe('dash basic', () => {
     beforeEach(() => {
@@ -20,12 +19,15 @@ describe('dash basic', () => {
     it('can edit last and update dataframe on "enter"', async () => {
         DashTable.getCell(249, 0).click();
 
-        const initialValue = await Resolve(DOM.focused.then($input => {
-            return $input.val();
-        }));
+        DOM.focused.then($input => {
+            const initialValue = $input.val();
 
-        DOM.focused.type(`abc${Key.Enter}`);
+            DOM.focused.type(`abc${Key.Enter}`);
 
-        cy.get('#container').should('have.value', `[249][0] = ${initialValue} -> abc${initialValue}`);
+            cy.get('#container').should(
+                'have.value',
+                `[249][0] = ${initialValue} -> abc${initialValue}`
+            );
+        });
     });
 });

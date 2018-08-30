@@ -1,7 +1,6 @@
 import DashTable from 'cypress/DashTable';
 import DOM from 'cypress/DOM';
 import Key from 'cypress/Key';
-import Resolve from 'cypress/Resolve';
 
 describe('navigate', () => {
     beforeEach(() => {
@@ -9,14 +8,15 @@ describe('navigate', () => {
     });
 
     it('does not change column width', async () => {
-        const startWidth = await Resolve(DashTable.getCell(3, 3)).then(res => res.outerWidth());
+        DashTable.getCell(3, 3).then(startCell => {
+            const startWidth = startCell.outerWidth();
 
-        await Resolve(DashTable.getCell(3, 3).click());
+            DashTable.getCell(3, 3).then(endCell => {
+                const endWidth = endCell.outerWidth();
 
-        const endWidth = await Resolve(DashTable.getCell(3, 3).then(res => res.outerWidth()));
-
-        expect(endWidth).to.equal(startWidth);
-
+                expect(endWidth).to.equal(startWidth);
+            });
+        });
     });
 
     describe('with keyboard', () => {
