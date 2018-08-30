@@ -1,6 +1,6 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import DashTable from 'dash-table/components/Table';
+import DashTable from 'dash-table/Table';
 
 import fixtures from './fixtures';
 
@@ -12,7 +12,7 @@ storiesOf('DashTable/Without Data', module)
         id='table'
         dataframe={[]}
         columns={[{ id: 'a', name: 'A' }]}
-        sortable={false}
+        sorting={false}
         editable={false}
         row_deletable={false}
         row_selectable={false}
@@ -36,7 +36,7 @@ storiesOf('DashTable/With Data')
             { id: 'c', name: 'C', width: '200px' }
         ]}
         editable={false}
-        sortable={false}
+        sorting={false}
         row_deletable={false}
         row_selectable={false}
     />));

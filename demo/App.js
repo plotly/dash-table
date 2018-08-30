@@ -2,7 +2,7 @@
 import * as R from 'ramda';
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {Table} from 'dash-table';
+import { Table } from 'dash-table';
 import {mockData} from './data';
 import { memoizeOne } from 'core/memoizer';
 
