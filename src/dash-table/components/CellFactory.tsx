@@ -6,27 +6,30 @@ import { ICellFactoryOptions, SelectedCells } from 'dash-table/components/Table/
 import * as actions from 'dash-table/utils/actions';
 
 export default class CellFactory {
-    private readonly handlers = new Map();
+    // private readonly handlers = new Map();
 
-    private isCellSelected(selectedCells: SelectedCells, idx: number, i: number) {
-        return R.contains([idx, i], selectedCells);
+    private isCellSelected = (selectedCells: SelectedCells, idx: number, i: number) => {
+        return selectedCells && R.contains([idx, i], selectedCells);
     }
 
-    private getEventHandler(fn: Function, options: ICellFactoryOptions, idx: number, i: number): any {
-        const fnHandler = (this.handlers.get(fn) || this.handlers.set(fn, new Map()).get(fn));
-        const idxHandler = (fnHandler.get(idx) || fnHandler.set(idx, new Map()).get(idx));
+    private getEventHandler = (fn: Function, options: ICellFactoryOptions, idx: number, i: number): any => {
+        // const fnHandler = (this.handlers.get(fn) || this.handlers.set(fn, new Map()).get(fn));
+        // const idxHandler = (fnHandler.get(idx) || fnHandler.set(idx, new Map()).get(idx));
 
-        return (
-            idxHandler.get(i) ||
-            (idxHandler.set(i, fn.bind(this, options, idx, i)).get(i))
-        ) as Function;
+        // return (
+        //     idxHandler.get(i) ||
+        //     (idxHandler.set(i, fn.bind(this, idx, i)).get(i))
+        // ).bind(options) as Function;
+        return (e: any) => fn(idx, i, options, e);
     }
 
-    private handleClick(options: ICellFactoryOptions, idx: number, i: number, e: any) {
+    private handleClick = (idx: number, i: number, options: ICellFactoryOptions, e: any) => {
         const {
             columns,
             editable,
             is_focused,
+            row_deletable,
+            row_selectable,
             selected_cell,
             setProps
         } = options;
@@ -53,10 +56,14 @@ export default class CellFactory {
         };
 
         // visible col indices
+        const columnIndexOffset =
+            (row_deletable ? 1 : 0) +
+            (row_selectable ? 1 : 0);
+
         const vci: any[] = [];
         columns.forEach((c, ci: number) => {
             if (!c.hidden) {
-                vci.push(ci);
+                vci.push(ci + columnIndexOffset);
             }
         });
 
@@ -79,10 +86,11 @@ export default class CellFactory {
         } else {
             newProps.selected_cell = [cellLocation];
         }
+
         setProps(newProps);
     }
 
-    private handleDoubleClick(options: ICellFactoryOptions, idx: number, i: number, e: any) {
+    private handleDoubleClick = (idx: number, i: number, options: ICellFactoryOptions, e: any) => {
         const {
             editable,
             is_focused,
@@ -104,7 +112,7 @@ export default class CellFactory {
         }
     }
 
-    private handleChange(options: ICellFactoryOptions, idx: number, i: number, e: any) {
+    private handleChange = (idx: number, i: number, options: ICellFactoryOptions, e: any) => {
         const {
             columns,
             dataframe,
@@ -128,7 +136,7 @@ export default class CellFactory {
         });
     }
 
-    private handlePaste(options: ICellFactoryOptions, idx: number, i: number, e: any) {
+    private handlePaste = (idx: number, i: number, options: ICellFactoryOptions, e: any) => {
         const {
             is_focused,
             selected_cell
@@ -141,7 +149,7 @@ export default class CellFactory {
         }
     }
 
-    rowSelectCell(options: ICellFactoryOptions, idx: number) {
+    private rowSelectCell(options: ICellFactoryOptions, idx: number) {
         const {
             n_fixed_columns,
             setProps,
@@ -182,7 +190,7 @@ export default class CellFactory {
         );
     }
 
-    rowDeleteCell(options: ICellFactoryOptions, idx: number) {
+    private rowDeleteCell(options: ICellFactoryOptions, idx: number) {
         const {
             n_fixed_columns,
             setProps,

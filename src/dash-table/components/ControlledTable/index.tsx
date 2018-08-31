@@ -12,7 +12,7 @@ import {
 import { selectionCycle } from 'dash-table/utils/navigation';
 
 import HeaderCellFactory, { DEFAULT_CELL_WIDTH } from 'dash-table/components/HeaderCellFactory';
-import { PropsWithDefaults } from 'dash-table/components/Table/props';
+import { PropsWithDefaults, SetProps } from 'dash-table/components/Table/props';
 import Logger from 'core/Logger';
 import AbstractVirtualizationStrategy from 'dash-table/virtualization/AbstractStrategy';
 import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
@@ -21,7 +21,7 @@ import CellFactory from 'dash-table/components/CellFactory';
 const sortNumerical = R.sort<number>((a, b) => a - b);
 
 type ControlledTableProps = PropsWithDefaults & {
-    setProps: (...args: any[]) => any;
+    setProps: SetProps;
     virtualizer: AbstractVirtualizationStrategy
 };
 
@@ -562,11 +562,12 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         const { virtualizer } = this.props;
         const dataframe = virtualizer.dataframe;
 
+        const cellProps = R.merge(this.props, { dataframe });
+
         const cells = [
             ...HeaderCellFactory.createHeaders(this.props),
-            ...this.cellFactory.createCells(
-                R.merge(this.props, { dataframe })
-            )];
+            ...this.cellFactory.createCells(cellProps)
+        ];
 
         // slice out fixed columns
         const fixedColumns = n_fixed_columns ?
