@@ -55,17 +55,17 @@ export default class CellFactory {
             return;
         }
 
-        e.preventDefault();
-        const cellLocation: [number, number] = [idx, i];
-        const newProps: Partial<ICellFactoryOptions> = {
-            is_focused: false,
-            active_cell: cellLocation
-        };
-
         // visible col indices
         const columnIndexOffset =
             (row_deletable ? 1 : 0) +
             (row_selectable ? 1 : 0);
+
+        e.preventDefault();
+        const cellLocation: [number, number] = [idx, i + columnIndexOffset];
+        const newProps: Partial<ICellFactoryOptions> = {
+            is_focused: false,
+            active_cell: cellLocation
+        };
 
         const vci: any[] = [];
         columns.forEach((c, ci: number) => {
@@ -270,7 +270,7 @@ export default class CellFactory {
 
                 return (<Cell
                     key={`${column.id}-${visibleIndex}`}
-                    active={active_cell[0] === rowIndex && active_cell[1] === index}
+                    active={active_cell[0] === rowIndex && active_cell[1] === index + offset}
                     classes={classes}
                     clearable={column.clearable}
                     conditionalDropdowns={conditionalDropdowns}
@@ -283,7 +283,7 @@ export default class CellFactory {
                     onPaste={this.getEventHandler(this.handlePaste, rowIndex, index)}
                     onChange={this.getEventHandler(this.handleChange, rowIndex, index)}
                     property={column.id}
-                    selected={R.contains([rowIndex, index], selected_cell)}
+                    selected={R.contains([rowIndex, index + offset], selected_cell)}
                     staticDropdown={staticDropdown}
                     staticStyle={staticStyle}
                     tableId={id}
