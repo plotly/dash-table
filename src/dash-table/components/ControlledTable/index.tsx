@@ -613,6 +613,12 @@ export default class ControlledTable extends Component<ControlledTableProps> {
                         }</div>))}
                 </div>
             </div>
+            {!this.displayPagination ? null : (
+                <div>
+                    <button className='previous-page' onClick={this.loadPrevious}>Previous</button>
+                    <button className='next-page' onClick={this.loadNext}>Next</button>
+                </div>
+            )}
         </div>);
     }
 }
