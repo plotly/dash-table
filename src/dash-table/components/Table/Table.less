@@ -86,6 +86,9 @@
 
 .dash-spreadsheet {
     box-sizing: border-box;
+    border-left: lightgrey 1px solid;
+    border-top: lightgrey 1px solid;
+    margin: 20px;
 
     // freeze columns
     &.freeze-left {
@@ -153,40 +156,16 @@
         }
     }
 
+    .cell {
+        td, th {
+            .inset-shadow(var(--border), 0px, 0px, -1px, -1px);
 
-    // cell border styling
-    tbody {
-        tr {
-            td, th {
-                .inset-shadow(var(--border), 1px, 0px, 0px, -1px);
-
-                &:focus {
-                    outline: none;
-                }
-
-                &.focused + td {
-                    .inset-shadow(var(--border), 0px, 0px, 0px, -1px);
-
-                    &:last-of-type {
-                        .inset-shadow(var(--border), 0px, 0px, -1px, -1px);
-                    }
-                }
-
-                &:last-of-type {
-                    .inset-shadow(var(--border), 1px, 0px, -1px, -1px);
-                }
+            &:focus {
+                outline: none;
             }
-        }
 
-        &:first-of-type {
-            tr:first-of-type {
-                td, th {
-                    .inset-shadow(var(--border), 1px, 1px, 0px, -1px);
-
-                    &:last-of-type {
-                        .inset-shadow(var(--border), 1px, 1px, -1px, -1px);
-                    }
-                }
+            &.focused + td {
+                .inset-shadow(var(--border), 0px, 0px, 0px, -1px);
             }
         }
     }
