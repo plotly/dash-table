@@ -15,7 +15,7 @@ import HeaderCellFactory, { DEFAULT_CELL_WIDTH } from 'dash-table/components/Hea
 import Logger from 'core/Logger';
 import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
 import CellFactory from 'dash-table/components/CellFactory';
-import { ControlledTableProps } from 'dash-table/components/Table/props';
+import { ControlledTableProps, Dataframe, Columns, RowSelection } from 'dash-table/components/Table/props';
 
 const sortNumerical = R.sort<number>((a, b) => a - b);
 
@@ -58,46 +58,25 @@ export default class ControlledTable extends Component<ControlledTableProps> {
     }
 
     componentDidUpdate() {
-        const { n_fixed_columns = 0, n_fixed_rows = 0 } = this.props;
-        if (!n_fixed_columns && !n_fixed_rows) {
-            return;
+        const { r0c0, r0c1, r1c1 } = this.refs as { [key: string]: HTMLElement };
+
+        const r0c0Width = getComputedStyle(r0c0).width;
+
+        if (r0c0Width !== r0c1.style.marginLeft) {
+            r0c1.style.paddingLeft = r0c0Width;
         }
 
-        const { container, frozenTop } = this.refs as { [key: string]: HTMLElement };
+        let trs = r0c1.querySelectorAll('tr');
+        r0c0.querySelectorAll('tr').forEach((tr, index) => {
+            const tr2 = trs[index];
 
-        if (n_fixed_columns > 0) {
-            // Find the height of the <tr /> of the first <td /> and <th />
-            // Assume that these table rows are representative in style with the rest of the table
-            // Use them to force the height of the fixed cells; base styling vs. rendering can be off
-
-            let fixedTdParent = container.querySelector(`td.frozen-left`);
-            let fixedThParent = container.querySelector(`th.frozen-left`);
-
-            fixedTdParent = fixedTdParent && fixedTdParent.parentElement;
-            fixedThParent = fixedThParent && fixedThParent.parentElement;
-
-            const tdHeight = fixedTdParent && parseInt(getComputedStyle(fixedTdParent).height || '', 10) || 0;
-            const thHeight = fixedThParent && parseInt(getComputedStyle(fixedThParent).height || '', 10) || 0;
-
-            this.stylesheet.setRule(`td.frozen-left`, `height: ${tdHeight}px;`);
-            this.stylesheet.setRule(`th.frozen-left`, `height: ${thHeight}px;`);
-        }
-
-        let xOffset = 0;
-        R.range(0, n_fixed_columns).forEach(index => {
-            this.stylesheet.setRule(`.frozen-left-${index}`, `margin-left: ${xOffset}px;`);
-
-            const fixedCell = container.querySelector(`td.frozen-left-${index}`);
-            if (fixedCell) {
-                xOffset += (fixedCell.clientWidth || parseInt(getComputedStyle(fixedCell).width || '', 10) || 0);
-            }
+            tr.style.height = getComputedStyle(tr2).height;
         });
-        this.stylesheet.setRule(`.dash-spreadsheet`, `padding-left: ${xOffset}px; padding-top: ${frozenTop ? frozenTop.clientHeight : 0}px;`);
 
-        R.forEach<HTMLElement>(
-            cell => cell.style.height = cell.parentElement ? `${cell.parentElement.clientHeight}` : null,
-            Array.from(container.querySelectorAll('tr th.frozen-left'))
-        );
+        const contentTr = r1c1.querySelector('tr');
+        if (contentTr) {
+            this.stylesheet.setRule('.cell-1-0 tr', `height: ${getComputedStyle(contentTr).height}`);
+        }
     }
 
     handleClickOutside = (event: any) => {
@@ -507,6 +486,97 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         this.stylesheet.setRule(`.frozen-left`, `margin-top: ${-ev.target.scrollTop}px;`);
     }
 
+    applyStyle = (columns: Columns, deletable: boolean, selectable: RowSelection) => {
+        let typeIndex = 0;
+
+        if (deletable) {
+            ++typeIndex;
+
+            this.stylesheet.setRule(
+                `.dash-spreadsheet td.column-${typeIndex}`,
+                `width: 30px; max-width: 30px; min-width: 30px;`
+            );
+            this.stylesheet.setRule(
+                `.dash-spreadsheet th.column-${typeIndex}`,
+                `width: 30px; max-width: 30px; min-width: 30px;`
+            );
+        }
+
+        if (selectable) {
+            ++typeIndex;
+
+            this.stylesheet.setRule(
+                `.dash-spreadsheet td.column-${typeIndex}`,
+                `width: 30px; max-width: 30px; min-width: 30px;`
+            );
+            this.stylesheet.setRule(
+                `.dash-spreadsheet th.column-${typeIndex}`,
+                `width: 30px; max-width: 30px; min-width: 30px;`
+            );
+        }
+
+        R.forEach(column => {
+            const width = Stylesheet.unit(column.width || DEFAULT_CELL_WIDTH, 'px');
+            ++typeIndex;
+
+            this.stylesheet.setRule(
+                `.dash-spreadsheet td.column-${typeIndex}`,
+                `width: ${width}; max-width: ${width}; min-width: ${width};`
+            );
+            this.stylesheet.setRule(
+                `.dash-spreadsheet th.column-${typeIndex}`,
+                `width: ${width}; max-width: ${width}; min-width: ${width};`
+            );
+        }, columns);
+    }
+
+    renderFragment = (cells: any[][] | null) => (
+        cells ?
+            (<table
+                onPaste={this.onPaste}
+                tabIndex={-1}
+            >
+                <tbody>
+                    {cells.map(
+                        (row, idx) => <tr key={`row-${idx}`}>{row}</tr>)
+                    }
+                </tbody>
+            </table>) :
+            null
+    )
+
+    getFragments = (dataframe: Dataframe, fixedColumns: number, fixedRows: number) => {
+        const cells = [
+            ...HeaderCellFactory.createHeaders(this.props),
+            ...this.cellFactory.createCells(dataframe)
+        ];
+
+        // slice out fixed columns
+        const fixedColumnCells = fixedColumns ?
+            R.map(row => row.splice(0, fixedColumns), cells) :
+            null;
+
+        // slice out fixed rows
+        const fixedRowCells = fixedRows ?
+            cells.splice(0, fixedRows) :
+            null;
+
+        const fixedRowAndColumnCells = fixedRows && fixedColumnCells ?
+            fixedColumnCells.splice(0, fixedRows) :
+            null;
+
+        return [
+            [this.renderFragment(fixedRowAndColumnCells), this.renderFragment(fixedRowCells)],
+            [this.renderFragment(fixedColumnCells), this.renderFragment(cells)]
+        ];
+    }
+
+    onScroll = (ev: any) => {
+        const { r1c2 } = this.refs as { [key: string]: HTMLElement };
+
+        r1c2.style.marginLeft = `${-ev.target.scrollLeft}`;
+    }
+
     render() {
         const {
             id,
@@ -514,144 +584,35 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             n_fixed_columns,
             n_fixed_rows,
             row_deletable,
-            row_selectable
+            row_selectable,
+            virtualizer
         } = this.props;
 
-        let typeIndex = 0;
-        if (row_deletable) {
-            this.stylesheet.setRule(
-                `.dash-spreadsheet td:nth-of-type(${++typeIndex})`,
-                `width: 30px; max-width: 30px; min-width: 30px;`
-            );
-            this.stylesheet.setRule(
-                `.dash-spreadsheet th:nth-of-type(${typeIndex})`,
-                `width: 30px; max-width: 30px; min-width: 30px;`
-            );
-        }
-
-        if (row_selectable) {
-            this.stylesheet.setRule(
-                `.dash-spreadsheet td:nth-of-type(${++typeIndex})`,
-                `width: 30px; max-width: 30px; min-width: 30px;`
-            );
-            this.stylesheet.setRule(
-                `.dash-spreadsheet th:nth-of-type(${typeIndex})`,
-                `width: 30px; max-width: 30px; min-width: 30px;`
-            );
-        }
-
-        R.forEach(column => {
-            const width = Stylesheet.unit(column.width || DEFAULT_CELL_WIDTH, 'px');
-
-            this.stylesheet.setRule(
-                `.dash-spreadsheet td:nth-of-type(${++typeIndex})`,
-                `width: ${width}; max-width: ${width}; min-width: ${width};`
-            );
-            this.stylesheet.setRule(
-                `.dash-spreadsheet th:nth-of-type(${typeIndex})`,
-                `width: ${width}; max-width: ${width}; min-width: ${width};`
-            );
-        }, columns);
-
-        const { virtualizer } = this.props;
         const dataframe = virtualizer.dataframe;
 
-        const cells = [
-            ...HeaderCellFactory.createHeaders(this.props),
-            ...this.cellFactory.createCells(dataframe)
-        ];
+        this.applyStyle(columns, row_deletable, row_selectable);
 
-        // slice out fixed columns
-        const fixedColumns = n_fixed_columns ?
-            R.map(row => row.splice(0, n_fixed_columns), cells) :
-            null;
+        const grid = this.getFragments(dataframe, n_fixed_columns, n_fixed_rows);
 
-        // slice out fixed rows
-        const fixedRows = n_fixed_rows ?
-            cells.splice(0, n_fixed_rows) :
-            null;
-
-        const hasFixedRows = fixedRows && fixedRows.length !== 0;
-
-        const table_component = (
-            <div
-                className={[
-                    'dash-spreadsheet',
-                    ...(hasFixedRows ? ['freeze-top'] : []),
-                    ...(n_fixed_columns ? ['freeze-left'] : [])
-                ].join(' ')}
-                onKeyDown={this.handleKeyDown}
-                onScroll={this.onContainerScroll}
-                key={`${id}-table-container`}
-                ref='spreadsheet'
-            >
-                {fixedColumns && (<table className='fixed-columns'>
-                    <tbody>
-                        {fixedColumns.map(((row, idx) => <tr
-                            key={`row-${idx}`}
-                        >
-                            {row}
-                        </tr>))}
-                    </tbody>
-                </table>)}
-
-                <div className='dash-spreadsheet-right'>
-                    {fixedRows && (<table className='fixed-rows'>
-                        <tbody>
-                            {fixedRows.map(((row, idx) => <tr
-                                key={`row-${idx}`}
-                            >
-                                {row}
-                            </tr>))}
-                        </tbody>
-                    </table>)}
-
-                    <table
-                        className='content'
-                        key={`${id}-table`}
-                        onPaste={this.onPaste}
-                        tabIndex={-1}
-                    >
-                        {/* {hasFixedRows ? <tbody
-                        className={'frozen-top'}
-                        ref='frozenTop'
-                    >
-                        {fixedRows}
-                    </tbody> : null} */}
-
-                        <tbody>
-                            {cells.map((rowOfCells, idx) => (<tr
-                                key={`row-${idx}`}
-                            >
-                                {rowOfCells}
-                            </tr>))}
-                        </tbody>
-                    </table>
+        return (<div id={id}>
+            <div className='dash-spreadsheet-container'>
+                <div
+                    className='dash-spreadsheet'
+                    onKeyDown={this.handleKeyDown}
+                >
+                    {grid.map((row, rowIndex) => (<div
+                        key={`r${rowIndex}`}
+                        ref={`r${rowIndex}`}
+                        className={`row row-${rowIndex}`}
+                        onScroll={this.onScroll}
+                    >{row.map((cell, columnIndex) => (<div
+                        key={columnIndex}
+                        ref={`r${rowIndex}c${columnIndex}`}
+                        className={`cell cell-${rowIndex}-${columnIndex}`}
+                    >{cell}</div>))
+                        }</div>))}
                 </div>
             </div>
-        );
-
-        return (
-            <div id={id}>
-                <div className={[
-                    'dash-spreadsheet-clipper',
-                    ...(hasFixedRows ? ['freeze-top'] : []),
-                    ...(n_fixed_columns ? ['freeze-left'] : [])
-                ].join(' ')}>
-                    <div
-                        className='dash-spreadsheet-container'
-                        ref='container'
-                    >
-                        {table_component}
-                    </div>
-                </div>
-                {!this.displayPagination ? null : (
-                    <div>
-                        <button className='previous-page' onClick={this.loadPrevious}>Previous</button>
-                        <button className='next-page' onClick={this.loadNext}>Next</button>
-                    </div>
-                )}
-            </div>
-        );
+        </div>);
     }
 }

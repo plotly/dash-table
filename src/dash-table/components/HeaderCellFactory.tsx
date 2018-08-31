@@ -183,6 +183,7 @@ export default class HeaderFactory {
                 key={`header-cell-${columnId}`}
                 colSpan={colSpan}
                 className={
+                    `column-${columnId + columnIndexOffset} ` +
                     (columnId === columns.length - 1 || columnId === R.last(columnIndices) ? 'cell--right-last ' : '')
                     // (visibleIndex < n_fixed_columns ? `frozen-left frozen-left-${visibleIndex}` : '')
 

@@ -8,6 +8,7 @@ import { memoizeOne } from 'core/memoizer';
 
 const clone = o => JSON.parse(JSON.stringify(o));
 
+
 class App extends Component {
     constructor() {
         super();

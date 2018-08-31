@@ -38,6 +38,52 @@
 
 }
 
+.dash-spreadsheet-container {
+    position: relative;
+}
+
+.dash-spreadsheet {
+    width: 500px !important;
+    height: 500px !important;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    .row-0 {
+        position: sticky;
+        top: 0;
+        left: 0;
+    }
+
+    .cell-0-0 {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+    }
+
+    .cell-0-1 {
+        position: sticky;
+        top: 0;
+    }
+
+    .row-1 {
+        overflow: scroll;
+        display: flex;
+        flex-direction: row;
+    }
+
+    .cell-1-0 {
+        position: sticky;
+        left: 0;
+        flex: 0 0 auto;
+    }
+
+    .cell-1-1 {
+        flex: 1 1 0;
+    }
+}
+
 .dash-spreadsheet {
     box-sizing: border-box;
 

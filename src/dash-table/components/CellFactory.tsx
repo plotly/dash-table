@@ -252,9 +252,9 @@ export default class CellFactory {
             const cells = visibleColumns.map((column, visibleIndex) => {
                 visibleIndex += offset;
 
-                const index = columns.indexOf(column) + offset;
+                const index = columns.indexOf(column);
 
-                const classes = [`column-${visibleIndex}`];
+                const classes = [`column-${index + offset}`];
 
                 let conditionalDropdowns = column_conditional_dropdowns.find((cd: any) => cd.id === column.id);
                 let staticDropdown = column_static_dropdown.find((sd: any) => sd.id === column.id);
