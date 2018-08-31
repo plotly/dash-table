@@ -237,14 +237,14 @@ export default class CellFactory {
             (row_deletable ? 1 : 0) +
             (row_selectable ? 1 : 0);
 
-        return dataframe.map((datum, idx) => {
-            const deleteCell = this.rowDeleteCell(options, idx);
-            const selectCell = this.rowSelectCell(options, idx);
+        return dataframe.map((datum, rowIndex) => {
+            const deleteCell = this.rowDeleteCell(options, rowIndex);
+            const selectCell = this.rowSelectCell(options, rowIndex);
 
-            const cells = columns.map((column, i) => {
-                i += offset;
+            const cells = visibleColumns.map((column, visibleIndex) => {
+                visibleIndex += offset;
 
-                const visibleIndex = visibleColumns.indexOf(column) + offset;
+                const index = columns.indexOf(column) + offset;
 
                 const classes = [`column-${visibleIndex}`];
 
@@ -261,8 +261,8 @@ export default class CellFactory {
                 staticStyle = staticStyle && staticStyle.style;
 
                 return (<Cell
-                    key={`${column.id}-${i}`}
-                    active={active_cell[0] === idx && active_cell[1] === i}
+                    key={`${column.id}-${visibleIndex}`}
+                    active={active_cell[0] === rowIndex && active_cell[1] === index}
                     classes={classes}
                     clearable={column.clearable}
                     conditionalDropdowns={conditionalDropdowns}
@@ -270,12 +270,12 @@ export default class CellFactory {
                     datum={datum}
                     editable={editable}
                     focused={!!is_focused}
-                    onClick={this.getEventHandler(this.handleClick, options, idx, i)}
-                    onDoubleClick={this.getEventHandler(this.handleDoubleClick, options, idx, i)}
-                    onPaste={this.getEventHandler(this.handlePaste, options, idx, i)}
-                    onChange={this.getEventHandler(this.handleChange, options, idx, i)}
+                    onClick={this.getEventHandler(this.handleClick, options, rowIndex, index)}
+                    onDoubleClick={this.getEventHandler(this.handleDoubleClick, options, rowIndex, index)}
+                    onPaste={this.getEventHandler(this.handlePaste, options, rowIndex, index)}
+                    onChange={this.getEventHandler(this.handleChange, options, rowIndex, index)}
                     property={column.id}
-                    selected={R.contains([idx, i], selected_cell)}
+                    selected={R.contains([rowIndex, index], selected_cell)}
                     staticDropdown={staticDropdown}
                     staticStyle={staticStyle}
                     tableId={id}
