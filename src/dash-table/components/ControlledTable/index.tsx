@@ -12,18 +12,12 @@ import {
 import { selectionCycle } from 'dash-table/utils/navigation';
 
 import HeaderCellFactory, { DEFAULT_CELL_WIDTH } from 'dash-table/components/HeaderCellFactory';
-import { PropsWithDefaults, SetProps } from 'dash-table/components/Table/props';
 import Logger from 'core/Logger';
-import AbstractVirtualizationStrategy from 'dash-table/virtualization/AbstractStrategy';
 import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
 import CellFactory from 'dash-table/components/CellFactory';
+import { ControlledTableProps } from 'dash-table/components/Table/props';
 
 const sortNumerical = R.sort<number>((a, b) => a - b);
-
-type ControlledTableProps = PropsWithDefaults & {
-    setProps: SetProps;
-    virtualizer: AbstractVirtualizationStrategy
-};
 
 export default class ControlledTable extends Component<ControlledTableProps> {
     private stylesheet: Stylesheet;
@@ -32,7 +26,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
     constructor(props: ControlledTableProps) {
         super(props);
 
-        this.cellFactory = new CellFactory();
+        this.cellFactory = new CellFactory(() => this.props);
         this.stylesheet = new Stylesheet(`#${props.id}`);
     }
 
@@ -562,11 +556,9 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         const { virtualizer } = this.props;
         const dataframe = virtualizer.dataframe;
 
-        const cellProps = R.merge(this.props, { dataframe });
-
         const cells = [
             ...HeaderCellFactory.createHeaders(this.props),
-            ...this.cellFactory.createCells(cellProps)
+            ...this.cellFactory.createCells(dataframe)
         ];
 
         // slice out fixed columns

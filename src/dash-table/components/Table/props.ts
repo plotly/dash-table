@@ -1,4 +1,5 @@
 import { SortSettings } from 'core/sorting';
+import AbstractVirtualizationStrategy from 'dash-table/virtualization/AbstractStrategy';
 
 export type ActiveCell = CellCoordinates | [];
 export type CellCoordinates = [number, number];
@@ -98,6 +99,11 @@ interface IDefaultProps {
 
 export type PropsWithDefaults = IProps & IDefaultProps;
 
+export type ControlledTableProps = PropsWithDefaults & {
+    setProps: SetProps;
+    virtualizer: AbstractVirtualizationStrategy
+};
+
 export interface ICellFactoryOptions {
     active_cell: ActiveCell;
     columns: Columns;
@@ -105,7 +111,6 @@ export interface ICellFactoryOptions {
     column_conditional_styles: any[];
     column_static_dropdown: any;
     column_static_style: any;
-    dataframe: Dataframe;
     editable: boolean;
     id: string;
     is_focused?: boolean;
@@ -116,4 +121,5 @@ export interface ICellFactoryOptions {
     selected_cell: SelectedCells;
     selected_rows: number[];
     setProps: SetProps;
+    virtualizer: AbstractVirtualizationStrategy;
 }

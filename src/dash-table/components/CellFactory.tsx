@@ -2,28 +2,35 @@ import * as R from 'ramda';
 import React from 'react';
 
 import Cell from 'dash-table/components/Cell';
-import { ICellFactoryOptions, SelectedCells } from 'dash-table/components/Table/props';
+import { ICellFactoryOptions, SelectedCells, Dataframe } from 'dash-table/components/Table/props';
 import * as actions from 'dash-table/utils/actions';
 
 export default class CellFactory {
-    // private readonly handlers = new Map();
+    private readonly handlers = new Map();
+
+    private get props() {
+        return this.propsFn();
+    }
+
+    constructor(private readonly propsFn: () => ICellFactoryOptions) {
+
+    }
 
     private isCellSelected = (selectedCells: SelectedCells, idx: number, i: number) => {
         return selectedCells && R.contains([idx, i], selectedCells);
     }
 
-    private getEventHandler = (fn: Function, options: ICellFactoryOptions, idx: number, i: number): any => {
-        // const fnHandler = (this.handlers.get(fn) || this.handlers.set(fn, new Map()).get(fn));
-        // const idxHandler = (fnHandler.get(idx) || fnHandler.set(idx, new Map()).get(idx));
+    private getEventHandler = (fn: Function, idx: number, i: number): any => {
+        const fnHandler = (this.handlers.get(fn) || this.handlers.set(fn, new Map()).get(fn));
+        const idxHandler = (fnHandler.get(idx) || fnHandler.set(idx, new Map()).get(idx));
 
-        // return (
-        //     idxHandler.get(i) ||
-        //     (idxHandler.set(i, fn.bind(this, idx, i)).get(i))
-        // ).bind(options) as Function;
-        return (e: any) => fn(idx, i, options, e);
+        return (
+            idxHandler.get(i) ||
+            (idxHandler.set(i, fn.bind(this, idx, i)).get(i))
+        );
     }
 
-    private handleClick = (idx: number, i: number, options: ICellFactoryOptions, e: any) => {
+    private handleClick = (idx: number, i: number, e: any) => {
         const {
             columns,
             editable,
@@ -32,7 +39,7 @@ export default class CellFactory {
             row_selectable,
             selected_cell,
             setProps
-        } = options;
+        } = this.props;
 
         const selected = this.isCellSelected(selected_cell, idx, i);
 
@@ -90,12 +97,12 @@ export default class CellFactory {
         setProps(newProps);
     }
 
-    private handleDoubleClick = (idx: number, i: number, options: ICellFactoryOptions, e: any) => {
+    private handleDoubleClick = (idx: number, i: number, e: any) => {
         const {
             editable,
             is_focused,
             setProps
-        } = options;
+        } = this.props;
 
         if (!editable) {
             return;
@@ -112,13 +119,15 @@ export default class CellFactory {
         }
     }
 
-    private handleChange = (idx: number, i: number, options: ICellFactoryOptions, e: any) => {
+    private handleChange = (idx: number, i: number, e: any) => {
         const {
             columns,
-            dataframe,
             editable,
-            setProps
-        } = options;
+            setProps,
+            virtualizer
+        } = this.props;
+
+        const { dataframe } = virtualizer;
 
         const c = columns[i];
 
@@ -136,11 +145,11 @@ export default class CellFactory {
         });
     }
 
-    private handlePaste = (idx: number, i: number, options: ICellFactoryOptions, e: any) => {
+    private handlePaste = (idx: number, i: number, e: any) => {
         const {
             is_focused,
             selected_cell
-        } = options;
+        } = this.props;
 
         const selected = this.isCellSelected(selected_cell, idx, i);
 
@@ -149,14 +158,14 @@ export default class CellFactory {
         }
     }
 
-    private rowSelectCell(options: ICellFactoryOptions, idx: number) {
+    private rowSelectCell(idx: number) {
         const {
             n_fixed_columns,
             setProps,
             selected_rows,
             row_deletable,
             row_selectable
-        } = options;
+        } = this.props;
 
         const rowSelectableFixedIndex = row_deletable ? 1 : 0;
 
@@ -190,12 +199,12 @@ export default class CellFactory {
         );
     }
 
-    private rowDeleteCell(options: ICellFactoryOptions, idx: number) {
+    private rowDeleteCell(idx: number) {
         const {
             n_fixed_columns,
             setProps,
             row_deletable
-        } = options;
+        } = this.props;
 
         return !row_deletable ? null : (
             <td
@@ -204,7 +213,7 @@ export default class CellFactory {
                     'delete-cell'
                     // (n_fixed_columns > 0 ? 'frozen-left frozen-left-0 ' : '')
                 }
-                onClick={() => setProps(actions.deleteRow(idx, options))}
+                onClick={() => setProps(actions.deleteRow(idx, this.props))}
                 style={n_fixed_columns > 0 ? {
                     width: `30px`
                 } : undefined}
@@ -214,7 +223,7 @@ export default class CellFactory {
         );
     }
 
-    public createCells(options: ICellFactoryOptions) {
+    public createCells(dataframe: Dataframe) {
         const {
             active_cell,
             columns,
@@ -222,14 +231,13 @@ export default class CellFactory {
             column_conditional_styles,
             column_static_dropdown,
             column_static_style,
-            dataframe,
             editable,
             id,
             is_focused,
             row_deletable,
             row_selectable,
             selected_cell
-        } = options;
+        } = this.props;
 
         const visibleColumns = columns.filter(column => !column.hidden);
 
@@ -238,8 +246,8 @@ export default class CellFactory {
             (row_selectable ? 1 : 0);
 
         return dataframe.map((datum, rowIndex) => {
-            const deleteCell = this.rowDeleteCell(options, rowIndex);
-            const selectCell = this.rowSelectCell(options, rowIndex);
+            const deleteCell = this.rowDeleteCell(rowIndex);
+            const selectCell = this.rowSelectCell(rowIndex);
 
             const cells = visibleColumns.map((column, visibleIndex) => {
                 visibleIndex += offset;
@@ -270,10 +278,10 @@ export default class CellFactory {
                     datum={datum}
                     editable={editable}
                     focused={!!is_focused}
-                    onClick={this.getEventHandler(this.handleClick, options, rowIndex, index)}
-                    onDoubleClick={this.getEventHandler(this.handleDoubleClick, options, rowIndex, index)}
-                    onPaste={this.getEventHandler(this.handlePaste, options, rowIndex, index)}
-                    onChange={this.getEventHandler(this.handleChange, options, rowIndex, index)}
+                    onClick={this.getEventHandler(this.handleClick, rowIndex, index)}
+                    onDoubleClick={this.getEventHandler(this.handleDoubleClick, rowIndex, index)}
+                    onPaste={this.getEventHandler(this.handlePaste, rowIndex, index)}
+                    onChange={this.getEventHandler(this.handleChange, rowIndex, index)}
                     property={column.id}
                     selected={R.contains([rowIndex, index], selected_cell)}
                     staticDropdown={staticDropdown}
