@@ -12,6 +12,7 @@ export type RowSelection = 'single' | 'multi' | false;
 export type SelectedCells = CellCoordinates[];
 export type SetProps = (...args: any[]) => void;
 export type Sorting = 'fe' | 'be' | boolean;
+export type SortingType = 'multi' | 'single';
 export type Virtualization = 'fe' | 'be' | boolean;
 
 interface IColumn {
@@ -62,6 +63,7 @@ interface IProps {
     setProps?: SetProps;
     sorting?: Sorting;
     sorting_settings?: SortSettings;
+    sorting_type?: SortingType;
     table_style?: { selector: string, rule: string }[];
     virtualization?: Virtualization;
     virtualization_settings?: IVirtualizationSettings;
@@ -90,6 +92,7 @@ interface IDefaultProps {
     selected_rows: number[];
     sorting: Sorting;
     sorting_settings: SortSettings;
+    sorting_type: SortingType;
     table_style: { selector: string, rule: string }[];
     virtual_dataframe: any[];
     virtual_dataframe_indices: number[];
