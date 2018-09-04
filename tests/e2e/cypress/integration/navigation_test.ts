@@ -58,8 +58,7 @@ describe('navigate', () => {
 
                 DashTable.getCell(3, 8).should('have.class', 'focused');
                 DashTable.getCell(3, 8).get('.Select').should('exist');
-                DashTable.getCell(3, 8).then($el => $el[0].scrollIntoView());
-                DOM.focused.type(Key.ArrowLeft);
+                DOM.focused.type(Key.ArrowLeft, { force: true });
 
                 DashTable.getCell(3, 8).should('not.have.class', 'focused');
                 DashTable.getCell(3, 7).should('have.class', 'focused');
