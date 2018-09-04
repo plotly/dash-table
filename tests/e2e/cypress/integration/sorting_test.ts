@@ -15,6 +15,5 @@ describe('sort', () => {
         DashTable.getCell(1, 8).within(() => cy.get('.Select-value-label').should('have.html', 'Wet'));
         DashTable.getCell(2, 8).within(() => cy.get('.Select-value-label').should('have.html', 'Wet'));
         DashTable.getCell(3, 8).within(() => cy.get('.Select-value-label').should('have.html', 'Wet'));
-
     });
 });
