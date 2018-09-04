@@ -160,67 +160,48 @@ export default class CellFactory {
 
     private rowSelectCell(idx: number) {
         const {
-            n_fixed_columns,
             setProps,
             selected_rows,
-            row_deletable,
             row_selectable
         } = this.props;
 
-        const rowSelectableFixedIndex = row_deletable ? 1 : 0;
-
-        return !row_selectable ? null : (
-            <td
-                key='select'
-                className={
-                    'select-cell'
-                    // (n_fixed_columns > rowSelectableFixedIndex ? `frozen-left frozen-left-${rowSelectableFixedIndex} ` : '')
-                }
-                style={n_fixed_columns > rowSelectableFixedIndex ? {
-                    width: `30px`
-                } : undefined}
-            >
-                <input
-                    type={row_selectable === 'single' ? 'radio' : 'checkbox'}
-                    name='row-select'
-                    checked={R.contains(idx, selected_rows)}
-                    onChange={() => setProps({
-                        selected_rows:
-                            row_selectable === 'single' ?
-                                [idx] :
-                                R.ifElse(
-                                    R.contains(idx),
-                                    R.without([idx]),
-                                    R.append(idx)
-                                )(selected_rows)
-                    })}
-                />
-            </td>
-        );
+        return !row_selectable ? null : (<td
+            key='select'
+            className='select-cell'
+            style={{ width: `30px`, maxWidth: `30px`, minWidth: `30px` }}
+        >
+            <input
+                type={row_selectable === 'single' ? 'radio' : 'checkbox'}
+                name='row-select'
+                checked={R.contains(idx, selected_rows)}
+                onChange={() => setProps({
+                    selected_rows:
+                        row_selectable === 'single' ?
+                            [idx] :
+                            R.ifElse(
+                                R.contains(idx),
+                                R.without([idx]),
+                                R.append(idx)
+                            )(selected_rows)
+                })}
+            />
+        </td>);
     }
 
     private rowDeleteCell(idx: number) {
         const {
-            n_fixed_columns,
             setProps,
             row_deletable
         } = this.props;
 
-        return !row_deletable ? null : (
-            <td
-                key='delete'
-                className={
-                    'delete-cell'
-                    // (n_fixed_columns > 0 ? 'frozen-left frozen-left-0 ' : '')
-                }
-                onClick={() => setProps(actions.deleteRow(idx, this.props))}
-                style={n_fixed_columns > 0 ? {
-                    width: `30px`
-                } : undefined}
-            >
-                {'×'}
-            </td>
-        );
+        return !row_deletable ? null : (<td
+            key='delete'
+            className='delete-cell'
+            onClick={() => setProps(actions.deleteRow(idx, this.props))}
+            style={{ width: `30px`, maxWidth: `30px`, minWidth: `30px` }}
+        >
+            {'×'}
+        </td>);
     }
 
     public createCells(dataframe: Dataframe) {

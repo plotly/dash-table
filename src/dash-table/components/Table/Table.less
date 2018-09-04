@@ -12,113 +12,31 @@
         0px @bottom 0px 0px @color;
 }
 
-.dash-spreadsheet-clipper {
-    &.freeze-left {
-        overflow: hidden;
-    }
-
-    // freeze rows
-    &.freeze-top {
-        overflow: hidden;
-    }
-}
-
 .dash-spreadsheet-container {
-    position: relative;
-}
-
-.dash-spreadsheet {
     display: flex;
     flex-direction: row;
-
-    .dash-spreadsheet-right {
-        display: flex;
-        flex-direction: column;
-    }
-
-}
-
-.dash-spreadsheet-container {
     position: relative;
-}
-
-.dash-spreadsheet {
-    width: 500px !important;
-    height: 500px !important;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-
-    .row-0 {
-        position: sticky;
-        top: 0;
-        left: 0;
-    }
-
-    .cell-0-0 {
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 1000;
-    }
-
-    .cell-0-1 {
-        position: sticky;
-        top: 0;
-    }
-
-    .row-1 {
-        overflow: scroll;
-        display: flex;
-        flex-direction: row;
-    }
-
-    .cell-1-0 {
-        position: sticky;
-        left: 0;
-        flex: 0 0 auto;
-    }
-
-    .cell-1-1 {
-        flex: 1 1 0;
-    }
 }
 
 .dash-spreadsheet {
     box-sizing: border-box;
     border-left: lightgrey 1px solid;
     border-top: lightgrey 1px solid;
+    display: flex;
+    flex-direction: column;
     margin: 20px;
 
-    // freeze columns
-    &.freeze-left {
-        overflow-x: scroll;
-        overflow-y: scroll;
-
-        .frozen-left {
-            overflow: hidden;
-            position: absolute;
-            z-index: 1000;
-            left: 0;
-        }
+    &.freeze-left,
+    &.freeze-top {
+        overflow: hidden !important;
     }
 
-    // freeze rows
+    &.freeze-left {
+        width: 500px;
+    }
+
     &.freeze-top {
-        overflow-y: auto;
-        // height:500px;
-        // width: 100px;
-
-        table {
-            width: 0 !important;
-        }
-
-        .frozen-top {
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 2000;
-        }
+        height: 500px;
     }
 
     *,
@@ -154,6 +72,34 @@
             padding: 0 !important;
             margin: 0 !important;
         }
+    }
+
+    .row-0 {
+        display: flex;
+        flex: 0 0 auto;
+        flex-direction: row;
+    }
+
+    .row-1 {
+        display: flex;
+        flex-direction: row;
+        overflow: scroll;
+    }
+
+    .cell-0-0,
+    .cell-1-0 {
+        flex: 0 0 auto;
+        left: 0;
+        position: sticky;
+        z-index: 1;
+    }
+
+    .cell-0-1 {
+        flex: 0 0 auto;
+    }
+
+    .cell-1-1 {
+        flex: 0 0 auto;
     }
 
     .cell {

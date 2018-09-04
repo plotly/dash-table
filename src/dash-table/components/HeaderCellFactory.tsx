@@ -232,33 +232,26 @@ export default class HeaderFactory {
     }
 
     private static createDeletableHeader(options: IOptions) {
-        const { n_fixed_columns, row_deletable } = options;
+        const { row_deletable } = options;
+
         return !row_deletable ? null : (
             <th
                 key='delete'
-                className={
-                    'expanded-row--empty-cell '
-                    // (n_fixed_columns > 0 ? 'frozen-left frozen-left-0' : '')
-                }
-                style={n_fixed_columns > 0 ? { width: `30px` } : undefined}
+                className='expanded-row--empty-cell'
+                style={{ width: `30px`, maxWidth: `30px`, minWidth: `30px` }}
 
             />
         );
     }
 
     private static createSelectableHeader(options: IOptions) {
-        const { n_fixed_columns, row_deletable, row_selectable } = options;
-
-        const rowSelectableFixedIndex = row_deletable ? 1 : 0;
+        const { row_selectable } = options;
 
         return !row_selectable ? null : (
             <th
                 key='select'
-                className={
-                    'expanded-row--empty-cell '
-                    // (n_fixed_columns > rowSelectableFixedIndex ? `frozen-left frozen-left-${rowSelectableFixedIndex}` : '')
-                }
-                style={n_fixed_columns > rowSelectableFixedIndex ? { width: `30px` } : undefined}
+                className='expanded-row--empty-cell'
+                style={{ width: `30px`, maxWidth: `30px`, minWidth: `30px` }}
             />
         );
     }

@@ -28,9 +28,9 @@ class App extends Component {
                 editable: true,
                 filtering: true,
                 sorting: true,
-                // n_fixed_rows: 3,
-                // n_fixed_columns: 2,
-                merge_duplicate_headers: true,
+                n_fixed_rows: 3,
+                n_fixed_columns: 2,
+                merge_duplicate_headers: false,
                 row_deletable: true,
                 row_selectable: 'single',
                 column_static_dropdown: [
@@ -42,6 +42,9 @@ class App extends Component {
                         }))
                     }
                 ],
+                table_style: [
+                    { selector: '.dash-spreadsheet.freeze-left', rule: 'width: 1000px' }
+                ]
             }
         };
 

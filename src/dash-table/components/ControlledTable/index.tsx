@@ -58,14 +58,9 @@ export default class ControlledTable extends Component<ControlledTableProps> {
     }
 
     componentDidUpdate() {
-        const { r0c0, r0c1, r1c1 } = this.refs as { [key: string]: HTMLElement };
+        const { r0c0, r0c1, r1c0, r1c1 } = this.refs as { [key: string]: HTMLElement };
 
-        const r0c0Width = getComputedStyle(r0c0).width;
-
-        if (r0c0Width !== r0c1.style.marginLeft) {
-            r0c1.style.paddingLeft = r0c0Width;
-        }
-
+        // Adjust [fixed columns/fixed rows combo] to fixed rows height
         let trs = r0c1.querySelectorAll('tr');
         r0c0.querySelectorAll('tr').forEach((tr, index) => {
             const tr2 = trs[index];
@@ -73,8 +68,20 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             tr.style.height = getComputedStyle(tr2).height;
         });
 
-        const contentTr = r1c1.querySelector('tr');
-        if (contentTr) {
+        // Adjust fixed columns headers to header's height
+        let trths = r1c1.querySelectorAll('tr > th:first-of-type');
+        r1c0.querySelectorAll('tr > th:first-of-type').forEach((th, index) => {
+            const tr2 = trths[index].parentElement as HTMLElement;
+            const tr = th.parentElement as HTMLElement;
+
+            tr.style.height = getComputedStyle(tr2).height;
+        });
+
+        // Adjust fixed columns data to data height
+        const contentTd = r1c1.querySelector('tr > td:first-of-type');
+        if (contentTd) {
+            const contentTr = contentTd.parentElement as HTMLElement;
+
             this.stylesheet.setRule('.cell-1-0 tr', `height: ${getComputedStyle(contentTr).height}`);
         }
     }
@@ -490,7 +497,6 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         let typeIndex = 0;
 
         if (deletable) {
-            ++typeIndex;
 
             this.stylesheet.setRule(
                 `.dash-spreadsheet td.column-${typeIndex}`,
@@ -500,11 +506,11 @@ export default class ControlledTable extends Component<ControlledTableProps> {
                 `.dash-spreadsheet th.column-${typeIndex}`,
                 `width: 30px; max-width: 30px; min-width: 30px;`
             );
+
+            ++typeIndex;
         }
 
         if (selectable) {
-            ++typeIndex;
-
             this.stylesheet.setRule(
                 `.dash-spreadsheet td.column-${typeIndex}`,
                 `width: 30px; max-width: 30px; min-width: 30px;`
@@ -513,11 +519,12 @@ export default class ControlledTable extends Component<ControlledTableProps> {
                 `.dash-spreadsheet th.column-${typeIndex}`,
                 `width: 30px; max-width: 30px; min-width: 30px;`
             );
+
+            ++typeIndex;
         }
 
         R.forEach(column => {
             const width = Stylesheet.unit(column.width || DEFAULT_CELL_WIDTH, 'px');
-            ++typeIndex;
 
             this.stylesheet.setRule(
                 `.dash-spreadsheet td.column-${typeIndex}`,
@@ -527,6 +534,8 @@ export default class ControlledTable extends Component<ControlledTableProps> {
                 `.dash-spreadsheet th.column-${typeIndex}`,
                 `width: ${width}; max-width: ${width}; min-width: ${width};`
             );
+
+            ++typeIndex;
         }, columns);
     }
 
@@ -592,12 +601,18 @@ export default class ControlledTable extends Component<ControlledTableProps> {
 
         this.applyStyle(columns, row_deletable, row_selectable);
 
+        const classes = [
+            'dash-spreadsheet',
+            ...(n_fixed_rows ? ['freeze-top'] : []),
+            ...(n_fixed_columns ? ['freeze-left'] : [])
+        ];
+
         const grid = this.getFragments(dataframe, n_fixed_columns, n_fixed_rows);
 
         return (<div id={id}>
             <div className='dash-spreadsheet-container'>
                 <div
-                    className='dash-spreadsheet'
+                    className={classes.join(' ')}
                     onKeyDown={this.handleKeyDown}
                 >
                     {grid.map((row, rowIndex) => (<div
