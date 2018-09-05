@@ -5,7 +5,7 @@ describe('sort', () => {
         cy.visit('http://localhost:8080');
     });
 
-    it.only('can sort', () => {
+    it('can sort', () => {
         DashTable.getCell(0, 8).within(() => cy.get('.Select-value-label').should('have.html', 'Wet'));
         DashTable.getCell(1, 8).within(() => cy.get('.Select-value-label').should('have.html', 'Snowy'));
         DashTable.getCell(2, 8).within(() => cy.get('.Select-value-label').should('have.html', 'Tropical Beaches'));
