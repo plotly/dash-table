@@ -149,7 +149,7 @@ export default class HeaderFactory {
             (row_deletable ? 1 : 0) +
             (row_selectable ? 1 : 0);
 
-        return columnIndices.map((columnId, spanId) => {
+        return R.filter(column => !!column, columnIndices.map((columnId, spanId) => {
             const c = columns[columnId];
             if (c.hidden) {
                 return null;
@@ -163,8 +163,8 @@ export default class HeaderFactory {
             } else {
                 const nHiddenColumns = (
                     R.slice(columnId, columnIndices[spanId + 1] || Infinity, columns)
-                     .filter(R.propEq('hidden', true))
-                     .length);
+                        .filter(R.propEq('hidden', true))
+                        .length);
                 if (columnId === R.last(columnIndices)) {
                     colSpan = labels.length - columnId - nHiddenColumns;
                 } else {
@@ -236,7 +236,7 @@ export default class HeaderFactory {
 
                 <span>{labels[columnId]}</span>
             </th>);
-        });
+        }));
     }
 
     private static createDeletableHeader(options: IOptions) {

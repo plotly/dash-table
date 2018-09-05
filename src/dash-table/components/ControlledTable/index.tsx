@@ -19,6 +19,11 @@ import { ControlledTableProps, Dataframe, Columns, RowSelection } from 'dash-tab
 
 const sortNumerical = R.sort<number>((a, b) => a - b);
 
+interface IAccumulator {
+    cells: number;
+    count: number;
+}
+
 export default class ControlledTable extends Component<ControlledTableProps> {
     private stylesheet: Stylesheet;
     private cellFactory: CellFactory;
@@ -562,7 +567,19 @@ export default class ControlledTable extends Component<ControlledTableProps> {
 
         // slice out fixed columns
         const fixedColumnCells = fixedColumns ?
-            R.map(row => row.splice(0, fixedColumns), cells) :
+            R.map(row =>
+                row.splice(0, R.reduceWhile<JSX.Element, IAccumulator>(
+                    acc => acc.count < fixedColumns,
+                    (acc, cell) => {
+                        acc.cells++;
+                        acc.count += (cell.props.colSpan || 1);
+
+                        return acc;
+                    },
+                    { cells: 0, count: 0 },
+                    row as any
+                ).cells),
+                cells) :
             null;
 
         // slice out fixed rows

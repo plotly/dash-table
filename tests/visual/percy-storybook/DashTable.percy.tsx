@@ -46,6 +46,22 @@ storiesOf('DashTable/With Data', module)
 const columns = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
     .map(id => ({ id: id, name: id.toUpperCase(), width: '100px' }));
 
+const idMap: { [key: string]: number } = {
+    a: 0,
+    b: 0,
+    c: 1,
+    d: 1,
+    e: 2,
+    f: 2,
+    g: 2,
+    h: 3,
+    i: 3,
+    j: 3
+};
+
+const mergedColumns = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
+    .map(id => ({ id: id, name: [idMap[id], id.toUpperCase()], width: '100px' }));
+
 const dataframe = (() => {
     const r = random(0);
 
@@ -85,4 +101,27 @@ storiesOf('DashTable/Fixed Rows & Columns', module)
         n_fixed_columns={2}
         row_deletable={true}
         row_selectable={true}
-    />));
+    />))
+    .add('with 2 fixed rows, 4 fixed columns and merged cells', () => (<DashTable
+        setProps={setProps}
+        id='table'
+        dataframe={dataframe}
+        columns={mergedColumns}
+        merge_duplicate_headers={true}
+        n_fixed_columns={4}
+        n_fixed_rows={2}
+    />))
+    .add('with 2 fixed rows, 3 fixed columns, hidden columns and merged cells', () => {
+        const testColumns = JSON.parse(JSON.stringify(mergedColumns));
+        testColumns[2].hidden = true;
+
+        return (<DashTable
+            setProps={setProps}
+            id='table'
+            dataframe={dataframe}
+            columns={mergedColumns}
+            merge_duplicate_headers={true}
+            n_fixed_columns={3}
+            n_fixed_rows={2}
+        />);
+    });
