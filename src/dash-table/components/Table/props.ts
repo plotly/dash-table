@@ -128,4 +128,5 @@ export interface ICellFactoryOptions {
     setProps: SetProps;
     virtual_dataframe: Dataframe;
     virtual_dataframe_indices: Indices;
+    virtualizer: AbstractVirtualizationStrategy;
 }

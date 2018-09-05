@@ -216,9 +216,10 @@ export default class CellFactory {
             row_deletable,
             row_selectable,
             selected_cell,
-            virtual_dataframe,
-            virtual_dataframe_indices
+            virtualizer
         } = this.props;
+
+        const { dataframe, indices } = virtualizer;
 
         const visibleColumns = columns.filter(column => !column.hidden);
 
@@ -226,8 +227,8 @@ export default class CellFactory {
             (row_deletable ? 1 : 0) +
             (row_selectable ? 1 : 0);
 
-        return virtual_dataframe.map((datum, virtualIdx) => {
-            const realIdx = virtual_dataframe_indices[virtualIdx];
+        return dataframe.map((datum, virtualIdx) => {
+            const realIdx = indices[virtualIdx];
 
             const deleteCell = this.rowDeleteCell(realIdx);
             const selectCell = this.rowSelectCell(realIdx);

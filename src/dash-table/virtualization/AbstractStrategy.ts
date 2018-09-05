@@ -17,6 +17,7 @@ export interface ITarget extends IViewport {
 export default abstract class AbstractVirtualizationStrategy
 {
     protected __dataframe: Dataframe;
+    protected __indices: Indices;
 
     constructor(protected readonly target: ITarget) {
 
@@ -24,6 +25,10 @@ export default abstract class AbstractVirtualizationStrategy
 
     public get dataframe(): Dataframe {
         return this.__dataframe;
+    }
+
+    public get indices(): Indices {
+        return this.__indices;
     }
 
     public refresh() {
@@ -39,6 +44,8 @@ export default abstract class AbstractVirtualizationStrategy
         }
 
         this.__dataframe = dataframe;
+        this.__indices = indices;
+
         this.target.update({
             viewportDataframe: dataframe,
             viewportIndices: indices
