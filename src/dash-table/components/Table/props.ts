@@ -7,6 +7,7 @@ export type Columns = IColumn[];
 export type Dataframe = Datum[];
 export type Datum =  IDatumObject | any;
 export type Filtering = 'fe' | 'be' | boolean;
+export type Indices = number[];
 export type Navigation = 'page';
 export type RowSelection = 'single' | 'multi' | false;
 export type SelectedCells = CellCoordinates[];
@@ -94,8 +95,8 @@ interface IDefaultProps {
     sorting_settings: SortSettings;
     sorting_type: SortingType;
     table_style: { selector: string, rule: string }[];
-    virtual_dataframe: any[];
-    virtual_dataframe_indices: number[];
+    virtual_dataframe: Dataframe;
+    virtual_dataframe_indices: Indices;
     virtualization: Virtualization;
     virtualization_settings: IVirtualizationSettings;
 }
@@ -124,5 +125,6 @@ export interface ICellFactoryOptions {
     selected_cell: SelectedCells;
     selected_rows: number[];
     setProps: SetProps;
-    virtualizer: AbstractVirtualizationStrategy;
+    virtual_dataframe: Dataframe;
+    virtual_dataframe_indices: Indices;
 }

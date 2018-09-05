@@ -2,7 +2,7 @@ import * as R from 'ramda';
 import React from 'react';
 
 import Cell from 'dash-table/components/Cell';
-import { ICellFactoryOptions, SelectedCells, Dataframe } from 'dash-table/components/Table/props';
+import { ICellFactoryOptions, SelectedCells } from 'dash-table/components/Table/props';
 import * as actions from 'dash-table/utils/actions';
 
 export default class CellFactory {
@@ -124,10 +124,8 @@ export default class CellFactory {
             columns,
             editable,
             setProps,
-            virtualizer
+            virtual_dataframe
         } = this.props;
-
-        const { dataframe } = virtualizer;
 
         const c = columns[i];
 
@@ -138,7 +136,7 @@ export default class CellFactory {
         const newDataframe = R.set(
             R.lensPath([idx, c.id]),
             e.target.value,
-            dataframe
+            virtual_dataframe
         );
         setProps({
             dataframe: newDataframe
@@ -204,7 +202,7 @@ export default class CellFactory {
         </td>);
     }
 
-    public createCells(dataframe: Dataframe) {
+    public createCells() {
         const {
             active_cell,
             columns,
@@ -217,7 +215,9 @@ export default class CellFactory {
             is_focused,
             row_deletable,
             row_selectable,
-            selected_cell
+            selected_cell,
+            virtual_dataframe,
+            virtual_dataframe_indices
         } = this.props;
 
         const visibleColumns = columns.filter(column => !column.hidden);
@@ -226,9 +226,11 @@ export default class CellFactory {
             (row_deletable ? 1 : 0) +
             (row_selectable ? 1 : 0);
 
-        return dataframe.map((datum, rowIndex) => {
-            const deleteCell = this.rowDeleteCell(rowIndex);
-            const selectCell = this.rowSelectCell(rowIndex);
+        return virtual_dataframe.map((datum, virtualIdx) => {
+            const realIdx = virtual_dataframe_indices[virtualIdx];
+
+            const deleteCell = this.rowDeleteCell(realIdx);
+            const selectCell = this.rowSelectCell(realIdx);
 
             const cells = visibleColumns.map((column, visibleIndex) => {
                 visibleIndex += offset;
@@ -251,7 +253,7 @@ export default class CellFactory {
 
                 return (<Cell
                     key={`${column.id}-${visibleIndex}`}
-                    active={active_cell[0] === rowIndex && active_cell[1] === index + offset}
+                    active={active_cell[0] === virtualIdx && active_cell[1] === index + offset}
                     classes={classes}
                     clearable={column.clearable}
                     conditionalDropdowns={conditionalDropdowns}
@@ -259,12 +261,12 @@ export default class CellFactory {
                     datum={datum}
                     editable={editable}
                     focused={!!is_focused}
-                    onClick={this.getEventHandler(this.handleClick, rowIndex, index)}
-                    onDoubleClick={this.getEventHandler(this.handleDoubleClick, rowIndex, index)}
-                    onPaste={this.getEventHandler(this.handlePaste, rowIndex, index)}
-                    onChange={this.getEventHandler(this.handleChange, rowIndex, index)}
+                    onClick={this.getEventHandler(this.handleClick, virtualIdx, index)}
+                    onDoubleClick={this.getEventHandler(this.handleDoubleClick, virtualIdx, index)}
+                    onPaste={this.getEventHandler(this.handlePaste, virtualIdx, index)}
+                    onChange={this.getEventHandler(this.handleChange, virtualIdx, index)}
                     property={column.id}
-                    selected={R.contains([rowIndex, index + offset], selected_cell)}
+                    selected={R.contains([virtualIdx, index + offset], selected_cell)}
                     staticDropdown={staticDropdown}
                     staticStyle={staticStyle}
                     tableId={id}

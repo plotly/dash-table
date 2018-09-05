@@ -1,7 +1,8 @@
-import { Dataframe, IVirtualizationSettings, Virtualization } from 'dash-table/components/Table/props';
+import { Dataframe, IVirtualizationSettings, Virtualization, Indices } from 'dash-table/components/Table/props';
 
 export interface IViewport {
     readonly dataframe: Dataframe;
+    readonly indices: Indices;
     readonly settings: IVirtualizationSettings;
     readonly virtualization: Virtualization;
 
