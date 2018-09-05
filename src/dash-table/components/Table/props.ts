@@ -115,6 +115,7 @@ export interface ICellFactoryOptions {
     column_conditional_styles: any[];
     column_static_dropdown: any;
     column_static_style: any;
+    dataframe: Dataframe;
     editable: boolean;
     id: string;
     is_focused?: boolean;

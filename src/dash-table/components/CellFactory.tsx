@@ -122,9 +122,9 @@ export default class CellFactory {
     private handleChange = (idx: number, i: number, e: any) => {
         const {
             columns,
+            dataframe,
             editable,
-            setProps,
-            virtual_dataframe
+            setProps
         } = this.props;
 
         const c = columns[i];
@@ -136,7 +136,7 @@ export default class CellFactory {
         const newDataframe = R.set(
             R.lensPath([idx, c.id]),
             e.target.value,
-            virtual_dataframe
+            dataframe
         );
         setProps({
             dataframe: newDataframe
@@ -264,7 +264,7 @@ export default class CellFactory {
                     onClick={this.getEventHandler(this.handleClick, virtualIdx, index)}
                     onDoubleClick={this.getEventHandler(this.handleDoubleClick, virtualIdx, index)}
                     onPaste={this.getEventHandler(this.handlePaste, virtualIdx, index)}
-                    onChange={this.getEventHandler(this.handleChange, virtualIdx, index)}
+                    onChange={this.getEventHandler(this.handleChange, realIdx, index)}
                     property={column.id}
                     selected={R.contains([virtualIdx, index + offset], selected_cell)}
                     staticDropdown={staticDropdown}
