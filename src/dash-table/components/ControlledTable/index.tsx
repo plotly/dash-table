@@ -583,7 +583,8 @@ export default class ControlledTable extends Component<ControlledTableProps> {
     onScroll = (ev: any) => {
         const { r0c1 } = this.refs as { [key: string]: HTMLElement };
 
-        r0c1.style.marginLeft = `${-ev.target.scrollLeft}`;
+        Logger.debug(`ControlledTable fragment scrolled to (left,top)=(${ev.target.scrollLeft},${ev.target.scrollTop})`);
+        r0c1.style.marginLeft = `${-ev.target.scrollLeft}px`;
     }
 
     render() {
