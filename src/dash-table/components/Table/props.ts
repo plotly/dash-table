@@ -3,10 +3,12 @@ import AbstractVirtualizationStrategy from 'dash-table/virtualization/AbstractSt
 
 export type ActiveCell = CellCoordinates | [];
 export type CellCoordinates = [number, number];
+export type ColumnId = string | number;
 export type Columns = IColumn[];
 export type Dataframe = Datum[];
 export type Datum =  IDatumObject | any;
 export type Filtering = 'fe' | 'be' | boolean;
+export type FilteringType = 'basic' | 'advanced';
 export type Indices = number[];
 export type Navigation = 'page';
 export type RowSelection = 'single' | 'multi' | false;
@@ -16,9 +18,10 @@ export type Sorting = 'fe' | 'be' | boolean;
 export type SortingType = 'multi' | 'single';
 export type Virtualization = 'fe' | 'be' | boolean;
 
-interface IColumn {
-    id: string | number;
+export interface IColumn {
+    id: ColumnId;
     editable?: boolean;
+    name: string;
     [key: string]: any;
 }
 
@@ -51,6 +54,7 @@ interface IProps {
     editable?: boolean;
     filtering?: Filtering;
     filtering_settings?: string;
+    filtering_type?: FilteringType;
     merge_duplicate_headers?: boolean;
     navigation?: Navigation;
     n_fixed_columns?: number;
@@ -81,6 +85,7 @@ interface IDefaultProps {
     editable: boolean;
     filtering: Filtering;
     filtering_settings: string;
+    filtering_type: FilteringType;
     merge_duplicate_headers: boolean;
     navigation: Navigation;
     n_fixed_columns: number;

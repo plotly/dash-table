@@ -22,9 +22,10 @@ export const defaultProps = {
 
     filtering: false,
     filtering_settings: '',
+    filtering_type: 'basic',
     sorting: false,
-    sorting_type: 'single',
     sorting_settings: [],
+    sorting_type: 'single',
 
     virtual_dataframe: [],
     virtual_dataframe_indices: [],
@@ -155,14 +156,14 @@ export const propTypes = {
 
     filtering: PropTypes.oneOf(['fe', 'be', true, false]),
     filtering_settings: PropTypes.string,
+    filtering_type: PropTypes.oneOf(['basic', 'advanced']),
 
     sorting: PropTypes.oneOf(['fe', 'be', true, false]),
-    sorting_type: PropTypes.oneOf(['single', 'multi']),
     sorting_settings: PropTypes.arrayOf(PropTypes.shape({
         columnId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         direction: PropTypes.oneOf(['asc', 'desc'])
-    })
-    ),
+    })),
+    sorting_type: PropTypes.oneOf(['single', 'multi']),
 
     virtual_dataframe: PropTypes.arrayOf(PropTypes.object),
     virtual_dataframe_indices: PropTypes.arrayOf(PropTypes.number)

@@ -66,7 +66,7 @@ class App extends Component {
         return (<Table
             setProps={this.setProps}
             {...this.state.tableProps}
-            {...{ filtering: 'fe', filtering_settings: this.state.filter }}
+            {...{ filtering: 'fe' }}
         />);
     }
 }

@@ -50,6 +50,7 @@ export default class TableClipboardHelper {
             ) {
                 newColumns.push({
                     id: `Column ${i + 1}`,
+                    name: `Column ${i + 1}`,
                     type: 'numeric'
                 });
                 newDataframe.forEach(row => (row[`Column ${i}`] = ''));

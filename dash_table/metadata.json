@@ -511,6 +511,27 @@
           "computed": false
         }
       },
+      "filtering_type": {
+        "type": {
+          "name": "enum",
+          "value": [
+            {
+              "value": "'basic'",
+              "computed": false
+            },
+            {
+              "value": "'advanced'",
+              "computed": false
+            }
+          ]
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "'basic'",
+          "computed": false
+        }
+      },
       "sorting": {
         "type": {
           "name": "enum",
@@ -537,27 +558,6 @@
         "description": "",
         "defaultValue": {
           "value": "false",
-          "computed": false
-        }
-      },
-      "sorting_type": {
-        "type": {
-          "name": "enum",
-          "value": [
-            {
-              "value": "'single'",
-              "computed": false
-            },
-            {
-              "value": "'multi'",
-              "computed": false
-            }
-          ]
-        },
-        "required": false,
-        "description": "",
-        "defaultValue": {
-          "value": "'single'",
           "computed": false
         }
       },
@@ -600,6 +600,27 @@
         "description": "",
         "defaultValue": {
           "value": "[]",
+          "computed": false
+        }
+      },
+      "sorting_type": {
+        "type": {
+          "name": "enum",
+          "value": [
+            {
+              "value": "'single'",
+              "computed": false
+            },
+            {
+              "value": "'multi'",
+              "computed": false
+            }
+          ]
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "'single'",
           "computed": false
         }
       },

@@ -16,6 +16,7 @@ import Logger from 'core/Logger';
 import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
 import CellFactory from 'dash-table/components/CellFactory';
 import { ControlledTableProps, Columns, RowSelection } from 'dash-table/components/Table/props';
+import HeaderFilterFactory, { IFilterOptions } from 'dash-table/components/HeaderFilterFactory';
 
 const sortNumerical = R.sort<number>((a, b) => a - b);
 
@@ -559,12 +560,32 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             null
     )
 
-    getFragments = (fixedColumns: number, fixedRows: number) => {
-        const cells = [
+    handleSetFilter = (filtering_settings: string) => this.props.setProps({ filtering_settings });
+
+    getCells = () => {
+        const { row_deletable, row_selectable } = this.props;
+
+        const offset =
+            (row_deletable ? 1 : 0) +
+            (row_selectable ? 1 : 0);
+
+        const filterOptions: IFilterOptions = {
+            columns: this.props.columns,
+            filtering: this.props.filtering,
+            filtering_type: this.props.filtering_type,
+            id: this.props.id,
+            offset,
+            setFilter: this.handleSetFilter
+        };
+
+        return [
             ...HeaderCellFactory.createHeaders(this.props),
+            ...HeaderFilterFactory.createFilters(filterOptions),
             ...this.cellFactory.createCells()
         ];
+    }
 
+    getFragments = (cells: any, fixedColumns: number, fixedRows: number) => {
         // slice out fixed columns
         const fixedColumnCells = fixedColumns ?
             R.map(row =>
@@ -600,7 +621,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
     onScroll = (ev: any) => {
         const { r0c1 } = this.refs as { [key: string]: HTMLElement };
 
-        Logger.debug(`ControlledTable fragment scrolled to (left,top)=(${ev.target.scrollLeft},${ev.target.scrollTop})`);
+        Logger.trace(`ControlledTable fragment scrolled to (left,top)=(${ev.target.scrollLeft},${ev.target.scrollTop})`);
         r0c1.style.marginLeft = `${-ev.target.scrollLeft}px`;
     }
 
@@ -613,6 +634,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             row_deletable,
             row_selectable
         } = this.props;
+        console.log('ControlledTable -- render', this.props.filtering_settings);
 
         this.applyStyle(columns, row_deletable, row_selectable);
 
@@ -622,7 +644,8 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             ...(n_fixed_columns ? ['freeze-left'] : [])
         ];
 
-        const grid = this.getFragments(n_fixed_columns, n_fixed_rows);
+        const cells = this.getCells();
+        const grid = this.getFragments(cells, n_fixed_columns, n_fixed_rows);
 
         return (<div id={id}>
             <div className='dash-spreadsheet-container'>
