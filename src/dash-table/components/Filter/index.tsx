@@ -44,7 +44,6 @@ export class ColumnFilter extends Component<IColumnFilterProps, IColumnFilterSta
         const { value: nextValue } = nextProps;
 
         if (this.state.value !== nextValue) {
-            console.log('componentWillReceiveProps', this.state.value, nextValue);
             this.setState({
                 value: nextValue
             });
@@ -82,8 +81,6 @@ export class ColumnFilter extends Component<IColumnFilterProps, IColumnFilterSta
     }
 
     render() {
-        console.log('ColumnFilter -- render');
-
         const {
             classes
         } = this.props;
@@ -107,7 +104,7 @@ export class AdvancedFilter extends Component<IAdvancedFilterProps> {
         super(props);
     }
 
-    private handleChange = (ev: any) => this.props.setFilter(ev)
+    private handleChange = (ev: any) => this.props.setFilter(ev);
 
     render() {
         const {

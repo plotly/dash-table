@@ -634,7 +634,6 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             row_deletable,
             row_selectable
         } = this.props;
-        console.log('ControlledTable -- render', this.props.filtering_settings);
 
         this.applyStyle(columns, row_deletable, row_selectable);
 
