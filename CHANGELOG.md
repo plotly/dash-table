@@ -7,7 +7,9 @@
 
     The default value is 'single'.
 
-## RC8 - Filtering (Basic & Advanced)
+## RC8 - setProps bug fix
+
+## RC9 - Filtering (Basic & Advanced)
 
 - Additional filtering_type prop that can take value 'basic' or 'advanced'
     This prop defines whether the user can filter by column or with complex expressions (and toggle between basic and advanced)
