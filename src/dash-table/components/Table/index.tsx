@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import * as R from 'ramda';
 
 import { memoizeOne } from 'core/memoizer';

@@ -7,7 +7,7 @@ import multiUpdateSettings from 'core/sorting/multi';
 import singleUpdateSettings from 'core/sorting/single';
 
 import * as actions from 'dash-table/utils/actions';
-import { RowSelection, SetProps, SortingType, Dataframe, Columns } from 'dash-table/components/Table/props';
+import { Columns, Dataframe, RowSelection, SetProps, SortingType } from 'dash-table/components/Table/props';
 
 export const DEFAULT_CELL_WIDTH = 200;
 

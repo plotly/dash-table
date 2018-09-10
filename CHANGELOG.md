@@ -51,7 +51,7 @@
         - column options
         - dropdown_properties
 
-## Pre-RC6 & RC6 - Consolidating virtualization, sorting, filtering
+## RC6 - Consolidating virtualization, sorting, filtering
     * First steps to make sorting work from both FE and BE *
     * and consistent with Virtualization settings *
 
@@ -71,28 +71,35 @@
         - if the user modifies a cell, the dataframe and the virtual_dataframe are updated with the new data
 
 ## RC7 - Sorting props
-
-- Additional sorting_type prop that can take value 'multi' or 'single'
-    This prop defines whether the user can sort based on multiple columns or can only sort by one column at a time.
-
-    The default value is 'single'.
+    - Additional sorting_type prop that can take value 'multi' or 'single'
+        This prop defines whether the user can sort based on multiple columns or can only sort by one column at a time. The default value is 'single'.
 
 ## RC8 - setProps bug fix
+    - Fixing initialization issue where the FE wrongly believes it's working in DEV mode
 
-- Fixing initialization issue where the FE wrongly believes it's working in DEV mode
 
-## RC10 - Filtering (Basic & Advanced)
+## RC9 - Treat empty strings as none
+    - sorting_treat_empty_string_as_none takes value True or False
 
-- Additional filtering_type prop that can take value 'basic' or 'advanced'
-    This prop defines whether the user is presented with the UI to filter by column or with complex expressions
+        Overrides sorting default behavior to consider empty strings as a nully value.
 
-    The default value is 'basic'
+        Note: This is a stopgag prop, full implementation of sorting overrides will most probably deprecate it.
 
-    Note: The filtering row counts against n_fixed_rows
+        Default value is False.
 
-- Additional filtering_types prop that takes an array of values with valid values 'basic' and 'advanced'
-    This prop defines what type of filtering are available to the user
+## RC10 - Fix double click regression
 
-    The default value is ['basic']
+## RC11 - Filtering (Basic & Advanced)
+    - Additional filtering_type prop that can take value 'basic' or 'advanced'
+        This prop defines whether the user is presented with the UI to filter by column or with complex expressions
 
-    Note: This value needs to be consistent with filtering_type
+        The default value is 'basic'
+
+        Note: The filtering row counts against n_fixed_rows
+
+    - Additional filtering_types prop that takes an array of values with valid values 'basic' and 'advanced'
+        This prop defines what type of filtering are available to the user
+
+        The default value is ['basic']
+
+        Note: This value needs to be consistent with filtering_type

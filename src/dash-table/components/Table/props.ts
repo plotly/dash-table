@@ -80,6 +80,7 @@ interface IProps {
     sorting_settings?: SortSettings;
     sorting_type?: SortingType;
     table_style?: IStylesheetRule[];
+    sorting_treat_empty_string_as_none?: boolean;
     virtualization?: Virtualization;
     virtualization_settings?: IVirtualizationSettings;
 }
@@ -111,6 +112,7 @@ interface IDefaultProps {
     sorting_settings: SortSettings;
     sorting_type: SortingType;
     table_style: IStylesheetRule[];
+    sorting_treat_empty_string_as_none: boolean;
     virtual_dataframe: Dataframe;
     virtual_dataframe_indices: Indices;
     virtualization: Virtualization;
