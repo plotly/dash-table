@@ -34,7 +34,7 @@ export default class VirtualizationAdapter implements ITarget {
         }
 
         const isNully = sorting_treat_empty_string_as_none ?
-            (value: any) => value === '' ? true : defaultIsNully(value) :
+            (value: any) => value === '' || defaultIsNully(value) :
             undefined;
 
         if (sorting === 'fe' || sorting === true) {
