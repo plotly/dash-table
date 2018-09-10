@@ -29,6 +29,11 @@ interface IDatumObject {
     [key: string]: any;
 }
 
+interface IStylesheetRule {
+    selector: string;
+    rule: string;
+}
+
 export interface IVirtualizationSettings {
     displayed_pages: number;
     current_page: number;
@@ -55,6 +60,7 @@ interface IProps {
     filtering?: Filtering;
     filtering_settings?: string;
     filtering_type?: FilteringType;
+    filtering_types?: FilteringType[];
     merge_duplicate_headers?: boolean;
     navigation?: Navigation;
     n_fixed_columns?: number;
@@ -69,7 +75,7 @@ interface IProps {
     sorting?: Sorting;
     sorting_settings?: SortSettings;
     sorting_type?: SortingType;
-    table_style?: { selector: string, rule: string }[];
+    table_style?: IStylesheetRule[];
     virtualization?: Virtualization;
     virtualization_settings?: IVirtualizationSettings;
 }
@@ -86,6 +92,7 @@ interface IDefaultProps {
     filtering: Filtering;
     filtering_settings: string;
     filtering_type: FilteringType;
+    filtering_types: FilteringType[];
     merge_duplicate_headers: boolean;
     navigation: Navigation;
     n_fixed_columns: number;
@@ -99,7 +106,7 @@ interface IDefaultProps {
     sorting: Sorting;
     sorting_settings: SortSettings;
     sorting_type: SortingType;
-    table_style: { selector: string, rule: string }[];
+    table_style: IStylesheetRule[];
     virtual_dataframe: Dataframe;
     virtual_dataframe_indices: Indices;
     virtualization: Virtualization;

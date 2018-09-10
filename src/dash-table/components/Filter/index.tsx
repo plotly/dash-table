@@ -1,7 +1,9 @@
-import React, { Component, KeyboardEvent } from 'react';
-import { ColumnId } from 'dash-table/components/Table/props';
+import React, { Component } from 'react';
+
 import { isEqual } from 'core/comparer';
-import { KEY_CODES } from 'dash-table/utils/unicode';
+import IsolatedInput from 'core/components/IsolatedInput';
+
+import { ColumnId } from 'dash-table/components/Table/props';
 
 type SetFilter = (ev: any) => void;
 
@@ -50,50 +52,25 @@ export class ColumnFilter extends Component<IColumnFilterProps, IColumnFilterSta
         }
     }
 
-    private update = () => {
-        const { setFilter, value } = this.props;
+    private submit = (value: string | undefined) => {
+        const { setFilter } = this.props;
 
-        if (this.state.value !== value) {
-            setFilter({
-                target: {
-                    value: this.state.value
-                }
-            } as any);
-        }
-    }
-
-    private handleBlur = () => {
-        this.update();
-    }
-
-    private handleChange = (e: any) => {
-        this.setState({ value: e.target.value });
-    }
-
-    private handleKeyDown = (ev: KeyboardEvent) => {
-        ev.stopPropagation();
-
-        if (ev.keyCode !== KEY_CODES.ENTER) {
-            return;
-        }
-
-        this.update();
+        setFilter({
+            target: { value }
+        } as any);
     }
 
     render() {
         const {
-            classes
+            classes,
+            value
         } = this.props;
 
-        return (<th
-            className={classes.join(' ')}
-        >
-            <input
-                type='text'
-                value={this.state.value}
-                onBlur={this.handleBlur}
-                onChange={this.handleChange}
-                onKeyDown={this.handleKeyDown}
+        return (<th className={classes.join(' ')}>
+            <IsolatedInput
+                value={value}
+                stopPropagation={true}
+                submit={this.submit}
             />
         </th>);
     }
@@ -104,7 +81,7 @@ export class AdvancedFilter extends Component<IAdvancedFilterProps> {
         super(props);
     }
 
-    private handleChange = (ev: any) => this.props.setFilter(ev);
+    private submit = (ev: any) => this.props.setFilter(ev);
 
     render() {
         const {
@@ -115,10 +92,10 @@ export class AdvancedFilter extends Component<IAdvancedFilterProps> {
         return (<th
             colSpan={colSpan}
         >
-            <input
-                type='text'
+            <IsolatedInput
+                stopPropagation={true}
                 value={value}
-                onChange={this.handleChange}
+                submit={this.submit}
             />
         </th>);
     }

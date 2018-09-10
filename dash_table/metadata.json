@@ -532,6 +532,30 @@
           "computed": false
         }
       },
+      "filtering_types": {
+        "type": {
+          "name": "arrayOf",
+          "value": {
+            "name": "enum",
+            "value": [
+              {
+                "value": "'basic'",
+                "computed": false
+              },
+              {
+                "value": "'advanced'",
+                "computed": false
+              }
+            ]
+          }
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "['basic']",
+          "computed": false
+        }
+      },
       "sorting": {
         "type": {
           "name": "enum",

@@ -23,6 +23,7 @@ export const defaultProps = {
     filtering: false,
     filtering_settings: '',
     filtering_type: 'basic',
+    filtering_types: ['basic'],
     sorting: false,
     sorting_settings: [],
     sorting_type: 'single',
@@ -157,6 +158,9 @@ export const propTypes = {
     filtering: PropTypes.oneOf(['fe', 'be', true, false]),
     filtering_settings: PropTypes.string,
     filtering_type: PropTypes.oneOf(['basic', 'advanced']),
+    filtering_types: PropTypes.arrayOf(PropTypes.oneOf([
+        'basic', 'advanced'
+    ])),
 
     sorting: PropTypes.oneOf(['fe', 'be', true, false]),
     sorting_settings: PropTypes.arrayOf(PropTypes.shape({

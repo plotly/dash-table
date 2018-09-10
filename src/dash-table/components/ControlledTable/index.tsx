@@ -13,6 +13,9 @@ import { selectionCycle } from 'dash-table/utils/navigation';
 
 import HeaderCellFactory, { DEFAULT_CELL_WIDTH } from 'dash-table/components/HeaderCellFactory';
 import Logger from 'core/Logger';
+import { memoizeOne } from 'core/memoizer';
+import lexer from 'core/syntax-tree/lexer';
+
 import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
 import CellFactory from 'dash-table/components/CellFactory';
 import { ControlledTableProps, Columns, RowSelection } from 'dash-table/components/Table/props';
@@ -34,6 +37,14 @@ export default class ControlledTable extends Component<ControlledTableProps> {
 
         this.cellFactory = new CellFactory(() => this.props);
         this.stylesheet = new Stylesheet(`#${props.id}`);
+    }
+
+    getLexerResult = memoizeOne(lexer);
+
+    get lexerResult() {
+        const { filtering_settings } = this.props;
+
+        return this.getLexerResult(filtering_settings);
     }
 
     componentDidMount() {
@@ -574,6 +585,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             filtering: this.props.filtering,
             filtering_type: this.props.filtering_type,
             id: this.props.id,
+            lexerResult: this.lexerResult,
             offset,
             setFilter: this.handleSetFilter
         };
