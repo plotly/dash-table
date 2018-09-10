@@ -187,9 +187,7 @@ const lexicon: ILexeme[] = [
                 case 'is num':
                     return typeof opValue === 'number';
                 case 'is object':
-                    return opValue !== null &&
-                        opValue !== undefined &&
-                        typeof opValue === 'object';
+                    return opValue !== null && typeof opValue === 'object';
                 case 'is str':
                     return typeof opValue === 'string';
                 case 'is prime':

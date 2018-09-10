@@ -60,6 +60,10 @@ const parser = (lexs: ILexemeResult[]): ISyntaxTree => {
 export default (lexerResult: ILexerResult): ISyntaxerResult => {
     const { lexemes } = lexerResult;
 
+    if (!lexerResult.valid) {
+        return { valid: false, error: `lexer -- ${lexerResult.error}` };
+    }
+
     try {
         return { tree: parser(lexemes), valid: true };
     } catch (error) {
