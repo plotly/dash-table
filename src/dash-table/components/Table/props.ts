@@ -1,6 +1,11 @@
 import { SortSettings } from 'core/sorting';
 import AbstractVirtualizationStrategy from 'dash-table/virtualization/AbstractStrategy';
 
+export enum FilteringType {
+    Advanced = 'advanced',
+    Basic = 'basic'
+}
+
 export type ActiveCell = CellCoordinates | [];
 export type CellCoordinates = [number, number];
 export type ColumnId = string | number;
@@ -8,7 +13,6 @@ export type Columns = IColumn[];
 export type Dataframe = Datum[];
 export type Datum =  IDatumObject | any;
 export type Filtering = 'fe' | 'be' | boolean;
-export type FilteringType = 'basic' | 'advanced';
 export type Indices = number[];
 export type Navigation = 'page';
 export type RowSelection = 'single' | 'multi' | false;

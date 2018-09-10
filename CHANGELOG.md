@@ -81,7 +81,7 @@
 
 - Fixing initialization issue where the FE wrongly believes it's working in DEV mode
 
-## RC9 - Filtering (Basic & Advanced)
+## RC10 - Filtering (Basic & Advanced)
 
 - Additional filtering_type prop that can take value 'basic' or 'advanced'
     This prop defines whether the user is presented with the UI to filter by column or with complex expressions

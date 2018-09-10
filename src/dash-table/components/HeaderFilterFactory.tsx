@@ -138,7 +138,7 @@ export default class HeaderFilterFactory {
 
         const offsetCells = R.range(0, offset).map(i => (<th key={`offset-${i}`} />));
 
-        const filterCells = filtering_type === 'basic' ?
+        const filterCells = filtering_type === FilteringType.Basic ?
             R.addIndex<IColumn, JSX.Element>(R.map)((column, index) => {
                 return (<ColumnFilter
                     key={`column-${index + offset}`}
