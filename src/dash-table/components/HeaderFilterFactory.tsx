@@ -2,10 +2,10 @@ import * as R from 'ramda';
 import React from 'react';
 
 import Logger from 'core/Logger';
-import { ILexerResult, ILexemeResult } from 'core/syntax-tree/lexer';
 
 import { ColumnFilter, AdvancedFilter } from 'dash-table/components/Filter';
 import { ColumnId, Columns, Filtering, FilteringType, IColumn } from 'dash-table/components/Table/props';
+import lexer, { ILexerResult, ILexemeResult } from 'core/syntax-tree/lexer';
 import { LexemeType } from 'core/syntax-tree/lexicon';
 import syntaxer, { ISyntaxerResult, ISyntaxTree } from 'core/syntax-tree/syntaxer';
 
@@ -14,15 +14,26 @@ type SetFilter = (filter: string) => void;
 export interface IFilterOptions {
     columns: Columns;
     filtering: Filtering;
+    filtering_settings: string;
     filtering_type: FilteringType;
     id: string;
-    lexerResult: ILexerResult;
     offset: number;
     setFilter: SetFilter;
 }
 
-export default class HeaderFilterFactory {
-    private static onChange = (columnId: ColumnId, ops: Map<ColumnId, string>, setFilter: SetFilter, ev: any) => {
+export default class FilterFactory {
+    private readonly handlers = new Map();
+    private readonly ops = new Map<ColumnId, string>();
+
+    private get props() {
+        return this.propsFn();
+    }
+
+    constructor(private readonly propsFn: () => IFilterOptions) {
+
+    }
+
+    private onChange = (columnId: ColumnId, ops: Map<ColumnId, string>, setFilter: SetFilter, ev: any) => {
         Logger.debug('Filter -- onChange', columnId, ev.target.value && ev.target.value.trim());
 
         const value = ev.target.value.trim();
@@ -39,19 +50,17 @@ export default class HeaderFilterFactory {
         ).join(' && '));
     }
 
-    private static readonly handlers = new Map();
-    private static getEventHandler = (fn: Function, id: string, columnId: ColumnId, ops: Map<ColumnId, string>, setFilter: SetFilter): any => {
-        const fnHandler = (HeaderFilterFactory.handlers.get(fn) || HeaderFilterFactory.handlers.set(fn, new Map()).get(fn));
-        const idHandler = (fnHandler.get(id) || fnHandler.set(id, new Map()).get(id));
-        const columnIdHandler = (idHandler.get(columnId) || idHandler.set(columnId, new Map()).get(columnId));
+    private getEventHandler = (fn: Function, columnId: ColumnId, ops: Map<ColumnId, string>, setFilter: SetFilter): any => {
+        const fnHandler = (this.handlers.get(fn) || this.handlers.set(fn, new Map()).get(fn));
+        const columnIdHandler = (fnHandler.get(columnId) || fnHandler.set(columnId, new Map()).get(columnId));
 
         return (
             columnIdHandler.get(setFilter) ||
-            (columnIdHandler.set(setFilter, fn.bind(HeaderFilterFactory, columnId, ops, setFilter)).get(setFilter))
+            (columnIdHandler.set(setFilter, fn.bind(this, columnId, ops, setFilter)).get(setFilter))
         );
     }
 
-    private static respectsBasicSyntax(lexemes: ILexemeResult[]) {
+    private respectsBasicSyntax(lexemes: ILexemeResult[]) {
         const allowedLexemeTypes = [
             LexemeType.And,
             LexemeType.BinaryOperator,
@@ -86,66 +95,84 @@ export default class HeaderFilterFactory {
         return true;
     }
 
-    private static isBasicFilter(
+    private isBasicFilter(
         lexerResult: ILexerResult,
         syntaxerResult: ISyntaxerResult
     ) {
         return lexerResult.valid &&
             syntaxerResult.valid &&
-            HeaderFilterFactory.respectsBasicSyntax(lexerResult.lexemes);
+            this.respectsBasicSyntax(lexerResult.lexemes);
     }
 
-    public static createFilters(options: IFilterOptions) {
+    private updateOps(query: string) {
+        const lexerResult = lexer(query);
+        const syntaxerResult = syntaxer(lexerResult);
+
+        if (!this.isBasicFilter(lexerResult, syntaxerResult)) {
+            return;
+        }
+
+        const { tree } = syntaxerResult;
+        const toCheck: (ISyntaxTree | undefined)[] = [tree];
+
+        while (toCheck.length) {
+            const item = toCheck.pop();
+            if (!item) {
+                continue;
+            }
+
+            if (item.lexeme.name === LexemeType.UnaryOperator && item.block) {
+                this.ops.set(item.block.value, item.value);
+            } else if (item.lexeme.name === LexemeType.BinaryOperator && item.left && item.right) {
+                this.ops.set(item.left.value, `${item.value} ${item.right.value}`);
+            } else {
+                toCheck.push(item.left);
+                toCheck.push(item.block);
+                toCheck.push(item.right);
+            }
+        }
+    }
+
+    private isValidOrNull(columnId: ColumnId) {
+        const op = this.ops.get(columnId);
+
+        return !op || !op.trim().length || this.isValid(columnId);
+    }
+
+    private isValid(columnId: ColumnId) {
+        const op = this.ops.get(columnId);
+
+        return syntaxer(lexer(`${columnId} ${op}`)).valid;
+    }
+
+    public createFilters() {
         const {
             columns,
             filtering,
+            filtering_settings,
             filtering_type,
-            id,
-            lexerResult,
             offset,
             setFilter
-        } = options;
+        } = this.props;
 
         if (!filtering) {
             return [];
         }
 
-        const syntaxerResult = syntaxer(lexerResult);
+        this.updateOps(filtering_settings);
+
         const visibleColumns = R.filter(column => !column.hidden, columns);
-
-        const ops = new Map<ColumnId, string>();
-        if (HeaderFilterFactory.isBasicFilter(lexerResult, syntaxerResult)) {
-            const { tree } = syntaxerResult;
-            const toCheck: (ISyntaxTree | undefined)[] = [tree];
-
-            while (toCheck.length) {
-                const item = toCheck.pop();
-                if (!item) {
-                    continue;
-                }
-
-                if (item.lexeme.name === LexemeType.UnaryOperator && item.block) {
-                    ops.set(item.block.value, item.value);
-                } else if (item.lexeme.name === LexemeType.BinaryOperator && item.left && item.right) {
-                    ops.set(item.left.value, `${item.value} ${item.right.value}`);
-                } else {
-                    toCheck.push(item.left);
-                    toCheck.push(item.block);
-                    toCheck.push(item.right);
-                }
-            }
-        }
-
         const offsetCells = R.range(0, offset).map(i => (<th key={`offset-${i}`} />));
 
         const filterCells = filtering_type === FilteringType.Basic ?
             R.addIndex<IColumn, JSX.Element>(R.map)((column, index) => {
                 return (<ColumnFilter
                     key={`column-${index + offset}`}
-                    classes={[`column-${index + offset}`]}
+                    classes={`filter column-${index + offset}`}
+                    isValid={this.isValidOrNull(column.id)}
                     property={column.id}
-                    setFilter={this.getEventHandler(this.onChange, id, column.id, ops, setFilter)}
-                    value={ops.get(column.id)}
+                    setFilter={this.getEventHandler(this.onChange, column.id, this.ops, setFilter)}
+                    value={this.ops.get(column.id)}
                 />);
             }, visibleColumns) :
             [(<AdvancedFilter

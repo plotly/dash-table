@@ -19,7 +19,7 @@ import lexer from 'core/syntax-tree/lexer';
 import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
 import CellFactory from 'dash-table/components/CellFactory';
 import { ControlledTableProps, Columns, RowSelection } from 'dash-table/components/Table/props';
-import HeaderFilterFactory, { IFilterOptions } from 'dash-table/components/HeaderFilterFactory';
+import HeaderFilterFactory from 'dash-table/components/HeaderFilterFactory';
 
 const sortNumerical = R.sort<number>((a, b) => a - b);
 
@@ -31,11 +31,29 @@ interface IAccumulator {
 export default class ControlledTable extends Component<ControlledTableProps> {
     private stylesheet: Stylesheet;
     private cellFactory: CellFactory;
+    private filterFactory: HeaderFilterFactory;
 
     constructor(props: ControlledTableProps) {
         super(props);
 
         this.cellFactory = new CellFactory(() => this.props);
+        this.filterFactory = new HeaderFilterFactory(() => {
+            const { row_deletable, row_selectable } = this.props;
+
+            const offset =
+                (row_deletable ? 1 : 0) +
+                (row_selectable ? 1 : 0);
+
+            return {
+                columns: this.props.columns,
+                filtering: this.props.filtering,
+                filtering_settings: this.props.filtering_settings,
+                filtering_type: this.props.filtering_type,
+                id: this.props.id,
+                offset,
+                setFilter: this.handleSetFilter
+            };
+        });
         this.stylesheet = new Stylesheet(`#${props.id}`);
     }
 
@@ -574,25 +592,9 @@ export default class ControlledTable extends Component<ControlledTableProps> {
     handleSetFilter = (filtering_settings: string) => this.props.setProps({ filtering_settings });
 
     getCells = () => {
-        const { row_deletable, row_selectable } = this.props;
-
-        const offset =
-            (row_deletable ? 1 : 0) +
-            (row_selectable ? 1 : 0);
-
-        const filterOptions: IFilterOptions = {
-            columns: this.props.columns,
-            filtering: this.props.filtering,
-            filtering_type: this.props.filtering_type,
-            id: this.props.id,
-            lexerResult: this.lexerResult,
-            offset,
-            setFilter: this.handleSetFilter
-        };
-
         return [
             ...HeaderCellFactory.createHeaders(this.props),
-            ...HeaderFilterFactory.createFilters(filterOptions),
+            ...this.filterFactory.createFilters(),
             ...this.cellFactory.createCells()
         ];
     }

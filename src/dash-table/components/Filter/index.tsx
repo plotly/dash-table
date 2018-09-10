@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 
-import { isEqual } from 'core/comparer';
 import IsolatedInput from 'core/components/IsolatedInput';
 
 import { ColumnId } from 'dash-table/components/Table/props';
@@ -8,9 +7,10 @@ import { ColumnId } from 'dash-table/components/Table/props';
 type SetFilter = (ev: any) => void;
 
 interface IColumnFilterProps {
-    classes: string[];
-    setFilter: SetFilter;
+    classes: string;
+    isValid: boolean;
     property: ColumnId;
+    setFilter: SetFilter;
     value?: string;
 }
 
@@ -25,21 +25,13 @@ interface IAdvancedFilterProps {
     value?: string;
 }
 
-export class ColumnFilter extends Component<IColumnFilterProps, IColumnFilterState> {
+export class ColumnFilter extends PureComponent<IColumnFilterProps, IColumnFilterState> {
     constructor(props: IColumnFilterProps) {
         super(props);
 
         this.state = {
             value: props.value
         };
-    }
-
-    shouldComponentUpdate(nextProps: IColumnFilterProps, nextState: IColumnFilterState) {
-        const props = this.props;
-        const state = this.state;
-
-        return !isEqual(props, nextProps, true) ||
-            !isEqual(state, nextState, true);
     }
 
     componentWillReceiveProps(nextProps: IColumnFilterProps) {
@@ -63,10 +55,11 @@ export class ColumnFilter extends Component<IColumnFilterProps, IColumnFilterSta
     render() {
         const {
             classes,
+            isValid,
             value
         } = this.props;
 
-        return (<th className={classes.join(' ')}>
+        return (<th className={classes + (isValid ? '' : ' invalid')}>
             <IsolatedInput
                 value={value}
                 stopPropagation={true}
