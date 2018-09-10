@@ -169,7 +169,6 @@ export const propTypes = {
             columnId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
             direction: PropTypes.oneOf(['asc', 'desc'])
     })),
-    sorting_type: PropTypes.oneOf(['single', 'multi']),
     sorting_treat_empty_string_as_none: PropTypes.bool,
 
     virtual_dataframe: PropTypes.arrayOf(PropTypes.object),
