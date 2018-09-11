@@ -126,12 +126,13 @@ export default class Cell extends Component<ICellProps, ICellState> {
             onDoubleClick: onDoubleClick
         };
 
-        return !active ?
+        return (!active && this.state.value === this.props.value) ?
             this.renderValue(attributes) :
             (<input
                 ref='textInput'
                 type='text'
                 value={this.state.value}
+                onBlur={this.propagateChange}
                 onChange={this.handleChange}
                 onKeyDown={this.handleKeyDown}
                 onPaste={this.onPaste}
@@ -232,6 +233,16 @@ export default class Cell extends Component<ICellProps, ICellState> {
         </td>);
     }
 
+    propagateChange = () => {
+        const { onChange } = this.props;
+
+        onChange({
+            target: {
+                value: this.state.value
+            }
+        } as any);
+    }
+
     handleChange = (e: any) => {
         this.setState({ value: e.target.value });
     }
@@ -241,13 +252,7 @@ export default class Cell extends Component<ICellProps, ICellState> {
             return;
         }
 
-        const { onChange } = this.props;
-
-        onChange({
-            target: {
-                value: this.state.value
-            }
-        } as any);
+        this.propagateChange();
     }
 
     handleOpenDropdown = () => {
@@ -287,7 +292,7 @@ export default class Cell extends Component<ICellProps, ICellState> {
     }
 
     componentDidUpdate() {
-        const { active, onChange, value } = this.propsWithDefaults;
+        const { active } = this.propsWithDefaults;
 
         if (active && this.refs.textInput) {
             (this.refs.textInput as HTMLElement).focus();
@@ -295,14 +300,6 @@ export default class Cell extends Component<ICellProps, ICellState> {
 
         if (active && this.refs.dropdown) {
             (this.refs.td as HTMLElement).focus();
-        }
-
-        if (!active && this.state.value !== value) {
-            onChange({
-                target: {
-                    value: this.state.value
-                }
-            } as any);
         }
     }
 
