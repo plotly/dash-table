@@ -5,6 +5,10 @@ const packagejson = require('./../../package.json');
 const dashLibraryName = packagejson.name.replace(/-/g, '_');
 
 module.exports = (preprocessor = {}, mode = 'development') => {
+    console.log('********** Webpack Environment Overrides **********');
+    console.log('Preprocessor', JSON.stringify(preprocessor));
+    console.log('mode', mode);
+
     return {
         entry: {
             bundle: './src/dash-table/index.ts',

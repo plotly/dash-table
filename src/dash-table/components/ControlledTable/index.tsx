@@ -322,18 +322,29 @@ export default class ControlledTable extends Component<ControlledTableProps> {
     deleteCell = (event: any) => {
         const {
             columns,
+            dataframe,
             editable,
+            row_deletable,
+            row_selectable,
             selected_cell,
             setProps,
-            virtualizer
+            virtual_dataframe_indices
         } = this.props;
-
-        const dataframe = virtualizer.dataframe;
 
         event.preventDefault();
 
         let newDataframe = dataframe;
-        selected_cell.forEach(cell => {
+
+        const columnIndexOffset =
+            (row_deletable ? 1 : 0) +
+            (row_selectable ? 1 : 0);
+
+        const realCells: [number, number][] = R.map(
+            cell => [virtual_dataframe_indices[cell[0]], cell[1] - columnIndexOffset] as [number, number],
+            selected_cell
+        );
+
+        realCells.forEach(cell => {
             if (colIsEditable(editable, columns[cell[1]])) {
                 newDataframe = R.set(
                     R.lensPath([cell[0], columns[cell[1]].id]),
@@ -455,10 +466,13 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             columns,
             dataframe,
             editable,
+            filtering_settings,
             is_focused,
-            setProps,
             row_deletable,
-            row_selectable
+            row_selectable,
+            setProps,
+            sorting_settings,
+            virtual_dataframe_indices
         } = this.props;
 
         if (is_focused || !editable) {
@@ -474,8 +488,11 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         const result = TableClipboardHelper.fromClipboard(
             e,
             noOffsetActiveCell,
+            virtual_dataframe_indices,
             columns,
-            dataframe
+            dataframe,
+            true,
+            !sorting_settings.length || !filtering_settings.length
         );
 
         if (result) {
