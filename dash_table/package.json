@@ -20,7 +20,7 @@
     "private::runtests": "cypress run --browser chrome",
     "private::test-e2e": "run-p --race private::host* private::runtests",
     "private::test-visual": "build-storybook && percy-storybook",
-    "build.watch": "webpack-dev-server --content-base dash_table --mode development --config webpack.test.config.js",
+    "build.watch": "webpack-dev-server --content-base dash_table --mode development",
     "build:js-dev": "run-s \"private::build -- --mode development\"",
     "build:js": "run-s \"private::build -- --mode production\"",
     "build:py": "./extract-meta src/dash-table/Table.js > dash_table/metadata.json && cp package.json dash_table",
