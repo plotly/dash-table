@@ -50,6 +50,7 @@ export default class TableClipboardHelper {
             ) {
                 newColumns.push({
                     id: `Column ${i + 1}`,
+                    name: `Column ${i + 1}`,
                     type: 'numeric'
                 });
                 newDataframe.forEach(row => (row[`Column ${i}`] = ''));
@@ -68,8 +69,8 @@ export default class TableClipboardHelper {
             );
         }
 
-        values.forEach((row: any, i: any) =>
-            row.forEach((cell: any, j: any) => {
+        values.forEach((row: string[], i: number) =>
+            row.forEach((cell: string, j: number) => {
                 const iOffset = activeCell[0] + i;
                 const jOffset = activeCell[1] + j;
                 // let newDataframe = dataframe;

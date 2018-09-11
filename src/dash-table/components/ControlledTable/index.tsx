@@ -133,6 +133,9 @@ export default class ControlledTable extends Component<ControlledTableProps> {
 
         // if paste event onPaste handler registered in Table jsx handles it
         if (ctrlDown && e.keyCode === KEY_CODES.V) {
+            /*#if TEST_COPY_PASTE*/
+            this.onPaste({} as any);
+            /*#endif*/
             return;
         }
 
@@ -422,32 +425,55 @@ export default class ControlledTable extends Component<ControlledTableProps> {
     }
 
     onCopy = (e: any) => {
-        const { columns, selected_cell, virtualizer } = this.props;
+        const {
+            columns,
+            row_deletable,
+            row_selectable,
+            selected_cell,
+            virtualizer
+        } = this.props;
         const dataframe = virtualizer.dataframe;
 
         e.preventDefault();
 
-        TableClipboardHelper.toClipboard(selected_cell, columns, dataframe);
+        const columnIndexOffset =
+            (row_deletable ? 1 : 0) +
+            (row_selectable ? 1 : 0);
+
+        const noOffsetSelectedCells: [number, number][] = R.map(
+            cell => [cell[0], cell[1] - columnIndexOffset] as [number, number],
+            selected_cell
+        );
+
+        TableClipboardHelper.toClipboard(noOffsetSelectedCells, columns, dataframe);
         this.$el.focus();
     }
 
     onPaste = (e: any) => {
         const {
-            columns,
-            editable,
-            setProps,
-            is_focused,
             active_cell,
-            dataframe
+            columns,
+            dataframe,
+            editable,
+            is_focused,
+            setProps,
+            row_deletable,
+            row_selectable
         } = this.props;
 
         if (is_focused || !editable) {
             return;
         }
 
+        const columnIndexOffset =
+            (row_deletable ? 1 : 0) +
+            (row_selectable ? 1 : 0);
+
+        const noOffsetActiveCell: [number, number] = [active_cell[0], active_cell[1] - columnIndexOffset];
+
         const result = TableClipboardHelper.fromClipboard(
             e,
-            active_cell,
+            noOffsetActiveCell,
             columns,
             dataframe
         );

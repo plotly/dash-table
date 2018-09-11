@@ -20,18 +20,28 @@ describe('copy paste', () => {
             });
     });
 
-    // Commenting this test as Cypress team is having issues with the copy/paste scenario
-    // https://github.com/cypress-io/cypress/issues/2386
+    it.only('can do BE roundtrip on copy-paste', () => {
+        DashTable.getCell(0, 0).click();
+        DOM.focused.type(`${Key.Meta}c`);
 
-    // it('can do BE roundtrip on copy-paste', () => {
-    //     DashTable.getCell(0, 0).click();
-    //     DOM.focused.type(`${Key.Meta}c`);
+        DashTable.getCell(1, 0).click();
+        DOM.focused.type(`${Key.Meta}v`);
 
-    //     DashTable.getCell(1, 0).click();
-    //     DOM.focused.type(`${Key.Meta}v`);
+        DashTable
+            .getCell(1, 1)
+            .within(() => cy.get('.cell-value').should('have.html', 'MODIFIED'));
+        DashTable
+            .getCell(1, 0)
+            .within(() => cy.get('.cell-value').should('have.value', '0'));
 
-    //     DashTable
-    //         .getCell(1, 1)
-    //         .within(() => cy.get('.cell-value').should('have.html', 'MODIFIED'));
-    // });
+        DashTable.getCell(1, 1).click();
+        DOM.focused.type(`${Key.Meta}c`);
+
+        DashTable.getCell(2, 1).click();
+        DOM.focused.type(`${Key.Meta}v`);
+
+        DashTable
+            .getCell(2, 1)
+            .within(() => cy.get('.cell-value').should('have.value', 'MODIFIED'));
+    });
 });
