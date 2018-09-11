@@ -94,3 +94,7 @@
     Issue: https://github.com/plotly/dash-table/issues/64
     Issue: https://github.com/plotly/dash-table/issues/65
     Issue: https://github.com/plotly/dash-table/issues/67
+
+## RC12 - Dropdown regression fix
+
+    Issue: https://github.com/plotly/dash-table/issues/73
