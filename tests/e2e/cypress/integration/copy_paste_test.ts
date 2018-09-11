@@ -20,7 +20,7 @@ describe('copy paste', () => {
             });
     });
 
-    it.only('can do BE roundtrip on copy-paste', () => {
+    it('can do BE roundtrip on copy-paste', () => {
         DashTable.getCell(0, 0).click();
         DOM.focused.type(`${Key.Meta}c`);
 
