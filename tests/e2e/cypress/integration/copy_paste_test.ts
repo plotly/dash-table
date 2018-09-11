@@ -20,6 +20,9 @@ describe('copy paste', () => {
             });
     });
 
+    // Commenting this test as Cypress team is having issues with the copy/paste scenario
+    // LINK: https://github.com/cypress-io/cypress/issues/2386
+
     it('can do BE roundtrip on copy-paste', () => {
         DashTable.getCell(0, 0).click();
         DOM.focused.type(`${Key.Meta}c`);
