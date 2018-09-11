@@ -234,6 +234,10 @@ export default class Cell extends Component<ICellProps, ICellState> {
     }
 
     propagateChange = () => {
+        if (this.state.value === this.props.value) {
+            return;
+        }
+
         const { onChange } = this.props;
 
         onChange({
