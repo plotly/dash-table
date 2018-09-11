@@ -7,7 +7,7 @@ describe('edit cell', () => {
         cy.visit('http://localhost:8080');
     });
 
-    it.only('can edit dropdown', () => {
+    it('can edit dropdown', () => {
         let initialValue: string;
         let expectedValue: string;
 
