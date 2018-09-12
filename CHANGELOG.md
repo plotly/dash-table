@@ -108,3 +108,7 @@
 
     First click selects the cell's content and will cause user input to override the cell content.
     Second click into the cell will remove the selection and position the cursor accordingly.
+
+## RC15 - Global copy/paste (through browser menu)
+
+    Issue: https://github.com/plotly/dash-table/issues/75

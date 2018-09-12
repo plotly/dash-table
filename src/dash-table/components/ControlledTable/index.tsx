@@ -145,12 +145,6 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             return;
         }
 
-        // copy
-        if (e.keyCode === KEY_CODES.C && ctrlDown && !is_focused) {
-            this.onCopy(e);
-            return;
-        }
-
         if (e.keyCode === KEY_CODES.ESCAPE) {
             setProps({ is_focused: false });
             return;
@@ -462,7 +456,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             selected_cell
         );
 
-        TableClipboardHelper.toClipboard(noOffsetSelectedCells, columns, dataframe);
+        TableClipboardHelper.toClipboard(e, noOffsetSelectedCells, columns, dataframe);
         this.$el.focus();
     }
 
@@ -595,10 +589,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
 
     renderFragment = (cells: any[][] | null) => (
         cells ?
-            (<table
-                onPaste={this.onPaste}
-                tabIndex={-1}
-            >
+            (<table tabIndex={-1}>
                 <tbody>
                     {cells.map(
                         (row, idx) => <tr key={`row-${idx}`}>{row}</tr>)
@@ -673,7 +664,11 @@ export default class ControlledTable extends Component<ControlledTableProps> {
 
         const grid = this.getFragments(n_fixed_columns, n_fixed_rows);
 
-        return (<div id={id}>
+        return (<div
+            id={id}
+            onCopy={this.onCopy}
+            onPaste={this.onPaste}
+        >
             <div className='dash-spreadsheet-container'>
                 <div
                     className={classes.join(' ')}
