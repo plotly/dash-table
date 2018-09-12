@@ -130,7 +130,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             editable
         } = this.props;
 
-        Logger.warning(`handleKeyDown: ${e.key}`);
+        Logger.trace(`handleKeyDown: ${e.key}`);
 
         // if this is the initial CtrlMeta keydown with no modifiers then pass
         if (isCtrlMetaKey(e.keyCode)) {
@@ -142,11 +142,12 @@ export default class ControlledTable extends Component<ControlledTableProps> {
 
         if (ctrlDown && e.keyCode === KEY_CODES.V) {
             this.onPaste({} as any);
+            e.preventDefault();
             return;
         }
 
         if (e.keyCode === KEY_CODES.C && ctrlDown && !is_focused) {
-            this.onCopy({ preventDefault: () => { } } as any);
+            this.onCopy(e as any);
             return;
         }
         /*#endif*/
