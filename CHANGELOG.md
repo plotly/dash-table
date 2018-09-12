@@ -100,3 +100,7 @@
     Issue: https://github.com/plotly/dash-table/issues/68
     Issue: https://github.com/plotly/dash-table/issues/73
     Issue: https://github.com/plotly/dash-table/issues/76
+
+## RC14 - Empty dropdown setting value regression fix
+
+    Issue: https://github.com/plotly/dash-table/issues/83
