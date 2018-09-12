@@ -46,7 +46,10 @@ export default class FilterFactory {
 
         setFilter(R.map(
             ([cId, filter]) => `${cId} ${filter}`,
-            Array.from(ops.entries())
+            R.filter(
+                ([cId]) => this.isFragmentValid(cId),
+                Array.from(ops.entries())
+            )
         ).join(' && '));
     }
 
@@ -60,14 +63,17 @@ export default class FilterFactory {
         );
     }
 
-    private respectsBasicSyntax(lexemes: ILexemeResult[]) {
+    private respectsBasicSyntax(lexemes: ILexemeResult[], allowMultiple: boolean = true) {
         const allowedLexemeTypes = [
-            LexemeType.And,
             LexemeType.BinaryOperator,
             LexemeType.Expression,
             LexemeType.Operand,
             LexemeType.UnaryOperator
         ];
+
+        if (allowMultiple) {
+            allowedLexemeTypes.push(LexemeType.And);
+        }
 
         const allAllowed = R.all(
             item => R.contains(item.lexeme.name, allowedLexemeTypes),
@@ -97,11 +103,12 @@ export default class FilterFactory {
 
     private isBasicFilter(
         lexerResult: ILexerResult,
-        syntaxerResult: ISyntaxerResult
+        syntaxerResult: ISyntaxerResult,
+        allowMultiple: boolean = true
     ) {
         return lexerResult.valid &&
             syntaxerResult.valid &&
-            this.respectsBasicSyntax(lexerResult.lexemes);
+            this.respectsBasicSyntax(lexerResult.lexemes, allowMultiple);
     }
 
     private updateOps(query: string) {
@@ -133,16 +140,19 @@ export default class FilterFactory {
         }
     }
 
-    private isValidOrNull(columnId: ColumnId) {
+    private isFragmentValidOrNull(columnId: ColumnId) {
         const op = this.ops.get(columnId);
 
-        return !op || !op.trim().length || this.isValid(columnId);
+        return !op || !op.trim().length || this.isFragmentValid(columnId);
     }
 
-    private isValid(columnId: ColumnId) {
+    private isFragmentValid(columnId: ColumnId) {
         const op = this.ops.get(columnId);
 
-        return syntaxer(lexer(`${columnId} ${op}`)).valid;
+        const lexerResult = lexer(`${columnId} ${op}`);
+        const syntaxerResult = syntaxer(lexerResult);
+
+        return syntaxerResult.valid && this.isBasicFilter(lexerResult, syntaxerResult, false);
     }
 
     public createFilters() {
@@ -169,7 +179,7 @@ export default class FilterFactory {
                 return (<ColumnFilter
                     key={`column-${index + offset}`}
                     classes={`filter column-${index + offset}`}
-                    isValid={this.isValidOrNull(column.id)}
+                    isValid={this.isFragmentValidOrNull(column.id)}
                     property={column.id}
                     setFilter={this.getEventHandler(this.onChange, column.id, this.ops, setFilter)}
                     value={this.ops.get(column.id)}

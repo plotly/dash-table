@@ -208,7 +208,7 @@ const lexicon: ILexeme[] = [
     },
     {
         evaluate: (target, tree) => {
-            Logger.debug('evaluate -> unary not', target, tree);
+            Logger.trace('evaluate -> unary not', target, tree);
 
             const t = tree as any;
 

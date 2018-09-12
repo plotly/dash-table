@@ -11,7 +11,7 @@ import {
 } from 'dash-table/utils/unicode';
 import { selectionCycle } from 'dash-table/utils/navigation';
 
-import HeaderCellFactory, { DEFAULT_CELL_WIDTH } from 'dash-table/components/HeaderCellFactory';
+import HeaderCellFactory, { DEFAULT_CELL_WIDTH } from 'dash-table/components/HeaderFactory';
 import Logger from 'core/Logger';
 import { memoizeOne } from 'core/memoizer';
 import lexer from 'core/syntax-tree/lexer';
@@ -19,7 +19,7 @@ import lexer from 'core/syntax-tree/lexer';
 import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
 import CellFactory from 'dash-table/components/CellFactory';
 import { ControlledTableProps, Columns, RowSelection } from 'dash-table/components/Table/props';
-import HeaderFilterFactory from 'dash-table/components/HeaderFilterFactory';
+import HeaderFilterFactory from 'dash-table/components/FilterFactory';
 
 const sortNumerical = R.sort<number>((a, b) => a - b);
 

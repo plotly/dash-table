@@ -116,6 +116,13 @@
         }
     }
 
+    .filter {
+        &.invalid {
+            .inset-shadow(red, 1px, 1px, -1px, -1px);
+            background-color: pink;
+        }
+    }
+
     .selected-row {
         td, th {
             background-color: var(--selected-row);
@@ -302,19 +309,6 @@ tr:hover input :not(.cell--selected) {
     box-shadow: inset 2px 0px 0px 0px var(--accent),
         inset -1px 0px 0px 0px var(--border);
     /* inset 0px 1px 0px 0px var(--border); */
-}
-
-.filter {
-    cursor: pointer;
-    float: left;
-    color: var(--faded-text-header);
-    font-size: 20px;
-}
-th:hover .filter {
-    color: var(--accent);
-}
-.filter:hover {
-    text-decoration: underline;
 }
 
 .dash-spreadsheet .delete-cell {
