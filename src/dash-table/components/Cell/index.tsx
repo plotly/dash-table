@@ -297,7 +297,7 @@ export default class Cell extends Component<ICellProps, ICellState> {
 
         if (active && document.activeElement !== input) {
             input.focus();
-            input.setSelectionRange(0, input.value.length);
+            input.setSelectionRange(0, input.value ? input.value.length : 0);
         }
 
         if (active && this.refs.dropdown) {

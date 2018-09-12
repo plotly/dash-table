@@ -15,6 +15,18 @@ describe('dash basic', () => {
         DashTable.getCell(0, 2).within(() => cy.get('input').should('have.value', '250'));
     });
 
+    it.only('cell click selects all text', () => {
+        DashTable.getCell(0, 3).click();
+        DashTable.getCell(0, 3).within(() =>
+            cy.get('input').then($inputs => {
+                const $input = $inputs[0];
+
+                expect($input.selectionStart).to.equal(0);
+                expect($input.selectionEnd).to.equal($input.value.length);
+            })
+        );
+    });
+
     // https://github.com/plotly/dash-table/issues/50
     it('can edit last and update dataframe on "enter"', () => {
         DashTable.getCell(249, 2).click();
