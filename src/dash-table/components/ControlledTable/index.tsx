@@ -5,7 +5,9 @@ import { colIsEditable } from 'dash-table/components/derivedState';
 import {
     KEY_CODES,
     isCtrlMetaKey,
+    /*#if TEST_COPY_PASTE*/
     isCtrlDown,
+    /*#endif*/
     isMetaKey,
     isNavKey
 } from 'dash-table/utils/unicode';
@@ -130,20 +132,24 @@ export default class ControlledTable extends Component<ControlledTableProps> {
 
         Logger.warning(`handleKeyDown: ${e.key}`);
 
-        const ctrlDown = isCtrlDown(e);
-
         // if this is the initial CtrlMeta keydown with no modifiers then pass
         if (isCtrlMetaKey(e.keyCode)) {
             return;
         }
 
-        // if paste event onPaste handler registered in Table jsx handles it
+        /*#if TEST_COPY_PASTE*/
+        const ctrlDown = isCtrlDown(e);
+
         if (ctrlDown && e.keyCode === KEY_CODES.V) {
-            /*#if TEST_COPY_PASTE*/
             this.onPaste({} as any);
-            /*#endif*/
             return;
         }
+
+        if (e.keyCode === KEY_CODES.C && ctrlDown && !is_focused) {
+            this.onCopy({ preventDefault: () => { } } as any);
+            return;
+        }
+        /*#endif*/
 
         if (e.keyCode === KEY_CODES.ESCAPE) {
             setProps({ is_focused: false });
@@ -667,13 +673,11 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         return (<div
             id={id}
             onCopy={this.onCopy}
+            onKeyDown={this.handleKeyDown}
             onPaste={this.onPaste}
         >
             <div className='dash-spreadsheet-container'>
-                <div
-                    className={classes.join(' ')}
-                    onKeyDown={this.handleKeyDown}
-                >
+                <div className={classes.join(' ')}>
                     {grid.map((row, rowIndex) => (<div
                         key={`r${rowIndex}`}
                         ref={`r${rowIndex}`}
