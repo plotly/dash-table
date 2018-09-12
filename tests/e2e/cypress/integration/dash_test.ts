@@ -15,7 +15,7 @@ describe('dash basic', () => {
         DashTable.getCell(0, 2).within(() => cy.get('input').should('have.value', '250'));
     });
 
-    it.only('cell click selects all text', () => {
+    it('cell click selects all text', () => {
         DashTable.getCell(0, 3).click();
         DashTable.getCell(0, 3).within(() =>
             cy.get('input').then($inputs => {
