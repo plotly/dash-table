@@ -101,6 +101,14 @@
     Issue: https://github.com/plotly/dash-table/issues/73
     Issue: https://github.com/plotly/dash-table/issues/76
 
+## RC13 - Modify click & sequential click behavior
+
+    Incremental improvement for:
+    Issue: https://github.com/plotly/dash-table/issues/77
+
+    First click selects the cell's content and will cause user input to override the cell content.
+    Second click into the cell will remove the selection and position the cursor accordingly.
+    
 ## RC14 - Empty dropdown setting value regression fix
 
     Issue: https://github.com/plotly/dash-table/issues/83
