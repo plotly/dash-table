@@ -89,7 +89,21 @@
 
 ## RC10 - Fix double click regression
 
-## RC11 - Filtering (Basic & Advanced)
+    Issue: https://github.com/plotly/dash-table/issues/62
+
+## RC11 - Fix copy/paste regression, fix delete regression, fix click/blur regression
+
+    Issue: https://github.com/plotly/dash-table/issues/64
+    Issue: https://github.com/plotly/dash-table/issues/65
+    Issue: https://github.com/plotly/dash-table/issues/67
+
+## RC12 - Dropdown regression fix, border style fix, zoom/resize fix
+
+    Issue: https://github.com/plotly/dash-table/issues/68
+    Issue: https://github.com/plotly/dash-table/issues/73
+    Issue: https://github.com/plotly/dash-table/issues/76
+
+## RC13 - Filtering (Basic & Advanced)
     - Additional filtering_type prop that can take value 'basic' or 'advanced'
         This prop defines whether the user is presented with the UI to filter by column or with complex expressions
 

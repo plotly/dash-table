@@ -75,11 +75,13 @@ export default class ControlledTable extends Component<ControlledTableProps> {
 
         // Fallback method for paste handling in Chrome
         // when no input element has focused inside the table
+        window.addEventListener('resize', this.handleResize);
         document.addEventListener('paste', this.handlePaste);
         document.addEventListener('mousedown', this.handleClickOutside);
     }
 
     componentWillUnmount() {
+        window.removeEventListener('resize', this.handleResize);
         document.removeEventListener('mousedown', this.handleClickOutside);
         document.removeEventListener('paste', this.handlePaste);
     }
@@ -93,6 +95,28 @@ export default class ControlledTable extends Component<ControlledTableProps> {
     }
 
     componentDidUpdate() {
+        this.handleResize();
+    }
+
+    handleClickOutside = (event: any) => {
+        const $el = this.$el;
+
+        if ($el && !$el.contains(event.target as Node)) {
+            this.props.setProps({ is_focused: false });
+        }
+    }
+
+    handlePaste = (event: any) => {
+        // no need to check for target as this will only be called if
+        // a child fails to handle the paste event (e.g table, table input)
+        // make sure the active element is in the scope of the component
+        const $el = this.$el;
+        if ($el && $el.contains(document.activeElement)) {
+            this.onPaste(event);
+        }
+    }
+
+    handleResize = () => {
         const { r0c0, r0c1, r1c0, r1c1 } = this.refs as { [key: string]: HTMLElement };
 
         // Adjust [fixed columns/fixed rows combo] to fixed rows height
@@ -121,24 +145,6 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         }
     }
 
-    handleClickOutside = (event: any) => {
-        const $el = this.$el;
-
-        if ($el && !$el.contains(event.target as Node)) {
-            this.props.setProps({ is_focused: false });
-        }
-    }
-
-    handlePaste = (event: any) => {
-        // no need to check for target as this will only be called if
-        // a child fails to handle the paste event (e.g table, table input)
-        // make sure the active element is in the scope of the component
-        const $el = this.$el;
-        if ($el && $el.contains(document.activeElement)) {
-            this.onPaste(event);
-        }
-    }
-
     get $el() {
         return document.getElementById(this.props.id) as HTMLElement;
     }
@@ -163,6 +169,9 @@ export default class ControlledTable extends Component<ControlledTableProps> {
 
         // if paste event onPaste handler registered in Table jsx handles it
         if (ctrlDown && e.keyCode === KEY_CODES.V) {
+            /*#if TEST_COPY_PASTE*/
+            this.onPaste({} as any);
+            /*#endif*/
             return;
         }
 
@@ -349,18 +358,29 @@ export default class ControlledTable extends Component<ControlledTableProps> {
     deleteCell = (event: any) => {
         const {
             columns,
+            dataframe,
             editable,
+            row_deletable,
+            row_selectable,
             selected_cell,
             setProps,
-            virtualizer
+            virtual_dataframe_indices
         } = this.props;
-
-        const dataframe = virtualizer.dataframe;
 
         event.preventDefault();
 
         let newDataframe = dataframe;
-        selected_cell.forEach(cell => {
+
+        const columnIndexOffset =
+            (row_deletable ? 1 : 0) +
+            (row_selectable ? 1 : 0);
+
+        const realCells: [number, number][] = R.map(
+            cell => [virtual_dataframe_indices[cell[0]], cell[1] - columnIndexOffset] as [number, number],
+            selected_cell
+        );
+
+        realCells.forEach(cell => {
             if (colIsEditable(editable, columns[cell[1]])) {
                 newDataframe = R.set(
                     R.lensPath([cell[0], columns[cell[1]].id]),
@@ -452,34 +472,63 @@ export default class ControlledTable extends Component<ControlledTableProps> {
     }
 
     onCopy = (e: any) => {
-        const { columns, selected_cell, virtualizer } = this.props;
+        const {
+            columns,
+            row_deletable,
+            row_selectable,
+            selected_cell,
+            virtualizer
+        } = this.props;
         const dataframe = virtualizer.dataframe;
 
         e.preventDefault();
 
-        TableClipboardHelper.toClipboard(selected_cell, columns, dataframe);
+        const columnIndexOffset =
+            (row_deletable ? 1 : 0) +
+            (row_selectable ? 1 : 0);
+
+        const noOffsetSelectedCells: [number, number][] = R.map(
+            cell => [cell[0], cell[1] - columnIndexOffset] as [number, number],
+            selected_cell
+        );
+
+        TableClipboardHelper.toClipboard(noOffsetSelectedCells, columns, dataframe);
         this.$el.focus();
     }
 
     onPaste = (e: any) => {
         const {
-            columns,
-            editable,
-            setProps,
-            is_focused,
             active_cell,
-            dataframe
+            columns,
+            dataframe,
+            editable,
+            filtering_settings,
+            is_focused,
+            row_deletable,
+            row_selectable,
+            setProps,
+            sorting_settings,
+            virtual_dataframe_indices
         } = this.props;
 
         if (is_focused || !editable) {
             return;
         }
 
+        const columnIndexOffset =
+            (row_deletable ? 1 : 0) +
+            (row_selectable ? 1 : 0);
+
+        const noOffsetActiveCell: [number, number] = [active_cell[0], active_cell[1] - columnIndexOffset];
+
         const result = TableClipboardHelper.fromClipboard(
             e,
-            active_cell,
+            noOffsetActiveCell,
+            virtual_dataframe_indices,
             columns,
-            dataframe
+            dataframe,
+            true,
+            !sorting_settings.length || !filtering_settings.length
         );
 
         if (result) {
