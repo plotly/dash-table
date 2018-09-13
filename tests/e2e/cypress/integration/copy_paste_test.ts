@@ -7,7 +7,7 @@ describe('copy paste', () => {
         cy.visit('http://localhost:8082');
     });
 
-    it.only('can copy multiple cells', () => {
+    it('can copy multiple rows', () => {
         DashTable.getCell(0, 0).click();
         DOM.focused.type(Key.Shift, { release: false });
         DashTable.getCell(2, 0).click();
@@ -19,6 +19,26 @@ describe('copy paste', () => {
 
         for (let row = 0; row <= 2; ++row) {
             DashTable.getCell(row + 3, 0).within(() => cy.get('.cell-value').should('have.html', `${row}`));
+        }
+    });
+
+    it('can copy multiple rows and columns', () => {
+        DashTable.getCell(0, 1).click();
+        DOM.focused.type(Key.Shift, { release: false });
+        DashTable.getCell(2, 2).click();
+
+        DOM.focused.type(`${Key.Meta}c`);
+        DashTable.getCell(3, 1).click();
+        DOM.focused.type(`${Key.Meta}v`);
+        DashTable.getCell(0, 0).click();
+
+        for (let row = 0; row <= 2; ++row) {
+            for (let column = 1; column <= 2; ++column) {
+                let initialValue: string;
+
+                DashTable.getCell(row, column).within(() => cy.get('.cell-value').then($cells => initialValue = $cells[0].innerHTML));
+                DashTable.getCell(row + 3, column).within(() => cy.get('.cell-value').should('have.html', initialValue));
+            }
         }
     });
 

@@ -12,14 +12,16 @@ export default class TableClipboardHelper {
         const selectedRows = R.uniq(R.pluck(0, selectedCells).sort());
         const selectedCols: any = R.uniq(R.pluck(1, selectedCells).sort());
 
-        const value = R.slice(
+        const df = R.slice(
             R.head(selectedRows) as any,
             R.last(selectedRows) as any + 1,
             dataframe
         ).map(row =>
             R.props(selectedCols, R.props(R.pluck('id', columns) as any, row) as any)
-        ).map(row => R.values(row).join('\t')
-        ).join('\r\n');
+        );
+
+        const value = SheetClip.prototype.stringify(df);
+
         Logger.trace('TableClipboard -- set clipboard data: ', value);
 
         Clipboard.set(e, value);
