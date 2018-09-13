@@ -103,7 +103,19 @@
     Issue: https://github.com/plotly/dash-table/issues/73
     Issue: https://github.com/plotly/dash-table/issues/76
 
-## RC13 - Filtering (Basic & Advanced)
+## RC13 - Modify click & sequential click behavior
+
+    Incremental improvement for:
+    Issue: https://github.com/plotly/dash-table/issues/77
+
+    First click selects the cell's content and will cause user input to override the cell content.
+    Second click into the cell will remove the selection and position the cursor accordingly.
+    
+## RC14 - Empty dropdown setting value regression fix
+
+    Issue: https://github.com/plotly/dash-table/issues/83
+
+## RC15 - Filtering (Basic & Advanced)
     - Additional filtering_type prop that can take value 'basic' or 'advanced'
         This prop defines whether the user is presented with the UI to filter by column or with complex expressions
 

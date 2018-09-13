@@ -7,6 +7,31 @@ describe('edit cell', () => {
         cy.visit('http://localhost:8080');
     });
 
+    it('can delete dropdown', () => {
+        DashTable.getCell(0, 8).trigger('mouseover');
+        DashTable.getCell(0, 8).within(() => cy.get('.Select-clear').click());
+        DashTable.getCell(0, 8).within(() => cy.get('.Select-placeholder').should('exist'));
+    });
+
+    it('can delete dropdown and set value', () => {
+        DashTable.getCell(0, 8).trigger('mouseover');
+        DashTable.getCell(0, 8).within(() => cy.get('.Select-clear').click());
+        DashTable.getCell(0, 8).within(() => cy.get('.Select-placeholder').should('exist'));
+
+        DashTable.getCell(0, 8).within(() => cy.get('div.Select').click()).then(() => {
+            DashTable.getCell(0, 8).within(() => {
+                cy.get('.Select-option').then($options => {
+                    const target = $options[0];
+                    if (target) {
+                        cy.wrap(target).click({ force: true });
+                    }
+                });
+            });
+        });
+
+        DashTable.getCell(0, 8).within(() => cy.get('.Select-placeholder').should('not.exist'));
+    });
+
     it('can edit dropdown', () => {
         let initialValue: string;
         let expectedValue: string;
@@ -40,22 +65,14 @@ describe('edit cell', () => {
     // https://github.com/plotly/dash-table/issues/50
     it('can edit on "enter"', () => {
         DashTable.getCell(0, 3).click();
-        DOM.focused.then($input => {
-            const initialValue = $input.val();
-
-            DOM.focused.type(`abc${Key.Enter}`);
-            DashTable.getCell(0, 3).within(() => cy.get('.cell-value').should('have.html', `abc${initialValue}`));
-        });
+        DOM.focused.type(`abc${Key.Enter}`);
+        DashTable.getCell(0, 3).within(() => cy.get('.cell-value').should('have.html', `abc`));
     });
 
     it('can edit when clicking outside of cell', () => {
         DashTable.getCell(0, 3).click();
-        DOM.focused.then($input => {
-            const initialValue = $input.val();
-
-            DOM.focused.type(`abc`);
-            DashTable.getCell(0, 2).click();
-            DashTable.getCell(0, 3).within(() => cy.get('.cell-value').should('have.html', `abc${initialValue}`));
-        });
+        DOM.focused.type(`abc`);
+        DashTable.getCell(0, 2).click();
+        DashTable.getCell(0, 3).within(() => cy.get('.cell-value').should('have.html', `abc`));
     });
 });
