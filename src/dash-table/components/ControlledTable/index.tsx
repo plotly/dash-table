@@ -474,7 +474,6 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             dataframe,
             editable,
             filtering_settings,
-            is_focused,
             row_deletable,
             row_selectable,
             setProps,
@@ -482,7 +481,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             virtual_dataframe_indices
         } = this.props;
 
-        if (is_focused || !editable) {
+        if (!editable) {
             return;
         }
 
@@ -491,6 +490,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             (row_selectable ? 1 : 0);
 
         const noOffsetActiveCell: [number, number] = [active_cell[0], active_cell[1] - columnIndexOffset];
+
 
         const result = TableClipboardHelper.fromClipboard(
             e,
