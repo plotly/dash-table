@@ -5,9 +5,7 @@ import { colIsEditable } from 'dash-table/components/derivedState';
 import {
     KEY_CODES,
     isCtrlMetaKey,
-    /*#if TEST_COPY_PASTE*/
     isCtrlDown,
-    /*#endif*/
     isMetaKey,
     isNavKey
 } from 'dash-table/utils/unicode';
@@ -137,20 +135,23 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             return;
         }
 
-        /*#if TEST_COPY_PASTE*/
         const ctrlDown = isCtrlDown(e);
 
         if (ctrlDown && e.keyCode === KEY_CODES.V) {
+            /*#if TEST_COPY_PASTE*/
             this.onPaste({} as any);
             e.preventDefault();
+            /*#endif*/
             return;
         }
 
         if (e.keyCode === KEY_CODES.C && ctrlDown && !is_focused) {
+            /*#if TEST_COPY_PASTE*/
             this.onCopy(e as any);
+            e.preventDefault();
+            /*#endif*/
             return;
         }
-        /*#endif*/
 
         if (e.keyCode === KEY_CODES.ESCAPE) {
             setProps({ is_focused: false });
@@ -452,8 +453,6 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         } = this.props;
         const dataframe = virtualizer.dataframe;
 
-        e.preventDefault();
-
         const columnIndexOffset =
             (row_deletable ? 1 : 0) +
             (row_selectable ? 1 : 0);
@@ -490,7 +489,6 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             (row_selectable ? 1 : 0);
 
         const noOffsetActiveCell: [number, number] = [active_cell[0], active_cell[1] - columnIndexOffset];
-
 
         const result = TableClipboardHelper.fromClipboard(
             e,
