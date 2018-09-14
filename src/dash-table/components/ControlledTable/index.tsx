@@ -158,26 +158,28 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             editable
         } = this.props;
 
-        Logger.warning(`handleKeyDown: ${e.key}`);
-
-        const ctrlDown = isCtrlDown(e);
+        Logger.trace(`handleKeyDown: ${e.key}`);
 
         // if this is the initial CtrlMeta keydown with no modifiers then pass
         if (isCtrlMetaKey(e.keyCode)) {
             return;
         }
 
-        // if paste event onPaste handler registered in Table jsx handles it
+        const ctrlDown = isCtrlDown(e);
+
         if (ctrlDown && e.keyCode === KEY_CODES.V) {
             /*#if TEST_COPY_PASTE*/
             this.onPaste({} as any);
+            e.preventDefault();
             /*#endif*/
             return;
         }
 
-        // copy
         if (e.keyCode === KEY_CODES.C && ctrlDown && !is_focused) {
-            this.onCopy(e);
+            /*#if TEST_COPY_PASTE*/
+            this.onCopy(e as any);
+            e.preventDefault();
+            /*#endif*/
             return;
         }
 
@@ -481,8 +483,6 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         } = this.props;
         const dataframe = virtualizer.dataframe;
 
-        e.preventDefault();
-
         const columnIndexOffset =
             (row_deletable ? 1 : 0) +
             (row_selectable ? 1 : 0);
@@ -492,7 +492,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             selected_cell
         );
 
-        TableClipboardHelper.toClipboard(noOffsetSelectedCells, columns, dataframe);
+        TableClipboardHelper.toClipboard(e, noOffsetSelectedCells, columns, dataframe);
         this.$el.focus();
     }
 
@@ -503,7 +503,6 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             dataframe,
             editable,
             filtering_settings,
-            is_focused,
             row_deletable,
             row_selectable,
             setProps,
@@ -511,7 +510,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             virtual_dataframe_indices
         } = this.props;
 
-        if (is_focused || !editable) {
+        if (!editable) {
             return;
         }
 
@@ -625,10 +624,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
 
     renderFragment = (cells: any[][] | null) => (
         cells ?
-            (<table
-                onPaste={this.onPaste}
-                tabIndex={-1}
-            >
+            (<table tabIndex={-1}>
                 <tbody>
                     {cells.map(
                         (row, idx) => <tr key={`row-${idx}`}>{row}</tr>)
@@ -709,12 +705,14 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         const cells = this.getCells();
         const grid = this.getFragments(cells, n_fixed_columns, n_fixed_rows);
 
-        return (<div id={id}>
+        return (<div
+            id={id}
+            onCopy={this.onCopy}
+            onKeyDown={this.handleKeyDown}
+            onPaste={this.onPaste}
+        >
             <div className='dash-spreadsheet-container'>
-                <div
-                    className={classes.join(' ')}
-                    onKeyDown={this.handleKeyDown}
-                >
+                <div className={classes.join(' ')}>
                     {grid.map((row, rowIndex) => (<div
                         key={`r${rowIndex}`}
                         ref={`r${rowIndex}`}

@@ -110,12 +110,21 @@
 
     First click selects the cell's content and will cause user input to override the cell content.
     Second click into the cell will remove the selection and position the cursor accordingly.
-    
+
 ## RC14 - Empty dropdown setting value regression fix
 
     Issue: https://github.com/plotly/dash-table/issues/83
 
-## RC15 - Filtering (Basic & Advanced)
+## RC15 - Global copy/paste (through browser menu), incorrect pasted data fix
+
+    Issue: https://github.com/plotly/dash-table/issues/75
+    Issue: https://github.com/plotly/dash-table/issues/88
+
+## RC16 - Fix incorrect keyboard navigation
+
+    Issue: https://github.com/plotly/dash-table/issues/49
+
+## RC17 - Filtering (Basic & Advanced)
     - Additional filtering_type prop that can take value 'basic' or 'advanced'
         This prop defines whether the user is presented with the UI to filter by column or with complex expressions
 

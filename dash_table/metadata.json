@@ -683,6 +683,13 @@
           "computed": false
         }
       },
+      "dropdown_properties": {
+        "type": {
+          "name": "any"
+        },
+        "required": false,
+        "description": ""
+      },
       "column_conditional_styles": {
         "defaultValue": {
           "value": "[]",

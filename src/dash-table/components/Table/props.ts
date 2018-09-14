@@ -26,6 +26,7 @@ export interface IColumn {
     id: ColumnId;
     editable?: boolean;
     name: string;
+    options?: { label: string | number, value: any }[]; // legacy    
     [key: string]: any;
 }
 
@@ -60,6 +61,7 @@ interface IProps {
     column_static_dropdown?: any;
     column_static_style?: any;
     dataframe?: Dataframe;
+    dropdown_properties: any; // legacy
     editable?: boolean;
     filtering?: Filtering;
     filtering_settings?: string;
@@ -134,6 +136,7 @@ export interface ICellFactoryOptions {
     column_static_dropdown: any;
     column_static_style: any;
     dataframe: Dataframe;
+    dropdown_properties: any; // legacy
     editable: boolean;
     id: string;
     is_focused?: boolean;
