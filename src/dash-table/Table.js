@@ -157,9 +157,9 @@ export const propTypes = {
 
     filtering: PropTypes.oneOf(['fe', 'be', true, false]),
     filtering_settings: PropTypes.string,
-    filtering_type: PropTypes.oneOf(['basic', 'advanced']),
+    filtering_type: PropTypes.oneOf(['basic']),
     filtering_types: PropTypes.arrayOf(PropTypes.oneOf([
-        'basic', 'advanced'
+        'basic'
     ])),
 
     sorting: PropTypes.oneOf(['fe', 'be', true, false]),

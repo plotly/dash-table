@@ -26,7 +26,7 @@ export interface IColumn {
     id: ColumnId;
     editable?: boolean;
     name: string;
-    options?: { label: string | number, value: any }[]; // legacy    
+    options?: { label: string | number, value: any }[]; // legacy
     [key: string]: any;
 }
 
