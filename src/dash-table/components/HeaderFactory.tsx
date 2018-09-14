@@ -198,7 +198,7 @@ export default class HeaderFactory {
             >
                 {rowSorting ? (
                     <span
-                        className='filter'
+                        className='sort'
                         onClick={HeaderFactory.doSort(c.id, options)}
                     >
                         {HeaderFactory.getSortingIcon(c.id, options)}

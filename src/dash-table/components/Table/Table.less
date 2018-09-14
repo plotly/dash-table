@@ -239,6 +239,19 @@ tr:hover input :not(.cell--selected) {
     background-color: rgb(250, 250, 250);
 }
 
+.sort {
+    cursor: pointer;
+    float: left;
+    color: var(--faded-text-header);
+    font-size: 20px;
+}
+th:hover .sort {
+    color: var(--accent);
+}
+.sort:hover {
+    text-decoration: underline;
+}
+
 .expanded-row--empty-cell {
     box-shadow: none;
     background-color: transparent;
