@@ -3,7 +3,8 @@ import React from 'react';
 
 import Logger from 'core/Logger';
 
-import { ColumnFilter, AdvancedFilter } from 'dash-table/components/Filter';
+import ColumnFilter from 'dash-table/components/Filter/Column';
+import AdvancedFilter from 'dash-table/components/Filter/Advanced';
 import { ColumnId, Columns, Filtering, FilteringType, IColumn } from 'dash-table/components/Table/props';
 import lexer, { ILexerResult, ILexemeResult } from 'core/syntax-tree/lexer';
 import { LexemeType } from 'core/syntax-tree/lexicon';

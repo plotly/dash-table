@@ -518,10 +518,6 @@
             {
               "value": "'basic'",
               "computed": false
-            },
-            {
-              "value": "'advanced'",
-              "computed": false
             }
           ]
         },
@@ -540,10 +536,6 @@
             "value": [
               {
                 "value": "'basic'",
-                "computed": false
-              },
-              {
-                "value": "'advanced'",
                 "computed": false
               }
             ]
