@@ -81,7 +81,7 @@ describe('select', () => {
             }
         });
 
-        it.only('can select 9-10 correctly', () => {
+        it('can select 9-10 correctly', () => {
             DashTable.getCell(9, 3).click();
             DOM.focused.type(Key.Shift, { release: false });
             DashTable.getCell(10, 3).click();
