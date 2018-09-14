@@ -1,7 +1,9 @@
 import * as R from 'ramda';
 
+import { ColumnId } from 'dash-table/components/Table/props';
+
 export interface ISortSetting {
-    columnId: string | number;
+    columnId: ColumnId;
     direction: SortDirection;
 }
 

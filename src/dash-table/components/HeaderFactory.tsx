@@ -7,7 +7,7 @@ import multiUpdateSettings from 'core/sorting/multi';
 import singleUpdateSettings from 'core/sorting/single';
 
 import * as actions from 'dash-table/utils/actions';
-import { Columns, Dataframe, RowSelection, SetProps, SortingType } from 'dash-table/components/Table/props';
+import { ColumnId, Columns, Dataframe, RowSelection, SetProps, SortingType } from 'dash-table/components/Table/props';
 
 export const DEFAULT_CELL_WIDTH = 200;
 
@@ -60,13 +60,13 @@ function deleteColumn(column: any, columnRowIndex: any, options: ICellOptions) {
 }
 
 export default class HeaderFactory {
-    private static getSorting(columnId: string | number, settings: SortSettings): SortDirection {
+    private static getSorting(columnId: ColumnId, settings: SortSettings): SortDirection {
         const setting = R.find(s => s.columnId === columnId, settings);
 
         return setting ? setting.direction : SortDirection.None;
     }
 
-    private static doSort(columnId: string | number, options: ICellOptions) {
+    private static doSort(columnId: ColumnId, options: ICellOptions) {
         return () => {
             const { sorting_settings, sorting_type } = options;
 
@@ -97,7 +97,7 @@ export default class HeaderFactory {
         };
     }
 
-    private static getSortingIcon(columnId: string | number, options: ICellOptions) {
+    private static getSortingIcon(columnId: ColumnId, options: ICellOptions) {
         const { sorting_settings } = options;
 
         switch (HeaderFactory.getSorting(columnId, sorting_settings)) {
