@@ -135,7 +135,13 @@
 
     Issue: https://github.com/plotly/dash-table/issues/49
 
-## RC17 - Filtering (Basic) & Preparation work advanced filtering
+## RC17 - UX Improvements
+
+    Issue: https://github.com/plotly/dash-table/issues/91
+
+    - Navigation and selection UX fine tuning
+
+## RC18 - Filtering (Basic) & Preparation work advanced filtering
 
     - Additional filtering_type prop that can take value 'basic' (or eventually 'advanced')
         This prop defines whether the user is presented with the UI to filter by column or with complex expressions

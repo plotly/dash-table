@@ -12,6 +12,16 @@
         0px @bottom 0px 0px @color;
 }
 
+.not-selectable() {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
+}
+
 .dash-spreadsheet-container {
     display: flex;
     flex-direction: row;
@@ -171,6 +181,15 @@
 
         text-align: right;
     }
+
+    th {
+        .column-header--edit,
+        .column-header--delete,
+        .filter {
+            .not-selectable();
+            cursor: pointer;
+        }
+    }
 }
 
 .dash-spreadsheet textarea {
@@ -325,6 +344,8 @@ th:hover .sort {
 }
 
 .dash-spreadsheet .delete-cell {
+    .not-selectable();
+
     font-size: 1.3rem;
     text-align: center;
     cursor: pointer;
