@@ -127,3 +127,9 @@
     Issue: https://github.com/plotly/dash-table/issues/91
 
     - Navigation and selection UX fine tuning
+
+## RC18 - Fix dropdown position & behavior on scroll
+
+    Issue: https://github.com/plotly/dash-table/issues/96
+
+    Note: For the menu to appear & disappear correctly, the size of .dash-spreadsheet-container needs to be controlled (to match the content exactly). This can be done through table_style: [{ selector: '.dash-spreadsheet-container.freeze-left', rule: '<width/height styling>' }] or through a custom CSS.

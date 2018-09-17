@@ -34,7 +34,6 @@
     border-top: lightgrey 1px solid;
     display: flex;
     flex-direction: column;
-    margin: 20px;
 
     &.freeze-left,
     &.freeze-top {
@@ -101,10 +100,11 @@
         flex: 0 0 auto;
         left: 0;
         position: sticky;
-        z-index: 1;
+        z-index: 300;
     }
 
     .cell-0-1 {
+        z-index: 300;
         flex: 0 0 auto;
     }
 
@@ -148,7 +148,7 @@
             .outline-shadow(var(--accent), 1px, 1px, 0, 0);
             border: 1px solid var(--accent);
             margin: -1px;
-            z-index: 500;
+            z-index: 200;
         }
 
         .cell-value {

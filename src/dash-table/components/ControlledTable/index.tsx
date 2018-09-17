@@ -16,6 +16,7 @@ import Logger from 'core/Logger';
 import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
 import CellFactory from 'dash-table/components/CellFactory';
 import { ControlledTableProps, Columns, RowSelection } from 'dash-table/components/Table/props';
+import dropdownHelper from 'dash-table/components/dropdownHelper';
 
 const sortNumerical = R.sort<number>((a, b) => a - b);
 
@@ -66,6 +67,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
 
     componentDidUpdate() {
         this.handleResize();
+        this.handleDropdown();
     }
 
     handleClickOutside = (event: any) => {
@@ -642,11 +644,19 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         ];
     }
 
+    handleDropdown = () => {
+        const { r1c1 } = this.refs as { [key: string]: HTMLElement };
+
+        dropdownHelper(r1c1.querySelector('.Select-menu-outer'));
+    }
+
     onScroll = (ev: any) => {
         const { r0c1 } = this.refs as { [key: string]: HTMLElement };
 
         Logger.debug(`ControlledTable fragment scrolled to (left,top)=(${ev.target.scrollLeft},${ev.target.scrollTop})`);
         r0c1.style.marginLeft = `${-ev.target.scrollLeft}px`;
+
+        this.handleDropdown();
     }
 
     render() {
@@ -667,6 +677,12 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             ...(n_fixed_columns ? ['freeze-left'] : [])
         ];
 
+        const containerClasses = [
+            'dash-spreadsheet-container',
+            ...(n_fixed_rows ? ['freeze-top'] : []),
+            ...(n_fixed_columns ? ['freeze-left'] : [])
+        ]
+
         const grid = this.getFragments(n_fixed_columns, n_fixed_rows);
 
         return (<div
@@ -675,7 +691,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             onKeyDown={this.handleKeyDown}
             onPaste={this.onPaste}
         >
-            <div className='dash-spreadsheet-container'>
+            <div className={containerClasses.join(' ')}>
                 <div className={classes.join(' ')}>
                     {grid.map((row, rowIndex) => (<div
                         key={`r${rowIndex}`}

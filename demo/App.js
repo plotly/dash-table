@@ -43,7 +43,7 @@ class App extends Component {
                     }
                 ],
                 table_style: [
-                    { selector: '.dash-spreadsheet.freeze-left', rule: 'width: 1000px' }
+                    { selector: '.dash-spreadsheet-container.freeze-left', rule: 'width: 1000px' }
                 ]
             }
         };
