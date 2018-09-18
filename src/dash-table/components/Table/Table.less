@@ -22,6 +22,17 @@
     cursor: default;
 }
 
+.dash-spreadsheet,
+.dash-spreadsheet-container {
+    &.freeze-left {
+        width: 500px;
+    }
+
+    &.freeze-top {
+        height: 500px;
+    }
+}
+
 .dash-spreadsheet-container {
     display: flex;
     flex-direction: row;
@@ -38,14 +49,6 @@
     &.freeze-left,
     &.freeze-top {
         overflow: hidden !important;
-    }
-
-    &.freeze-left {
-        width: 500px;
-    }
-
-    &.freeze-top {
-        height: 500px;
     }
 
     *,
@@ -100,7 +103,7 @@
         flex: 0 0 auto;
         left: 0;
         position: sticky;
-        z-index: 300;
+        z-index: 400;
     }
 
     .cell-0-1 {
