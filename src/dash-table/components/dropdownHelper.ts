@@ -16,6 +16,16 @@ export default (
         return;
     }
 
+    let positionalParent = dropdown;
+    while (getComputedStyle(positionalParent).position !== 'relative' &&
+        getComputedStyle(positionalParent).position !== 'sticky') {
+        if (!positionalParent.parentElement) {
+            break;
+        }
+
+        positionalParent = positionalParent.parentElement;
+    }
+
     let relativeParent = dropdown;
     while (getComputedStyle(relativeParent).position !== 'relative') {
         if (!relativeParent.parentElement) {
@@ -25,12 +35,13 @@ export default (
         relativeParent = relativeParent.parentElement;
     }
 
+    const positionalBounds = positionalParent.getBoundingClientRect();
     const relativeBounds = relativeParent.getBoundingClientRect();
 
     const parentBounds = cell.getBoundingClientRect();
 
-    const left = (parentBounds.left - relativeBounds.left) + relativeParent.scrollLeft;
-    const top = (parentBounds.top - relativeBounds.top) + relativeParent.scrollTop + parentBounds.height;
+    const left = (parentBounds.left - positionalBounds.left) + positionalParent.scrollLeft;
+    const top = (parentBounds.top - positionalBounds.top) + positionalParent.scrollTop + parentBounds.height;
 
     dropdown.style.width = `${parentBounds.width}px`;
     dropdown.style.top = `${top}px`;
