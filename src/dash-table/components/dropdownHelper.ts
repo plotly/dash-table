@@ -2,7 +2,6 @@ export default (
     dropdown: HTMLElement | null,
     cell: HTMLElement | null = null
 ) => {
-    console.log('dropdown helper', dropdown, cell);
     cell = cell || (() => {
         cell = dropdown;
 
