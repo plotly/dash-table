@@ -22,8 +22,7 @@
     cursor: default;
 }
 
-.dash-spreadsheet,
-.dash-spreadsheet-container {
+.dash-spreadsheet {
     &.freeze-left {
         width: 500px;
     }
@@ -39,7 +38,7 @@
     position: relative;
 }
 
-.dash-spreadsheet {
+.dash-spreadsheet-inner {
     box-sizing: border-box;
     border-left: lightgrey 1px solid;
     border-top: lightgrey 1px solid;
@@ -195,11 +194,11 @@
     }
 }
 
-.dash-spreadsheet textarea {
+.dash-spreadsheet-inner textarea {
     white-space: pre;
 }
 
-.dash-spreadsheet table {
+.dash-spreadsheet-inner table {
     border-collapse: collapse;
 
     font-family: monospace;
@@ -217,11 +216,11 @@
 }
 
 /* focus happens after copying to clipboard */
-.dash-spreadsheet table:focus {
+.dash-spreadsheet-inner table:focus {
     outline: none;
 }
 
-.dash-spreadsheet thead {
+.dash-spreadsheet-inner thead {
     display: table-row-group;
 }
 
@@ -231,7 +230,7 @@
     background-color: var(--background-color-ellipses);
 }
 
-.dash-spreadsheet td.dropdown {
+.dash-spreadsheet-inner td.dropdown {
     /*
      * To view the dropdown's contents, we need
      * overflow-y: visible.
@@ -247,17 +246,17 @@
     overflow-x: visible;
 }
 
-.dash-spreadsheet th {
+.dash-spreadsheet-inner th {
     box-shadow: inset 1px 0px 0px 0px var(--border),
         inset 0px 1px 0px 0px var(--border);
 }
 
-.dash-spreadsheet :not(.cell--selected) tr:hover,
+.dash-spreadsheet-inner :not(.cell--selected) tr:hover,
 tr:hover input :not(.cell--selected) {
     background-color: var(--hover);
 }
 
-.dash-spreadsheet th {
+.dash-spreadsheet-inner th {
     background-color: rgb(250, 250, 250);
 }
 
@@ -283,7 +282,7 @@ th:hover .sort {
     text-align: center;
 }
 
-.dash-spreadsheet input:not([type=radio]):not([type=checkbox]) {
+.dash-spreadsheet-inner input:not([type=radio]):not([type=checkbox]) {
     padding: 0px;
     margin: 0px;
     height: calc(100% - 1px);
@@ -303,13 +302,13 @@ th:hover .sort {
     text-shadow: none;
 }
 
-.dash-spreadsheet input.unfocused {
+.dash-spreadsheet-inner input.unfocused {
     color: transparent;
     text-shadow: 0 0 0 var(--text-color);
     cursor: default;
 }
 
-.dash-spreadsheet input.unfocused:focus {
+.dash-spreadsheet-inner input.unfocused:focus {
     outline: none;
 }
 
@@ -331,7 +330,7 @@ th:hover .sort {
     color: var(--accent);
 }
 
-.dash-spreadsheet tr:hover .toggle-row {
+.dash-spreadsheet-inner tr:hover .toggle-row {
     color: var(--accent);
 }
 
@@ -346,7 +345,7 @@ th:hover .sort {
     /* inset 0px 1px 0px 0px var(--border); */
 }
 
-.dash-spreadsheet .delete-cell {
+.dash-spreadsheet-inner .delete-cell {
     .not-selectable();
 
     font-size: 1.3rem;
@@ -354,11 +353,11 @@ th:hover .sort {
     cursor: pointer;
     color: var(--muted);
 }
-.dash-spreadsheet .delete-cell:hover {
+.dash-spreadsheet-inner .delete-cell:hover {
     color: var(--accent);
 }
 
-.dash-spreadsheet .column-header--edit {
+.dash-spreadsheet-inner .column-header--edit {
     float: left;
     opacity: 0.1;
     padding-left: 2px;
@@ -366,12 +365,12 @@ th:hover .sort {
     cursor: pointer;
 }
 
-.dash-spreadsheet th:hover .column-header--edit {
+.dash-spreadsheet-inner th:hover .column-header--edit {
     color: var(--accent);
     opacity: 1;
 }
 
-.dash-spreadsheet .column-header--delete {
+.dash-spreadsheet-inner .column-header--delete {
     float: left;
     opacity: 0.1;
     padding-left: 2px;
@@ -379,7 +378,7 @@ th:hover .sort {
     cursor: pointer;
 }
 
-.dash-spreadsheet th:hover .column-header--delete {
+.dash-spreadsheet-inner th:hover .column-header--delete {
     color: var(--accent);
     opacity: 1;
 }

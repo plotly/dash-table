@@ -584,11 +584,11 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         if (deletable) {
 
             this.stylesheet.setRule(
-                `.dash-spreadsheet td.column-${typeIndex}`,
+                `.dash-spreadsheet-inner td.column-${typeIndex}`,
                 `width: 30px; max-width: 30px; min-width: 30px;`
             );
             this.stylesheet.setRule(
-                `.dash-spreadsheet th.column-${typeIndex}`,
+                `.dash-spreadsheet-inner th.column-${typeIndex}`,
                 `width: 30px; max-width: 30px; min-width: 30px;`
             );
 
@@ -597,11 +597,11 @@ export default class ControlledTable extends Component<ControlledTableProps> {
 
         if (selectable) {
             this.stylesheet.setRule(
-                `.dash-spreadsheet td.column-${typeIndex}`,
+                `.dash-spreadsheet-inner td.column-${typeIndex}`,
                 `width: 30px; max-width: 30px; min-width: 30px;`
             );
             this.stylesheet.setRule(
-                `.dash-spreadsheet th.column-${typeIndex}`,
+                `.dash-spreadsheet-inner th.column-${typeIndex}`,
                 `width: 30px; max-width: 30px; min-width: 30px;`
             );
 
@@ -612,11 +612,11 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             const width = Stylesheet.unit(column.width || DEFAULT_CELL_WIDTH, 'px');
 
             this.stylesheet.setRule(
-                `.dash-spreadsheet td.column-${typeIndex}`,
+                `.dash-spreadsheet-inner td.column-${typeIndex}`,
                 `width: ${width}; max-width: ${width}; min-width: ${width};`
             );
             this.stylesheet.setRule(
-                `.dash-spreadsheet th.column-${typeIndex}`,
+                `.dash-spreadsheet-inner th.column-${typeIndex}`,
                 `width: ${width}; max-width: ${width}; min-width: ${width};`
             );
 
@@ -707,12 +707,14 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         this.applyStyle(columns, row_deletable, row_selectable);
 
         const classes = [
+            'dash-spreadsheet-inner',
             'dash-spreadsheet',
             ...(n_fixed_rows ? ['freeze-top'] : []),
             ...(n_fixed_columns ? ['freeze-left'] : [])
         ];
 
         const containerClasses = [
+            'dash-spreadsheet',
             'dash-spreadsheet-container',
             ...(n_fixed_rows ? ['freeze-top'] : []),
             ...(n_fixed_columns ? ['freeze-left'] : [])
