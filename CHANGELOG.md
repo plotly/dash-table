@@ -169,5 +169,5 @@
 
     Table styling has been changed for frozen rows and columns. Default styling change from:
 
-    - frozen rows: { width: 500px } to { height: fit-content, max-height: 500px }
-    - frozen columns: { height: 500px } to { width: fit-content, max-width: 500px }
+    - frozen rows: { height: 500px } to { height: fit-content, max-height: 500px }
+    - frozen columns: { width: 500px } to { width: fit-content, max-width: 500px }
