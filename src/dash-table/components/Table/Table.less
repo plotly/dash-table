@@ -41,6 +41,13 @@
     }
 }
 
+.fit-content-polyfill() {
+    width: auto; // MS Edge, IE
+    width: fit-content; // Chrome
+    width: -moz-fit-content; // Firefox
+    width: -webkit-fit-content; // Safari
+}
+
 .not-selectable() {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -53,12 +60,12 @@
 
 .dash-spreadsheet {
     &.freeze-left {
-        width: fit-content;
+        .fit-content-polyfill();
         max-width: 500px;
     }
 
     &.freeze-top {
-        height: fit-content;
+        .fit-content-polyfill();
         max-height: 500px;
     }
 }
