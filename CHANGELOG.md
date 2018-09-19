@@ -162,3 +162,12 @@
     Issue: https://github.com/plotly/dash-table/issues/96
 
     Limitation: The dropdown in fixed columns behaves differently from the dropdown in the non-fixed portion of the table. Because of layers of overflow & positioning, the dropdown does not show outside of the table is instead part of it. Opening the dropdown in bottom rows will require scrolling vs. displaying on top of the table.
+
+## RC20 - Fix incorrect border around table cells when not filled
+
+    Issue: https://github.com/plotly/dash-table/issues/101
+
+    Table styling has been changed for frozen-left and frozen-top. Default styling change from:
+
+    - frozen-top: { width: 500px } to { width: fit-content, max-width: 500px }
+    - frozen-left: { height: 500px } to { height: fit-content, max-height: 500px }
