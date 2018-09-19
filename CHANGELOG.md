@@ -167,7 +167,7 @@
 
     Issue: https://github.com/plotly/dash-table/issues/101
 
-    Table styling has been changed for frozen-left and frozen-top. Default styling change from:
+    Table styling has been changed for frozen rows and columns. Default styling change from:
 
-    - frozen-top: { width: 500px } to { width: fit-content, max-width: 500px }
-    - frozen-left: { height: 500px } to { height: fit-content, max-height: 500px }
+    - frozen rows: { width: 500px } to { width: fit-content, max-width: 500px }
+    - frozen columns: { height: 500px } to { height: fit-content, max-height: 500px }
