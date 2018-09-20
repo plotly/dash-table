@@ -227,7 +227,7 @@
           "computed": false
         }
       },
-      "virtualization": {
+      "pagination_mode": {
         "type": {
           "name": "enum",
           "value": [
@@ -256,7 +256,7 @@
           "computed": false
         }
       },
-      "virtualization_settings": {
+      "pagination_settings": {
         "type": {
           "name": "shape",
           "value": {
@@ -647,7 +647,7 @@
         "required": false,
         "description": ""
       },
-      "virtual_dataframe": {
+      "derived_viewport_dataframe": {
         "type": {
           "name": "arrayOf",
           "value": {
@@ -661,7 +661,7 @@
           "computed": false
         }
       },
-      "virtual_dataframe_indices": {
+      "derived_viewport_indices": {
         "type": {
           "name": "arrayOf",
           "value": {
@@ -681,6 +681,20 @@
         },
         "required": false,
         "description": ""
+      },
+      "derived_virtual_dataframe": {
+        "defaultValue": {
+          "value": "[]",
+          "computed": false
+        },
+        "required": false
+      },
+      "derived_virtual_indices": {
+        "defaultValue": {
+          "value": "[]",
+          "computed": false
+        },
+        "required": false
       },
       "column_conditional_styles": {
         "defaultValue": {
