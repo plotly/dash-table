@@ -9,8 +9,7 @@ interface IResult {
 export default class ViewportDataframeAdapter {
     constructor(
         private propsFn: () => PropsWithDefaults,
-        private dataFn: () => { virtual_dataframe: Dataframe, virtual_indices: Indices },
-
+        private dataFn: () => { virtual_dataframe: Dataframe, virtual_indices: Indices }
     ) { }
 
     get() {
