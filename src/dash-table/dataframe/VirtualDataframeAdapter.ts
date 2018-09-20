@@ -7,7 +7,9 @@ import {
     Dataframe,
     Datum,
     Indices,
-    PropsWithDefaults
+    PropsWithDefaults,
+    Filtering,
+    Sorting
 } from 'dash-table/components/Table/props';
 
 interface IResult {
@@ -46,9 +48,9 @@ export default class VirtualDataframeAdapter {
 
     private getDataframe = memoizeOneWithFlag((
         dataframe: Dataframe,
-        filtering: string | boolean,
+        filtering: Filtering,
         filtering_settings: string,
-        sorting: string | boolean,
+        sorting: Sorting,
         sorting_settings: SortSettings = [],
         sorting_treat_empty_string_as_none: boolean
     ): IResult => {

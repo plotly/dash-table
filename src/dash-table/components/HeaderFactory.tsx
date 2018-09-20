@@ -7,7 +7,7 @@ import multiUpdateSettings from 'core/sorting/multi';
 import singleUpdateSettings from 'core/sorting/single';
 
 import * as actions from 'dash-table/utils/actions';
-import { ColumnId, Columns, Dataframe, RowSelection, SetProps, SortingType, PaginationMode } from 'dash-table/components/Table/props';
+import { ColumnId, Columns, Dataframe, RowSelection, SetProps, SortingType, PaginationMode, Sorting } from 'dash-table/components/Table/props';
 
 export const DEFAULT_CELL_WIDTH = 200;
 
@@ -19,7 +19,7 @@ interface ICellOptions {
     mergeCells?: boolean;
     n_fixed_columns: number;
     offset: number;
-    rowSorting: string | boolean;
+    rowSorting: Sorting;
     setProps: SetProps;
     sorting_settings: SortSettings;
     sorting_type: SortingType;
@@ -36,7 +36,7 @@ interface IOptions {
     row_deletable: boolean;
     row_selectable: RowSelection;
     setProps: SetProps;
-    sorting: string | boolean;
+    sorting: Sorting;
     sorting_settings: SortSettings;
     sorting_type: SortingType;
     pagination_mode: PaginationMode;
