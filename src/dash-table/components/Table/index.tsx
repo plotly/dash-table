@@ -4,7 +4,7 @@ import * as R from 'ramda';
 import { memoizeOne } from 'core/memoizer';
 
 import ControlledTable from 'dash-table/components/ControlledTable';
-import { PropsWithDefaults, SetProps } from './props';
+import { SetProps, PropsWithDefaultsAndDerived } from './props';
 import VirtualDataframeAdapter from 'dash-table/dataframe/VirtualDataframeAdapter';
 
 import 'react-select/dist/react-select.css';
@@ -13,7 +13,7 @@ import './Dropdown.css';
 import ViewportDataframeAdapter from 'dash-table/dataframe/ViewportDataframeAdapter';
 import PaginationAdapter from 'dash-table/dataframe/PaginationAdapter';
 
-export default class Table extends Component<PropsWithDefaults> {
+export default class Table extends Component<PropsWithDefaultsAndDerived> {
     private virtualAdapter: VirtualDataframeAdapter;
     private viewportAdapter: ViewportDataframeAdapter;
     private paginationAdapter: PaginationAdapter;
@@ -81,6 +81,6 @@ export default class Table extends Component<PropsWithDefaults> {
             }
 
             setProps(newProps);
-        } : (newProps: Partial<PropsWithDefaults>) => this.setState(newProps);
+        } : (newProps: Partial<PropsWithDefaultsAndDerived>) => this.setState(newProps);
     });
 }

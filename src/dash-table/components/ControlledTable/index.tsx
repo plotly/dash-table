@@ -366,7 +366,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             row_selectable,
             selected_cell,
             setProps,
-            derived_viewport_indices
+            viewport_indices
         } = this.props;
 
         event.preventDefault();
@@ -378,7 +378,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             (row_selectable ? 1 : 0);
 
         const realCells: [number, number][] = R.map(
-            cell => [derived_viewport_indices[cell[0]], cell[1] - columnIndexOffset] as [number, number],
+            cell => [viewport_indices[cell[0]], cell[1] - columnIndexOffset] as [number, number],
             selected_cell
         );
 
@@ -505,7 +505,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             row_selectable,
             setProps,
             sorting_settings,
-            derived_viewport_indices
+            viewport_indices
         } = this.props;
 
         if (!editable) {
@@ -521,7 +521,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         const result = TableClipboardHelper.fromClipboard(
             e,
             noOffsetActiveCell,
-            derived_viewport_indices,
+            viewport_indices,
             columns,
             dataframe,
             true,

@@ -117,7 +117,9 @@ interface IDefaultProps {
     sorting_treat_empty_string_as_none: boolean;
     pagination_mode: PaginationMode;
     pagination_settings: IPaginationSettings;
+}
 
+interface IDerivedProps {
     derived_viewport_dataframe: Dataframe;
     derived_viewport_indices: Indices;
     derived_virtual_dataframe: Dataframe;
@@ -125,11 +127,12 @@ interface IDefaultProps {
 }
 
 export type PropsWithDefaults = IProps & IDefaultProps;
+export type PropsWithDefaultsAndDerived = PropsWithDefaults & IDerivedProps;
 
 export type ControlledTableProps = PropsWithDefaults & {
-    paginator: AbstractPaginationStrategy
     setProps: SetProps;
 
+    paginator: AbstractPaginationStrategy
     viewport_dataframe: Dataframe;
     viewport_indices: Indices;
     virtual_dataframe: Dataframe;
