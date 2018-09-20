@@ -11,7 +11,7 @@ import {
 } from 'dash-table/utils/unicode';
 import { selectionCycle } from 'dash-table/utils/navigation';
 
-import HeaderCellFactory, { DEFAULT_CELL_WIDTH } from 'dash-table/components/HeaderFactory';
+import HeaderFactory, { DEFAULT_CELL_WIDTH } from 'dash-table/components/HeaderFactory';
 import Logger from 'core/Logger';
 import { memoizeOne } from 'core/memoizer';
 import lexer from 'core/syntax-tree/lexer';
@@ -20,7 +20,7 @@ import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
 import CellFactory from 'dash-table/components/CellFactory';
 import { ControlledTableProps, Columns, RowSelection } from 'dash-table/components/Table/props';
 import dropdownHelper from 'dash-table/components/dropdownHelper';
-import HeaderFilterFactory from 'dash-table/components/FilterFactory';
+import FilterFactory from 'dash-table/components/FilterFactory';
 
 const sortNumerical = R.sort<number>((a, b) => a - b);
 
@@ -32,13 +32,14 @@ interface IAccumulator {
 export default class ControlledTable extends Component<ControlledTableProps> {
     private stylesheet: Stylesheet;
     private cellFactory: CellFactory;
-    private filterFactory: HeaderFilterFactory;
+    private filterFactory: FilterFactory;
+    private headerFactory: HeaderFactory;
 
     constructor(props: ControlledTableProps) {
         super(props);
 
         this.cellFactory = new CellFactory(() => this.props);
-        this.filterFactory = new HeaderFilterFactory(() => {
+        this.filterFactory = new FilterFactory(() => {
             const { row_deletable, row_selectable } = this.props;
 
             const offset =
@@ -55,6 +56,8 @@ export default class ControlledTable extends Component<ControlledTableProps> {
                 setFilter: this.handleSetFilter
             };
         });
+        this.headerFactory = new HeaderFactory(() => this.props);
+
         this.stylesheet = new Stylesheet(`#${props.id}`);
     }
 
@@ -636,7 +639,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
 
     getCells = () => {
         return [
-            ...HeaderCellFactory.createHeaders(this.props),
+            ...this.headerFactory.createHeaders(),
             ...this.filterFactory.createFilters(),
             ...this.cellFactory.createCells()
         ];
