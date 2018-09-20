@@ -7,7 +7,7 @@ import multiUpdateSettings from 'core/sorting/multi';
 import singleUpdateSettings from 'core/sorting/single';
 
 import * as actions from 'dash-table/utils/actions';
-import { ColumnId, Columns, Dataframe, RowSelection, SetProps, SortingType, PagingMode } from 'dash-table/components/Table/props';
+import { ColumnId, Columns, Dataframe, RowSelection, SetProps, SortingType, PaginationMode } from 'dash-table/components/Table/props';
 
 export const DEFAULT_CELL_WIDTH = 200;
 
@@ -23,7 +23,7 @@ interface ICellOptions {
     setProps: SetProps;
     sorting_settings: SortSettings;
     sorting_type: SortingType;
-    pagination_mode: PagingMode;
+    pagination_mode: PaginationMode;
 }
 
 interface IOptions {
@@ -39,7 +39,7 @@ interface IOptions {
     sorting: string | boolean;
     sorting_settings: SortSettings;
     sorting_type: SortingType;
-    pagination_mode: PagingMode;
+    pagination_mode: PaginationMode;
 }
 
 const getColLength = (c: any) => (Array.isArray(c.name) ? c.name.length : 1);

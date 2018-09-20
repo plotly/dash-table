@@ -1,10 +1,10 @@
-import { Dataframe, IPaginationSettings, Indices, PagingMode } from 'dash-table/components/Table/props';
+import { Dataframe, IPaginationSettings, Indices, PaginationMode } from 'dash-table/components/Table/props';
 
 export interface IViewport {
     readonly dataframe: Dataframe;
     readonly indices: Indices;
     readonly settings: IPaginationSettings;
-    readonly pageMode: PagingMode;
+    readonly pageMode: PaginationMode;
 
     readonly viewportDataframe: Dataframe;
     readonly viewportIndices: number[];

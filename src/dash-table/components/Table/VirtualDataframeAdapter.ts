@@ -5,7 +5,7 @@ import { memoizeOne } from 'core/memoizer';
 import sort, { defaultIsNully, SortSettings } from 'core/sorting';
 import SyntaxTree from 'core/syntax-tree';
 import Table from 'dash-table/components/Table';
-import { Dataframe, IPaginationSettings, PagingMode, Datum, Indices } from 'dash-table/components/Table/props';
+import { Dataframe, IPaginationSettings, PaginationMode, Datum, Indices } from 'dash-table/components/Table/props';
 
 export default class VirtualDataframeAdapter implements ITarget {
     constructor(private readonly target: Table) {
@@ -79,7 +79,7 @@ export default class VirtualDataframeAdapter implements ITarget {
         return this.target.props.pagination_settings;
     }
 
-    get pageMode(): PagingMode {
+    get pageMode(): PaginationMode {
         return this.target.props.pagination_mode;
     }
 

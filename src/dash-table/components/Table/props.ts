@@ -15,7 +15,7 @@ export type Datum =  IDatumObject | any;
 export type Filtering = 'fe' | 'be' | boolean;
 export type Indices = number[];
 export type Navigation = 'page';
-export type PagingMode = 'fe' | 'be' | boolean;
+export type PaginationMode = 'fe' | 'be' | boolean;
 export type RowSelection = 'single' | 'multi' | false;
 export type SelectedCells = CellCoordinates[];
 export type SetProps = (...args: any[]) => void;
@@ -83,7 +83,7 @@ interface IProps {
     sorting_type?: SortingType;
     table_style?: IStylesheetRule[];
     sorting_treat_empty_string_as_none?: boolean;
-    pagination_mode?: PagingMode;
+    pagination_mode?: PaginationMode;
     pagination_settings?: IPaginationSettings;
 }
 
@@ -115,7 +115,7 @@ interface IDefaultProps {
     sorting_type: SortingType;
     table_style: IStylesheetRule[];
     sorting_treat_empty_string_as_none: boolean;
-    pagination_mode: PagingMode;
+    pagination_mode: PaginationMode;
     pagination_settings: IPaginationSettings;
 
     derived_viewport_dataframe: Dataframe;
