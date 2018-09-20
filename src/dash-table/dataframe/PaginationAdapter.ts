@@ -1,10 +1,10 @@
-import { Dataframe, Indices, IPaginationSettings, PropsWithDefaults, PaginationMode, SetProps } from 'dash-table/components/Table/props';
+import { Dataframe, Indices, PaginationMode, PropsWithDefaults, SetProps } from 'dash-table/components/Table/props';
 import { memoizeOne } from 'core/memoizer';
 
-import BackEndPaginationStrategy from 'dash-table/pagination/BackEndPaginiation';
-import FrontEndPaginationStrategy from 'dash-table/pagination/FrontEndPagination';
-import NoPaginationStrategy from 'dash-table/pagination/NoPagination';
-import AbstractPaginationStrategy from 'dash-table/pagination/AbstractStrategy';
+interface IPaginator {
+    loadNext(): void;
+    loadPrevious(): void;
+}
 
 export default class PaginationAdapter {
     constructor(
@@ -15,31 +15,80 @@ export default class PaginationAdapter {
     ) { }
 
     get() {
-        const {
-            pagination_mode,
-            pagination_settings
-        } = this.propsFn();
+        const { pagination_mode } = this.propsFn();
 
-        return this.getPaginator(
-            pagination_mode,
-            pagination_settings
-        );
+        return this.getPaginator(pagination_mode);
     }
 
-    private getPaginator = memoizeOne((
-        pagination_mode: PaginationMode,
-        _pagination_settings: IPaginationSettings
-    ): AbstractPaginationStrategy => {
-        switch (pagination_mode) {
-            case false:
-                return new NoPaginationStrategy(this.propsFn, this.setProps);
-            case true:
-            case 'fe':
-                return new FrontEndPaginationStrategy(this.propsFn, this.dataFn, this.setProps);
-            case 'be':
-                return new BackEndPaginationStrategy(this.propsFn, this.setProps);
-            default:
-                throw new Error(`Unknown pagination mode: '${pagination_mode}'`);
+    private getPaginator = memoizeOne(
+        (pagination_mode: PaginationMode): IPaginator => {
+            switch (pagination_mode) {
+                case false:
+                    return this.getNoPagination();
+                case true:
+                case 'fe':
+                    return this.getFrontEndPagination();
+                case 'be':
+                    return this.getBackEndPagination();
+                default:
+                    throw new Error(`Unknown pagination mode: '${pagination_mode}'`);
+            }
         }
-    });
+    );
+
+    private getBackEndPagination(): IPaginator {
+        return {
+            loadNext: () => {
+                let { pagination_settings: settings } = this.propsFn();
+
+                settings.current_page++;
+                this.setProps({ pagination_settings: settings });
+            },
+            loadPrevious: () => {
+                let { pagination_settings: settings } = this.propsFn();
+
+                if (settings.current_page <= 0) {
+                    return;
+                }
+
+                settings.current_page--;
+                this.setProps({ pagination_settings: settings });
+            }
+        };
+    }
+
+    private getFrontEndPagination() {
+        return {
+            loadNext: () => {
+                let { pagination_settings: settings } = this.propsFn();
+                let { virtual_dataframe } = this.dataFn();
+
+                let maxPageIndex = Math.floor(virtual_dataframe.length / settings.page_size);
+
+                if (settings.current_page >= maxPageIndex) {
+                    return;
+                }
+
+                settings.current_page++;
+                this.setProps({ pagination_settings: settings });
+            },
+            loadPrevious: () => {
+                let { pagination_settings: settings } = this.propsFn();
+
+                if (settings.current_page <= 0) {
+                    return;
+                }
+
+                settings.current_page--;
+                this.setProps({ pagination_settings: settings });
+            }
+        };
+    }
+
+    private getNoPagination() {
+        return {
+            loadNext: () => { },
+            loadPrevious: () => { }
+        };
+    }
 }

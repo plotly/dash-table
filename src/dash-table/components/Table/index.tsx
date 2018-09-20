@@ -40,21 +40,21 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
     render() {
         const { setProps } = this;
 
-        const virtualDataframe = this.virtualAdapter.get();
-        const viewportDataframe = this.viewportAdapter.get();
+        const virtual = this.virtualAdapter.get();
+        const viewport = this.viewportAdapter.get();
         const paginator = this.paginationAdapter.get();
 
-        if (!virtualDataframe.cached || !viewportDataframe.cached) {
+        if (!virtual.cached || !viewport.cached) {
             let newProps: any = {};
 
-            if (!virtualDataframe.cached) {
-                newProps.derived_virtual_dataframe = virtualDataframe.result.virtual_dataframe;
-                newProps.derived_virtual_indices = virtualDataframe.result.virtual_indices;
+            if (!virtual.cached) {
+                newProps.derived_virtual_dataframe = virtual.result.virtual_dataframe;
+                newProps.derived_virtual_indices = virtual.result.virtual_indices;
             }
 
-            if (!viewportDataframe.cached) {
-                newProps.derived_viewport_dataframe = viewportDataframe.result.viewport_dataframe;
-                newProps.derived_viewport_indices = viewportDataframe.result.viewport_indices;
+            if (!viewport.cached) {
+                newProps.derived_viewport_dataframe = viewport.result.viewport_dataframe;
+                newProps.derived_viewport_indices = viewport.result.viewport_indices;
             }
 
             setTimeout(() => setProps(newProps), 0);
@@ -64,8 +64,8 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
             {...R.mergeAll([
                 this.props,
                 this.state,
-                virtualDataframe.result,
-                viewportDataframe.result,
+                virtual.result,
+                viewport.result,
                 { setProps, paginator }
             ])}
         />);
