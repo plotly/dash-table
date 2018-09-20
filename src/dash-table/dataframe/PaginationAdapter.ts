@@ -11,7 +11,6 @@ export default class PaginationAdapter {
         private readonly propsFn: () => PropsWithDefaults,
         private readonly dataFn: () => { virtual_dataframe: Dataframe, virtual_indices: Indices },
         private readonly setProps: SetProps
-
     ) { }
 
     get() {
