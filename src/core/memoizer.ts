@@ -1,6 +1,11 @@
 import { isEqualArgs } from 'core/comparer';
 import { ResultFn } from 'core/generic';
 
+interface ICachedResultFn<TEntry> {
+    result: TEntry;
+    cached: boolean;
+}
+
 export function memoizeOne<
     TArgs extends any[],
     TEntry
@@ -12,6 +17,20 @@ export function memoizeOne<
         return isEqualArgs(lastArgs, args) ?
             lastResult :
             (lastArgs = args) && (lastResult = fn(...args));
+    };
+}
+
+export function memoizeOneWithFlag<
+    TArgs extends any[],
+    TEntry
+    >(fn: ResultFn<TArgs, TEntry>): ResultFn<TArgs, ICachedResultFn<TEntry>> {
+    let lastArgs: any[] | null = null;
+    let lastResult: any;
+
+    return (...args: TArgs): ICachedResultFn<TEntry> => {
+        return isEqualArgs(lastArgs, args) ?
+            { cached: true, result: lastResult } :
+            { cached: false, result: (lastArgs = args) && (lastResult = fn(...args)) };
     };
 }
 

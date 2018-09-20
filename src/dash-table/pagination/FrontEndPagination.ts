@@ -1,65 +1,33 @@
-import AbstractStrategy, { ITarget } from 'dash-table/pagination/AbstractStrategy';
+import AbstractStrategy from 'dash-table/pagination/AbstractStrategy';
+import { Dataframe, PropsWithDefaults, SetProps } from 'dash-table/components/Table/props';
 
 export default class FrontEndPaginationStrategy extends AbstractStrategy {
-    private firstIndex: number;
-    private lastIndex: number;
-
-    constructor(target: ITarget) {
-        super(target);
-    }
-
-    protected getDataframe() {
-        let { settings, dataframe, indices } = this.target;
-
-        let currentPage = Math.min(
-            settings.current_page,
-            Math.floor(dataframe.length / settings.page_size)
-        );
-
-        this.firstIndex = settings.page_size * currentPage;
-
-        this.lastIndex = Math.min(
-            this.firstIndex + settings.displayed_pages * settings.page_size,
-            dataframe.length
-        );
-
-        return {
-            dataframe: dataframe.slice(
-                this.firstIndex,
-                this.lastIndex
-            ),
-            indices: indices.slice(
-                this.firstIndex,
-                this.lastIndex
-            )
-        };
-    }
-
-    public get offset() {
-        return this.firstIndex;
+    constructor(propsFn: () => PropsWithDefaults, private dataFn: () => { virtual_dataframe: Dataframe }, setProps: SetProps) {
+        super(propsFn, setProps);
     }
 
     public loadNext() {
-        let { settings, dataframe } = this.target;
+        let { setProps, settings } = this;
+        let { virtual_dataframe } = this.dataFn();
 
-        let maxPageIndex = Math.floor(dataframe.length / settings.page_size);
+        let maxPageIndex = Math.floor(virtual_dataframe.length / settings.page_size);
 
         if (settings.current_page >= maxPageIndex) {
             return;
         }
 
         settings.current_page++;
-        this.target.update({ settings });
+        setProps({ pagination_settings: settings });
     }
 
     public loadPrevious() {
-        let { settings } = this.target;
+        let { setProps, settings } = this;
 
         if (settings.current_page <= 0) {
             return;
         }
 
         settings.current_page--;
-        this.target.update({ settings });
+        setProps({ pagination_settings: settings });
     }
 }

@@ -214,13 +214,12 @@ export default class CellFactory {
             editable,
             id,
             is_focused,
-            paginator,
             row_deletable,
             row_selectable,
-            selected_cell
+            selected_cell,
+            viewport_dataframe: dataframe,
+            viewport_indices: indices
         } = this.props;
-
-        const { dataframe, indices } = paginator;
 
         const visibleColumns = columns.filter(column => !column.hidden);
 

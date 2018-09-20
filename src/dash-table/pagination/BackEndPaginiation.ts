@@ -1,35 +1,26 @@
-import AbstractStrategy, { ITarget } from 'dash-table/pagination/AbstractStrategy';
+import { PropsWithDefaults, SetProps } from 'dash-table/components/Table/props';
+import AbstractPaginationStrategy from 'dash-table/pagination/AbstractStrategy';
 
-export default class BackEndPaginationStrategy extends AbstractStrategy {
-    constructor(target: ITarget) {
-        super(target);
-    }
-
-    protected getDataframe() {
-        let { dataframe, indices } = this.target;
-
-        return { dataframe, indices };
-    }
-
-    public get offset() {
-        return 0;
+export default class BackEndPaginationStrategy extends AbstractPaginationStrategy {
+    constructor(propsFn: () => PropsWithDefaults, setProps: SetProps) {
+        super(propsFn, setProps);
     }
 
     public loadNext() {
-        let { settings } = this.target;
+        let { setProps, settings } = this;
 
         settings.current_page++;
-        this.target.update({ settings });
+        setProps({ pagination_settings: settings });
     }
 
     public loadPrevious() {
-        let { settings } = this.target;
+        let { setProps, settings } = this;
 
         if (settings.current_page <= 0) {
             return;
         }
 
         settings.current_page--;
-        this.target.update({ settings });
+        setProps({ pagination_settings: settings });
     }
 }

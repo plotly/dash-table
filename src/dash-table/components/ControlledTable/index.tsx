@@ -238,10 +238,8 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             row_selectable,
             selected_cell,
             setProps,
-            paginator
+            viewport_dataframe
         } = this.props;
-
-        const dataframe = paginator.dataframe;
 
         // This is mostly to prevent TABing also triggering native HTML tab
         // navigation. If the preventDefault is too greedy here we must
@@ -323,7 +321,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         // the active cell.
         if (selectingDown && active_cell[0] > minRow) {
             removeCells = selectedCols.map(col => [minRow, col]);
-        } else if (selectingDown && maxRow !== dataframe.length - 1) {
+        } else if (selectingDown && maxRow !== viewport_dataframe.length - 1) {
             // Otherwise if we are selecting down select the next row if possible.
             targetCells = selectedCols.map(col => [maxRow + 1, col]);
         } else if (selectingUp && active_cell[0] < maxRow) {
@@ -400,8 +398,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
     }
 
     getNextCell = (event: any, { restrictToSelection, currentCell }: any) => {
-        const { columns, row_deletable, row_selectable, selected_cell, paginator } = this.props;
-        const dataframe = paginator.dataframe;
+        const { columns, row_deletable, row_selectable, selected_cell, viewport_dataframe } = this.props;
 
         const e = event;
         const vci: any[] = [];
@@ -464,7 +461,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
                         selected_cell
                     )
                     : [
-                        R.min(dataframe.length - 1, currentCell[0] + 1),
+                        R.min(viewport_dataframe.length - 1, currentCell[0] + 1),
                         currentCell[1]
                     ];
 
@@ -481,9 +478,8 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             row_deletable,
             row_selectable,
             selected_cell,
-            paginator
+            viewport_dataframe
         } = this.props;
-        const dataframe = paginator.dataframe;
 
         const columnIndexOffset =
             (row_deletable ? 1 : 0) +
@@ -494,7 +490,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             selected_cell
         );
 
-        TableClipboardHelper.toClipboard(e, noOffsetSelectedCells, columns, dataframe);
+        TableClipboardHelper.toClipboard(e, noOffsetSelectedCells, columns, viewport_dataframe);
         this.$el.focus();
     }
 

@@ -1,62 +1,22 @@
-import { Dataframe, IPaginationSettings, Indices, PaginationMode } from 'dash-table/components/Table/props';
-
-export interface IViewport {
-    readonly dataframe: Dataframe;
-    readonly indices: Indices;
-    readonly settings: IPaginationSettings;
-    readonly pageMode: PaginationMode;
-
-    readonly viewportDataframe: Dataframe;
-    readonly viewportIndices: number[];
-}
-
-export interface ITarget extends IViewport {
-    update: (viewport: Partial<IViewport>) => void;
-}
+import { PropsWithDefaults, SetProps } from 'dash-table/components/Table/props';
 
 export default abstract class AbstractPaginationStrategy
 {
-    protected __dataframe: Dataframe;
-    protected __indices: Indices;
-
-    constructor(protected readonly target: ITarget) {
-
+    protected get mode() {
+        return this.propsFn().pagination_mode;
     }
 
-    public get dataframe(): Dataframe {
-        return this.__dataframe;
+    protected get settings() {
+        return this.propsFn().pagination_settings;
     }
 
-    public get indices(): Indices {
-        return this.__indices;
+    constructor(
+        private readonly propsFn: () => PropsWithDefaults,
+        protected readonly setProps: SetProps
+    ) {
+
     }
-
-    public refresh() {
-        let { dataframe = [], indices = [] } = this.target.dataframe && this.getDataframe();
-
-        let isEqual =
-            !!this.__dataframe &&
-            dataframe.length === this.dataframe.length &&
-            !!dataframe.every((datum, index) => datum === this.dataframe[index]);
-
-        if (isEqual) {
-            return;
-        }
-
-        this.__dataframe = dataframe;
-        this.__indices = indices;
-
-        this.target.update({
-            viewportDataframe: dataframe,
-            viewportIndices: indices
-        });
-    }
-
-    // Abstract
-    public abstract get offset(): number;
 
     public abstract loadNext(): void;
     public abstract loadPrevious(): void;
-
-    protected abstract getDataframe(): { dataframe: Dataframe, indices: number[] };
 }

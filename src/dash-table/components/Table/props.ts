@@ -129,6 +129,11 @@ export type PropsWithDefaults = IProps & IDefaultProps;
 export type ControlledTableProps = PropsWithDefaults & {
     paginator: AbstractPaginationStrategy
     setProps: SetProps;
+
+    viewport_dataframe: Dataframe;
+    viewport_indices: Indices;
+    virtual_dataframe: Dataframe;
+    virtual_indices: Indices;
 };
 
 export interface ICellFactoryOptions {
@@ -152,6 +157,6 @@ export interface ICellFactoryOptions {
     selected_rows: number[];
     setProps: SetProps;
 
-    derived_viewport_dataframe: Dataframe;
-    derived_viewport_indices: Indices;
+    viewport_dataframe: Dataframe;
+    viewport_indices: Indices;
 }
