@@ -1,5 +1,5 @@
 import { SortSettings } from 'core/sorting';
-import AbstractPaginationStrategy from 'dash-table/pagination/AbstractStrategy';
+import { IPaginator } from 'dash-table/adapter/PaginationAdapter';
 
 export enum FilteringType {
     Advanced = 'advanced',
@@ -132,7 +132,7 @@ export type PropsWithDefaultsAndDerived = PropsWithDefaults & IDerivedProps;
 export type ControlledTableProps = PropsWithDefaults & {
     setProps: SetProps;
 
-    paginator: AbstractPaginationStrategy
+    paginator: IPaginator
     viewport_dataframe: Dataframe;
     viewport_indices: Indices;
     virtual_dataframe: Dataframe;
@@ -153,7 +153,7 @@ export interface ICellFactoryOptions {
     is_focused?: boolean;
     n_fixed_columns: number;
     n_fixed_rows: number;
-    paginator: AbstractPaginationStrategy;
+    paginator: IPaginator;
     row_deletable: boolean;
     row_selectable: RowSelection;
     selected_cell: SelectedCells;

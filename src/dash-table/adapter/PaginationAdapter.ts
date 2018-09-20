@@ -1,7 +1,7 @@
 import { Dataframe, Indices, PaginationMode, PropsWithDefaults, SetProps } from 'dash-table/components/Table/props';
 import { memoizeOne } from 'core/memoizer';
 
-interface IPaginator {
+export interface IPaginator {
     loadNext(): void;
     loadPrevious(): void;
 }

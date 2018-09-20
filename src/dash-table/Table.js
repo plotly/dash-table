@@ -42,48 +42,14 @@ export const defaultProps = {
     row_conditional_styles: [],
     row_static_style: {},
 
-    changed_data: {},
     dataframe: [],
     columns: [],
     editable: false,
     active_cell: [],
-    index_name: '',
-    types: {},
-    merged_styles: {},
     selected_cell: [[]],
     selected_rows: [],
     row_selectable: false,
-    table_style: [],
-    base_styles: {
-        numeric: {
-            'text-align': 'right',
-            'font-family': `'Droid Sans Mono', Courier, monospace`
-        },
-
-        string: {
-            'text-align': 'left'
-        },
-
-        input: {
-            padding: 0,
-            margin: 0,
-            width: '80px',
-            border: 'none',
-            'font-size': '1rem'
-        },
-
-        'input-active': {
-            outline: '#7FDBFF auto 3px'
-        },
-
-        table: {},
-
-        thead: {},
-
-        th: {},
-
-        td: {}
-    }
+    table_style: []
 };
 
 export const propTypes = {

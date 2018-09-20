@@ -4,14 +4,15 @@ import * as R from 'ramda';
 import { memoizeOne } from 'core/memoizer';
 
 import ControlledTable from 'dash-table/components/ControlledTable';
-import { SetProps, PropsWithDefaultsAndDerived } from './props';
-import VirtualDataframeAdapter from 'dash-table/dataframe/VirtualDataframeAdapter';
 
+import PaginationAdapter from 'dash-table/adapter/PaginationAdapter';
+import ViewportDataframeAdapter from 'dash-table/adapter/ViewportDataframeAdapter';
+import VirtualDataframeAdapter from 'dash-table/adapter/VirtualDataframeAdapter';
+
+import { SetProps, PropsWithDefaultsAndDerived } from './props';
 import 'react-select/dist/react-select.css';
 import './Table.less';
 import './Dropdown.css';
-import ViewportDataframeAdapter from 'dash-table/dataframe/ViewportDataframeAdapter';
-import PaginationAdapter from 'dash-table/dataframe/PaginationAdapter';
 
 export default class Table extends Component<PropsWithDefaultsAndDerived> {
     private virtualAdapter: VirtualDataframeAdapter;
