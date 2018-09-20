@@ -3,11 +3,11 @@ import * as R from 'ramda';
 
 import { memoizeOne } from 'core/memoizer';
 
-import VirtualizationFactory from 'dash-table/virtualization/Factory';
+import PaginatorFactory from 'dash-table/pagination/PaginatorFactory';
 
 import ControlledTable from 'dash-table/components/ControlledTable';
 import { PropsWithDefaults, SetProps } from './props';
-import VirtualizationAdapter from './VirtualizationAdapter';
+import VirtualDataframeAdapter from 'dash-table/components/Table/VirtualDataframeAdapter';
 
 import 'react-select/dist/react-select.css';
 import './Table.less';
@@ -23,15 +23,15 @@ export default class Table extends Component<PropsWithDefaults> {
     }
 
     render() {
-        const { setProps, virtualizer } = this;
+        const { setProps, paginator } = this;
 
-        virtualizer.refresh();
+        paginator.refresh();
 
         return (<ControlledTable
             {...R.mergeAll([
                 this.props,
                 this.state,
-                { setProps, virtualizer }
+                { setProps, paginator }
             ])}
         />);
     }
@@ -40,17 +40,17 @@ export default class Table extends Component<PropsWithDefaults> {
         return this.__adapter();
     }
 
-    private get virtualizer() {
-        const { virtualization, virtualization_settings } = this.props;
+    private get paginator() {
+        const { pagination_mode, pagination_settings } = this.props;
 
-        return this.__virtualizer(
-            virtualization,
-            virtualization_settings
+        return this.__paginator(
+            pagination_mode,
+            pagination_settings
         );
     }
 
     private __adapter = memoizeOne(
-        () => new VirtualizationAdapter(this)
+        () => new VirtualDataframeAdapter(this)
     );
 
     private __setProps = memoizeOne((setProps?: SetProps) => {
@@ -66,7 +66,7 @@ export default class Table extends Component<PropsWithDefaults> {
         } : (newProps: Partial<PropsWithDefaults>) => this.setState(newProps);
     });
 
-    private __virtualizer = memoizeOne((_virtualization, _settings) => {
-        return VirtualizationFactory.getVirtualizer(this.adapter);
+    private __paginator = memoizeOne((_pageMode, _settings) => {
+        return PaginatorFactory.getPaginator(this.adapter);
     });
 }

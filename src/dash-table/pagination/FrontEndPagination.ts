@@ -1,6 +1,6 @@
-import AbstractStrategy, { ITarget } from 'dash-table/virtualization/AbstractStrategy';
+import AbstractStrategy, { ITarget } from 'dash-table/pagination/AbstractStrategy';
 
-export default class FrontEndPageStrategy extends AbstractStrategy {
+export default class FrontEndPaginationStrategy extends AbstractStrategy {
     private firstIndex: number;
     private lastIndex: number;
 

@@ -29,8 +29,8 @@ app.layout = html.Div(
         dash_table.Table(
             id="table",
             dataframe=[],
-            virtualization="be",
-            virtualization_settings={
+            pagination_mode="be",
+            pagination_settings={
                 "displayed_pages": 1,
                 "current_page": 0,
                 "page_size": 250,
@@ -63,13 +63,13 @@ app.layout = html.Div(
 )
 
 
-@app.callback(Output("table", "dataframe"), [Input("table", "virtualization_settings")])
-def updateDataframe(virtualization_settings):
-    print(virtualization_settings)
+@app.callback(Output("table", "dataframe"), [Input("table", "pagination_settings")])
+def updateDataframe(pagination_settings):
+    print(pagination_settings)
 
-    current_page = virtualization_settings["current_page"]
-    displayed_pages = virtualization_settings["displayed_pages"]
-    page_size = virtualization_settings["page_size"]
+    current_page = pagination_settings["current_page"]
+    displayed_pages = pagination_settings["displayed_pages"]
+    page_size = pagination_settings["page_size"]
 
     start_index = current_page * page_size
     end_index = start_index + displayed_pages * page_size

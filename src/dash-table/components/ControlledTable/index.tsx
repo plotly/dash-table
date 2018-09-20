@@ -238,10 +238,10 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             row_selectable,
             selected_cell,
             setProps,
-            virtualizer
+            paginator
         } = this.props;
 
-        const dataframe = virtualizer.dataframe;
+        const dataframe = paginator.dataframe;
 
         // This is mostly to prevent TABing also triggering native HTML tab
         // navigation. If the preventDefault is too greedy here we must
@@ -368,7 +368,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             row_selectable,
             selected_cell,
             setProps,
-            virtual_dataframe_indices
+            derived_viewport_indices
         } = this.props;
 
         event.preventDefault();
@@ -380,7 +380,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             (row_selectable ? 1 : 0);
 
         const realCells: [number, number][] = R.map(
-            cell => [virtual_dataframe_indices[cell[0]], cell[1] - columnIndexOffset] as [number, number],
+            cell => [derived_viewport_indices[cell[0]], cell[1] - columnIndexOffset] as [number, number],
             selected_cell
         );
 
@@ -400,8 +400,8 @@ export default class ControlledTable extends Component<ControlledTableProps> {
     }
 
     getNextCell = (event: any, { restrictToSelection, currentCell }: any) => {
-        const { columns, row_deletable, row_selectable, selected_cell, virtualizer } = this.props;
-        const dataframe = virtualizer.dataframe;
+        const { columns, row_deletable, row_selectable, selected_cell, paginator } = this.props;
+        const dataframe = paginator.dataframe;
 
         const e = event;
         const vci: any[] = [];
@@ -481,9 +481,9 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             row_deletable,
             row_selectable,
             selected_cell,
-            virtualizer
+            paginator
         } = this.props;
-        const dataframe = virtualizer.dataframe;
+        const dataframe = paginator.dataframe;
 
         const columnIndexOffset =
             (row_deletable ? 1 : 0) +
@@ -509,7 +509,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             row_selectable,
             setProps,
             sorting_settings,
-            virtual_dataframe_indices
+            derived_viewport_indices
         } = this.props;
 
         if (!editable) {
@@ -525,7 +525,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         const result = TableClipboardHelper.fromClipboard(
             e,
             noOffsetActiveCell,
-            virtual_dataframe_indices,
+            derived_viewport_indices,
             columns,
             dataframe,
             true,
@@ -541,27 +541,27 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         const {
             dataframe,
             navigation,
-            virtualization,
-            virtualization_settings
+            pagination_mode,
+            pagination_settings
         } = this.props;
 
         return navigation === 'page' &&
             (
-                (virtualization === 'fe' && virtualization_settings.page_size < dataframe.length) ||
-                virtualization === 'be'
+                (pagination_mode === 'fe' && pagination_settings.page_size < dataframe.length) ||
+                pagination_mode === 'be'
             );
     }
 
     loadNext = () => {
-        const { virtualizer } = this.props;
+        const { paginator } = this.props;
 
-        virtualizer.loadNext();
+        paginator.loadNext();
     }
 
     loadPrevious = () => {
-        const { virtualizer } = this.props;
+        const { paginator } = this.props;
 
-        virtualizer.loadPrevious();
+        paginator.loadPrevious();
     }
 
     onContainerScroll = (ev: any) => {
@@ -718,7 +718,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             'dash-spreadsheet-container',
             ...(n_fixed_rows ? ['freeze-top'] : []),
             ...(n_fixed_columns ? ['freeze-left'] : [])
-        ]
+        ];
 
         const cells = this.getCells();
         const grid = this.getFragments(cells, n_fixed_columns, n_fixed_rows);

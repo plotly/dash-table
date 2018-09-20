@@ -12,8 +12,8 @@ export default class Table extends Component {
 }
 
 export const defaultProps = {
-    virtualization: 'fe',
-    virtualization_settings: {
+    pagination_mode: 'fe',
+    pagination_settings: {
         displayed_pages: 1,
         current_page: 0,
         page_size: 250
@@ -28,8 +28,10 @@ export const defaultProps = {
     sorting_type: 'single',
     sorting_settings: [],
 
-    virtual_dataframe: [],
-    virtual_dataframe_indices: [],
+    derived_viewport_dataframe: [],
+    derived_viewport_indices: [],
+    derived_virtual_dataframe: [],
+    derived_virtual_indices: [],
 
     column_conditional_dropdowns: [],
     column_static_dropdown: [],
@@ -111,8 +113,8 @@ export const propTypes = {
         rule: PropTypes.string
     })),
 
-    virtualization: PropTypes.oneOf(['fe', 'be', true, false]),
-    virtualization_settings: PropTypes.shape({
+    pagination_mode: PropTypes.oneOf(['fe', 'be', true, false]),
+    pagination_settings: PropTypes.shape({
         displayed_pages: PropTypes.number,
         current_page: PropTypes.number,
         page_size: PropTypes.number
@@ -171,8 +173,8 @@ export const propTypes = {
     })),
     sorting_treat_empty_string_as_none: PropTypes.bool,
 
-    virtual_dataframe: PropTypes.arrayOf(PropTypes.object),
-    virtual_dataframe_indices: PropTypes.arrayOf(PropTypes.number),
+    derived_viewport_dataframe: PropTypes.arrayOf(PropTypes.object),
+    derived_viewport_indices: PropTypes.arrayOf(PropTypes.number),
 
     dropdown_properties: PropTypes.any,
 };

@@ -1,13 +1,13 @@
 import * as R from 'ramda';
 
-import { ITarget, IViewport } from 'dash-table/virtualization/AbstractStrategy';
+import { ITarget, IViewport } from 'dash-table/pagination/AbstractStrategy';
 import { memoizeOne } from 'core/memoizer';
 import sort, { defaultIsNully, SortSettings } from 'core/sorting';
 import SyntaxTree from 'core/syntax-tree';
 import Table from 'dash-table/components/Table';
-import { Dataframe, IVirtualizationSettings, Virtualization, Datum, Indices } from 'dash-table/components/Table/props';
+import { Dataframe, IPaginationSettings, PagingMode, Datum, Indices } from 'dash-table/components/Table/props';
 
-export default class VirtualizationAdapter implements ITarget {
+export default class VirtualDataframeAdapter implements ITarget {
     constructor(private readonly target: Table) {
 
     }
@@ -75,20 +75,20 @@ export default class VirtualizationAdapter implements ITarget {
         return this.dataframeAndIndices.indices;
     }
 
-    get settings(): IVirtualizationSettings {
-        return this.target.props.virtualization_settings;
+    get settings(): IPaginationSettings {
+        return this.target.props.pagination_settings;
     }
 
-    get virtualization(): Virtualization {
-        return this.target.props.virtualization;
+    get pageMode(): PagingMode {
+        return this.target.props.pagination_mode;
     }
 
     get viewportDataframe(): Dataframe {
-        return this.target.props.virtual_dataframe;
+        return this.target.props.derived_viewport_dataframe;
     }
 
     get viewportIndices(): number[] {
-        return this.target.props.virtual_dataframe_indices;
+        return this.target.props.derived_viewport_indices;
     }
 
     update(viewport: Partial<IViewport>) {
@@ -100,10 +100,17 @@ export default class VirtualizationAdapter implements ITarget {
             viewportIndices
         } = viewport;
 
+        const {
+            dataframe,
+            indices
+        } = this;
+
         let props = R.mergeAll([
-            settings ? { virtualization_settings: settings } : {},
-            viewportDataframe ? { virtual_dataframe: viewportDataframe } : {},
-            viewportIndices ? { virtual_dataframe_indices: viewportIndices } : {}
+            settings ? { pagination_settings: settings } : {},
+            dataframe ? { derived_virtual_dataframe: dataframe } : {},
+            indices ? { derived_virtual_indices: indices } : {},
+            viewportDataframe ? { derived_viewport_dataframe: viewportDataframe } : {},
+            viewportIndices ? { derived_viewport_indices: viewportIndices } : {}
         ]);
 
         setTimeout(() => { setProps(props); }, 0);

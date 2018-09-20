@@ -7,7 +7,7 @@ import multiUpdateSettings from 'core/sorting/multi';
 import singleUpdateSettings from 'core/sorting/single';
 
 import * as actions from 'dash-table/utils/actions';
-import { ColumnId, Columns, Dataframe, RowSelection, SetProps, SortingType } from 'dash-table/components/Table/props';
+import { ColumnId, Columns, Dataframe, RowSelection, SetProps, SortingType, PagingMode } from 'dash-table/components/Table/props';
 
 export const DEFAULT_CELL_WIDTH = 200;
 
@@ -23,7 +23,7 @@ interface ICellOptions {
     setProps: SetProps;
     sorting_settings: SortSettings;
     sorting_type: SortingType;
-    virtualization: any;
+    pagination_mode: PagingMode;
 }
 
 interface IOptions {
@@ -39,7 +39,7 @@ interface IOptions {
     sorting: string | boolean;
     sorting_settings: SortSettings;
     sorting_type: SortingType;
-    virtualization: any;
+    pagination_mode: PagingMode;
 }
 
 const getColLength = (c: any) => (Array.isArray(c.name) ? c.name.length : 1);
@@ -119,8 +119,8 @@ export default class HeaderFactory {
             mergeCells,
             n_fixed_columns,
             offset,
-            rowSorting,
-            virtualization
+            pagination_mode,
+            rowSorting
         } = options;
 
         let columnIndices: any[] = [];
@@ -216,7 +216,7 @@ export default class HeaderFactory {
                         </span>
                     ) : ''}
 
-                {((c.deletable && virtualization !== 'be' && R.type(c.deletable) === 'Boolean') ||
+                {((c.deletable && pagination_mode !== 'be' && R.type(c.deletable) === 'Boolean') ||
                     (R.type(c.deletable) === 'Number' &&
                         c.deletable === columnRowIndex)) ? (
                         <span
@@ -265,12 +265,12 @@ export default class HeaderFactory {
             sorting,
             merge_duplicate_headers,
             n_fixed_columns,
+            pagination_mode,
             row_deletable,
             row_selectable,
             setProps,
             sorting_settings,
-            sorting_type,
-            virtualization
+            sorting_type
         } = options;
 
         const offset =
@@ -294,11 +294,11 @@ export default class HeaderFactory {
                     labels: R.pluck('name', columns),
                     n_fixed_columns,
                     offset,
+                    pagination_mode,
                     rowSorting: sorting,
                     setProps,
                     sorting_settings,
-                    sorting_type,
-                    virtualization
+                    sorting_type
                 }))
             ]];
         } else {
@@ -317,14 +317,14 @@ export default class HeaderFactory {
                     ),
                     n_fixed_columns,
                     offset,
+                    pagination_mode,
                     rowSorting: !!sorting && i + 1 === headerDepth,
                     mergeCells:
                         merge_duplicate_headers &&
                         i + 1 !== headerDepth,
                     setProps,
                     sorting_settings,
-                    sorting_type,
-                    virtualization
+                    sorting_type
                 }))
             ]));
         }

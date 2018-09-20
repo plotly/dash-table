@@ -1,10 +1,10 @@
-import { Dataframe, IVirtualizationSettings, Virtualization, Indices } from 'dash-table/components/Table/props';
+import { Dataframe, IPaginationSettings, Indices, PagingMode } from 'dash-table/components/Table/props';
 
 export interface IViewport {
     readonly dataframe: Dataframe;
     readonly indices: Indices;
-    readonly settings: IVirtualizationSettings;
-    readonly virtualization: Virtualization;
+    readonly settings: IPaginationSettings;
+    readonly pageMode: PagingMode;
 
     readonly viewportDataframe: Dataframe;
     readonly viewportIndices: number[];
@@ -14,7 +14,7 @@ export interface ITarget extends IViewport {
     update: (viewport: Partial<IViewport>) => void;
 }
 
-export default abstract class AbstractVirtualizationStrategy
+export default abstract class AbstractPaginationStrategy
 {
     protected __dataframe: Dataframe;
     protected __indices: Indices;

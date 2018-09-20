@@ -16,8 +16,8 @@ app.layout = html.Div([
     dash_table.Table(
         id='table',
         dataframe=df,
-        virtualization='fe',
-        virtualization_settings={
+        pagination_mode='fe',
+        pagination_settings={
             'current_page': 0,
             'displayed_pages': 1,
             'page_size': 500

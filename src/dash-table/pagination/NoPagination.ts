@@ -1,8 +1,8 @@
 import * as R from 'ramda';
 
-import AbstractStrategy, { ITarget } from 'dash-table/virtualization/AbstractStrategy';
+import AbstractStrategy, { ITarget } from 'dash-table/pagination/AbstractStrategy';
 
-export default class NoStrategy extends AbstractStrategy {
+export default class NoPaginationStrategy extends AbstractStrategy {
     constructor(target: ITarget) {
         super(target);
 

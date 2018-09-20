@@ -1,6 +1,6 @@
-import AbstractStrategy, { ITarget } from 'dash-table/virtualization/AbstractStrategy';
+import AbstractStrategy, { ITarget } from 'dash-table/pagination/AbstractStrategy';
 
-export default class BackEndPageStrategy extends AbstractStrategy {
+export default class BackEndPaginationStrategy extends AbstractStrategy {
     constructor(target: ITarget) {
         super(target);
     }
