@@ -21,13 +21,13 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
     constructor(props: any) {
         super(props);
 
-        this.virtualAdapter = new VirtualDataframeAdapter(() => props);
+        this.virtualAdapter = new VirtualDataframeAdapter(() => this.props);
         this.viewportAdapter = new ViewportDataframeAdapter(
-            () => props,
+            () => this.props,
             () => this.virtualAdapter.get().result
         );
         this.paginationAdapter = new PaginationAdapter(
-            () => props,
+            () => this.props,
             () => this.virtualAdapter.get().result,
             this.setProps
         );
