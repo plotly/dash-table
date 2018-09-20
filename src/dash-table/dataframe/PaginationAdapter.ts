@@ -1,5 +1,5 @@
 import { Dataframe, Indices, IPaginationSettings, PropsWithDefaults, PaginationMode, SetProps } from 'dash-table/components/Table/props';
-import { memoizeOneWithFlag } from 'core/memoizer';
+import { memoizeOne } from 'core/memoizer';
 
 import BackEndPaginationStrategy from 'dash-table/pagination/BackEndPaginiation';
 import FrontEndPaginationStrategy from 'dash-table/pagination/FrontEndPagination';
@@ -26,7 +26,7 @@ export default class PaginationAdapter {
         );
     }
 
-    private getPaginator = memoizeOneWithFlag((
+    private getPaginator = memoizeOne((
         pagination_mode: PaginationMode,
         _pagination_settings: IPaginationSettings
     ): AbstractPaginationStrategy => {
