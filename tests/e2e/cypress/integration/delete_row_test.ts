@@ -12,9 +12,9 @@ describe('delete', () => {
 
         it('can delete row when sorted', () => {
             cy.get('tr th.column-0 .sort').click({ force: true });
-            DashTable.getCell(0, 0).within(() => cy.get('.dash-cell-value').should('have.html', '249'));
+            DashTable.getCell(0, 0).within(() => cy.get('.dash-cell-value').should('have.html', '28155'));
             DashTable.getDelete(0).click();
-            DashTable.getCell(0, 0).within(() => cy.get('.dash-cell-value').should('have.html', '248'));
+            DashTable.getCell(0, 0).within(() => cy.get('.dash-cell-value').should('have.html', '28154'));
         });
     });
 

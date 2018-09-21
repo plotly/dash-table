@@ -2,7 +2,7 @@ import DashTable from 'cypress/DashTable';
 import DOM from 'cypress/DOM';
 import Key from 'cypress/Key';
 
-describe.only('edit cell', () => {
+describe('edit cell', () => {
     beforeEach(() => {
         cy.visit('http://localhost:8080');
     });
