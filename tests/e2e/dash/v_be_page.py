@@ -56,7 +56,8 @@ app.layout = html.Div(
             n_fixed_rows=1,
             row_selectable=True,
             row_deletable=True,
-            sorting=True,
+            sorting=False,
+            filtering=False,
             editable=True,
         ),
     ]
