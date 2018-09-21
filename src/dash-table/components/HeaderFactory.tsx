@@ -203,7 +203,7 @@ export default class HeaderFactory {
                 key={`header-cell-${columnId}`}
                 colSpan={colSpan}
                 className={
-                    `column-${columnId + offset} ` +
+                    `column-${columnId} ` +
                     (columnId === columns.length - 1 || columnId === R.last(columnIndices) ? 'cell--right-last ' : '')
                     // (visibleIndex < n_fixed_columns ? `frozen-left frozen-left-${visibleIndex}` : '')
 
@@ -257,7 +257,7 @@ export default class HeaderFactory {
         return !row_deletable ? null : (
             <th
                 key='delete'
-                className='expanded-row--empty-cell'
+                className='expanded-row--empty-cell delete-cell'
                 style={{ width: `30px`, maxWidth: `30px`, minWidth: `30px` }}
 
             />
@@ -270,7 +270,7 @@ export default class HeaderFactory {
         return !row_selectable ? null : (
             <th
                 key='select'
-                className='expanded-row--empty-cell'
+                className='expanded-row--empty-cell select-cell'
                 style={{ width: `30px`, maxWidth: `30px`, minWidth: `30px` }}
             />
         );

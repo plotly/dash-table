@@ -35,8 +35,6 @@ export default class CellFactory {
             columns,
             editable,
             is_focused,
-            row_deletable,
-            row_selectable,
             selected_cell,
             setProps
         } = this.props;
@@ -55,13 +53,8 @@ export default class CellFactory {
             return;
         }
 
-        // visible col indices
-        const columnIndexOffset =
-            (row_deletable ? 1 : 0) +
-            (row_selectable ? 1 : 0);
-
         e.preventDefault();
-        const cellLocation: [number, number] = [idx, i + columnIndexOffset];
+        const cellLocation: [number, number] = [idx, i];
         const newProps: Partial<ICellFactoryOptions> = {
             is_focused: false,
             active_cell: cellLocation
@@ -70,7 +63,7 @@ export default class CellFactory {
         const vci: any[] = [];
         columns.forEach((c, ci: number) => {
             if (!c.hidden) {
-                vci.push(ci + columnIndexOffset);
+                vci.push(ci);
             }
         });
 
@@ -101,8 +94,6 @@ export default class CellFactory {
         const {
             editable,
             is_focused,
-            row_deletable,
-            row_selectable,
             setProps
         } = this.props;
 
@@ -110,12 +101,7 @@ export default class CellFactory {
             return;
         }
 
-        // visible col indices
-        const columnIndexOffset =
-            (row_deletable ? 1 : 0) +
-            (row_selectable ? 1 : 0);
-
-        const cellLocation: [number, number] = [idx, i + columnIndexOffset];
+        const cellLocation: [number, number] = [idx, i];
 
         if (!is_focused) {
             e.preventDefault();
@@ -214,18 +200,12 @@ export default class CellFactory {
             editable,
             id,
             is_focused,
-            row_deletable,
-            row_selectable,
             selected_cell,
             viewport_dataframe: dataframe,
             viewport_indices: indices
         } = this.props;
 
         const visibleColumns = columns.filter(column => !column.hidden);
-
-        const offset =
-            (row_deletable ? 1 : 0) +
-            (row_selectable ? 1 : 0);
 
         return dataframe.map((datum, viewportIdx) => {
             const realIdx = indices[viewportIdx];
@@ -234,8 +214,6 @@ export default class CellFactory {
             const selectCell = this.rowSelectCell(realIdx);
 
             const cells = visibleColumns.map((column, visibleIndex) => {
-                visibleIndex += offset;
-
                 let legacyDropdown: any = (
                     (
                         dropdown_properties &&
@@ -250,7 +228,7 @@ export default class CellFactory {
 
                 const index = columns.indexOf(column);
 
-                const classes = [`column-${index + offset}`];
+                const classes = [`column-${index}`];
 
                 let conditionalDropdowns = column_conditional_dropdowns.find((cd: any) => cd.id === column.id);
                 let staticDropdown = column_static_dropdown.find((sd: any) => sd.id === column.id);
@@ -266,7 +244,7 @@ export default class CellFactory {
 
                 return (<Cell
                     key={`${column.id}-${visibleIndex}`}
-                    active={active_cell[0] === viewportIdx && active_cell[1] === index + offset}
+                    active={active_cell[0] === viewportIdx && active_cell[1] === index}
                     classes={classes}
                     clearable={column.clearable}
                     conditionalDropdowns={conditionalDropdowns}
@@ -279,7 +257,7 @@ export default class CellFactory {
                     onPaste={this.handlePaste}
                     onChange={this.getEventHandler(this.handleChange, realIdx, index)}
                     property={column.id}
-                    selected={R.contains([viewportIdx, index + offset], selected_cell)}
+                    selected={R.contains([viewportIdx, index], selected_cell)}
                     staticDropdown={staticDropdown}
                     staticStyle={staticStyle}
                     tableId={id}

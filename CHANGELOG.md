@@ -226,3 +226,5 @@ Derived properties allow the component to expose complex state that can be usefu
         - derived_virtual_indices
 
         In the event where sorting, filtering or pagination is done on the Dash Server, it is possible that some or all derived dataframes will be equal to the dataframe prop.
+
+## RC2 - Clean up column offsets
