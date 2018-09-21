@@ -4,9 +4,27 @@ import PropTypes from 'prop-types';
 import RealTable from 'dash-table/components/Table';
 
 import 'dash-table/style/component.less';
+import Logger from 'core/Logger';
 
 export default class Table extends Component {
     render() {
+        const {
+            filtering,
+            sorting,
+            pagination_mode
+        } = this.props;
+
+        const beFiltering = filtering === 'be';
+        const beSorting = sorting === 'be';
+        const bePagination = pagination_mode === 'be';
+
+        const isValid = (beFiltering && beSorting && bePagination) || !bePagination;
+
+        if (!isValid) {
+            Logger.error(`Invalid combination of filtering / sorting / pagination`, filtering, sorting, pagination_mode);
+            return (<div>Invalid props combination</div>);
+        }
+
         return (<RealTable {...this.props} />);
     }
 }

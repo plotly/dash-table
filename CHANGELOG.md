@@ -228,3 +228,6 @@ Derived properties allow the component to expose complex state that can be usefu
         In the event where sorting, filtering or pagination is done on the Dash Server, it is possible that some or all derived dataframes will be equal to the dataframe prop.
 
 ## RC2 - Clean up column offsets
+
+    - A bunch of offsets were introduced to the table in the previous development cycle. Turns out these offsets are neither useful or necessary
+    - Validate compatibility of filtering, sorting, pagination
