@@ -201,11 +201,12 @@ export default class HeaderFactory {
 
             return (<th
                 key={`header-cell-${columnId}`}
+                data-dash-column={c.id}
                 colSpan={colSpan}
                 className={
+                    `dash-header ` +
                     `column-${columnId} ` +
                     (columnId === columns.length - 1 || columnId === R.last(columnIndices) ? 'cell--right-last ' : '')
-                    // (visibleIndex < n_fixed_columns ? `frozen-left frozen-left-${visibleIndex}` : '')
 
                 }
                 style={visibleIndex < n_fixed_columns ? {
@@ -257,7 +258,7 @@ export default class HeaderFactory {
         return !row_deletable ? null : (
             <th
                 key='delete'
-                className='expanded-row--empty-cell delete-cell'
+                className='expanded-row--empty-cell dash-delete-header'
                 style={{ width: `30px`, maxWidth: `30px`, minWidth: `30px` }}
 
             />
@@ -270,7 +271,7 @@ export default class HeaderFactory {
         return !row_selectable ? null : (
             <th
                 key='select'
-                className='expanded-row--empty-cell select-cell'
+                className='expanded-row--empty-cell dash-select-header'
                 style={{ width: `30px`, maxWidth: `30px`, minWidth: `30px` }}
             />
         );

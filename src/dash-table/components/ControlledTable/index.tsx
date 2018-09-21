@@ -534,39 +534,25 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         paginator.loadPrevious();
     }
 
-    onContainerScroll = (ev: any) => {
-        const { n_fixed_columns } = this.props;
-        if (!n_fixed_columns) {
-            return;
-        }
-
-        const { spreadsheet } = this.refs;
-        if (ev.target !== spreadsheet) {
-            return;
-        }
-
-        this.stylesheet.setRule(`.frozen-left`, `margin-top: ${-ev.target.scrollTop}px;`);
-    }
-
     applyStyle = (columns: Columns, deletable: boolean, selectable: RowSelection) => {
         if (deletable) {
             this.stylesheet.setRule(
-                `.dash-spreadsheet-inner td.delete-cell`,
+                `.dash-spreadsheet-inner td.dash-delete-cell`,
                 `width: 30px; max-width: 30px; min-width: 30px;`
             );
             this.stylesheet.setRule(
-                `.dash-spreadsheet-inner th.delete-cell`,
+                `.dash-spreadsheet-inner th.dash-delete-header`,
                 `width: 30px; max-width: 30px; min-width: 30px;`
             );
         }
 
         if (selectable) {
             this.stylesheet.setRule(
-                `.dash-spreadsheet-inner td.select-cell`,
+                `.dash-spreadsheet-inner td.dash-select-cell`,
                 `width: 30px; max-width: 30px; min-width: 30px;`
             );
             this.stylesheet.setRule(
-                `.dash-spreadsheet-inner th.select-cell`,
+                `.dash-spreadsheet-inner th.dash-select-header`,
                 `width: 30px; max-width: 30px; min-width: 30px;`
             );
         }
@@ -670,15 +656,15 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         const classes = [
             'dash-spreadsheet-inner',
             'dash-spreadsheet',
-            ...(n_fixed_rows ? ['freeze-top'] : []),
-            ...(n_fixed_columns ? ['freeze-left'] : [])
+            ...(n_fixed_rows ? ['dash-freeze-top'] : []),
+            ...(n_fixed_columns ? ['dash-freeze-left'] : [])
         ];
 
         const containerClasses = [
             'dash-spreadsheet',
             'dash-spreadsheet-container',
-            ...(n_fixed_rows ? ['freeze-top'] : []),
-            ...(n_fixed_columns ? ['freeze-left'] : [])
+            ...(n_fixed_rows ? ['dash-freeze-top'] : []),
+            ...(n_fixed_columns ? ['dash-freeze-left'] : [])
         ];
 
         const cells = this.getCells();

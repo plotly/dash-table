@@ -69,6 +69,7 @@ export default class Cell extends Component<ICellProps, ICellState> {
         } = this.propsWithDefaults;
 
         return [
+            'dash-cell',
             ...(active ? ['focused'] : []),
             ...(!editable ? ['cell--uneditable'] : []),
             ...(selected ? ['cell--selected'] : []),
@@ -113,7 +114,7 @@ export default class Cell extends Component<ICellProps, ICellState> {
         const classes = [
             ...(active ? ['input-active'] : []),
             ...(focused ? ['focused'] : ['unfocused']),
-            ...['cell-value']
+            ...['dash-cell-value']
         ];
 
         const attributes = {
@@ -219,11 +220,14 @@ export default class Cell extends Component<ICellProps, ICellState> {
     }
 
     render() {
+        const { property } = this.props;
+
         return (<td
             ref='td'
             tabIndex={-1}
             className={this.classes.join(' ')}
             style={this.style}
+            data-dash-column={property}
         >
             {this.renderInner()}
         </td>);

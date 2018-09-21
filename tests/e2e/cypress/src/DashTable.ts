@@ -4,11 +4,11 @@ export default class DashTable {
     }
 
     static getDelete(row: number) {
-        return cy.get(`#table tbody tr td.delete-cell`).eq(row);
+        return cy.get(`#table tbody tr td.dash-delete-cell`).eq(row);
     }
 
     static getSelect(row: number) {
-        return cy.get(`#table tbody tr td.select-cell`).eq(row);
+        return cy.get(`#table tbody tr td.dash-select-cell`).eq(row);
     }
 
     static getSelectedCells() {

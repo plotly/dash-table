@@ -151,7 +151,7 @@ export default class CellFactory {
 
         return !row_selectable ? null : (<td
             key='select'
-            className='select-cell'
+            className='dash-select-cell'
             style={{ width: `30px`, maxWidth: `30px`, minWidth: `30px` }}
         >
             <input
@@ -180,7 +180,7 @@ export default class CellFactory {
 
         return !row_deletable ? null : (<td
             key='delete'
-            className='delete-cell'
+            className='dash-delete-cell'
             onClick={() => setProps(actions.deleteRow(idx, this.props))}
             style={{ width: `30px`, maxWidth: `30px`, minWidth: `30px` }}
         >

@@ -28,7 +28,7 @@ export default [
             ],
             n_fixed_rows: 1,
             table_style: [{
-                selector: '.dash-spreadsheet.freeze-top',
+                selector: '.dash-spreadsheet.dash-freeze-top',
                 rule: 'height: 100px;'
             }]
         }

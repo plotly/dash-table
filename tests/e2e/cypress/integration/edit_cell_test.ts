@@ -66,13 +66,13 @@ describe.only('edit cell', () => {
     it('can edit on "enter"', () => {
         DashTable.getCell(0, 1).click();
         DOM.focused.type(`abc${Key.Enter}`);
-        DashTable.getCell(0, 1).within(() => cy.get('.cell-value').should('have.html', `abc`));
+        DashTable.getCell(0, 1).within(() => cy.get('.dash-cell-value').should('have.html', `abc`));
     });
 
     it('can edit when clicking outside of cell', () => {
         DashTable.getCell(0, 1).click();
         DOM.focused.type(`abc`);
         DashTable.getCell(0, 0).click();
-        DashTable.getCell(0, 1).within(() => cy.get('.cell-value').should('have.html', `abc`));
+        DashTable.getCell(0, 1).within(() => cy.get('.dash-cell-value').should('have.html', `abc`));
     });
 });

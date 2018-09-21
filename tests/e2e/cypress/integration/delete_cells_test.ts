@@ -10,9 +10,9 @@ describe('delete cells', () => {
     describe('unsorted dataframe', () => {
         it('can delete single cell', () => {
             DashTable.getCell(0, 1).click();
-            DashTable.getCell(0, 1).within(() => cy.get('.cell-value').should('not.have.value', ''));
+            DashTable.getCell(0, 1).within(() => cy.get('.dash-cell-value').should('not.have.value', ''));
             DOM.focused.type(`${Key.Backspace}${Key.ArrowDown}`);
-            DashTable.getCell(0, 1).within(() => cy.get('.cell-value').should('have.html', ''));
+            DashTable.getCell(0, 1).within(() => cy.get('.dash-cell-value').should('have.html', ''));
         });
 
         it('can delete multiple cells', () => {
@@ -23,7 +23,7 @@ describe('delete cells', () => {
 
             for (let row = 0; row <= 1; ++row) {
                 for (let column = 1; column <= 2; ++column) {
-                    DashTable.getCell(row, column).within(() => cy.get('.cell-value').should('have.html', ''));
+                    DashTable.getCell(row, column).within(() => cy.get('.dash-cell-value').should('have.html', ''));
                 }
             }
         });
@@ -36,9 +36,9 @@ describe('delete cells', () => {
 
         it('can delete single cell', () => {
             DashTable.getCell(0, 1).click();
-            DashTable.getCell(0, 1).within(() => cy.get('.cell-value').should('not.have.value', ''));
+            DashTable.getCell(0, 1).within(() => cy.get('.dash-cell-value').should('not.have.value', ''));
             DOM.focused.type(`${Key.Backspace}${Key.ArrowDown}`);
-            DashTable.getCell(0, 1).within(() => cy.get('.cell-value').should('have.html', ''));
+            DashTable.getCell(0, 1).within(() => cy.get('.dash-cell-value').should('have.html', ''));
         });
 
         it('can delete multiple cells', () => {
@@ -49,7 +49,7 @@ describe('delete cells', () => {
 
             for (let row = 0; row <= 1; ++row) {
                 for (let column = 1; column <= 2; ++column) {
-                    DashTable.getCell(row, column).within(() => cy.get('.cell-value').should('have.html', ''));
+                    DashTable.getCell(row, column).within(() => cy.get('.dash-cell-value').should('have.html', ''));
                 }
             }
         });

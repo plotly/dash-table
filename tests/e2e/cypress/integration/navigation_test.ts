@@ -27,15 +27,15 @@ describe('navigate', () => {
         describe('from a focused cell input', () => {
             beforeEach(() => {
                 DOM.focused.type(Key.Enter);
-                DashTable.getCell(3, 1).within(() => cy.get('.cell-value').should('have.class', 'focused'));
+                DashTable.getCell(3, 1).within(() => cy.get('.dash-cell-value').should('have.class', 'focused'));
             });
 
             it('does not focus on next cell input on "enter"', () => {
                 DOM.focused.type(Key.Enter);
-                DashTable.getCell(3, 1).within(() => cy.get('.cell-value').should('not.have.class', 'focused'));
+                DashTable.getCell(3, 1).within(() => cy.get('.dash-cell-value').should('not.have.class', 'focused'));
 
                 DashTable.getCell(4, 1).should('have.class', 'focused');
-                DashTable.getCell(4, 1).within(() => cy.get('.cell-value').should('not.have.class', 'focused'));
+                DashTable.getCell(4, 1).within(() => cy.get('.dash-cell-value').should('not.have.class', 'focused'));
             });
 
             it('does not focus on next cell input on "tab"', () => {
@@ -44,7 +44,7 @@ describe('navigate', () => {
                 DashTable.getCell(3, 1).should('not.have.class', 'focused');
 
                 DashTable.getCell(3, 2).should('have.class', 'focused');
-                DashTable.getCell(3, 2).within(() => cy.get('.cell-value').should('not.have.class', 'focused'));
+                DashTable.getCell(3, 2).within(() => cy.get('.dash-cell-value').should('not.have.class', 'focused'));
             });
         });
 
