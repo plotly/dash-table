@@ -1,7 +1,7 @@
 import DashTable from 'cypress/DashTable';
 
 describe('delete', () => {
-    describe('be', () => {
+    describe('be pagination & sort', () => {
         beforeEach(() => cy.visit('http://localhost:8081'));
 
         it('can select row', () => {
@@ -23,7 +23,7 @@ describe('delete', () => {
         });
     });
 
-    describe('fe', () => {
+    describe('fe pagination & sort', () => {
         beforeEach(() => cy.visit('http://localhost:8080'));
 
         it('can select row', () => {
