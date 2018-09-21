@@ -675,26 +675,40 @@
           "computed": false
         }
       },
+      "derived_virtual_dataframe": {
+        "type": {
+          "name": "arrayOf",
+          "value": {
+            "name": "object"
+          }
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "[]",
+          "computed": false
+        }
+      },
+      "derived_virtual_indices": {
+        "type": {
+          "name": "arrayOf",
+          "value": {
+            "name": "number"
+          }
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "[]",
+          "computed": false
+        }
+      },
       "dropdown_properties": {
         "type": {
           "name": "any"
         },
         "required": false,
         "description": ""
-      },
-      "derived_virtual_dataframe": {
-        "defaultValue": {
-          "value": "[]",
-          "computed": false
-        },
-        "required": false
-      },
-      "derived_virtual_indices": {
-        "defaultValue": {
-          "value": "[]",
-          "computed": false
-        },
-        "required": false
       },
       "column_conditional_styles": {
         "defaultValue": {

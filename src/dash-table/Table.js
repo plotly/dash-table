@@ -141,6 +141,8 @@ export const propTypes = {
 
     derived_viewport_dataframe: PropTypes.arrayOf(PropTypes.object),
     derived_viewport_indices: PropTypes.arrayOf(PropTypes.number),
+    derived_virtual_dataframe: PropTypes.arrayOf(PropTypes.object),
+    derived_virtual_indices: PropTypes.arrayOf(PropTypes.number),
 
     dropdown_properties: PropTypes.any,
 };
