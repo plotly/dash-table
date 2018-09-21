@@ -1,5 +1,16 @@
 # Changelog
 
+# Version 3.0 (ALPHA)
+
+Version 3.0 of the Dash-Table expands vastly on the capability of the 2.x table and provides features:
+
+    - visually freezing rows and/or columns
+    - filtering in either FE or BE, basic filtering UI
+    - sorting in either FE or BE, basic sorting UI
+    - pagination in either FE or BE, basic pagination UI
+    - performance optimizations
+    - basic coverage through e2e, integration and unit tests
+
 ## RC1, RC2, RC3, RC4 (Virtualization, Freeze, Deletable & Editable Columns, Performance)
 
 ### Virtualization
@@ -181,4 +192,37 @@
     entire app to re-render.
     Now, clicking outside the table will update the component more efficiently,
     prevent excessive application re-renders.
-    
+
+# Version 3.1 (BETA)
+
+Version 3.1 of the Dash-Table builds upon the 3.0 table and solidifies the external facing API of the table
+
+    - introducing the notion of derived properties
+
+    - virtual and viewport dataframe and indices for more flexibility
+    - code refactoring to simplify and improve the existing implementation / prepare for the future
+    - documentation of the API and table features
+    - additional e2e, integration and unit tests for a more mature development platform
+
+### Derived Properties
+
+Derived properties are new to 3.1
+They are readonly properties that represent a transform from multiple 'first-class' properties of the component.
+
+For example, derived_viewport_dataframe is a readonly view based on
+    f(dataframe, filtering params, sorting params, pagination params) --> derived_viewport_dataframe
+
+Derived properties allow the component to expose complex state that can be useful for a Dash Server developper but without introducing dual states, a situation where multiple properties may represent the same state within the component, making it necessary to reconcile them on each prop update.
+
+## RC1 - Virtual and Viewport Dataframe
+
+    - 4 new external facing derived properties and 4 internal facing controlled properties that represent:
+        1. the filtered and sorted dataframe and the indices mapping
+        2. the filtered, sorted and paginated dataframe and the indices mapping
+
+        - derived_viewport_dataframe
+        - derived_viewport_indices
+        - derived_virtual_dataframe
+        - derived_virtual_indices
+
+        In the event where sorting, filtering or pagination is done on the Dash Server, it is possible that some or all derived dataframes will be equal to the dataframe prop.
