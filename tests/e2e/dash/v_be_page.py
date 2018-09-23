@@ -17,7 +17,6 @@ dash_table = modules[0]
 
 url = "https://github.com/plotly/datasets/raw/master/" "26k-consumer-complaints.csv"
 df = pd.read_csv(url)
-df = df.values
 
 app = dash.Dash()
 app.css.config.serve_locally = True
@@ -56,15 +55,19 @@ app.layout = html.Div(
             n_fixed_rows=1,
             row_selectable=True,
             row_deletable=True,
-            sorting=True,
+            sorting="be",
+            filtering=False,
             editable=True,
         ),
     ]
 )
 
 
-@app.callback(Output("table", "dataframe"), [Input("table", "pagination_settings")])
-def updateDataframe(pagination_settings):
+@app.callback(Output("table", "dataframe"), [
+    Input("table", "pagination_settings"),
+    Input("table", "sorting_settings")
+])
+def updateDataframe(pagination_settings, sorting_settings):
     print(pagination_settings)
 
     current_page = pagination_settings["current_page"]
@@ -74,8 +77,17 @@ def updateDataframe(pagination_settings):
     start_index = current_page * page_size
     end_index = start_index + displayed_pages * page_size
     print(str(start_index) + "," + str(end_index))
+    print(sorting_settings)
 
-    return df[start_index:end_index]
+    if (sorting_settings is None or len(sorting_settings) == 0):
+        sorted_df = df.values
+    else:
+        sorted_df = df.sort_index(
+            axis=sorting_settings[0]['columnId'],
+            ascending=(sorting_settings[0]['direction'] == 'asc')
+        ).values
+
+    return sorted_df[start_index:end_index]
 
 
 @app.callback(

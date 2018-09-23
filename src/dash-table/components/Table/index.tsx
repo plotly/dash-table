@@ -26,6 +26,7 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
 
     render() {
         const controlled = this.controlledProps;
+        console.log('ControlledTable -- render', controlled.viewport, controlled.virtual, controlled.paginator);
         this.updateDerivedProps(controlled);
 
         return (<ControlledTable {...controlled} />);
