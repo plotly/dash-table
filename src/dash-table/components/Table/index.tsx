@@ -9,7 +9,12 @@ import derivedPaginator from 'dash-table/derived/paginator';
 import derivedViewportDataframe from 'dash-table/derived/viewportDataframe';
 import derivedVirtualDataframe from 'dash-table/derived/virtualDataframe';
 
-import { SetProps, PropsWithDefaultsAndDerived } from './props';
+import {
+    ControlledTableProps,
+    PropsWithDefaultsAndDerived,
+    SetProps
+} from './props';
+
 import 'react-select/dist/react-select.css';
 import './Table.less';
 import './Dropdown.css';
@@ -19,11 +24,38 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
         super(props);
     }
 
-    public get setProps() {
+    render() {
+        const controlled = this.controlledProps;
+        this.updateDerivedProps(controlled);
+
+        return (<ControlledTable {...controlled} />);
+    }
+
+    private readonly paginator = derivedPaginator();
+    private readonly viewport = derivedViewportDataframe();
+    private readonly virtual = derivedVirtualDataframe();
+
+    private readonly viewportCache = memoizeOneWithFlag(viewport => viewport);
+    private readonly virtualCache = memoizeOneWithFlag(virtual => virtual);
+
+    private readonly __setProps = memoizeOne((setProps?: SetProps) => {
+        return setProps ? (newProps: any) => {
+            if (R.has('dataframe', newProps)) {
+                const { dataframe } = this.props;
+
+                newProps.dataframe_timestamp = Date.now();
+                newProps.dataframe_previous = dataframe;
+            }
+
+            setProps(newProps);
+        } : (newProps: Partial<PropsWithDefaultsAndDerived>) => this.setState(newProps);
+    });
+
+    private get setProps() {
         return this.__setProps(this.props.setProps);
     }
 
-    render() {
+    private get controlledProps(): ControlledTableProps {
         const { setProps } = this;
 
         const {
@@ -60,56 +92,41 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
             viewport.dataframe
         );
 
+        return R.mergeAll([
+            this.props,
+            this.state,
+            {
+                paginator,
+                setProps,
+                viewport,
+                virtual
+            }
+        ]);
+    }
+
+    private updateDerivedProps(controlled: ControlledTableProps) {
+        const { viewport, virtual } = controlled;
+
         const viewportCached = this.viewportCache(viewport).cached;
         const virtualCached = this.virtualCache(virtual).cached;
 
-        if (!virtualCached || !viewportCached) {
-            let newProps: any = {};
-
-            if (!virtualCached) {
-                newProps.derived_virtual_dataframe = virtual.dataframe;
-                newProps.derived_virtual_indices = virtual.indices;
-            }
-
-            if (!viewportCached) {
-                newProps.derived_viewport_dataframe = viewport.dataframe;
-                newProps.derived_viewport_indices = viewport.indices;
-            }
-
-            setTimeout(() => setProps(newProps), 0);
+        if (virtualCached && viewportCached) {
+            return;
         }
 
-        return (<ControlledTable
-            {...R.mergeAll([
-                this.props,
-                this.state,
-                {
-                    paginator,
-                    setProps,
-                    viewport,
-                    virtual
-                }
-            ])}
-        />);
+        const { setProps } = this;
+        let newProps: any = {};
+
+        if (!virtualCached) {
+            newProps.derived_virtual_dataframe = virtual.dataframe;
+            newProps.derived_virtual_indices = virtual.indices;
+        }
+
+        if (!viewportCached) {
+            newProps.derived_viewport_dataframe = viewport.dataframe;
+            newProps.derived_viewport_indices = viewport.indices;
+        }
+
+        setTimeout(() => setProps(newProps), 0);
     }
-
-    private readonly paginator = derivedPaginator();
-    private readonly viewport = derivedViewportDataframe();
-    private readonly virtual = derivedVirtualDataframe();
-
-    private readonly viewportCache = memoizeOneWithFlag(viewport => viewport);
-    private readonly virtualCache = memoizeOneWithFlag(virtual => virtual);
-
-    private __setProps = memoizeOne((setProps?: SetProps) => {
-        return setProps ? (newProps: any) => {
-            if (R.has('dataframe', newProps)) {
-                const { dataframe } = this.props;
-
-                newProps.dataframe_timestamp = Date.now();
-                newProps.dataframe_previous = dataframe;
-            }
-
-            setProps(newProps);
-        } : (newProps: Partial<PropsWithDefaultsAndDerived>) => this.setState(newProps);
-    });
 }
