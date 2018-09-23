@@ -67,25 +67,22 @@ function getNoPagination() {
 }
 
 const getter = (
-    pagination_mode: PaginationMode
-) => {
-    return (
-        pagination_settings: IPaginationSettings,
-        setProps: SetProps,
-        virtual_dataframe: Dataframe
-    ): IPaginator => {
-        switch (pagination_mode) {
-            case false:
-                return getNoPagination();
-            case true:
-            case 'fe':
-                return getFrontEndPagination(pagination_settings, setProps, virtual_dataframe);
-            case 'be':
-                return getBackEndPagination(pagination_settings, setProps);
-            default:
-                throw new Error(`Unknown pagination mode: '${pagination_mode}'`);
-        }
-    };
+    pagination_mode: PaginationMode,
+    pagination_settings: IPaginationSettings,
+    setProps: SetProps,
+    virtual_dataframe: Dataframe
+): IPaginator => {
+    switch (pagination_mode) {
+        case false:
+            return getNoPagination();
+        case true:
+        case 'fe':
+            return getFrontEndPagination(pagination_settings, setProps, virtual_dataframe);
+        case 'be':
+            return getBackEndPagination(pagination_settings, setProps);
+        default:
+            throw new Error(`Unknown pagination mode: '${pagination_mode}'`);
+    }
 };
 
 export default memoizeOneFactory(getter);

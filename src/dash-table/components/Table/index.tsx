@@ -49,8 +49,7 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
         );
 
         const paginator = this.paginator(
-            this.props.pagination_mode
-        )(
+            this.props.pagination_mode,
             this.props.pagination_settings,
             setProps,
             viewport.dataframe
