@@ -15,13 +15,7 @@ import './Table.less';
 import './Dropdown.css';
 
 export default class Table extends Component<PropsWithDefaultsAndDerived> {
-
-    constructor(
-        props: any,
-        private readonly virtualDataframe = derivedVirtualDataframe(),
-        private readonly viewportDataframe = derivedViewportDataframe(),
-        private readonly paginator = derivedPaginator()
-    ) {
+    constructor(props: PropsWithDefaultsAndDerived) {
         super(props);
     }
 
@@ -29,7 +23,7 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
         return this.__setProps(this.props.setProps);
     }
 
-    render() {
+    render = () => {
         const { setProps } = this;
 
         const {
@@ -43,7 +37,7 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
             sorting_treat_empty_string_as_none
         } = this.props;
 
-        const virtual = this.virtualDataframe(
+        const virtual = this.virtual(
             dataframe,
             filtering,
             filtering_settings,
@@ -52,7 +46,7 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
             sorting_treat_empty_string_as_none
         );
 
-        const viewport = this.viewportDataframe(
+        const viewport = this.viewport(
             pagination_mode,
             pagination_settings,
             virtual.dataframe,
@@ -99,8 +93,12 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
         />);
     }
 
-    private viewportCache = memoizeOneWithFlag<any, any>(viewport => viewport);
-    private virtualCache = memoizeOneWithFlag<any, any>(virtual => virtual);
+    private readonly paginator = derivedPaginator();
+    private readonly viewport = derivedViewportDataframe();
+    private readonly virtual = derivedVirtualDataframe();
+
+    private readonly viewportCache = memoizeOneWithFlag(viewport => viewport);
+    private readonly virtualCache = memoizeOneWithFlag(virtual => virtual);
 
     private __setProps = memoizeOne((setProps?: SetProps) => {
         return setProps ? (newProps: any) => {
