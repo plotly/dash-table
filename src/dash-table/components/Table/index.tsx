@@ -23,7 +23,7 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
         return this.__setProps(this.props.setProps);
     }
 
-    render = () => {
+    render() {
         const { setProps } = this;
 
         const {
