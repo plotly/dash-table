@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import * as R from 'ramda';
 import Stylesheet from 'core/Stylesheet';
 import { colIsEditable } from 'dash-table/components/derivedState';
@@ -29,7 +29,7 @@ interface IAccumulator {
     count: number;
 }
 
-export default class ControlledTable extends Component<ControlledTableProps> {
+export default class ControlledTable extends PureComponent<ControlledTableProps> {
     private stylesheet: Stylesheet;
     private cellFactory: CellFactory;
     private filterFactory: FilterFactory;
