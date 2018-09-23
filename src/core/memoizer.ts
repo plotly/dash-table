@@ -20,6 +20,13 @@ export function memoizeOne<
     };
 }
 
+export function memoizeOneFactory<
+    TArgs extends any[],
+    TEntry
+    >(fn: ResultFn<TArgs, TEntry>): () => ResultFn<TArgs, TEntry> {
+    return () => memoizeOne(fn);
+}
+
 export function memoizeOneWithFlag<
     TArgs extends any[],
     TEntry

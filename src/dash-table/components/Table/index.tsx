@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import * as R from 'ramda';
 
-import { memoizeOne } from 'core/memoizer';
+import { memoizeOne, memoizeOneWithFlag } from 'core/memoizer';
 
 import ControlledTable from 'dash-table/components/ControlledTable';
 
-import PaginationAdapter from 'dash-table/adapter/PaginationAdapter';
-import ViewportDataframeAdapter from 'dash-table/adapter/ViewportDataframeAdapter';
-import VirtualDataframeAdapter from 'dash-table/adapter/VirtualDataframeAdapter';
+import derivedPaginator from 'dash-table/derived/paginator';
+import derivedViewportDataframe from 'dash-table/derived/viewportDataframe';
+import derivedVirtualDataframe from 'dash-table/derived/virtualDataframe';
 
 import { SetProps, PropsWithDefaultsAndDerived } from './props';
 import 'react-select/dist/react-select.css';
@@ -15,23 +15,14 @@ import './Table.less';
 import './Dropdown.css';
 
 export default class Table extends Component<PropsWithDefaultsAndDerived> {
-    private virtualAdapter: VirtualDataframeAdapter;
-    private viewportAdapter: ViewportDataframeAdapter;
-    private paginationAdapter: PaginationAdapter;
 
-    constructor(props: any) {
+    constructor(
+        props: any,
+        private readonly virtualDataframe = derivedVirtualDataframe(),
+        private readonly viewportDataframe = derivedViewportDataframe(),
+        private readonly paginator = derivedPaginator()
+    ) {
         super(props);
-
-        this.virtualAdapter = new VirtualDataframeAdapter(() => this.props);
-        this.viewportAdapter = new ViewportDataframeAdapter(
-            () => this.props,
-            () => this.virtualAdapter.get().result
-        );
-        this.paginationAdapter = new PaginationAdapter(
-            () => this.props,
-            () => this.virtualAdapter.get().result,
-            this.setProps
-        );
     }
 
     public get setProps() {
@@ -41,21 +32,44 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
     render() {
         const { setProps } = this;
 
-        const virtual = this.virtualAdapter.get();
-        const viewport = this.viewportAdapter.get();
-        const paginator = this.paginationAdapter.get();
+        const virtual = this.virtualDataframe(
+            this.props.dataframe,
+            this.props.filtering,
+            this.props.filtering_settings,
+            this.props.sorting,
+            this.props.sorting_settings,
+            this.props.sorting_treat_empty_string_as_none
+        );
 
-        if (!virtual.cached || !viewport.cached) {
+        const viewport = this.viewportDataframe(
+            this.props.pagination_mode,
+            this.props.pagination_settings,
+            virtual.dataframe,
+            virtual.indices
+        );
+
+        const paginator = this.paginator(
+            this.props.pagination_mode
+        )(
+            this.props.pagination_settings,
+            setProps,
+            viewport.dataframe
+        );
+
+        const viewportCached = this.viewportCache(viewport).cached;
+        const virtualCached = this.virtualCache(virtual).cached;
+
+        if (!virtualCached || !viewportCached) {
             let newProps: any = {};
 
-            if (!virtual.cached) {
-                newProps.derived_virtual_dataframe = virtual.result.virtual_dataframe;
-                newProps.derived_virtual_indices = virtual.result.virtual_indices;
+            if (!virtualCached) {
+                newProps.derived_virtual_dataframe = virtual.dataframe;
+                newProps.derived_virtual_indices = virtual.indices;
             }
 
-            if (!viewport.cached) {
-                newProps.derived_viewport_dataframe = viewport.result.viewport_dataframe;
-                newProps.derived_viewport_indices = viewport.result.viewport_indices;
+            if (!viewportCached) {
+                newProps.derived_viewport_dataframe = viewport.dataframe;
+                newProps.derived_viewport_indices = viewport.indices;
             }
 
             setTimeout(() => setProps(newProps), 0);
@@ -65,12 +79,21 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
             {...R.mergeAll([
                 this.props,
                 this.state,
-                virtual.result,
-                viewport.result,
+                {
+                    virtual_dataframe: virtual.dataframe,
+                    virtual_indices: virtual.indices
+                },
+                {
+                    viewport_dataframe: viewport.dataframe,
+                    viewport_indices: viewport.indices
+                },
                 { setProps, paginator }
             ])}
         />);
     }
+
+    private viewportCache = memoizeOneWithFlag<any, any>(viewport => viewport);
+    private virtualCache = memoizeOneWithFlag<any, any>(virtual => virtual);
 
     private __setProps = memoizeOne((setProps?: SetProps) => {
         return setProps ? (newProps: any) => {

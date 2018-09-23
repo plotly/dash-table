@@ -1,5 +1,5 @@
 import { SortSettings } from 'core/sorting';
-import { IPaginator } from 'dash-table/adapter/PaginationAdapter';
+import { IPaginator } from 'dash-table/calculations/paginator';
 
 export enum FilteringType {
     Advanced = 'advanced',
