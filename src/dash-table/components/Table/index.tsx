@@ -32,25 +32,36 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
     render() {
         const { setProps } = this;
 
+        const {
+            dataframe,
+            filtering,
+            filtering_settings,
+            pagination_mode,
+            pagination_settings,
+            sorting,
+            sorting_settings,
+            sorting_treat_empty_string_as_none
+        } = this.props;
+
         const virtual = this.virtualDataframe(
-            this.props.dataframe,
-            this.props.filtering,
-            this.props.filtering_settings,
-            this.props.sorting,
-            this.props.sorting_settings,
-            this.props.sorting_treat_empty_string_as_none
+            dataframe,
+            filtering,
+            filtering_settings,
+            sorting,
+            sorting_settings,
+            sorting_treat_empty_string_as_none
         );
 
         const viewport = this.viewportDataframe(
-            this.props.pagination_mode,
-            this.props.pagination_settings,
+            pagination_mode,
+            pagination_settings,
             virtual.dataframe,
             virtual.indices
         );
 
         const paginator = this.paginator(
-            this.props.pagination_mode,
-            this.props.pagination_settings,
+            pagination_mode,
+            pagination_settings,
             setProps,
             viewport.dataframe
         );
@@ -79,14 +90,11 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
                 this.props,
                 this.state,
                 {
-                    virtual_dataframe: virtual.dataframe,
-                    virtual_indices: virtual.indices
-                },
-                {
-                    viewport_dataframe: viewport.dataframe,
-                    viewport_indices: viewport.indices
-                },
-                { setProps, paginator }
+                    paginator,
+                    setProps,
+                    viewport,
+                    virtual
+                }
             ])}
         />);
     }

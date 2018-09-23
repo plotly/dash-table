@@ -248,7 +248,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             row_selectable,
             selected_cell,
             setProps,
-            viewport_dataframe
+            viewport
         } = this.props;
 
         // This is mostly to prevent TABing also triggering native HTML tab
@@ -331,7 +331,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         // the active cell.
         if (selectingDown && active_cell[0] > minRow) {
             removeCells = selectedCols.map(col => [minRow, col]);
-        } else if (selectingDown && maxRow !== viewport_dataframe.length - 1) {
+        } else if (selectingDown && maxRow !== viewport.dataframe.length - 1) {
             // Otherwise if we are selecting down select the next row if possible.
             targetCells = selectedCols.map(col => [maxRow + 1, col]);
         } else if (selectingUp && active_cell[0] < maxRow) {
@@ -376,7 +376,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             row_selectable,
             selected_cell,
             setProps,
-            viewport_indices
+            viewport
         } = this.props;
 
         event.preventDefault();
@@ -388,7 +388,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             (row_selectable ? 1 : 0);
 
         const realCells: [number, number][] = R.map(
-            cell => [viewport_indices[cell[0]], cell[1] - columnIndexOffset] as [number, number],
+            cell => [viewport.indices[cell[0]], cell[1] - columnIndexOffset] as [number, number],
             selected_cell
         );
 
@@ -408,7 +408,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
     }
 
     getNextCell = (event: any, { restrictToSelection, currentCell }: any) => {
-        const { columns, row_deletable, row_selectable, selected_cell, viewport_dataframe } = this.props;
+        const { columns, row_deletable, row_selectable, selected_cell, viewport } = this.props;
 
         const e = event;
         const vci: any[] = [];
@@ -471,7 +471,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
                         selected_cell
                     )
                     : [
-                        R.min(viewport_dataframe.length - 1, currentCell[0] + 1),
+                        R.min(viewport.dataframe.length - 1, currentCell[0] + 1),
                         currentCell[1]
                     ];
 
@@ -488,7 +488,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             row_deletable,
             row_selectable,
             selected_cell,
-            viewport_dataframe
+            viewport
         } = this.props;
 
         const columnIndexOffset =
@@ -500,7 +500,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             selected_cell
         );
 
-        TableClipboardHelper.toClipboard(e, noOffsetSelectedCells, columns, viewport_dataframe);
+        TableClipboardHelper.toClipboard(e, noOffsetSelectedCells, columns, viewport.dataframe);
         this.$el.focus();
     }
 
@@ -515,7 +515,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             row_selectable,
             setProps,
             sorting_settings,
-            viewport_indices
+            viewport
         } = this.props;
 
         if (!editable) {
@@ -531,7 +531,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         const result = TableClipboardHelper.fromClipboard(
             e,
             noOffsetActiveCell,
-            viewport_indices,
+            viewport.indices,
             columns,
             dataframe,
             true,
