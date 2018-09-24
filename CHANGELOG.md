@@ -236,6 +236,10 @@ Derived properties allow the component to expose complex state that can be usefu
 
 ## RC2 - Clean up column offsets
 
+    - 1 new internal facing derived/controlled property:
+        columns: Columns -> columns: VisibleColumns
+        Gets rid of conditional processing for hidden columns in the cell and header factories as well as in navigation/selection handlers
+
     - A bunch of offsets were introduced to the table in the previous development cycle (2.x -> 3.0). Turns out these offsets are neither useful or necessary
     - Validate compatibility of filtering, sorting, pagination
     - External facing classes and attributes
