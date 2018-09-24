@@ -15,7 +15,7 @@ describe('delete', () => {
             DashTable.getSelect(0).within(() => cy.get('input').should('be.checked'));
         });
 
-        it.only('select, sort, new row is not selected', () => {
+        it('select, sort, new row is not selected', () => {
             DashTable.getSelect(0).within(() => cy.get('input').click());
             DashTable.getSelect(0).within(() => cy.get('input').should('be.checked'));
             cy.get('tr th.column-2 .sort').click({ force: true });

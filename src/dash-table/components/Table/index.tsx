@@ -98,14 +98,14 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
         const viewportCached = this.viewportCache(viewport).cached;
         const virtualCached = this.virtualCache(virtual).cached;
 
-        const invalidatedFilter = !this.filterCache(filtering_settings).cached;
-        const invalidatedPagination = !this.paginationCache(pagination_settings).cached;
-        const invalidatedSort = !this.sortCache(sorting_settings).cached;
+        const invalidatedFilter = this.filterCache(filtering_settings);
+        const invalidatedPagination = this.paginationCache(pagination_settings);
+        const invalidatedSort = this.sortCache(sorting_settings);
 
         const invalidateSelection =
-            (invalidatedFilter && filtering === 'be') ||
-            (invalidatedPagination && pagination_mode === 'be') ||
-            (invalidatedSort && sorting === 'be');
+            (!invalidatedFilter.cached && !invalidatedFilter.first && filtering === 'be') ||
+            (!invalidatedPagination.cached && !invalidatedPagination.first && pagination_mode === 'be') ||
+            (!invalidatedSort.cached && !invalidatedSort.first && sorting === 'be');
 
         if (virtualCached && viewportCached && !invalidateSelection) {
             return;

@@ -4,6 +4,7 @@ import { ResultFn } from 'core/generic';
 interface ICachedResultFn<TEntry> {
     result: TEntry;
     cached: boolean;
+    first: boolean;
 }
 
 export function memoizeOne<
@@ -33,11 +34,15 @@ export function memoizeOneWithFlag<
     >(fn: ResultFn<TArgs, TEntry>): ResultFn<TArgs, ICachedResultFn<TEntry>> {
     let lastArgs: any[] | null = null;
     let lastResult: any;
+    let isFirst = true;
 
     return (...args: TArgs): ICachedResultFn<TEntry> => {
-        return isEqualArgs(lastArgs, args) ?
-            { cached: true, result: lastResult } :
-            { cached: false, result: (lastArgs = args) && (lastResult = fn(...args)) };
+        let res = isEqualArgs(lastArgs, args) ?
+            { cached: true, first: isFirst, result: lastResult } :
+            { cached: false, first: isFirst, result: (lastArgs = args) && (lastResult = fn(...args)) };
+        isFirst = false;
+
+        return res;
     };
 }
 
