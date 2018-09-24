@@ -10,7 +10,6 @@ import * as actions from 'dash-table/utils/actions';
 import {
     ColumnId,
     ControlledTableProps,
-    Dataframe,
     PaginationMode,
     RowSelection,
     SetProps,
@@ -24,11 +23,9 @@ export const DEFAULT_CELL_WIDTH = 200;
 interface ICellOptions {
     columns: VisibleColumns;
     columnRowIndex: any;
-    dataframe: Dataframe;
     labels: any[];
     mergeCells?: boolean;
     n_fixed_columns: number;
-    offset: number;
     rowSorting: Sorting;
     setProps: SetProps;
     sorting_settings: SortSettings;
@@ -38,11 +35,9 @@ interface ICellOptions {
 
 interface IOptions {
     columns: VisibleColumns;
-    dataframe: Dataframe;
     mergeCells?: boolean;
     merge_duplicate_headers: boolean;
     n_fixed_columns: number;
-    n_fixed_rows: number;
     row_deletable: boolean;
     row_selectable: RowSelection;
     setProps: SetProps;
@@ -136,7 +131,6 @@ export default class HeaderFactory {
             labels,
             mergeCells,
             n_fixed_columns,
-            offset,
             pagination_mode,
             rowSorting
         } = options;
@@ -162,7 +156,7 @@ export default class HeaderFactory {
         return R.filter(column => !!column, columnIndices.map((columnId, spanId) => {
             const c = columns[columnId];
 
-            const visibleIndex = columns.indexOf(c) + offset;
+            const visibleIndex = columns.indexOf(c);
 
             let colSpan: number;
             if (!mergeCells) {
@@ -183,7 +177,7 @@ export default class HeaderFactory {
             const spannedColumns = columns.filter((_column, index) =>
                 index >= visibleColumnId &&
                 index < visibleColumnId + colSpan &&
-                index + offset < n_fixed_columns
+                index < n_fixed_columns
             );
 
             // Calculate the width of all those columns combined
@@ -272,7 +266,6 @@ export default class HeaderFactory {
 
         let {
             columns,
-            dataframe,
             sorting,
             merge_duplicate_headers,
             n_fixed_columns,
@@ -288,6 +281,8 @@ export default class HeaderFactory {
             (row_deletable ? 1 : 0) +
             (row_selectable ? 1 : 0);
 
+        n_fixed_columns = Math.max(0, n_fixed_columns - offset);
+
         const deletableCell = this.createDeletableHeader(props);
         const selectableCell = this.createSelectableHeader(props);
 
@@ -301,10 +296,8 @@ export default class HeaderFactory {
                 ...(this.createHeaderCells({
                     columns,
                     columnRowIndex: 0,
-                    dataframe,
                     labels: R.pluck('name', columns),
                     n_fixed_columns,
-                    offset,
                     pagination_mode,
                     rowSorting: sorting,
                     setProps,
@@ -319,7 +312,6 @@ export default class HeaderFactory {
                 ...(this.createHeaderCells({
                     columns,
                     columnRowIndex: i,
-                    dataframe,
                     labels: columns.map(
                         c =>
                             R.isNil(c.name) && i === headerDepth - 1
@@ -327,7 +319,6 @@ export default class HeaderFactory {
                                 : getColNameAt(c, i)
                     ),
                     n_fixed_columns,
-                    offset,
                     pagination_mode,
                     rowSorting: !!sorting && i + 1 === headerDepth,
                     mergeCells:
