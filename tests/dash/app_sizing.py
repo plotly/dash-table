@@ -268,31 +268,6 @@ def layout():
                 style={'overflowX': 'scroll'}
             ),
 
-            section_title('HTML Table - Alignment'),
-            html.Div('''
-            When displaying numerical data, it's a good practice to use
-            monospaced fonts, to right-align the data, and to provide the same
-            number of decimals throughout the column.
-
-            Note that it's not possible to modify the number of decimal places
-            in css. `dash-table` will provide formatting options in the future,
-            until then you'll have to modify your data before displaying it.
-
-            For textual data, left-aligning the data is usually easier to read.
-
-            In both cases, the column headers should have the same alignment
-            as the cell content.
-            '''),
-            html_table(
-                df,
-                cell_style={'paddingLeft': 5, 'paddingRight': 5},
-                cell_style_by_column={
-                    'Rep': {'textAlign': 'right', 'fontFamily': 'monospaced'},
-                    'Ind': {'textAlign': 'right', 'fontFamily': 'monospaced'},
-                    'Dem': {'textAlign': 'right', 'fontFamily': 'monospaced'},
-                }
-            ),
-
             html.Hr(),
 
             html.H3('Dash Interactive Table'),
