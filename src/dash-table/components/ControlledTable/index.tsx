@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import * as R from 'ramda';
 import Stylesheet from 'core/Stylesheet';
 import { colIsEditable } from 'dash-table/components/derivedState';
@@ -29,7 +29,7 @@ interface IAccumulator {
     count: number;
 }
 
-export default class ControlledTable extends Component<ControlledTableProps> {
+export default class ControlledTable extends PureComponent<ControlledTableProps> {
     private stylesheet: Stylesheet;
     private cellFactory: CellFactory;
     private filterFactory: FilterFactory;
@@ -246,7 +246,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             columns,
             selected_cell,
             setProps,
-            viewport_dataframe
+            viewport
         } = this.props;
 
         // This is mostly to prevent TABing also triggering native HTML tab
@@ -324,7 +324,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         // the active cell.
         if (selectingDown && active_cell[0] > minRow) {
             removeCells = selectedCols.map(col => [minRow, col]);
-        } else if (selectingDown && maxRow !== viewport_dataframe.length - 1) {
+        } else if (selectingDown && maxRow !== viewport.dataframe.length - 1) {
             // Otherwise if we are selecting down select the next row if possible.
             targetCells = selectedCols.map(col => [maxRow + 1, col]);
         } else if (selectingUp && active_cell[0] < maxRow) {
@@ -367,7 +367,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             editable,
             selected_cell,
             setProps,
-            viewport_indices
+            viewport
         } = this.props;
 
         event.preventDefault();
@@ -375,7 +375,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         let newDataframe = dataframe;
 
         const realCells: [number, number][] = R.map(
-            cell => [viewport_indices[cell[0]], cell[1]] as [number, number],
+            cell => [viewport.indices[cell[0]], cell[1]] as [number, number],
             selected_cell
         );
 
@@ -395,7 +395,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
     }
 
     getNextCell = (event: any, { restrictToSelection, currentCell }: any) => {
-        const { columns, selected_cell, viewport_dataframe } = this.props;
+        const { columns, selected_cell, viewport } = this.props;
 
         const e = event;
         const vci: any[] = [];
@@ -454,7 +454,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
                         selected_cell
                     )
                     : [
-                        R.min(viewport_dataframe.length - 1, currentCell[0] + 1),
+                        R.min(viewport.dataframe.length - 1, currentCell[0] + 1),
                         currentCell[1]
                     ];
 
@@ -469,10 +469,10 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         const {
             columns,
             selected_cell,
-            viewport_dataframe
+            viewport
         } = this.props;
 
-        TableClipboardHelper.toClipboard(e, selected_cell, columns, viewport_dataframe);
+        TableClipboardHelper.toClipboard(e, selected_cell, columns, viewport.dataframe);
         this.$el.focus();
     }
 
@@ -485,7 +485,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             filtering_settings,
             setProps,
             sorting_settings,
-            viewport_indices
+            viewport
         } = this.props;
 
         if (!editable) {
@@ -495,7 +495,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         const result = TableClipboardHelper.fromClipboard(
             e,
             active_cell,
-            viewport_indices,
+            viewport.indices,
             columns,
             dataframe,
             true,

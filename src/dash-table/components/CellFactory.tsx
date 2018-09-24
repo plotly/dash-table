@@ -201,14 +201,13 @@ export default class CellFactory {
             id,
             is_focused,
             selected_cell,
-            viewport_dataframe: dataframe,
-            viewport_indices: indices
+            viewport
         } = this.props;
 
         const visibleColumns = columns.filter(column => !column.hidden);
 
-        return dataframe.map((datum, viewportIdx) => {
-            const realIdx = indices[viewportIdx];
+        return viewport.dataframe.map((datum, viewportIdx) => {
+            const realIdx = viewport.indices[viewportIdx];
 
             const deleteCell = this.rowDeleteCell(realIdx);
             const selectCell = this.rowSelectCell(realIdx);

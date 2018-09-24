@@ -193,6 +193,13 @@ Version 3.0 of the Dash-Table expands vastly on the capability of the 2.x table 
     Now, clicking outside the table will update the component more efficiently,
     prevent excessive application re-renders.
 
+## RC22 - Fix regression for user select
+
+    Regression from: https://github.com/plotly/dash-table/pull/93
+    Issue: https://github.com/plotly/dash-table/issues/91
+
+    Sorting arrow will no longer highlight.
+
 # Version 3.1 (BETA)
 
 Version 3.1 of the Dash-Table builds upon the 3.0 table and solidifies the external facing API of the table

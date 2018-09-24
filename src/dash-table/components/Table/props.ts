@@ -1,5 +1,5 @@
 import { SortSettings } from 'core/sorting';
-import { IPaginator } from 'dash-table/adapter/PaginationAdapter';
+import { IPaginator } from 'dash-table/derived/paginator';
 
 export enum FilteringType {
     Advanced = 'advanced',
@@ -133,10 +133,14 @@ export type ControlledTableProps = PropsWithDefaults & {
     setProps: SetProps;
 
     paginator: IPaginator
-    viewport_dataframe: Dataframe;
-    viewport_indices: Indices;
-    virtual_dataframe: Dataframe;
-    virtual_indices: Indices;
+    viewport: {
+        dataframe: Dataframe,
+        indices: Indices
+    },
+    virtual: {
+        dataframe: Dataframe,
+        indices: Indices
+    }
 };
 
 export interface ICellFactoryOptions {
@@ -160,6 +164,8 @@ export interface ICellFactoryOptions {
     selected_rows: number[];
     setProps: SetProps;
 
-    viewport_dataframe: Dataframe;
-    viewport_indices: Indices;
+    viewport: {
+        dataframe: Dataframe,
+        indices: Indices
+    };
 }

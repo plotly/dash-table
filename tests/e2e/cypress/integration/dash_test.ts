@@ -56,6 +56,7 @@ describe('dash basic', () => {
     });
 
     it('can get cell with double click', () => {
+        cy.window().then(win => cy.spy(win.console, 'log'));
         DashTable.getCell(3, 1).within(() => cy.get('div').dblclick());
         DashTable.getCell(3, 1).should('have.class', 'focused');
     });
