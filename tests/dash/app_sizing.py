@@ -78,23 +78,7 @@ def layout():
     )
 
     return [
-        dcc.Markdown(
-        dedent('''
-        # Sizing and Styling Guide
-
-        By default, the `Table` is responsive and will fill the container that
-        you provide it. The `Table` is rendered with HTML's underlying `table`,
-        so we get a lot of the responsive sizing behaviour for free.
-
-        We override some of the default HTML styles:
-        - Column names will turn into ellipses if they can't fit
-        - A min-width of 200px is applied on each column
-        - The table has `content-fit` applied
-
-        Below, the interactive `Table`, `html.Table` with default browser
-        styles, and `html.Table` with a few extra CSS styles.
-        Resize the browser and see how they interact.
-        ''')),
+        html.H1('Sizing Guide'),
 
         html.Div(style={
             'marginLeft': 'auto',
