@@ -357,6 +357,7 @@ export default [
         props: {
             id: 'table',
             editable: true,
+            active_cell: [2, 1],
             selected_cell: [[2, 1], [2, 2], [1, 1], [1, 2]],
             columns: [
                 {
