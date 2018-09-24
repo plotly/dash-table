@@ -26,7 +26,6 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
 
     render() {
         const controlled = this.controlledProps;
-        console.log('ControlledTable -- render', controlled.viewport, controlled.virtual, controlled.paginator);
         this.updateDerivedProps(controlled);
 
         return (<ControlledTable {...controlled} />);
@@ -36,6 +35,9 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
     private readonly viewport = derivedViewportDataframe();
     private readonly virtual = derivedVirtualDataframe();
 
+    private readonly filterCache = memoizeOneWithFlag(filter => filter);
+    private readonly paginationCache = memoizeOneWithFlag(pagination => pagination);
+    private readonly sortCache = memoizeOneWithFlag(sort => sort);
     private readonly viewportCache = memoizeOneWithFlag(viewport => viewport);
     private readonly virtualCache = memoizeOneWithFlag(virtual => virtual);
 
@@ -106,17 +108,26 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
     }
 
     private updateDerivedProps(controlled: ControlledTableProps) {
-        const { viewport, virtual } = controlled;
+        const { filtering, filtering_settings, pagination_mode, pagination_settings, sorting, sorting_settings, viewport, virtual } = controlled;
 
         const viewportCached = this.viewportCache(viewport).cached;
         const virtualCached = this.virtualCache(virtual).cached;
 
-        if (virtualCached && viewportCached) {
+        const invalidatedFilter = !this.filterCache(filtering_settings).cached;
+        const invalidatedPagination = !this.paginationCache(pagination_settings).cached;
+        const invalidatedSort = !this.sortCache(sorting_settings).cached;
+
+        const invalidateSelection =
+            (invalidatedFilter && filtering === 'be') ||
+            (invalidatedPagination && pagination_mode === 'be') ||
+            (invalidatedSort && sorting === 'be');
+
+        if (virtualCached && viewportCached && !invalidateSelection) {
             return;
         }
 
         const { setProps } = this;
-        let newProps: any = {};
+        let newProps: Partial<PropsWithDefaultsAndDerived> = {};
 
         if (!virtualCached) {
             newProps.derived_virtual_dataframe = virtual.dataframe;
@@ -126,6 +137,12 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
         if (!viewportCached) {
             newProps.derived_viewport_dataframe = viewport.dataframe;
             newProps.derived_viewport_indices = viewport.indices;
+        }
+
+        if (invalidateSelection) {
+            newProps.active_cell = undefined;
+            newProps.selected_cell = undefined;
+            newProps.selected_rows = undefined;
         }
 
         setTimeout(() => setProps(newProps), 0);
