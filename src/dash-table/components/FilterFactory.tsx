@@ -5,7 +5,7 @@ import Logger from 'core/Logger';
 
 import ColumnFilter from 'dash-table/components/Filter/Column';
 import AdvancedFilter from 'dash-table/components/Filter/Advanced';
-import { ColumnId, Columns, Filtering, FilteringType, IColumn } from 'dash-table/components/Table/props';
+import { ColumnId, Filtering, FilteringType, IVisibleColumn, VisibleColumns } from 'dash-table/components/Table/props';
 import lexer, { ILexerResult, ILexemeResult } from 'core/syntax-tree/lexer';
 import { LexemeType } from 'core/syntax-tree/lexicon';
 import syntaxer, { ISyntaxerResult, ISyntaxTree } from 'core/syntax-tree/syntaxer';
@@ -13,7 +13,7 @@ import syntaxer, { ISyntaxerResult, ISyntaxTree } from 'core/syntax-tree/syntaxe
 type SetFilter = (filter: string) => void;
 
 export interface IFilterOptions {
-    columns: Columns;
+    columns: VisibleColumns;
     fillerColumns: number;
     filtering: Filtering;
     filtering_settings: string;
@@ -172,11 +172,10 @@ export default class FilterFactory {
 
         this.updateOps(filtering_settings);
 
-        const visibleColumns = R.filter(column => !column.hidden, columns);
         const offsetCells = R.range(0, fillerColumns).map(i => (<th key={`offset-${i}`} />));
 
         const filterCells = filtering_type === FilteringType.Basic ?
-            R.addIndex<IColumn, JSX.Element>(R.map)((column, index) => {
+            R.addIndex<IVisibleColumn, JSX.Element>(R.map)((column, index) => {
                 return (<ColumnFilter
                     key={`column-${index}`}
                     classes={`filter column-${index}`}
@@ -185,11 +184,11 @@ export default class FilterFactory {
                     setFilter={this.getEventHandler(this.onChange, column.id, this.ops, setFilter)}
                     value={this.ops.get(column.id)}
                 />);
-            }, visibleColumns) :
+            }, columns) :
             [(<AdvancedFilter
                 key={`column-${0}`}
                 classes={[]}
-                colSpan={visibleColumns.length}
+                colSpan={columns.length}
                 value=''
                 setFilter={() => undefined}
             />)];

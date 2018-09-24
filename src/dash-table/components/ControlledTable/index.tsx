@@ -305,13 +305,6 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         const maxRow = selectedRows[selectedRows.length - 1];
         const maxCol = selectedCols[selectedCols.length - 1];
 
-        const vci: any[] = [];
-        columns.forEach((c, i) => {
-            if (!c.hidden) {
-                vci.push(i);
-            }
-        });
-
         const selectingDown =
             e.keyCode === KEY_CODES.ARROW_DOWN || e.keyCode === KEY_CODES.ENTER;
         const selectingUp = e.keyCode === KEY_CODES.ARROW_UP;
@@ -345,7 +338,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             // If there are selections to the left of the active cell and
             // we are selecting right, move the left side closer to active_cell
             removeCells = selectedRows.map(row => [row, minCol]);
-        } else if (selectingRight && maxCol + 1 <= R.last(vci)) {
+        } else if (selectingRight && maxCol + 1 <= columns.length - 1) {
             // Otherwise move selection right if possible
             targetCells = selectedRows.map(row => [row, maxCol + 1]);
         }
@@ -398,15 +391,6 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         const { columns, selected_cell, viewport } = this.props;
 
         const e = event;
-        const vci: any[] = [];
-
-        if (!restrictToSelection) {
-            columns.forEach((c, i) => {
-                if (!c.hidden) {
-                    vci.push(i);
-                }
-            });
-        }
 
         switch (e.keyCode) {
             case KEY_CODES.ARROW_LEFT:
@@ -417,10 +401,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                     )
                     : [
                         currentCell[0],
-                        R.max(
-                            vci[0],
-                            vci[R.indexOf(currentCell[1], vci) - 1]
-                        )
+                        R.max(0, currentCell[1] - 1)
                     ];
 
             case KEY_CODES.ARROW_RIGHT:
@@ -432,10 +413,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                     )
                     : [
                         currentCell[0],
-                        R.min(
-                            R.last(vci),
-                            vci[R.indexOf(currentCell[1], vci) + 1]
-                        )
+                        R.min(columns.length - 1, currentCell[1] + 1)
                     ];
 
             case KEY_CODES.ARROW_UP:

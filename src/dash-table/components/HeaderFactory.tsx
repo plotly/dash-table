@@ -9,20 +9,20 @@ import singleUpdateSettings from 'core/sorting/single';
 import * as actions from 'dash-table/utils/actions';
 import {
     ColumnId,
-    Columns,
     ControlledTableProps,
     Dataframe,
     PaginationMode,
     RowSelection,
     SetProps,
     Sorting,
-    SortingType
+    SortingType,
+    VisibleColumns
 } from 'dash-table/components/Table/props';
 
 export const DEFAULT_CELL_WIDTH = 200;
 
 interface ICellOptions {
-    columns: Columns;
+    columns: VisibleColumns;
     columnRowIndex: any;
     dataframe: Dataframe;
     labels: any[];
@@ -37,7 +37,7 @@ interface ICellOptions {
 }
 
 interface IOptions {
-    columns: Columns;
+    columns: VisibleColumns;
     dataframe: Dataframe;
     mergeCells?: boolean;
     merge_duplicate_headers: boolean;
@@ -151,7 +151,7 @@ export default class HeaderFactory {
             labels.forEach((label, i) => {
                 // Skip over hidden columns for labels selection / filtering;
                 // otherwise they will be filtered out when generating the headers
-                if (columns[i].hidden || label === labels[compareIndex]) {
+                if (label === labels[compareIndex]) {
                     return;
                 }
                 columnIndices.push(i);
@@ -159,38 +159,28 @@ export default class HeaderFactory {
             });
         }
 
-        const visibleColumns = columns.filter(column => !column.hidden);
-
         return R.filter(column => !!column, columnIndices.map((columnId, spanId) => {
             const c = columns[columnId];
-            if (c.hidden) {
-                return null;
-            }
 
-            const visibleIndex = visibleColumns.indexOf(c) + offset;
+            const visibleIndex = columns.indexOf(c) + offset;
 
             let colSpan: number;
             if (!mergeCells) {
                 colSpan = 1;
             } else {
-                const nHiddenColumns = (
-                    R.slice(columnId, columnIndices[spanId + 1] || Infinity, columns)
-                        .filter(R.propEq('hidden', true))
-                        .length);
                 if (columnId === R.last(columnIndices)) {
-                    colSpan = labels.length - columnId - nHiddenColumns;
+                    colSpan = labels.length - columnId;
                 } else {
-                    colSpan = columnIndices[spanId + 1] - columnId - nHiddenColumns;
+                    colSpan = columnIndices[spanId + 1] - columnId;
                 }
             }
 
             // This is not efficient and can be improved upon...
             // Fixed columns need to override the default cell behavior when they span multiple columns
             // Find all columns that fit the header's range [index, index+colspan[ and keep the fixed/visible ones
-            const visibleColumnId = visibleColumns.indexOf(c);
+            const visibleColumnId = columns.indexOf(c);
 
-            const spannedColumns = visibleColumns.filter((column, index) =>
-                !column.hidden &&
+            const spannedColumns = columns.filter((_column, index) =>
                 index >= visibleColumnId &&
                 index < visibleColumnId + colSpan &&
                 index + offset < n_fixed_columns

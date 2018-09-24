@@ -32,7 +32,6 @@ export default class CellFactory {
 
     private handleClick = (idx: number, i: number, e: any) => {
         const {
-            columns,
             editable,
             is_focused,
             selected_cell,
@@ -60,13 +59,6 @@ export default class CellFactory {
             active_cell: cellLocation
         };
 
-        const vci: any[] = [];
-        columns.forEach((c, ci: number) => {
-            if (!c.hidden) {
-                vci.push(ci);
-            }
-        });
-
         const selectedRows = R.uniq(R.pluck(0, selected_cell)).sort((a, b) => a - b);
         const selectedCols = R.uniq(R.pluck(1, selected_cell)).sort((a, b) => a - b);
         const minRow = selectedRows[0];
@@ -82,7 +74,7 @@ export default class CellFactory {
                     R.min(minCol, cellLocation[1]),
                     R.max(minCol, cellLocation[1]) + 1
                 )
-            ).filter(c => R.contains(c[1], vci)) as any;
+            ) as any;
         } else {
             newProps.selected_cell = [cellLocation];
         }
@@ -204,15 +196,13 @@ export default class CellFactory {
             viewport
         } = this.props;
 
-        const visibleColumns = columns.filter(column => !column.hidden);
-
         return viewport.dataframe.map((datum, viewportIdx) => {
             const realIdx = viewport.indices[viewportIdx];
 
             const deleteCell = this.rowDeleteCell(realIdx);
             const selectCell = this.rowSelectCell(realIdx);
 
-            const cells = visibleColumns.map((column, visibleIndex) => {
+            const cells = columns.map((column, visibleIndex) => {
                 let legacyDropdown: any = (
                     (
                         dropdown_properties &&
@@ -245,7 +235,7 @@ export default class CellFactory {
                     key={`${column.id}-${visibleIndex}`}
                     active={active_cell[0] === viewportIdx && active_cell[1] === index}
                     classes={classes}
-                    clearable={column.clearable}
+                    clearable={!!column.clearable}
                     conditionalDropdowns={conditionalDropdowns}
                     conditionalStyles={conditionalStyles}
                     datum={datum}

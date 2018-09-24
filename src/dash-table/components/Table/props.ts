@@ -21,13 +21,22 @@ export type SelectedCells = CellCoordinates[];
 export type SetProps = (...args: any[]) => void;
 export type Sorting = 'fe' | 'be' | boolean;
 export type SortingType = 'multi' | 'single';
+export type VisibleColumns = IVisibleColumn[];
 
-export interface IColumn {
-    id: ColumnId;
+export interface IColumn extends IVisibleColumn {
+    hidden?: boolean;
+}
+
+export interface IVisibleColumn {
+    clearable?: boolean;
+    deletable?: boolean;
     editable?: boolean;
+    editable_name?: boolean;
+    id: ColumnId;
     name: string;
-    options?: { label: string | number, value: any }[]; // legacy
-    [key: string]: any;
+    options?: { label: string | number, value: any }[];
+    type?: string;
+    width?: string | number;
 }
 
 interface IDatumObject {
@@ -132,6 +141,7 @@ export type PropsWithDefaultsAndDerived = PropsWithDefaults & IDerivedProps;
 export type ControlledTableProps = PropsWithDefaults & {
     setProps: SetProps;
 
+    columns: VisibleColumns;
     paginator: IPaginator
     viewport: {
         dataframe: Dataframe,
@@ -145,7 +155,7 @@ export type ControlledTableProps = PropsWithDefaults & {
 
 export interface ICellFactoryOptions {
     active_cell: ActiveCell;
-    columns: Columns;
+    columns: VisibleColumns;
     column_conditional_dropdowns: any[];
     column_conditional_styles: any[];
     column_static_dropdown: any;
