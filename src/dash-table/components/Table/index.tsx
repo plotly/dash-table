@@ -20,45 +20,31 @@ import './Table.less';
 import './Dropdown.css';
 
 export default class Table extends Component<PropsWithDefaultsAndDerived> {
+    private controlled: ControlledTableProps;
+
     constructor(props: PropsWithDefaultsAndDerived) {
         super(props);
+
+        this.controlled = this.getControlledProps(this.props);
+    }
+
+    componentWillReceiveProps(nextProps: PropsWithDefaultsAndDerived) {
+        this.controlled = this.getControlledProps(nextProps);
+        this.updateDerivedProps();
+    }
+
+    shouldComponentUpdate(nextProps: PropsWithDefaultsAndDerived) {
+        return Object.keys(this.props).filter(key =>
+            !key.startsWith('derived_') &&
+            (nextProps as any)[key] !== (this.props as any)[key]
+        ).length > 0;
     }
 
     render() {
-        const controlled = this.controlledProps;
-        this.updateDerivedProps(controlled);
-
-        return (<ControlledTable {...controlled} />);
+        return (<ControlledTable {...this.controlled} />);
     }
 
-    private readonly paginator = derivedPaginator();
-    private readonly viewport = derivedViewportDataframe();
-    private readonly virtual = derivedVirtualDataframe();
-
-    private readonly filterCache = memoizeOneWithFlag(filter => filter);
-    private readonly paginationCache = memoizeOneWithFlag(pagination => pagination);
-    private readonly sortCache = memoizeOneWithFlag(sort => sort);
-    private readonly viewportCache = memoizeOneWithFlag(viewport => viewport);
-    private readonly virtualCache = memoizeOneWithFlag(virtual => virtual);
-
-    private readonly __setProps = memoizeOne((setProps?: SetProps) => {
-        return setProps ? (newProps: any) => {
-            if (R.has('dataframe', newProps)) {
-                const { dataframe } = this.props;
-
-                newProps.dataframe_timestamp = Date.now();
-                newProps.dataframe_previous = dataframe;
-            }
-
-            setProps(newProps);
-        } : (newProps: Partial<PropsWithDefaultsAndDerived>) => this.setState(newProps);
-    });
-
-    private get setProps() {
-        return this.__setProps(this.props.setProps);
-    }
-
-    private get controlledProps(): ControlledTableProps {
+    private getControlledProps(props: PropsWithDefaultsAndDerived): ControlledTableProps {
         const { setProps } = this;
 
         const {
@@ -70,7 +56,7 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
             sorting,
             sorting_settings,
             sorting_treat_empty_string_as_none
-        } = this.props;
+        } = props;
 
         const virtual = this.virtual(
             dataframe,
@@ -96,8 +82,7 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
         );
 
         return R.mergeAll([
-            this.props,
-            this.state,
+            props,
             {
                 paginator,
                 setProps,
@@ -107,8 +92,8 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
         ]);
     }
 
-    private updateDerivedProps(controlled: ControlledTableProps) {
-        const { filtering, filtering_settings, pagination_mode, pagination_settings, sorting, sorting_settings, viewport, virtual } = controlled;
+    private updateDerivedProps() {
+        const { filtering, filtering_settings, pagination_mode, pagination_settings, sorting, sorting_settings, viewport, virtual } = this.controlled;
 
         const viewportCached = this.viewportCache(viewport).cached;
         const virtualCached = this.virtualCache(virtual).cached;
@@ -147,4 +132,31 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
 
         setTimeout(() => setProps(newProps), 0);
     }
+
+    private get setProps() {
+        return this.__setProps(this.props.setProps);
+    }
+
+    private readonly __setProps = memoizeOne((setProps?: SetProps) => {
+        return setProps ? (newProps: any) => {
+            if (R.has('dataframe', newProps)) {
+                const { dataframe } = this.props;
+
+                newProps.dataframe_timestamp = Date.now();
+                newProps.dataframe_previous = dataframe;
+            }
+
+            setProps(newProps);
+        } : (newProps: Partial<PropsWithDefaultsAndDerived>) => this.setState(newProps);
+    });
+
+    private readonly paginator = derivedPaginator();
+    private readonly viewport = derivedViewportDataframe();
+    private readonly virtual = derivedVirtualDataframe();
+
+    private readonly filterCache = memoizeOneWithFlag(filter => filter);
+    private readonly paginationCache = memoizeOneWithFlag(pagination => pagination);
+    private readonly sortCache = memoizeOneWithFlag(sort => sort);
+    private readonly viewportCache = memoizeOneWithFlag(viewport => viewport);
+    private readonly virtualCache = memoizeOneWithFlag(virtual => virtual);
 }
