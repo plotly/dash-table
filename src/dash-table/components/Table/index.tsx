@@ -19,6 +19,8 @@ import 'react-select/dist/react-select.css';
 import './Table.less';
 import './Dropdown.css';
 
+const DERIVED_REGEX = /^derived_/;
+
 export default class Table extends Component<PropsWithDefaultsAndDerived> {
     private controlled: ControlledTableProps;
 
@@ -37,7 +39,7 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
         const props: any = this.props;
 
         return R.any(key =>
-            !/^derived_/.test(key) && props[key] !== nextProps[key],
+            !DERIVED_REGEX.test(key) && props[key] !== nextProps[key],
             R.keysIn(props)
         );
     }
