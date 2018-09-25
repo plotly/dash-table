@@ -8,6 +8,7 @@ import ControlledTable from 'dash-table/components/ControlledTable';
 import derivedPaginator from 'dash-table/derived/paginator';
 import derivedViewportDataframe from 'dash-table/derived/viewportDataframe';
 import derivedVirtualDataframe from 'dash-table/derived/virtualDataframe';
+import derivedVisibleColumns from 'dash-table/derived/visibleColumns';
 
 import {
     ControlledTableProps,
@@ -52,6 +53,7 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
         const { setProps } = this;
 
         const {
+            columns,
             dataframe,
             filtering,
             filtering_settings,
@@ -85,9 +87,12 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
             viewport.dataframe
         );
 
+        const visibleColumns = this.visibleColumns(columns);
+
         return R.mergeAll([
             props,
             {
+                columns: visibleColumns,
                 paginator,
                 setProps,
                 viewport,
@@ -157,6 +162,7 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
     private readonly paginator = derivedPaginator();
     private readonly viewport = derivedViewportDataframe();
     private readonly virtual = derivedVirtualDataframe();
+    private readonly visibleColumns = derivedVisibleColumns();
 
     private readonly filterCache = memoizeOneWithFlag(filter => filter);
     private readonly paginationCache = memoizeOneWithFlag(pagination => pagination);

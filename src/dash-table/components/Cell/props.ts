@@ -11,7 +11,7 @@ import { ColumnId } from 'dash-table/components/Table/props';
 export interface ICellProps {
     active: boolean;
     classes?: string[];
-    clearable: boolean;
+    clearable?: boolean;
     conditionalDropdowns?: IConditionalDropdown[];
     conditionalStyles?: IConditionalStyle[];
     datum: any;

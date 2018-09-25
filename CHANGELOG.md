@@ -233,3 +233,37 @@ Derived properties allow the component to expose complex state that can be usefu
         - derived_virtual_indices
 
         In the event where sorting, filtering or pagination is done on the Dash Server, it is possible that some or all derived dataframes will be equal to the dataframe prop.
+
+## RC2 - Clean up column offsets
+
+    - 1 new internal facing derived/controlled property:
+        columns: Columns -> columns: VisibleColumns
+        Gets rid of conditional processing for hidden columns in the cell and header factories as well as in navigation/selection handlers
+
+    - A bunch of offsets were introduced to the table in the previous development cycle (2.x -> 3.0). Turns out these offsets are neither useful or necessary
+    - Validate compatibility of filtering, sorting, pagination
+    - External facing classes and attributes
+        * (ATTRIBUTE) data-dash-column=<columnId>
+
+            .dash-cell,
+            .dash-header {
+                &[data-dash-column='ticker'] {
+                    // styling
+                }
+            }
+
+        * (CLASS) dash-cell
+        * (CLASS) dash-header
+
+        * (CLASS) dash-delete-cell
+        * (CLASS) dash-delete-header
+        * (CLASS) dash-select-cell
+        * (CLASS) dash-select-header
+
+        * (CLASS) dash-cell-value
+
+        * (CLASS) dash-freeze-left
+        * (CLASS) dash-freeze-top
+        * (CLASS) dash-spreadsheet
+        * (CLASS) dash-spreadsheet-container
+        * (CLASS) dash-spreadsheet-inner

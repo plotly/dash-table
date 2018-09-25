@@ -5,7 +5,7 @@ import Logger from 'core/Logger';
 
 import ColumnFilter from 'dash-table/components/Filter/Column';
 import AdvancedFilter from 'dash-table/components/Filter/Advanced';
-import { ColumnId, Columns, Filtering, FilteringType, IColumn } from 'dash-table/components/Table/props';
+import { ColumnId, Filtering, FilteringType, IVisibleColumn, VisibleColumns } from 'dash-table/components/Table/props';
 import lexer, { ILexerResult, ILexemeResult } from 'core/syntax-tree/lexer';
 import { LexemeType } from 'core/syntax-tree/lexicon';
 import syntaxer, { ISyntaxerResult, ISyntaxTree } from 'core/syntax-tree/syntaxer';
@@ -13,12 +13,12 @@ import syntaxer, { ISyntaxerResult, ISyntaxTree } from 'core/syntax-tree/syntaxe
 type SetFilter = (filter: string) => void;
 
 export interface IFilterOptions {
-    columns: Columns;
+    columns: VisibleColumns;
+    fillerColumns: number;
     filtering: Filtering;
     filtering_settings: string;
     filtering_type: FilteringType;
     id: string;
-    offset: number;
     setFilter: SetFilter;
 }
 
@@ -159,10 +159,10 @@ export default class FilterFactory {
     public createFilters() {
         const {
             columns,
+            fillerColumns,
             filtering,
             filtering_settings,
             filtering_type,
-            offset,
             setFilter
         } = this.props;
 
@@ -172,24 +172,23 @@ export default class FilterFactory {
 
         this.updateOps(filtering_settings);
 
-        const visibleColumns = R.filter(column => !column.hidden, columns);
-        const offsetCells = R.range(0, offset).map(i => (<th key={`offset-${i}`} />));
+        const offsetCells = R.range(0, fillerColumns).map(i => (<th key={`offset-${i}`} />));
 
         const filterCells = filtering_type === FilteringType.Basic ?
-            R.addIndex<IColumn, JSX.Element>(R.map)((column, index) => {
+            R.addIndex<IVisibleColumn, JSX.Element>(R.map)((column, index) => {
                 return (<ColumnFilter
-                    key={`column-${index + offset}`}
-                    classes={`filter column-${index + offset}`}
+                    key={`column-${index}`}
+                    classes={`filter column-${index}`}
                     isValid={this.isFragmentValidOrNull(column.id)}
                     property={column.id}
                     setFilter={this.getEventHandler(this.onChange, column.id, this.ops, setFilter)}
                     value={this.ops.get(column.id)}
                 />);
-            }, visibleColumns) :
+            }, columns) :
             [(<AdvancedFilter
-                key={`column-${offset}`}
+                key={`column-${0}`}
                 classes={[]}
-                colSpan={visibleColumns.length}
+                colSpan={columns.length}
                 value=''
                 setFilter={() => undefined}
             />)];

@@ -59,12 +59,12 @@
 }
 
 .dash-spreadsheet {
-    &.freeze-left {
+    &.dash-freeze-left {
         .fit-content-polyfill();
         max-width: 500px;
     }
 
-    &.freeze-top {
+    &.dash-freeze-top {
         .fit-content-polyfill();
         max-height: 500px;
     }
@@ -81,8 +81,8 @@
     display: flex;
     flex-direction: column;
 
-    &.freeze-left,
-    &.freeze-top {
+    &.dash-freeze-left,
+    &.dash-freeze-top {
         overflow: hidden !important;
     }
 
@@ -141,13 +141,13 @@
         z-index: 400;
     }
 
-    &:not(.freeze-top):not(.freeze-left) {
+    &:not(.dash-freeze-top):not(.dash-freeze-left) {
         .cell-1-1 {
             .top-left-cells();
         }
     }
 
-    &:not(.freeze-top).freeze-left {
+    &:not(.dash-freeze-top).dash-freeze-left {
         .cell-1-0 {
             .top-left-cells();
         }
@@ -157,7 +157,7 @@
         }
     }
 
-    &.freeze-top:not(.freeze-left) {
+    &.dash-freeze-top:not(.dash-freeze-left) {
         .cell-0-1 {
             .top-left-cells();
         }
@@ -167,7 +167,7 @@
         }
     }
 
-    &.freeze-top.freeze-left {
+    &.dash-freeze-top.dash-freeze-left {
         .cell-0-0 {
             .top-left-cells();
         }
@@ -232,12 +232,12 @@
             z-index: 200;
         }
 
-        .cell-value {
+        .dash-cell-value {
             height: 100%;
             width: 100%;
         }
 
-        div.cell-value {
+        div.dash-cell-value {
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -417,7 +417,8 @@ th:hover .sort {
     /* inset 0px 1px 0px 0px var(--border); */
 }
 
-.dash-spreadsheet-inner .delete-cell {
+.dash-spreadsheet-inner .dash-delete-cell,
+.dash-spreadsheet-inner .dash-delete-header {
     .not-selectable();
 
     font-size: 1.3rem;
@@ -425,7 +426,8 @@ th:hover .sort {
     cursor: pointer;
     color: var(--muted);
 }
-.dash-spreadsheet-inner .delete-cell:hover {
+.dash-spreadsheet-inner .dash-delete-cell:hover,
+.dash-spreadsheet-inner .dash-delete-header:hover {
     color: var(--accent);
 }
 
