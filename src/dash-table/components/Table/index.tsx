@@ -29,6 +29,7 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
         super(props);
 
         this.controlled = this.getControlledProps(this.props);
+        this.updateDerivedProps();
     }
 
     componentWillReceiveProps(nextProps: PropsWithDefaultsAndDerived) {
@@ -84,7 +85,7 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
             pagination_mode,
             pagination_settings,
             setProps,
-            viewport.dataframe
+            virtual.dataframe
         );
 
         const visibleColumns = this.visibleColumns(columns);

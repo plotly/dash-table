@@ -40,9 +40,9 @@ export default class FilterFactory {
         const value = ev.target.value.trim();
 
         if (value && value.length) {
-            ops.set(columnId, value);
+            ops.set(columnId.toString(), value);
         } else {
-            ops.delete(columnId);
+            ops.delete(columnId.toString());
         }
 
         setFilter(R.map(

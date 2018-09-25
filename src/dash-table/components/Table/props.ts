@@ -6,6 +6,11 @@ export enum FilteringType {
     Basic = 'basic'
 }
 
+export interface IDerivedDataframe {
+    dataframe: Dataframe;
+    indices: Indices;
+}
+
 export type ActiveCell = CellCoordinates | [];
 export type CellCoordinates = [number, number];
 export type ColumnId = string | number;
@@ -142,15 +147,9 @@ export type ControlledTableProps = PropsWithDefaults & {
     setProps: SetProps;
 
     columns: VisibleColumns;
-    paginator: IPaginator
-    viewport: {
-        dataframe: Dataframe,
-        indices: Indices
-    },
-    virtual: {
-        dataframe: Dataframe,
-        indices: Indices
-    }
+    paginator: IPaginator;
+    viewport: IDerivedDataframe;
+    virtual: IDerivedDataframe;
 };
 
 export interface ICellFactoryOptions {
@@ -173,9 +172,5 @@ export interface ICellFactoryOptions {
     selected_cell: SelectedCells;
     selected_rows: number[];
     setProps: SetProps;
-
-    viewport: {
-        dataframe: Dataframe,
-        indices: Indices
-    };
+    viewport: IDerivedDataframe;
 }
