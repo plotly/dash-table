@@ -235,7 +235,7 @@ export default class CellFactory {
                     key={`${column.id}-${visibleIndex}`}
                     active={active_cell[0] === viewportIdx && active_cell[1] === index}
                     classes={classes}
-                    clearable={!!column.clearable}
+                    clearable={column.clearable}
                     conditionalDropdowns={conditionalDropdowns}
                     conditionalStyles={conditionalStyles}
                     datum={datum}
