@@ -59,6 +59,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         this.headerFactory = new HeaderFactory(() => this.props);
 
         this.stylesheet = new Stylesheet(`#${props.id}`);
+        this.updateStylesheet();
     }
 
     getLexerResult = memoizeOne(lexer);
@@ -67,6 +68,14 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         const { filtering_settings } = this.props;
 
         return this.getLexerResult(filtering_settings);
+    }
+
+    private updateStylesheet() {
+        const { table_style } = this.props;
+
+        R.forEach(({ selector, rule }) => {
+            this.stylesheet.setRule(selector, rule);
+        }, table_style);
     }
 
     componentDidMount() {
@@ -91,11 +100,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
     }
 
     componentWillUpdate() {
-        const { table_style } = this.props;
-
-        R.forEach(({ selector, rule }) => {
-            this.stylesheet.setRule(selector, rule);
-        }, table_style);
+        this.updateStylesheet();
     }
 
     componentDidUpdate() {
