@@ -14,15 +14,16 @@ export default class Table extends Component {
             pagination_mode
         } = this.props;
 
-        function isFe(value: any) {
+        function isFrontEnd(value: any) {
             return ['fe', true, false].indexOf(value) !== -1;
         }
 
-        function isBe(value: any) {
+        function isBackEnd(value: any) {
             return ['be', false].indexOf(value) !== -1;
         }
 
-        const isValid = isFe(pagination_mode) || (isBe(filtering) && isBe(sorting));
+        const isValid = isFrontEnd(pagination_mode) ||
+            (isBackEnd(filtering) && isBackEnd(sorting));
 
         if (!isValid) {
             Logger.error(`Invalid combination of filtering / sorting / pagination`, filtering, sorting, pagination_mode);
