@@ -219,7 +219,7 @@ They are readonly properties that represent a transform from multiple 'first-cla
 For example, derived_viewport_dataframe is a readonly view based on
     f(dataframe, filtering params, sorting params, pagination params) --> derived_viewport_dataframe
 
-Derived properties allow the component to expose complex state that can be useful for a Dash Server developper but without introducing dual states, a situation where multiple properties may represent the same state within the component, making it necessary to reconcile them on each prop update.
+Derived properties allow the component to expose complex state that can be useful for a Dash Server developer but without introducing dual states, a situation where multiple properties may represent the same state within the component, making it necessary to reconcile them on each prop update.
 
 ## RC1 - Virtual and Viewport Dataframe
 

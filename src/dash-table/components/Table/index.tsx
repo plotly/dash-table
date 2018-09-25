@@ -33,11 +33,13 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
         this.updateDerivedProps();
     }
 
-    shouldComponentUpdate(nextProps: PropsWithDefaultsAndDerived) {
-        return Object.keys(this.props).filter(key =>
-            !key.startsWith('derived_') &&
-            (nextProps as any)[key] !== (this.props as any)[key]
-        ).length > 0;
+    shouldComponentUpdate(nextProps: any) {
+        const props: any = this.props;
+
+        return R.any(key =>
+            !/^derived_/.test(key) && props[key] !== nextProps[key],
+            R.keysIn(props)
+        );
     }
 
     render() {
