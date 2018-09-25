@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import * as R from 'ramda';
 import Stylesheet from 'core/Stylesheet';
 import { colIsEditable } from 'dash-table/components/derivedState';
@@ -11,7 +11,7 @@ import {
 } from 'dash-table/utils/unicode';
 import { selectionCycle } from 'dash-table/utils/navigation';
 
-import HeaderCellFactory, { DEFAULT_CELL_WIDTH } from 'dash-table/components/HeaderFactory';
+import HeaderFactory, { DEFAULT_CELL_WIDTH } from 'dash-table/components/HeaderFactory';
 import Logger from 'core/Logger';
 import { memoizeOne } from 'core/memoizer';
 import lexer from 'core/syntax-tree/lexer';
@@ -20,7 +20,7 @@ import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
 import CellFactory from 'dash-table/components/CellFactory';
 import { ControlledTableProps, Columns, RowSelection } from 'dash-table/components/Table/props';
 import dropdownHelper from 'dash-table/components/dropdownHelper';
-import HeaderFilterFactory from 'dash-table/components/FilterFactory';
+import FilterFactory from 'dash-table/components/FilterFactory';
 
 const sortNumerical = R.sort<number>((a, b) => a - b);
 
@@ -29,16 +29,17 @@ interface IAccumulator {
     count: number;
 }
 
-export default class ControlledTable extends Component<ControlledTableProps> {
+export default class ControlledTable extends PureComponent<ControlledTableProps> {
     private stylesheet: Stylesheet;
     private cellFactory: CellFactory;
-    private filterFactory: HeaderFilterFactory;
+    private filterFactory: FilterFactory;
+    private headerFactory: HeaderFactory;
 
     constructor(props: ControlledTableProps) {
         super(props);
 
         this.cellFactory = new CellFactory(() => this.props);
-        this.filterFactory = new HeaderFilterFactory(() => {
+        this.filterFactory = new FilterFactory(() => {
             const { row_deletable, row_selectable } = this.props;
 
             const offset =
@@ -55,6 +56,8 @@ export default class ControlledTable extends Component<ControlledTableProps> {
                 setFilter: this.handleSetFilter
             };
         });
+        this.headerFactory = new HeaderFactory(() => this.props);
+
         this.stylesheet = new Stylesheet(`#${props.id}`);
     }
 
@@ -245,10 +248,8 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             row_selectable,
             selected_cell,
             setProps,
-            virtualizer
+            viewport
         } = this.props;
-
-        const dataframe = virtualizer.dataframe;
 
         // This is mostly to prevent TABing also triggering native HTML tab
         // navigation. If the preventDefault is too greedy here we must
@@ -330,7 +331,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         // the active cell.
         if (selectingDown && active_cell[0] > minRow) {
             removeCells = selectedCols.map(col => [minRow, col]);
-        } else if (selectingDown && maxRow !== dataframe.length - 1) {
+        } else if (selectingDown && maxRow !== viewport.dataframe.length - 1) {
             // Otherwise if we are selecting down select the next row if possible.
             targetCells = selectedCols.map(col => [maxRow + 1, col]);
         } else if (selectingUp && active_cell[0] < maxRow) {
@@ -375,7 +376,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             row_selectable,
             selected_cell,
             setProps,
-            virtual_dataframe_indices
+            viewport
         } = this.props;
 
         event.preventDefault();
@@ -387,7 +388,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             (row_selectable ? 1 : 0);
 
         const realCells: [number, number][] = R.map(
-            cell => [virtual_dataframe_indices[cell[0]], cell[1] - columnIndexOffset] as [number, number],
+            cell => [viewport.indices[cell[0]], cell[1] - columnIndexOffset] as [number, number],
             selected_cell
         );
 
@@ -407,8 +408,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
     }
 
     getNextCell = (event: any, { restrictToSelection, currentCell }: any) => {
-        const { columns, row_deletable, row_selectable, selected_cell, virtualizer } = this.props;
-        const dataframe = virtualizer.dataframe;
+        const { columns, row_deletable, row_selectable, selected_cell, viewport } = this.props;
 
         const e = event;
         const vci: any[] = [];
@@ -471,7 +471,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
                         selected_cell
                     )
                     : [
-                        R.min(dataframe.length - 1, currentCell[0] + 1),
+                        R.min(viewport.dataframe.length - 1, currentCell[0] + 1),
                         currentCell[1]
                     ];
 
@@ -488,9 +488,8 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             row_deletable,
             row_selectable,
             selected_cell,
-            virtualizer
+            viewport
         } = this.props;
-        const dataframe = virtualizer.dataframe;
 
         const columnIndexOffset =
             (row_deletable ? 1 : 0) +
@@ -501,7 +500,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             selected_cell
         );
 
-        TableClipboardHelper.toClipboard(e, noOffsetSelectedCells, columns, dataframe);
+        TableClipboardHelper.toClipboard(e, noOffsetSelectedCells, columns, viewport.dataframe);
         this.$el.focus();
     }
 
@@ -516,7 +515,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             row_selectable,
             setProps,
             sorting_settings,
-            virtual_dataframe_indices
+            viewport
         } = this.props;
 
         if (!editable) {
@@ -532,7 +531,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         const result = TableClipboardHelper.fromClipboard(
             e,
             noOffsetActiveCell,
-            virtual_dataframe_indices,
+            viewport.indices,
             columns,
             dataframe,
             true,
@@ -548,27 +547,27 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         const {
             dataframe,
             navigation,
-            virtualization,
-            virtualization_settings
+            pagination_mode,
+            pagination_settings
         } = this.props;
 
         return navigation === 'page' &&
             (
-                (virtualization === 'fe' && virtualization_settings.page_size < dataframe.length) ||
-                virtualization === 'be'
+                (pagination_mode === 'fe' && pagination_settings.page_size < dataframe.length) ||
+                pagination_mode === 'be'
             );
     }
 
     loadNext = () => {
-        const { virtualizer } = this.props;
+        const { paginator } = this.props;
 
-        virtualizer.loadNext();
+        paginator.loadNext();
     }
 
     loadPrevious = () => {
-        const { virtualizer } = this.props;
+        const { paginator } = this.props;
 
-        virtualizer.loadPrevious();
+        paginator.loadPrevious();
     }
 
     onContainerScroll = (ev: any) => {
@@ -647,7 +646,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
 
     getCells = () => {
         return [
-            ...HeaderCellFactory.createHeaders(this.props),
+            ...this.headerFactory.createHeaders(),
             ...this.filterFactory.createFilters(),
             ...this.cellFactory.createCells()
         ];
@@ -725,7 +724,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             'dash-spreadsheet-container',
             ...(n_fixed_rows ? ['freeze-top'] : []),
             ...(n_fixed_columns ? ['freeze-left'] : [])
-        ]
+        ];
 
         const cells = this.getCells();
         const grid = this.getFragments(cells, n_fixed_columns, n_fixed_rows);
