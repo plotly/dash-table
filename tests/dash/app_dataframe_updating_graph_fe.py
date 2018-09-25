@@ -19,13 +19,10 @@ def layout():
             html.Div(
                 dash_table.Table(
                     id=IDS["table"],
-                    columns=[{
-                        "name": i,
-                        "id": i,
-                        "deletable": True
-                    } for i in df.columns],
+                    columns=[
+                        {"name": i, "id": i, "deletable": True} for i in df.columns
+                    ],
                     dataframe=df.to_dict("rows"),
-
                     editable=True,
                     filtering=True,
                     sorting=True,
@@ -34,7 +31,7 @@ def layout():
                     row_deletable=True,
                     selected_rows=[],
                     derived_viewport_indices=[],
-                    n_fixed_rows=1
+                    n_fixed_rows=1,
                 ),
                 style={"height": 300, "overflowY": "scroll"},
             ),
@@ -84,8 +81,10 @@ def layout():
 
 @app.callback(
     Output(IDS["container"], "children"),
-    [Input(IDS["table"], "derived_virtual_dataframe"),
-     Input(IDS["table"], "selected_rows")],
+    [
+        Input(IDS["table"], "derived_virtual_dataframe"),
+        Input(IDS["table"], "selected_rows"),
+    ],
 )
 def update_graph(rows, selected_rows):
     # When the table is first rendered, `derived_virtual_dataframe`
