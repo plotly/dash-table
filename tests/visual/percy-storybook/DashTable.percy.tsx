@@ -166,7 +166,7 @@ storiesOf('DashTable/Hidden Columns', module)
         dataframe={dataframe}
         columns={hiddenColumns}
         selected_cell={[[1, 1], [1, 2], [2, 1], [2, 2]]}
-    />));;
+    />));
 
 storiesOf('DashTable/Sorting', module)
     .add('"a" ascending', () => (<DashTable
