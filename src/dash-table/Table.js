@@ -12,8 +12,8 @@ export default class Table extends Component {
 }
 
 export const defaultProps = {
-    virtualization: 'fe',
-    virtualization_settings: {
+    pagination_mode: 'fe',
+    pagination_settings: {
         displayed_pages: 1,
         current_page: 0,
         page_size: 250
@@ -28,8 +28,10 @@ export const defaultProps = {
     sorting_type: 'single',
     sorting_settings: [],
 
-    virtual_dataframe: [],
-    virtual_dataframe_indices: [],
+    derived_viewport_dataframe: [],
+    derived_viewport_indices: [],
+    derived_virtual_dataframe: [],
+    derived_virtual_indices: [],
 
     column_conditional_dropdowns: [],
     column_static_dropdown: [],
@@ -40,48 +42,14 @@ export const defaultProps = {
     row_conditional_styles: [],
     row_static_style: {},
 
-    changed_data: {},
     dataframe: [],
     columns: [],
     editable: false,
     active_cell: [],
-    index_name: '',
-    types: {},
-    merged_styles: {},
     selected_cell: [[]],
     selected_rows: [],
     row_selectable: false,
-    table_style: [],
-    base_styles: {
-        numeric: {
-            'text-align': 'right',
-            'font-family': `'Droid Sans Mono', Courier, monospace`
-        },
-
-        string: {
-            'text-align': 'left'
-        },
-
-        input: {
-            padding: 0,
-            margin: 0,
-            width: '80px',
-            border: 'none',
-            'font-size': '1rem'
-        },
-
-        'input-active': {
-            outline: '#7FDBFF auto 3px'
-        },
-
-        table: {},
-
-        thead: {},
-
-        th: {},
-
-        td: {}
-    }
+    table_style: []
 };
 
 export const propTypes = {
@@ -111,8 +79,8 @@ export const propTypes = {
         rule: PropTypes.string
     })),
 
-    virtualization: PropTypes.oneOf(['fe', 'be', true, false]),
-    virtualization_settings: PropTypes.shape({
+    pagination_mode: PropTypes.oneOf(['fe', 'be', true, false]),
+    pagination_settings: PropTypes.shape({
         displayed_pages: PropTypes.number,
         current_page: PropTypes.number,
         page_size: PropTypes.number
@@ -171,8 +139,10 @@ export const propTypes = {
     })),
     sorting_treat_empty_string_as_none: PropTypes.bool,
 
-    virtual_dataframe: PropTypes.arrayOf(PropTypes.object),
-    virtual_dataframe_indices: PropTypes.arrayOf(PropTypes.number),
+    derived_viewport_dataframe: PropTypes.arrayOf(PropTypes.object),
+    derived_viewport_indices: PropTypes.arrayOf(PropTypes.number),
+    derived_virtual_dataframe: PropTypes.arrayOf(PropTypes.object),
+    derived_virtual_indices: PropTypes.arrayOf(PropTypes.number),
 
     dropdown_properties: PropTypes.any,
 };

@@ -217,10 +217,8 @@ export default class CellFactory {
             row_deletable,
             row_selectable,
             selected_cell,
-            virtualizer
+            viewport
         } = this.props;
-
-        const { dataframe, indices } = virtualizer;
 
         const visibleColumns = columns.filter(column => !column.hidden);
 
@@ -228,8 +226,8 @@ export default class CellFactory {
             (row_deletable ? 1 : 0) +
             (row_selectable ? 1 : 0);
 
-        return dataframe.map((datum, virtualIdx) => {
-            const realIdx = indices[virtualIdx];
+        return viewport.dataframe.map((datum, viewportIdx) => {
+            const realIdx = viewport.indices[viewportIdx];
 
             const deleteCell = this.rowDeleteCell(realIdx);
             const selectCell = this.rowSelectCell(realIdx);
@@ -267,7 +265,7 @@ export default class CellFactory {
 
                 return (<Cell
                     key={`${column.id}-${visibleIndex}`}
-                    active={active_cell[0] === virtualIdx && active_cell[1] === index + offset}
+                    active={active_cell[0] === viewportIdx && active_cell[1] === index + offset}
                     classes={classes}
                     clearable={column.clearable}
                     conditionalDropdowns={conditionalDropdowns}
@@ -275,12 +273,12 @@ export default class CellFactory {
                     datum={datum}
                     editable={editable}
                     focused={!!is_focused}
-                    onClick={this.getEventHandler(this.handleClick, virtualIdx, index)}
-                    onDoubleClick={this.getEventHandler(this.handleDoubleClick, virtualIdx, index)}
+                    onClick={this.getEventHandler(this.handleClick, viewportIdx, index)}
+                    onDoubleClick={this.getEventHandler(this.handleDoubleClick, viewportIdx, index)}
                     onPaste={this.handlePaste}
                     onChange={this.getEventHandler(this.handleChange, realIdx, index)}
                     property={column.id}
-                    selected={R.contains([virtualIdx, index + offset], selected_cell)}
+                    selected={R.contains([viewportIdx, index + offset], selected_cell)}
                     staticDropdown={staticDropdown}
                     staticStyle={staticStyle}
                     tableId={id}

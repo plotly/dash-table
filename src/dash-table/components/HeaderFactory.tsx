@@ -7,7 +7,17 @@ import multiUpdateSettings from 'core/sorting/multi';
 import singleUpdateSettings from 'core/sorting/single';
 
 import * as actions from 'dash-table/utils/actions';
-import { ColumnId, Columns, Dataframe, RowSelection, SetProps, SortingType } from 'dash-table/components/Table/props';
+import {
+    ColumnId,
+    Columns,
+    ControlledTableProps,
+    Dataframe,
+    PaginationMode,
+    RowSelection,
+    SetProps,
+    Sorting,
+    SortingType
+} from 'dash-table/components/Table/props';
 
 export const DEFAULT_CELL_WIDTH = 200;
 
@@ -19,11 +29,11 @@ interface ICellOptions {
     mergeCells?: boolean;
     n_fixed_columns: number;
     offset: number;
-    rowSorting: string | boolean;
+    rowSorting: Sorting;
     setProps: SetProps;
     sorting_settings: SortSettings;
     sorting_type: SortingType;
-    virtualization: any;
+    pagination_mode: PaginationMode;
 }
 
 interface IOptions {
@@ -36,10 +46,10 @@ interface IOptions {
     row_deletable: boolean;
     row_selectable: RowSelection;
     setProps: SetProps;
-    sorting: string | boolean;
+    sorting: Sorting;
     sorting_settings: SortSettings;
     sorting_type: SortingType;
-    virtualization: any;
+    pagination_mode: PaginationMode;
 }
 
 const getColLength = (c: any) => (Array.isArray(c.name) ? c.name.length : 1);
@@ -60,18 +70,26 @@ function deleteColumn(column: any, columnRowIndex: any, options: ICellOptions) {
 }
 
 export default class HeaderFactory {
-    private static getSorting(columnId: ColumnId, settings: SortSettings): SortDirection {
+    private get props() {
+        return this.propsFn();
+    }
+
+    constructor(private readonly propsFn: () => ControlledTableProps) {
+
+    }
+
+    private getSorting(columnId: ColumnId, settings: SortSettings): SortDirection {
         const setting = R.find(s => s.columnId === columnId, settings);
 
         return setting ? setting.direction : SortDirection.None;
     }
 
-    private static doSort(columnId: ColumnId, options: ICellOptions) {
+    private doSort(columnId: ColumnId, options: ICellOptions) {
         return () => {
             const { sorting_settings, sorting_type } = options;
 
             let direction: SortDirection;
-            switch (HeaderFactory.getSorting(columnId, sorting_settings)) {
+            switch (this.getSorting(columnId, sorting_settings)) {
                 case SortDirection.Descending:
                     direction = SortDirection.Ascending;
                     break;
@@ -97,10 +115,10 @@ export default class HeaderFactory {
         };
     }
 
-    private static getSortingIcon(columnId: ColumnId, options: ICellOptions) {
+    private getSortingIcon(columnId: ColumnId, options: ICellOptions) {
         const { sorting_settings } = options;
 
-        switch (HeaderFactory.getSorting(columnId, sorting_settings)) {
+        switch (this.getSorting(columnId, sorting_settings)) {
             case SortDirection.Descending:
                 return '↑';
             case SortDirection.Ascending:
@@ -111,7 +129,7 @@ export default class HeaderFactory {
         }
     }
 
-    private static createHeaderCells(options: ICellOptions) {
+    private createHeaderCells(options: ICellOptions) {
         const {
             columns,
             columnRowIndex,
@@ -119,8 +137,8 @@ export default class HeaderFactory {
             mergeCells,
             n_fixed_columns,
             offset,
-            rowSorting,
-            virtualization
+            pagination_mode,
+            rowSorting
         } = options;
 
         let columnIndices: any[] = [];
@@ -199,9 +217,9 @@ export default class HeaderFactory {
                 {rowSorting ? (
                     <span
                         className='sort'
-                        onClick={HeaderFactory.doSort(c.id, options)}
+                        onClick={this.doSort(c.id, options)}
                     >
-                        {HeaderFactory.getSortingIcon(c.id, options)}
+                        {this.getSortingIcon(c.id, options)}
                     </span>) : ('')
                 }
 
@@ -216,7 +234,7 @@ export default class HeaderFactory {
                         </span>
                     ) : ''}
 
-                {((c.deletable && virtualization !== 'be' && R.type(c.deletable) === 'Boolean') ||
+                {((c.deletable && pagination_mode !== 'be' && R.type(c.deletable) === 'Boolean') ||
                     (R.type(c.deletable) === 'Number' &&
                         c.deletable === columnRowIndex)) ? (
                         <span
@@ -233,7 +251,7 @@ export default class HeaderFactory {
         }));
     }
 
-    private static createDeletableHeader(options: IOptions) {
+    private createDeletableHeader(options: IOptions) {
         const { row_deletable } = options;
 
         return !row_deletable ? null : (
@@ -246,7 +264,7 @@ export default class HeaderFactory {
         );
     }
 
-    private static createSelectableHeader(options: IOptions) {
+    private createSelectableHeader(options: IOptions) {
         const { row_selectable } = options;
 
         return !row_selectable ? null : (
@@ -258,27 +276,29 @@ export default class HeaderFactory {
         );
     }
 
-    static createHeaders(options: IOptions) {
+    public createHeaders() {
+        const props = this.props;
+
         let {
             columns,
             dataframe,
             sorting,
             merge_duplicate_headers,
             n_fixed_columns,
+            pagination_mode,
             row_deletable,
             row_selectable,
             setProps,
             sorting_settings,
-            sorting_type,
-            virtualization
-        } = options;
+            sorting_type
+        } = props;
 
         const offset =
             (row_deletable ? 1 : 0) +
             (row_selectable ? 1 : 0);
 
-        const deletableCell = this.createDeletableHeader(options);
-        const selectableCell = this.createSelectableHeader(options);
+        const deletableCell = this.createDeletableHeader(props);
+        const selectableCell = this.createSelectableHeader(props);
 
         const headerDepth = Math.max.apply(Math, columns.map(getColLength));
 
@@ -287,25 +307,25 @@ export default class HeaderFactory {
             headers = [[
                 ...(deletableCell ? [deletableCell] : []),
                 ...(selectableCell ? [selectableCell] : []),
-                ...(HeaderFactory.createHeaderCells({
+                ...(this.createHeaderCells({
                     columns,
                     columnRowIndex: 0,
                     dataframe,
                     labels: R.pluck('name', columns),
                     n_fixed_columns,
                     offset,
+                    pagination_mode,
                     rowSorting: sorting,
                     setProps,
                     sorting_settings,
-                    sorting_type,
-                    virtualization
+                    sorting_type
                 }))
             ]];
         } else {
             headers = R.range(0, headerDepth).map(i => ([
                 ...(deletableCell ? [deletableCell] : []),
                 ...(selectableCell ? [selectableCell] : []),
-                ...(HeaderFactory.createHeaderCells({
+                ...(this.createHeaderCells({
                     columns,
                     columnRowIndex: i,
                     dataframe,
@@ -317,14 +337,14 @@ export default class HeaderFactory {
                     ),
                     n_fixed_columns,
                     offset,
+                    pagination_mode,
                     rowSorting: !!sorting && i + 1 === headerDepth,
                     mergeCells:
                         merge_duplicate_headers &&
                         i + 1 !== headerDepth,
                     setProps,
                     sorting_settings,
-                    sorting_type,
-                    virtualization
+                    sorting_type
                 }))
             ]));
         }

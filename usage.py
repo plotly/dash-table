@@ -27,8 +27,8 @@ app.layout = html.Div([
     dash_table.Table(
         id='table',
         dataframe=dataframe,
-        virtualization='be',
-        virtualization_settings={
+        pagination_mode='be',
+        pagination_settings={
             'displayed_pages': 1,
             'current_page': 0,
             'page_size': 100
@@ -56,7 +56,7 @@ app.layout = html.Div([
 
 @app.callback(
     Output('table', 'dataframe'),
-    [Input('table', 'virtualization')]
+    [Input('table', 'pagination_mode')]
 )
 def updateDataframe():
     return dataframe2
@@ -65,8 +65,8 @@ def updateDataframe():
 @app.callback(
     Output('container', 'children'),
     [
-        Input('table', 'virtual_dataframe'),
-        Input('table', 'virtual_dataframe_indices')
+        Input('table', 'derived_viewport_dataframe'),
+        Input('table', 'derived_viewport_indices')
     ]
 )
 def updateContainer():
