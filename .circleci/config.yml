@@ -75,6 +75,10 @@ jobs:
                     - node_modules
 
             - run:
+                name: Run build:js
+                command: npm run build:js
+
+            - run:
                 name: Run visual tests
                 command: npm run test.visual
 
