@@ -4,19 +4,15 @@ import {
     Dataframe,
     Indices,
     IPaginationSettings,
-    PaginationMode
+    PaginationMode,
+    IDerivedDataframe
 } from 'dash-table/components/Table/props';
 
-interface IResult {
-    dataframe: Dataframe;
-    indices: Indices;
-}
-
-function getNoPagination(dataframe: Dataframe, indices: Indices): IResult {
+function getNoPagination(dataframe: Dataframe, indices: Indices): IDerivedDataframe {
     return { dataframe, indices };
 }
 
-function getFrontEndPagination(settings: IPaginationSettings, dataframe: Dataframe, indices: Indices): IResult {
+function getFrontEndPagination(settings: IPaginationSettings, dataframe: Dataframe, indices: Indices): IDerivedDataframe {
     let currentPage = Math.min(
         settings.current_page,
         Math.floor(dataframe.length / settings.page_size)
@@ -34,7 +30,7 @@ function getFrontEndPagination(settings: IPaginationSettings, dataframe: Datafra
     };
 }
 
-function getBackEndPagination(dataframe: Dataframe, indices: Indices): IResult {
+function getBackEndPagination(dataframe: Dataframe, indices: Indices): IDerivedDataframe {
     return { dataframe, indices };
 }
 
@@ -43,7 +39,7 @@ const getter = (
     pagination_settings: IPaginationSettings,
     dataframe: Dataframe,
     indices: Indices
-): IResult => {
+): IDerivedDataframe => {
     switch (pagination_mode) {
         case false:
             return getNoPagination(dataframe, indices);

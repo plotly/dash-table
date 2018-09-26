@@ -24,7 +24,7 @@ export interface IFilterOptions {
 
 export default class FilterFactory {
     private readonly handlers = new Map();
-    private readonly ops = new Map<ColumnId, string>();
+    private readonly ops = new Map<string, string>();
 
     private get props() {
         return this.propsFn();
@@ -40,9 +40,9 @@ export default class FilterFactory {
         const value = ev.target.value.trim();
 
         if (value && value.length) {
-            ops.set(columnId, value);
+            ops.set(columnId.toString(), value);
         } else {
-            ops.delete(columnId);
+            ops.delete(columnId.toString());
         }
 
         setFilter(R.map(
@@ -142,13 +142,13 @@ export default class FilterFactory {
     }
 
     private isFragmentValidOrNull(columnId: ColumnId) {
-        const op = this.ops.get(columnId);
+        const op = this.ops.get(columnId.toString());
 
         return !op || !op.trim().length || this.isFragmentValid(columnId);
     }
 
     private isFragmentValid(columnId: ColumnId) {
-        const op = this.ops.get(columnId);
+        const op = this.ops.get(columnId.toString());
 
         const lexerResult = lexer(`${columnId} ${op}`);
         const syntaxerResult = syntaxer(lexerResult);
@@ -182,7 +182,7 @@ export default class FilterFactory {
                     isValid={this.isFragmentValidOrNull(column.id)}
                     property={column.id}
                     setFilter={this.getEventHandler(this.onChange, column.id, this.ops, setFilter)}
-                    value={this.ops.get(column.id)}
+                    value={this.ops.get(column.id.toString())}
                 />);
             }, columns) :
             [(<AdvancedFilter

@@ -6,15 +6,10 @@ import SyntaxTree from 'core/syntax-tree';
 import {
     Dataframe,
     Datum,
-    Indices,
     Filtering,
+    IDerivedDataframe,
     Sorting
 } from 'dash-table/components/Table/props';
-
-interface IResult {
-    dataframe: Dataframe;
-    indices: Indices;
-}
 
 const getter = (
     dataframe: Dataframe,
@@ -23,7 +18,7 @@ const getter = (
     sorting: Sorting,
     sorting_settings: SortSettings = [],
     sorting_treat_empty_string_as_none: boolean
-): IResult => {
+): IDerivedDataframe => {
     const map = new Map<Datum, number>();
     R.addIndex(R.forEach)((datum, index) => {
         map.set(datum, index);

@@ -267,3 +267,7 @@ Derived properties allow the component to expose complex state that can be usefu
         * (CLASS) dash-spreadsheet
         * (CLASS) dash-spreadsheet-container
         * (CLASS) dash-spreadsheet-inner
+
+## RC3 - Miscellaneous fixes for pagination, virtual df and viewport df
+
+    Issue: https://github.com/plotly/dash-table/pull/112

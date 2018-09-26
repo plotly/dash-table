@@ -1,3 +1,5 @@
+import * as R from 'ramda';
+
 import { memoizeOneFactory } from 'core/memoizer';
 
 import {
@@ -35,17 +37,20 @@ function getBackEndPagination(
 function getFrontEndPagination(
     pagination_settings: IPaginationSettings,
     setProps: SetProps,
-    virtual_dataframe: Dataframe
+    dataframe: Dataframe
 ) {
     return {
         loadNext: () => {
-            let maxPageIndex = Math.floor(virtual_dataframe.length / pagination_settings.page_size);
+            let maxPageIndex = Math.floor(dataframe.length / pagination_settings.page_size);
 
             if (pagination_settings.current_page >= maxPageIndex) {
                 return;
             }
 
-            pagination_settings.current_page++;
+            pagination_settings = R.merge(pagination_settings, {
+                current_page: pagination_settings.current_page + 1
+            });
+
             setProps({ pagination_settings });
         },
         loadPrevious: () => {
@@ -53,7 +58,10 @@ function getFrontEndPagination(
                 return;
             }
 
-            pagination_settings.current_page--;
+            pagination_settings = R.merge(pagination_settings, {
+                current_page: pagination_settings.current_page - 1
+            });
+
             setProps({ pagination_settings });
         }
     };
@@ -70,14 +78,14 @@ const getter = (
     pagination_mode: PaginationMode,
     pagination_settings: IPaginationSettings,
     setProps: SetProps,
-    virtual_dataframe: Dataframe
+    dataframe: Dataframe
 ): IPaginator => {
     switch (pagination_mode) {
         case false:
             return getNoPagination();
         case true:
         case 'fe':
-            return getFrontEndPagination(pagination_settings, setProps, virtual_dataframe);
+            return getFrontEndPagination(pagination_settings, setProps, dataframe);
         case 'be':
             return getBackEndPagination(pagination_settings, setProps);
         default:
