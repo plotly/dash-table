@@ -94,7 +94,7 @@ def layout():
                     """
             The widths can be under-specified. Here, we're only setting the width for the three
             columns in the middle, the rest of the columns are automatically sized to fit the rest of the container.
-            The columns have a width of 50, or the width of this line:
+            The columns have a width of 50px, or the width of this line:
             """
                 ),
                 html.Div(
@@ -197,7 +197,7 @@ def layout():
 
             In this way, `min-width` and `overflow-x: scroll` is an alternative
             to `text-overflow: ellipses`. With scroll, the content that can't
-            fit on the container will get pushed out into a scrollable zone.
+            fit in the container will get pushed out into a scrollable zone.
             With text-overflow: ellipses, the content will get truncated by
             ellipses. Both strategies work with or without line breaks on the
             white spaces (`white-space: normal` or `white-space: nowrap`).
