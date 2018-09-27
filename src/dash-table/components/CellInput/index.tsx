@@ -171,7 +171,8 @@ export default class CellInput extends Component<ICellProps, ICellState> {
         }
 
         if (active && this.refs.dropdown) {
-            (this.refs.td as HTMLElement).focus();
+            // Limitation due to React < 16 --> Use React.createRef instead to pass parent ref to child
+            ((this.refs.dropdown as any).wrapper.parentElement as HTMLElement).focus();
         }
     }
 
