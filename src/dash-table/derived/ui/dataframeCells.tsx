@@ -7,6 +7,8 @@ import { IConditionalStyle, IStyle } from 'dash-table/components/Cell/types';
 import Cell from 'dash-table/components/Cell';
 import SyntaxTree from 'core/syntax-tree';
 import memoizerCache from 'core/memoizerCache';
+import isActiveCell from 'dash-table/derived/isActiveCell';
+import isSelectedCell from 'dash-table/derived/isSelectedCell';
 
 const styleAstCache = memoizerCache<[string, ColumnId, number], [string], SyntaxTree>(
     (query: string) => new SyntaxTree(query)
@@ -69,8 +71,8 @@ const getter = (
             conditionalStyles = (conditionalStyles && conditionalStyles.styles) || [];
             staticStyle = staticStyle && staticStyle.style;
 
-            const active = activeCell[0] === rowIndex && activeCell[1] === columnIndex;
-            const selected = R.contains([rowIndex, columnIndex], selectedCells);
+            const active = isActiveCell(activeCell, rowIndex, columnIndex);
+            const selected = isSelectedCell(selectedCells, rowIndex, columnIndex);
 
             const classes = getClasses(active, [`column-${columnIndex}`], editable, selected, column.type);
             const style = getStyle(conditionalStyles, datum[column.id], column.id, staticStyle, id);

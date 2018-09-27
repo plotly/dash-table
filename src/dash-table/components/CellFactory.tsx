@@ -2,13 +2,14 @@ import * as R from 'ramda';
 import React from 'react';
 
 import { ICellFactoryOptions } from 'dash-table/components/Table/props';
-import * as actions from 'dash-table/utils/actions';
 import derivedDataframeCells from 'dash-table/derived/ui/dataframeCells';
 import derivedDataframeInputs from 'dash-table/derived/ui/dataframeInputs';
+import derivedDataframeOperations from 'dash-table/derived/ui/dataframeOperations';
 
 export default class CellFactory {
     private readonly dataframeCells = derivedDataframeCells();
     private readonly dataframeInputs = derivedDataframeInputs();
+    private readonly dataframeOperations = derivedDataframeOperations();
 
     private get props() {
         return this.propsFn();
@@ -16,52 +17,6 @@ export default class CellFactory {
 
     constructor(private readonly propsFn: () => ICellFactoryOptions) {
 
-    }
-
-    private rowSelectCell(idx: number) {
-        const {
-            setProps,
-            selected_rows,
-            row_selectable
-        } = this.props;
-
-        return !row_selectable ? null : (<td
-            key='select'
-            className='dash-select-cell'
-            style={{ width: `30px`, maxWidth: `30px`, minWidth: `30px` }}
-        >
-            <input
-                type={row_selectable === 'single' ? 'radio' : 'checkbox'}
-                name='row-select'
-                checked={R.contains(idx, selected_rows)}
-                onChange={() => setProps({
-                    selected_rows:
-                        row_selectable === 'single' ?
-                            [idx] :
-                            R.ifElse(
-                                R.contains(idx),
-                                R.without([idx]),
-                                R.append(idx)
-                            )(selected_rows)
-                })}
-            />
-        </td>);
-    }
-
-    private rowDeleteCell(idx: number) {
-        const {
-            setProps,
-            row_deletable
-        } = this.props;
-
-        return !row_deletable ? null : (<td
-            key='delete'
-            className='dash-delete-cell'
-            onClick={() => setProps(actions.deleteRow(idx, this.props))}
-            style={{ width: `30px`, maxWidth: `30px`, minWidth: `30px` }}
-        >
-            {'×'}
-        </td>);
     }
 
     public createCells() {
@@ -76,9 +31,22 @@ export default class CellFactory {
             editable,
             id,
             is_focused,
+            row_deletable,
+            row_selectable,
             selected_cell,
+            selected_rows,
+            setProps,
             viewport
         } = this.props;
+
+        const operations = this.dataframeOperations(
+            active_cell,
+            viewport.dataframe,
+            row_selectable,
+            row_deletable,
+            selected_rows,
+            setProps
+        );
 
         const wrappers = this.dataframeCells(
             active_cell,
@@ -117,18 +85,9 @@ export default class CellFactory {
             tuples
         );
 
-        return R.addIndex<JSX.Element[], JSX.Element[]>(R.map)(
-            (row, index) => {
-                const rowDelete = this.rowDeleteCell(index);
-                const rowSelect = this.rowSelectCell(index);
-
-                return [
-                    ...(rowDelete ? [rowDelete] : []),
-                    ...(rowSelect ? [rowSelect] : []),
-                    ...row
-                ];
-            },
-            cells
+        return R.map(
+            ([o, c]) => [...o, ...c],
+            R.zip(operations, cells)
         );
     }
 }

@@ -17,6 +17,7 @@ import derivedCellEventHandlerProps from 'dash-table/derived/ui/cellEventHandler
 import SyntaxTree from 'core/syntax-tree';
 import memoizerCache from 'core/memoizerCache';
 import { IConditionalDropdown } from 'dash-table/components/Cell/types';
+import isActiveCell from 'dash-table/derived/isActiveCell';
 
 const mapDataframe = R.addIndex<Datum, JSX.Element[]>(R.map);
 const mapRow = R.addIndex<IVisibleColumn, JSX.Element>(R.map);
@@ -69,7 +70,7 @@ const getter = (
 ): JSX.Element[][] => mapDataframe(
     (datum, rowIndex) => mapRow(
         (column, columnIndex) => {
-            const active = activeCell[0] === rowIndex && activeCell[1] === columnIndex;
+            const active = isActiveCell(activeCell, rowIndex, columnIndex);
 
             let legacyDropdown: any = (
                 (
