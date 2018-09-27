@@ -1,20 +1,21 @@
 import * as R from 'ramda';
 import React from 'react';
 
-import Cell from 'dash-table/components/Cell';
 import { ICellFactoryOptions } from 'dash-table/components/Table/props';
 import * as actions from 'dash-table/utils/actions';
-import derivedInputEventHandler, { Handler, CacheFn } from 'dash-table/derived/ui/cellEventHandler';
+import derivedDataframeCells from 'dash-table/derived/ui/dataframeCells';
+import derivedDataframeInputs from 'dash-table/derived/ui/dataframeInputs';
 
 export default class CellFactory {
-    private readonly inputEventHandler: CacheFn;
+    private readonly dataframeCells = derivedDataframeCells();
+    private readonly dataframeInputs = derivedDataframeInputs();
 
     private get props() {
         return this.propsFn();
     }
 
     constructor(private readonly propsFn: () => ICellFactoryOptions) {
-        this.inputEventHandler = derivedInputEventHandler()(propsFn);
+
     }
 
     private rowSelectCell(idx: number) {
@@ -79,72 +80,55 @@ export default class CellFactory {
             viewport
         } = this.props;
 
-        return viewport.dataframe.map((datum, viewportIdx) => {
-            const realIdx = viewport.indices[viewportIdx];
+        const wrappers = this.dataframeCells(
+            active_cell,
+            columns,
+            column_conditional_styles,
+            column_static_style,
+            viewport.dataframe,
+            editable,
+            id,
+            selected_cell
+        );
 
-            const deleteCell = this.rowDeleteCell(realIdx);
-            const selectCell = this.rowSelectCell(realIdx);
+        const inputs = this.dataframeInputs(
+            active_cell,
+            columns,
+            viewport.dataframe,
+            column_conditional_dropdowns,
+            column_static_dropdown,
+            dropdown_properties,
+            editable,
+            !!is_focused,
+            id,
+            this.propsFn
+        );
 
-            const cells = columns.map((column, index) => {
-                let legacyDropdown: any = (
-                    (
-                        dropdown_properties &&
-                        dropdown_properties[column.id] &&
-                        (
-                            dropdown_properties[column.id].length > realIdx ?
-                                dropdown_properties[column.id][realIdx] :
-                                null
-                        )
-                    ) || column || {}
-                ).options;
+        const tuples = R.map(
+            ([i, w]) => R.zip(i, w),
+            R.zip(inputs, wrappers)
+        );
 
-                const classes = [`column-${index}`];
+        const cells = R.map(
+            row => R.map(
+                ([input, wrapper]) => React.cloneElement(wrapper, { children: [input] }),
+                row
+            ),
+            tuples
+        );
 
-                let conditionalDropdowns = column_conditional_dropdowns.find((cd: any) => cd.id === column.id);
-                let staticDropdown = column_static_dropdown.find((sd: any) => sd.id === column.id);
+        return R.addIndex<JSX.Element[], JSX.Element[]>(R.map)(
+            (row, index) => {
+                const rowDelete = this.rowDeleteCell(index);
+                const rowSelect = this.rowSelectCell(index);
 
-                conditionalDropdowns = conditionalDropdowns && conditionalDropdowns.dropdowns;
-                staticDropdown = legacyDropdown || (staticDropdown && staticDropdown.dropdown);
-
-                let conditionalStyles = column_conditional_styles.find((cs: any) => cs.id === column.id);
-                let staticStyle = column_static_style.find((ss: any) => ss.id === column.id);
-
-                conditionalStyles = conditionalStyles && conditionalStyles.styles;
-                staticStyle = staticStyle && staticStyle.style;
-
-                return (<Cell
-                    key={`${column.id}-${index}`}
-                    active={active_cell[0] === viewportIdx && active_cell[1] === index}
-                    classes={classes}
-                    clearable={column.clearable}
-                    conditionalDropdowns={conditionalDropdowns}
-                    conditionalStyles={conditionalStyles}
-                    datum={datum}
-                    editable={editable}
-                    focused={!!is_focused}
-                    onClick={this.inputEventHandler(Handler.Click, viewportIdx, index) as any}
-                    onDoubleClick={this.inputEventHandler(Handler.DoubleClick, viewportIdx, index) as any}
-                    onPaste={this.inputEventHandler(Handler.Paste, realIdx, index) as any}
-                    onChange={this.inputEventHandler(Handler.Change, realIdx, index) as any}
-                    property={column.id}
-                    selected={R.contains([viewportIdx, index], selected_cell)}
-                    staticDropdown={staticDropdown}
-                    staticStyle={staticStyle}
-                    tableId={id}
-                    type={column.type}
-                    value={datum[column.id]}
-                />);
-            });
-
-            if (selectCell) {
-                cells.unshift(selectCell);
-            }
-
-            if (deleteCell) {
-                cells.unshift(deleteCell);
-            }
-
-            return cells;
-        });
+                return [
+                    ...(rowDelete ? [rowDelete] : []),
+                    ...(rowSelect ? [rowSelect] : []),
+                    ...row
+                ];
+            },
+            cells
+        );
     }
 }

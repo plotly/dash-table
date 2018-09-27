@@ -1,65 +1,76 @@
 import * as R from 'ramda';
 import React from 'react';
-import Dropdown from 'react-select';
 
 import { memoizeOneFactory } from 'core/memoizer';
 
 import {
     ActiveCell,
-    ColumnType,
     Dataframe,
     Datum,
     IVisibleColumn,
-    VisibleColumns
+    VisibleColumns,
+    ICellFactoryOptions
 } from 'dash-table/components/Table/props';
-
-const datumDiv = (value: any) => (<div>{value}</div>);
-const datumInput = (value: any) => (<input type='text' defaultValue={value} />);
-const datumDropdown = (value: any, clearable: boolean | undefined) => (<Dropdown
-    ref='dropdown'
-    clearable={clearable}
-    onChange={() => {}}
-    options={[]}
-    placeholder={''}
-    value={value}
-/>);
-
-const datumElement = (
-    activeCell: ActiveCell,
-    columnIdx: number,
-    rowIdx: number,
-    column: IVisibleColumn,
-    value: any
-): JSX.Element => {
-    const active = activeCell[0] === rowIdx && activeCell[1] === columnIdx;
-
-    switch (column.type) {
-        case ColumnType.Text:
-        case ColumnType.Numeric:
-            return active ? datumInput(value) : datumDiv(value);
-        case ColumnType.Dropdown:
-            return datumDropdown(value, column.clearable);
-        default:
-            return datumDiv(value);
-    }
-};
+import CellInput from 'dash-table/components/CellInput';
+import derivedCellEventHandlerProps from 'dash-table/derived/ui/cellEventHandlerProps';
 
 const mapDataframe = R.addIndex<Datum, JSX.Element[]>(R.map);
 const mapRow = R.addIndex<IVisibleColumn, JSX.Element>(R.map);
 
+const cellEventHandlerProps = derivedCellEventHandlerProps();
+
 const getter = (
     activeCell: ActiveCell,
     columns: VisibleColumns,
-    dataframe: Dataframe
+    dataframe: Dataframe,
+    columnConditionalDropdown: any,
+    columnStaticDropdown: any,
+    dropdown_properties: any,
+    editable: boolean,
+    isFocused: boolean,
+    tableId: string,
+    propsFn: () => ICellFactoryOptions
 ): JSX.Element[][] => mapDataframe(
-    (data, rowIdx) => mapRow(
-        (column, columnIdx) => datumElement(
-            activeCell,
-            columnIdx,
-            rowIdx,
-            column,
-            data[column.id]
-        ),
+    (datum, rowIndex) => mapRow(
+        (column, columnIndex) => {
+            const active = activeCell[0] === rowIndex && activeCell[1] === columnIndex;
+
+            let legacyDropdown: any = (
+                (
+                    dropdown_properties &&
+                    dropdown_properties[column.id] &&
+                    (
+                        dropdown_properties[column.id].length > rowIndex ?
+                            dropdown_properties[column.id][rowIndex] :
+                            null
+                    )
+                ) || column || {}
+            ).options;
+
+            const handlers = cellEventHandlerProps(propsFn)(rowIndex, columnIndex);
+
+            let conditionalDropdowns = columnConditionalDropdown.find((cs: any) => cs.id === column.id);
+            let staticDropdown = columnStaticDropdown.find((ss: any) => ss.id === column.id);
+
+            conditionalDropdowns = (conditionalDropdowns && conditionalDropdowns.styles) || [];
+            staticDropdown = legacyDropdown || (staticDropdown && staticDropdown.dropdown);
+
+            return (<CellInput
+                key={`column-${columnIndex}`}
+                active={active}
+                clearable={column.clearable}
+                conditionalDropdowns={conditionalDropdowns}
+                datum={datum}
+                editable={editable}
+                focused={isFocused}
+                property={column.id}
+                staticDropdown={staticDropdown}
+                tableId={tableId}
+                type={column.type}
+                value={datum[column.id]}
+                {...handlers}
+            />);
+        },
         columns
     ),
     dataframe

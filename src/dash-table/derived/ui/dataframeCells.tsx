@@ -3,10 +3,14 @@ import React, { CSSProperties } from 'react';
 
 import { memoizeOneFactory } from 'core/memoizer';
 import { Dataframe, IVisibleColumn, VisibleColumns, ColumnType, ActiveCell, SelectedCells, Datum, ColumnId } from 'dash-table/components/Table/props';
-import isActiveCell from 'dash-table/derived/ui/isActiveCell';
-import isSelectedCell from 'dash-table/derived/ui/isSelectedCell';
 import { IConditionalStyle, IStyle } from 'dash-table/components/Cell/types';
 import Cell from 'dash-table/components/Cell';
+import SyntaxTree from 'core/syntax-tree';
+import memoizerCache from 'core/memoizerCache';
+
+const styleAstCache = memoizerCache<[string, ColumnId, number], [string], SyntaxTree>(
+    (query: string) => new SyntaxTree(query)
+);
 
 const getClasses = (
     active: boolean,
@@ -35,7 +39,7 @@ const getStyle = (
         ...R.map(
             ([cs]) => cs.style,
             R.filter(
-                ([cs, i]) => Cell.styleAstCache([tableId, property, i], cs.condition).evaluate(datum),
+                ([cs, i]) => styleAstCache([tableId, property, i], cs.condition).evaluate(datum),
                 R.addIndex<IConditionalStyle, [IConditionalStyle, number]>(R.map)(
                     (cs, i) => [cs, i],
                     conditionalStyles
@@ -62,25 +66,26 @@ const getter = (
             let conditionalStyles = columnConditionalStyle.find((cs: any) => cs.id === column.id);
             let staticStyle = columnStaticStyle.find((ss: any) => ss.id === column.id);
 
-            conditionalStyles = conditionalStyles && conditionalStyles.styles;
+            conditionalStyles = (conditionalStyles && conditionalStyles.styles) || [];
             staticStyle = staticStyle && staticStyle.style;
 
-            return (<td
-                className={getClasses(
-                    isActiveCell(activeCell, rowIndex, columnIndex),
-                    [`column-${columnIndex}`],
-                    editable,
-                    isSelectedCell(selectedCells, rowIndex, columnIndex),
-                    column.type
-                )}
-                data-dash-column={column.id}
-                style={getStyle(
-                    conditionalStyles || [],
-                    datum,
-                    column.id,
-                    staticStyle || {},
-                    id
-                )}
+            const active = activeCell[0] === rowIndex && activeCell[1] === columnIndex;
+            const selected = R.contains([rowIndex, columnIndex], selectedCells);
+
+            const classes = getClasses(active, [`column-${columnIndex}`], editable, selected, column.type);
+            const style = getStyle(conditionalStyles, datum[column.id], column.id, staticStyle, id);
+
+            return (<Cell
+                active={active}
+                classes={classes}
+                datum={datum}
+                editable={editable}
+                key={`column-${columnIndex}`}
+                property={column.id}
+                selected={selected}
+                style={style}
+                tableId={id}
+                type={column.type}
             />);
         },
         columns

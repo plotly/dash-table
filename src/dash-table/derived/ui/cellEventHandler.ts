@@ -5,7 +5,7 @@ import { ICellFactoryOptions } from 'dash-table/components/Table/props';
 import { handleChange, handleClick, handleDoubleClick, handlePaste } from 'dash-table/handlers/cellEvents';
 
 type CacheArgs = [Handler, number, number];
-type GetterArgs = [HandlerFn | undefined, number, number];
+type GetterArgs = [HandlerFn, number, number];
 
 export enum Handler {
     Change = 'change',
@@ -42,7 +42,7 @@ const getter = (propsFn: () => ICellFactoryOptions): CacheFn => {
             columnIndex
         ] = args;
 
-        return cache(args, handlers.get(handler), rowIndex, columnIndex);
+        return cache(args, handlers.get(handler) as HandlerFn, rowIndex, columnIndex);
     };
 };
 
