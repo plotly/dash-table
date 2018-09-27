@@ -2,7 +2,7 @@ import * as R from 'ramda';
 
 import derivedViewportDataframe from 'dash-table/derived/viewportDataframe';
 
-describe.only('derived viewport', () => {
+describe('derived viewport', () => {
     const viewportDataframe = derivedViewportDataframe();
 
     describe('virtual dataframe <= page size', () => {
@@ -48,7 +48,7 @@ describe.only('derived viewport', () => {
             });
         });
     });
-    
+
     describe('virtual dataframe > page size', () => {
         describe('with fe pagination', () => {
             it('returns slice of dataframe', () => {
