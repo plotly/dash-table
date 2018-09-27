@@ -2,7 +2,7 @@
     "compilerOptions": {
         "allowJs": true,
         "allowSyntheticDefaultImports": true,
-        "baseUrl": "./..",
+        "baseUrl": ".",
         "emitDecoratorMetadata": false,
         "experimentalDecorators": true,
         "lib": ["esnext", "dom"],
@@ -12,7 +12,7 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "paths": {
-            "cypress/*": ["cypress/src/*"],
+            "cypress/*": ["./src/*"],
             "core/*": ["./../../src/core/*"],
             "dash-table/*": ["./../../src/dash-table/*"]
 
