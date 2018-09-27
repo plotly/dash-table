@@ -1,4 +1,3 @@
-import * as R from 'ramda';
 import React, {
     Component,
     KeyboardEvent
@@ -6,9 +5,6 @@ import React, {
 import Dropdown from 'react-select';
 
 import { isEqual } from 'core/comparer';
-import { memoizeOne } from 'core/memoizer';
-import memoizerCache from 'core/memoizerCache';
-import SyntaxTree from 'core/syntax-tree';
 
 import {
     ICellDefaultProps,
@@ -18,20 +14,12 @@ import {
 } from 'dash-table/components/CellInput/props';
 
 import {
-    IDropdownOptions,
-    IConditionalDropdown
-} from 'dash-table/components/CellInput/types';
-
-import {
     KEY_CODES
 } from 'dash-table/utils/unicode';
-import { ColumnId, ColumnType } from 'dash-table/components/Table/props';
+import { ColumnType } from 'dash-table/components/Table/props';
 import dropdownHelper from 'dash-table/components/dropdownHelper';
 
 export default class CellInput extends Component<ICellProps, ICellState> {
-    public static readonly dropdownAstCache = memoizerCache<[string, ColumnId, number], [string], SyntaxTree>(
-        (query: string) => new SyntaxTree(query)
-    );
 
     public static defaultProps: ICellDefaultProps = {
         conditionalDropdowns: [],
@@ -53,11 +41,10 @@ export default class CellInput extends Component<ICellProps, ICellState> {
     private renderDropdown() {
         const {
             clearable,
+            dropdown,
             onChange,
             value
         } = this.propsWithDefaults;
-
-        const dropdown = this.dropdown;
 
         return !dropdown ?
             this.renderValue() :
@@ -131,35 +118,6 @@ export default class CellInput extends Component<ICellProps, ICellState> {
             default:
                 return this.renderValue();
         }
-    }
-
-    private getDropdown = memoizeOne((...dropdowns: IDropdownOptions[]): IDropdownOptions | undefined => {
-        return dropdowns.length ? dropdowns.slice(-1)[0] : undefined;
-    });
-
-    private get dropdown() {
-        let {
-            conditionalDropdowns,
-            datum,
-            property,
-            staticDropdown,
-            tableId
-        } = this.propsWithDefaults;
-
-        const dropdowns = [
-            ...(staticDropdown ? [staticDropdown] : []),
-            ...R.map(
-                ([cd]) => cd.dropdown,
-                R.filter(
-                    ([cd, i]) => CellInput.dropdownAstCache([tableId, property, i], cd.condition).evaluate(datum),
-                    R.addIndex<IConditionalDropdown, [IConditionalDropdown, number]>(R.map)(
-                        (cd, i) => [cd, i],
-                        conditionalDropdowns
-                    ))
-            )
-        ];
-
-        return this.getDropdown(...dropdowns);
     }
 
     propagateChange = () => {

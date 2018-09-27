@@ -9,15 +9,51 @@ import {
     Datum,
     IVisibleColumn,
     VisibleColumns,
-    ICellFactoryOptions
+    ICellFactoryOptions,
+    ColumnId
 } from 'dash-table/components/Table/props';
 import CellInput from 'dash-table/components/CellInput';
 import derivedCellEventHandlerProps from 'dash-table/derived/ui/cellEventHandlerProps';
+import SyntaxTree from 'core/syntax-tree';
+import memoizerCache from 'core/memoizerCache';
+import { IConditionalDropdown } from 'dash-table/components/Cell/types';
 
 const mapDataframe = R.addIndex<Datum, JSX.Element[]>(R.map);
 const mapRow = R.addIndex<IVisibleColumn, JSX.Element>(R.map);
 
 const cellEventHandlerProps = derivedCellEventHandlerProps();
+
+const dropdownAstCache = memoizerCache<[string, ColumnId, number], [string], SyntaxTree>(
+    (query: string) => new SyntaxTree(query)
+);
+
+// private getDropdown = memoizeOne((...dropdowns: IDropdownOptions[]): IDropdownOptions | undefined => {
+//     return dropdowns.length ? dropdowns.slice(-1)[0] : undefined;
+// });
+
+const getDropdown = (
+    conditionalDropdowns: any,
+    datum: Datum,
+    property: ColumnId,
+    staticDropdown: any,
+    tableId: string
+) => {
+    const dropdowns = [
+        ...(staticDropdown ? [staticDropdown] : []),
+        ...R.map(
+            ([cd]) => cd.dropdown,
+            R.filter(
+                ([cd, i]) => dropdownAstCache([tableId, property, i], cd.condition).evaluate(datum),
+                R.addIndex<IConditionalDropdown, [IConditionalDropdown, number]>(R.map)(
+                    (cd, i) => [cd, i],
+                    conditionalDropdowns
+                ))
+        )
+    ];
+
+    return dropdowns.length ? dropdowns.slice(-1)[0] : undefined;
+
+}
 
 const getter = (
     activeCell: ActiveCell,
@@ -61,6 +97,7 @@ const getter = (
                 clearable={column.clearable}
                 conditionalDropdowns={conditionalDropdowns}
                 datum={datum}
+                dropdown={getDropdown(conditionalDropdowns, datum, column.id, staticDropdown, tableId)}
                 editable={editable}
                 focused={isFocused}
                 property={column.id}

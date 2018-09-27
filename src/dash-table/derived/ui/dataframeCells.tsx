@@ -78,14 +78,9 @@ const getter = (
             return (<Cell
                 active={active}
                 classes={classes}
-                datum={datum}
-                editable={editable}
                 key={`column-${columnIndex}`}
                 property={column.id}
-                selected={selected}
                 style={style}
-                tableId={id}
-                type={column.type}
             />);
         },
         columns

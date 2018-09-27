@@ -3,27 +3,14 @@ import React, {
 } from 'react';
 
 import { isEqual } from 'core/comparer';
-import memoizerCache from 'core/memoizerCache';
-import SyntaxTree from 'core/syntax-tree';
 
 import {
-    ICellDefaultProps,
     ICellProps,
     ICellPropsWithDefaults,
     ICellState
 } from 'dash-table/components/Cell/props';
 
-import { ColumnId, ColumnType } from 'dash-table/components/Table/props';
-
 export default class Cell extends Component<ICellProps, ICellState> {
-    public static readonly dropdownAstCache = memoizerCache<[string, ColumnId, number], [string], SyntaxTree>(
-        (query: string) => new SyntaxTree(query)
-    );
-
-    public static defaultProps: ICellDefaultProps = {
-        type: ColumnType.Text
-    };
-
     constructor(props: ICellProps) {
         super(props);
     }
