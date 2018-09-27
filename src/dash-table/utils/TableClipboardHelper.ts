@@ -5,7 +5,7 @@ import Clipboard from 'core/Clipboard';
 import Logger from 'core/Logger';
 
 import { colIsEditable } from 'dash-table/components/derivedState';
-import { ActiveCell, Columns, Dataframe, SelectedCells } from 'dash-table/components/Table/props';
+import { ActiveCell, Columns, Dataframe, SelectedCells, ColumnType } from 'dash-table/components/Table/props';
 
 export default class TableClipboardHelper {
     public static toClipboard(e: any, selectedCells: SelectedCells, columns: Columns, dataframe: Dataframe) {
@@ -57,7 +57,7 @@ export default class TableClipboardHelper {
                 newColumns.push({
                     id: `Column ${i + 1}`,
                     name: `Column ${i + 1}`,
-                    type: 'numeric'
+                    type: ColumnType.Text
                 });
                 newDataframe.forEach(row => (row[`Column ${i}`] = ''));
             }

@@ -40,7 +40,10 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
         this.cellFactory = new CellFactory(() => this.props);
         this.filterFactory = new FilterFactory(() => {
-            const { row_deletable, row_selectable } = this.props;
+            const {
+                row_deletable,
+                row_selectable
+            } = this.props;
 
             const fillerColumns =
                 (row_deletable ? 1 : 0) +

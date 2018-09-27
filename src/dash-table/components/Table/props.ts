@@ -1,6 +1,12 @@
 import { SortSettings } from 'core/sorting';
 import { IPaginator } from 'dash-table/derived/paginator';
 
+export enum ColumnType {
+    Dropdown = 'dropdown',
+    Numeric = 'numeric',
+    Text = 'text'
+}
+
 export enum FilteringType {
     Advanced = 'advanced',
     Basic = 'basic'
@@ -40,7 +46,7 @@ export interface IVisibleColumn {
     id: ColumnId;
     name: string;
     options?: { label: string | number, value: any }[];
-    type?: string;
+    type?: ColumnType;
     width?: string | number;
 }
 

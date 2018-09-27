@@ -6,7 +6,7 @@ import {
     IDropdownOptions,
     IStyle
 } from 'dash-table/components/Cell/types';
-import { ColumnId } from 'dash-table/components/Table/props';
+import { ColumnId, ColumnType } from 'dash-table/components/Table/props';
 
 export interface ICellProps {
     active: boolean;
@@ -35,7 +35,7 @@ export interface ICellDefaultProps {
     conditionalDropdowns: IConditionalDropdown[];
     conditionalStyles: IConditionalStyle[];
     staticStyle: CSSProperties;
-    type: string;
+    type: ColumnType;
 }
 
 export interface ICellState {

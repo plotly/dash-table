@@ -27,15 +27,15 @@ import {
 import {
     KEY_CODES
 } from 'dash-table/utils/unicode';
-import { ColumnId } from 'dash-table/components/Table/props';
+import { ColumnId, ColumnType } from 'dash-table/components/Table/props';
 import dropdownHelper from 'dash-table/components/dropdownHelper';
 
 export default class Cell extends Component<ICellProps, ICellState> {
-    private static readonly dropdownAstCache = memoizerCache<[string, ColumnId, number], [string], SyntaxTree>(
+    public static readonly dropdownAstCache = memoizerCache<[string, ColumnId, number], [string], SyntaxTree>(
         (query: string) => new SyntaxTree(query)
     );
 
-    private static readonly styleAstCache = memoizerCache<[string, ColumnId, number], [string], SyntaxTree>(
+    public static readonly styleAstCache = memoizerCache<[string, ColumnId, number], [string], SyntaxTree>(
         (query: string) => new SyntaxTree(query)
     );
 
@@ -44,7 +44,7 @@ export default class Cell extends Component<ICellProps, ICellState> {
         conditionalDropdowns: [],
         conditionalStyles: [],
         staticStyle: {},
-        type: 'text'
+        type: ColumnType.Text
     };
 
     constructor(props: ICellProps) {
@@ -73,7 +73,7 @@ export default class Cell extends Component<ICellProps, ICellState> {
             ...(active ? ['focused'] : []),
             ...(!editable ? ['cell--uneditable'] : []),
             ...(selected ? ['cell--selected'] : []),
-            ...(type === 'dropdown' ? ['dropdown'] : []),
+            ...(type === ColumnType.Dropdown ? ['dropdown'] : []),
             ...classes
         ];
     }
@@ -181,7 +181,7 @@ export default class Cell extends Component<ICellProps, ICellState> {
             ...R.map(
                 ([cd]) => cd.dropdown,
                 R.filter(
-                    ([cd, i]) => Cell.dropdownAstCache([tableId, property, i], [cd.condition]).evaluate(datum),
+                    ([cd, i]) => Cell.dropdownAstCache([tableId, property, i], cd.condition).evaluate(datum),
                     R.addIndex<IConditionalDropdown, [IConditionalDropdown, number]>(R.map)(
                         (cd, i) => [cd, i],
                         conditionalDropdowns
@@ -208,7 +208,7 @@ export default class Cell extends Component<ICellProps, ICellState> {
         const styles = [staticStyle, ...R.map(
             ([cs]) => cs.style,
             R.filter(
-                ([cs, i]) => Cell.styleAstCache([tableId, property, i], [cs.condition]).evaluate(datum),
+                ([cs, i]) => Cell.styleAstCache([tableId, property, i], cs.condition).evaluate(datum),
                 R.addIndex<IConditionalStyle, [IConditionalStyle, number]>(R.map)(
                     (cs, i) => [cs, i],
                     conditionalStyles
