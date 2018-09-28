@@ -84,9 +84,9 @@ export default class CellFactory {
 
         const cells = matrixMap3(
             wrappers,
-            inputs,
             wrapperStyles,
-            (w, i, s) => React.cloneElement(w, { children: [i], style: s })
+            inputs,
+            (w, s, i) => React.cloneElement(w, { children: [i], style: s })
         );
 
         return arrayMap(
