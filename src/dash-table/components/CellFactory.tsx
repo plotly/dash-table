@@ -1,15 +1,18 @@
-import * as R from 'ramda';
 import React from 'react';
 
 import { ICellFactoryOptions } from 'dash-table/components/Table/props';
-import derivedDataframeCells from 'dash-table/derived/cell/wrappers';
-import derivedDataframeInputs from 'dash-table/derived/cell/inputs';
-import derivedDataframeOperations from 'dash-table/derived/cell/operations';
+import derivedCellWrappers from 'dash-table/derived/cell/wrappers';
+import derivedCellInputs from 'dash-table/derived/cell/inputs';
+import derivedCellOperations from 'dash-table/derived/cell/operations';
+import derivedCellStyles from 'dash-table/derived/cell/wrapperStyles';
+import { matrixMap3 } from 'core/math/matrixZipMap';
+import { arrayMap } from 'core/math/arrayZipMap';
 
 export default class CellFactory {
-    private readonly dataframeCells = derivedDataframeCells();
-    private readonly dataframeInputs = derivedDataframeInputs();
-    private readonly dataframeOperations = derivedDataframeOperations();
+    private readonly cellWrappers = derivedCellWrappers();
+    private readonly cellInputs = derivedCellInputs();
+    private readonly cellOperations = derivedCellOperations();
+    private readonly cellStyles = derivedCellStyles();
 
     private get props() {
         return this.propsFn();
@@ -40,7 +43,7 @@ export default class CellFactory {
             viewport
         } = this.props;
 
-        const operations = this.dataframeOperations(
+        const operations = this.cellOperations(
             active_cell,
             dataframe,
             viewport.dataframe,
@@ -51,18 +54,23 @@ export default class CellFactory {
             setProps
         );
 
-        const wrappers = this.dataframeCells(
+        const wrappers = this.cellWrappers(
             active_cell,
+            columns,
+            viewport.dataframe,
+            editable,
+            selected_cell
+        );
+
+        const wrapperStyles = this.cellStyles(
             columns,
             column_conditional_styles,
             column_static_style,
             viewport.dataframe,
-            editable,
-            id,
-            selected_cell
+            id
         );
 
-        const inputs = this.dataframeInputs(
+        const inputs = this.cellInputs(
             active_cell,
             columns,
             viewport.dataframe,
@@ -75,22 +83,17 @@ export default class CellFactory {
             this.propsFn
         );
 
-        const tuples = R.map(
-            ([i, w]) => R.zip(i, w),
-            R.zip(inputs, wrappers)
+        const cells = matrixMap3(
+            wrappers,
+            inputs,
+            wrapperStyles,
+            (w, i, s) => React.cloneElement(w, { children: [i], style: s })
         );
 
-        const cells = R.map(
-            row => R.map(
-                ([input, wrapper]) => React.cloneElement(wrapper, { children: [input] }),
-                row
-            ),
-            tuples
-        );
-
-        return R.map(
-            ([o, c]) => [...o, ...c],
-            R.zip(operations, cells)
+        return arrayMap(
+            operations,
+            cells,
+            (o, c) => [...o, ...c]
         );
     }
 }

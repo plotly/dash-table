@@ -1,18 +1,11 @@
 import * as R from 'ramda';
-import React, { CSSProperties } from 'react';
+import React from 'react';
 
 import { memoizeOneFactory } from 'core/memoizer';
-import { Dataframe, IVisibleColumn, VisibleColumns, ColumnType, ActiveCell, SelectedCells, Datum, ColumnId } from 'dash-table/components/Table/props';
-import { IConditionalStyle, IStyle } from 'dash-table/components/Cell/types';
+import { Dataframe, IVisibleColumn, VisibleColumns, ColumnType, ActiveCell, SelectedCells, Datum } from 'dash-table/components/Table/props';
 import Cell from 'dash-table/components/Cell';
-import SyntaxTree from 'core/syntax-tree';
-import memoizerCache from 'core/memoizerCache';
 import isActiveCell from 'dash-table/derived/cell/isActive';
 import isSelectedCell from 'dash-table/derived/cell/isSelected';
-
-const styleAstCache = memoizerCache<[string, ColumnId, number], [string], SyntaxTree>(
-    (query: string) => new SyntaxTree(query)
-);
 
 const getClasses = (
     active: boolean,
@@ -29,60 +22,25 @@ const getClasses = (
     ...classes
 ].join(' ');
 
-const getStyle = (
-    conditionalStyles: IConditionalStyle[],
-    datum: Datum,
-    property: ColumnId,
-    staticStyle: IStyle,
-    tableId: string
-) => {
-    const styles = [
-        staticStyle,
-        ...R.map(
-            ([cs]) => cs.style,
-            R.filter(
-                ([cs, i]) => styleAstCache([tableId, property, i], cs.condition).evaluate(datum),
-                R.addIndex<IConditionalStyle, [IConditionalStyle, number]>(R.map)(
-                    (cs, i) => [cs, i],
-                    conditionalStyles
-                )
-            )
-        )
-    ];
-
-    return styles.length ? R.mergeAll<CSSProperties>(styles) : undefined;
-};
-
 const getter = (
     activeCell: ActiveCell,
     columns: VisibleColumns,
-    columnConditionalStyle: any,
-    columnStaticStyle: any,
     dataframe: Dataframe,
     editable: boolean,
-    id: string,
     selectedCells: SelectedCells
 ): JSX.Element[][] => R.addIndex<Datum, JSX.Element[]>(R.map)(
-    (datum, rowIndex) => R.addIndex<IVisibleColumn, JSX.Element>(R.map)(
+    (_, rowIndex) => R.addIndex<IVisibleColumn, JSX.Element>(R.map)(
         (column, columnIndex) => {
-            let conditionalStyles = columnConditionalStyle.find((cs: any) => cs.id === column.id);
-            let staticStyle = columnStaticStyle.find((ss: any) => ss.id === column.id);
-
-            conditionalStyles = (conditionalStyles && conditionalStyles.styles) || [];
-            staticStyle = staticStyle && staticStyle.style;
-
             const active = isActiveCell(activeCell, rowIndex, columnIndex);
             const selected = isSelectedCell(selectedCells, rowIndex, columnIndex);
 
             const classes = getClasses(active, [`column-${columnIndex}`], editable, selected, column.type);
-            const style = getStyle(conditionalStyles, datum[column.id], column.id, staticStyle, id);
 
             return (<Cell
                 active={active}
                 classes={classes}
                 key={`column-${columnIndex}`}
                 property={column.id}
-                style={style}
             />);
         },
         columns

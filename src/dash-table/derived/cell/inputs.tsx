@@ -53,8 +53,7 @@ const getDropdown = (
     ];
 
     return dropdowns.length ? dropdowns.slice(-1)[0] : undefined;
-
-}
+};
 
 const getter = (
     activeCell: ActiveCell,
