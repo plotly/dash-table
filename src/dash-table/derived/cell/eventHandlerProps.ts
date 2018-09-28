@@ -1,7 +1,7 @@
 
 import { memoizeOneFactory } from 'core/memoizer';
 import { ICellFactoryOptions } from 'dash-table/components/Table/props';
-import cellEventHandler, { Handler } from 'dash-table/derived/ui/cellEventHandler';
+import cellEventHandler, { Handler } from 'dash-table/derived/cell/eventHandler';
 import { ICellHandlerProps } from 'dash-table/components/CellInput/props';
 
 type CacheArgs = [number, number];

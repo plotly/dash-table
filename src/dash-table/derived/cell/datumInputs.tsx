@@ -13,11 +13,11 @@ import {
     ColumnId
 } from 'dash-table/components/Table/props';
 import CellInput from 'dash-table/components/CellInput';
-import derivedCellEventHandlerProps from 'dash-table/derived/ui/cellEventHandlerProps';
+import derivedCellEventHandlerProps from 'dash-table/derived/cell/eventHandlerProps';
 import SyntaxTree from 'core/syntax-tree';
 import memoizerCache from 'core/memoizerCache';
 import { IConditionalDropdown } from 'dash-table/components/Cell/types';
-import isActiveCell from 'dash-table/derived/isActiveCell';
+import isActiveCell from 'dash-table/derived/cell/isActive';
 
 const mapDataframe = R.addIndex<Datum, JSX.Element[]>(R.map);
 const mapRow = R.addIndex<IVisibleColumn, JSX.Element>(R.map);

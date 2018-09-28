@@ -7,8 +7,8 @@ import { IConditionalStyle, IStyle } from 'dash-table/components/Cell/types';
 import Cell from 'dash-table/components/Cell';
 import SyntaxTree from 'core/syntax-tree';
 import memoizerCache from 'core/memoizerCache';
-import isActiveCell from 'dash-table/derived/isActiveCell';
-import isSelectedCell from 'dash-table/derived/isSelectedCell';
+import isActiveCell from 'dash-table/derived/cell/isActive';
+import isSelectedCell from 'dash-table/derived/cell/isSelected';
 
 const styleAstCache = memoizerCache<[string, ColumnId, number], [string], SyntaxTree>(
     (query: string) => new SyntaxTree(query)

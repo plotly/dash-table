@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 
-import derivedViewportDataframe from 'dash-table/derived/viewportDataframe';
+import derivedViewportDataframe from 'dash-table/derived/dataframe/viewport';
 
 describe('derived viewport', () => {
     const viewportDataframe = derivedViewportDataframe();
