@@ -2,8 +2,8 @@ import * as R from 'ramda';
 import React from 'react';
 
 import { ICellFactoryOptions } from 'dash-table/components/Table/props';
-import derivedDataframeCells from 'dash-table/derived/cell/datum';
-import derivedDataframeInputs from 'dash-table/derived/cell/datumInputs';
+import derivedDataframeCells from 'dash-table/derived/cell/wrappers';
+import derivedDataframeInputs from 'dash-table/derived/cell/inputs';
 import derivedDataframeOperations from 'dash-table/derived/cell/operations';
 
 export default class CellFactory {
