@@ -92,7 +92,7 @@ export default class CellFactory {
         return arrayMap(
             operations,
             cells,
-            (o, c) => [...o, ...c]
+            (o, c) => Array.prototype.concat(o, c)
         );
     }
 }
