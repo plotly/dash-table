@@ -16,8 +16,19 @@ import CellInput from 'dash-table/components/CellInput';
 import derivedCellEventHandlerProps from 'dash-table/derived/cell/eventHandlerProps';
 import SyntaxTree from 'core/syntax-tree';
 import memoizerCache from 'core/memoizerCache';
-import { IConditionalDropdown } from 'dash-table/components/Cell/types';
 import isActiveCell from 'dash-table/derived/cell/isActive';
+
+interface IDropdownOption {
+    label: string;
+    value: string;
+}
+
+type IDropdownOptions = IDropdownOption[];
+
+interface IConditionalDropdown {
+    condition: string;
+    dropdown: IDropdownOptions;
+}
 
 const mapDataframe = R.addIndex<Datum, JSX.Element[]>(R.map);
 const mapRow = R.addIndex<IVisibleColumn, JSX.Element>(R.map);

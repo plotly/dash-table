@@ -62,12 +62,11 @@ export default class CellFactory {
             selected_cell
         );
 
-        const wrapperStyles = this.cellStyles(
+        const wrapperStyles = this.cellStyles(id)(
             columns,
             column_conditional_styles,
             column_static_style,
-            viewport.dataframe,
-            id
+            viewport.dataframe
         );
 
         const inputs = this.cellInputs(

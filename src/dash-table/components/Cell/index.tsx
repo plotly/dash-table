@@ -6,11 +6,10 @@ import { isEqual } from 'core/comparer';
 
 import {
     ICellProps,
-    ICellPropsWithDefaults,
-    ICellState
+    ICellPropsWithDefaults
 } from 'dash-table/components/Cell/props';
 
-export default class Cell extends Component<ICellProps, ICellState> {
+export default class Cell extends Component<ICellProps> {
     constructor(props: ICellProps) {
         super(props);
     }
@@ -32,11 +31,7 @@ export default class Cell extends Component<ICellProps, ICellState> {
         />);
     }
 
-    shouldComponentUpdate(nextProps: ICellPropsWithDefaults, nextState: ICellState) {
-        const props = this.props;
-        const state = this.state;
-
-        return !isEqual(props, nextProps, true) ||
-            !isEqual(state, nextState, true);
+    shouldComponentUpdate(nextProps: ICellPropsWithDefaults) {
+        return !isEqual(this.props, nextProps, true);
     }
 }

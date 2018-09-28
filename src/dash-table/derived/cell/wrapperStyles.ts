@@ -2,28 +2,34 @@ import * as R from 'ramda';
 import { CSSProperties } from 'react';
 
 import { memoizeOneFactory } from 'core/memoizer';
-import { Dataframe, IVisibleColumn, VisibleColumns, Datum, ColumnId } from 'dash-table/components/Table/props';
-import { IConditionalStyle, IStyle } from 'dash-table/components/Cell/types';
+import { ColumnId, Dataframe, Datum, VisibleColumns } from 'dash-table/components/Table/props';
 import SyntaxTree from 'core/syntax-tree';
 import memoizerCache from 'core/memoizerCache';
 
-const styleAstCache = memoizerCache<[string, ColumnId, number], [string], SyntaxTree>(
-    (query: string) => new SyntaxTree(query)
-);
+interface IStyle {
+    target?: undefined;
+    style: CSSProperties;
+}
+
+interface IConditionalStyle extends IStyle {
+    condition: string;
+}
+
+type Style = CSSProperties | undefined;
 
 const getStyle = (
+    astCache: (key: [ColumnId, number], query: string) => SyntaxTree,
     conditionalStyles: IConditionalStyle[],
     datum: Datum,
     property: ColumnId,
-    staticStyle: IStyle,
-    tableId: string
+    staticStyle: IStyle
 ) => {
     const styles = [
         staticStyle,
         ...R.map(
             ([cs]) => cs.style,
             R.filter(
-                ([cs, i]) => styleAstCache([tableId, property, i], cs.condition).evaluate(datum),
+                ([cs, i]) => astCache([property, i], cs.condition).evaluate(datum),
                 R.addIndex<IConditionalStyle, [IConditionalStyle, number]>(R.map)(
                     (cs, i) => [cs, i],
                     conditionalStyles
@@ -35,34 +41,41 @@ const getStyle = (
     return styles.length ? R.mergeAll<CSSProperties>(styles) : undefined;
 };
 
-type Style = CSSProperties | undefined;
-
-const datumGetter = (
+const getter = (
+    astCache: (key: [ColumnId, number], query: string) => SyntaxTree,
+    columns: VisibleColumns,
     columnConditionalStyle: any,
     columnStaticStyle: any,
-    id: string,
-    datum: Datum,
-    column: IVisibleColumn
-): Style => {
+    dataframe: Dataframe
+): Style[][] => R.map(datum => R.map(column => {
     let conditionalStyles = columnConditionalStyle.find((cs: any) => cs.id === column.id);
     let staticStyle = columnStaticStyle.find((ss: any) => ss.id === column.id);
 
     conditionalStyles = (conditionalStyles && conditionalStyles.styles) || [];
     staticStyle = staticStyle && staticStyle.style;
 
-    return getStyle(conditionalStyles, datum[column.id], column.id, staticStyle, id);
-};
+    return getStyle(
+        astCache,
+        conditionalStyles,
+        datum[column.id],
+        column.id,
+        staticStyle
+    );
+}, columns), dataframe);
 
-const getter = (
+const getterFactory = memoizeOneFactory(getter);
+
+const decoratedGetter = (_id: string): ((
     columns: VisibleColumns,
     columnConditionalStyle: any,
     columnStaticStyle: any,
-    dataframe: Dataframe,
-    id: string
-): Style[][] => {
-    const bindedDatumGetter = datumGetter.bind(undefined, columnConditionalStyle, columnStaticStyle, id);
+    dataframe: Dataframe
+) => Style[][]) => {
+    const astCache = memoizerCache<[ColumnId, number], [string], SyntaxTree>(
+        (query: string) => new SyntaxTree(query)
+    );
 
-    return R.map(datum => R.map(column => bindedDatumGetter(datum, column), columns), dataframe);
+    return getterFactory().bind(undefined, astCache);
 };
 
-export default memoizeOneFactory(getter);
+export default memoizeOneFactory(decoratedGetter);

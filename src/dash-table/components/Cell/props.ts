@@ -11,8 +11,4 @@ export interface ICellProps {
     style?: CSSProperties;
 }
 
-export interface ICellState {
-    value: any;
-}
-
 export type ICellPropsWithDefaults = ICellProps;
