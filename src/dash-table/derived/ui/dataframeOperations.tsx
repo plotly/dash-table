@@ -8,12 +8,13 @@ import {
     Datum,
     SetProps,
     RowSelection,
-    ActiveCell
+    ActiveCell,
+    Indices
 } from 'dash-table/components/Table/props';
 
 function deleteRow(idx: number, activeCell: ActiveCell, dataframe: Dataframe, selectedRows: number[]) {
     const newProps: any = {
-        dataframe: R.remove(idx, 1, dataframe),
+        dataframe: R.remove(idx, 1, dataframe)
     };
     if (R.is(Array, activeCell) && activeCell[0] === idx) {
         newProps.active_cell = [];
@@ -63,16 +64,18 @@ function rowDeleteCell(setProps: SetProps, deleteFn: () => any) {
 const getter = (
     activeCell: ActiveCell,
     dataframe: Dataframe,
+    viewportDataframe: Dataframe,
+    viewportIndices: Indices,
     rowSelectable: RowSelection,
     rowDeletable: boolean,
     selectedRows: number[],
     setProps: SetProps
 ): JSX.Element[][] => R.addIndex<Datum, JSX.Element[]>(R.map)(
     (_, rowIndex) => [
-        ...(rowDeletable ? [rowDeleteCell(setProps, deleteRow.bind(undefined, rowIndex, activeCell, dataframe, selectedRows))] : []),
-        ...(rowSelectable ? [rowSelectCell(rowIndex, rowSelectable, selectedRows, setProps)] : [])
+        ...(rowDeletable ? [rowDeleteCell(setProps, deleteRow.bind(undefined, viewportIndices[rowIndex], activeCell, dataframe, selectedRows))] : []),
+        ...(rowSelectable ? [rowSelectCell(viewportIndices[rowIndex], rowSelectable, selectedRows, setProps)] : [])
     ],
-    dataframe
+        viewportDataframe
 );
 
 export default memoizeOneFactory(getter);

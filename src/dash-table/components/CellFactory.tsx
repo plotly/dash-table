@@ -27,6 +27,7 @@ export default class CellFactory {
             column_conditional_styles,
             column_static_dropdown,
             column_static_style,
+            dataframe,
             dropdown_properties, // legacy
             editable,
             id,
@@ -41,7 +42,9 @@ export default class CellFactory {
 
         const operations = this.dataframeOperations(
             active_cell,
+            dataframe,
             viewport.dataframe,
+            viewport.indices,
             row_selectable,
             row_deletable,
             selected_rows,

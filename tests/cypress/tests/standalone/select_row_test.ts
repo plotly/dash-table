@@ -15,7 +15,8 @@ describe('select row', () => {
             DashTable.getSelect(0).within(() => cy.get('input').should('be.checked'));
         });
 
-        it('select, sort, new row is not selected', () => {
+        it.only('select, sort, new row is not selected', () => {
+            // cy.window().then(win => cy.spy(win.console, 'log'));
             DashTable.getSelect(0).within(() => cy.get('input').click());
             DashTable.getSelect(0).within(() => cy.get('input').should('be.checked'));
             cy.get('tr th.column-0 .sort').click({ force: true });
