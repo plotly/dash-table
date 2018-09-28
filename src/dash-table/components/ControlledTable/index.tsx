@@ -29,7 +29,11 @@ interface IAccumulator {
     count: number;
 }
 
-export default class ControlledTable extends PureComponent<ControlledTableProps> {
+interface IState {
+    forcedResizeOnly: boolean;
+}
+
+export default class ControlledTable extends PureComponent<ControlledTableProps, IState> {
     private stylesheet: Stylesheet;
     private cellFactory: CellFactory;
     private filterFactory: FilterFactory;
@@ -37,6 +41,10 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
     constructor(props: ControlledTableProps) {
         super(props);
+
+        this.state = {
+            forcedResizeOnly: false
+        };
 
         this.cellFactory = new CellFactory(() => this.props);
         this.filterFactory = new FilterFactory(() => {
@@ -91,13 +99,13 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
         // Fallback method for paste handling in Chrome
         // when no input element has focused inside the table
-        window.addEventListener('resize', this.handleResize);
+        window.addEventListener('resize', this.forceHandleResize);
         document.addEventListener('paste', this.handlePaste);
         document.addEventListener('mousedown', this.handleClickOutside);
     }
 
     componentWillUnmount() {
-        window.removeEventListener('resize', this.handleResize);
+        window.removeEventListener('resize', this.forceHandleResize);
         document.removeEventListener('mousedown', this.handleClickOutside);
         document.removeEventListener('paste', this.handlePaste);
     }
@@ -136,7 +144,17 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         }
     }
 
-    handleResize = () => {
+    forceHandleResize = () => this.handleResize(true);
+
+    handleResize = (force: boolean = false) => {
+        if (this.state.forcedResizeOnly && !force) {
+            return;
+        }
+
+        if (!force) {
+            this.setState({ forcedResizeOnly: true });
+        }
+
         const { r0c0, r0c1, r1c0, r1c1 } = this.refs as { [key: string]: HTMLElement };
 
         // Adjust [fixed columns/fixed rows combo] to fixed rows height
@@ -144,7 +162,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         r0c0.querySelectorAll('tr').forEach((tr, index) => {
             const tr2 = trs[index];
 
-            tr.style.height = getComputedStyle(tr2).height;
+            tr.style.height = `${tr2.clientHeight}px`;
         });
 
         // Adjust fixed columns headers to header's height
@@ -161,7 +179,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         if (contentTd) {
             const contentTr = contentTd.parentElement as HTMLElement;
 
-            this.stylesheet.setRule('.cell-1-0 tr', `height: ${getComputedStyle(contentTr).height}`);
+            this.stylesheet.setRule('.cell-1-0 tr', `height: ${getComputedStyle(contentTr).height};`);
         }
     }
 

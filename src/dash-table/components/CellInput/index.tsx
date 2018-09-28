@@ -85,6 +85,7 @@ export default class CellInput extends Component<ICellProps, ICellState> {
         return (!active && this.state.value === this.props.value) ?
             this.renderValue(attributes) :
             (<input
+                autoFocus={true}
                 ref='textInput'
                 type='text'
                 value={this.state.value}
@@ -163,16 +164,20 @@ export default class CellInput extends Component<ICellProps, ICellState> {
 
     componentDidUpdate() {
         const { active } = this.propsWithDefaults;
-        const input = this.refs.textInput as HTMLInputElement;
+        if (!active) {
+            return;
+        }
 
-        if (active && input && document.activeElement !== input) {
-            input.focus();
+        const input = this.refs.textInput as HTMLInputElement;
+        const dropdown = this.refs.dropdown as any;
+
+        if (input) {
             input.setSelectionRange(0, input.value ? input.value.length : 0);
         }
 
-        if (active && this.refs.dropdown) {
+        if (dropdown) {
             // Limitation due to React < 16 --> Use React.createRef instead to pass parent ref to child
-            ((this.refs.dropdown as any).wrapper.parentElement as HTMLElement).focus();
+            (dropdown.wrapper.parentElement as HTMLElement).focus();
         }
     }
 
