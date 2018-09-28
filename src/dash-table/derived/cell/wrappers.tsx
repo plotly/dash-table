@@ -7,21 +7,6 @@ import Cell from 'dash-table/components/Cell';
 import isActiveCell from 'dash-table/derived/cell/isActive';
 import isSelectedCell from 'dash-table/derived/cell/isSelected';
 
-const getClasses = (
-    active: boolean,
-    classes: string[],
-    editable: boolean,
-    selected: boolean,
-    type: ColumnType | undefined
-) => [
-    'dash-cell',
-    ...(active ? ['focused'] : []),
-    ...(!editable ? ['cell--uneditable'] : []),
-    ...(selected ? ['cell--selected'] : []),
-    ...(type === ColumnType.Dropdown ? ['dropdown'] : []),
-    ...classes
-].join(' ');
-
 const getter = (
     activeCell: ActiveCell,
     columns: VisibleColumns,
@@ -34,7 +19,13 @@ const getter = (
             const active = isActiveCell(activeCell, rowIndex, columnIndex);
             const selected = isSelectedCell(selectedCells, rowIndex, columnIndex);
 
-            const classes = getClasses(active, [`column-${columnIndex}`], editable, selected, column.type);
+            const classes =
+                'dash-cell' +
+                ` column-${columnIndex}` +
+                (active ? ' focused' : '') +
+                (!editable ? ' cell--uneditable' : '') +
+                (selected ? ' cell--selected' : '') +
+                (column.type === ColumnType.Dropdown ? ' dropdown' : '');
 
             return (<Cell
                 active={active}
