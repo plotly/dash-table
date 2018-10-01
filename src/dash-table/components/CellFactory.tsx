@@ -11,19 +11,19 @@ import { matrixMap3 } from 'core/math/matrixZipMap';
 import { arrayMap } from 'core/math/arrayZipMap';
 
 export default class CellFactory {
-    private readonly cellWrappers = derivedCellWrappers();
     private readonly cellInputs = derivedCellInputs();
     private readonly cellOperations = derivedCellOperations();
-    private readonly cellStyles = derivedCellStyles();
     private readonly cellDropdowns = derivedDropdowns();
 
     private get props() {
         return this.propsFn();
     }
 
-    constructor(private readonly propsFn: () => ICellFactoryOptions) {
-
-    }
+    constructor(
+        private readonly propsFn: () => ICellFactoryOptions,
+        private readonly cellStyles = derivedCellStyles(propsFn().id),
+        private readonly cellWrappers = derivedCellWrappers(propsFn().id)
+    ) { }
 
     public createCells() {
         const {
@@ -57,7 +57,7 @@ export default class CellFactory {
             setProps
         );
 
-        const wrappers = this.cellWrappers(id)(
+        const wrappers = this.cellWrappers(
             active_cell,
             !!is_focused,
             columns,
@@ -66,7 +66,7 @@ export default class CellFactory {
             selected_cell
         );
 
-        const wrapperStyles = this.cellStyles(id)(
+        const wrapperStyles = this.cellStyles(
             columns,
             column_conditional_styles,
             column_static_style,
