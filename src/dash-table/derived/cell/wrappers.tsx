@@ -20,7 +20,6 @@ type ElementCacheFn = (
 function getter(
     elementCache: ElementCacheFn,
     activeCell: ActiveCell,
-    isFocused: boolean,
     columns: VisibleColumns,
     dataframe: Dataframe,
     editable: boolean,
@@ -36,7 +35,6 @@ function getter(
                     'dash-cell' +
                     ` column-${columnIndex}` +
                     (active ? ' focused' : '') +
-                    (isFocused ? ' input-focused' : '') +
                     (!editable ? ' cell--uneditable' : '') +
                     (selected ? ' cell--selected' : '') +
                     (column.type === ColumnType.Dropdown ? ' dropdown' : '');
@@ -51,7 +49,6 @@ function getter(
 
 function decorator(_id: string): ((
     activeCell: ActiveCell,
-    isFocused: boolean,
     columns: VisibleColumns,
     columnConditionalStyle: any,
     columnStaticStyle: any,

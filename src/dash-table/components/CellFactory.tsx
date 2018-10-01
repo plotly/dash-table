@@ -59,7 +59,6 @@ export default class CellFactory {
 
         const wrappers = this.cellWrappers(
             active_cell,
-            !!is_focused,
             columns,
             viewport.dataframe,
             editable,
