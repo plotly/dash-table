@@ -41,7 +41,7 @@ def layout():
                     {"name": i, "id": i, "deletable": True} for i in sorted(df.columns)
                 ],
                 pagination_settings={
-                    'displayed_pages': 2,
+                    'displayed_pages': 1,
                     'current_page': 0,
                     'page_size': PAGE_SIZE
                 },
@@ -71,7 +71,7 @@ def layout():
                     {"name": i, "id": i, "deletable": True} for i in sorted(df.columns)
                 ],
                 pagination_settings={
-                    'displayed_pages': 2,
+                    'displayed_pages': 1,
                     'current_page': 0,
                     'page_size': PAGE_SIZE
                 },
@@ -99,7 +99,7 @@ def layout():
                     {"name": i, "id": i, "deletable": True} for i in sorted(df.columns)
                 ],
                 pagination_settings={
-                    'displayed_pages': 2,
+                    'displayed_pages': 1,
                     'current_page': 0,
                     'page_size': PAGE_SIZE
                 },
@@ -138,7 +138,7 @@ def layout():
                     {"name": i, "id": i, "deletable": True} for i in sorted(df.columns)
                 ],
                 pagination_settings={
-                    'displayed_pages': 2,
+                    'displayed_pages': 1,
                     'current_page': 0,
                     'page_size': PAGE_SIZE
                 },
@@ -156,7 +156,7 @@ def layout():
                     {"name": i, "id": i, "deletable": True} for i in sorted(df.columns)
                 ],
                 pagination_settings={
-                    'displayed_pages': 2,
+                    'displayed_pages': 1,
                     'current_page': 0,
                     'page_size': PAGE_SIZE
                 },
@@ -306,7 +306,6 @@ def update_graph(pagination_settings, filtering_settings):
      Input(IDS["table-sorting-filtering"], "sorting_settings"),
      Input(IDS["table-sorting-filtering"], "filtering_settings")])
 def update_graph(pagination_settings, sorting_settings, filtering_settings):
-    print(filtering_settings)
     filtering_expressions = filtering_settings.split(' && ')
     dff = df
     for filter in filtering_expressions:
