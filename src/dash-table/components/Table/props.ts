@@ -40,6 +40,8 @@ export interface IVisibleColumn {
     id: ColumnId;
     name: string;
     options?: { label: string | number, value: any }[];
+    maxWidth?: string | number;
+    minWidth?: string | number;
     type?: string;
     width?: string | number;
 }

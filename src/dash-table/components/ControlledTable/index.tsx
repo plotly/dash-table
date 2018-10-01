@@ -542,14 +542,16 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
         R.addIndex<IColumn>(R.forEach)((column, index) => {
             const width = Stylesheet.unit(column.width || DEFAULT_CELL_WIDTH, 'px');
+            const maxWidth = Stylesheet.unit(column.maxWidth || column.width || DEFAULT_CELL_WIDTH, 'px');
+            const minWidth = Stylesheet.unit(column.minWidth || column.width || DEFAULT_CELL_WIDTH, 'px');
 
             this.stylesheet.setRule(
                 `.dash-spreadsheet-inner td.column-${index}`,
-                `width: ${width}; max-width: ${width}; min-width: ${width};`
+                `width: ${width}; max-width: ${maxWidth}; min-width: ${minWidth};`
             );
             this.stylesheet.setRule(
                 `.dash-spreadsheet-inner th.column-${index}`,
-                `width: ${width}; max-width: ${width}; min-width: ${width};`
+                `width: ${width}; max-width: ${maxWidth}; min-width: ${minWidth};`
             );
         }, columns);
     }
