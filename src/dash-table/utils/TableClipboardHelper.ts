@@ -43,6 +43,14 @@ export default class TableClipboardHelper {
             return;
         }
 
+        if (!overflowRows) {
+            Logger.debug(`Clipboard -- Sorting or filtering active, do not create new rows`);
+        }
+
+        if (!overflowColumns) {
+            Logger.debug(`Clipboard -- Do not create new columns`);
+        }
+
         const values = SheetClip.prototype.parse(text);
 
         let newDataframe = dataframe;
@@ -61,10 +69,6 @@ export default class TableClipboardHelper {
                 });
                 newDataframe.forEach(row => (row[`Column ${i}`] = ''));
             }
-        }
-
-        if (overflowRows) {
-            Logger.debug(`Clipboard -- Sorting or filtering active, do not create new rows`);
         }
 
         const realActiveRow = derived_viewport_indices[activeCell[0]];
@@ -92,9 +96,13 @@ export default class TableClipboardHelper {
                 // let newDataframe = dataframe;
                 const col = newColumns[jOffset];
                 if (col && colIsEditable(true, col)) {
+                    const datum = R.merge(newDataframe[iRealCell], {
+                        [col.id]: cell
+                    });
+
                     newDataframe = R.set(
-                        R.lensPath([iRealCell, col.id]),
-                        cell,
+                        R.lensPath([iRealCell]),
+                        datum,
                         newDataframe
                     );
                 }

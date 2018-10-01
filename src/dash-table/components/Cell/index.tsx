@@ -35,9 +35,19 @@ export default class Cell extends Component<ICellProps> {
     shouldComponentUpdate(nextProps: any) {
         const props: any = this.props;
 
+        const childProps: any = this.getChildProps(props);
+        const nextChildProps: any = this.getChildProps(nextProps);
+
         return R.any(key =>
             !CHILDREN_REGEX.test(key) && props[key] !== nextProps[key],
             R.keysIn(props)
+        ) || R.any(
+            key => childProps[key] !== nextChildProps[key],
+            R.keysIn(childProps)
         );
+    }
+
+    private getChildProps(props: any) {
+        return props && props.children && props.children[0] && props.children[0].props;
     }
 }
