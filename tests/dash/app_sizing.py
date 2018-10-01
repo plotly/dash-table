@@ -51,6 +51,7 @@ def layout():
                 "marginLeft": "auto",
                 "marginRight": "auto",
                 "width": "80%",
+                "padding": "24px",
                 "borderLeft": "thin hotpink solid",
                 "borderRight": "thin hotpink solid",
             },
@@ -249,7 +250,15 @@ def layout():
                     columns=[{"name": i, "id": i} for i in df.columns],
                 ),
                 section_title("Dash Table - Padding"),
-                # ...
+                dash_table.Table(
+                    id="dt-padding",
+                    dataframe=df.to_dict("rows"),
+                    columns=[{"name": i, "id": i} for i in df.columns],
+                    table_style=[{
+                        'selector': '.dash-cell',
+                        'rule': 'padding-left: 10px;'
+                    }]
+                ),
                 section_title("Dash Table - Underspecified Widths"),
                 # ...
                 section_title("Dash Table - Widths that are smaller than the content"),
