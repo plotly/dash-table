@@ -11,6 +11,7 @@ import memoizerCache from 'core/memoizerCache';
 const getter = (
     elementCache: (key: [number, number], active: boolean, classes: string, columnIndex: number, columnId: ColumnId) => JSX.Element,
     activeCell: ActiveCell,
+    isFocused: boolean,
     columns: VisibleColumns,
     dataframe: Dataframe,
     editable: boolean,
@@ -25,6 +26,7 @@ const getter = (
                 'dash-cell' +
                 ` column-${columnIndex}` +
                 (active ? ' focused' : '') +
+                (isFocused ? ' input-focused' : '') +
                 (!editable ? ' cell--uneditable' : '') +
                 (selected ? ' cell--selected' : '') +
                 (column.type === ColumnType.Dropdown ? ' dropdown' : '');
@@ -40,6 +42,7 @@ const getterFactory = memoizeOneFactory(getter);
 
 const decoratedGetter = (_id: string): ((
     activeCell: ActiveCell,
+    isFocused: boolean,
     columns: VisibleColumns,
     columnConditionalStyle: any,
     columnStaticStyle: any,
