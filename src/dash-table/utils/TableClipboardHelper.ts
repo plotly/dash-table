@@ -93,16 +93,11 @@ export default class TableClipboardHelper {
                 const iRealCell = derived_viewport_indices[iOffset];
 
                 const jOffset = activeCell[1] + j;
-                // let newDataframe = dataframe;
                 const col = newColumns[jOffset];
                 if (col && colIsEditable(true, col)) {
-                    const datum = R.merge(newDataframe[iRealCell], {
-                        [col.id]: cell
-                    });
-
                     newDataframe = R.set(
-                        R.lensPath([iRealCell]),
-                        datum,
+                        R.lensPath([iRealCell, col.id]),
+                        cell,
                         newDataframe
                     );
                 }

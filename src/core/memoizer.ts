@@ -1,5 +1,3 @@
-// import * as R from 'ramda';
-
 import { isEqualArgs } from 'core/comparer';
 import { ResultFn } from 'core/generic';
 
