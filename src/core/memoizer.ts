@@ -1,3 +1,5 @@
+// import * as R from 'ramda';
+
 import { isEqualArgs } from 'core/comparer';
 import { ResultFn } from 'core/generic';
 
@@ -14,11 +16,10 @@ export function memoizeOne<
     let lastArgs: any[] | null = null;
     let lastResult: any;
 
-    return (...args: TArgs): TEntry => {
-        return isEqualArgs(lastArgs, args) ?
+    return (...args: TArgs): TEntry =>
+        isEqualArgs(lastArgs, args) ?
             lastResult :
             (lastArgs = args) && (lastResult = fn(...args));
-    };
 }
 
 export function memoizeOneFactory<

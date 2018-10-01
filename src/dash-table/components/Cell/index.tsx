@@ -1,13 +1,14 @@
+import * as R from 'ramda';
 import React, {
     Component
 } from 'react';
-
-import { isEqual } from 'core/comparer';
 
 import {
     ICellProps,
     ICellPropsWithDefaults
 } from 'dash-table/components/Cell/props';
+
+const CHILDREN_REGEX = /^children$/;
 
 export default class Cell extends Component<ICellProps> {
     constructor(props: ICellProps) {
@@ -31,7 +32,12 @@ export default class Cell extends Component<ICellProps> {
         />);
     }
 
-    shouldComponentUpdate(nextProps: ICellPropsWithDefaults) {
-        return !isEqual(this.props, nextProps, true);
+    shouldComponentUpdate(nextProps: any) {
+        const props: any = this.props;
+
+        return R.any(key =>
+            !CHILDREN_REGEX.test(key) && props[key] !== nextProps[key],
+            R.keysIn(props)
+        );
     }
 }

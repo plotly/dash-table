@@ -20,13 +20,11 @@ export interface ICellHandlerProps {
 export interface ICellProps extends ICellHandlerProps {
     active: boolean;
     clearable?: boolean;
-    conditionalDropdowns?: IConditionalDropdown[];
     datum: any;
     dropdown: IDropdownOptions | undefined;
     editable: boolean;
     focused: boolean;
     property: ColumnId;
-    staticDropdown?: IDropdownOptions;
     tableId: string;
     type?: string;
     value: any;

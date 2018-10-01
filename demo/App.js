@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { Table } from 'dash-table';
 import {mockData} from './data';
 import { memoizeOne } from 'core/memoizer';
+import Logger from 'core/Logger';
 
 const clone = o => JSON.parse(JSON.stringify(o));
 
@@ -49,7 +50,7 @@ class App extends Component {
 
         const setProps = memoizeOne(() => {
             return newProps => {
-                console.info('--->', newProps);
+                Logger.debug('--->', newProps);
                 this.setState(prevState => ({
                     tableProps: R.merge(prevState.tableProps, newProps)
                 }));

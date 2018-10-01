@@ -1,10 +1,8 @@
 import React, {
-    Component,
+    PureComponent,
     KeyboardEvent
 } from 'react';
 import Dropdown from 'react-select';
-
-import { isEqual } from 'core/comparer';
 
 import {
     ICellDefaultProps,
@@ -19,7 +17,7 @@ import {
 import { ColumnType } from 'dash-table/components/Table/props';
 import dropdownHelper from 'dash-table/components/dropdownHelper';
 
-export default class CellInput extends Component<ICellProps, ICellState> {
+export default class CellInput extends PureComponent<ICellProps, ICellState> {
 
     public static defaultProps: ICellDefaultProps = {
         conditionalDropdowns: [],
@@ -85,7 +83,6 @@ export default class CellInput extends Component<ICellProps, ICellState> {
         return (!active && this.state.value === this.props.value) ?
             this.renderValue(attributes) :
             (<input
-                autoFocus={true}
                 ref='textInput'
                 type='text'
                 value={this.state.value}
@@ -171,21 +168,14 @@ export default class CellInput extends Component<ICellProps, ICellState> {
         const input = this.refs.textInput as HTMLInputElement;
         const dropdown = this.refs.dropdown as any;
 
-        if (input) {
+        if (input && document.activeElement !== input) {
+            input.focus();
             input.setSelectionRange(0, input.value ? input.value.length : 0);
         }
 
-        if (dropdown) {
-            // Limitation due to React < 16 --> Use React.createRef instead to pass parent ref to child
+        if (dropdown && document.activeElement !== dropdown) {
+            // Limitation. If React >= 16 --> Use React.createRef instead to pass parent ref to child
             (dropdown.wrapper.parentElement as HTMLElement).focus();
         }
-    }
-
-    shouldComponentUpdate(nextProps: ICellPropsWithDefaults, nextState: ICellState) {
-        const props = this.props;
-        const state = this.state;
-
-        return !isEqual(props, nextProps, true) ||
-            !isEqual(state, nextState, true);
     }
 }
