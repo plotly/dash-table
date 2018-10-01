@@ -77,7 +77,7 @@ def layout():
             """
                 ),
                 html_table(df, table_style={"width": "100%"}, base_column_style={}),
-                section_title("HTML Table - Column Widths defined by Percents"),
+                section_title("HTML Table - All Column Widths defined by Percent"),
                 html.Div(
                     """
             The column widths can be definied by percents rather than pixels.
@@ -95,7 +95,7 @@ def layout():
                         "Region": {"width": '30%'},
                     },
                 ),
-                section_title("HTML Table - Column Widths defined by Percents"),
+                section_title("HTML Table - Single Column Width Defined by Percent"),
                 html.Div(
                     """
             The width of one column (Region=50%) can be definied by percent.
@@ -281,7 +281,9 @@ def layout():
                 ),
                 section_title("Dash Table - Padding"),
                 # ...
-                section_title("Dash Table - Column Widths by Percent"),
+                section_title("Dash Table - All Column Widths by Percent"),
+                # ...
+                section_title("Dash Table - Single Column Width by Percent"),
                 # ...
                 section_title("Dash Table - Underspecified Widths"),
                 # ...
