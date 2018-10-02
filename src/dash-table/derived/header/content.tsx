@@ -17,8 +17,6 @@ import {
 } from 'dash-table/components/Table/props';
 import * as actions from 'dash-table/utils/actions';
 
-const getColNameAt = (c: any, i: number) => (Array.isArray(c.name) ? c.name[i] : '');
-
 function deleteColumn(column: IVisibleColumn, columns: VisibleColumns, columnRowIndex: any, setProps: SetProps, options: ControlledTableProps) {
     return () => {
         setProps(actions.deleteColumn(column, columns, columnRowIndex, options));
@@ -79,44 +77,20 @@ function getSortingIcon(columnId: ColumnId, sortSettings: SortSettings) {
 }
 
 function getter(
-    headerRows: number,
     columns: VisibleColumns,
-    mergeHeaders: boolean,
+    labelsAndIndices: R.KeyValuePair<any[], number[]>[],
     sortType: SortingType,
     sortSettings: SortSettings,
     paginationMode: PaginationMode,
     setProps: SetProps,
     options: ControlledTableProps
 ): JSX.Element[][] {
-    return R.map(
-        headerRowIndex => {
-            const labels = columns.map(
-                c =>
-                    R.isNil(c.name) && headerRowIndex === headerRows - 1
-                        ? c.id
-                        : getColNameAt(c, headerRowIndex)
-            );
-
-            let columnIndices: any[];
-            if (!mergeHeaders) {
-                columnIndices = R.range(0, columns.length);
-            } else {
-                columnIndices = [0];
-                let compareIndex = 0;
-                labels.forEach((label, i) => {
-                    // Skip over hidden columns for labels selection / filtering;
-                    // otherwise they will be filtered out when generating the headers
-                    if (label === labels[compareIndex]) {
-                        return;
-                    }
-                    columnIndices.push(i);
-                    compareIndex = i;
-                });
-            }
-
+    return R.addIndex<R.KeyValuePair<any[], number[]>, JSX.Element[]>(R.map)(
+        ([labels, indices], headerRowIndex) => {
             return R.addIndex<number, JSX.Element>(R.map)(
                 columnIndex => {
                     const column = columns[columnIndex];
+
                     return (<div>
                         {sortType ?
                             (<span
@@ -151,10 +125,10 @@ function getter(
                         <span>{labels[columnIndex]}</span>
                     </div>);
                 },
-                columnIndices
+                indices
             );
         },
-        R.range(0, headerRows)
+        labelsAndIndices
     );
 }
 
