@@ -1,42 +1,31 @@
 import * as R from 'ramda';
 
-function getGroupedColumnIndices(column, headerRowIndex, props) {
-    // Find the set of column indices that share the same name and are adjacent
-    // as the given column ("group")
-    const {columns} = props;
+function getGroupedColumnIndices(column, columns, headerRowIndex) {
+    const columnIndex = columns.indexOf(column);
 
-    // if the columns are merged, then deleting will delete all of the
-    // merged columns
-    let columnName;
-    let names;
-    if (R.type(headerRowIndex) !== 'Null') {
-        columnName = column.name[headerRowIndex];
-        names = R.pluck(
-            headerRowIndex,
-            R.pluck('name', columns)
-        );
-    } else {
-        columnName = column.name;
-        names = R.pluck('name', columns);
-    }
-    const columnIndex = R.findIndex(R.propEq('id', column.id), columns);
-    let groupIndexFirst = columnIndex;
-    let groupIndexLast = columnIndex;
-    while(names[groupIndexFirst - 1] === columnName) {
-        groupIndexFirst--;
+    if (!column.name || (Array.isArray(column.name) && column.name.length < headerRowIndex)) {
+        return { groupIndexFirst: columnIndex, groupIndexLast: columnIndex };
     }
 
-    while(names[groupIndexLast + 1] === columnName) {
-        groupIndexLast++;
+    let lastColumnIndex = columnIndex;
+
+    for (let i = columnIndex; i < columns.length; ++i) {
+        const c = columns[i];
+
+        if (c.name && Array.isArray(c.name) && c.name.length > headerRowIndex && c.name[headerRowIndex] === column.name[headerRowIndex]) {
+            lastColumnIndex = i;
+        } else {
+            break;
+        }
     }
 
-    return {groupIndexFirst, groupIndexLast};
+    return { groupIndexFirst: columnIndex, groupIndexLast: lastColumnIndex };
 }
 
-export function deleteColumn(column, headerRowIndex, props) {
-    const {columns, dataframe} = props;
+export function deleteColumn(column, columns, headerRowIndex, props) {
+    const { dataframe} = props;
     const {groupIndexFirst, groupIndexLast} = getGroupedColumnIndices(
-        column, headerRowIndex, props
+        column, columns, headerRowIndex
     );
     const rejectedColumnIds = R.slice(
         groupIndexFirst,
@@ -61,10 +50,9 @@ export function deleteColumn(column, headerRowIndex, props) {
     }
 }
 
-export function editColumnName(column, headerRowIndex, props) {
-    const {columns} = props;
-    const {groupIndexFirst, groupIndexLast} = getGroupedColumnIndices(
-        column, headerRowIndex, props
+export function editColumnName(column, columns, headerRowIndex, props) {
+    const { groupIndexFirst, groupIndexLast } = getGroupedColumnIndices(
+        column, columns, headerRowIndex, props
     );
     /* eslint no-alert: 0 */
     const newColumnName = window.prompt('Enter a new column name');
