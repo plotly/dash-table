@@ -74,7 +74,8 @@ export default class CellFactory {
 
         const dropdowns = this.cellDropdowns(id)(
             columns,
-            dataframe,
+            viewport.dataframe,
+            viewport.indices,
             column_conditional_dropdowns,
             column_static_dropdown,
             dropdown_properties
