@@ -30,8 +30,8 @@ interface IState {
 }
 
 export default class ControlledTable extends PureComponent<ControlledTableProps, IState> {
-    private stylesheet: Stylesheet;
-    private table: ((propsFn: () => ControlledTableProps) => JSX.Element[][]) = derivedTable();
+    private readonly stylesheet: Stylesheet;
+    private readonly tableFn: () => JSX.Element[][];
 
     constructor(props: ControlledTableProps) {
         super(props);
@@ -41,6 +41,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
         };
 
         this.stylesheet = new Stylesheet(`#${props.id}`);
+        this.tableFn = derivedTable(() => this.props);
         this.updateStylesheet();
     }
 
@@ -589,7 +590,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
             ...(n_fixed_columns ? ['dash-freeze-left'] : [])
         ];
 
-        const rawTable = this.table(() => this.props);
+        const rawTable = this.tableFn();
         const grid = derivedTableFragments(n_fixed_columns, n_fixed_rows, rawTable);
 
         return (<div
