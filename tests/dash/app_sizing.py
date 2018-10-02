@@ -43,6 +43,13 @@ def layout():
     df_long = pd.DataFrame(
         OrderedDict([(name, col_data * 10) for (name, col_data) in data.items()])
     )
+    df_two_columns = pd.DataFrame({"Column 1": [1, 2], "Column 2": [3, 3]})
+    df_long_columns = pd.DataFrame(
+        {
+            "Column {}".format(i): [1, 2]
+            for i in range(10)
+        }
+    )
 
     return [
         html.H1("Sizing Guide"),
@@ -78,6 +85,37 @@ def layout():
             """
                 ),
                 html_table(df, table_style={"width": "100%"}, base_column_style={}),
+                section_title("HTML Table - All Column Widths defined by Percent"),
+                html.Div(
+                    """
+            The column widths can be definied by percents rather than pixels.
+            """
+                ),
+                html_table(
+                    df,
+                    table_style={"width": "100%"},
+                    column_style={
+                        "Date": {"width": '30%'},
+                        "Election Polling Organization": {"width": '25%'},
+                        "Dem": {"width": '5%'},
+                        "Rep": {"width": '5%'},
+                        "Ind": {"width": '5%'},
+                        "Region": {"width": '30%'},
+                    },
+                ),
+                section_title("HTML Table - Single Column Width Defined by Percent"),
+                html.Div(
+                    """
+            The width of one column (Region=50%) can be definied by percent.
+            """
+                ),
+                html_table(
+                    df,
+                    table_style={"width": "100%"},
+                    column_style={
+                        "Region": {"width": '50%'},
+                    },
+                ),
                 section_title("HTML Table - Columns with min-width"),
                 html.Div(
                     "Here, the min-width for the first column is 130px, or about the width of this line: "
@@ -259,23 +297,148 @@ def layout():
                         'rule': 'padding-left: 10px;'
                     }]
                 ),
+                section_title("Dash Table - All Column Widths by Percent [Not working?]"),
+                dash_table.Table(
+                    id="dt-widths-all-percentage",
+                    dataframe=df.to_dict("rows"),
+                    columns=[{"name": i, "id": i} for i in df.columns],
+                    column_static_style=[
+                        {
+                            'id': 'Date',
+                            'style': {'width': '30%'}
+                        },
+                        {
+                            'id': 'Election Polling Organization',
+                            'style': {'width': '25%'}
+                        },
+                        {
+                            'id': 'Dem',
+                            'style': {'width': '5%'}
+                        },
+                        {
+                            'id': 'Rep',
+                            'style': {'width': '5%'}
+                        },
+                        {
+                            'id': 'Ind',
+                            'style': {'width': '5%'}
+                        },
+                        {
+                            'id': 'Region',
+                            'style': {'width': '30%'}
+                        }
+                    ]
+                ),
+                section_title("Dash Table - Single Column Width by Percent [Not working?]"),
+                dash_table.Table(
+                    id="dt-widths-one-percentage",
+                    dataframe=df.to_dict("rows"),
+                    columns=[{"name": i, "id": i} for i in df.columns],
+                    table_style=[{
+                        'selector': '.dash-spreadsheet',
+                        'rule': 'width: 100%;'
+                    }],
+                    column_static_style=[
+                        {
+                            'id': 'Region',
+                            'style': {'width': '50%'}
+                        }
+                    ]
+                ),
                 section_title("Dash Table - Underspecified Widths"),
+                dash_table.Table(
+                    id="dt-underspec",
+                    dataframe=df.to_dict("rows"),
+                    columns=[{"name": i, "id": i, "width": 50, "maxWidth": 300} for i in df.columns],
+                ),
+                section_title("Dash Table - Widths that are smaller than the content [Not Working]"),
+                dash_table.Table(
+                    id="dt-small-widths",
+                    dataframe=df.to_dict("rows"),
+                    columns=[{"name": i, "id": i, "width": 10} for i in df.columns],
+                ),
                 # ...
-                section_title("Dash Table - Widths that are smaller than the content"),
+                section_title("Dash Table - Content with Ellipses [Not Working]"),
                 # ...
-                section_title("Dash Table - Content with Ellipses"),
-                # ...
+                dash_table.Table(
+                    id="dt-ellipsis",
+                    dataframe=df.to_dict("rows"),
+                    columns=[{"name": i, "id": i, "maxWidth": 10} for i in df.columns],
+                    table_style=[{
+                        'selector': '.dash-cell',
+                        'rule': 'padding-left: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'
+                    }]
+                ),
                 section_title("Dash Table - Vertical Scrolling"),
+                dash_table.Table(
+                    id="dt-vert-scroll",
+                    dataframe=df_long.to_dict("rows"),
+                    columns=[{"name": i, "id": i} for i in df_long.columns],
+                    table_style=[{
+                        'selector': '.dash-spreadsheet',
+                        'rule': 'max-height: 300px; overflow: scroll;'
+                    }]
+                ),
                 # ...
                 section_title("Dash Table - Vertical Scrolling with Max Height"),
+                dash_table.Table(
+                    id="dt-vert-scroll-max-height",
+                    dataframe=df_long.to_dict("rows"),
+                    columns=[{"name": i, "id": i} for i in df_long.columns],
+                    table_style=[{
+                        'selector': '.dash-spreadsheet',
+                        'rule': 'max-height: 300px; overflow: scroll;'
+                    }]
+                ),
                 # ...
                 section_title("Dash Table - Vertical Scrolling with Height"),
-                # ...
+                dash_table.Table(
+                    id="dt-vert-scroll",
+                    dataframe=df_long.to_dict("rows"),
+                    columns=[{"name": i, "id": i} for i in df_long.columns],
+                    table_style=[{
+                        'selector': '.dash-spreadsheet',
+                        'rule': 'height: 300px; overflow: scroll;'
+                    }]
+                ),
                 section_title("Dash Table - Horizontal Scrolling"),
-                # ...
                 section_title("Dash Table - Two Columns, 100% Min-Width"),
+                dash_table.Table(
+                    id="dt-hor-scroll",
+                    dataframe=df_two_columns.to_dict("rows"),
+                    columns=[{"name": i, "id": i} for i in df_two_columns.columns],
+                    table_style=[{
+                        'selector': '.dash-spreadsheet',
+                        'rule': 'min-width:100%; overflow-x: scroll;'
+                    },
+                    {
+                        'selector': '.dash-spreadsheet table',
+                        'rule':'min-width: 100%;'
+                    },
+                    {
+                        'selector':'.dash-cell',
+                        'rule': 'whitespace: nowrap;'
+                    }]
+                ),
                 # ...
                 section_title("Dash Table - Long Columns, 100% Min-Width"),
+                dash_table.Table(
+                    id="dt-hor-scroll",
+                    dataframe=df_long_columns.to_dict("rows"),
+                    columns=[{"name": i, "id": i} for i in df_long_columns.columns],
+                    table_style=[{
+                        'selector': '.dash-spreadsheet',
+                        'rule': 'min-width:100%; overflow-x: scroll;'
+                    },
+                    {
+                        'selector': '.dash-spreadsheet table',
+                        'rule':'min-width: 100%;'
+                    },
+                    {
+                        'selector':'.dash-cell',
+                        'rule': 'whitespace: nowrap;'
+                    }]
+                ),
                 # ...
                 section_title("Dash Table - Alignment"),
                 # ...
