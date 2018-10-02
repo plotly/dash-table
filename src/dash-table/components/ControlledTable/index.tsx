@@ -11,23 +11,19 @@ import {
 } from 'dash-table/utils/unicode';
 import { selectionCycle } from 'dash-table/utils/navigation';
 
-import HeaderFactory, { DEFAULT_CELL_WIDTH } from 'dash-table/components/HeaderFactory';
+import { DEFAULT_CELL_WIDTH } from 'dash-table/components/HeaderFactory';
 import Logger from 'core/Logger';
 import { memoizeOne } from 'core/memoizer';
 import lexer from 'core/syntax-tree/lexer';
 
 import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
-import CellFactory from 'dash-table/components/CellFactory';
 import { ControlledTableProps, Columns, RowSelection, IColumn } from 'dash-table/components/Table/props';
 import dropdownHelper from 'dash-table/components/dropdownHelper';
-import FilterFactory from 'dash-table/components/FilterFactory';
+
+import derivedTable from 'dash-table/derived/table';
+import derivedTableFragments from 'dash-table/derived/table/fragments';
 
 const sortNumerical = R.sort<number>((a, b) => a - b);
-
-interface IAccumulator {
-    cells: number;
-    count: number;
-}
 
 interface IState {
     forcedResizeOnly: boolean;
@@ -35,9 +31,7 @@ interface IState {
 
 export default class ControlledTable extends PureComponent<ControlledTableProps, IState> {
     private stylesheet: Stylesheet;
-    private cellFactory: CellFactory;
-    private filterFactory: FilterFactory;
-    private headerFactory: HeaderFactory;
+    private table: ((propsFn: () => ControlledTableProps) => JSX.Element[][]) = derivedTable();
 
     constructor(props: ControlledTableProps) {
         super(props);
@@ -45,29 +39,6 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
         this.state = {
             forcedResizeOnly: false
         };
-
-        this.cellFactory = new CellFactory(() => this.props);
-        this.filterFactory = new FilterFactory(() => {
-            const {
-                row_deletable,
-                row_selectable
-            } = this.props;
-
-            const fillerColumns =
-                (row_deletable ? 1 : 0) +
-                (row_selectable ? 1 : 0);
-
-            return {
-                columns: this.props.columns,
-                fillerColumns,
-                filtering: this.props.filtering,
-                filtering_settings: this.props.filtering_settings,
-                filtering_type: this.props.filtering_type,
-                id: this.props.id,
-                setFilter: this.handleSetFilter
-            };
-        });
-        this.headerFactory = new HeaderFactory(() => this.props);
 
         this.stylesheet = new Stylesheet(`#${props.id}`);
         this.updateStylesheet();
@@ -577,61 +548,6 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
         }, columns);
     }
 
-    renderFragment = (cells: any[][] | null) => (
-        cells ?
-            (<table tabIndex={-1}>
-                <tbody>
-                    {cells.map(
-                        (row, idx) => <tr key={`row-${idx}`}>{row}</tr>)
-                    }
-                </tbody>
-            </table>) :
-            null
-    )
-
-    handleSetFilter = (filtering_settings: string) => this.props.setProps({ filtering_settings });
-
-    getCells = () => {
-        return [
-            ...this.headerFactory.createHeaders(),
-            ...this.filterFactory.createFilters(),
-            ...this.cellFactory.createCells()
-        ];
-    }
-
-    getFragments = (cells: any, fixedColumns: number, fixedRows: number) => {
-        // slice out fixed columns
-        const fixedColumnCells = fixedColumns ?
-            R.map(row =>
-                row.splice(0, R.reduceWhile<JSX.Element, IAccumulator>(
-                    acc => acc.count < fixedColumns,
-                    (acc, cell) => {
-                        acc.cells++;
-                        acc.count += (cell.props.colSpan || 1);
-
-                        return acc;
-                    },
-                    { cells: 0, count: 0 },
-                    row as any
-                ).cells),
-                cells) :
-            null;
-
-        // slice out fixed rows
-        const fixedRowCells = fixedRows ?
-            cells.splice(0, fixedRows) :
-            null;
-
-        const fixedRowAndColumnCells = fixedRows && fixedColumnCells ?
-            fixedColumnCells.splice(0, fixedRows) :
-            null;
-
-        return [
-            [this.renderFragment(fixedRowAndColumnCells), this.renderFragment(fixedRowCells)],
-            [this.renderFragment(fixedColumnCells), this.renderFragment(cells)]
-        ];
-    }
-
     handleDropdown = () => {
         const { r1c1 } = this.refs as { [key: string]: HTMLElement };
 
@@ -673,8 +589,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
             ...(n_fixed_columns ? ['dash-freeze-left'] : [])
         ];
 
-        const cells = this.getCells();
-        const grid = this.getFragments(cells, n_fixed_columns, n_fixed_rows);
+        const rawTable = this.table(() => this.props);
+        const grid = derivedTableFragments(n_fixed_columns, n_fixed_rows, rawTable);
 
         return (<div
             id={id}
