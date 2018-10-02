@@ -12,8 +12,7 @@ enum Key {
     Meta = '{meta}',
     OpenBracket = '{{}',
     SelectAll = '{selectall}',
-    Shift = '{shift}',
-    Tab = '{tab}'
+    Shift = '{shift}'
 }
 
 export default Key;
