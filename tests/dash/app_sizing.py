@@ -77,6 +77,37 @@ def layout():
             """
                 ),
                 html_table(df, table_style={"width": "100%"}, base_column_style={}),
+                section_title("HTML Table - All Column Widths defined by Percent"),
+                html.Div(
+                    """
+            The column widths can be definied by percents rather than pixels.
+            """
+                ),
+                html_table(
+                    df,
+                    table_style={"width": "100%"},
+                    column_style={
+                        "Date": {"width": '30%'},
+                        "Election Polling Organization": {"width": '25%'},
+                        "Dem": {"width": '5%'},
+                        "Rep": {"width": '5%'},
+                        "Ind": {"width": '5%'},
+                        "Region": {"width": '30%'},
+                    },
+                ),
+                section_title("HTML Table - Single Column Width Defined by Percent"),
+                html.Div(
+                    """
+            The width of one column (Region=50%) can be definied by percent.
+            """
+                ),
+                html_table(
+                    df,
+                    table_style={"width": "100%"},
+                    column_style={
+                        "Region": {"width": '50%'},
+                    },
+                ),
                 section_title("HTML Table - Columns with min-width"),
                 html.Div(
                     "Here, the min-width for the first column is 130px, or about the width of this line: "
@@ -249,6 +280,10 @@ def layout():
                     columns=[{"name": i, "id": i} for i in df.columns],
                 ),
                 section_title("Dash Table - Padding"),
+                # ...
+                section_title("Dash Table - All Column Widths by Percent"),
+                # ...
+                section_title("Dash Table - Single Column Width by Percent"),
                 # ...
                 section_title("Dash Table - Underspecified Widths"),
                 # ...
