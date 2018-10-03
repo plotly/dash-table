@@ -106,7 +106,7 @@ function getter(
                             ''
                         }
 
-                        {(column.editable_name && isLastRow && R.type(column.editable_name) === 'Boolean') ?
+                        {(column.editable_name && R.type(column.editable_name) === 'Boolean') ?
                             (<span
                                 className='column-header--edit'
                                 onClick={editColumnName(column, columns, headerRowIndex, setProps, options)}
@@ -116,7 +116,7 @@ function getter(
                             ''
                         }
 
-                        {(column.deletable && isLastRow && paginationMode !== 'be' && R.type(column.deletable) === 'Boolean') ?
+                        {(column.deletable && paginationMode !== 'be' && R.type(column.deletable) === 'Boolean') ?
                             (<span
                                 className='column-header--delete'
                                 onClick={deleteColumn(column, columns, headerRowIndex, setProps, options)}
