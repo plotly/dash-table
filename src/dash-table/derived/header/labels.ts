@@ -2,7 +2,7 @@ import * as R from 'ramda';
 
 import { VisibleColumns } from 'dash-table/components/Table/props';
 
-const getColNameAt = (c: any, i: number) => (Array.isArray(c.name) ? c.name[i] : '');
+const getColNameAt = (c: any, i: number) => (Array.isArray(c.name) ? c.name[i] : c.name);
 
 export default (
     columns: VisibleColumns,
