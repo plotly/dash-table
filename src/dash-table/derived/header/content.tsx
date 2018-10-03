@@ -95,6 +95,15 @@ function getter(
                 columnIndex => {
                     const column = columns[columnIndex];
 
+                    const editable = (column.editable_name && R.type(column.editable_name) === 'Boolean') ||
+                        (R.type(column.editable_name) === 'Number' && column.editable_name === headerRowIndex);
+
+                    const deletable = paginationMode !== 'be' &&
+                        (
+                            (column.deletable && R.type(column.deletable) === 'Boolean') ||
+                            (R.type(column.deletable) === 'Number' && column.deletable === headerRowIndex)
+                        );
+
                     return (<div>
                         {sorting && isLastRow ?
                             (<span
@@ -106,7 +115,7 @@ function getter(
                             ''
                         }
 
-                        {(column.editable_name && R.type(column.editable_name) === 'Boolean') ?
+                        {editable ?
                             (<span
                                 className='column-header--edit'
                                 onClick={editColumnName(column, columns, headerRowIndex, setProps, options)}
@@ -116,7 +125,7 @@ function getter(
                             ''
                         }
 
-                        {(column.deletable && paginationMode !== 'be' && R.type(column.deletable) === 'Boolean') ?
+                        {deletable ?
                             (<span
                                 className='column-header--delete'
                                 onClick={deleteColumn(column, columns, headerRowIndex, setProps, options)}

@@ -40,9 +40,9 @@ export interface IColumn extends IVisibleColumn {
 
 export interface IVisibleColumn {
     clearable?: boolean;
-    deletable?: boolean;
+    deletable?: boolean | number;
     editable?: boolean;
-    editable_name?: boolean;
+    editable_name?: boolean | number;
     id: ColumnId;
     name: string;
     options?: { label: string | number, value: any }[];
