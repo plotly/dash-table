@@ -87,12 +87,12 @@ def layout():
                     df,
                     table_style={"width": "100%"},
                     column_style={
-                        "Date": {"width": '30%'},
-                        "Election Polling Organization": {"width": '25%'},
-                        "Dem": {"width": '5%'},
-                        "Rep": {"width": '5%'},
-                        "Ind": {"width": '5%'},
-                        "Region": {"width": '30%'},
+                        "Date": {"width": "30%"},
+                        "Election Polling Organization": {"width": "25%"},
+                        "Dem": {"width": "5%"},
+                        "Rep": {"width": "5%"},
+                        "Ind": {"width": "5%"},
+                        "Region": {"width": "30%"},
                     },
                 ),
                 section_title("HTML Table - Single Column Width Defined by Percent"),
@@ -104,9 +104,7 @@ def layout():
                 html_table(
                     df,
                     table_style={"width": "100%"},
-                    column_style={
-                        "Region": {"width": '50%'},
-                    },
+                    column_style={"Region": {"width": "50%"}},
                 ),
                 section_title("HTML Table - Columns with min-width"),
                 html.Div(
