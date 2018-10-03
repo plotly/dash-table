@@ -74,6 +74,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
         window.addEventListener('resize', this.forceHandleResize);
         document.addEventListener('paste', this.handlePaste);
         document.addEventListener('mousedown', this.handleClickOutside);
+
+        this.handleResize();
     }
 
     componentWillUnmount() {
