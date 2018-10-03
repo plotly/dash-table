@@ -3,16 +3,8 @@ import React from 'react';
 
 import { arrayMap } from 'core/math/arrayZipMap';
 import { matrixMap } from 'core/math/matrixZipMap';
-import { SortSettings } from 'core/sorting';
 
-import {
-    ControlledTableProps,
-    PaginationMode,
-    SetProps,
-    Sorting,
-    SortingType,
-    VisibleColumns
-} from 'dash-table/components/Table/props';
+import { ControlledTableProps } from 'dash-table/components/Table/props';
 
 import derivedHeaderContent from 'dash-table/derived/header/content';
 import getFixedHeaders from 'dash-table/derived/header/fixedHeaders';
@@ -23,19 +15,6 @@ import derivedHeaderOperations from 'dash-table/derived/header/operations';
 import derivedHeaderWrappers from 'dash-table/derived/header/wrappers';
 
 export const DEFAULT_CELL_WIDTH = 200;
-
-export interface ICellOptions {
-    columns: VisibleColumns;
-    columnRowIndex: any;
-    labels: any[];
-    mergeCells?: boolean;
-    n_fixed_columns: number;
-    rowSorting: Sorting;
-    setProps: SetProps;
-    sorting_settings: SortSettings;
-    sorting_type: SortingType;
-    pagination_mode: PaginationMode;
-}
 
 export default class HeaderFactory {
     private readonly headerContent = derivedHeaderContent();
@@ -61,6 +40,7 @@ export default class HeaderFactory {
             row_deletable,
             row_selectable,
             setProps,
+            sorting,
             sorting_settings,
             sorting_type
         } = props;
@@ -89,6 +69,7 @@ export default class HeaderFactory {
         const content = this.headerContent(
             columns,
             labelsAndIndices,
+            sorting,
             sorting_type,
             sorting_settings,
             pagination_mode,

@@ -13,7 +13,8 @@ import {
     VisibleColumns,
     IVisibleColumn,
     SetProps,
-    ControlledTableProps
+    ControlledTableProps,
+    Sorting
 } from 'dash-table/components/Table/props';
 import * as actions from 'dash-table/utils/actions';
 
@@ -79,6 +80,7 @@ function getSortingIcon(columnId: ColumnId, sortSettings: SortSettings) {
 function getter(
     columns: VisibleColumns,
     labelsAndIndices: R.KeyValuePair<any[], number[]>[],
+    sorting: Sorting,
     sortType: SortingType,
     sortSettings: SortSettings,
     paginationMode: PaginationMode,
@@ -92,7 +94,7 @@ function getter(
                     const column = columns[columnIndex];
 
                     return (<div>
-                        {sortType ?
+                        {sorting ?
                             (<span
                                 className='sort'
                                 onClick={doSort(column.id, sortSettings, sortType, setProps)}
