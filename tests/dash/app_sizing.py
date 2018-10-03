@@ -383,8 +383,8 @@ def layout():
                 section_title("Dash Table - Vertical Scrolling with Max Height"),
                 dash_table.Table(
                     id="dt-vert-scroll-max-height",
-                    dataframe=df_long.to_dict("rows"),
-                    columns=[{"name": i, "id": i} for i in df_long.columns],
+                    dataframe=df.to_dict("rows"),
+                    columns=[{"name": i, "id": i} for i in df.columns],
                     table_style=[{
                         'selector': '.dash-spreadsheet',
                         'rule': 'max-height: 300px; overflow: scroll;'
@@ -394,8 +394,8 @@ def layout():
                 section_title("Dash Table - Vertical Scrolling with Height"),
                 dash_table.Table(
                     id="dt-vert-scroll",
-                    dataframe=df_long.to_dict("rows"),
-                    columns=[{"name": i, "id": i} for i in df_long.columns],
+                    dataframe=df.to_dict("rows"),
+                    columns=[{"name": i, "id": i} for i in df.columns],
                     table_style=[{
                         'selector': '.dash-spreadsheet',
                         'rule': 'height: 300px; overflow: scroll;'
