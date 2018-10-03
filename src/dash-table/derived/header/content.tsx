@@ -89,12 +89,14 @@ function getter(
 ): JSX.Element[][] {
     return R.addIndex<R.KeyValuePair<any[], number[]>, JSX.Element[]>(R.map)(
         ([labels, indices], headerRowIndex) => {
+            const isLastRow = headerRowIndex === labelsAndIndices.length - 1;
+
             return R.addIndex<number, JSX.Element>(R.map)(
                 columnIndex => {
                     const column = columns[columnIndex];
 
                     return (<div>
-                        {sorting ?
+                        {sorting && isLastRow ?
                             (<span
                                 className='sort'
                                 onClick={doSort(column.id, sortSettings, sortType, setProps)}
@@ -104,7 +106,7 @@ function getter(
                             ''
                         }
 
-                        {(column.editable_name && R.type(column.editable_name) === 'Boolean') ?
+                        {(column.editable_name && isLastRow && R.type(column.editable_name) === 'Boolean') ?
                             (<span
                                 className='column-header--edit'
                                 onClick={editColumnName(column, columns, headerRowIndex, setProps, options)}
@@ -114,7 +116,7 @@ function getter(
                             ''
                         }
 
-                        {(column.deletable && paginationMode !== 'be' && R.type(column.deletable) === 'Boolean') ?
+                        {(column.deletable && isLastRow && paginationMode !== 'be' && R.type(column.deletable) === 'Boolean') ?
                             (<span
                                 className='column-header--delete'
                                 onClick={deleteColumn(column, columns, headerRowIndex, setProps, options)}
