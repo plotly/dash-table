@@ -13,13 +13,19 @@ const getter = (propsFn: () => ICellFactoryOptions): CacheFn => {
     const derivedHandlers = cellEventHandler()(propsFn);
 
     return (...args: CacheArgs) => {
-        let [
+        const [
             rowIndex,
             columnIndex
         ] = args;
 
+        const {
+            viewport
+        } = propsFn();
+
+        const realIndex = viewport.indices[rowIndex];
+
         return {
-            onChange: derivedHandlers(Handler.Change, rowIndex, columnIndex),
+            onChange: derivedHandlers(Handler.Change, realIndex, columnIndex),
             onClick: derivedHandlers(Handler.Click, rowIndex, columnIndex),
             onDoubleClick: derivedHandlers(Handler.DoubleClick, rowIndex, columnIndex),
             onPaste: derivedHandlers(Handler.Paste, rowIndex, columnIndex)
