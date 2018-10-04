@@ -159,7 +159,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
         if (contentTd) {
             const contentTr = contentTd.parentElement as HTMLElement;
 
-            this.stylesheet.setRule('.cell-1-0 tr', `height: ${getComputedStyle(contentTr).height};`);
+            this.stylesheet.setRule('.dash-fixed-column tr', `height: ${getComputedStyle(contentTr).height};`);
         }
 
         // Adjust the width of the fixed row header
