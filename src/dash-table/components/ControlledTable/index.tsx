@@ -16,13 +16,12 @@ import { memoizeOne } from 'core/memoizer';
 import lexer from 'core/syntax-tree/lexer';
 
 import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
-import { ControlledTableProps, Columns, RowSelection, IColumn } from 'dash-table/components/Table/props';
+import { ControlledTableProps, IColumn } from 'dash-table/components/Table/props';
 import dropdownHelper from 'dash-table/components/dropdownHelper';
 
 import derivedTable from 'dash-table/derived/table';
 import derivedTableFragments from 'dash-table/derived/table/fragments';
 
-const DEFAULT_CELL_WIDTH = 200;
 const sortNumerical = R.sort<number>((a, b) => a - b);
 
 interface IState {
@@ -70,6 +69,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
         }
 
         this.handleResize();
+        this.applyStyle();
     }
 
     componentWillMount() {
@@ -92,6 +92,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
 
     componentDidUpdate() {
         this.handleResize();
+        this.applyStyle();
         this.handleDropdown();
     }
 
@@ -135,8 +136,6 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
 
         const { r0c0, r0c1, r1c0, r1c1 } = this.refs as { [key: string]: HTMLElement };
 
-        const { n_fixed_columns, n_fixed_rows } = this.props;
-
         // Adjust [fixed columns/fixed rows combo] to fixed rows height
         let trs = r0c1.querySelectorAll('tr');
         r0c0.querySelectorAll('tr').forEach((tr, index) => {
@@ -160,28 +159,6 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
             const contentTr = contentTd.parentElement as HTMLElement;
 
             this.stylesheet.setRule('.dash-fixed-column tr', `height: ${getComputedStyle(contentTr).height};`);
-        }
-
-        // Adjust the width of the fixed row header
-        if (n_fixed_rows) {
-            r1c1.querySelectorAll('tr:first-of-type td').forEach((td, index) => {
-                const width: any = getComputedStyle(td).width;
-                this.stylesheet.setRule(
-                    `.dash-fixed-row:not(.dash-fixed-column) th:nth-of-type(${index + 1})`,
-                    `width: ${width}; min-width: ${width}; max-width: ${width};`
-                );
-            });
-        }
-
-        // Adjust the width of the fixed row / fixed columns header
-        if (n_fixed_columns && n_fixed_rows) {
-            r1c0.querySelectorAll('tr:first-of-type td').forEach((td, index) => {
-                const width: any = getComputedStyle(td).width;
-                this.stylesheet.setRule(
-                    `.dash-fixed-column.dash-fixed-row th:nth-of-type(${index + 1})`,
-                    `width: ${width}; min-width: ${width}; max-width: ${width};`
-                );
-            });
         }
     }
 
@@ -540,8 +517,18 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
         paginator.loadPrevious();
     }
 
-    applyStyle = (columns: Columns, deletable: boolean, selectable: RowSelection) => {
-        if (deletable) {
+    applyStyle = () => {
+        const {
+            columns,
+            n_fixed_columns,
+            n_fixed_rows,
+            row_deletable,
+            row_selectable
+        } = this.props;
+
+        const { r1c0, r1c1 } = this.refs as { [key: string]: HTMLElement };
+
+        if (row_deletable) {
             this.stylesheet.setRule(
                 `.dash-spreadsheet-inner td.dash-delete-cell`,
                 `width: 30px; max-width: 30px; min-width: 30px;`
@@ -552,7 +539,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
             );
         }
 
-        if (selectable) {
+        if (row_selectable) {
             this.stylesheet.setRule(
                 `.dash-spreadsheet-inner td.dash-select-cell`,
                 `width: 30px; max-width: 30px; min-width: 30px;`
@@ -564,20 +551,75 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
         }
 
         R.addIndex<IColumn>(R.forEach)((column, index) => {
-            const width = Stylesheet.unit(column.width || DEFAULT_CELL_WIDTH, 'px');
-            const maxWidth = Stylesheet.unit(column.maxWidth || column.width || DEFAULT_CELL_WIDTH, 'px');
-            const minWidth = Stylesheet.unit(column.minWidth || column.width || DEFAULT_CELL_WIDTH, 'px');
+            const rules = [];
 
-            this.stylesheet.setRule(
-                `.dash-spreadsheet-inner td.column-${index}`,
-                `width: ${width}; max-width: ${maxWidth}; min-width: ${minWidth};`
-            );
+            if (column.width) {
+                rules.push(`width: ${Stylesheet.unit(column.width, 'px')};`);
+            }
 
-            this.stylesheet.setRule(
-                `.dash-spreadsheet-inner th.column-${index}`,
-                `width: ${width}; max-width: ${maxWidth}; min-width: ${minWidth};`
-            );
+            if (column.minWidth) {
+                rules.push(`min-width: ${Stylesheet.unit(column.minWidth, 'px')};`);
+            }
+
+            if(column.maxWidth) {
+                rules.push(`max-width: ${Stylesheet.unit(column.maxWidth, 'px')};`);
+            }
+
+            if (rules.length) {
+                const rule = rules.join(' ');
+
+                this.stylesheet.setRule(`.dash-spreadsheet-inner td.column-${index}`, rule);
+                this.stylesheet.setRule(`.dash-spreadsheet-inner th.column-${index}`, rule);
+            }
         }, columns);
+
+        // Adjust the width of the fixed row header
+        if (n_fixed_rows) {
+            r1c1.querySelectorAll('tr:first-of-type td').forEach((td, index) => {
+                const style = getComputedStyle(td);
+                const width = style.width;
+                const innerWidth = Stylesheet.unit(
+                    Stylesheet.extractDimension(style.width) -
+                    Stylesheet.extractDimension(style.paddingLeft) -
+                    Stylesheet.extractDimension(style.paddingRight) -
+                    1,
+                    'px'
+                );
+
+                this.stylesheet.setRule(
+                    `.dash-fixed-row:not(.dash-fixed-column) th:nth-of-type(${index + 1})`,
+                    `width: ${width}; min-width: ${width}; max-width: ${width};`
+                );
+
+                this.stylesheet.setRule(
+                    `.dash-fixed-content td:nth-of-type(${index + 1}) input`,
+                    `width: ${innerWidth};`
+                );
+            });
+        }
+
+        // Adjust the width of the fixed row / fixed columns header
+        if (n_fixed_columns && n_fixed_rows) {
+            r1c0.querySelectorAll('tr:first-of-type td').forEach((td, index) => {
+                const style = getComputedStyle(td);
+                const width = style.width;
+                const innerWidth = Stylesheet.unit(
+                    Stylesheet.extractDimension(style.width) -
+                    Stylesheet.extractDimension(style.paddingLeft) -
+                    Stylesheet.extractDimension(style.paddingRight) -
+                    1, 'px');
+
+                this.stylesheet.setRule(
+                    `.dash-fixed-column.dash-fixed-row th:nth-of-type(${index + 1})`,
+                    `width: ${width}; min-width: ${width}; max-width: ${width};`
+                );
+
+                this.stylesheet.setRule(
+                    `.dash-fixed-column td:nth-of-type(${index + 1}) input`,
+                    `width: ${innerWidth};`
+                );
+            });
+        }
     }
 
     handleDropdown = () => {
@@ -598,15 +640,10 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
     render() {
         const {
             id,
-            columns,
             content_style,
             n_fixed_columns,
             n_fixed_rows,
-            row_deletable,
-            row_selectable
         } = this.props;
-
-        this.applyStyle(columns, row_deletable, row_selectable);
 
         const classes = [
             'dash-spreadsheet-inner',
