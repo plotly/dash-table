@@ -32,11 +32,8 @@ export default class CellFactory {
 
     private handleClick = (idx: number, i: number, e: any) => {
         const {
-            columns,
             editable,
             is_focused,
-            row_deletable,
-            row_selectable,
             selected_cell,
             setProps
         } = this.props;
@@ -55,24 +52,12 @@ export default class CellFactory {
             return;
         }
 
-        // visible col indices
-        const columnIndexOffset =
-            (row_deletable ? 1 : 0) +
-            (row_selectable ? 1 : 0);
-
         e.preventDefault();
-        const cellLocation: [number, number] = [idx, i + columnIndexOffset];
+        const cellLocation: [number, number] = [idx, i];
         const newProps: Partial<ICellFactoryOptions> = {
             is_focused: false,
             active_cell: cellLocation
         };
-
-        const vci: any[] = [];
-        columns.forEach((c, ci: number) => {
-            if (!c.hidden) {
-                vci.push(ci + columnIndexOffset);
-            }
-        });
 
         const selectedRows = R.uniq(R.pluck(0, selected_cell)).sort((a, b) => a - b);
         const selectedCols = R.uniq(R.pluck(1, selected_cell)).sort((a, b) => a - b);
@@ -89,7 +74,7 @@ export default class CellFactory {
                     R.min(minCol, cellLocation[1]),
                     R.max(minCol, cellLocation[1]) + 1
                 )
-            ).filter(c => R.contains(c[1], vci)) as any;
+            ) as any;
         } else {
             newProps.selected_cell = [cellLocation];
         }
@@ -101,8 +86,6 @@ export default class CellFactory {
         const {
             editable,
             is_focused,
-            row_deletable,
-            row_selectable,
             setProps
         } = this.props;
 
@@ -110,12 +93,7 @@ export default class CellFactory {
             return;
         }
 
-        // visible col indices
-        const columnIndexOffset =
-            (row_deletable ? 1 : 0) +
-            (row_selectable ? 1 : 0);
-
-        const cellLocation: [number, number] = [idx, i + columnIndexOffset];
+        const cellLocation: [number, number] = [idx, i];
 
         if (!is_focused) {
             e.preventDefault();
@@ -165,7 +143,7 @@ export default class CellFactory {
 
         return !row_selectable ? null : (<td
             key='select'
-            className='select-cell'
+            className='dash-select-cell'
             style={{ width: `30px`, maxWidth: `30px`, minWidth: `30px` }}
         >
             <input
@@ -194,7 +172,7 @@ export default class CellFactory {
 
         return !row_deletable ? null : (<td
             key='delete'
-            className='delete-cell'
+            className='dash-delete-cell'
             onClick={() => setProps(actions.deleteRow(idx, this.props))}
             style={{ width: `30px`, maxWidth: `30px`, minWidth: `30px` }}
         >
@@ -214,29 +192,17 @@ export default class CellFactory {
             editable,
             id,
             is_focused,
-            row_deletable,
-            row_selectable,
             selected_cell,
-            virtualizer
+            viewport
         } = this.props;
 
-        const { dataframe, indices } = virtualizer;
-
-        const visibleColumns = columns.filter(column => !column.hidden);
-
-        const offset =
-            (row_deletable ? 1 : 0) +
-            (row_selectable ? 1 : 0);
-
-        return dataframe.map((datum, virtualIdx) => {
-            const realIdx = indices[virtualIdx];
+        return viewport.dataframe.map((datum, viewportIdx) => {
+            const realIdx = viewport.indices[viewportIdx];
 
             const deleteCell = this.rowDeleteCell(realIdx);
             const selectCell = this.rowSelectCell(realIdx);
 
-            const cells = visibleColumns.map((column, visibleIndex) => {
-                visibleIndex += offset;
-
+            const cells = columns.map((column, visibleIndex) => {
                 let legacyDropdown: any = (
                     (
                         dropdown_properties &&
@@ -251,7 +217,7 @@ export default class CellFactory {
 
                 const index = columns.indexOf(column);
 
-                const classes = [`column-${index + offset}`];
+                const classes = [`column-${index}`];
 
                 let conditionalDropdowns = column_conditional_dropdowns.find((cd: any) => cd.id === column.id);
                 let staticDropdown = column_static_dropdown.find((sd: any) => sd.id === column.id);
@@ -267,7 +233,7 @@ export default class CellFactory {
 
                 return (<Cell
                     key={`${column.id}-${visibleIndex}`}
-                    active={active_cell[0] === virtualIdx && active_cell[1] === index + offset}
+                    active={active_cell[0] === viewportIdx && active_cell[1] === index}
                     classes={classes}
                     clearable={column.clearable}
                     conditionalDropdowns={conditionalDropdowns}
@@ -275,12 +241,12 @@ export default class CellFactory {
                     datum={datum}
                     editable={editable}
                     focused={!!is_focused}
-                    onClick={this.getEventHandler(this.handleClick, virtualIdx, index)}
-                    onDoubleClick={this.getEventHandler(this.handleDoubleClick, virtualIdx, index)}
+                    onClick={this.getEventHandler(this.handleClick, viewportIdx, index)}
+                    onDoubleClick={this.getEventHandler(this.handleDoubleClick, viewportIdx, index)}
                     onPaste={this.handlePaste}
                     onChange={this.getEventHandler(this.handleChange, realIdx, index)}
                     property={column.id}
-                    selected={R.contains([virtualIdx, index + offset], selected_cell)}
+                    selected={R.contains([viewportIdx, index], selected_cell)}
                     staticDropdown={staticDropdown}
                     staticStyle={staticStyle}
                     tableId={id}

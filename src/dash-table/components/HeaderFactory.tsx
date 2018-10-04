@@ -7,39 +7,44 @@ import multiUpdateSettings from 'core/sorting/multi';
 import singleUpdateSettings from 'core/sorting/single';
 
 import * as actions from 'dash-table/utils/actions';
-import { ColumnId, Columns, Dataframe, RowSelection, SetProps, SortingType } from 'dash-table/components/Table/props';
+import {
+    ColumnId,
+    ControlledTableProps,
+    PaginationMode,
+    RowSelection,
+    SetProps,
+    Sorting,
+    SortingType,
+    VisibleColumns
+} from 'dash-table/components/Table/props';
 
 export const DEFAULT_CELL_WIDTH = 200;
 
 interface ICellOptions {
-    columns: Columns;
+    columns: VisibleColumns;
     columnRowIndex: any;
-    dataframe: Dataframe;
     labels: any[];
     mergeCells?: boolean;
     n_fixed_columns: number;
-    offset: number;
-    rowSorting: string | boolean;
+    rowSorting: Sorting;
     setProps: SetProps;
     sorting_settings: SortSettings;
     sorting_type: SortingType;
-    virtualization: any;
+    pagination_mode: PaginationMode;
 }
 
 interface IOptions {
-    columns: Columns;
-    dataframe: Dataframe;
+    columns: VisibleColumns;
     mergeCells?: boolean;
     merge_duplicate_headers: boolean;
     n_fixed_columns: number;
-    n_fixed_rows: number;
     row_deletable: boolean;
     row_selectable: RowSelection;
     setProps: SetProps;
-    sorting: string | boolean;
+    sorting: Sorting;
     sorting_settings: SortSettings;
     sorting_type: SortingType;
-    virtualization: any;
+    pagination_mode: PaginationMode;
 }
 
 const getColLength = (c: any) => (Array.isArray(c.name) ? c.name.length : 1);
@@ -60,18 +65,26 @@ function deleteColumn(column: any, columnRowIndex: any, options: ICellOptions) {
 }
 
 export default class HeaderFactory {
-    private static getSorting(columnId: ColumnId, settings: SortSettings): SortDirection {
+    private get props() {
+        return this.propsFn();
+    }
+
+    constructor(private readonly propsFn: () => ControlledTableProps) {
+
+    }
+
+    private getSorting(columnId: ColumnId, settings: SortSettings): SortDirection {
         const setting = R.find(s => s.columnId === columnId, settings);
 
         return setting ? setting.direction : SortDirection.None;
     }
 
-    private static doSort(columnId: ColumnId, options: ICellOptions) {
+    private doSort(columnId: ColumnId, options: ICellOptions) {
         return () => {
             const { sorting_settings, sorting_type } = options;
 
             let direction: SortDirection;
-            switch (HeaderFactory.getSorting(columnId, sorting_settings)) {
+            switch (this.getSorting(columnId, sorting_settings)) {
                 case SortDirection.Descending:
                     direction = SortDirection.Ascending;
                     break;
@@ -97,10 +110,10 @@ export default class HeaderFactory {
         };
     }
 
-    private static getSortingIcon(columnId: ColumnId, options: ICellOptions) {
+    private getSortingIcon(columnId: ColumnId, options: ICellOptions) {
         const { sorting_settings } = options;
 
-        switch (HeaderFactory.getSorting(columnId, sorting_settings)) {
+        switch (this.getSorting(columnId, sorting_settings)) {
             case SortDirection.Descending:
                 return '↑';
             case SortDirection.Ascending:
@@ -111,16 +124,15 @@ export default class HeaderFactory {
         }
     }
 
-    private static createHeaderCells(options: ICellOptions) {
+    private createHeaderCells(options: ICellOptions) {
         const {
             columns,
             columnRowIndex,
             labels,
             mergeCells,
             n_fixed_columns,
-            offset,
-            rowSorting,
-            virtualization
+            pagination_mode,
+            rowSorting
         } = options;
 
         let columnIndices: any[] = [];
@@ -133,7 +145,7 @@ export default class HeaderFactory {
             labels.forEach((label, i) => {
                 // Skip over hidden columns for labels selection / filtering;
                 // otherwise they will be filtered out when generating the headers
-                if (columns[i].hidden || label === labels[compareIndex]) {
+                if (label === labels[compareIndex]) {
                     return;
                 }
                 columnIndices.push(i);
@@ -141,41 +153,31 @@ export default class HeaderFactory {
             });
         }
 
-        const visibleColumns = columns.filter(column => !column.hidden);
-
         return R.filter(column => !!column, columnIndices.map((columnId, spanId) => {
             const c = columns[columnId];
-            if (c.hidden) {
-                return null;
-            }
 
-            const visibleIndex = visibleColumns.indexOf(c) + offset;
+            const visibleIndex = columns.indexOf(c);
 
             let colSpan: number;
             if (!mergeCells) {
                 colSpan = 1;
             } else {
-                const nHiddenColumns = (
-                    R.slice(columnId, columnIndices[spanId + 1] || Infinity, columns)
-                        .filter(R.propEq('hidden', true))
-                        .length);
                 if (columnId === R.last(columnIndices)) {
-                    colSpan = labels.length - columnId - nHiddenColumns;
+                    colSpan = labels.length - columnId;
                 } else {
-                    colSpan = columnIndices[spanId + 1] - columnId - nHiddenColumns;
+                    colSpan = columnIndices[spanId + 1] - columnId;
                 }
             }
 
             // This is not efficient and can be improved upon...
             // Fixed columns need to override the default cell behavior when they span multiple columns
             // Find all columns that fit the header's range [index, index+colspan[ and keep the fixed/visible ones
-            const visibleColumnId = visibleColumns.indexOf(c);
+            const visibleColumnId = columns.indexOf(c);
 
-            const spannedColumns = visibleColumns.filter((column, index) =>
-                !column.hidden &&
+            const spannedColumns = columns.filter((_column, index) =>
                 index >= visibleColumnId &&
                 index < visibleColumnId + colSpan &&
-                index + offset < n_fixed_columns
+                index < n_fixed_columns
             );
 
             // Calculate the width of all those columns combined
@@ -185,9 +187,11 @@ export default class HeaderFactory {
 
             return (<th
                 key={`header-cell-${columnId}`}
+                data-dash-column={c.id}
                 colSpan={colSpan}
                 className={
-                    `column-${columnId + offset} ` +
+                    `dash-header ` +
+                    `column-${columnId} ` +
                     (columnId === columns.length - 1 || columnId === R.last(columnIndices) ? 'cell--right-last ' : '')
                 }
                 style={visibleIndex < n_fixed_columns ? { maxWidth, minWidth, width } : undefined}
@@ -195,9 +199,9 @@ export default class HeaderFactory {
                 {rowSorting ? (
                     <span
                         className='sort'
-                        onClick={HeaderFactory.doSort(c.id, options)}
+                        onClick={this.doSort(c.id, options)}
                     >
-                        {HeaderFactory.getSortingIcon(c.id, options)}
+                        {this.getSortingIcon(c.id, options)}
                     </span>) : ('')
                 }
 
@@ -212,7 +216,7 @@ export default class HeaderFactory {
                         </span>
                     ) : ''}
 
-                {((c.deletable && virtualization !== 'be' && R.type(c.deletable) === 'Boolean') ||
+                {((c.deletable && pagination_mode !== 'be' && R.type(c.deletable) === 'Boolean') ||
                     (R.type(c.deletable) === 'Number' &&
                         c.deletable === columnRowIndex)) ? (
                         <span
@@ -229,52 +233,55 @@ export default class HeaderFactory {
         }));
     }
 
-    private static createDeletableHeader(options: IOptions) {
+    private createDeletableHeader(options: IOptions) {
         const { row_deletable } = options;
 
         return !row_deletable ? null : (
             <th
                 key='delete'
-                className='expanded-row--empty-cell'
+                className='expanded-row--empty-cell dash-delete-header'
                 style={{ width: `30px`, maxWidth: `30px`, minWidth: `30px` }}
 
             />
         );
     }
 
-    private static createSelectableHeader(options: IOptions) {
+    private createSelectableHeader(options: IOptions) {
         const { row_selectable } = options;
 
         return !row_selectable ? null : (
             <th
                 key='select'
-                className='expanded-row--empty-cell'
+                className='expanded-row--empty-cell dash-select-header'
                 style={{ width: `30px`, maxWidth: `30px`, minWidth: `30px` }}
             />
         );
     }
 
-    static createHeaders(options: IOptions) {
+    public createHeaders() {
+        const props = this.props;
+
         let {
             columns,
-            dataframe,
             sorting,
             merge_duplicate_headers,
             n_fixed_columns,
+            pagination_mode,
             row_deletable,
             row_selectable,
             setProps,
             sorting_settings,
-            sorting_type,
-            virtualization
-        } = options;
+            sorting_type
+        } = props;
 
         const offset =
             (row_deletable ? 1 : 0) +
             (row_selectable ? 1 : 0);
 
-        const deletableCell = this.createDeletableHeader(options);
-        const selectableCell = this.createSelectableHeader(options);
+        n_fixed_columns = Math.max(0, n_fixed_columns - offset);
+
+        const deletableCell = this.createDeletableHeader(props);
+        const selectableCell = this.createSelectableHeader(props);
 
         const headerDepth = Math.max.apply(Math, columns.map(getColLength));
 
@@ -283,28 +290,25 @@ export default class HeaderFactory {
             headers = [[
                 ...(deletableCell ? [deletableCell] : []),
                 ...(selectableCell ? [selectableCell] : []),
-                ...(HeaderFactory.createHeaderCells({
+                ...(this.createHeaderCells({
                     columns,
                     columnRowIndex: 0,
-                    dataframe,
                     labels: R.pluck('name', columns),
                     n_fixed_columns,
-                    offset,
+                    pagination_mode,
                     rowSorting: sorting,
                     setProps,
                     sorting_settings,
-                    sorting_type,
-                    virtualization
+                    sorting_type
                 }))
             ]];
         } else {
             headers = R.range(0, headerDepth).map(i => ([
                 ...(deletableCell ? [deletableCell] : []),
                 ...(selectableCell ? [selectableCell] : []),
-                ...(HeaderFactory.createHeaderCells({
+                ...(this.createHeaderCells({
                     columns,
                     columnRowIndex: i,
-                    dataframe,
                     labels: columns.map(
                         c =>
                             R.isNil(c.name) && i === headerDepth - 1
@@ -312,15 +316,14 @@ export default class HeaderFactory {
                                 : getColNameAt(c, i)
                     ),
                     n_fixed_columns,
-                    offset,
+                    pagination_mode,
                     rowSorting: !!sorting && i + 1 === headerDepth,
                     mergeCells:
                         merge_duplicate_headers &&
                         i + 1 !== headerDepth,
                     setProps,
                     sorting_settings,
-                    sorting_type,
-                    virtualization
+                    sorting_type
                 }))
             ]));
         }

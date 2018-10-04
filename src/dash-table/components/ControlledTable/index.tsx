@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import * as R from 'ramda';
 import Stylesheet from 'core/Stylesheet';
 import { colIsEditable } from 'dash-table/components/derivedState';
@@ -11,16 +11,16 @@ import {
 } from 'dash-table/utils/unicode';
 import { selectionCycle } from 'dash-table/utils/navigation';
 
-import HeaderCellFactory, { DEFAULT_CELL_WIDTH } from 'dash-table/components/HeaderFactory';
+import HeaderFactory, { DEFAULT_CELL_WIDTH } from 'dash-table/components/HeaderFactory';
 import Logger from 'core/Logger';
 import { memoizeOne } from 'core/memoizer';
 import lexer from 'core/syntax-tree/lexer';
 
 import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
 import CellFactory from 'dash-table/components/CellFactory';
-import { ControlledTableProps, Columns, RowSelection } from 'dash-table/components/Table/props';
+import { ControlledTableProps, Columns, RowSelection, IColumn } from 'dash-table/components/Table/props';
 import dropdownHelper from 'dash-table/components/dropdownHelper';
-import HeaderFilterFactory from 'dash-table/components/FilterFactory';
+import FilterFactory from 'dash-table/components/FilterFactory';
 
 const sortNumerical = R.sort<number>((a, b) => a - b);
 
@@ -29,33 +29,37 @@ interface IAccumulator {
     count: number;
 }
 
-export default class ControlledTable extends Component<ControlledTableProps> {
+export default class ControlledTable extends PureComponent<ControlledTableProps> {
     private stylesheet: Stylesheet;
     private cellFactory: CellFactory;
-    private filterFactory: HeaderFilterFactory;
+    private filterFactory: FilterFactory;
+    private headerFactory: HeaderFactory;
 
     constructor(props: ControlledTableProps) {
         super(props);
 
         this.cellFactory = new CellFactory(() => this.props);
-        this.filterFactory = new HeaderFilterFactory(() => {
+        this.filterFactory = new FilterFactory(() => {
             const { row_deletable, row_selectable } = this.props;
 
-            const offset =
+            const fillerColumns =
                 (row_deletable ? 1 : 0) +
                 (row_selectable ? 1 : 0);
 
             return {
                 columns: this.props.columns,
+                fillerColumns,
                 filtering: this.props.filtering,
                 filtering_settings: this.props.filtering_settings,
                 filtering_type: this.props.filtering_type,
                 id: this.props.id,
-                offset,
                 setFilter: this.handleSetFilter
             };
         });
+        this.headerFactory = new HeaderFactory(() => this.props);
+
         this.stylesheet = new Stylesheet(`#${props.id}`);
+        this.updateStylesheet();
     }
 
     getLexerResult = memoizeOne(lexer);
@@ -64,6 +68,14 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         const { filtering_settings } = this.props;
 
         return this.getLexerResult(filtering_settings);
+    }
+
+    private updateStylesheet() {
+        const { table_style } = this.props;
+
+        R.forEach(({ selector, rule }) => {
+            this.stylesheet.setRule(selector, rule);
+        }, table_style);
     }
 
     componentDidMount() {
@@ -88,11 +100,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
     }
 
     componentWillUpdate() {
-        const { table_style } = this.props;
-
-        R.forEach(({ selector, rule }) => {
-            this.stylesheet.setRule(selector, rule);
-        }, table_style);
+        this.updateStylesheet();
     }
 
     componentDidUpdate() {
@@ -241,14 +249,10 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         const {
             active_cell,
             columns,
-            row_deletable,
-            row_selectable,
             selected_cell,
             setProps,
-            virtualizer
+            viewport
         } = this.props;
-
-        const dataframe = virtualizer.dataframe;
 
         // This is mostly to prevent TABing also triggering native HTML tab
         // navigation. If the preventDefault is too greedy here we must
@@ -306,18 +310,6 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         const maxRow = selectedRows[selectedRows.length - 1];
         const maxCol = selectedCols[selectedCols.length - 1];
 
-        // visible col indices
-        const columnIndexOffset =
-            (row_deletable ? 1 : 0) +
-            (row_selectable ? 1 : 0);
-
-        const vci: any[] = [];
-        columns.forEach((c, i) => {
-            if (!c.hidden) {
-                vci.push(i + columnIndexOffset);
-            }
-        });
-
         const selectingDown =
             e.keyCode === KEY_CODES.ARROW_DOWN || e.keyCode === KEY_CODES.ENTER;
         const selectingUp = e.keyCode === KEY_CODES.ARROW_UP;
@@ -330,7 +322,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         // the active cell.
         if (selectingDown && active_cell[0] > minRow) {
             removeCells = selectedCols.map(col => [minRow, col]);
-        } else if (selectingDown && maxRow !== dataframe.length - 1) {
+        } else if (selectingDown && maxRow !== viewport.dataframe.length - 1) {
             // Otherwise if we are selecting down select the next row if possible.
             targetCells = selectedCols.map(col => [maxRow + 1, col]);
         } else if (selectingUp && active_cell[0] < maxRow) {
@@ -351,7 +343,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             // If there are selections to the left of the active cell and
             // we are selecting right, move the left side closer to active_cell
             removeCells = selectedRows.map(row => [row, minCol]);
-        } else if (selectingRight && maxCol + 1 <= R.last(vci)) {
+        } else if (selectingRight && maxCol + 1 <= columns.length - 1) {
             // Otherwise move selection right if possible
             targetCells = selectedRows.map(row => [row, maxCol + 1]);
         }
@@ -371,23 +363,17 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             columns,
             dataframe,
             editable,
-            row_deletable,
-            row_selectable,
             selected_cell,
             setProps,
-            virtual_dataframe_indices
+            viewport
         } = this.props;
 
         event.preventDefault();
 
         let newDataframe = dataframe;
 
-        const columnIndexOffset =
-            (row_deletable ? 1 : 0) +
-            (row_selectable ? 1 : 0);
-
         const realCells: [number, number][] = R.map(
-            cell => [virtual_dataframe_indices[cell[0]], cell[1] - columnIndexOffset] as [number, number],
+            cell => [viewport.indices[cell[0]], cell[1]] as [number, number],
             selected_cell
         );
 
@@ -407,23 +393,9 @@ export default class ControlledTable extends Component<ControlledTableProps> {
     }
 
     getNextCell = (event: any, { restrictToSelection, currentCell }: any) => {
-        const { columns, row_deletable, row_selectable, selected_cell, virtualizer } = this.props;
-        const dataframe = virtualizer.dataframe;
+        const { columns, selected_cell, viewport } = this.props;
 
         const e = event;
-        const vci: any[] = [];
-
-        const columnIndexOffset =
-            (row_deletable ? 1 : 0) +
-            (row_selectable ? 1 : 0);
-
-        if (!restrictToSelection) {
-            columns.forEach((c, i) => {
-                if (!c.hidden) {
-                    vci.push(i + columnIndexOffset);
-                }
-            });
-        }
 
         switch (e.keyCode) {
             case KEY_CODES.ARROW_LEFT:
@@ -434,10 +406,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
                     )
                     : [
                         currentCell[0],
-                        R.max(
-                            vci[0],
-                            vci[R.indexOf(currentCell[1], vci) - 1]
-                        )
+                        R.max(0, currentCell[1] - 1)
                     ];
 
             case KEY_CODES.ARROW_RIGHT:
@@ -449,10 +418,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
                     )
                     : [
                         currentCell[0],
-                        R.min(
-                            R.last(vci),
-                            vci[R.indexOf(currentCell[1], vci) + 1]
-                        )
+                        R.min(columns.length - 1, currentCell[1] + 1)
                     ];
 
             case KEY_CODES.ARROW_UP:
@@ -471,7 +437,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
                         selected_cell
                     )
                     : [
-                        R.min(dataframe.length - 1, currentCell[0] + 1),
+                        R.min(viewport.dataframe.length - 1, currentCell[0] + 1),
                         currentCell[1]
                     ];
 
@@ -485,23 +451,11 @@ export default class ControlledTable extends Component<ControlledTableProps> {
     onCopy = (e: any) => {
         const {
             columns,
-            row_deletable,
-            row_selectable,
             selected_cell,
-            virtualizer
+            viewport
         } = this.props;
-        const dataframe = virtualizer.dataframe;
 
-        const columnIndexOffset =
-            (row_deletable ? 1 : 0) +
-            (row_selectable ? 1 : 0);
-
-        const noOffsetSelectedCells: [number, number][] = R.map(
-            cell => [cell[0], cell[1] - columnIndexOffset] as [number, number],
-            selected_cell
-        );
-
-        TableClipboardHelper.toClipboard(e, noOffsetSelectedCells, columns, dataframe);
+        TableClipboardHelper.toClipboard(e, selected_cell, columns, viewport.dataframe);
         this.$el.focus();
     }
 
@@ -512,27 +466,19 @@ export default class ControlledTable extends Component<ControlledTableProps> {
             dataframe,
             editable,
             filtering_settings,
-            row_deletable,
-            row_selectable,
             setProps,
             sorting_settings,
-            virtual_dataframe_indices
+            viewport
         } = this.props;
 
         if (!editable) {
             return;
         }
 
-        const columnIndexOffset =
-            (row_deletable ? 1 : 0) +
-            (row_selectable ? 1 : 0);
-
-        const noOffsetActiveCell: [number, number] = [active_cell[0], active_cell[1] - columnIndexOffset];
-
         const result = TableClipboardHelper.fromClipboard(
             e,
-            noOffsetActiveCell,
-            virtual_dataframe_indices,
+            active_cell,
+            viewport.indices,
             columns,
             dataframe,
             true,
@@ -548,88 +494,65 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         const {
             dataframe,
             navigation,
-            virtualization,
-            virtualization_settings
+            pagination_mode,
+            pagination_settings
         } = this.props;
 
         return navigation === 'page' &&
             (
-                (virtualization === 'fe' && virtualization_settings.page_size < dataframe.length) ||
-                virtualization === 'be'
+                (pagination_mode === 'fe' && pagination_settings.page_size < dataframe.length) ||
+                pagination_mode === 'be'
             );
     }
 
     loadNext = () => {
-        const { virtualizer } = this.props;
+        const { paginator } = this.props;
 
-        virtualizer.loadNext();
+        paginator.loadNext();
     }
 
     loadPrevious = () => {
-        const { virtualizer } = this.props;
+        const { paginator } = this.props;
 
-        virtualizer.loadPrevious();
-    }
-
-    onContainerScroll = (ev: any) => {
-        const { n_fixed_columns } = this.props;
-        if (!n_fixed_columns) {
-            return;
-        }
-
-        const { spreadsheet } = this.refs;
-        if (ev.target !== spreadsheet) {
-            return;
-        }
-
-        this.stylesheet.setRule(`.frozen-left`, `margin-top: ${-ev.target.scrollTop}px;`);
+        paginator.loadPrevious();
     }
 
     applyStyle = (columns: Columns, deletable: boolean, selectable: RowSelection) => {
-        let typeIndex = 0;
-
         if (deletable) {
-
             this.stylesheet.setRule(
-                `.dash-spreadsheet-inner td.column-${typeIndex}`,
+                `.dash-spreadsheet-inner td.dash-delete-cell`,
                 `width: 30px; max-width: 30px; min-width: 30px;`
             );
             this.stylesheet.setRule(
-                `.dash-spreadsheet-inner th.column-${typeIndex}`,
+                `.dash-spreadsheet-inner th.dash-delete-header`,
                 `width: 30px; max-width: 30px; min-width: 30px;`
             );
-
-            ++typeIndex;
         }
 
         if (selectable) {
             this.stylesheet.setRule(
-                `.dash-spreadsheet-inner td.column-${typeIndex}`,
+                `.dash-spreadsheet-inner td.dash-select-cell`,
                 `width: 30px; max-width: 30px; min-width: 30px;`
             );
             this.stylesheet.setRule(
-                `.dash-spreadsheet-inner th.column-${typeIndex}`,
+                `.dash-spreadsheet-inner th.dash-select-header`,
                 `width: 30px; max-width: 30px; min-width: 30px;`
             );
-
-            ++typeIndex;
         }
 
-        R.forEach(column => {
+        R.addIndex<IColumn>(R.forEach)((column, index) => {
             const width = Stylesheet.unit(column.width || DEFAULT_CELL_WIDTH, 'px');
             const maxWidth = Stylesheet.unit(column.maxWidth || column.width || DEFAULT_CELL_WIDTH, 'px');
             const minWidth = Stylesheet.unit(column.minWidth || column.width || DEFAULT_CELL_WIDTH, 'px');
 
             this.stylesheet.setRule(
-                `.dash-spreadsheet-inner td.column-${typeIndex}`,
+                `.dash-spreadsheet-inner td.column-${index}`,
                 `width: ${width}; max-width: ${maxWidth}; min-width: ${minWidth};`
             );
             this.stylesheet.setRule(
-                `.dash-spreadsheet-inner th.column-${typeIndex}`,
+                `.dash-spreadsheet-inner th.column-${index}`,
                 `width: ${width}; max-width: ${maxWidth}; min-width: ${minWidth};`
             );
-
-            ++typeIndex;
         }, columns);
     }
 
@@ -649,7 +572,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
 
     getCells = () => {
         return [
-            ...HeaderCellFactory.createHeaders(this.props),
+            ...this.headerFactory.createHeaders(),
             ...this.filterFactory.createFilters(),
             ...this.cellFactory.createCells()
         ];
@@ -718,15 +641,15 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         const classes = [
             'dash-spreadsheet-inner',
             'dash-spreadsheet',
-            ...(n_fixed_rows ? ['freeze-top'] : []),
-            ...(n_fixed_columns ? ['freeze-left'] : [])
+            ...(n_fixed_rows ? ['dash-freeze-top'] : []),
+            ...(n_fixed_columns ? ['dash-freeze-left'] : [])
         ];
 
         const containerClasses = [
             'dash-spreadsheet',
             'dash-spreadsheet-container',
-            ...(n_fixed_rows ? ['freeze-top'] : []),
-            ...(n_fixed_columns ? ['freeze-left'] : [])
+            ...(n_fixed_rows ? ['dash-freeze-top'] : []),
+            ...(n_fixed_columns ? ['dash-freeze-left'] : [])
         ];
 
         const cells = this.getCells();
