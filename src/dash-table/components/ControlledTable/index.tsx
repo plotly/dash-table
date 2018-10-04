@@ -637,6 +637,11 @@ export default class ControlledTable extends Component<ControlledTableProps> {
                 `width: ${width}; max-width: ${maxWidth}; min-width: ${minWidth};`
             );
 
+            this.stylesheet.setRule(
+                `.dash-spreadsheet-inner th.column-${typeIndex}`,
+                `width: ${width}; max-width: ${maxWidth}; min-width: ${minWidth};`
+            );
+
             ++typeIndex;
         }, columns);
     }
