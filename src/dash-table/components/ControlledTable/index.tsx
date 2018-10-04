@@ -11,7 +11,6 @@ import {
 } from 'dash-table/utils/unicode';
 import { selectionCycle } from 'dash-table/utils/navigation';
 
-import { DEFAULT_CELL_WIDTH } from 'dash-table/components/HeaderFactory';
 import Logger from 'core/Logger';
 import { memoizeOne } from 'core/memoizer';
 import lexer from 'core/syntax-tree/lexer';
@@ -23,6 +22,7 @@ import dropdownHelper from 'dash-table/components/dropdownHelper';
 import derivedTable from 'dash-table/derived/table';
 import derivedTableFragments from 'dash-table/derived/table/fragments';
 
+const DEFAULT_CELL_WIDTH = 200;
 const sortNumerical = R.sort<number>((a, b) => a - b);
 
 interface IState {

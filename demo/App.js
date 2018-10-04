@@ -26,7 +26,6 @@ class App extends Component {
                     deletable: true,
                 //     type: 'dropdown'
                 })),
-                content_style: 'grow',
                 editable: true,
                 sorting: true,
                 n_fixed_rows: 4,
