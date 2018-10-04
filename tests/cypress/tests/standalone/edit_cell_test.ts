@@ -62,11 +62,25 @@ describe('edit cell', () => {
         });
     });
 
-    it.only('can edit on 2nd page', () => {
+    it('can edit on 2nd page', () => {
         DashTable.getCell(0, 0).click();
         DashTable.getCell(0, 0).within(() => cy.get('input').should('have.value', '1'));
         cy.get('button.next-page').click();
         DashTable.getCell(0, 0).within(() => cy.get('input').should('have.value', '251'));
+
+        DOM.focused.type(`abc${Key.Enter}`);
+        DashTable.getCell(0, 0).click();
+        DashTable.getCell(0, 0).within(() => cy.get('input').should('have.value', 'abc'));
+    });
+
+    it('can delete then edit on 2nd page', () => {
+        DashTable.getCell(0, 0).click();
+        DashTable.getCell(0, 0).within(() => cy.get('input').should('have.value', '1'));
+        cy.get('button.next-page').click();
+        DashTable.getCell(0, 0).within(() => cy.get('input').should('have.value', '251'));
+        DashTable.getDelete(0).click();
+        DashTable.getCell(0, 0).click();
+        DashTable.getCell(0, 0).within(() => cy.get('input').should('have.value', '252'));
 
         DOM.focused.type(`abc${Key.Enter}`);
         DashTable.getCell(0, 0).click();

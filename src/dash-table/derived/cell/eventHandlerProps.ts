@@ -18,14 +18,8 @@ const getter = (propsFn: () => ICellFactoryOptions): CacheFn => {
             columnIndex
         ] = args;
 
-        const {
-            viewport
-        } = propsFn();
-
-        const realIndex = viewport.indices[rowIndex];
-
         return {
-            onChange: derivedHandlers(Handler.Change, realIndex, columnIndex),
+            onChange: derivedHandlers(Handler.Change, rowIndex, columnIndex),
             onClick: derivedHandlers(Handler.Click, rowIndex, columnIndex),
             onDoubleClick: derivedHandlers(Handler.DoubleClick, rowIndex, columnIndex),
             onPaste: derivedHandlers(Handler.Paste, rowIndex, columnIndex)
