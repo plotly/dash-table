@@ -124,7 +124,7 @@ export default class ControlledTable extends Component<ControlledTableProps> {
     handleResize = () => {
         const { r0c0, r0c1, r1c0, r1c1 } = this.refs as { [key: string]: HTMLElement };
 
-        const { table_style } = this.props;
+        const { n_fixed_columns, n_fixed_rows, table_style } = this.props;
 
         R.forEach(({ selector, rule }) => {
             this.stylesheet.setRule(selector, rule);
@@ -156,22 +156,26 @@ export default class ControlledTable extends Component<ControlledTableProps> {
         }
 
         // Adjust the width of the fixed row header
-        r1c0.querySelectorAll('tr:first-of-type td').forEach((td, index) => {
-            const width: any = getComputedStyle(td).width;
-            this.stylesheet.setRule(
-                `.cell-0-0 th:nth-of-type(${index + 1})`,
-                `width: ${width}; min-width: ${width}; max-width: ${width};`
-            );
-        });
+        if (n_fixed_rows) {
+            r1c1.querySelectorAll('tr:first-of-type td').forEach((td, index) => {
+                const width: any = getComputedStyle(td).width;
+                this.stylesheet.setRule(
+                    `.dash-fixed-row:not(.dash-fixed-column) th:nth-of-type(${index + 1})`,
+                    `width: ${width}; min-width: ${width}; max-width: ${width};`
+                );
+            });
+        }
 
-        // Adjust the width of the fixed row header
-        r1c1.querySelectorAll('tr:first-of-type td').forEach((td, index) => {
-            const width: any = getComputedStyle(td).width;
-            this.stylesheet.setRule(
-                `.cell-0-1 th:nth-of-type(${index + 1})`,
-                `width: ${width}; min-width: ${width}; max-width: ${width};`
-            );
-        });
+        // Adjust the width of the fixed row / fixed columns header
+        if (n_fixed_columns && n_fixed_rows) {
+            r1c0.querySelectorAll('tr:first-of-type td').forEach((td, index) => {
+                const width: any = getComputedStyle(td).width;
+                this.stylesheet.setRule(
+                    `.dash-fixed-column.dash-fixed-row th:nth-of-type(${index + 1})`,
+                    `width: ${width}; min-width: ${width}; max-width: ${width};`
+                );
+            });
+        }
     }
 
     get $el() {
