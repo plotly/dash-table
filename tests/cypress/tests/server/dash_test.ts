@@ -42,7 +42,7 @@ describe('dash basic', () => {
     });
 
     // https://github.com/plotly/dash-table/issues/107
-    it.only('can edit last and update dataframe on "tab"', () => {
+    it('can edit last and update dataframe on "tab"', () => {
         DashTable.getCell(249, 2).click();
         DOM.focused.then($input => {
             const initialValue = $input.val();
