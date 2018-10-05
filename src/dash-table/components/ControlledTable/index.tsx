@@ -561,7 +561,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
                 rules.push(`min-width: ${Stylesheet.unit(column.minWidth, 'px')};`);
             }
 
-            if(column.maxWidth) {
+            if (column.maxWidth) {
                 rules.push(`max-width: ${Stylesheet.unit(column.maxWidth, 'px')};`);
             }
 

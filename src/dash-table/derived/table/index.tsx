@@ -21,7 +21,6 @@ function filterPropsFn(propsFn: () => ControlledTableProps) {
         (row_deletable ? 1 : 0) +
         (row_selectable ? 1 : 0);
 
-
     return {
         columns: columns,
         fillerColumns,

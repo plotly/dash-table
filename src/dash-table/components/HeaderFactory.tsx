@@ -5,7 +5,6 @@ import { arrayMap } from 'core/math/arrayZipMap';
 import { matrixMap } from 'core/math/matrixZipMap';
 
 import { ControlledTableProps } from 'dash-table/components/Table/props';
-
 import derivedHeaderContent from 'dash-table/derived/header/content';
 import getHeaderRows from 'dash-table/derived/header/headerRows';
 import getIndices from 'dash-table/derived/header/indices';
