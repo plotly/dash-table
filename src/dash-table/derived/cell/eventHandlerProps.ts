@@ -13,7 +13,7 @@ const getter = (propsFn: () => ICellFactoryOptions): CacheFn => {
     const derivedHandlers = cellEventHandler()(propsFn);
 
     return (...args: CacheArgs) => {
-        let [
+        const [
             rowIndex,
             columnIndex
         ] = args;

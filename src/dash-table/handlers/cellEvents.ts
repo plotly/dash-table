@@ -86,17 +86,19 @@ export const handleChange = (propsFn: () => ICellFactoryOptions, idx: number, i:
         columns,
         dataframe,
         editable,
-        setProps
+        setProps,
+        viewport
     } = propsFn();
 
     const c = columns[i];
+    const realIdx = viewport.indices[idx];
 
     if (!editable) {
         return;
     }
 
     const newDataframe = R.set(
-        R.lensPath([idx, c.id]),
+        R.lensPath([realIdx, c.id]),
         value,
         dataframe
     );
