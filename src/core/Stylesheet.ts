@@ -99,7 +99,6 @@ export default class Stylesheet {
             if (result.rule.cssText === css || result.rule.cssText === `${selector} { ${css} }`) {
                 return;
             } else {
-                console.log('change', selector, css);
                 this.stylesheet.deleteRule(result.index);
             }
         }
