@@ -11,54 +11,37 @@ import {
 } from 'dash-table/utils/unicode';
 import { selectionCycle } from 'dash-table/utils/navigation';
 
-import HeaderFactory, { DEFAULT_CELL_WIDTH } from 'dash-table/components/HeaderFactory';
+import { DEFAULT_CELL_WIDTH } from 'dash-table/components/HeaderFactory';
 import Logger from 'core/Logger';
 import { memoizeOne } from 'core/memoizer';
 import lexer from 'core/syntax-tree/lexer';
 
 import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
-import CellFactory from 'dash-table/components/CellFactory';
 import { ControlledTableProps, Columns, RowSelection, IColumn } from 'dash-table/components/Table/props';
 import dropdownHelper from 'dash-table/components/dropdownHelper';
-import FilterFactory from 'dash-table/components/FilterFactory';
+
+import derivedTable from 'dash-table/derived/table';
+import derivedTableFragments from 'dash-table/derived/table/fragments';
 
 const sortNumerical = R.sort<number>((a, b) => a - b);
 
-interface IAccumulator {
-    cells: number;
-    count: number;
+interface IState {
+    forcedResizeOnly: boolean;
 }
 
-export default class ControlledTable extends PureComponent<ControlledTableProps> {
-    private stylesheet: Stylesheet;
-    private cellFactory: CellFactory;
-    private filterFactory: FilterFactory;
-    private headerFactory: HeaderFactory;
+export default class ControlledTable extends PureComponent<ControlledTableProps, IState> {
+    private readonly stylesheet: Stylesheet;
+    private readonly tableFn: () => JSX.Element[][];
 
     constructor(props: ControlledTableProps) {
         super(props);
 
-        this.cellFactory = new CellFactory(() => this.props);
-        this.filterFactory = new FilterFactory(() => {
-            const { row_deletable, row_selectable } = this.props;
-
-            const fillerColumns =
-                (row_deletable ? 1 : 0) +
-                (row_selectable ? 1 : 0);
-
-            return {
-                columns: this.props.columns,
-                fillerColumns,
-                filtering: this.props.filtering,
-                filtering_settings: this.props.filtering_settings,
-                filtering_type: this.props.filtering_type,
-                id: this.props.id,
-                setFilter: this.handleSetFilter
-            };
-        });
-        this.headerFactory = new HeaderFactory(() => this.props);
+        this.state = {
+            forcedResizeOnly: false
+        };
 
         this.stylesheet = new Stylesheet(`#${props.id}`);
+        this.tableFn = derivedTable(() => this.props);
         this.updateStylesheet();
     }
 
@@ -88,13 +71,15 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
         // Fallback method for paste handling in Chrome
         // when no input element has focused inside the table
-        window.addEventListener('resize', this.handleResize);
+        window.addEventListener('resize', this.forceHandleResize);
         document.addEventListener('paste', this.handlePaste);
         document.addEventListener('mousedown', this.handleClickOutside);
+
+        this.handleResize();
     }
 
     componentWillUnmount() {
-        window.removeEventListener('resize', this.handleResize);
+        window.removeEventListener('resize', this.forceHandleResize);
         document.removeEventListener('mousedown', this.handleClickOutside);
         document.removeEventListener('paste', this.handlePaste);
     }
@@ -133,7 +118,17 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         }
     }
 
-    handleResize = () => {
+    forceHandleResize = () => this.handleResize(true);
+
+    handleResize = (force: boolean = false) => {
+        if (this.state.forcedResizeOnly && !force) {
+            return;
+        }
+
+        if (!force) {
+            this.setState({ forcedResizeOnly: true });
+        }
+
         const { r0c0, r0c1, r1c0, r1c1 } = this.refs as { [key: string]: HTMLElement };
 
         // Adjust [fixed columns/fixed rows combo] to fixed rows height
@@ -141,7 +136,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         r0c0.querySelectorAll('tr').forEach((tr, index) => {
             const tr2 = trs[index];
 
-            tr.style.height = getComputedStyle(tr2).height;
+            tr.style.height = `${tr2.clientHeight}px`;
         });
 
         // Adjust fixed columns headers to header's height
@@ -158,7 +153,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         if (contentTd) {
             const contentTr = contentTd.parentElement as HTMLElement;
 
-            this.stylesheet.setRule('.cell-1-0 tr', `height: ${getComputedStyle(contentTr).height}`);
+            this.stylesheet.setRule('.cell-1-0 tr', `height: ${getComputedStyle(contentTr).height};`);
         }
     }
 
@@ -556,61 +551,6 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         }, columns);
     }
 
-    renderFragment = (cells: any[][] | null) => (
-        cells ?
-            (<table tabIndex={-1}>
-                <tbody>
-                    {cells.map(
-                        (row, idx) => <tr key={`row-${idx}`}>{row}</tr>)
-                    }
-                </tbody>
-            </table>) :
-            null
-    )
-
-    handleSetFilter = (filtering_settings: string) => this.props.setProps({ filtering_settings });
-
-    getCells = () => {
-        return [
-            ...this.headerFactory.createHeaders(),
-            ...this.filterFactory.createFilters(),
-            ...this.cellFactory.createCells()
-        ];
-    }
-
-    getFragments = (cells: any, fixedColumns: number, fixedRows: number) => {
-        // slice out fixed columns
-        const fixedColumnCells = fixedColumns ?
-            R.map(row =>
-                row.splice(0, R.reduceWhile<JSX.Element, IAccumulator>(
-                    acc => acc.count < fixedColumns,
-                    (acc, cell) => {
-                        acc.cells++;
-                        acc.count += (cell.props.colSpan || 1);
-
-                        return acc;
-                    },
-                    { cells: 0, count: 0 },
-                    row as any
-                ).cells),
-                cells) :
-            null;
-
-        // slice out fixed rows
-        const fixedRowCells = fixedRows ?
-            cells.splice(0, fixedRows) :
-            null;
-
-        const fixedRowAndColumnCells = fixedRows && fixedColumnCells ?
-            fixedColumnCells.splice(0, fixedRows) :
-            null;
-
-        return [
-            [this.renderFragment(fixedRowAndColumnCells), this.renderFragment(fixedRowCells)],
-            [this.renderFragment(fixedColumnCells), this.renderFragment(cells)]
-        ];
-    }
-
     handleDropdown = () => {
         const { r1c1 } = this.refs as { [key: string]: HTMLElement };
 
@@ -652,8 +592,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             ...(n_fixed_columns ? ['dash-freeze-left'] : [])
         ];
 
-        const cells = this.getCells();
-        const grid = this.getFragments(cells, n_fixed_columns, n_fixed_rows);
+        const rawTable = this.tableFn();
+        const grid = derivedTableFragments(n_fixed_columns, n_fixed_rows, rawTable);
 
         return (<div
             id={id}

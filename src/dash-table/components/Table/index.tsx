@@ -6,9 +6,9 @@ import { memoizeOne, memoizeOneWithFlag } from 'core/memoizer';
 import ControlledTable from 'dash-table/components/ControlledTable';
 
 import derivedPaginator from 'dash-table/derived/paginator';
-import derivedViewportDataframe from 'dash-table/derived/viewportDataframe';
-import derivedVirtualDataframe from 'dash-table/derived/virtualDataframe';
-import derivedVisibleColumns from 'dash-table/derived/visibleColumns';
+import derivedViewportDataframe from 'dash-table/derived/dataframe/viewport';
+import derivedVirtualDataframe from 'dash-table/derived/dataframe/virtual';
+import derivedVisibleColumns from 'dash-table/derived/column/visible';
 
 import {
     ControlledTableProps,
