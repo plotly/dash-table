@@ -86,7 +86,7 @@ export default class CellInput extends PureComponent<ICellProps, ICellState> {
         return readonly ?
             this.renderValue(attributes) :
             (<div className='dash-cell-value-container'>
-                {this.renderValue(R.merge(attributes, { style: { opacity: 0 }}))}
+                {this.renderValue(R.merge(attributes, { className: 'cell-value-shadow' }))}
                 <input
                     ref='textInput'
                     type='text'
