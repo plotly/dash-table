@@ -578,22 +578,10 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
             r1c1.querySelectorAll('tr:first-of-type td').forEach((td, index) => {
                 const style = getComputedStyle(td);
                 const width = style.width;
-                const innerWidth = Stylesheet.unit(
-                    Stylesheet.extractDimension(style.width) -
-                    Stylesheet.extractDimension(style.paddingLeft) -
-                    Stylesheet.extractDimension(style.paddingRight) -
-                    1,
-                    'px'
-                );
 
                 this.stylesheet.setRule(
                     `.dash-fixed-row:not(.dash-fixed-column) th:nth-of-type(${index + 1})`,
                     `width: ${width}; min-width: ${width}; max-width: ${width};`
-                );
-
-                this.stylesheet.setRule(
-                    `.dash-fixed-content td:nth-of-type(${index + 1}) input`,
-                    `width: ${innerWidth};`
                 );
             });
         }
@@ -603,20 +591,10 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
             r1c0.querySelectorAll('tr:first-of-type td').forEach((td, index) => {
                 const style = getComputedStyle(td);
                 const width = style.width;
-                const innerWidth = Stylesheet.unit(
-                    Stylesheet.extractDimension(style.width) -
-                    Stylesheet.extractDimension(style.paddingLeft) -
-                    Stylesheet.extractDimension(style.paddingRight) -
-                    1, 'px');
 
                 this.stylesheet.setRule(
                     `.dash-fixed-column.dash-fixed-row th:nth-of-type(${index + 1})`,
                     `width: ${width}; min-width: ${width}; max-width: ${width};`
-                );
-
-                this.stylesheet.setRule(
-                    `.dash-fixed-column td:nth-of-type(${index + 1}) input`,
-                    `width: ${innerWidth};`
                 );
             });
         }

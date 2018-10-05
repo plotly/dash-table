@@ -1,3 +1,4 @@
+import * as R from 'ramda';
 import React, {
     PureComponent,
     KeyboardEvent
@@ -80,18 +81,22 @@ export default class CellInput extends PureComponent<ICellProps, ICellState> {
             onDoubleClick: onDoubleClick
         };
 
-        return (!active && this.state.value === this.props.value) ?
+        const readonly = !active && this.state.value === this.props.value;
+
+        return readonly ?
             this.renderValue(attributes) :
-            (<input
-                ref='textInput'
-                type='text'
-                value={this.state.value}
-                onBlur={this.propagateChange}
-                onChange={this.handleChange}
-                onKeyDown={this.handleKeyDown}
-                onPaste={onPaste}
-                {...attributes}
-            />);
+            (<div className='dash-cell-value-container'>
+                {this.renderValue(R.merge(attributes, { style: { opacity: 0 }}))}
+                <input
+                    ref='textInput'
+                    type='text'
+                    value={this.state.value}
+                    onBlur={this.propagateChange}
+                    onChange={this.handleChange}
+                    onKeyDown={this.handleKeyDown}
+                    onPaste={onPaste}
+                    {...attributes}
+                /></div>);
     }
 
     private renderValue(attributes = {}) {

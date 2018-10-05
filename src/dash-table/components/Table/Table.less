@@ -243,15 +243,21 @@
             z-index: 200;
         }
 
-        .dash-cell-value {
-            height: 100%;
+        .dash-cell-value-container {
+            position: relative;
+        }
+
+        input.dash-cell-value {
+            position: absolute;
+            left: 0;
+            top: 0;
             width: 100%;
+            height: 100%;
         }
 
         div.dash-cell-value {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            display: inline-block;
+            margin: auto 0;
         }
     }
 

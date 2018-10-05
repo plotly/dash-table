@@ -271,3 +271,40 @@ Derived properties allow the component to expose complex state that can be usefu
 ## RC3 - Miscellaneous fixes for pagination, virtual df and viewport df
 
     Issue: https://github.com/plotly/dash-table/pull/112
+
+## RC4 - Columns width percentage and default (fit to content) support
+
+    * Added prop content_style that takes values 'fit' or 'grow' (Default='fit')
+    * Added width percentage support
+    * Modified default column behavior from fixed width to 'fit content'
+    * Modified width, min-width, max-width interaction on columns
+
+### Width percentage
+
+    Columns can now accept '%' width, minWidth, maxWidth
+
+    For the percentages to have meaning, the dash-table must be forced to have a width and the content of the dash-table must be forced to grow to fill the available space made available by the container (by default the table is only as big as it needs to be).
+
+    To use percentage-based column widths, add:
+
+    * content style
+        content_style='grow'
+
+    * table style (example)
+        table_style=[{ selector: '.dash-spreadsheet', rule: 'width: 100%; max-width: 100%' }]
+
+    * column with %-based width
+        columns=[{
+            id: 'column',
+            width: '40%'
+        }]
+
+### Default column width
+
+    Columns now default to 'fit to content' when no width is defined
+
+    Note: If pagination is used or the dataframe modified, the column width will be re-evaluated on each modification.
+
+### Interaction between width, min-width and max-width
+
+    Column min-width and max-width do not default to width value is not defined.
