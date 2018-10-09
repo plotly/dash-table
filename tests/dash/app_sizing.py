@@ -294,11 +294,16 @@ def layout():
                     id="sizing-2",
                     dataframe=df.to_dict("rows"),
                     content_style="grow",
-                    columns=[{"name":i, "id":i, "width":"16.67%"} for i in df.columns],
+                    columns=[
+                        {"name": i, "id": i, "width": "16.67%"} for i in df.columns
+                    ],
                     table_style=[
-                        { "selector": ".dash-spreadsheet", "rule": "width: 100%" },
-                        { "selector": ".dash-cell[data-dash-column=Region]", "rule": "white-space: normal" }
-                    ]
+                        {"selector": ".dash-spreadsheet", "rule": "width: 100%"},
+                        {
+                            "selector": ".dash-cell[data-dash-column=Region]",
+                            "rule": "white-space: normal",
+                        },
+                    ],
                 ),
                 section_title("Dash Table - Single Column Width by Percent"),
                 html.Div(
@@ -315,11 +320,17 @@ def layout():
                     id="sizing-3",
                     dataframe=df.to_dict("rows"),
                     content_style="grow",
-                    columns=[{"name":i, "id":i, "width": "50%" if i == "Region" else None } for i in df.columns],
+                    columns=[
+                        {"name": i, "id": i, "width": "50%" if i == "Region" else None}
+                        for i in df.columns
+                    ],
                     table_style=[
-                        { "selector": ".dash-spreadsheet", "rule": "width: 100%" },
-                        { "selector": ".dash-cell[data-dash-column=Region]", "rule": "white-space: normal" }
-                    ]
+                        {"selector": ".dash-spreadsheet", "rule": "width: 100%"},
+                        {
+                            "selector": ".dash-cell[data-dash-column=Region]",
+                            "rule": "white-space: normal",
+                        },
+                    ],
                 ),
                 section_title("Dash Table - Underspecified Widths"),
                 html.Div(
@@ -332,13 +343,22 @@ def layout():
                 dash_table.Table(
                     id="sizing-4",
                     dataframe=df.to_dict("rows"),
-                    columns = [{
-                        "name": i,
-                        "id": i,
-                        "width": "100px" if i == "Dem" or i == "Rep" or i == "Ind" else None,
-                        "minWidth": "100px" if i == "Dem" or i == "Rep" or i == "Ind" else None,
-                        "maxWidth": "100px" if i == "Dem" or i == "Rep" or i == "Ind" else None
-                    } for i in df.columns]
+                    columns=[
+                        {
+                            "name": i,
+                            "id": i,
+                            "width": "100px"
+                            if i == "Dem" or i == "Rep" or i == "Ind"
+                            else None,
+                            "minWidth": "100px"
+                            if i == "Dem" or i == "Rep" or i == "Ind"
+                            else None,
+                            "maxWidth": "100px"
+                            if i == "Dem" or i == "Rep" or i == "Ind"
+                            else None,
+                        }
+                        for i in df.columns
+                    ],
                 ),
                 section_title("Dash Table - Widths that are smaller than the content"),
                 html.Div(
@@ -351,16 +371,19 @@ def layout():
                 dash_table.Table(
                     id="sizing-5",
                     dataframe=df.to_dict("rows"),
-                    columns = [{
-                        "name": i,
-                        "id": i,
-                        "width": "100px"
-                    } for i in df.columns],
+                    columns=[
+                        {"name": i, "id": i, "width": "100px"} for i in df.columns
+                    ],
                     table_style=[
-                        { "selector": ".dash-cell[data-dash-column=Region]", "rule": "white-space: normal" }
-                    ]
+                        {
+                            "selector": ".dash-cell[data-dash-column=Region]",
+                            "rule": "white-space: normal",
+                        }
+                    ],
                 ),
-                section_title("Dash Table - Widths that are smaller than the content (forced)"),
+                section_title(
+                    "Dash Table - Widths that are smaller than the content (forced)"
+                ),
                 html.Div(
                     """
             Width/minWidth/maxWidth for all columns is set to 100px. Columns whose content is smaller than the defined size will respect it.
@@ -371,16 +394,22 @@ def layout():
                 dash_table.Table(
                     id="sizing-6",
                     dataframe=df.to_dict("rows"),
-                    columns = [{
-                        "name": i,
-                        "id": i,
-                        "width": "100px",
-                        "minWidth": "100px",
-                        "maxWidth": "100px"
-                    } for i in df.columns],
+                    columns=[
+                        {
+                            "name": i,
+                            "id": i,
+                            "width": "100px",
+                            "minWidth": "100px",
+                            "maxWidth": "100px",
+                        }
+                        for i in df.columns
+                    ],
                     table_style=[
-                        { "selector": ".dash-cell[data-dash-column=Region]", "rule": "white-space: normal" }
-                    ]
+                        {
+                            "selector": ".dash-cell[data-dash-column=Region]",
+                            "rule": "white-space: normal",
+                        }
+                    ],
                 ),
                 section_title("Dash Table - Content with Ellipses"),
                 # ...
