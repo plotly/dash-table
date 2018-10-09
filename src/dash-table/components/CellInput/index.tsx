@@ -1,4 +1,3 @@
-import * as R from 'ramda';
 import React, {
     PureComponent,
     KeyboardEvent
@@ -47,17 +46,20 @@ export default class CellInput extends PureComponent<ICellProps, ICellState> {
 
         return !dropdown ?
             this.renderValue() :
-            (<Dropdown
-                ref='dropdown'
-                clearable={clearable}
-                onChange={(newValue: any) => {
-                    onChange(newValue ? newValue.value : newValue);
-                }}
-                onOpen={this.handleOpenDropdown}
-                options={dropdown}
-                placeholder={''}
-                value={value}
-            />);
+            (<div className='dash-dropdown-cell-value-container dash-cell-value-container'>
+                {this.renderValue({ className: 'dropdown-cell-value-shadow cell-value-shadow' })}
+                <Dropdown
+                    ref='dropdown'
+                    clearable={clearable}
+                    onChange={(newValue: any) => {
+                        onChange(newValue ? newValue.value : newValue);
+                    }}
+                    onOpen={this.handleOpenDropdown}
+                    options={dropdown}
+                    placeholder={''}
+                    value={value}
+                />
+            </div>);
     }
 
     private renderInput() {
@@ -85,8 +87,8 @@ export default class CellInput extends PureComponent<ICellProps, ICellState> {
 
         return readonly ?
             this.renderValue(attributes) :
-            (<div className='dash-cell-value-container'>
-                {this.renderValue(R.merge(attributes, { className: 'cell-value-shadow' }))}
+            (<div className='dash-input-cell-value-container dash-cell-value-container'>
+                {this.renderValue({ className: 'input-cell-value-shadow cell-value-shadow' })}
                 <input
                     ref='textInput'
                     type='text'
@@ -96,7 +98,8 @@ export default class CellInput extends PureComponent<ICellProps, ICellState> {
                     onKeyDown={this.handleKeyDown}
                     onPaste={onPaste}
                     {...attributes}
-                /></div>);
+                />
+            </div>);
     }
 
     private renderValue(attributes = {}) {
