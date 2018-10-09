@@ -1,4 +1,48 @@
 {
+    "src/dash-table/TableLite.js": {
+      "description": "",
+      "displayName": "TableLite",
+      "methods": [],
+      "props": {
+        "columns": {
+          "type": {
+            "name": "arrayOf",
+            "value": {
+              "name": "string"
+            }
+          },
+          "required": false,
+          "description": ""
+        },
+        "rows": {
+          "type": {
+            "name": "arrayOf",
+            "value": {
+              "name": "arrayOf",
+              "value": {
+                "name": "string"
+              }
+            }
+          },
+          "required": false,
+          "description": ""
+        },
+        "styles": {
+          "type": {
+            "name": "object"
+          },
+          "required": false,
+          "description": ""
+        },
+        "editable": {
+          "type": {
+            "name": "bool"
+          },
+          "required": false,
+          "description": ""
+        }
+      }
+  },
   "src/dash-table/Table.js": {
     "description": "",
     "displayName": "Table",
