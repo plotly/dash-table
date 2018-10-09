@@ -1,0 +1,31 @@
+.table-light th {
+    border: thin lightgrey solid;
+    padding: 5px;
+}
+
+.table-light td {
+    border: thin lightgrey solid;
+}
+
+.table-light textarea {
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0px;
+    box-sizing: content-box;
+    display: block;
+    margin: 0px;
+    overflow-wrap: normal;
+    padding: 0px;
+    resize: none;
+    text-align: left;
+    text-rendering: auto;
+    vertical-align: baseline;
+    width: 100%;
+    white-space: normal;
+
+    min-height: 0px;
+}
+
+.table-light textarea:focus {
+    border: none;
+    outline: none;
+}

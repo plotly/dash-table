@@ -59,6 +59,12 @@ def layout():
                 section_title("HTML Table - Default Styles"),
                 html.Div("By default, HTML tables expand to their contents"),
                 html_table(df, table_style={}, base_column_style={}),
+
+                dash_table.TableLite(
+                    rows=df.to_records(index=False),
+                    columns=[{'name': i} for i in data.keys()],
+                ),
+
                 section_title("HTML Table - Padding"),
                 html.Div(
                     """
@@ -68,6 +74,11 @@ def layout():
             """
                 ),
                 html_table(df, table_style={}, cell_style={"paddingLeft": 10}),
+                dash_table.TableLite(
+                    rows=df.to_records(index=False),
+                    columns=[{'name': i} for i in data.keys()],
+                ),
+
                 section_title("HTML Table - Responsive Table"),
                 html.Div(
                     """
@@ -77,6 +88,40 @@ def layout():
             """
                 ),
                 html_table(df, table_style={"width": "100%"}, base_column_style={}),
+                dash_table.TableLite(
+                    rows=df.to_records(index=False),
+                    columns=[{'name': i} for i in data.keys()],
+                    styles={
+                        'table': {'width': '100%'}
+                    }
+                ),
+
+                section_title("HTML Table - Columns with Pixel Width"),
+                html.Div(
+                    """
+            The column widths can also be unresponsive, and fixed at a particular width.
+            """
+                ),
+                html_table(
+                    df,
+                    column_style={
+                        "Date": {"width": "200px"},
+                        "Election Polling Organization": {"width": "200px"},
+                        "Dem": {"width": "200px"},
+                        "Rep": {"width": "200px"},
+                        "Ind": {"width": "200px"},
+                        "Region": {"width": "200px"},
+                    },
+                ),
+                dash_table.TableLite(
+                    rows=df.to_records(index=False),
+                    columns=[
+                        {'name': i, 'style': {'width': '200px'}}
+                        for i in df.columns
+                    ],
+                    styles={}
+                ),
+
                 section_title("HTML Table - All Column Widths defined by Percent"),
                 html.Div(
                     """
@@ -95,6 +140,21 @@ def layout():
                         "Region": {"width": "30%"},
                     },
                 ),
+                dash_table.TableLite(
+                    rows=df.to_records(index=False),
+                    columns=[
+                        {'name': 'Date', 'style': {'width': '30%'}},
+                        {'name': 'Election Polling Organization', 'style': {'width': '25%'}},
+                        {'name': 'Rep', 'style': {'width': '5%'}},
+                        {'name': 'Dem', 'style': {'width': '5%'}},
+                        {'name': 'Ind', 'style': {'width': '5%'}},
+                        {'name': 'Region', 'style': {'width': '30%'}},
+                    ],
+                    styles={
+                        'table': {'width': '100%'}
+                    }
+                ),
+
                 section_title("HTML Table - Single Column Width Defined by Percent"),
                 html.Div(
                     """
@@ -106,6 +166,21 @@ def layout():
                     table_style={"width": "100%"},
                     column_style={"Region": {"width": "50%"}},
                 ),
+                dash_table.TableLite(
+                    rows=df.to_records(index=False),
+                    columns=[
+                        {'name': 'Date'},
+                        {'name': 'Election Polling Organization'},
+                        {'name': 'Rep'},
+                        {'name': 'Dem'},
+                        {'name': 'Ind'},
+                        {'name': 'Region', 'style': {'width': '50%'}},
+                    ],
+                    styles={
+                        'table': {'width': '100%'}
+                    }
+                ),
+
                 section_title("HTML Table - Columns with min-width"),
                 html.Div(
                     "Here, the min-width for the first column is 130px, or about the width of this line: "
@@ -118,6 +193,21 @@ def layout():
                     table_style={"width": "100%"},
                     column_style={"Date": {"minWidth": "130"}},
                 ),
+                dash_table.TableLite(
+                    rows=df.to_records(index=False),
+                    columns=[
+                        {'name': 'Date', 'style': {'minWidth': '130px'}},
+                        {'name': 'Election Polling Organization'},
+                        {'name': 'Rep'},
+                        {'name': 'Dem'},
+                        {'name': 'Ind'},
+                        {'name': 'Region'}
+                    ],
+                    styles={
+                        'table': {'width': '100%'}
+                    }
+                ),
+
                 section_title("HTML Table - Underspecified Widths"),
                 html.Div(
                     """
@@ -138,6 +228,21 @@ def layout():
                         "Ind": {"width": 50},
                     },
                 ),
+                dash_table.TableLite(
+                    rows=df.to_records(index=False),
+                    columns=[
+                        {'name': 'Date'},
+                        {'name': 'Election Polling Organization'},
+                        {'name': 'Dem', 'style': {'width': 50}},
+                        {'name': 'Rep', 'style': {'width': 50}},
+                        {'name': 'Ind', 'style': {'width': 50}},
+                        {'name': 'Region'}
+                    ],
+                    styles={
+                        'table': {'width': '100%'}
+                    }
+                ),
+
                 section_title("HTML Table - Widths that are smaller than the content"),
                 html.Div(
                     """
@@ -158,6 +263,21 @@ def layout():
                         "Ind": {"width": 20},
                     },
                 ),
+                dash_table.TableLite(
+                    rows=df.to_records(index=False),
+                    columns=[
+                        {'name': 'Date'},
+                        {'name': 'Election Polling Organization'},
+                        {'name': 'Dem', 'style': {'width': 20}},
+                        {'name': 'Rep', 'style': {'width': 20}},
+                        {'name': 'Ind', 'style': {'width': 20}},
+                        {'name': 'Region'}
+                    ],
+                    styles={
+                        'table': {'width': '100%'}
+                    }
+                ),
+
                 section_title("HTML Table - Content with Ellipses"),
                 html.Div(
                     """
@@ -179,6 +299,33 @@ def layout():
                         "maxWidth": 0,
                     },
                 ),
+                dash_table.TableLite(
+                    rows=df.to_records(index=False),
+                    columns=[
+                        {'name': 'Date'},
+                        {'name': 'Election Polling Organization'},
+                        {'name': 'Rep'},
+                        {'name': 'Dem'},
+                        {'name': 'Ind'},
+                        {'name': 'Region'}
+                    ],
+                    styles={
+                        'table': {'width': '100%'},
+                        'th': {
+                            "whiteSpace": "nowrap",
+                            "overflow": "hidden",
+                            "textOverflow": "ellipsis",
+                            "maxWidth": 0,
+                        },
+                        'td': {
+                            "whiteSpace": "nowrap",
+                            "overflow": "hidden",
+                            "textOverflow": "ellipsis",
+                            "maxWidth": 0,
+                        }
+                    }
+                ),
+
                 section_title("HTML Table - Vertical Scrolling"),
                 html.Div(
                     """
@@ -238,6 +385,7 @@ def layout():
 
             """
                 ),
+
                 section_title("HTML Table - Two Columns, 100% Min-Width"),
                 html.Div(
                     html_table(
@@ -247,6 +395,17 @@ def layout():
                     ),
                     style={"overflowX": "scroll"},
                 ),
+                html.Div(
+                    dash_table.TableLite(
+                        rows=[[1, 2]],
+                        columns=[{'name': 'Column 1'}, {'name': 'Column 2'}],
+                        styles={
+                            "table": {"minWidth": "100%"},
+                            "td": {"whiteSpace": "nowrap"}
+                        },
+                    )
+                ),
+
                 section_title("HTML Table - Long Columns, 100% Min-Width"),
                 html.Div(
                     """
@@ -268,41 +427,26 @@ def layout():
                     ),
                     style={"overflowX": "scroll"},
                 ),
-                html.Hr(),
-                html.H3("Dash Interactive Table"),
-                html.Div("These same styles can be applied to the dash table"),
-                section_title("Dash Table - Default Styles"),
-                dash_table.Table(
-                    id="sizing-1",
-                    dataframe=df.to_dict("rows"),
-                    columns=[{"name": i, "id": i} for i in df.columns],
+                html.Div(
+                    dash_table.TableLite(
+                        rows=pd.DataFrame(
+                            {
+                                "This is Column {} Data".format(i): [1, 2]
+                                for i in range(10)
+                            }
+                        ).to_records(index=False),
+                        columns=[
+                            {'name': "This is Column {} Data".format(i)}
+                            for i in range(10)
+                        ],
+                        styles={
+                            'table': {"minWidth": "100%", "overflowX": "scroll"},
+                            'th': {"whiteSpace": "nowrap"},
+                            'td': {"whiteSpace": "nowrap"},
+                        }
+                    ),
+                    style={"overflowX": "scroll"},
                 ),
-                section_title("Dash Table - Padding"),
-                # ...
-                section_title("Dash Table - All Column Widths by Percent"),
-                # ...
-                section_title("Dash Table - Single Column Width by Percent"),
-                # ...
-                section_title("Dash Table - Underspecified Widths"),
-                # ...
-                section_title("Dash Table - Widths that are smaller than the content"),
-                # ...
-                section_title("Dash Table - Content with Ellipses"),
-                # ...
-                section_title("Dash Table - Vertical Scrolling"),
-                # ...
-                section_title("Dash Table - Vertical Scrolling with Max Height"),
-                # ...
-                section_title("Dash Table - Vertical Scrolling with Height"),
-                # ...
-                section_title("Dash Table - Horizontal Scrolling"),
-                # ...
-                section_title("Dash Table - Two Columns, 100% Min-Width"),
-                # ...
-                section_title("Dash Table - Long Columns, 100% Min-Width"),
-                # ...
-                section_title("Dash Table - Alignment"),
-                # ...
             ],
         ),
     ]
