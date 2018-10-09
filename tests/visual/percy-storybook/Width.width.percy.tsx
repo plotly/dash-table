@@ -6,8 +6,7 @@ import DashTable from 'dash-table/Table';
 
 const setProps = () => { };
 
-const columns = ['a', 'b', 'c']
-    .map(id => ({ id: id, name: id.toUpperCase(), width: '33%' }));
+const columns = ['a', 'b', 'c'];
 
 const dataframe = (() => {
     const r = random(1);
@@ -20,19 +19,17 @@ const dataframe = (() => {
     ));
 })();
 
-let props = {
+const baseProps = {
     setProps,
-    content_style: 'grow',
     id: 'table',
-    dataframe,
-    columns,
-    table_style: [
-        { selector: '.dash-spreadsheet', rule: 'width: 1000px; max-width: 1000px; height: 1000px;' },
-        { selector: '.dash-fixed-column', rule: 'width: 33%;' }
-    ]
+    dataframe
 };
 
-storiesOf('DashTable/Width percentages', module)
+const props = Object.assign({}, baseProps, {
+    columns: columns.map((id => ({ id: id, name: id.toUpperCase(), width: 20 })))
+});
+
+storiesOf('DashTable/Width width only', module)
     .add('without frozen columns or rows', () => (<DashTable
         {...props}
     />))
