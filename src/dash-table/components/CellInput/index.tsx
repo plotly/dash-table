@@ -4,6 +4,8 @@ import React, {
 } from 'react';
 import Dropdown from 'react-select';
 
+import DOM from 'core/browser/DOM';
+
 import {
     ICellDefaultProps,
     ICellProps,
@@ -183,7 +185,10 @@ export default class CellInput extends PureComponent<ICellProps, ICellState> {
 
         if (dropdown && document.activeElement !== dropdown) {
             // Limitation. If React >= 16 --> Use React.createRef instead to pass parent ref to child
-            (dropdown.wrapper.parentElement as HTMLElement).focus();
+            const tdParent = DOM.getFirstParentOfType(dropdown.wrapper, 'td');
+            if (tdParent) {
+                tdParent.focus();
+            }
         }
     }
 }
