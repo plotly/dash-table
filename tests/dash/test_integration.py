@@ -11,6 +11,8 @@ class Tests(IntegrationTests):
     def test_review_app(self):
         app = index.app
         self.startServer(app)
+
+        print self.driver.capabilities['browserName']
         links = [
             a.get_property("href")
             for a in self.driver.find_elements_by_css_selector("a")
