@@ -11,9 +11,6 @@ class Tests(IntegrationTests):
     def test_review_app(self):
         app = index.app
         self.startServer(app)
-
-        print(self.driver.capabilities["browserName"])
-        print(self.driver.capabilities["version"])
         links = [
             a.get_property("href")
             for a in self.driver.find_elements_by_css_selector("a")
@@ -24,9 +21,7 @@ class Tests(IntegrationTests):
             WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located((By.ID, "waitfor"))
             )
-            print("Before: %s" % time.ctime())
-            time.sleep(50)
-            print("After: %s" % time.ctime())
+            time.sleep(2)
             self.snapshot(href)
             self.driver.back()
 
