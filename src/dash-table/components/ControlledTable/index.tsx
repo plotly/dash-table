@@ -68,8 +68,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
             this.props.setProps({ active_cell: this.props.selected_cell[0] });
         }
 
-        this.handleResize();
         this.applyStyle();
+        this.handleResize();
     }
 
     componentWillMount() {
@@ -91,8 +91,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
     }
 
     componentDidUpdate() {
-        this.handleResize();
         this.applyStyle();
+        this.handleResize();
         this.handleDropdown();
     }
 
