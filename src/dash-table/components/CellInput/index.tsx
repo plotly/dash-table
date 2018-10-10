@@ -49,7 +49,10 @@ export default class CellInput extends PureComponent<ICellProps, ICellState> {
         return !dropdown ?
             this.renderValue() :
             (<div className='dash-dropdown-cell-value-container dash-cell-value-container'>
-                {this.renderValue({ className: 'dropdown-cell-value-shadow cell-value-shadow' })}
+                {this.renderValue(
+                    { className: 'dropdown-cell-value-shadow cell-value-shadow' },
+                    (dropdown.find(entry => entry.value === value) || { label: undefined }).label
+                )}
                 <Dropdown
                     ref='dropdown'
                     clearable={clearable}
@@ -104,8 +107,8 @@ export default class CellInput extends PureComponent<ICellProps, ICellState> {
             </div>);
     }
 
-    private renderValue(attributes = {}) {
-        const { value } = this.propsWithDefaults;
+    private renderValue(attributes = {}, value?: string) {
+        value = value || this.propsWithDefaults.value;
 
         return (<div
             {...attributes}
