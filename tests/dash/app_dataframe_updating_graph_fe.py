@@ -30,7 +30,7 @@ def layout():
                     row_selectable="multi",
                     row_deletable=True,
                     selected_rows=[],
-                    n_fixed_rows=2,
+                    n_fixed_rows=1,
                 ),
                 style={"height": 300, "overflowY": "scroll"},
             ),

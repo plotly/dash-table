@@ -23,6 +23,10 @@ class Tests(IntegrationTests):
             )
             time.sleep(2)
             self.snapshot(href)
+            # print messages
+            for entry in self.driver.get_log("browser"):
+                print(entry)
+
             self.driver.back()
 
         for link in links:
