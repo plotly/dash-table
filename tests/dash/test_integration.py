@@ -13,6 +13,7 @@ class Tests(IntegrationTests):
         self.startServer(app)
 
         print(self.driver.capabilities["browserName"])
+        print(self.driver.capabilities["version"])
         links = [
             a.get_property("href")
             for a in self.driver.find_elements_by_css_selector("a")
