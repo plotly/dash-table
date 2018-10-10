@@ -63,16 +63,6 @@ export default class Stylesheet {
         }
     }
 
-    static extractDimension(dimension: string | null): number {
-        if (dimension === null) {
-            return 0;
-        }
-
-        const match = dimension.match(/^(\d+(?:\.\d+)?)(?:px|em|rem|%)$/);
-
-        return match && match.length >= 2 ? parseInt(match[1], 10) : 0;
-    }
-
     static hasUnit(dimension: any) {
         return typeof dimension === 'string' &&
             /^\d+(\.\d+)?(px|em|rem|%)$/.test(dimension);
