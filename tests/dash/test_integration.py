@@ -25,7 +25,7 @@ class Tests(IntegrationTests):
                 EC.presence_of_element_located((By.ID, "waitfor"))
             )
             print("Before: %s" % time.ctime())
-            time.sleep(5)
+            time.sleep(50)
             print("After: %s" % time.ctime())
             self.snapshot(href)
             self.driver.back()
