@@ -144,20 +144,6 @@ jobs:
                     - "venv"
 
             - run:
-                name: Run black
-                command: |
-                    . venv/bin/activate
-                    black tests/dash --check
-                when: always
-
-            - run:
-                name: Run pylint
-                command: |
-                    . venv/bin/activate
-                    flake8 tests.dash
-                when: always
-
-            - run:
                 name: Run integration tests
                 command: |
                   . venv/bin/activate
