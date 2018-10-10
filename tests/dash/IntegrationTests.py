@@ -10,7 +10,6 @@ import flask
 import requests
 
 from selenium import webdriver
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.chrome.options import Options
 
 
@@ -24,10 +23,7 @@ class IntegrationTests(unittest.TestCase):
         if "DASH_TEST_CHROMEPATH" in os.environ:
             options.binary_location = os.environ["DASH_TEST_CHROMEPATH"]
 
-        d = DesiredCapabilities.CHROME
-        d["loggingPrefs"] = {"browser": "ALL"}
-
-        cls.driver = webdriver.Chrome(chrome_options=options, desired_capabilities=d)
+        cls.driver = webdriver.Chrome(chrome_options=options)
         loader = percy.ResourceLoader(webdriver=cls.driver)
         cls.percy_runner = percy.Runner(loader=loader)
         cls.percy_runner.initialize_build()
