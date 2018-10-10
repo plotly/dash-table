@@ -178,7 +178,7 @@ export default class FilterFactory {
             R.addIndex<IVisibleColumn, JSX.Element>(R.map)((column, index) => {
                 return (<ColumnFilter
                     key={`column-${index}`}
-                    classes={`filter column-${index}`}
+                    classes={`dash-filter column-${index}`}
                     isValid={this.isFragmentValidOrNull(column.id)}
                     property={column.id}
                     setFilter={this.getEventHandler(this.onChange, column.id, this.ops, setFilter)}
