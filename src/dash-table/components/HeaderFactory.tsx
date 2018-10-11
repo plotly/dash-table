@@ -5,16 +5,12 @@ import { arrayMap } from 'core/math/arrayZipMap';
 import { matrixMap } from 'core/math/matrixZipMap';
 
 import { ControlledTableProps } from 'dash-table/components/Table/props';
-
 import derivedHeaderContent from 'dash-table/derived/header/content';
-import getFixedHeaders from 'dash-table/derived/header/fixedHeaders';
 import getHeaderRows from 'dash-table/derived/header/headerRows';
 import getIndices from 'dash-table/derived/header/indices';
 import getLabels from 'dash-table/derived/header/labels';
 import derivedHeaderOperations from 'dash-table/derived/header/operations';
 import derivedHeaderWrappers from 'dash-table/derived/header/wrappers';
-
-export const DEFAULT_CELL_WIDTH = 200;
 
 export default class HeaderFactory {
     private readonly headerContent = derivedHeaderContent();
@@ -35,7 +31,6 @@ export default class HeaderFactory {
         let {
             columns,
             merge_duplicate_headers,
-            n_fixed_columns,
             pagination_mode,
             row_deletable,
             row_selectable,
@@ -45,7 +40,6 @@ export default class HeaderFactory {
             sorting_type
         } = props;
 
-        const fixedHeaders = getFixedHeaders(n_fixed_columns, row_deletable, row_selectable);
         const headerRows = getHeaderRows(columns);
 
         const labels = getLabels(columns, headerRows);
@@ -62,8 +56,7 @@ export default class HeaderFactory {
         const wrappers = this.headerWrappers(
             columns,
             labelsAndIndices,
-            merge_duplicate_headers,
-            fixedHeaders
+            merge_duplicate_headers
         );
 
         const content = this.headerContent(

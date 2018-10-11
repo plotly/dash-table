@@ -4,6 +4,8 @@ import React, {
 } from 'react';
 import Dropdown from 'react-select';
 
+import DOM from 'core/browser/DOM';
+
 import {
     ICellDefaultProps,
     ICellProps,
@@ -46,17 +48,23 @@ export default class CellInput extends PureComponent<ICellProps, ICellState> {
 
         return !dropdown ?
             this.renderValue() :
-            (<Dropdown
-                ref='dropdown'
-                clearable={clearable}
-                onChange={(newValue: any) => {
-                    onChange(newValue ? newValue.value : newValue);
-                }}
-                onOpen={this.handleOpenDropdown}
-                options={dropdown}
-                placeholder={''}
-                value={value}
-            />);
+            (<div className='dash-dropdown-cell-value-container dash-cell-value-container'>
+                {this.renderValue(
+                    { className: 'dropdown-cell-value-shadow cell-value-shadow' },
+                    (dropdown.find(entry => entry.value === value) || { label: undefined }).label
+                )}
+                <Dropdown
+                    ref='dropdown'
+                    clearable={clearable}
+                    onChange={(newValue: any) => {
+                        onChange(newValue ? newValue.value : newValue);
+                    }}
+                    onOpen={this.handleOpenDropdown}
+                    options={dropdown}
+                    placeholder={''}
+                    value={value}
+                />
+            </div>);
     }
 
     private renderInput() {
@@ -80,22 +88,27 @@ export default class CellInput extends PureComponent<ICellProps, ICellState> {
             onDoubleClick: onDoubleClick
         };
 
-        return (!active && this.state.value === this.props.value) ?
+        const readonly = !active && this.state.value === this.props.value;
+
+        return readonly ?
             this.renderValue(attributes) :
-            (<input
-                ref='textInput'
-                type='text'
-                value={this.state.value}
-                onBlur={this.propagateChange}
-                onChange={this.handleChange}
-                onKeyDown={this.handleKeyDown}
-                onPaste={onPaste}
-                {...attributes}
-            />);
+            (<div className='dash-input-cell-value-container dash-cell-value-container'>
+                {this.renderValue({ className: 'input-cell-value-shadow cell-value-shadow' })}
+                <input
+                    ref='textInput'
+                    type='text'
+                    value={this.state.value}
+                    onBlur={this.propagateChange}
+                    onChange={this.handleChange}
+                    onKeyDown={this.handleKeyDown}
+                    onPaste={onPaste}
+                    {...attributes}
+                />
+            </div>);
     }
 
-    private renderValue(attributes = {}) {
-        const { value } = this.propsWithDefaults;
+    private renderValue(attributes = {}, value?: string) {
+        value = value || this.propsWithDefaults.value;
 
         return (<div
             {...attributes}
@@ -175,7 +188,10 @@ export default class CellInput extends PureComponent<ICellProps, ICellState> {
 
         if (dropdown && document.activeElement !== dropdown) {
             // Limitation. If React >= 16 --> Use React.createRef instead to pass parent ref to child
-            (dropdown.wrapper.parentElement as HTMLElement).focus();
+            const tdParent = DOM.getFirstParentOfType(dropdown.wrapper, 'td');
+            if (tdParent) {
+                tdParent.focus();
+            }
         }
     }
 }

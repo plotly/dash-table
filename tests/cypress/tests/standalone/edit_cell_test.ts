@@ -73,7 +73,7 @@ describe('edit cell', () => {
         DashTable.getCell(0, 0).within(() => cy.get('input').should('have.value', 'abc'));
     });
 
-    it.only('can delete then edit on 2nd page', () => {
+    it('can delete then edit on 2nd page', () => {
         DashTable.getCell(0, 0).click();
         DashTable.getCell(0, 0).within(() => cy.get('input').should('have.value', '1'));
         cy.get('button.next-page').click();

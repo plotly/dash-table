@@ -24,6 +24,8 @@ class App extends Component {
                 columns: clone(mockData.columns).map(col => R.merge(col, {
                     editable_name: true,
                     deletable: true,
+                    minWidth: col.width,
+                    maxWidth: col.width
                 //     type: 'dropdown'
                 })),
                 editable: true,

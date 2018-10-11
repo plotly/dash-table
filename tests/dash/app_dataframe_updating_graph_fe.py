@@ -30,7 +30,6 @@ def layout():
                     row_selectable="multi",
                     row_deletable=True,
                     selected_rows=[],
-                    derived_viewport_indices=[],
                     n_fixed_rows=1,
                 ),
                 style={"height": 300, "overflowY": "scroll"},
