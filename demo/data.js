@@ -116,20 +116,6 @@ export const mockDataSimple = unpackIntoColumnsAndDataFrames([
             i => ['Humid', 'Wet', 'Snowy', 'Tropical Beaches'][i % 4]
         ),
     },
-    {
-        id: 'bbb-ii',
-        name: 'Climate-ii',
-        type: 'numeric',
-        options: ['Humid', 'Wet', 'Snowy', 'Tropical Beaches'].map(i => ({
-            label: i,
-            value: i,
-        })),
-        clearable: true,
-        width: 200,
-        data: gendata(
-            i => ['Humid', 'Wet', 'Snowy', 'Tropical Beaches'][i % 4]
-        ),
-    },
 ]);
 
 export const miniData = unpackIntoColumnsAndDataFrames([
