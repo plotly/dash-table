@@ -2,9 +2,29 @@ import DashTable from 'cypress/DashTable';
 import DOM from 'cypress/DOM';
 import Key from 'cypress/Key';
 
-describe('edit cell', () => {
+describe('edit', () => {
     beforeEach(() => {
         cy.visit('http://localhost:8080');
+    });
+
+    describe('readonly cell', () => {
+        describe('with input', () => {
+            it('does not modify value', () => {
+                DashTable.getCellById(0, 'aaa-readonly').click();
+                DashTable.getCellById(0, 'aaa-readonly').within(() => {
+                    cy.get('input').should('not.exist');
+                });
+            });
+        });
+
+        describe('with dropdown', () => {
+            it('does not modify value', () => {
+                DashTable.getCellById(0, 'bbb-readonly').click();
+                DashTable.getCellById(0, 'bbb-readonly').within(() => {
+                    cy.get('.Select-value-label').should('not.exist');
+                });
+            });
+        });
     });
 
     it('can delete dropdown', () => {

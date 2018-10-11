@@ -65,9 +65,29 @@ export const mockData = unpackIntoColumnsAndDataFrames([
     },
 
     {
+        id: 'bbb-readonly',
+        name: ['', 'Weather', 'Climate-RO'],
+        type: 'dropdown',
+        editable: false,
+        width: 200,
+        data: gendata(
+            i => ['Humid', 'Wet', 'Snowy', 'Tropical Beaches'][i % 4]
+        )
+    },
+
+    {
         id: 'aaa',
         name: ['', 'Weather', 'Temperature'],
         type: 'numeric',
+        width: 150,
+        data: gendata(i => i + 1),
+    },
+
+    {
+        id: 'aaa-readonly',
+        name: ['', 'Weather', 'Temperature-RO'],
+        type: 'numeric',
+        editable: false,
         width: 150,
         data: gendata(i => i + 1),
     }
@@ -85,6 +105,20 @@ export const mockDataSimple = unpackIntoColumnsAndDataFrames([
     {
         id: 'bbb',
         name: 'Climate',
+        type: 'numeric',
+        options: ['Humid', 'Wet', 'Snowy', 'Tropical Beaches'].map(i => ({
+            label: i,
+            value: i,
+        })),
+        clearable: true,
+        width: 200,
+        data: gendata(
+            i => ['Humid', 'Wet', 'Snowy', 'Tropical Beaches'][i % 4]
+        ),
+    },
+    {
+        id: 'bbb-ii',
+        name: 'Climate-ii',
         type: 'numeric',
         options: ['Humid', 'Wet', 'Snowy', 'Tropical Beaches'].map(i => ({
             label: i,
