@@ -79,7 +79,66 @@ def layout():
             ]
         ),
 
+        section_title('Dash Table with Per-Cell Dropdowns via Filtering UI'),
+
+        dash_table.Table(
+            id=IDS['dropdown-by-cell'],
+            dataframe=df_per_row_dropdown.to_dict('rows'),
+            columns=[
+                {'id': c, 'name': c}
+                for c in df_per_row_dropdown.columns
+            ],
+
+            editable=True,
+            column_conditional_dropdowns=[
+                {
+                    'id': 'Neighborhood',
+                    'dropdowns': [
+
+                        {
+                            'condition': 'City eq "NYC"',
+                            'dropdown': [
+                                {'label': i, 'value': i}
+                                for i in [
+                                    'Brooklyn',
+                                    'Queens',
+                                    'Staten Island'
+                                ]
+                            ]
+                        },
+
+                        {
+                            'condition': 'City eq "Montreal"',
+                            'dropdown': [
+                                {'label': i, 'value': i}
+                                for i in [
+                                    'Mile End',
+                                    'Plateau',
+                                    'Hochelaga'
+                                ]
+                            ]
+                        },
+
+                        {
+                            'condition': 'City eq "Los Angeles"',
+                            'dropdown': [
+                                {'label': i, 'value': i}
+                                for i in [
+                                    'Venice',
+                                    'Hollywood',
+                                    'Los Feliz'
+                                ]
+                            ]
+                        }
+
+                    ]
+                }
+            ]
+        ),
+
         section_title('Dash Table with Per-Cell Dropdowns'),
+
+        html.Div('This example uses a deprecated API, `dropdown_properties`.'),
 
         dash_table.Table(
             id=IDS['dropdown-by-cell'],
