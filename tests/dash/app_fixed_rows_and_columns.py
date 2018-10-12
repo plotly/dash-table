@@ -180,13 +180,13 @@ def layout():
         If you are merging your row headers, then your fix columns can only
         happen at the edges of the merged column sections.
 
-        For example, in the table below, you can only fix 3 or 5 columns
-        (at the edges of "Experiment 1" or "Experiment 2").
+        For example, in the table below, you can't set fixed columns to be
+        1, 2, 4, or 5 (the columns in the middle of the "Experiment" headers).
         ''')),
 
         dash_table.Table(
             id='merged-row-headers-with-fixed-columns',
-            n_fixed_columns=5,
+            n_fixed_columns=7,
             merge_duplicate_headers=True,
             columns=([
                 {
