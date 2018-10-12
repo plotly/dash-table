@@ -51,6 +51,7 @@ storiesOf('DashTable/Width defaults', module)
         setProps={setProps}
         id={'table'}
         dataframe={gapminder}
+        n_fixed_rows={1}
         columns={[
             'country',
             'year',
