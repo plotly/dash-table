@@ -30,8 +30,8 @@ def layout():
         will be as large as its content.
 
         With fixed rows, we bound the height of the table so that the content
-        is scrollable. In this case, the height is ??.
-        With a row height of ??, this will draw about ?? rows.
+        is scrollable. In this case, the height is 500px.
+        With a row height of 30px, this will draw about 15 rows.
         ''')),
 
         dash_table.Table(
@@ -61,7 +61,7 @@ def layout():
         that you'd like to fix.
 
         Similar to fixing rows, when you fix columns we'll fix the width of the
-        table's container to ?? pixels. Without fixed columns, the table's
+        table's container to 500px pixels. Without fixed columns, the table's
         width will expand to its contents.
         ''')),
 
