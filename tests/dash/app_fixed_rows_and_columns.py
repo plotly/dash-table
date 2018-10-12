@@ -35,7 +35,7 @@ def layout():
         ''')),
 
         dash_table.Table(
-            id=rand_id(),
+            id='id{}'.format(rand_id()),
             dataframe=df.to_dict('rows')[:100],
             columns=[{'name': i, 'id': i} for i in df.columns],
             n_fixed_rows=1
@@ -47,7 +47,7 @@ def layout():
         ''')),
 
         dash_table.Table(
-            id=rand_id(),
+            id='id{}'.format(rand_id()),
             dataframe=df.to_dict('rows'),
             columns=[{'name': i, 'id': i} for i in df.columns],
             n_fixed_rows=1,
@@ -66,7 +66,7 @@ def layout():
         ''')),
 
         dash_table.Table(
-            id=rand_id(),
+            id='id{}'.format(rand_id()),
             dataframe=df.to_dict('rows')[:10],
             columns=[{'name': i, 'id': i} for i in df.columns],
             n_fixed_columns=2
@@ -77,7 +77,7 @@ def layout():
         To adjust the width of the table, set ??
         ''')),
         dash_table.Table(
-            id=rand_id(),
+            id='id{}'.format(rand_id()),
             dataframe=df.to_dict('rows')[:10],
             columns=[{'name': i, 'id': i} for i in df.columns],
             n_fixed_columns=2,
@@ -91,7 +91,7 @@ def layout():
         ''')),
 
         dash_table.Table(
-            id=rand_id(),
+            id='id{}'.format(rand_id()),
             dataframe=df.to_dict('rows')[:100],
             columns=[{'name': i, 'id': i} for i in df.columns],
             n_fixed_columns=3,
@@ -106,7 +106,7 @@ def layout():
         ''')),
 
         dash_table.Table(
-            id=rand_id(),
+            id='id{}'.format(rand_id()),
             columns=[
                 {
                     'name': ['', '', 'Year'],
