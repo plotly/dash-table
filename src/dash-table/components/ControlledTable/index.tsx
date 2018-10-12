@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import * as R from 'ramda';
 import Stylesheet from 'core/Stylesheet';
+import { colIsEditable } from 'dash-table/components/derivedState';
 import {
     KEY_CODES,
     isCtrlMetaKey,
@@ -20,7 +21,6 @@ import dropdownHelper from 'dash-table/components/dropdownHelper';
 
 import derivedTable from 'dash-table/derived/table';
 import derivedTableFragments from 'dash-table/derived/table/fragments';
-import isEditable from 'dash-table/derived/cell/isEditable';
 
 const sortNumerical = R.sort<number>((a, b) => a - b);
 
@@ -208,7 +208,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
         if (
             e.keyCode === KEY_CODES.ENTER &&
             !is_focused &&
-            isEditable(editable, columns[active_cell[1]])
+            colIsEditable(editable, columns[active_cell[1]])
         ) {
             setProps({ is_focused: true });
             return;
@@ -235,7 +235,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
             // if we have any non-meta key enter editable mode
 
             !this.props.is_focused &&
-            isEditable(editable, columns[active_cell[1]]) &&
+            colIsEditable(editable, columns[active_cell[1]]) &&
             !isMetaKey(e.keyCode)
         ) {
             setProps({ is_focused: true });
@@ -378,7 +378,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
         );
 
         realCells.forEach(cell => {
-            if (isEditable(editable, columns[cell[1]])) {
+            if (colIsEditable(editable, columns[cell[1]])) {
                 newDataframe = R.set(
                     R.lensPath([cell[0], columns[cell[1]].id]),
                     '',
@@ -620,7 +620,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
             id,
             content_style,
             n_fixed_columns,
-            n_fixed_rows
+            n_fixed_rows,
         } = this.props;
 
         const classes = [
