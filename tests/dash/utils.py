@@ -1,4 +1,9 @@
 import dash_html_components as html
+import uuid
+
+
+def rand_id():
+    return str(uuid.uuid4())
 
 
 def merge(*args):
