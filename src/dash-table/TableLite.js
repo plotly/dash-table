@@ -77,10 +77,10 @@ class Cell extends Component {
     }
 
     render() {
-        const {editable, styles} = this.props;
+        const {editable, style} = this.props;
         const {value, focussed} = this.state;
         let inner;
-        let tdstyle = R.clone(styles.td);
+        let tdstyle = R.clone(style);
         if (editable && focussed) {
 
             // maxWidth to 0 is used for ellipses overflow
@@ -115,25 +115,55 @@ class Cell extends Component {
 
 class TableLite extends Component {
     render() {
-        const {columns, editable, rows, styles} = this.props;
+        const {
+            columns,
+            editable,
+            rows,
+
+            style_table,
+            style_row,
+            style_row_even,
+            style_row_odd,
+
+            style_cell,
+            style_cell_by_column,
+
+            style_header,
+            style_header_by_column,
+
+            style_cell_and_header,
+            style_cell_and_header_by_column,
+        } = this.props;
         return (
-            <table style={styles.table} className="table-light">
+            <table style={style_table} className="table-light">
                 <thead>
                     {columns.map(c =>
-                        <th style={R.merge(styles.th, R.propOr({}, 'style', c))}>
+                        <th style={R.mergeAll([
+                            style_row,
+                            style_cell_and_header,
+                            R.propOr({}, c.name, style_cell_and_header_by_column),
+                            style_header,
+                            R.propOr({}, c.name, style_header_by_column)
+                        ])}>
                             {c.name}
                         </th>
                     )}
                 </thead>
                 <tbody>
                     {rows.map(
-                        row => (
-                            <tr style={styles.tr}>{row.map((cell, i) =>
+                        (row, rowIndex) => (
+                            <tr style={R.mergeAll([
+                                style_row,
+                                rowIndex % 2 === 0 ? style_row_even : style_row_odd,
+                            ])}>{row.map((cell, i) =>
                                 <Cell
-                                    styles={R.mergeDeepRight(
-                                        styles,
-                                        {td: R.propOr({}, 'style', columns[i])}
-                                    )}
+                                    style={R.mergeAll([
+                                        style_cell_and_header,
+                                        R.propOr({}, columns[i].name, style_cell_and_header_by_column),
+
+                                        style_cell,
+                                        R.propOr({}, columns[i].name, style_cell_by_column),
+                                    ])}
                                     value={cell}
                                     editable={editable}
                                 />
@@ -148,29 +178,43 @@ class TableLite extends Component {
 }
 
 TableLite.defaultProps = {
-    styles: {
-        'table': {},
-        'th': {
-            'border': 'thin lightgrey solid',
-            'padding': '5px'
-        },
-        'tr': {
+    style_table: {},
 
-        },
-        'td': {
-            'border': 'thin lightgrey solid',
-            'padding': '5px'
-        },
-        'input': {
-        }
-    },
+    style_row: {},
+    style_row_even: {},
+    style_row_odd: {},
+
+    style_cell: {},
+    style_cell_by_column: {},
+
+    style_header: {},
+    style_header_by_column: {},
+
+    style_cell_and_header: {},
+    style_cell_and_header_by_column: {},
+
     editable: true
 }
 
 export const propTypes = {
     columns: PropTypes.arrayOf(PropTypes.string),
     rows: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
-    styles: PropTypes.object,
+
+    style_table: PropTypes.object,
+
+    style_row: PropTypes.object,
+    style_row_even: PropTypes.object,
+    style_row_odd: PropTypes.object,
+
+    style_cell: PropTypes.object,
+    style_cell_by_column: PropTypes.object,
+
+    style_header: PropTypes.object,
+    style_header_by_column: PropTypes.object,
+
+    style_cell_and_header: PropTypes.object,
+    style_cell_and_header_by_column: PropTypes.object,
+
     editable: PropTypes.bool
 }
 TableLite.propTypes = propTypes;

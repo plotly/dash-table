@@ -28,6 +28,13 @@ def layout():
         children=[
             html.H1("[WIP] - Styling the Table"),
 
+            section_title('Default Style'),
+            html_table(df),
+            dash_table.TableLite(
+                rows=df.to_records(index=False),
+                columns=[{'name': i} for i in df.columns]
+            ),
+
             section_title("HTML Table - Gridded"),
 
             html.Div("""
@@ -42,6 +49,20 @@ def layout():
                 table_style={'width': '100%'},
                 column_style={'width': '20%', 'paddingLeft': 20},
                 header_style={'backgroundColor': 'rgb(235, 235, 235)'}
+            ),
+
+            dash_table.TableLite(
+                rows=df.to_records(index=False),
+                columns=[{'name': i} for i in df.columns],
+                style_table={'width': '100%'},
+                style_cell_and_header={
+                    'width': '20%',
+                    'paddingLeft': 20,
+                    'border': 'thin lightgrey solid'
+                },
+                style_header={
+                    'backgroundColor': 'rgb(235, 235, 235)'
+                }
             ),
 
             html.Hr(),
@@ -81,6 +102,26 @@ def layout():
                 header_style={'backgroundColor': 'rgb(235, 235, 235)'}
             ),
 
+            dash_table.TableLite(
+                rows=df.to_records(index=False),
+                columns=[{'name': i} for i in df.columns],
+                style_table={'width': '100%'},
+                style_cell_and_header={
+                    'width': '20%',
+                    'paddingLeft': 20,
+                    'paddingRight': 5,
+                    'border': 'thin lightgrey solid'
+                },
+                style_header={
+                    'backgroundColor': 'rgb(235, 235, 235)'
+                },
+                style_cell_and_header_by_column={
+                    "Temperature": {"textAlign": "right", "fontFamily": "monospaced"},
+                    "Humidity": {"textAlign": "right", "fontFamily": "monospaced"},
+                    "Pressure": {"textAlign": "right", "fontFamily": "monospaced"},
+                },
+            ),
+
             html.Hr(),
 
             section_title('HTML Table - Styling the Table as a List'),
@@ -109,6 +150,28 @@ def layout():
                 },
             ),
 
+            dash_table.TableLite(
+                rows=df.to_records(index=False),
+                columns=[{'name': i} for i in df.columns],
+                style_table={'width': '100%'},
+                style_cell_and_header={
+                    'width': '20%',
+                    'paddingLeft': 20,
+                    'paddingRight': 5,
+                    'borderLeft': 'none',
+                    'borderRight': 'none'
+                },
+                style_header={
+                    'backgroundColor': 'rgb(235, 235, 235)'
+                },
+                style_cell_and_header_by_column={
+                    "Temperature": {"textAlign": "right", "fontFamily": "monospaced"},
+                    "Humidity": {"textAlign": "right", "fontFamily": "monospaced"},
+                    "Pressure": {"textAlign": "right", "fontFamily": "monospaced"},
+                },
+            ),
+
+
             html.Hr(),
 
             section_title('HTML Table - Row Padding'),
@@ -135,6 +198,29 @@ def layout():
                     "Pressure": {"textAlign": "right", "fontFamily": "monospaced"},
                 },
                 row_style={'paddingTop': 10, 'paddingBottom': 10}
+            ),
+
+            dash_table.TableLite(
+                rows=df.to_records(index=False),
+                columns=[{'name': i} for i in df.columns],
+                style_table={'width': '100%'},
+                style_cell_and_header={
+                    'width': '20%',
+                    'paddingLeft': 20,
+                    'paddingRight': 5,
+                    'borderLeft': 'none',
+                    'borderRight': 'none',
+                    'paddingTop': 10,
+                    'paddingBottom': 10
+                },
+                style_header={
+                    'backgroundColor': 'rgb(235, 235, 235)'
+                },
+                style_cell_and_header_by_column={
+                    "Temperature": {"textAlign": "right", "fontFamily": "monospaced"},
+                    "Humidity": {"textAlign": "right", "fontFamily": "monospaced"},
+                    "Pressure": {"textAlign": "right", "fontFamily": "monospaced"},
+                },
             ),
 
             html.Hr(),
@@ -166,6 +252,30 @@ def layout():
                 row_style={'paddingTop': 10, 'paddingBottom': 10}
             ),
 
+            dash_table.TableLite(
+                rows=df.to_records(index=False),
+                columns=[{'name': i} for i in df.columns],
+                style_table={'width': '100%'},
+                style_cell_and_header={
+                    'width': '20%',
+                    'paddingLeft': 20,
+                    'paddingRight': 5,
+                    'borderLeft': 'none',
+                    'borderRight': 'none',
+                    'paddingBottom': 10,
+                    'paddingTop': 10,
+                },
+                style_header={
+                    'backgroundColor': 'white',
+                    'borderBottom': '2px lightgrey solid'
+                },
+                style_cell_and_header_by_column={
+                    "Temperature": {"textAlign": "right", "fontFamily": "monospaced"},
+                    "Humidity": {"textAlign": "right", "fontFamily": "monospaced"},
+                    "Pressure": {"textAlign": "right", "fontFamily": "monospaced"},
+                },
+            ),
+
             html.Hr(),
 
             section_title('HTML Table - List Style with Understated Headers'),
@@ -192,6 +302,29 @@ def layout():
                     "Pressure": {"textAlign": "right", "fontFamily": "monospaced"},
                 },
                 row_style={'paddingTop': 10, 'paddingBottom': 10}
+            ),
+
+            dash_table.TableLite(
+                rows=df.to_records(index=False),
+                columns=[{'name': i} for i in df.columns],
+                style_table={'width': '100%'},
+                style_cell_and_header={
+                    'width': '20%',
+                    'paddingLeft': 20,
+                    'paddingRight': 5,
+                    'paddingBottom': 10,
+                    'paddingTop': 10,
+                },
+                style_header={
+                    'backgroundColor': 'white',
+                    'borderBottom': '2px lightgrey solid',
+                    'color': 'rgb(100, 100, 100)'
+                },
+                style_cell_and_header_by_column={
+                    "Temperature": {"textAlign": "right", "fontFamily": "monospaced"},
+                    "Humidity": {"textAlign": "right", "fontFamily": "monospaced"},
+                    "Pressure": {"textAlign": "right", "fontFamily": "monospaced"},
+                },
             ),
 
             html.Hr(),
@@ -222,6 +355,30 @@ def layout():
                 },
                 row_style={'paddingTop': 10, 'paddingBottom': 10},
                 odd_row_style={'backgroundColor': 'rgb(248, 248, 248)'}
+            ),
+
+            dash_table.TableLite(
+                rows=df.to_records(index=False),
+                columns=[{'name': i} for i in df.columns],
+                style_table={'width': '100%'},
+                style_cell_and_header={
+                    'width': '20%',
+                    'paddingLeft': 20,
+                    'paddingRight': 5,
+                    'paddingBottom': 10,
+                    'paddingTop': 10,
+                },
+                style_header={
+                    'backgroundColor': 'white',
+                    'borderBottom': '2px lightgrey solid',
+                    'color': 'rgb(100, 100, 100)'
+                },
+                style_cell_and_header_by_column={
+                    "Temperature": {"textAlign": "right", "fontFamily": "monospaced"},
+                    "Humidity": {"textAlign": "right", "fontFamily": "monospaced"},
+                    "Pressure": {"textAlign": "right", "fontFamily": "monospaced"},
+                },
+                style_row_odd={'backgroundColor': 'rgb(248, 248, 248)'}
             ),
 
             section_title('HTML Table - Dark Theme with Cells'),
@@ -256,6 +413,29 @@ def layout():
                 },
             ),
 
+            dash_table.TableLite(
+                rows=df.to_records(index=False),
+                columns=[{'name': i} for i in df.columns],
+                style_table={
+                    'width': '100%',
+                    'backgroundColor': 'rgb(50, 50, 50)',
+                    'color': 'white',
+                },
+                style_cell_and_header={
+                    'border': 'thin white solid',
+                    'padding': 10
+                },
+                style_header={
+                    'backgroundColor': 'rgb(30, 30, 30)',
+                    'borderBottom': '2px lightgrey solid',
+                },
+                style_cell_and_header_by_column={
+                    "Temperature": {"textAlign": "right", "fontFamily": "monospaced"},
+                    "Humidity": {"textAlign": "right", "fontFamily": "monospaced"},
+                    "Pressure": {"textAlign": "right", "fontFamily": "monospaced"},
+                },
+            ),
+
             section_title('HTML Table - Dark Theme with Rows'),
 
             html_table(
@@ -263,7 +443,7 @@ def layout():
                 table_style={
                     'backgroundColor': 'rgb(50, 50, 50)',
                     'color': 'white',
-                    'width': '100%'
+                    'width': '100%',
                 },
                 row_style={
                     'borderTop': 'thin white solid',
@@ -277,6 +457,30 @@ def layout():
                     "Pressure": {"textAlign": "right", "fontFamily": "monospaced"},
                 },
                 cell_style_by_column={
+                    "Temperature": {"textAlign": "right", "fontFamily": "monospaced"},
+                    "Humidity": {"textAlign": "right", "fontFamily": "monospaced"},
+                    "Pressure": {"textAlign": "right", "fontFamily": "monospaced"},
+                },
+            ),
+
+            dash_table.TableLite(
+                rows=df.to_records(index=False),
+                columns=[{'name': i} for i in df.columns],
+                style_table={
+                    'width': '100%',
+                    'backgroundColor': 'rgb(50, 50, 50)',
+                    'color': 'white',
+                },
+                style_cell_and_header={
+                    'borderTop': 'thin white solid',
+                    'borderBottom': 'thin white solid',
+                    'padding': 10
+                },
+                style_header={
+                    'backgroundColor': 'rgb(30, 30, 30)',
+                    'borderBottom': '2px lightgrey solid',
+                },
+                style_cell_and_header_by_column={
                     "Temperature": {"textAlign": "right", "fontFamily": "monospaced"},
                     "Humidity": {"textAlign": "right", "fontFamily": "monospaced"},
                     "Pressure": {"textAlign": "right", "fontFamily": "monospaced"},
@@ -345,38 +549,6 @@ def layout():
                     ) else {}
                 )
             ),
-
-            html.Hr(),
-
-            section_title('Dash Table - Styling the Table as a List'),
-            # ...
-
-            section_title('Dash Table - Row Padding'),
-            # ...
-
-            section_title('Dash Table - List Style with Minimal Headers'),
-            # ...
-
-            section_title('Dash Table - List Style with Understated Headers'),
-            # ...
-
-            section_title('Dash Table - Striped Rows'),
-            # ...
-
-            section_title('Dash Table - Dark Theme with Cells'),
-            # ...
-
-            section_title('Dash Table - Dark Theme with Rows'),
-            # ...
-
-            section_title('Dash Table - Highlighting Certain Rows'),
-            # ...
-
-            section_title('Dash Table - Highlighting Certain Columns'),
-            # ...
-
-            section_title('Dash Table - Highlighting Certain Cells'),
-            # ...
 
         ],
     )
