@@ -1,35 +1,82 @@
 {
-    "src/dash-table/TableLite.js": {
+    "src/dash-table/Table.js": {
       "description": "",
-      "displayName": "TableLite",
+      "displayName": "Table",
       "methods": [],
       "props": {
+        "active_cell": {
+          "type": {
+            "name": "array"
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "[]",
+            "computed": false
+          }
+        },
         "columns": {
           "type": {
             "name": "arrayOf",
             "value": {
-              "name": "string"
+              "name": "object"
             }
           },
           "required": false,
-          "description": ""
+          "description": "",
+          "defaultValue": {
+            "value": "[]",
+            "computed": false
+          }
         },
-        "rows": {
+        "content_style": {
+          "type": {
+            "name": "enum",
+            "value": [
+              {
+                "value": "'fit'",
+                "computed": false
+              },
+              {
+                "value": "'grow'",
+                "computed": false
+              }
+            ]
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "'fit'",
+            "computed": false
+          }
+        },
+        "dataframe": {
           "type": {
             "name": "arrayOf",
             "value": {
-              "name": "arrayOf",
-              "value": {
-                "name": "string"
-              }
+              "name": "object"
+            }
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "[]",
+            "computed": false
+          }
+        },
+        "dataframe_previous": {
+          "type": {
+            "name": "arrayOf",
+            "value": {
+              "name": "object"
             }
           },
           "required": false,
           "description": ""
         },
-        "styles": {
+        "dataframe_timestamp": {
           "type": {
-            "name": "object"
+            "name": "any"
           },
           "required": false,
           "description": ""
@@ -39,493 +86,690 @@
             "name": "bool"
           },
           "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "false",
+            "computed": false
+          }
+        },
+        "end_cell": {
+          "type": {
+            "name": "arrayOf",
+            "value": {
+              "name": "number"
+            }
+          },
+          "required": false,
           "description": ""
+        },
+        "id": {
+          "type": {
+            "name": "string"
+          },
+          "required": true,
+          "description": ""
+        },
+        "is_focused": {
+          "type": {
+            "name": "bool"
+          },
+          "required": false,
+          "description": ""
+        },
+        "merge_duplicate_headers": {
+          "type": {
+            "name": "bool"
+          },
+          "required": false,
+          "description": ""
+        },
+        "n_fixed_columns": {
+          "type": {
+            "name": "number"
+          },
+          "required": false,
+          "description": ""
+        },
+        "n_fixed_rows": {
+          "type": {
+            "name": "number"
+          },
+          "required": false,
+          "description": ""
+        },
+        "row_deletable": {
+          "type": {
+            "name": "bool"
+          },
+          "required": false,
+          "description": ""
+        },
+        "row_selectable": {
+          "type": {
+            "name": "enum",
+            "value": [
+              {
+                "value": "'single'",
+                "computed": false
+              },
+              {
+                "value": "'multi'",
+                "computed": false
+              },
+              {
+                "value": "false",
+                "computed": false
+              }
+            ]
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "false",
+            "computed": false
+          }
+        },
+        "selected_cell": {
+          "type": {
+            "name": "arrayOf",
+            "value": {
+              "name": "arrayOf",
+              "value": {
+                "name": "number"
+              }
+            }
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "[[]]",
+            "computed": false
+          }
+        },
+        "selected_rows": {
+          "type": {
+            "name": "arrayOf",
+            "value": {
+              "name": "number"
+            }
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "[]",
+            "computed": false
+          }
+        },
+        "setProps": {
+          "type": {
+            "name": "any"
+          },
+          "required": false,
+          "description": ""
+        },
+        "start_cell": {
+          "type": {
+            "name": "arrayOf",
+            "value": {
+              "name": "number"
+            }
+          },
+          "required": false,
+          "description": ""
+        },
+        "style_as_list_view": {
+          "type": {
+            "name": "bool"
+          },
+          "required": false,
+          "description": ""
+        },
+        "table_style": {
+          "type": {
+            "name": "arrayOf",
+            "value": {
+              "name": "shape",
+              "value": {
+                "selector": {
+                  "name": "string",
+                  "required": false
+                },
+                "rule": {
+                  "name": "string",
+                  "required": false
+                }
+              }
+            }
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "[]",
+            "computed": false
+          }
+        },
+        "pagination_mode": {
+          "type": {
+            "name": "enum",
+            "value": [
+              {
+                "value": "'fe'",
+                "computed": false
+              },
+              {
+                "value": "'be'",
+                "computed": false
+              },
+              {
+                "value": "true",
+                "computed": false
+              },
+              {
+                "value": "false",
+                "computed": false
+              }
+            ]
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "'fe'",
+            "computed": false
+          }
+        },
+        "pagination_settings": {
+          "type": {
+            "name": "shape",
+            "value": {
+              "displayed_pages": {
+                "name": "number",
+                "required": false
+              },
+              "current_page": {
+                "name": "number",
+                "required": false
+              },
+              "page_size": {
+                "name": "number",
+                "required": false
+              }
+            }
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "{\n    displayed_pages: 1,\n    current_page: 0,\n    page_size: 250\n}",
+            "computed": false
+          }
+        },
+        "navigation": {
+          "type": {
+            "name": "string"
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "'page'",
+            "computed": false
+          }
+        },
+        "column_conditional_dropdowns": {
+          "type": {
+            "name": "arrayOf",
+            "value": {
+              "name": "shape",
+              "value": {
+                "id": {
+                  "name": "string",
+                  "required": false
+                },
+                "dropdowns": {
+                  "name": "arrayOf",
+                  "value": {
+                    "name": "shape",
+                    "value": {
+                      "condition": {
+                        "name": "string",
+                        "required": false
+                      },
+                      "dropdown": {
+                        "name": "arrayOf",
+                        "value": {
+                          "name": "shape",
+                          "value": {
+                            "label": {
+                              "name": "string",
+                              "required": false
+                            },
+                            "value": {
+                              "name": "any",
+                              "required": false
+                            }
+                          }
+                        },
+                        "required": false
+                      }
+                    }
+                  },
+                  "required": false
+                }
+              }
+            }
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "[]",
+            "computed": false
+          }
+        },
+        "column_static_dropdown": {
+          "type": {
+            "name": "arrayOf",
+            "value": {
+              "name": "shape",
+              "value": {
+                "id": {
+                  "name": "string",
+                  "required": false
+                },
+                "dropdown": {
+                  "name": "arrayOf",
+                  "value": {
+                    "name": "shape",
+                    "value": {
+                      "label": {
+                        "name": "string",
+                        "required": false
+                      },
+                      "value": {
+                        "name": "any",
+                        "required": false
+                      }
+                    }
+                  },
+                  "required": false
+                }
+              }
+            }
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "[]",
+            "computed": false
+          }
+        },
+        "column_conditional_style": {
+          "type": {
+            "name": "arrayOf",
+            "value": {
+              "name": "shape",
+              "value": {
+                "id": {
+                  "name": "string",
+                  "required": false
+                },
+                "styles": {
+                  "name": "arrayOf",
+                  "value": {
+                    "name": "shape",
+                    "value": {
+                      "condition": {
+                        "name": "string",
+                        "required": false
+                      },
+                      "style": {
+                        "name": "object",
+                        "required": false
+                      }
+                    }
+                  },
+                  "required": false
+                }
+              }
+            }
+          },
+          "required": false,
+          "description": ""
+        },
+        "column_static_style": {
+          "type": {
+            "name": "arrayOf",
+            "value": {
+              "name": "shape",
+              "value": {
+                "id": {
+                  "name": "string",
+                  "required": false
+                },
+                "style": {
+                  "name": "object",
+                  "required": false
+                }
+              }
+            }
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "[]",
+            "computed": false
+          }
+        },
+        "row_conditional_styles": {
+          "type": {
+            "name": "arrayOf",
+            "value": {
+              "name": "shape",
+              "value": {
+                "condition": {
+                  "name": "string",
+                  "required": false
+                },
+                "style": {
+                  "name": "object",
+                  "required": false
+                }
+              }
+            }
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "[]",
+            "computed": false
+          }
+        },
+        "row_static_style": {
+          "type": {
+            "name": "object"
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "{}",
+            "computed": false
+          }
+        },
+        "filtering": {
+          "type": {
+            "name": "enum",
+            "value": [
+              {
+                "value": "'fe'",
+                "computed": false
+              },
+              {
+                "value": "'be'",
+                "computed": false
+              },
+              {
+                "value": "true",
+                "computed": false
+              },
+              {
+                "value": "false",
+                "computed": false
+              }
+            ]
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "false",
+            "computed": false
+          }
+        },
+        "filtering_settings": {
+          "type": {
+            "name": "string"
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "''",
+            "computed": false
+          }
+        },
+        "filtering_type": {
+          "type": {
+            "name": "enum",
+            "value": [
+              {
+                "value": "'basic'",
+                "computed": false
+              }
+            ]
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "'basic'",
+            "computed": false
+          }
+        },
+        "filtering_types": {
+          "type": {
+            "name": "arrayOf",
+            "value": {
+              "name": "enum",
+              "value": [
+                {
+                  "value": "'basic'",
+                  "computed": false
+                }
+              ]
+            }
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "['basic']",
+            "computed": false
+          }
+        },
+        "sorting": {
+          "type": {
+            "name": "enum",
+            "value": [
+              {
+                "value": "'fe'",
+                "computed": false
+              },
+              {
+                "value": "'be'",
+                "computed": false
+              },
+              {
+                "value": "true",
+                "computed": false
+              },
+              {
+                "value": "false",
+                "computed": false
+              }
+            ]
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "false",
+            "computed": false
+          }
+        },
+        "sorting_type": {
+          "type": {
+            "name": "enum",
+            "value": [
+              {
+                "value": "'single'",
+                "computed": false
+              },
+              {
+                "value": "'multi'",
+                "computed": false
+              }
+            ]
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "'single'",
+            "computed": false
+          }
+        },
+        "sorting_settings": {
+          "type": {
+            "name": "arrayOf",
+            "value": {
+              "name": "shape",
+              "value": {
+                "columnId": {
+                  "name": "union",
+                  "value": [
+                    {
+                      "name": "string"
+                    },
+                    {
+                      "name": "number"
+                    }
+                  ],
+                  "required": false
+                },
+                "direction": {
+                  "name": "enum",
+                  "value": [
+                    {
+                      "value": "'asc'",
+                      "computed": false
+                    },
+                    {
+                      "value": "'desc'",
+                      "computed": false
+                    }
+                  ],
+                  "required": false
+                }
+              }
+            }
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "[]",
+            "computed": false
+          }
+        },
+        "sorting_treat_empty_string_as_none": {
+          "type": {
+            "name": "bool"
+          },
+          "required": false,
+          "description": ""
+        },
+        "derived_viewport_dataframe": {
+          "type": {
+            "name": "arrayOf",
+            "value": {
+              "name": "object"
+            }
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "[]",
+            "computed": false
+          }
+        },
+        "derived_viewport_indices": {
+          "type": {
+            "name": "arrayOf",
+            "value": {
+              "name": "number"
+            }
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "[]",
+            "computed": false
+          }
+        },
+        "derived_virtual_dataframe": {
+          "type": {
+            "name": "arrayOf",
+            "value": {
+              "name": "object"
+            }
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "[]",
+            "computed": false
+          }
+        },
+        "derived_virtual_indices": {
+          "type": {
+            "name": "arrayOf",
+            "value": {
+              "name": "number"
+            }
+          },
+          "required": false,
+          "description": "",
+          "defaultValue": {
+            "value": "[]",
+            "computed": false
+          }
+        },
+        "dropdown_properties": {
+          "type": {
+            "name": "any"
+          },
+          "required": false,
+          "description": ""
+        },
+        "column_conditional_styles": {
+          "defaultValue": {
+            "value": "[]",
+            "computed": false
+          },
+          "required": false
         }
       }
   },
-  "src/dash-table/Table.js": {
+
+  "src/dash-table/TableLite.js": {
     "description": "",
-    "displayName": "Table",
+    "displayName": "TableLite",
     "methods": [],
     "props": {
-      "active_cell": {
-        "type": {
-          "name": "array"
-        },
-        "required": false,
-        "description": "",
-        "defaultValue": {
-          "value": "[]",
-          "computed": false
-        }
-      },
       "columns": {
         "type": {
           "name": "arrayOf",
           "value": {
-            "name": "object"
-          }
-        },
-        "required": false,
-        "description": "",
-        "defaultValue": {
-          "value": "[]",
-          "computed": false
-        }
-      },
-      "content_style": {
-        "type": {
-          "name": "enum",
-          "value": [
-            {
-              "value": "'fit'",
-              "computed": false
-            },
-            {
-              "value": "'grow'",
-              "computed": false
-            }
-          ]
-        },
-        "required": false,
-        "description": "",
-        "defaultValue": {
-          "value": "'fit'",
-          "computed": false
-        }
-      },
-      "dataframe": {
-        "type": {
-          "name": "arrayOf",
-          "value": {
-            "name": "object"
-          }
-        },
-        "required": false,
-        "description": "",
-        "defaultValue": {
-          "value": "[]",
-          "computed": false
-        }
-      },
-      "dataframe_previous": {
-        "type": {
-          "name": "arrayOf",
-          "value": {
-            "name": "object"
+            "name": "string"
           }
         },
         "required": false,
         "description": ""
       },
-      "dataframe_timestamp": {
-        "type": {
-          "name": "any"
-        },
-        "required": false,
-        "description": ""
-      },
-      "editable": {
-        "type": {
-          "name": "bool"
-        },
-        "required": false,
-        "description": "",
-        "defaultValue": {
-          "value": "false",
-          "computed": false
-        }
-      },
-      "end_cell": {
-        "type": {
-          "name": "arrayOf",
-          "value": {
-            "name": "number"
-          }
-        },
-        "required": false,
-        "description": ""
-      },
-      "id": {
-        "type": {
-          "name": "string"
-        },
-        "required": true,
-        "description": ""
-      },
-      "is_focused": {
-        "type": {
-          "name": "bool"
-        },
-        "required": false,
-        "description": ""
-      },
-      "merge_duplicate_headers": {
-        "type": {
-          "name": "bool"
-        },
-        "required": false,
-        "description": ""
-      },
-      "n_fixed_columns": {
-        "type": {
-          "name": "number"
-        },
-        "required": false,
-        "description": ""
-      },
-      "n_fixed_rows": {
-        "type": {
-          "name": "number"
-        },
-        "required": false,
-        "description": ""
-      },
-      "row_deletable": {
-        "type": {
-          "name": "bool"
-        },
-        "required": false,
-        "description": ""
-      },
-      "row_selectable": {
-        "type": {
-          "name": "enum",
-          "value": [
-            {
-              "value": "'single'",
-              "computed": false
-            },
-            {
-              "value": "'multi'",
-              "computed": false
-            },
-            {
-              "value": "false",
-              "computed": false
-            }
-          ]
-        },
-        "required": false,
-        "description": "",
-        "defaultValue": {
-          "value": "false",
-          "computed": false
-        }
-      },
-      "selected_cell": {
+      "rows": {
         "type": {
           "name": "arrayOf",
           "value": {
             "name": "arrayOf",
             "value": {
-              "name": "number"
-            }
-          }
-        },
-        "required": false,
-        "description": "",
-        "defaultValue": {
-          "value": "[[]]",
-          "computed": false
-        }
-      },
-      "selected_rows": {
-        "type": {
-          "name": "arrayOf",
-          "value": {
-            "name": "number"
-          }
-        },
-        "required": false,
-        "description": "",
-        "defaultValue": {
-          "value": "[]",
-          "computed": false
-        }
-      },
-      "setProps": {
-        "type": {
-          "name": "any"
-        },
-        "required": false,
-        "description": ""
-      },
-      "start_cell": {
-        "type": {
-          "name": "arrayOf",
-          "value": {
-            "name": "number"
-          }
-        },
-        "required": false,
-        "description": ""
-      },
-      "style_as_list_view": {
-        "type": {
-          "name": "bool"
-        },
-        "required": false,
-        "description": ""
-      },
-      "table_style": {
-        "type": {
-          "name": "arrayOf",
-          "value": {
-            "name": "shape",
-            "value": {
-              "selector": {
-                "name": "string",
-                "required": false
-              },
-              "rule": {
-                "name": "string",
-                "required": false
-              }
-            }
-          }
-        },
-        "required": false,
-        "description": "",
-        "defaultValue": {
-          "value": "[]",
-          "computed": false
-        }
-      },
-      "pagination_mode": {
-        "type": {
-          "name": "enum",
-          "value": [
-            {
-              "value": "'fe'",
-              "computed": false
-            },
-            {
-              "value": "'be'",
-              "computed": false
-            },
-            {
-              "value": "true",
-              "computed": false
-            },
-            {
-              "value": "false",
-              "computed": false
-            }
-          ]
-        },
-        "required": false,
-        "description": "",
-        "defaultValue": {
-          "value": "'fe'",
-          "computed": false
-        }
-      },
-      "pagination_settings": {
-        "type": {
-          "name": "shape",
-          "value": {
-            "displayed_pages": {
-              "name": "number",
-              "required": false
-            },
-            "current_page": {
-              "name": "number",
-              "required": false
-            },
-            "page_size": {
-              "name": "number",
-              "required": false
-            }
-          }
-        },
-        "required": false,
-        "description": "",
-        "defaultValue": {
-          "value": "{\n    displayed_pages: 1,\n    current_page: 0,\n    page_size: 250\n}",
-          "computed": false
-        }
-      },
-      "navigation": {
-        "type": {
-          "name": "string"
-        },
-        "required": false,
-        "description": "",
-        "defaultValue": {
-          "value": "'page'",
-          "computed": false
-        }
-      },
-      "column_conditional_dropdowns": {
-        "type": {
-          "name": "arrayOf",
-          "value": {
-            "name": "shape",
-            "value": {
-              "id": {
-                "name": "string",
-                "required": false
-              },
-              "dropdowns": {
-                "name": "arrayOf",
-                "value": {
-                  "name": "shape",
-                  "value": {
-                    "condition": {
-                      "name": "string",
-                      "required": false
-                    },
-                    "dropdown": {
-                      "name": "arrayOf",
-                      "value": {
-                        "name": "shape",
-                        "value": {
-                          "label": {
-                            "name": "string",
-                            "required": false
-                          },
-                          "value": {
-                            "name": "any",
-                            "required": false
-                          }
-                        }
-                      },
-                      "required": false
-                    }
-                  }
-                },
-                "required": false
-              }
-            }
-          }
-        },
-        "required": false,
-        "description": "",
-        "defaultValue": {
-          "value": "[]",
-          "computed": false
-        }
-      },
-      "column_static_dropdown": {
-        "type": {
-          "name": "arrayOf",
-          "value": {
-            "name": "shape",
-            "value": {
-              "id": {
-                "name": "string",
-                "required": false
-              },
-              "dropdown": {
-                "name": "arrayOf",
-                "value": {
-                  "name": "shape",
-                  "value": {
-                    "label": {
-                      "name": "string",
-                      "required": false
-                    },
-                    "value": {
-                      "name": "any",
-                      "required": false
-                    }
-                  }
-                },
-                "required": false
-              }
-            }
-          }
-        },
-        "required": false,
-        "description": "",
-        "defaultValue": {
-          "value": "[]",
-          "computed": false
-        }
-      },
-      "column_conditional_style": {
-        "type": {
-          "name": "arrayOf",
-          "value": {
-            "name": "shape",
-            "value": {
-              "id": {
-                "name": "string",
-                "required": false
-              },
-              "styles": {
-                "name": "arrayOf",
-                "value": {
-                  "name": "shape",
-                  "value": {
-                    "condition": {
-                      "name": "string",
-                      "required": false
-                    },
-                    "style": {
-                      "name": "object",
-                      "required": false
-                    }
-                  }
-                },
-                "required": false
-              }
+              "name": "string"
             }
           }
         },
         "required": false,
         "description": ""
       },
-      "column_static_style": {
-        "type": {
-          "name": "arrayOf",
-          "value": {
-            "name": "shape",
-            "value": {
-              "id": {
-                "name": "string",
-                "required": false
-              },
-              "style": {
-                "name": "object",
-                "required": false
-              }
-            }
-          }
-        },
-        "required": false,
-        "description": "",
-        "defaultValue": {
-          "value": "[]",
-          "computed": false
-        }
-      },
-      "row_conditional_styles": {
-        "type": {
-          "name": "arrayOf",
-          "value": {
-            "name": "shape",
-            "value": {
-              "condition": {
-                "name": "string",
-                "required": false
-              },
-              "style": {
-                "name": "object",
-                "required": false
-              }
-            }
-          }
-        },
-        "required": false,
-        "description": "",
-        "defaultValue": {
-          "value": "[]",
-          "computed": false
-        }
-      },
-      "row_static_style": {
+      "style_table": {
         "type": {
           "name": "object"
         },
@@ -536,251 +780,115 @@
           "computed": false
         }
       },
-      "filtering": {
+      "style_row": {
         "type": {
-          "name": "enum",
-          "value": [
-            {
-              "value": "'fe'",
-              "computed": false
-            },
-            {
-              "value": "'be'",
-              "computed": false
-            },
-            {
-              "value": "true",
-              "computed": false
-            },
-            {
-              "value": "false",
-              "computed": false
-            }
-          ]
+          "name": "object"
         },
         "required": false,
         "description": "",
         "defaultValue": {
-          "value": "false",
+          "value": "{}",
           "computed": false
         }
       },
-      "filtering_settings": {
+      "style_row_even": {
         "type": {
-          "name": "string"
+          "name": "object"
         },
         "required": false,
         "description": "",
         "defaultValue": {
-          "value": "''",
+          "value": "{}",
           "computed": false
         }
       },
-      "filtering_type": {
+      "style_row_odd": {
         "type": {
-          "name": "enum",
-          "value": [
-            {
-              "value": "'basic'",
-              "computed": false
-            }
-          ]
+          "name": "object"
         },
         "required": false,
         "description": "",
         "defaultValue": {
-          "value": "'basic'",
+          "value": "{}",
           "computed": false
         }
       },
-      "filtering_types": {
+      "style_cell": {
         "type": {
-          "name": "arrayOf",
-          "value": {
-            "name": "enum",
-            "value": [
-              {
-                "value": "'basic'",
-                "computed": false
-              }
-            ]
-          }
+          "name": "object"
         },
         "required": false,
         "description": "",
         "defaultValue": {
-          "value": "['basic']",
+          "value": "{}",
           "computed": false
         }
       },
-      "sorting": {
+      "style_cell_by_column": {
         "type": {
-          "name": "enum",
-          "value": [
-            {
-              "value": "'fe'",
-              "computed": false
-            },
-            {
-              "value": "'be'",
-              "computed": false
-            },
-            {
-              "value": "true",
-              "computed": false
-            },
-            {
-              "value": "false",
-              "computed": false
-            }
-          ]
+          "name": "object"
         },
         "required": false,
         "description": "",
         "defaultValue": {
-          "value": "false",
+          "value": "{}",
           "computed": false
         }
       },
-      "sorting_type": {
+      "style_header": {
         "type": {
-          "name": "enum",
-          "value": [
-            {
-              "value": "'single'",
-              "computed": false
-            },
-            {
-              "value": "'multi'",
-              "computed": false
-            }
-          ]
+          "name": "object"
         },
         "required": false,
         "description": "",
         "defaultValue": {
-          "value": "'single'",
+          "value": "{}",
           "computed": false
         }
       },
-      "sorting_settings": {
+      "style_header_by_column": {
         "type": {
-          "name": "arrayOf",
-          "value": {
-            "name": "shape",
-            "value": {
-              "columnId": {
-                "name": "union",
-                "value": [
-                  {
-                    "name": "string"
-                  },
-                  {
-                    "name": "number"
-                  }
-                ],
-                "required": false
-              },
-              "direction": {
-                "name": "enum",
-                "value": [
-                  {
-                    "value": "'asc'",
-                    "computed": false
-                  },
-                  {
-                    "value": "'desc'",
-                    "computed": false
-                  }
-                ],
-                "required": false
-              }
-            }
-          }
+          "name": "object"
         },
         "required": false,
         "description": "",
         "defaultValue": {
-          "value": "[]",
+          "value": "{}",
           "computed": false
         }
       },
-      "sorting_treat_empty_string_as_none": {
+      "style_cell_and_header": {
+        "type": {
+          "name": "object"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "{}",
+          "computed": false
+        }
+      },
+      "style_cell_and_header_by_column": {
+        "type": {
+          "name": "object"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "{}",
+          "computed": false
+        }
+      },
+      "editable": {
         "type": {
           "name": "bool"
         },
         "required": false,
-        "description": ""
-      },
-      "derived_viewport_dataframe": {
-        "type": {
-          "name": "arrayOf",
-          "value": {
-            "name": "object"
-          }
-        },
-        "required": false,
         "description": "",
         "defaultValue": {
-          "value": "[]",
+          "value": "true",
           "computed": false
         }
-      },
-      "derived_viewport_indices": {
-        "type": {
-          "name": "arrayOf",
-          "value": {
-            "name": "number"
-          }
-        },
-        "required": false,
-        "description": "",
-        "defaultValue": {
-          "value": "[]",
-          "computed": false
-        }
-      },
-      "derived_virtual_dataframe": {
-        "type": {
-          "name": "arrayOf",
-          "value": {
-            "name": "object"
-          }
-        },
-        "required": false,
-        "description": "",
-        "defaultValue": {
-          "value": "[]",
-          "computed": false
-        }
-      },
-      "derived_virtual_indices": {
-        "type": {
-          "name": "arrayOf",
-          "value": {
-            "name": "number"
-          }
-        },
-        "required": false,
-        "description": "",
-        "defaultValue": {
-          "value": "[]",
-          "computed": false
-        }
-      },
-      "dropdown_properties": {
-        "type": {
-          "name": "any"
-        },
-        "required": false,
-        "description": ""
-      },
-      "column_conditional_styles": {
-        "defaultValue": {
-          "value": "[]",
-          "computed": false
-        },
-        "required": false
       }
     }
   }
