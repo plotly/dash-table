@@ -91,8 +91,8 @@ def layout():
                 dash_table.TableLite(
                     rows=df.to_records(index=False),
                     columns=[{'name': i} for i in data.keys()],
-                    styles={
-                        'table': {'width': '100%'}
+                    style_table={
+                        'width': '100%'
                     }
                 ),
 
@@ -116,10 +116,12 @@ def layout():
                 dash_table.TableLite(
                     rows=df.to_records(index=False),
                     columns=[
-                        {'name': i, 'style': {'width': '200px'}}
+                        {'name': i}
                         for i in df.columns
                     ],
-                    styles={}
+                    style_cell_and_header={
+                        'width': '200px'
+                    }
                 ),
 
                 section_title("HTML Table - All Column Widths defined by Percent"),
@@ -142,16 +144,17 @@ def layout():
                 ),
                 dash_table.TableLite(
                     rows=df.to_records(index=False),
-                    columns=[
-                        {'name': 'Date', 'style': {'width': '30%'}},
-                        {'name': 'Election Polling Organization', 'style': {'width': '25%'}},
-                        {'name': 'Rep', 'style': {'width': '5%'}},
-                        {'name': 'Dem', 'style': {'width': '5%'}},
-                        {'name': 'Ind', 'style': {'width': '5%'}},
-                        {'name': 'Region', 'style': {'width': '30%'}},
-                    ],
-                    styles={
-                        'table': {'width': '100%'}
+                    columns=[{'name': i} for i in df.columns],
+                    style_table={
+                        'width': '100%'
+                    },
+                    style_cell_and_header_by_column={
+                        'Date': {'width': '30%'},
+                        'Election Polling Organization': {'width': '25%'},
+                        'Rep': {'width': '5%'},
+                        'Dem': {'width': '5%'},
+                        'Ind': {'width': '5%'},
+                        'Region': {'width': '30%'},
                     }
                 ),
 
@@ -174,10 +177,13 @@ def layout():
                         {'name': 'Rep'},
                         {'name': 'Dem'},
                         {'name': 'Ind'},
-                        {'name': 'Region', 'style': {'width': '50%'}},
+                        {'name': 'Region'},
                     ],
-                    styles={
-                        'table': {'width': '100%'}
+                    style_table={
+                        'width': '100%'
+                    },
+                    style_cell_and_header_by_column={
+                        'Region': {'width': '50%'}
                     }
                 ),
 
@@ -196,15 +202,18 @@ def layout():
                 dash_table.TableLite(
                     rows=df.to_records(index=False),
                     columns=[
-                        {'name': 'Date', 'style': {'minWidth': '130px'}},
+                        {'name': 'Date'},
                         {'name': 'Election Polling Organization'},
                         {'name': 'Rep'},
                         {'name': 'Dem'},
                         {'name': 'Ind'},
                         {'name': 'Region'}
                     ],
-                    styles={
-                        'table': {'width': '100%'}
+                    style_table={
+                        'width': '100%'
+                    },
+                    style_cell_and_header_by_column={
+                        'minWidth': '130px'
                     }
                 ),
 
@@ -238,8 +247,13 @@ def layout():
                         {'name': 'Ind', 'style': {'width': 50}},
                         {'name': 'Region'}
                     ],
-                    styles={
-                        'table': {'width': '100%'}
+                    style_table={
+                        'width': '100%'
+                    },
+                    style_cell_and_header_by_column={
+                        "Dem": {"width": 50},
+                        "Rep": {"width": 50},
+                        "Ind": {"width": 50},
                     }
                 ),
 
@@ -273,8 +287,13 @@ def layout():
                         {'name': 'Ind', 'style': {'width': 20}},
                         {'name': 'Region'}
                     ],
-                    styles={
-                        'table': {'width': '100%'}
+                    style_table={
+                        'width': '100%'
+                    },
+                    style_cell_and_header_by_column={
+                        "Dem": {"width": 20},
+                        "Rep": {"width": 20},
+                        "Ind": {"width": 20},
                     }
                 ),
 
@@ -309,21 +328,13 @@ def layout():
                         {'name': 'Ind'},
                         {'name': 'Region'}
                     ],
-                    styles={
-                        'table': {'width': '100%'},
-                        'th': {
-                            "whiteSpace": "nowrap",
-                            "overflow": "hidden",
-                            "textOverflow": "ellipsis",
-                            "maxWidth": 0,
-                        },
-                        'td': {
-                            "whiteSpace": "nowrap",
-                            "overflow": "hidden",
-                            "textOverflow": "ellipsis",
-                            "maxWidth": 0,
-                        }
-                    }
+                    style_table={"width": "100%"},
+                    style_cell_and_header={
+                        "whiteSpace": "nowrap",
+                        "overflow": "hidden",
+                        "textOverflow": "ellipsis",
+                        "maxWidth": 0,
+                    },
                 ),
 
                 section_title("HTML Table - Vertical Scrolling"),
@@ -399,10 +410,12 @@ def layout():
                     dash_table.TableLite(
                         rows=[[1, 2]],
                         columns=[{'name': 'Column 1'}, {'name': 'Column 2'}],
-                        styles={
-                            "table": {"minWidth": "100%"},
-                            "td": {"whiteSpace": "nowrap"}
+                        style_table={
+                            "minWidth": "100%"
                         },
+                        style_cell={
+                            "whiteSpace": "nowrap"
+                        }
                     )
                 ),
 
@@ -439,10 +452,9 @@ def layout():
                             {'name': "This is Column {} Data".format(i)}
                             for i in range(10)
                         ],
-                        styles={
-                            'table': {"minWidth": "100%", "overflowX": "scroll"},
-                            'th': {"whiteSpace": "nowrap"},
-                            'td': {"whiteSpace": "nowrap"},
+                        style_table={},
+                        style_cell_and_header={
+                            "whiteSpace": "nowrap"
                         }
                     ),
                     style={"overflowX": "scroll"},
