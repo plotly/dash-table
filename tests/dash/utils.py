@@ -3,7 +3,7 @@ import uuid
 
 
 def rand_id():
-    return str(uuid.uuid4())
+    return 'id-{}'.format(str(uuid.uuid4()).split('-')[0])
 
 
 def merge(*args):
