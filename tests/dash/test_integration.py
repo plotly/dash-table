@@ -21,7 +21,7 @@ class Tests(IntegrationTests):
             WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located((By.ID, "waitfor"))
             )
-            time.sleep(30)
+            time.sleep(5)
             self.snapshot(href)
             self.driver.back()
 

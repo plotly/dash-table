@@ -3,7 +3,6 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import random from 'core/math/random';
 import DashTable from 'dash-table/Table';
-import gapminder from './dataset-gapminder';
 
 const setProps = () => { };
 
@@ -46,18 +45,4 @@ storiesOf('DashTable/Width defaults', module)
         {...props}
         n_fixed_columns={1}
         n_fixed_rows={1}
-    />))
-    .add('with large dataset', () => (<DashTable
-        setProps={setProps}
-        id={'table'}
-        dataframe={gapminder}
-        n_fixed_rows={1}
-        columns={[
-            'country',
-            'year',
-            'pop',
-            'continent',
-            'lifeExp',
-            'gdpPercap'
-        ].map(colName => ({name: colName, id: colName}))}
     />));
