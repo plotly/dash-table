@@ -303,11 +303,11 @@ export default [
                 },
                 {
                     name: 'Column 2',
-                    id: 'column-2',
+                    id: 'column-2'
                 },
                 {
                     name: 'Column 3',
-                    id: 'column-3',
+                    id: 'column-3'
                 }
             ],
             dataframe: [
@@ -494,7 +494,7 @@ export default [
                 {
                     id: 'column-1',
                     name: 'Column 1',
-                    type: 'dropdown',
+                    type: 'dropdown'
                 },
                 {
                     id: 'column-2',
