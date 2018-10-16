@@ -656,7 +656,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
         const rawTable = this.tableFn();
         const grid = derivedTableFragments(n_fixed_columns, n_fixed_rows, rawTable);
 
-        const tableStyle = this.tableStyle(style).style;
+        const tableStyle = this.tableStyle(style);
 
         return (<div
             id={id}

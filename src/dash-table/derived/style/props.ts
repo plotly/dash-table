@@ -1,14 +1,14 @@
 import { StyleProperty } from './py2jsCssProperties';
+import { ColumnId } from 'dash-table/components/Table/props';
 
-interface INamedElement {
-    id?: string;
-}
-
-interface IConditionalElement {
+export interface IConditionalElement {
+    id?: ColumnId;
     condition?: string;
 }
 
-export type Selector = Partial<INamedElement & IConditionalElement>;
+type ConditionalColumn = IConditionalElement;
+type ConditionalHeader = IConditionalElement;
+type ConditionalRow = IConditionalElement & { id?: number };
 
 interface IStyle {
     background: StyleProperty;
@@ -204,21 +204,13 @@ interface IStyle {
 
 export type Style = Partial<IStyle>;
 
-export type Element = Style & Partial<{
-    focus: Style,
-    hover: Style
-}>;
+export type Column = Style & ConditionalColumn;
+export type Header = Style & ConditionalHeader;
+export type Row = Style & ConditionalRow;
 
-export type Column = Style; // & Partial<{
-//     input: Element,
-//     dropdown: Element
-// }>;
-export type Header = Style;
-export type Row = Style;
-
-export type Columns = (Column & Selector)[];
-export type Headers = (Header & Selector)[];
-export type Rows = (Row & Selector)[];
+export type Columns = Column[];
+export type Headers = Header[];
+export type Rows = Row[];
 
 type TableStyle = Style & Partial<{
     columns: Columns,

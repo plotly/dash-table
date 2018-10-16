@@ -578,7 +578,1826 @@
       },
       "style": {
         "type": {
-          "name": "any"
+          "name": "shape",
+          "value": {
+            "background": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "background_attachment": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "background_color": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "background_image": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "background_position": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "background_repeat": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "border": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "border_bottom": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "border_bottom_color": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "border_bottom_style": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "border_bottom_width": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "border_color": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "border_left": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "border_left_color": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "border_left_style": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "border_left_width": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "border_right": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "border_right_color": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "border_right_style": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "border_right_width": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "border_style": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "border_top": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "border_top_color": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "border_top_style": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "border_top_width": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "border_width": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "clear": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "clip": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "color": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "cursor": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "display": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "filter": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "float": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "font": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "font_family": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "font_size": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "font_variant": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "font_weight": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "height": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "left": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "letter_spacing": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "line_height": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "list_style": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "list_style_image": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "list_style_position": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "list_style_type": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "margin": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "margin_bottom": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "margin_left": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "margin_right": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "margin_top": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "max_width": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "min_width": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "overflow": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "padding": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "padding_bottom": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "padding_left": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "padding_right": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "padding_top": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "page_break_after": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "page_break_before": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "position": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "stroke_dasharray": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "stroke_dashoffset": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "stroke_width": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "text_align": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "text_decoration": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "text_indent": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "text_transform": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "top": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "vertical_align": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "visibility": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "width": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "z_index": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ],
+              "required": false
+            },
+            "columns": {
+              "name": "arrayOf",
+              "value": {
+                "name": "shape",
+                "value": {
+                  "id": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "condition": {
+                    "name": "string",
+                    "required": false
+                  },
+                  "background": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "background_attachment": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "background_color": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "background_image": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "background_position": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "background_repeat": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "border": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "border_bottom": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "border_bottom_color": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "border_bottom_style": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "border_bottom_width": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "border_color": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "border_left": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "border_left_color": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "border_left_style": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "border_left_width": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "border_right": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "border_right_color": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "border_right_style": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "border_right_width": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "border_style": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "border_top": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "border_top_color": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "border_top_style": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "border_top_width": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "border_width": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "clear": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "clip": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "color": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "cursor": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "display": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "filter": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "float": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "font": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "font_family": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "font_size": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "font_variant": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "font_weight": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "height": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "left": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "letter_spacing": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "line_height": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "list_style": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "list_style_image": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "list_style_position": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "list_style_type": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "margin": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "margin_bottom": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "margin_left": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "margin_right": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "margin_top": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "max_width": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "min_width": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "overflow": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "padding": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "padding_bottom": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "padding_left": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "padding_right": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "padding_top": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "page_break_after": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "page_break_before": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "position": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "stroke_dasharray": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "stroke_dashoffset": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "stroke_width": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "text_align": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "text_decoration": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "text_indent": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "text_transform": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "top": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "vertical_align": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "visibility": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "width": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "z_index": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ],
+                    "required": false
+                  }
+                }
+              },
+              "required": false
+            },
+            "headers": {
+              "name": "arrayOf",
+              "value": {
+                "name": "custom",
+                "raw": "{\n    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    condition: PropTypes.string,\n    background: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    background_attachment: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    background_color: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    background_image: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    background_position: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    background_repeat: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_bottom: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_bottom_color: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_bottom_style: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_bottom_width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_color: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_left: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_left_color: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_left_style: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_left_width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_right: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_right_color: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_right_style: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_right_width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_style: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_top: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_top_color: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_top_style: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_top_width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    clear: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    clip: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    color: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    cursor: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    display: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    filter: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    float: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    font: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    font_family: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    font_size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    font_variant: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    font_weight: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    left: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    letter_spacing: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    line_height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    list_style: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    list_style_image: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    list_style_position: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    list_style_type: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    margin: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    margin_bottom: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    margin_left: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    margin_right: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    margin_top: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    max_width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    min_width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    overflow: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    padding: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    padding_bottom: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    padding_left: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    padding_right: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    padding_top: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    page_break_after: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    page_break_before: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    position: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    stroke_dasharray: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    stroke_dashoffset: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    stroke_width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    text_align: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    text_decoration: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    text_indent: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    text_transform: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    top: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    vertical_align: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    visibility: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    z_index: PropTypes.oneOfType([PropTypes.string, PropTypes.number])\n}"
+              },
+              "required": false
+            },
+            "rows": {
+              "name": "arrayOf",
+              "value": {
+                "name": "custom",
+                "raw": "{\n    id: PropTypes.number,\n    condition: PropTypes.string,\n    background: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    background_attachment: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    background_color: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    background_image: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    background_position: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    background_repeat: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_bottom: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_bottom_color: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_bottom_style: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_bottom_width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_color: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_left: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_left_color: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_left_style: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_left_width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_right: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_right_color: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_right_style: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_right_width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_style: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_top: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_top_color: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_top_style: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_top_width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    border_width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    clear: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    clip: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    color: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    cursor: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    display: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    filter: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    float: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    font: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    font_family: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    font_size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    font_variant: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    font_weight: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    left: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    letter_spacing: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    line_height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    list_style: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    list_style_image: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    list_style_position: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    list_style_type: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    margin: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    margin_bottom: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    margin_left: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    margin_right: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    margin_top: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    max_width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    min_width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    overflow: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    padding: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    padding_bottom: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    padding_left: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    padding_right: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    padding_top: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    page_break_after: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    page_break_before: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    position: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    stroke_dasharray: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    stroke_dashoffset: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    stroke_width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    text_align: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    text_decoration: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    text_indent: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    text_transform: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    top: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    vertical_align: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    visibility: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),\n    z_index: PropTypes.oneOfType([PropTypes.string, PropTypes.number])\n}"
+              },
+              "required": false
+            }
+          }
         },
         "required": false,
         "description": "",
