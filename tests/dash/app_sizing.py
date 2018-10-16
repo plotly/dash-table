@@ -297,7 +297,7 @@ def layout():
                     columns=[
                         {"name": i, "id": i, "width": "16.67%"} for i in df.columns
                     ],
-                    table_style=[
+                    css=[
                         {"selector": ".dash-spreadsheet", "rule": "width: 100%"},
                         {
                             "selector": ".dash-cell[data-dash-column=Region]",
@@ -324,7 +324,7 @@ def layout():
                         {"name": i, "id": i, "width": "50%" if i == "Region" else None}
                         for i in df.columns
                     ],
-                    table_style=[
+                    css=[
                         {"selector": ".dash-spreadsheet", "rule": "width: 100%"},
                         {
                             "selector": ".dash-cell[data-dash-column=Region]",
@@ -374,7 +374,7 @@ def layout():
                     columns=[
                         {"name": i, "id": i, "width": "100px"} for i in df.columns
                     ],
-                    table_style=[
+                    css=[
                         {
                             "selector": ".dash-cell[data-dash-column=Region]",
                             "rule": "white-space: normal",
@@ -404,7 +404,7 @@ def layout():
                         }
                         for i in df.columns
                     ],
-                    table_style=[
+                    css=[
                         {
                             "selector": ".dash-cell[data-dash-column=Region]",
                             "rule": "white-space: normal",

@@ -39,7 +39,7 @@ let props = {
     id: 'table',
     dataframe,
     columns,
-    table_style: [{
+    css: [{
         selector: '.dash-spreadsheet', rule: 'width: 500px; height: 500px;'
     }]
 };
@@ -49,7 +49,7 @@ let props2 = {
     id: 'table',
     dataframe: dataframe2,
     columns: columns2,
-    table_style: [{
+    css: [{
         selector: '.dash-spreadsheet', rule: 'width: 500px; height: 500px;'
     }]
 };
