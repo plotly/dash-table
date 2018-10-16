@@ -312,3 +312,16 @@ Derived properties allow the component to expose complex state that can be usefu
 ## RC5 - Tests and fixes for editable/readonly
 
     Issue: https://github.com/plotly/dash-table/issues/132
+
+## RC6 - Styling API refactoring
+
+    * Remove column width / maxWidth / minWidth
+    * Rename property table_style to css
+    * Add new property style with structure:
+
+        {
+            CSSProperties,
+            columns: [{ id, condition, CSSProperties }],
+            headers: [{ id, condition, CSSProperties }],
+            rows: [{ id, condition, CSSProperties }]
+        }

@@ -44,6 +44,7 @@ export const defaultProps = {
     navigation: 'page',
 
     content_style: 'fit',
+    css: [],
     filtering: false,
     filtering_settings: '',
     filtering_type: 'basic',
@@ -60,12 +61,6 @@ export const defaultProps = {
     column_conditional_dropdowns: [],
     column_static_dropdown: [],
 
-    column_conditional_styles: [],
-    column_static_style: [],
-
-    row_conditional_styles: [],
-    row_static_style: {},
-
     dataframe: [],
     columns: [],
     editable: false,
@@ -73,13 +68,17 @@ export const defaultProps = {
     selected_cell: [[]],
     selected_rows: [],
     row_selectable: false,
-    table_style: []
+    style: {}
 };
 
 export const propTypes = {
     active_cell: PropTypes.array,
     columns: PropTypes.arrayOf(PropTypes.object),
     content_style: PropTypes.oneOf(['fit', 'grow']),
+    css: PropTypes.arrayOf(PropTypes.shape({
+        selector: PropTypes.string,
+        rule: PropTypes.string
+    })),
 
     dataframe: PropTypes.arrayOf(PropTypes.object),
     dataframe_previous: PropTypes.arrayOf(PropTypes.object),
@@ -99,10 +98,6 @@ export const propTypes = {
     setProps: PropTypes.any,
     start_cell: PropTypes.arrayOf(PropTypes.number),
     style_as_list_view: PropTypes.bool,
-    table_style: PropTypes.arrayOf(PropTypes.shape({
-        selector: PropTypes.string,
-        rule: PropTypes.string
-    })),
 
     pagination_mode: PropTypes.oneOf(['fe', 'be', true, false]),
     pagination_settings: PropTypes.shape({
@@ -130,24 +125,6 @@ export const propTypes = {
         }))
     })),
 
-    column_conditional_style: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.string,
-        styles: PropTypes.arrayOf(PropTypes.shape({
-            condition: PropTypes.string,
-            style: PropTypes.object
-        }))
-    })),
-    column_static_style: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.string,
-        style: PropTypes.object
-    })),
-
-    row_conditional_styles: PropTypes.arrayOf(PropTypes.shape({
-        condition: PropTypes.string,
-        style: PropTypes.object
-    })),
-    row_static_style: PropTypes.object,
-
     filtering: PropTypes.oneOf(['fe', 'be', true, false]),
     filtering_settings: PropTypes.string,
     filtering_type: PropTypes.oneOf(['basic']),
@@ -163,6 +140,7 @@ export const propTypes = {
             direction: PropTypes.oneOf(['asc', 'desc'])
     })),
     sorting_treat_empty_string_as_none: PropTypes.bool,
+    style: PropTypes.any,
 
     derived_viewport_dataframe: PropTypes.arrayOf(PropTypes.object),
     derived_viewport_indices: PropTypes.arrayOf(PropTypes.number),

@@ -50,6 +50,30 @@
           "computed": false
         }
       },
+      "css": {
+        "type": {
+          "name": "arrayOf",
+          "value": {
+            "name": "shape",
+            "value": {
+              "selector": {
+                "name": "string",
+                "required": false
+              },
+              "rule": {
+                "name": "string",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "[]",
+          "computed": false
+        }
+      },
       "dataframe": {
         "type": {
           "name": "arrayOf",
@@ -224,30 +248,6 @@
         "required": false,
         "description": ""
       },
-      "table_style": {
-        "type": {
-          "name": "arrayOf",
-          "value": {
-            "name": "shape",
-            "value": {
-              "selector": {
-                "name": "string",
-                "required": false
-              },
-              "rule": {
-                "name": "string",
-                "required": false
-              }
-            }
-          }
-        },
-        "required": false,
-        "description": "",
-        "defaultValue": {
-          "value": "[]",
-          "computed": false
-        }
-      },
       "pagination_mode": {
         "type": {
           "name": "enum",
@@ -397,98 +397,6 @@
         "description": "",
         "defaultValue": {
           "value": "[]",
-          "computed": false
-        }
-      },
-      "column_conditional_style": {
-        "type": {
-          "name": "arrayOf",
-          "value": {
-            "name": "shape",
-            "value": {
-              "id": {
-                "name": "string",
-                "required": false
-              },
-              "styles": {
-                "name": "arrayOf",
-                "value": {
-                  "name": "shape",
-                  "value": {
-                    "condition": {
-                      "name": "string",
-                      "required": false
-                    },
-                    "style": {
-                      "name": "object",
-                      "required": false
-                    }
-                  }
-                },
-                "required": false
-              }
-            }
-          }
-        },
-        "required": false,
-        "description": ""
-      },
-      "column_static_style": {
-        "type": {
-          "name": "arrayOf",
-          "value": {
-            "name": "shape",
-            "value": {
-              "id": {
-                "name": "string",
-                "required": false
-              },
-              "style": {
-                "name": "object",
-                "required": false
-              }
-            }
-          }
-        },
-        "required": false,
-        "description": "",
-        "defaultValue": {
-          "value": "[]",
-          "computed": false
-        }
-      },
-      "row_conditional_styles": {
-        "type": {
-          "name": "arrayOf",
-          "value": {
-            "name": "shape",
-            "value": {
-              "condition": {
-                "name": "string",
-                "required": false
-              },
-              "style": {
-                "name": "object",
-                "required": false
-              }
-            }
-          }
-        },
-        "required": false,
-        "description": "",
-        "defaultValue": {
-          "value": "[]",
-          "computed": false
-        }
-      },
-      "row_static_style": {
-        "type": {
-          "name": "object"
-        },
-        "required": false,
-        "description": "",
-        "defaultValue": {
-          "value": "{}",
           "computed": false
         }
       },
@@ -668,6 +576,17 @@
         "required": false,
         "description": ""
       },
+      "style": {
+        "type": {
+          "name": "any"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "{}",
+          "computed": false
+        }
+      },
       "derived_viewport_dataframe": {
         "type": {
           "name": "arrayOf",
@@ -730,13 +649,6 @@
         },
         "required": false,
         "description": ""
-      },
-      "column_conditional_styles": {
-        "defaultValue": {
-          "value": "[]",
-          "computed": false
-        },
-        "required": false
       }
     }
   }
