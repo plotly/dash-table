@@ -31,7 +31,7 @@ const baseProps = {
 };
 
 const props = Object.assign({}, baseProps, {
-    columns: columns.map((id => ({ id: id, name: id.toUpperCase()))
+    columns: columns.map(id => ({ id: id, name: id.toUpperCase() }))
 });
 
 storiesOf('DashTable/Width width, minWidth, maxWidth', module)
