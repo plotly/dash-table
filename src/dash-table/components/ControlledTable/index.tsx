@@ -15,7 +15,7 @@ import { memoizeOne } from 'core/memoizer';
 import lexer from 'core/syntax-tree/lexer';
 
 import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
-import { ControlledTableProps, IColumn } from 'dash-table/components/Table/props';
+import { ControlledTableProps } from 'dash-table/components/Table/props';
 import dropdownHelper from 'dash-table/components/dropdownHelper';
 
 import derivedTable from 'dash-table/derived/table';
@@ -521,7 +521,6 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
 
     applyStyle = () => {
         const {
-            columns,
             n_fixed_columns,
             n_fixed_rows,
             row_deletable,
@@ -551,29 +550,6 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
                 `width: 30px; max-width: 30px; min-width: 30px;`
             );
         }
-
-        R.addIndex<IColumn>(R.forEach)((column, index) => {
-            const rules = [];
-
-            if (column.width) {
-                rules.push(`width: ${Stylesheet.unit(column.width, 'px')};`);
-            }
-
-            if (column.minWidth) {
-                rules.push(`min-width: ${Stylesheet.unit(column.minWidth, 'px')};`);
-            }
-
-            if (column.maxWidth) {
-                rules.push(`max-width: ${Stylesheet.unit(column.maxWidth, 'px')};`);
-            }
-
-            if (rules.length) {
-                const rule = rules.join(' ');
-
-                this.stylesheet.setRule(`.dash-spreadsheet-inner td.column-${index}`, rule);
-                this.stylesheet.setRule(`.dash-spreadsheet-inner th.column-${index}`, rule);
-            }
-        }, columns);
 
         // Adjust the width of the fixed row header
         if (n_fixed_rows) {

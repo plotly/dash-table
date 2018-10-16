@@ -52,10 +52,7 @@ export interface IVisibleColumn {
     id: ColumnId;
     name: string;
     options?: { label: string | number, value: any }[]; // legacy
-    maxWidth?: string | number;
-    minWidth?: string | number;
     type?: ColumnType;
-    width?: string | number;
 }
 
 interface IDatumObject {

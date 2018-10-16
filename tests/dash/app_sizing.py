@@ -347,18 +347,16 @@ def layout():
                         {
                             "name": i,
                             "id": i,
-                            "width": "100px"
-                            if i == "Dem" or i == "Rep" or i == "Ind"
-                            else None,
-                            "minWidth": "100px"
-                            if i == "Dem" or i == "Rep" or i == "Ind"
-                            else None,
-                            "maxWidth": "100px"
-                            if i == "Dem" or i == "Rep" or i == "Ind"
-                            else None,
                         }
                         for i in df.columns
                     ],
+                    style={
+                        "columns":[
+                            { "id": "Dem", "width": 100, "min_width": 100, "max_width": 100 },
+                            { "id": "Rep", "width": 100, "min_width": 100, "max_width": 100 },
+                            { "id": "Ind", "width": 100, "min_width": 100, "max_width": 100 }
+                        ]
+                    }
                 ),
                 section_title("Dash Table - Widths that are smaller than the content"),
                 html.Div(
@@ -398,9 +396,6 @@ def layout():
                         {
                             "name": i,
                             "id": i,
-                            "width": "100px",
-                            "minWidth": "100px",
-                            "maxWidth": "100px",
                         }
                         for i in df.columns
                     ],
@@ -410,6 +405,11 @@ def layout():
                             "rule": "white-space: normal",
                         }
                     ],
+                    style={
+                        "columns": [
+                            { "width": "100px", "minWidth": "100px", "maxWidth": "100px" }
+                        ]
+                    }
                 ),
                 section_title("Dash Table - Content with Ellipses"),
                 # ...
