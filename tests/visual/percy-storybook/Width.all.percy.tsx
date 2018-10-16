@@ -25,7 +25,7 @@ const baseProps = {
     dataframe,
     style: {
         columns: [
-            { width: '20px', minWidth: '20px', maxWidth: '20px' }
+            { width: '20px', min_width: '20px', max_width: '20px' }
         ]
     }
 };

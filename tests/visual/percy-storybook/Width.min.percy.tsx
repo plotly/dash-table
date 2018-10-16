@@ -29,7 +29,7 @@ const props = Object.assign({}, baseProps, {
     columns: columns.map((id => ({ id: id, name: id.toUpperCase() }))),
     style: {
         columns: [
-            { minWidth: 100 }
+            { min_width: 100 }
         ]
     }
 });

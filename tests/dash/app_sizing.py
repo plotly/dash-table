@@ -422,7 +422,7 @@ def layout():
                     ],
                     style={
                         "columns": [
-                            { "width": "100px", "minWidth": "100px", "maxWidth": "100px" }
+                            { "width": "100px", "min_width": "100px", "max_width": "100px" }
                         ]
                     }
                 ),
