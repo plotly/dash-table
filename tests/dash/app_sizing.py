@@ -295,7 +295,7 @@ def layout():
                     dataframe=df.to_dict("rows"),
                     content_style="grow",
                     columns=[
-                        {"name": i, "id": i, "width": "16.67%"} for i in df.columns
+                        {"name": i, "id": i} for i in df.columns
                     ],
                     css=[
                         {"selector": ".dash-spreadsheet", "rule": "width: 100%"},
@@ -304,6 +304,11 @@ def layout():
                             "rule": "white-space: normal",
                         },
                     ],
+                    style={
+                        "columns": [
+                            {"width": "16.67%"}
+                        ]
+                    }
                 ),
                 section_title("Dash Table - Single Column Width by Percent"),
                 html.Div(
@@ -321,7 +326,7 @@ def layout():
                     dataframe=df.to_dict("rows"),
                     content_style="grow",
                     columns=[
-                        {"name": i, "id": i, "width": "50%" if i == "Region" else None}
+                        {"name": i, "id": i }
                         for i in df.columns
                     ],
                     css=[
@@ -331,6 +336,11 @@ def layout():
                             "rule": "white-space: normal",
                         },
                     ],
+                    style={
+                        "columns": [
+                            { "id": "Region", "width": "50%" }
+                        ]
+                    }
                 ),
                 section_title("Dash Table - Underspecified Widths"),
                 html.Div(
@@ -352,9 +362,9 @@ def layout():
                     ],
                     style={
                         "columns":[
-                            { "id": "Dem", "width": 100, "min_width": 100, "max_width": 100 },
-                            { "id": "Rep", "width": 100, "min_width": 100, "max_width": 100 },
-                            { "id": "Ind", "width": 100, "min_width": 100, "max_width": 100 }
+                            { "id": "Dem", "width": "100px", "min_width": "100px", "max_width": "100px" },
+                            { "id": "Rep", "width": "100px", "min_width": "100px", "max_width": "100px" },
+                            { "id": "Ind", "width": "100px", "min_width": "100px", "max_width": "100px" }
                         ]
                     }
                 ),
@@ -370,7 +380,7 @@ def layout():
                     id="sizing-5",
                     dataframe=df.to_dict("rows"),
                     columns=[
-                        {"name": i, "id": i, "width": "100px"} for i in df.columns
+                        {"name": i, "id": i } for i in df.columns
                     ],
                     css=[
                         {
@@ -378,6 +388,11 @@ def layout():
                             "rule": "white-space: normal",
                         }
                     ],
+                    style={
+                        "columns": [
+                            { "width": "100px" }
+                        ]
+                    }
                 ),
                 section_title(
                     "Dash Table - Widths that are smaller than the content (forced)"

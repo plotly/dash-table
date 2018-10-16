@@ -43,9 +43,9 @@ storiesOf('DashTable/With Data', module)
         row_selectable={false}
         style={{
             columns: [
-                { id: 'a', width: 100 },
-                { id: 'b', width: 50 },
-                { id: 'c', width: 200 }
+                { id: 'a', width: '100px' },
+                { id: 'b', width: '50px' },
+                { id: 'c', width: '200px' }
             ]
         }}
     />));
@@ -82,7 +82,7 @@ const dataframe = (() => {
 
 const style = {
     columns: [
-        { width: 100 }
+        { width: '100px' }
     ]
 };
 
