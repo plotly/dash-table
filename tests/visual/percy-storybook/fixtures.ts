@@ -159,6 +159,12 @@ export default [
     {
         name: 'dropdown with column widths',
         props: {
+            style: {
+                columns: [
+                    { id: 'column-2', width: 400 },
+                    { id: 'column-3', width: 80 }
+                ]
+            },
             columns: [
                 {
                     name: 'Column 1',
@@ -178,7 +184,6 @@ export default [
                 {
                     name: 'Column 2',
                     id: 'column-2',
-                    width: 400,
                     type: 'dropdown',
                     options: [
                         {
@@ -194,7 +199,6 @@ export default [
                 {
                     name: 'Column 3',
                     id: 'column-3',
-                    width: 80,
                     type: 'dropdown',
                     options: [
                         {
@@ -286,6 +290,12 @@ export default [
         name: 'mixed percentage and pixel column widths',
         props: {
             id: 'table',
+            style: {
+                columns: [
+                    { id: 'column-2', width: 400 },
+                    { id: 'column-3', width: '30%' }
+                ]
+            },
             columns: [
                 {
                     name: 'Column 1',
@@ -294,12 +304,10 @@ export default [
                 {
                     name: 'Column 2',
                     id: 'column-2',
-                    width: 400
                 },
                 {
                     name: 'Column 3',
                     id: 'column-3',
-                    width: '30%'
                 }
             ],
             dataframe: [
@@ -477,12 +485,16 @@ export default [
         name: 'per-cell dropdowns',
         props: {
             id: 'table',
+            style: {
+                columns: [
+                    { id: 'column-1', width: 200 }
+                ]
+            },
             columns: [
                 {
                     id: 'column-1',
                     name: 'Column 1',
                     type: 'dropdown',
-                    width: 200
                 },
                 {
                     id: 'column-2',
