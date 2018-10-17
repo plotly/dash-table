@@ -159,12 +159,10 @@ export default [
     {
         name: 'dropdown with column widths',
         props: {
-            style: {
-                columns: [
-                    { id: 'column-2', width: 400 },
-                    { id: 'column-3', width: 80 }
-                ]
-            },
+            style_cells: [
+                { if: { column_id: 'column-2' }, width: 400 },
+                { if: { column_id: 'column-3' }, width: 80 }
+            ],
             columns: [
                 {
                     name: 'Column 1',
@@ -290,12 +288,10 @@ export default [
         name: 'mixed percentage and pixel column widths',
         props: {
             id: 'table',
-            style: {
-                columns: [
-                    { id: 'column-2', width: 400 },
-                    { id: 'column-3', width: '30%' }
-                ]
-            },
+            style_cells: [
+                { if: { column_id: 'column-2' }, width: 400 },
+                { if: { column_id: 'column-3' }, width: '30%' }
+            ],
             columns: [
                 {
                     name: 'Column 1',
@@ -485,11 +481,9 @@ export default [
         name: 'per-cell dropdowns',
         props: {
             id: 'table',
-            style: {
-                columns: [
-                    { id: 'column-1', width: 200 }
-                ]
-            },
+            style_cells: [
+                { if: { column_id: 'column-1' }, width: 200 }
+            ],
             columns: [
                 {
                     id: 'column-1',

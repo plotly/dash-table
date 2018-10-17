@@ -358,12 +358,7 @@ def layout():
                 columns=[
                     {"name": i, "id": i} for i in df.columns
                 ],
-                style={
-                    "columns": [{
-                        "padding_bottom": 5,
-                        "padding_top": 5
-                    }]
-                }
+                style_cells=[{ "padding_bottom": 5, "padding_top": 5}]
             ),
 
             section_title('Dash Table - List Style with Minimal Headers'),
@@ -383,29 +378,29 @@ def layout():
                     {"name": i, "id": i} for i in df.columns
                 ],
                 content_style="grow",
-                style={
-                    "width": "100%",
-                    "columns": [{
-                        "background_color": "rgb(50, 50, 50)",
-                        "color": "white",
-                        "font_family": "arial"
-                    }, {
-                        "id": "Humidity",
-                        "font_family": "monospace",
-                        "padding_left": 20,
-                        "text_align": "left"
-                    }, {
-                        "id": "Pressure",
-                        "font_family": "monospace",
-                        "padding_left": 20,
-                        "text_align": "left"
-                    }, {
-                        "id": "Temperature",
-                        "font_family": "monospace",
-                        "padding_left": 20,
-                        "text_align": "left"
-                    }]
-                }
+                style_table={
+                    "width": "100%"
+                },
+                style_cells=[{
+                    "background_color": "rgb(50, 50, 50)",
+                    "color": "white",
+                    "font_family": "arial"
+                }, {
+                    "if": { "column_id": "Humidity" },
+                    "font_family": "monospace",
+                    "padding_left": 20,
+                    "text_align": "left"
+                }, {
+                    "if": { "column_id": "Pressure" },
+                    "font_family": "monospace",
+                    "padding_left": 20,
+                    "text_align": "left"
+                }, {
+                    "if": { "column_id": "Temperature" },
+                    "font_family": "monospace",
+                    "padding_left": 20,
+                    "text_align": "left"
+                }]
             ),
 
             section_title('Dash Table - Dark Theme with Rows'),
@@ -422,18 +417,18 @@ def layout():
                     {"name": i, "id": i} for i in df.columns
                 ],
                 content_style="grow",
-                style={
-                    "width": "100%",
-                    "columns": [{
-                        "color": "rgb(60, 60, 60)",
-                        "padding_left": 20,
-                        "text-align": "left",
-                        "width": "20%"
-                    }, {
-                        "background_color": "yellow",
-                        "id": "Temperature"
-                    }]
-                }
+                style_table={
+                    "width": "100%"
+                },
+                style_cells=[{
+                    "color": "rgb(60, 60, 60)",
+                    "padding_left": 20,
+                    "text-align": "left",
+                    "width": "20%"
+                }, {
+                    "if": { "column_id": "Temperature" },
+                    "background_color": "yellow"
+                }]
             ),
 
             section_title('Dash Table - Highlighting Certain Cells'),
@@ -444,19 +439,16 @@ def layout():
                     {"name": i, "id": i} for i in df.columns
                 ],
                 content_style="grow",
-                style={
-                    "width": "100%",
-                    "columns": [{
-                        "background_color": "yellow",
-                        "id": "Region",
-                        "condition": "Region eq str(Montreal)"
-                    }, {
-                        "background_color": "yellow",
-                        "id": "Humidity",
-                        "condition": "Humidity eq num(20)"
-                    }]
-                }
+                style_table={
+                    "width": "100%"
+                },
+                style_cells=[{
+                    "if": { "column_id": "Region", "filter": "Region eq str(Montreal)" },
+                    "background_color": "yellow"
+                }, {
+                    "if": { "column_id": "Humidity", "filter": "Humidity eq num(20)" },
+                    "background_color": "yellow"
+                }]
             )
-
         ],
     )

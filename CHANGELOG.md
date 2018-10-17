@@ -317,11 +317,21 @@ Derived properties allow the component to expose complex state that can be usefu
 
     * Remove column width / maxWidth / minWidth
     * Rename property table_style to css
-    * Add new property style with structure:
-
-        {
-            CSSProperties,
-            columns: [{ id, condition, CSSProperties }],
-            headers: [{ id, condition, CSSProperties }],
-            rows: [{ id, condition, CSSProperties }]
-        }
+    * Add new property style_table of form
+        { ...CSSProperties }
+    * Add new property style_cells of form
+        [{
+            if: { column_id: string | number, filter: string, row_index: number | 'odd' | 'even' },
+            ...CSSProperties
+        }]
+    * Add new property style_headers of form
+        [{
+            if: { column_id: string | number, header_index: number | 'odd' | 'even' },
+            ...CSSProperties
+        }]
+    * Add new property style_cells_and_headers of form
+        [{
+            if: { column_id: string | number },
+            ...CSSProperties
+        }]
+    * All CSSProperties are supported in kebab-cass, camelCase and snake_case

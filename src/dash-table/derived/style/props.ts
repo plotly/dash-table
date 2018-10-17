@@ -2,13 +2,24 @@ import { StyleProperty } from './py2jsCssProperties';
 import { ColumnId } from 'dash-table/components/Table/props';
 
 export interface IConditionalElement {
-    id?: ColumnId;
-    condition?: string;
+    filter?: string;
 }
 
-type ConditionalColumn = IConditionalElement;
-type ConditionalHeader = IConditionalElement;
-type ConditionalRow = IConditionalElement & { id?: number };
+export interface IIndexedHeaderElement {
+    header_index?: number | 'odd' | 'even';
+}
+
+export interface IIndexedRowElement {
+    row_index?: number | 'odd' | 'even';
+}
+
+export interface INamedElement {
+    column_id?: ColumnId;
+}
+
+type ConditionalCell = IConditionalElement & IIndexedRowElement & INamedElement;
+type ConditionalCellAndHeader = INamedElement;
+type ConditionalHeader = IIndexedHeaderElement & INamedElement;
 
 interface IStyle {
     background: StyleProperty;
@@ -204,18 +215,11 @@ interface IStyle {
 
 export type Style = Partial<IStyle>;
 
-export type Column = Style & ConditionalColumn;
-export type Header = Style & ConditionalHeader;
-export type Row = Style & ConditionalRow;
+export type Cell = Style & { if: ConditionalCell };
+export type CellAndHeader = Style & { if: ConditionalCellAndHeader };
+export type Header = Style & { if: ConditionalHeader };
 
-export type Columns = Column[];
+export type Cells = Cell[];
+export type CellsAndHeaders = CellAndHeader[];
 export type Headers = Header[];
-export type Rows = Row[];
-
-type TableStyle = Style & Partial<{
-    columns: Columns,
-    headers: Headers,
-    rows: Rows
-}>;
-
-export default TableStyle;
+export type Table = Style;

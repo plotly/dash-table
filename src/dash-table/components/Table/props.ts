@@ -1,6 +1,6 @@
 import { SortSettings } from 'core/sorting';
 import { IPaginator } from 'dash-table/derived/paginator';
-import TableStyle from 'dash-table/derived/style/props';
+import { Table, Cells, CellsAndHeaders, Headers } from 'dash-table/derived/style/props';
 
 export enum ColumnType {
     Dropdown = 'dropdown',
@@ -105,9 +105,13 @@ interface IProps {
     sorting_settings?: SortSettings;
     sorting_type?: SortingType;
     sorting_treat_empty_string_as_none?: boolean;
-    style?: TableStyle;
     pagination_mode?: PaginationMode;
     pagination_settings?: IPaginationSettings;
+
+    style_table?: Table;
+    style_cells?: Cells;
+    style_cells_and_headers?: CellsAndHeaders;
+    style_headers?: Headers;
 }
 
 interface IDefaultProps {
@@ -134,9 +138,14 @@ interface IDefaultProps {
     sorting_settings: SortSettings;
     sorting_type: SortingType;
     sorting_treat_empty_string_as_none: boolean;
-    style: TableStyle;
+
     pagination_mode: PaginationMode;
     pagination_settings: IPaginationSettings;
+
+    style_table: Table;
+    style_cells: Cells;
+    style_cells_and_headers: CellsAndHeaders;
+    style_headers: Headers;
 }
 
 interface IDerivedProps {
@@ -176,6 +185,9 @@ export interface ICellFactoryOptions {
     selected_cell: SelectedCells;
     selected_rows: number[];
     setProps: SetProps;
-    style: TableStyle;
+    style_table: Table;
+    style_cells: Cells;
+    style_cells_and_headers: CellsAndHeaders;
+    style_headers: Headers;
     viewport: IDerivedDataframe;
 }

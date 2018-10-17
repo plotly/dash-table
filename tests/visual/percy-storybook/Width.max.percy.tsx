@@ -23,11 +23,7 @@ const baseProps = {
     setProps,
     id: 'table',
     dataframe,
-    style: {
-        columns: [
-            { max_width: 10 }
-        ]
-    }
+    style_cells: [{ max_width: 10 }]
 };
 
 const props = Object.assign({}, baseProps, {

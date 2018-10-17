@@ -42,16 +42,16 @@ class App extends Component {
                         }))
                     }
                 ],
-                style: {
+                style_table: {
                     max_width: '1000px',
-                    width: '1000px',
-                    columns: [
-                        { max_width: 150, min_width: 150, width: 150 },
-                        { id: 'rows', max_width: 40, min_width: 40, width: 40 },
-                        { id: 'bbb', max_width: 200, min_width: 200, width: 200 },
-                        { id: 'bbb-readonly', max_width: 200, min_width: 200, width: 200 }
-                    ]
-                }
+                    width: '1000px'
+                },
+                style_cells: [
+                    { max_width: 150, min_width: 150, width: 150 },
+                    { if: { column_id: 'rows' }, max_width: 40, min_width: 40, width: 40 },
+                    { if: { column_id: 'bbb' }, max_width: 200, min_width: 200, width: 200 },
+                    { if: { column_id: 'bbb-readonly' }, max_width: 200, min_width: 200, width: 200 }
+                ],
             }
         };
 
@@ -73,7 +73,7 @@ class App extends Component {
         return (<Table
             setProps={this.setProps}
             {...this.state.tableProps}
-            {...{ filtering: 'fe' }}
+            // {...{ filtering: 'fe' }}
         />);
     }
 }

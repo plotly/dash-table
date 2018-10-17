@@ -23,11 +23,9 @@ const baseProps = {
     setProps,
     id: 'table',
     dataframe,
-    style: {
-        columns: [
-            { width: '20px', min_width: '20px', max_width: '20px' }
-        ]
-    }
+    style_cells: [
+        { width: '20px', min_width: '20px', max_width: '20px' }
+    ]
 };
 
 const props = Object.assign({}, baseProps, {
