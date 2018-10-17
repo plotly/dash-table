@@ -106,25 +106,25 @@ describe('copy paste', () => {
             DOM.focused.type(`${Key.Meta}c`);
 
             DashTable.getCell(1, 0).click();
-            DOM.focused.type(`${Key.Meta}v`);
+            DOM.focused.type(`${Key.Meta}v`).then(() => {
+                DashTable
+                    .getCell(1, 0)
+                    .within(() => cy.get('.dash-cell-value').should('have.value', '249'));
+                DashTable
+                    .getCell(1, 1)
+                    .within(() => cy.get('.dash-cell-value').should('have.html', 'MODIFIED'));
 
-            DashTable
-                .getCell(1, 0)
-                .within(() => cy.get('.dash-cell-value').should('have.value', '249'));
-            DashTable
-                .getCell(1, 1)
-                .within(() => cy.get('.dash-cell-value').should('have.html', 'MODIFIED'))
-                .then(() => {
-                    DashTable.getCell(1, 1).click();
-                    DOM.focused.type(`${Key.Meta}c`);
+                DashTable.getCell(1, 1).click();
+                DOM.focused.type(`${Key.Meta}c`);
 
-                    DashTable.getCell(2, 1).click();
-                    DOM.focused.type(`${Key.Meta}v`);
+                DashTable.getCell(2, 1).click();
+                DOM.focused.type(`${Key.Meta}v`);
 
-                    DashTable
-                        .getCell(2, 1)
-                        .within(() => cy.get('.dash-cell-value').should('have.value', 'MODIFIED'));
-                });
+                DashTable
+                    .getCell(2, 1)
+                    .wait(10000)
+                    .within(() => cy.get('.dash-cell-value').should('have.value', 'MODIFIED'));
+            });
         });
     });
 });
