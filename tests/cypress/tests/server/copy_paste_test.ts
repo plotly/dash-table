@@ -99,33 +99,44 @@ describe('copy paste', () => {
 
         it('BE rountrip with sorted, unfiltered data', () => {
             cy.get('tr th.column-0 .sort').last().click();
+            cy.log('i');
 
             DashTable.getCell(0, 0).click();
+            cy.log('ii');
             DashTable.getCell(0, 0).within(() => cy.get('.dash-cell-value').should('have.value', '249'));
+            cy.log('iii');
 
             DOM.focused.type(`${Key.Meta}c`);
+            cy.log('iv');
 
             DashTable.getCell(1, 0).click();
-            DOM.focused.type(`${Key.Meta}v`).then(() => {
-                DashTable
-                    .getCell(1, 0)
-                    .within(() => cy.get('.dash-cell-value').should('have.value', '249'));
-                DashTable
-                    .getCell(1, 1)
-                    .within(() => cy.get('.dash-cell-value').should('have.html', 'MODIFIED'));
+            cy.log('v');
+            DOM.focused.type(`${Key.Meta}v`);
+            cy.log('vi');
 
-                DashTable.getCell(1, 1).click();
-                DOM.focused.type(`${Key.Meta}c`);
+            DashTable
+                .getCell(1, 0)
+                .within(() => cy.get('.dash-cell-value').should('have.value', '249'));
+            cy.log('vii');
+            DashTable
+                .getCell(1, 1)
+                .within(() => cy.get('.dash-cell-value').should('have.html', 'MODIFIED'));
+            cy.log('viii');
 
-                DashTable.getCell(2, 1).click();
-                DOM.focused.type(`${Key.Meta}v`);
+            DashTable.getCell(1, 1).click();
+            cy.log('ix');
+            DOM.focused.type(`${Key.Meta}c`);
+            cy.log('x');
 
-                cy.wait(10000).then(() => {
-                    DashTable
-                        .getCell(2, 1)
-                        .within(() => cy.get('.dash-cell-value').should('have.value', 'MODIFIED'));
-                });
-            });
+            DashTable.getCell(2, 1).click();
+            cy.log('xi');
+            DOM.focused.type(`${Key.Meta}v`);
+            cy.log('xii');
+
+            DashTable
+                .getCell(2, 1)
+                .within(() => cy.get('.dash-cell-value').should('have.value', 'MODIFIED'));
+            cy.log('xiii');
         });
     });
 });
