@@ -42,9 +42,9 @@ storiesOf('DashTable/With Data', module)
         row_deletable={false}
         row_selectable={false}
         style_cells={[
-            { id: 'a', width: '100px' },
-            { id: 'b', width: '50px' },
-            { id: 'c', width: '200px' }
+            { if: { column_id: 'a' }, width: '100px' },
+            { if: { column_id: 'b' }, width: '50px' },
+            { if: { column_id: 'c' }, width: '200px' }
         ]}
     />));
 
