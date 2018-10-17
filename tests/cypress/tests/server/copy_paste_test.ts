@@ -109,11 +109,12 @@ describe('copy paste', () => {
             DOM.focused.type(`${Key.Meta}v`);
 
             DashTable
-                .getCell(1, 1)
-                .within(() => cy.get('.dash-cell-value').should('have.html', 'MODIFIED'));
-            DashTable
                 .getCell(1, 0)
-                .within(() => cy.get('.dash-cell-value').should('have.value', 'xxx-249'));
+                .within(() => cy.get('.dash-cell-value').should('have.value', '249'))
+                .then(() => DashTable
+                    .getCell(1, 1)
+                    .within(() => cy.get('.dash-cell-value').should('have.html', 'MODIFIED'))
+                );
 
             DashTable.getCell(1, 1).click();
             DOM.focused.type(`${Key.Meta}c`);
