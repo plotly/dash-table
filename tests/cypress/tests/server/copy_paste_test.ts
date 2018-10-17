@@ -120,10 +120,11 @@ describe('copy paste', () => {
                 DashTable.getCell(2, 1).click();
                 DOM.focused.type(`${Key.Meta}v`);
 
-                DashTable
-                    .getCell(2, 1)
-                    .wait(10000)
-                    .within(() => cy.get('.dash-cell-value').should('have.value', 'MODIFIED'));
+                cy.wait(10000).then(() => {
+                    DashTable
+                        .getCell(2, 1)
+                        .within(() => cy.get('.dash-cell-value').should('have.value', 'MODIFIED'));
+                });
             });
         });
     });
