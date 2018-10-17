@@ -34,20 +34,22 @@ const dataframe2 = (() => {
     ));
 })();
 
-const style = {
+const style_table = {
     height: 500,
-    width: 500,
-    columns: [
-        { width: 100 }
-    ]
+    width: 500
 };
+
+const style_cells = [
+    { width: 100 }
+];
 
 let props = {
     setProps,
     id: 'table',
     dataframe,
     columns,
-    style
+    style_cells,
+    style_table
 };
 
 let props2 = {
@@ -55,7 +57,8 @@ let props2 = {
     id: 'table',
     dataframe: dataframe2,
     columns: columns2,
-    style
+    style_cells,
+    style_table
 };
 
 storiesOf('DashTable/Border (available space not filled)', module)
