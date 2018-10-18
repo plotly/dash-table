@@ -97,7 +97,7 @@ describe('copy paste', () => {
                 .within(() => cy.get('.dash-cell-value').should('have.value', 'MODIFIED'));
         });
 
-        it.only('BE rountrip with sorted, unfiltered data', () => {
+        it('BE rountrip with sorted, unfiltered data', () => {
             cy.get('tr th.column-2 .sort').last().click();
 
             DashTable.getCell(0, 0).click();
