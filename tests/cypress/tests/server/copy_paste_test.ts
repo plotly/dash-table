@@ -97,11 +97,11 @@ describe('copy paste', () => {
                 .within(() => cy.get('.dash-cell-value').should('have.value', 'MODIFIED'));
         });
 
-        it('BE rountrip with sorted, unfiltered data', () => {
-            cy.get('tr th.column-0 .sort').last().click();
+        it.only('BE rountrip with sorted, unfiltered data', () => {
+            cy.get('tr th.column-2 .sort').last().click();
 
             DashTable.getCell(0, 0).click();
-            DashTable.getCell(0, 0).within(() => cy.get('.dash-cell-value').should('have.value', '249'));
+            DashTable.getCell(0, 0).within(() => cy.get('.dash-cell-value').should('have.value', '129'));
 
             DOM.focused.type(`${Key.Meta}c`);
 
@@ -113,7 +113,7 @@ describe('copy paste', () => {
                 .within(() => cy.get('.dash-cell-value').should('have.html', 'MODIFIED'));
             DashTable
                 .getCell(1, 0)
-                .within(() => cy.get('.dash-cell-value').should('have.value', '249'));
+                .within(() => cy.get('.dash-cell-value').should('have.value', '129'));
 
             DashTable.getCell(1, 1).click();
             DOM.focused.type(`${Key.Meta}c`);
@@ -126,7 +126,7 @@ describe('copy paste', () => {
                 .within(() => cy.get('.dash-cell-value').should('have.value', 'MODIFIED'));
             DashTable
                 .getCell(1, 0)
-                .within(() => cy.get('.dash-cell-value').should('have.html', '249'));
+                .within(() => cy.get('.dash-cell-value').should('have.html', '129'));
         });
     });
 });
