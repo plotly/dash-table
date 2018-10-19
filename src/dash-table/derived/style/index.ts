@@ -4,34 +4,40 @@ import { CSSProperties } from 'react';
 import SyntaxTree from 'core/syntax-tree';
 import { memoizeOneFactory } from 'core/memoizer';
 
-import { ColumnId } from 'dash-table/components/Table/props';
+import { Datum, IVisibleColumn } from 'dash-table/components/Table/props';
 
 import { Style, IConditionalElement, INamedElement, CellsAndHeaders, Cells, Headers, Table, IIndexedHeaderElement, IIndexedRowElement } from './props';
 import converter, { StyleProperty } from './py2jsCssProperties';
 
 export interface IConvertedStyle {
     style: CSSProperties;
-    id?: ColumnId;
-    idx?: (idx: number) => boolean;
-    filter?: SyntaxTree;
+    matchesColumn: (column: IVisibleColumn) => boolean;
+    matchesRow: (index: number) => boolean;
+    matchesFilter: (datum: Datum) => boolean;
 }
 
 type GenericIf = Partial<IConditionalElement & IIndexedHeaderElement & IIndexedRowElement & INamedElement>;
-type GenericStyle = Style & { if: GenericIf };
+type GenericStyle = Style & Partial<{ if: GenericIf }>;
 
 function convertElement(style: GenericStyle) {
     const indexFilter = style.if && (style.if.header_index || style.if.row_index);
+    let ast: SyntaxTree;
 
     return {
-        id: style.if && style.if.column_id,
-        idx: indexFilter === undefined ?
-            undefined :
-            typeof indexFilter === 'number' ?
-                (i: number) => i === indexFilter :
-                (i: number) => indexFilter === 'odd' ? i % 2 === 1 : i % 2 === 0,
-        filter: style.if && style.if.filter !== undefined ?
-            new SyntaxTree(style.if.filter) :
-            undefined,
+        matchesColumn: (column: IVisibleColumn) =>
+            !style.if ||
+            !style.if.column_id ||
+            style.if.column_id === column.id,
+        matchesRow: (index: number) =>
+            indexFilter === undefined ?
+                true :
+                typeof indexFilter === 'number' ?
+                    index === indexFilter :
+                    indexFilter === 'odd' ? index % 2 === 1 : index % 2 === 0,
+        matchesFilter: (datum: Datum) =>
+            !style.if ||
+            style.if.filter === undefined ||
+            (ast = ast || new SyntaxTree(style.if.filter)).evaluate(datum),
         style: convertStyle(style)
     };
 }

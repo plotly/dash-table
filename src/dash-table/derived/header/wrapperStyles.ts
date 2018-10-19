@@ -19,8 +19,8 @@ function getter(
             s => s.style,
             R.filter(
                 style =>
-                    (!style.id || style.id === column.id) &&
-                    (!style.idx || style.idx(idx)),
+                    style.matchesColumn(column) &&
+                    style.matchesRow(idx),
                 headerStyles
             )
         );
