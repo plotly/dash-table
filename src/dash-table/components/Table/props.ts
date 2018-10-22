@@ -66,6 +66,30 @@ interface IDatumObject {
     [key: string]: any;
 }
 
+interface IDropdownValue {
+    label: string;
+    value: any;
+}
+
+interface IConditionalDropdown {
+    condition: string;
+    dropdown: IDropdownValue[];
+}
+
+export  interface IColumnDropdown {
+    id: string;
+    dropdown: IDropdownValue[];
+}
+
+export interface IConditionalColumnDropdown {
+    id: string;
+    dropdowns: IConditionalDropdown[];
+}
+
+export interface IDropdownProperties {
+    [key: string]: { options: IDropdownValue[] }[];
+}
+
 interface IStylesheetRule {
     selector: string;
     rule: string;
@@ -88,8 +112,8 @@ interface IProps {
 
     active_cell?: ActiveCell;
     columns?: Columns;
-    column_conditional_dropdowns?: any[];
-    column_static_dropdown?: any;
+    column_conditional_dropdowns?: IConditionalColumnDropdown[];
+    column_static_dropdown?: IColumnDropdown[];
     content_style: ContentStyle;
     css?: IStylesheetRule[];
     data?: Data;
@@ -131,8 +155,8 @@ interface IProps {
 interface IDefaultProps {
     active_cell: ActiveCell;
     columns: Columns;
-    column_conditional_dropdowns: any[];
-    column_static_dropdown: any;
+    column_conditional_dropdowns: IConditionalColumnDropdown[];
+    column_static_dropdown: IColumnDropdown[];
     css: IStylesheetRule[];
     data: Data;
     editable: boolean;
@@ -191,8 +215,8 @@ export type ControlledTableProps = PropsWithDefaults & {
 export interface ICellFactoryOptions {
     active_cell: ActiveCell;
     columns: VisibleColumns;
-    column_conditional_dropdowns: any[];
-    column_static_dropdown: any;
+    column_conditional_dropdowns: IConditionalColumnDropdown[];
+    column_static_dropdown: IColumnDropdown[];
     data: Data;
     dropdown_properties: any; // legacy
     editable: boolean;

@@ -19,7 +19,96 @@
         "type": {
           "name": "arrayOf",
           "value": {
-            "name": "object"
+            "name": "shape",
+            "value": {
+              "clearable": {
+                "name": "bool",
+                "required": false
+              },
+              "deletable": {
+                "name": "union",
+                "value": [
+                  {
+                    "name": "bool"
+                  },
+                  {
+                    "name": "number"
+                  }
+                ],
+                "required": false
+              },
+              "editable": {
+                "name": "bool",
+                "required": false
+              },
+              "editable_name": {
+                "name": "union",
+                "value": [
+                  {
+                    "name": "bool"
+                  },
+                  {
+                    "name": "number"
+                  }
+                ],
+                "required": false
+              },
+              "hidden": {
+                "name": "bool",
+                "required": false
+              },
+              "id": {
+                "name": "string",
+                "required": true
+              },
+              "name": {
+                "name": "string",
+                "required": false
+              },
+              "options": {
+                "name": "arrayOf",
+                "value": {
+                  "name": "shape",
+                  "value": {
+                    "label": {
+                      "name": "union",
+                      "value": [
+                        {
+                          "name": "number"
+                        },
+                        {
+                          "name": "string"
+                        }
+                      ],
+                      "required": false
+                    },
+                    "value": {
+                      "name": "any",
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              },
+              "type": {
+                "name": "enum",
+                "value": [
+                  {
+                    "value": "'dropdown'",
+                    "computed": false
+                  },
+                  {
+                    "value": "'numeric'",
+                    "computed": false
+                  },
+                  {
+                    "value": "'text'",
+                    "computed": false
+                  }
+                ],
+                "required": false
+              }
+            }
           }
         },
         "required": false,
@@ -100,7 +189,7 @@
       },
       "data_timestamp": {
         "type": {
-          "name": "any"
+          "name": "number"
         },
         "required": false,
         "description": ""
@@ -226,7 +315,7 @@
       },
       "setProps": {
         "type": {
-          "name": "any"
+          "name": "func"
         },
         "required": false,
         "description": ""

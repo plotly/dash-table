@@ -77,7 +77,29 @@ export const defaultProps = {
 
 export const propTypes = {
     active_cell: PropTypes.array,
-    columns: PropTypes.arrayOf(PropTypes.object),
+    columns: PropTypes.arrayOf(PropTypes.shape({
+        clearable: PropTypes.bool,
+        deletable: PropTypes.oneOfType([
+            PropTypes.bool,
+            PropTypes.number
+        ]),
+        editable: PropTypes.bool,
+        editable_name: PropTypes.oneOfType([
+            PropTypes.bool,
+            PropTypes.number
+        ]),
+        hidden: PropTypes.bool,
+        id: PropTypes.string.isRequired,
+        name: PropTypes.string,
+        options: PropTypes.arrayOf(PropTypes.shape({
+            label: PropTypes.oneOfType([
+                PropTypes.number,
+                PropTypes.string
+            ]),
+            value: PropTypes.any
+        })),
+        type: PropTypes.oneOf(['dropdown', 'numeric', 'text'])
+    })),
     content_style: PropTypes.oneOf(['fit', 'grow']),
     css: PropTypes.arrayOf(PropTypes.shape({
         selector: PropTypes.string,
@@ -86,7 +108,7 @@ export const propTypes = {
 
     data: PropTypes.arrayOf(PropTypes.object),
     data_previous: PropTypes.arrayOf(PropTypes.object),
-    data_timestamp: PropTypes.any,
+    data_timestamp: PropTypes.number,
 
     editable: PropTypes.bool,
     end_cell: PropTypes.arrayOf(PropTypes.number),
@@ -99,7 +121,7 @@ export const propTypes = {
     row_selectable: PropTypes.oneOf(['single', 'multi', false]),
     selected_cell: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
     selected_rows: PropTypes.arrayOf(PropTypes.number),
-    setProps: PropTypes.any,
+    setProps: PropTypes.func,
     start_cell: PropTypes.arrayOf(PropTypes.number),
     style_as_list_view: PropTypes.bool,
 
