@@ -1,4 +1,5 @@
-# Dash Spreadsheet 3.0
+# Dash Table 3.0
+Advanced Table component for [Dash](https://dash.plot.ly/).
 
 ## Setup
 1. Install Node v8+
