@@ -130,8 +130,12 @@
         "type": {
           "name": "string"
         },
-        "required": true,
-        "description": ""
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "genRandomId()",
+          "computed": true
+        }
       },
       "is_focused": {
         "type": {

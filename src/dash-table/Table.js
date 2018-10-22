@@ -6,6 +6,8 @@ import RealTable from 'dash-table/components/Table';
 import 'dash-table/style/component.less';
 import Logger from 'core/Logger';
 
+import genRandomId from './utils/generate';
+
 export default class Table extends Component {
     render() {
         const {
@@ -61,6 +63,8 @@ export const defaultProps = {
     column_conditional_dropdowns: [],
     column_static_dropdown: [],
 
+    id: genRandomId(),
+
     data: [],
     columns: [],
     editable: false,
@@ -90,7 +94,7 @@ export const propTypes = {
 
     editable: PropTypes.bool,
     end_cell: PropTypes.arrayOf(PropTypes.number),
-    id: PropTypes.string.isRequired,
+    id: PropTypes.string,
     is_focused: PropTypes.bool,
     merge_duplicate_headers: PropTypes.bool,
     n_fixed_columns: PropTypes.number,
