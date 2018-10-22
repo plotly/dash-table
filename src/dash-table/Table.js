@@ -96,7 +96,10 @@ export const propTypes = {
                 PropTypes.number,
                 PropTypes.string
             ]),
-            value: PropTypes.any
+            value: PropTypes.oneOfType([
+                PropTypes.number,
+                PropTypes.string
+            ])
         })),
         type: PropTypes.oneOf(['dropdown', 'numeric', 'text'])
     })),
@@ -139,7 +142,10 @@ export const propTypes = {
             condition: PropTypes.string,
             dropdown: PropTypes.arrayOf(PropTypes.shape({
                 label: PropTypes.string,
-                value: PropTypes.any
+                value: PropTypes.oneOfType([
+                    PropTypes.number,
+                    PropTypes.string
+                ])
             }))
         }))
     })),
@@ -147,7 +153,10 @@ export const propTypes = {
         id: PropTypes.string,
         dropdown: PropTypes.arrayOf(PropTypes.shape({
             label: PropTypes.string,
-            value: PropTypes.any
+            value: PropTypes.oneOfType([
+                PropTypes.number,
+                PropTypes.string
+            ])
         }))
     })),
 

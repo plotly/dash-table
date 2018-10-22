@@ -58,7 +58,7 @@ export interface IVisibleColumn {
     editable_name?: boolean | number;
     id: ColumnId;
     name: string;
-    options?: { label: string | number, value: any }[]; // legacy
+    options?: { label: string | number, value: string | number }[]; // legacy
     type?: ColumnType;
 }
 
@@ -68,7 +68,7 @@ interface IDatumObject {
 
 interface IDropdownValue {
     label: string;
-    value: any;
+    value: string | number;
 }
 
 interface IConditionalDropdown {

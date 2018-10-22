@@ -83,7 +83,15 @@
                       "required": false
                     },
                     "value": {
-                      "name": "any",
+                      "name": "union",
+                      "value": [
+                        {
+                          "name": "number"
+                        },
+                        {
+                          "name": "string"
+                        }
+                      ],
                       "required": false
                     }
                   }
@@ -431,7 +439,15 @@
                             "required": false
                           },
                           "value": {
-                            "name": "any",
+                            "name": "union",
+                            "value": [
+                              {
+                                "name": "number"
+                              },
+                              {
+                                "name": "string"
+                              }
+                            ],
                             "required": false
                           }
                         }
@@ -472,7 +488,15 @@
                       "required": false
                     },
                     "value": {
-                      "name": "any",
+                      "name": "union",
+                      "value": [
+                        {
+                          "name": "number"
+                        },
+                        {
+                          "name": "string"
+                        }
+                      ],
                       "required": false
                     }
                   }
