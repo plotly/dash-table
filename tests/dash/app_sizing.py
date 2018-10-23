@@ -43,6 +43,12 @@ def layout():
     df_long = pd.DataFrame(
         OrderedDict([(name, col_data * 10) for (name, col_data) in data.items()])
     )
+    df_long_columns = pd.DataFrame(
+        {
+            "This is Column {} Data".format(i): [1, 2]
+            for i in range(10)
+        }
+    )
 
     return [
         html.H1("Sizing Guide"),
@@ -55,20 +61,18 @@ def layout():
                 "borderRight": "thin hotpink solid",
             },
             children=[
-                html.H1("Background - HTML Tables"),
-                section_title("HTML Table - Default Styles"),
-                html.Div("By default, HTML tables expand to their contents"),
+                section_title("Default Styles"),
+
+                html.B('HTML Table'),
                 html_table(df, table_style={}, base_column_style={}),
-                section_title("HTML Table - Padding"),
-                html.Div(
-                    """
-                Since the table content is packed so tightly,
-                it's usually a good idea to place some left
-                on the columns.
-            """
+                html.B('Dash Table'),
+                dash_table.Table(
+                    id='default-style',
+                    data=df.to_dict('rows'),
+                    columns=[{'id': c, 'name': c} for c in df.columns]
                 ),
-                html_table(df, table_style={}, cell_style={"paddingLeft": 10}),
-                section_title("HTML Table - Responsive Table"),
+
+                section_title("Responsive Table"),
                 html.Div(
                     """
             With 100% width, the tables will expand to their
@@ -77,7 +81,16 @@ def layout():
             """
                 ),
                 html_table(df, table_style={"width": "100%"}, base_column_style={}),
-                section_title("HTML Table - All Column Widths defined by Percent"),
+                dash_table.Table(
+                    id='responsive',
+                    data=df.to_dict('rows'),
+                    columns=[{'id': c, 'name': c} for c in df.columns],
+                    style_table={
+                        'width': '100%',
+                    }
+                ),
+
+                section_title("All Column Widths defined by Percent"),
                 html.Div(
                     """
             The column widths can be definied by percents rather than pixels.
@@ -95,7 +108,27 @@ def layout():
                         "Region": {"width": "30%"},
                     },
                 ),
-                section_title("HTML Table - Single Column Width Defined by Percent"),
+                dash_table.Table(
+                    id='column-percentage',
+                    data=df.to_dict('rows'),
+                    columns=[{'id': c, 'name': c} for c in df.columns],
+                    style_cell_conditional=[
+                        {'if': {'column_id': 'Date'},
+                         'width': '30%'},
+                        {'if': {'column_id': 'Election Polling Organization'},
+                         'width': '25%'},
+                        {'if': {'column_id': 'Dem'},
+                         'width': '5%'},
+                        {'if': {'column_id': 'Rep'},
+                         'width': '5%'},
+                        {'if': {'column_id': 'Ind'},
+                         'width': '5%'},
+                        {'if': {'column_id': 'Region'},
+                         'width': '30%'},
+                    ]
+                ),
+
+                section_title("Single Column Width Defined by Percent"),
                 html.Div(
                     """
             The width of one column (Region=50%) can be definied by percent.
@@ -106,7 +139,18 @@ def layout():
                     table_style={"width": "100%"},
                     column_style={"Region": {"width": "50%"}},
                 ),
-                section_title("HTML Table - Columns with min-width"),
+                dash_table.Table(
+                    id='single-column-percentage',
+                    data=df.to_dict('rows'),
+                    columns=[{'id': c, 'name': c} for c in df.columns],
+                    style_table={'width': '100%'},
+                    style_cell_conditional=[
+                        {'if': {'column_id': 'Region'},
+                         'width': '50%'},
+                    ]
+                ),
+
+                section_title("Columns with min-width"),
                 html.Div(
                     "Here, the min-width for the first column is 130px, or about the width of this line: "
                 ),
@@ -118,7 +162,18 @@ def layout():
                     table_style={"width": "100%"},
                     column_style={"Date": {"minWidth": "130"}},
                 ),
-                section_title("HTML Table - Underspecified Widths"),
+                dash_table.Table(
+                    id='single-column-min-width',
+                    data=df.to_dict('rows'),
+                    columns=[{'id': c, 'name': c} for c in df.columns],
+                    style_table={'width': '100%'},
+                    style_cell_conditional=[
+                        {'if': {'column_id': 'Date'},
+                         'minWidth': 130},
+                    ]
+                ),
+
+                section_title("Underspecified Widths"),
                 html.Div(
                     """
             The widths can be under-specified. Here, we're only setting the width for the three
@@ -138,7 +193,22 @@ def layout():
                         "Ind": {"width": 50},
                     },
                 ),
-                section_title("HTML Table - Widths that are smaller than the content"),
+                dash_table.Table(
+                    id='multiple-column-min-width',
+                    data=df.to_dict('rows'),
+                    columns=[{'id': c, 'name': c} for c in df.columns],
+                    style_table={'width': '100%'},
+                    style_cell_conditional=[
+                        {'if': {'column_id': 'Dem'},
+                         'width': 50},
+                        {'if': {'column_id': 'Rep'},
+                         'width': 50},
+                        {'if': {'column_id': 'Ind'},
+                         'width': 50},
+                    ]
+                ),
+
+                section_title("Widths that are smaller than the content"),
                 html.Div(
                     """
             In this case, we're setting the width to 20px, which is smaller
@@ -158,7 +228,22 @@ def layout():
                         "Ind": {"width": 20},
                     },
                 ),
-                section_title("HTML Table - Content with Ellipses"),
+                dash_table.Table(
+                    id='multiple-column-min-width-small',
+                    data=df.to_dict('rows'),
+                    columns=[{'id': c, 'name': c} for c in df.columns],
+                    style_table={'width': '100%'},
+                    style_cell_conditional=[
+                        {'if': {'column_id': 'Dem'},
+                         'width': 20},
+                        {'if': {'column_id': 'Rep'},
+                         'width': 20},
+                        {'if': {'column_id': 'Ind'},
+                         'width': 20},
+                    ]
+                ),
+
+                section_title("Content with Ellipses"),
                 html.Div(
                     """
                 With `max-width`, the content can collapse into
@@ -179,7 +264,20 @@ def layout():
                         "maxWidth": 0,
                     },
                 ),
-                section_title("HTML Table - Vertical Scrolling"),
+                dash_table.Table(
+                    id='multiple-column-ellipsis',
+                    data=df.to_dict('rows'),
+                    columns=[{'id': c, 'name': c} for c in df.columns],
+                    style_table={'width': '100%'},
+                    style_cell={
+                        "whiteSpace": "nowrap",
+                        "overflow": "hidden",
+                        "textOverflow": "ellipsis",
+                        "maxWidth": 0,
+                    },
+                ),
+
+                section_title("Vertical Scrolling"),
                 html.Div(
                     """
             By supplying a max-height of the Table container and supplying
@@ -191,7 +289,14 @@ def layout():
                     style={"maxHeight": 300, "overflowY": "scroll"},
                     children=html_table(df_long, table_style={"width": "100%"}),
                 ),
-                section_title("HTML Table - Vertical Scrolling with Max Height"),
+                dash_table.Table(
+                    id='vertical-scrolling',
+                    data=df_long.to_dict('rows'),
+                    columns=[{'id': c, 'name': c} for c in df.columns],
+                    style_table={'maxHeight': '300', 'overflowY': 'scroll'},
+                ),
+
+                section_title("Vertical Scrolling with Max Height"),
                 html.Div(
                     """
             With `max-height`, if the table's contents are shorter than the
@@ -209,13 +314,42 @@ def layout():
                     style={"maxHeight": 300, "overflowY": "scroll"},
                     children=html_table(df, table_style={"width": "100%"}),
                 ),
-                section_title("HTML Table - Vertical Scrolling with Height"),
+                dash_table.Table(
+                    id='vertical-scrolling-small',
+                    data=df.to_dict('rows'),
+                    columns=[{'id': c, 'name': c} for c in df.columns],
+                    style_table={'maxHeight': '300', 'overflowY': 'scroll'},
+                ),
+
+                section_title("Vertical Scrolling with Height"),
                 html.Div("and here is `height` with the same content"),
                 html.Div(
                     style={"height": 300, "overflowY": "scroll"},
                     children=html_table(df, table_style={"width": "100%"}),
                 ),
-                section_title("HTML Table - Horizontal Scrolling"),
+                dash_table.Table(
+                    id='vertical-scrolling-with-height',
+                    data=df.to_dict('rows'),
+                    columns=[{'id': c, 'name': c} for c in df.columns],
+                    style_table={'height': '300', 'overflowY': 'scroll'},
+                ),
+
+                section_title("Vertical Scrolling via Fixed Rows"),
+                dash_table.Table(
+                    id='vertical-scrolling-via-fixed-rows',
+                    data=df.to_dict('rows'),
+                    columns=[{'id': c, 'name': c} for c in df.columns],
+                    n_fixed_rows=1
+                ),
+
+                dash_table.Table(
+                    id='vertical-scrolling-via-fixed-rows-long',
+                    data=df_long.to_dict('rows'),
+                    columns=[{'id': c, 'name': c} for c in df.columns],
+                    n_fixed_rows=1
+                ),
+
+                section_title("Horizontal Scrolling"),
                 html.Div(
                     """
             With HTML tables, we can set `min-width` to be 100%.
@@ -238,7 +372,7 @@ def layout():
 
             """
                 ),
-                section_title("HTML Table - Two Columns, 100% Min-Width"),
+                section_title("Two Columns, 100% Min-Width"),
                 html.Div(
                     html_table(
                         pd.DataFrame({"Column 1": [1, 2], "Column 2": [3, 3]}),
@@ -247,7 +381,15 @@ def layout():
                     ),
                     style={"overflowX": "scroll"},
                 ),
-                section_title("HTML Table - Long Columns, 100% Min-Width"),
+                dash_table.Table(
+                    id='min-width-one-hundred',
+                    data=df_long.to_dict('rows'),
+                    columns=[{'id': c, 'name': c} for c in df.columns],
+                    style_table={'minWidth': '100%'},
+                    style_cell={'whiteSpace': 'nowrap'}
+                ),
+
+                section_title("Long Columns, 100% Min-Width"),
                 html.Div(
                     """
                 Here is a table with several columns with long titles,
@@ -257,175 +399,19 @@ def layout():
                 ),
                 html.Div(
                     html_table(
-                        pd.DataFrame(
-                            {
-                                "This is Column {} Data".format(i): [1, 2]
-                                for i in range(10)
-                            }
-                        ),
+                        df_long_columns,
                         table_style={"minWidth": "100%", "overflowX": "scroll"},
                         cell_style={"whiteSpace": "nowrap"},
                     ),
                     style={"overflowX": "scroll"},
                 ),
-                html.Hr(),
-                html.H3("Dash Interactive Table"),
-                html.Div("These same styles can be applied to the dash table"),
-                section_title("Dash Table - Default Styles"),
                 dash_table.Table(
-                    id="sizing-1",
-                    data=df.to_dict("rows"),
-                    columns=[{"name": i, "id": i} for i in df.columns],
+                    id='min-width-long-columns',
+                    data=df_long_columns.to_dict('rows'),
+                    columns=[{'id': c, 'name': c} for c in df_long_columns.columns],
+                    style_table={'minWidth': '100%', 'overflowX': 'scroll'},
+                    style_cell={'whiteSpace': 'nowrap'}
                 ),
-                section_title("Dash Table - Padding"),
-                # ...
-                section_title("Dash Table - All Column Widths by Percent"),
-                html.Div(
-                    """
-                Here is a table with all columns having width equal to 16.67%,
-                the Region column additionally wraps text. The table will try and respect
-                the width of each column while allowing for the content to be displayed.
-
-                Changing the browser's viewport width will help understand how the table
-                allocates space.
-            """
-                ),
-                dash_table.Table(
-                    id="sizing-2",
-                    data=df.to_dict("rows"),
-                    content_style="grow",
-                    columns=[
-                        {"name": i, "id": i} for i in df.columns
-                    ],
-                    css=[
-                        {"selector": ".dash-spreadsheet", "rule": "width: 100%"},
-                        {
-                            "selector": ".dash-cell[data-dash-column=Region]",
-                            "rule": "white-space: normal",
-                        },
-                    ],
-                    style_data_conditional=[{"width": "16.67%"}]
-                ),
-                section_title("Dash Table - Single Column Width by Percent"),
-                html.Div(
-                    """
-                Here is a table with all columns having default (auto) width excepts for the
-                the Region column that has 50% width and wraps text. The table will try and respect
-                the width of each column while allowing for the content to be displayed.
-
-                Changing the browser's viewport width will help understand how the table
-                allocates space.
-            """
-                ),
-                dash_table.Table(
-                    id="sizing-3",
-                    data=df.to_dict("rows"),
-                    content_style="grow",
-                    columns=[
-                        {"name": i, "id": i }
-                        for i in df.columns
-                    ],
-                    css=[
-                        {"selector": ".dash-spreadsheet", "rule": "width: 100%"},
-                        {
-                            "selector": ".dash-cell[data-dash-column=Region]",
-                            "rule": "white-space: normal",
-                        },
-                    ],
-                    style_data_conditional=[{ "if": { "column_id": "Region" }, "width": "50%" }]
-                ),
-                section_title("Dash Table - Underspecified Widths"),
-                html.Div(
-                    """
-            The widths can be under-specified. Here, we're only setting the width for the three
-            columns in the middle, the rest of the columns are automatically sized to fit the rest of the container.
-            The columns have a width/minWidth/maxWidth of 100px.
-            """
-                ),
-                dash_table.Table(
-                    id="sizing-4",
-                    data=df.to_dict("rows"),
-                    columns=[
-                        {
-                            "name": i,
-                            "id": i,
-                        }
-                        for i in df.columns
-                    ],
-                    style_data_conditional=[
-                        { "if": { "column_id": "Dem" }, "width": "100px", "min_width": "100px", "max_width": "100px" },
-                        { "if": { "column_id": "Rep" }, "width": "100px", "min_width": "100px", "max_width": "100px" },
-                        { "if": { "column_id": "Ind" }, "width": "100px", "min_width": "100px", "max_width": "100px" }
-                    ]
-                ),
-                section_title("Dash Table - Widths that are smaller than the content"),
-                html.Div(
-                    """
-            Width for all columns is set to 100px. Columns whose content is smaller than the defined size will respect it.
-            Columns whose content is bigger than defined will grow to accomodate content. Region column wraps to show behavior
-            in that case
-            """
-                ),
-                dash_table.Table(
-                    id="sizing-5",
-                    data=df.to_dict("rows"),
-                    columns=[
-                        {"name": i, "id": i } for i in df.columns
-                    ],
-                    css=[
-                        {
-                            "selector": ".dash-cell[data-dash-column=Region]",
-                            "rule": "white-space: normal",
-                        }
-                    ],
-                    style_data_conditional=[{ "width": "100px" }]
-                ),
-                section_title(
-                    "Dash Table - Widths that are smaller than the content (forced)"
-                ),
-                html.Div(
-                    """
-            Width/minWidth/maxWidth for all columns is set to 100px. Columns whose content is smaller than the defined size will respect it.
-            Columns whose content is bigger than defined will respect it too. Region column wraps to show behavior
-            in that case
-            """
-                ),
-                dash_table.Table(
-                    id="sizing-6",
-                    data=df.to_dict("rows"),
-                    columns=[
-                        {
-                            "name": i,
-                            "id": i,
-                        }
-                        for i in df.columns
-                    ],
-                    css=[
-                        {
-                            "selector": ".dash-cell[data-dash-column=Region]",
-                            "rule": "white-space: normal",
-                        }
-                    ],
-                    style_data_conditional=[
-                        { "width": "100px", "min_width": "100px", "max_width": "100px" }
-                    ]
-                ),
-                section_title("Dash Table - Content with Ellipses"),
-                # ...
-                section_title("Dash Table - Vertical Scrolling"),
-                # ...
-                section_title("Dash Table - Vertical Scrolling with Max Height"),
-                # ...
-                section_title("Dash Table - Vertical Scrolling with Height"),
-                # ...
-                section_title("Dash Table - Horizontal Scrolling"),
-                # ...
-                section_title("Dash Table - Two Columns, 100% Min-Width"),
-                # ...
-                section_title("Dash Table - Long Columns, 100% Min-Width"),
-                # ...
-                section_title("Dash Table - Alignment"),
-                # ...
-            ],
-        ),
+            ]
+        )
     ]
