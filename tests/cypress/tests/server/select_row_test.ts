@@ -4,7 +4,7 @@ describe('select row', () => {
     describe('be pagination & sort', () => {
         beforeEach(() => cy.visit('http://localhost:8081'));
 
-        it.only('can select row', () => {
+        it('can select row', () => {
             DashTable.getSelect(0).within(() => cy.get('input').click());
             DashTable.getSelect(0).within(() => cy.get('input').should('be.checked'));
         });
