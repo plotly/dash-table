@@ -63,7 +63,7 @@
               },
               "name": {
                 "name": "string",
-                "required": true
+                "required": false
               },
               "options": {
                 "name": "arrayOf",
