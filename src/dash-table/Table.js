@@ -90,7 +90,7 @@ export const propTypes = {
         ]),
         hidden: PropTypes.bool,
         id: PropTypes.string.isRequired,
-        name: PropTypes.string,
+        name: PropTypes.string.isRequired,
         options: PropTypes.arrayOf(PropTypes.shape({
             label: PropTypes.oneOfType([
                 PropTypes.number,
