@@ -11,10 +11,11 @@ import genRandomId from './utils/generate';
 export default class Table extends Component {
     constructor(props) {
         super(props);
-        if(!props.id) {
-            props.id = genRandomId('table-')
-        }
+
+        let id;
+        this.getId = () => (id = id || genRandomId('table-'));
     }
+
     render() {
         const {
             filtering,
@@ -38,7 +39,7 @@ export default class Table extends Component {
             return (<div>Invalid props combination</div>);
         }
 
-        return (<RealTable {...this.props} />);
+        return this.props.id ? (<RealTable {...this.props} />) : (<RealTable {...this.props} id={this.getId()} />);
     }
 }
 
