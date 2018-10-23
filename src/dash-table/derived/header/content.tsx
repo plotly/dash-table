@@ -17,7 +17,6 @@ import {
     Sorting
 } from 'dash-table/components/Table/props';
 import * as actions from 'dash-table/utils/actions';
-import Logger from 'core/Logger';
 
 function deleteColumn(column: IVisibleColumn, columns: VisibleColumns, columnRowIndex: any, setProps: SetProps, options: ControlledTableProps) {
     return () => {
@@ -28,7 +27,6 @@ function deleteColumn(column: IVisibleColumn, columns: VisibleColumns, columnRow
 function doSort(columnId: ColumnId, sortSettings: SortSettings, sortType: SortingType, setProps: SetProps) {
     return () => {
         let direction: SortDirection;
-        Logger.debug(getSorting(columnId, sortSettings))
         switch (getSorting(columnId, sortSettings)) {
             case SortDirection.Descending:
                 direction = SortDirection.None;
@@ -43,7 +41,6 @@ function doSort(columnId: ColumnId, sortSettings: SortSettings, sortType: Sortin
                 direction = SortDirection.Ascending;
                 break;
         }
-        Logger.debug('now -->', direction)
 
         const sortingStrategy = sortType === 'single' ?
             singleUpdateSettings :
