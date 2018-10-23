@@ -63,7 +63,7 @@ export const defaultProps = {
     column_conditional_dropdowns: [],
     column_static_dropdown: [],
 
-    id: genRandomId(),
+    id: genRandomId('table-'),
 
     data: [],
     columns: [],
