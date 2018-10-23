@@ -2,7 +2,32 @@
   "src/dash-table/Table.js": {
     "description": "",
     "displayName": "Table",
-    "methods": [],
+    "methods": [
+      {
+        "name": "isFrontEnd",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "value",
+            "type": null
+          }
+        ],
+        "returns": null
+      },
+      {
+        "name": "isBackEnd",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "value",
+            "type": null
+          }
+        ],
+        "returns": null
+      }
+    ],
     "props": {
       "active_cell": {
         "type": {
