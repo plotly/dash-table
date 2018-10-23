@@ -391,3 +391,7 @@ Derived properties allow the component to expose complex state that can be usefu
         dataframe_timestamp -> data_timestamp
         derived_virtual_dataframe -> derived_virtual_data
         derived_viewport_datafram -> derived_viewport_data
+
+## RC7 - Sort ascending on first click 
+    - Sorts ascending when first clicked
+    - Flips icons displayed so that they are pointing up on ascending and down on descending.
