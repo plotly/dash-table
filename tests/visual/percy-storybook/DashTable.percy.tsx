@@ -260,3 +260,33 @@ storiesOf('DashTable/Without id', module)
             "background_color": "yellow"
         }]}
     />))
+    .add('Two tables with CSS props set', () => (<div>
+        <DashTable
+            setProps={setProps}
+            data={data}
+            columns={columns}
+            n_fixed_columns={2}
+            n_fixed_rows={1}
+            row_deletable={true}
+            row_selectable={true}
+            style_table={{height: 500, width: 400}}
+            css={[{
+                'selector': '.dash-spreadsheet',
+                'rule': 'border: 4px solid hotpink'
+            }]}
+        />
+        <DashTable
+            setProps={setProps}
+            data={data}
+            columns={columns}
+            n_fixed_columns={2}
+            n_fixed_rows={1}
+            row_deletable={true}
+            row_selectable={true}
+            style_table={{height: 500, width: 400}}
+            css={[{
+                'selector': '.dash-spreadsheet',
+                'rule': 'border: 4px solid cyan'
+            }]}
+        />
+    </div>))
