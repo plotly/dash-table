@@ -6,6 +6,7 @@ import pandas as pd
 from textwrap import dedent
 
 import dash_table
+
 from index import app
 from .utils import html_table, section_title
 
@@ -26,15 +27,9 @@ def layout():
     return html.Div(
         style={"marginLeft": "auto", "marginRight": "auto", "width": "80%"},
         children=[
-            html.H1("[WIP] - Styling the Table"),
+            html.H1("Styling the Table"),
 
-            section_title("HTML Table - Gridded"),
-
-            html.Div("""
-            By default, the Dash table has grey headers and borders
-            around each cell. It resembles a spreadsheet with clearly defined
-            headers
-            """),
+            section_title("Default Styles"),
 
             html_table(
                 df,
@@ -43,10 +38,15 @@ def layout():
                 column_style={'width': '20%', 'paddingLeft': 20},
                 header_style={'backgroundColor': 'rgb(235, 235, 235)'}
             ),
+            dash_table.Table(
+                id='default-style',
+                data=df.to_dict('rows'),
+                columns=[{'id': c, 'name': c} for c in df.columns]
+            ),
 
             html.Hr(),
 
-            section_title("HTML Table - Column Alignment and Column Fonts"),
+            section_title("Column Alignment and Column Fonts"),
             dcc.Markdown(dedent(
             """
             When displaying numerical data, it's a good practice to use
@@ -80,10 +80,27 @@ def layout():
                 },
                 header_style={'backgroundColor': 'rgb(235, 235, 235)'}
             ),
+            dash_table.Table(
+                id='column-alignment',
+                data=df.to_dict('rows'),
+                columns=[{'id': c, 'name': c} for c in df.columns],
+
+                # feels odd that I need to specify both of these
+                content_style='grow',
+                style_table={'width': '100%'},
+
+                style_cell_conditional=[
+                    {'if': {'column_id': 'Date'},
+                     'textAlign': 'left', 'fontFamily': 'sans-serif',
+                     'paddingLeft': '10px'},
+                    {'if': {'column_id': 'Region'},
+                     'textAlign': 'left', 'fontFamily': 'sans-serif', 'paddingLeft': '10px'},
+                ]
+            ),
 
             html.Hr(),
 
-            section_title('HTML Table - Styling the Table as a List'),
+            section_title('Styling the Table as a List'),
 
             dcc.Markdown(dedent('''
             The gridded view is a good default view for an editable table, like a spreadsheet.
@@ -108,10 +125,28 @@ def layout():
                     "Pressure": {"textAlign": "right", "fontFamily": "monospaced"},
                 },
             ),
+            dash_table.Table(
+                id='style-as-list',
+                data=df.to_dict('rows'),
+                columns=[{'id': c, 'name': c} for c in df.columns],
+
+                content_style='grow',
+                style_table={'width': '100%'},
+                style_cell={
+                    # TODO - this doesn't work?
+                    'box-shadow': ', '.join([
+                        'inset 0px 1px 0px 0px #CCC',
+                        'inset 0px -1px 0px 0px #CCC'
+                    ]),
+
+                    # TODO - this doesn't work either:
+                    # 'boxShadow': 'none',
+                },
+            ),
 
             html.Hr(),
 
-            section_title('HTML Table - Row Padding'),
+            section_title('Row Padding'),
 
             dcc.Markdown(dedent('''
             By default, the gridded view is pretty tight. You can add some top and bottom row padding to
@@ -136,10 +171,29 @@ def layout():
                 },
                 row_style={'paddingTop': 10, 'paddingBottom': 10}
             ),
+            dash_table.Table(
+                id='style-as-list-padding',
+                data=df.to_dict('rows'),
+                columns=[{'id': c, 'name': c} for c in df.columns],
+
+                content_style='grow',
+                style_table={'width': '100%'},
+                style_cell={
+                    # boxShadow doesn't work
+                    'box-shadow': ', '.join([
+                        'inset 0px 1px 0px 0px #CCC',
+                        'inset 0px -1px 0px 0px #CCC'
+                    ]),
+
+                    # TODO - This only applies on the headers?
+                    'paddingTop': '10px',
+                    'paddingBottom': '10px',
+                },
+            ),
 
             html.Hr(),
 
-            section_title('HTML Table - List Style with Minimal Headers'),
+            section_title('List Style with Minimal Headers'),
 
             dcc.Markdown(dedent('''
             In some contexts, the grey background can look a little heavy.
@@ -165,10 +219,33 @@ def layout():
                 },
                 row_style={'paddingTop': 10, 'paddingBottom': 10}
             ),
+            dash_table.Table(
+                id='minimal-headers',
+                data=df.to_dict('rows'),
+                columns=[{'id': c, 'name': c} for c in df.columns],
+
+                content_style='grow',
+                style_table={'width': '100%'},
+                style_header={
+                    'backgroundColor': 'white',
+                    'borderBottom': '1px lightgrey solid'
+                },
+                style_cell={
+                    # boxShadow doesn't work
+                    'box-shadow': ', '.join([
+                        'inset 0px 1px 0px 0px #CCC',
+                        'inset 0px -1px 0px 0px #CCC'
+                    ]),
+
+                    # only applies on the headers?
+                    'paddingTop': '10px',
+                    'paddingBottom': '10px',
+                },
+            ),
 
             html.Hr(),
 
-            section_title('HTML Table - List Style with Understated Headers'),
+            section_title('List Style with Understated Headers'),
 
             dcc.Markdown(dedent('''
             When the data is obvious, sometimes you can de-emphasize the headers
@@ -193,10 +270,35 @@ def layout():
                 },
                 row_style={'paddingTop': 10, 'paddingBottom': 10}
             ),
+            dash_table.Table(
+                id='minimal-headers-understated',
+                data=df.to_dict('rows'),
+                columns=[{'id': c, 'name': c} for c in df.columns],
+
+                content_style='grow',
+                style_table={'width': '100%'},
+                style_header={
+                    'backgroundColor': 'white',
+                    'borderBottom': '1px lightgrey solid',
+                    'color': 'rgb(100, 100, 100)',
+                    'fontSize': '14px'
+                },
+                style_cell={
+                    # boxShadow doesn't work
+                    'box-shadow': ', '.join([
+                        'inset 0px 1px 0px 0px #CCC',
+                        'inset 0px -1px 0px 0px #CCC'
+                    ]),
+
+                    # only applies on the headers?
+                    'paddingTop': '10px',
+                    'paddingBottom': '10px',
+                },
+            ),
 
             html.Hr(),
 
-            section_title('HTML Table - Striped Rows'),
+            section_title('Striped Rows'),
 
             dcc.Markdown(dedent('''
             When you're viewing datasets where you need to compare values within individual rows, it
@@ -223,8 +325,31 @@ def layout():
                 row_style={'paddingTop': 10, 'paddingBottom': 10},
                 odd_row_style={'backgroundColor': 'rgb(248, 248, 248)'}
             ),
+            dash_table.Table(
+                id='striped-rows',
+                data=df.to_dict('rows'),
+                columns=[{'id': c, 'name': c} for c in df.columns],
 
-            section_title('HTML Table - Dark Theme with Cells'),
+                content_style='grow',
+                style_table={'width': '100%'},
+                style_cell={
+                    # boxShadow doesn't work
+                    'box-shadow': ', '.join([
+                        'inset 0px 1px 0px 0px #CCC',
+                        'inset 0px -1px 0px 0px #CCC'
+                    ]),
+
+                    # only applies on the headers?
+                    'paddingTop': '10px',
+                    'paddingBottom': '10px',
+                },
+                style_cell_conditional=[{
+                    'if': {'row_index': 'odd'},
+                    'backgroundColor': 'rgb(248, 248, 248)'
+                }]
+            ),
+
+            section_title('Dark Theme with Cells'),
 
             dcc.Markdown(dedent(
             """
@@ -255,8 +380,18 @@ def layout():
                     "Pressure": {"textAlign": "right", "fontFamily": "monospaced"},
                 },
             ),
+            dash_table.Table(
+                id='dark-theme',
+                data=df.to_dict('rows'),
+                columns=[{'id': c, 'name': c} for c in df.columns],
 
-            section_title('HTML Table - Dark Theme with Rows'),
+                content_style='grow',
+                style_table={'width': '100%'},
+                style_header={'backgroundColor': 'rgb(30, 30, 30)'},
+                style_cell={'backgroundColor': 'rgb(50, 50, 50)', 'color': 'white'},
+            ),
+
+            section_title('Dark Theme with Rows'),
 
             html_table(
                 df,
@@ -282,8 +417,26 @@ def layout():
                     "Pressure": {"textAlign": "right", "fontFamily": "monospaced"},
                 },
             ),
+            dash_table.Table(
+                id='dark-theme-with-rows',
+                data=df.to_dict('rows'),
+                columns=[{'id': c, 'name': c} for c in df.columns],
 
-            section_title('HTML Table - Highlighting Certain Rows'),
+                content_style='grow',
+                style_table={'width': '100%'},
+                style_header={'backgroundColor': 'rgb(30, 30, 30)'},
+                style_cell={
+                    'backgroundColor': 'rgb(50, 50, 50)',
+                    'color': 'white',
+                    # boxShadow doesn't work
+                    'box-shadow': ', '.join([
+                        'inset 0px 1px 0px 0px #CCC',
+                        'inset 0px -1px 0px 0px #CCC'
+                    ]),
+                },
+            ),
+
+            section_title('Highlighting Certain Rows'),
 
             dcc.Markdown(dedent('''
             You can draw attention to certain rows by providing a unique
@@ -298,120 +451,14 @@ def layout():
                 header_style={'backgroundColor': 'rgb(235, 235, 235)'},
                 row_style_by_index={
                     4: {
-                        'backgroundColor': 'yellow',
+                        'backgroundColor': '#3D9970',
+                        'color': 'white',
                     }
                 }
             ),
 
-            section_title('HTML Table - Highlighting Certain Columns'),
-
-            dcc.Markdown(dedent('''
-            Similarly, certain columns can be highlighted.
-            ''')),
-
-            html_table(
-                df,
-                cell_style={'border': 'thin lightgrey solid', 'color': 'rgb(60, 60, 60)'},
-                table_style={'width': '100%'},
-                column_style={'width': '20%', 'paddingLeft': 20},
-                header_style={'backgroundColor': 'rgb(235, 235, 235)'},
-                cell_style_by_column={
-                    "Temperature": {
-                        "backgroundColor": "yellow"
-                    },
-                }
-            ),
-
-            section_title('HTML Table - Highlighting Certain Cells'),
-
-            dcc.Markdown(dedent('''
-            You can also highlight certain cells. For example, you may want to
-            highlight certain cells that exceed a threshold or that match
-            a filter elsewhere in the app.
-            ''')),
-
-            html_table(
-                df,
-                cell_style={'border': 'thin lightgrey solid', 'color': 'rgb(60, 60, 60)'},
-                table_style={'width': '100%'},
-                column_style={'width': '20%', 'paddingLeft': 20},
-                header_style={'backgroundColor': 'rgb(235, 235, 235)'},
-                conditional_cell_style=lambda cell, column: (
-                    {'backgroundColor': 'yellow'}
-                    if (
-                        (column == 'Region' and cell == 'Montreal')
-                        or
-                        (cell == 20)
-                    ) else {}
-                )
-            ),
-
-            html.Hr(),
-
-            section_title('Dash Table - Styling the Table as a List'),
-            # ...
-
-            section_title('Dash Table - Row Padding'),
             dash_table.Table(
-                id="styling-2",
-                data=df.to_dict("rows"),
-                columns=[
-                    {"name": i, "id": i} for i in df.columns
-                ],
-                style_data_conditional=[{ "padding_bottom": 5, "padding_top": 5}]
-            ),
-
-            section_title('Dash Table - List Style with Minimal Headers'),
-            # ...
-
-            section_title('Dash Table - List Style with Understated Headers'),
-            # ...
-
-            section_title('Dash Table - Striped Rows'),
-            # ...
-
-            section_title('Dash Table - Dark Theme with Cells'),
-            dash_table.Table(
-                id="styling-6",
-                data=df.to_dict("rows"),
-                columns=[
-                    {"name": i, "id": i} for i in df.columns
-                ],
-                content_style="grow",
-                style_table={
-                    "width": "100%"
-                },
-                style_data_conditional=[{
-                    "background_color": "rgb(50, 50, 50)",
-                    "color": "white",
-                    "font_family": "arial"
-                }, {
-                    "if": { "column_id": "Humidity" },
-                    "font_family": "monospace",
-                    "padding_left": 20,
-                    "text_align": "left"
-                }, {
-                    "if": { "column_id": "Pressure" },
-                    "font_family": "monospace",
-                    "padding_left": 20,
-                    "text_align": "left"
-                }, {
-                    "if": { "column_id": "Temperature" },
-                    "font_family": "monospace",
-                    "padding_left": 20,
-                    "text_align": "left"
-                }]
-            ),
-
-            section_title('Dash Table - Dark Theme with Rows'),
-            # ...
-
-            section_title('Dash Table - Highlighting Certain Rows'),
-            # ...
-
-            section_title('Dash Table - Highlighting Certain Columns'),
-            dash_table.Table(
-                id="styling-9",
+                id="highlighting-rows",
                 data=df.to_dict("rows"),
                 columns=[
                     {"name": i, "id": i} for i in df.columns
@@ -426,14 +473,56 @@ def layout():
                     "text-align": "left",
                     "width": "20%"
                 }, {
-                    "if": { "column_id": "Temperature" },
-                    "background_color": "yellow"
+                    "if": {"row_index": 4},
+                    "backgroundColor": "#3D9970",
+                    'color': 'white',
                 }]
             ),
 
-            section_title('Dash Table - Highlighting Certain Cells'),
+            section_title('Highlighting Certain Columns'),
+
+            dcc.Markdown(dedent('''
+            Similarly, certain columns can be highlighted.
+            ''')),
+
+            html_table(
+                df,
+                cell_style={'border': 'thin lightgrey solid', 'color': 'rgb(60, 60, 60)'},
+                table_style={'width': '100%'},
+                column_style={'width': '20%', 'paddingLeft': 20},
+                header_style={'backgroundColor': 'rgb(235, 235, 235)'},
+                cell_style_by_column={
+                    "Temperature": {
+                        "backgroundColor": "#3D9970",
+                        'color': 'white',
+                    },
+                }
+            ),
             dash_table.Table(
-                id="styling-10",
+                id="highlighting-columns",
+                data=df.to_dict("rows"),
+                columns=[
+                    {"name": i, "id": i} for i in df.columns
+                ],
+                content_style="grow",
+                style_table={
+                    "width": "100%"
+                },
+                style_data_conditional=[{
+                    "if": {"column_id": "Temperature"},
+                    "backgroundColor": "#3D9970",
+                    'color': 'white',
+                }]
+            ),
+
+            section_title('Highlighting Certain Cells'),
+
+            dcc.Markdown(dedent('''
+            Similarly, certain columns can be highlighted.
+            ''')),
+
+            dash_table.Table(
+                id="highlighting-cells",
                 data=df.to_dict("rows"),
                 columns=[
                     {"name": i, "id": i} for i in df.columns
@@ -444,11 +533,14 @@ def layout():
                 },
                 style_data_conditional=[{
                     "if": { "column_id": "Region", "filter": "Region eq str(Montreal)" },
-                    "background_color": "yellow"
+                    "backgroundColor": "#3D9970",
+                    'color': 'white',
                 }, {
                     "if": { "column_id": "Humidity", "filter": "Humidity eq num(20)" },
-                    "background_color": "yellow"
+                    "backgroundColor": "#3D9970",
+                    'color': 'white',
                 }]
-            )
+            ),
+
         ],
     )
