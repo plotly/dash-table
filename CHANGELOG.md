@@ -392,6 +392,11 @@ Derived properties allow the component to expose complex state that can be usefu
         derived_virtual_dataframe -> derived_virtual_data
         derived_viewport_datafram -> derived_viewport_data
 
-## RC7 - Improve props typing
+## RC7 - Optional id prop
 
+    - The id prop of the table is now optional. It will generate a random id if it's not set.
     Issue: https://github.com/plotly/dash-table/issues/143
+    
+## RC8 - Improve props typing
+
+    Issue: https://github.com/plotly/dash-table/issues/143    
