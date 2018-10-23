@@ -131,11 +131,7 @@
           "name": "string"
         },
         "required": false,
-        "description": "",
-        "defaultValue": {
-          "value": "genRandomId()",
-          "computed": true
-        }
+        "description": ""
       },
       "is_focused": {
         "type": {

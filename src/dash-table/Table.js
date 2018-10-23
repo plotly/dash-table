@@ -9,6 +9,12 @@ import Logger from 'core/Logger';
 import genRandomId from './utils/generate';
 
 export default class Table extends Component {
+    constructor(props) {
+        super(props);
+        if(!props.id) {
+            props.id = genRandomId('table-')
+        }
+    }
     render() {
         const {
             filtering,
@@ -62,8 +68,6 @@ export const defaultProps = {
 
     column_conditional_dropdowns: [],
     column_static_dropdown: [],
-
-    id: genRandomId('table-'),
 
     data: [],
     columns: [],
