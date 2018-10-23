@@ -15,6 +15,15 @@ export default class Table extends Component {
             props.id = genRandomId('table-')
         }
     }
+
+    isFrontEnd = (value) => {
+        return ['fe', true, false].indexOf(value) !== -1;
+    }
+
+    isBackEnd = (value) => {
+        return ['be', false].indexOf(value) !== -1;
+    }
+
     render() {
         const {
             filtering,
@@ -22,16 +31,9 @@ export default class Table extends Component {
             pagination_mode
         } = this.props;
 
-        function isFrontEnd(value: any) {
-            return ['fe', true, false].indexOf(value) !== -1;
-        }
 
-        function isBackEnd(value: any) {
-            return ['be', false].indexOf(value) !== -1;
-        }
-
-        const isValid = isFrontEnd(pagination_mode) ||
-            (isBackEnd(filtering) && isBackEnd(sorting));
+        const isValid = this.isFrontEnd(pagination_mode) ||
+            (this.isBackEnd(filtering) && this.isBackEnd(sorting));
 
         if (!isValid) {
             Logger.error(`Invalid combination of filtering / sorting / pagination`, filtering, sorting, pagination_mode);
