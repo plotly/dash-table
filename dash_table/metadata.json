@@ -63,7 +63,7 @@
               },
               "name": {
                 "name": "string",
-                "required": false
+                "required": true
               },
               "options": {
                 "name": "arrayOf",
@@ -80,7 +80,7 @@
                           "name": "string"
                         }
                       ],
-                      "required": false
+                      "required": true
                     },
                     "value": {
                       "name": "union",
@@ -92,7 +92,7 @@
                           "name": "string"
                         }
                       ],
-                      "required": false
+                      "required": true
                     }
                   }
                 },
@@ -155,11 +155,11 @@
             "value": {
               "selector": {
                 "name": "string",
-                "required": false
+                "required": true
               },
               "rule": {
                 "name": "string",
-                "required": false
+                "required": true
               }
             }
           }
@@ -380,15 +380,15 @@
           "value": {
             "displayed_pages": {
               "name": "number",
-              "required": false
+              "required": true
             },
             "current_page": {
               "name": "number",
-              "required": false
+              "required": true
             },
             "page_size": {
               "name": "number",
-              "required": false
+              "required": true
             }
           }
         },
@@ -418,7 +418,7 @@
             "value": {
               "id": {
                 "name": "string",
-                "required": false
+                "required": true
               },
               "dropdowns": {
                 "name": "arrayOf",
@@ -427,7 +427,7 @@
                   "value": {
                     "condition": {
                       "name": "string",
-                      "required": false
+                      "required": true
                     },
                     "dropdown": {
                       "name": "arrayOf",
@@ -436,7 +436,7 @@
                         "value": {
                           "label": {
                             "name": "string",
-                            "required": false
+                            "required": true
                           },
                           "value": {
                             "name": "union",
@@ -448,15 +448,15 @@
                                 "name": "string"
                               }
                             ],
-                            "required": false
+                            "required": true
                           }
                         }
                       },
-                      "required": false
+                      "required": true
                     }
                   }
                 },
-                "required": false
+                "required": true
               }
             }
           }
@@ -476,7 +476,7 @@
             "value": {
               "id": {
                 "name": "string",
-                "required": false
+                "required": true
               },
               "dropdown": {
                 "name": "arrayOf",
@@ -485,7 +485,7 @@
                   "value": {
                     "label": {
                       "name": "string",
-                      "required": false
+                      "required": true
                     },
                     "value": {
                       "name": "union",
@@ -497,11 +497,11 @@
                           "name": "string"
                         }
                       ],
-                      "required": false
+                      "required": true
                     }
                   }
                 },
-                "required": false
+                "required": true
               }
             }
           }
@@ -656,7 +656,7 @@
                     "name": "number"
                   }
                 ],
-                "required": false
+                "required": true
               },
               "direction": {
                 "name": "enum",
@@ -670,7 +670,7 @@
                     "computed": false
                   }
                 ],
-                "required": false
+                "required": true
               }
             }
           }

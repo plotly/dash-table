@@ -90,23 +90,23 @@ export const propTypes = {
         ]),
         hidden: PropTypes.bool,
         id: PropTypes.string.isRequired,
-        name: PropTypes.string,
+        name: PropTypes.string.isRequired,
         options: PropTypes.arrayOf(PropTypes.shape({
             label: PropTypes.oneOfType([
                 PropTypes.number,
                 PropTypes.string
-            ]),
+            ]).isRequired,
             value: PropTypes.oneOfType([
                 PropTypes.number,
                 PropTypes.string
-            ])
+            ]).isRequired
         })),
         type: PropTypes.oneOf(['dropdown', 'numeric', 'text'])
     })),
     content_style: PropTypes.oneOf(['fit', 'grow']),
     css: PropTypes.arrayOf(PropTypes.shape({
-        selector: PropTypes.string,
-        rule: PropTypes.string
+        selector: PropTypes.string.isRequired,
+        rule: PropTypes.string.isRequired
     })),
 
     data: PropTypes.arrayOf(PropTypes.object),
@@ -130,34 +130,34 @@ export const propTypes = {
 
     pagination_mode: PropTypes.oneOf(['fe', 'be', true, false]),
     pagination_settings: PropTypes.shape({
-        displayed_pages: PropTypes.number,
-        current_page: PropTypes.number,
-        page_size: PropTypes.number
+        displayed_pages: PropTypes.number.isRequired,
+        current_page: PropTypes.number.isRequired,
+        page_size: PropTypes.number.isRequired
     }),
     navigation: PropTypes.string,
 
     column_conditional_dropdowns: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.string,
+        id: PropTypes.string.isRequired,
         dropdowns: PropTypes.arrayOf(PropTypes.shape({
-            condition: PropTypes.string,
+            condition: PropTypes.string.isRequired,
             dropdown: PropTypes.arrayOf(PropTypes.shape({
-                label: PropTypes.string,
+                label: PropTypes.string.isRequired,
                 value: PropTypes.oneOfType([
                     PropTypes.number,
                     PropTypes.string
-                ])
-            }))
-        }))
+                ]).isRequired
+            })).isRequired
+        })).isRequired
     })),
     column_static_dropdown: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.string,
+        id: PropTypes.string.isRequired,
         dropdown: PropTypes.arrayOf(PropTypes.shape({
-            label: PropTypes.string,
+            label: PropTypes.string.isRequired,
             value: PropTypes.oneOfType([
                 PropTypes.number,
                 PropTypes.string
-            ])
-        }))
+            ]).isRequired
+        })).isRequired
     })),
 
     filtering: PropTypes.oneOf(['fe', 'be', true, false]),
@@ -171,8 +171,8 @@ export const propTypes = {
     sorting_type: PropTypes.oneOf(['single', 'multi']),
     sorting_settings: PropTypes.arrayOf(
         PropTypes.shape({
-            columnId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-            direction: PropTypes.oneOf(['asc', 'desc'])
+            columnId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+            direction: PropTypes.oneOf(['asc', 'desc']).isRequired
         })),
     sorting_treat_empty_string_as_none: PropTypes.bool,
 
