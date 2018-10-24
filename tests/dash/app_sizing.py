@@ -343,7 +343,7 @@ def layout():
                     id='vertical-scrolling-with-height',
                     data=df.to_dict('rows'),
                     columns=[{'id': c, 'name': c} for c in df.columns],
-                    style_table={'height': '300', 'overflowY': 'scroll'},
+                    style_table={'height': '300'},
                 ),
 
                 section_title("Vertical Scrolling via Fixed Rows"),
@@ -352,10 +352,10 @@ def layout():
                     data = df.to_dict('rows'),
                     columns = [{'id':c, 'name':c} for c in df.columns],
                     content_style='grow',
-                    style_table={'width': '100%', 'maxHeight': '300', 'overflowY': 'scroll'},
+                    style_table={'width': '100%', 'maxHeight': '300'},
                     n_fixed_rows=1
                 ),
-
+                html.Br(),
                 dash_table.Table(
                     id='vertical-scrolling-via-fixed-rows-long',
                     data=df_long.to_dict('rows'),
@@ -400,7 +400,8 @@ def layout():
                 dash_table.Table(
                     id='min-width-one-hundred',
                     data=df_long.to_dict('rows'),
-                    columns=[{'id': c, 'name': c} for c in df.columns],
+                    columns = [{'id':c, 'name':c} for c in df.columns],
+                    content_style='grow',
                     style_table={'minWidth': '100%'},
                     style_cell={'whiteSpace': 'nowrap'}
                 ),
@@ -424,7 +425,8 @@ def layout():
                 dash_table.Table(
                     id='min-width-long-columns',
                     data=df_long_columns.to_dict('rows'),
-                    columns=[{'id': c, 'name': c} for c in df_long_columns.columns],
+                    columns = [{'id':c, 'name':c} for c in df_long_columns.columns],
+                    content_style='grow',
                     style_table={'minWidth': '100%', 'overflowX': 'scroll'},
                     style_cell={'whiteSpace': 'nowrap'}
                 ),
