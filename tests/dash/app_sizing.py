@@ -84,7 +84,8 @@ def layout():
                 dash_table.Table(
                     id='responsive',
                     data=df.to_dict('rows'),
-                    columns=[{'id': c, 'name': c} for c in df.columns],
+                    columns=[{'id':c, 'name':c} for c in df.columns],
+                    content_style='grow',
                     style_table={
                         'width': '100%',
                     }
@@ -111,7 +112,8 @@ def layout():
                 dash_table.Table(
                     id='column-percentage',
                     data=df.to_dict('rows'),
-                    columns=[{'id': c, 'name': c} for c in df.columns],
+                    columns=[{'id':c, 'name':c} for c in df.columns],
+                    content_style='grow',
                     style_cell_conditional=[
                         {'if': {'column_id': 'Date'},
                          'width': '30%'},
@@ -125,7 +127,10 @@ def layout():
                          'width': '5%'},
                         {'if': {'column_id': 'Region'},
                          'width': '30%'},
-                    ]
+                    ],
+                    style_table={
+                        'width': '100%',
+                    }
                 ),
 
                 section_title("Single Column Width Defined by Percent"),
@@ -142,7 +147,8 @@ def layout():
                 dash_table.Table(
                     id='single-column-percentage',
                     data=df.to_dict('rows'),
-                    columns=[{'id': c, 'name': c} for c in df.columns],
+                    columns=[{'id':c, 'name':c} for c in df.columns],
+                    content_style='grow',
                     style_table={'width': '100%'},
                     style_cell_conditional=[
                         {'if': {'column_id': 'Region'},
@@ -166,6 +172,7 @@ def layout():
                     id='single-column-min-width',
                     data=df.to_dict('rows'),
                     columns=[{'id': c, 'name': c} for c in df.columns],
+                    content_style='grow',
                     style_table={'width': '100%'},
                     style_cell_conditional=[
                         {'if': {'column_id': 'Date'},
@@ -197,6 +204,7 @@ def layout():
                     id='multiple-column-min-width',
                     data=df.to_dict('rows'),
                     columns=[{'id': c, 'name': c} for c in df.columns],
+                    content_style='grow',
                     style_table={'width': '100%'},
                     style_cell_conditional=[
                         {'if': {'column_id': 'Dem'},
@@ -231,7 +239,8 @@ def layout():
                 dash_table.Table(
                     id='multiple-column-min-width-small',
                     data=df.to_dict('rows'),
-                    columns=[{'id': c, 'name': c} for c in df.columns],
+                    columns = [{'id':c, 'name':c} for c in df.columns],
+                    content_style='grow',
                     style_table={'width': '100%'},
                     style_cell_conditional=[
                         {'if': {'column_id': 'Dem'},
@@ -267,7 +276,8 @@ def layout():
                 dash_table.Table(
                     id='multiple-column-ellipsis',
                     data=df.to_dict('rows'),
-                    columns=[{'id': c, 'name': c} for c in df.columns],
+                    columns = [{'id':c, 'name':c} for c in df.columns],
+                    content_style='grow',
                     style_table={'width': '100%'},
                     style_cell={
                         "whiteSpace": "nowrap",
@@ -292,8 +302,9 @@ def layout():
                 dash_table.Table(
                     id='vertical-scrolling',
                     data=df_long.to_dict('rows'),
-                    columns=[{'id': c, 'name': c} for c in df.columns],
-                    style_table={'maxHeight': '300', 'overflowY': 'scroll'},
+                    columns = [{'id':c, 'name':c} for c in df.columns],
+                    content_style='grow',
+                    style_table={'width': '100%', 'maxHeight': '300', 'overflowY': 'scroll'},
                 ),
 
                 section_title("Vertical Scrolling with Max Height"),
@@ -317,8 +328,9 @@ def layout():
                 dash_table.Table(
                     id='vertical-scrolling-small',
                     data=df.to_dict('rows'),
-                    columns=[{'id': c, 'name': c} for c in df.columns],
-                    style_table={'maxHeight': '300', 'overflowY': 'scroll'},
+                    columns = [{'id':c, 'name':c} for c in df.columns],
+                    content_style='grow',
+                    style_table={'width': '100%', 'maxHeight': '300', 'overflowY': 'scroll'},
                 ),
 
                 section_title("Vertical Scrolling with Height"),
@@ -337,15 +349,19 @@ def layout():
                 section_title("Vertical Scrolling via Fixed Rows"),
                 dash_table.Table(
                     id='vertical-scrolling-via-fixed-rows',
-                    data=df.to_dict('rows'),
-                    columns=[{'id': c, 'name': c} for c in df.columns],
+                    data = df.to_dict('rows'),
+                    columns = [{'id':c, 'name':c} for c in df.columns],
+                    content_style='grow',
+                    style_table={'width': '100%', 'maxHeight': '300', 'overflowY': 'scroll'},
                     n_fixed_rows=1
                 ),
 
                 dash_table.Table(
                     id='vertical-scrolling-via-fixed-rows-long',
                     data=df_long.to_dict('rows'),
-                    columns=[{'id': c, 'name': c} for c in df.columns],
+                    columns = [{'id':c, 'name':c} for c in df.columns],
+                    content_style='grow',
+                    style_table={'width': '100%', 'maxHeight': '300', 'overflowY': 'scroll'},
                     n_fixed_rows=1
                 ),
 
