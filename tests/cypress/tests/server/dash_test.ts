@@ -57,6 +57,62 @@ describe('dash basic', () => {
         });
     });
 
+    // https://github.com/plotly/dash-table/issues/141
+    it('can edit last and update data on "arrowleft"', () => {
+        DashTable.getCell(249, 0).click();
+        DOM.focused.then($input => {
+            const initialValue = $input.val();
+
+            DOM.focused.type(`abc${Key.ArrowLeft}`);
+
+            cy.get('#container').should($container => {
+                expect($container.first()[0].innerText).to.equal(`[249][0] = ${initialValue} -> abc`);
+            });
+        });
+    });
+
+    // https://github.com/plotly/dash-table/issues/141
+    it('can edit last and update data on "arrowup"', () => {
+        DashTable.getCell(249, 0).click();
+        DOM.focused.then($input => {
+            const initialValue = $input.val();
+
+            DOM.focused.type(`abc${Key.ArrowUp}`);
+
+            cy.get('#container').should($container => {
+                expect($container.first()[0].innerText).to.equal(`[249][0] = ${initialValue} -> abc`);
+            });
+        });
+    });
+
+    // https://github.com/plotly/dash-table/issues/141
+    it('can edit last and update data on "arrowright"', () => {
+        DashTable.getCell(249, 0).click();
+        DOM.focused.then($input => {
+            const initialValue = $input.val();
+
+            DOM.focused.type(`abc${Key.ArrowRight}`);
+
+            cy.get('#container').should($container => {
+                expect($container.first()[0].innerText).to.equal(`[249][0] = ${initialValue} -> abc`);
+            });
+        });
+    });
+
+    // https://github.com/plotly/dash-table/issues/141
+    it('can edit last and update data on "arrowdown"', () => {
+        DashTable.getCell(249, 0).click();
+        DOM.focused.then($input => {
+            const initialValue = $input.val();
+
+            DOM.focused.type(`abc${Key.ArrowDown}`);
+
+            cy.get('#container').should($container => {
+                expect($container.first()[0].innerText).to.equal(`[249][0] = ${initialValue} -> abc`);
+            });
+        });
+    });
+
     it('can edit last and update data when clicking outside of cell', () => {
         DashTable.getCell(249, 0).click();
         DOM.focused.then($input => {
