@@ -400,3 +400,7 @@ Derived properties allow the component to expose complex state that can be usefu
 ## RC8 - Improve props typing
 
     Issue: https://github.com/plotly/dash-table/issues/143    
+
+## RC9 - Allow keyboard navigation on focused input
+
+    Issue: https://github.com/plotly/dash-table/issues/141
