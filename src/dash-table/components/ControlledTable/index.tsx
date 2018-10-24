@@ -218,7 +218,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
 
         if (
             is_focused &&
-            (e.keyCode !== KEY_CODES.TAB && e.keyCode !== KEY_CODES.ENTER)
+            (!isNavKey(e.keyCode))
         ) {
             return;
         }

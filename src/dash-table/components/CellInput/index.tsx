@@ -14,7 +14,7 @@ import {
 } from 'dash-table/components/CellInput/props';
 
 import {
-    KEY_CODES
+    isNavKey
 } from 'dash-table/utils/unicode';
 import { ColumnType } from 'dash-table/components/Table/props';
 import dropdownHelper from 'dash-table/components/dropdownHelper';
@@ -166,7 +166,8 @@ export default class CellInput extends PureComponent<ICellProps, ICellState> {
     }
 
     handleKeyDown = (e: KeyboardEvent) => {
-        if (e.keyCode !== KEY_CODES.ENTER && e.keyCode !== KEY_CODES.TAB) {
+        if (!isNavKey(e.keyCode)
+        ) {
             return;
         }
 
