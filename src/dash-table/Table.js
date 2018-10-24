@@ -6,19 +6,20 @@ import RealTable from 'dash-table/components/Table';
 import 'dash-table/style/component.less';
 import Logger from 'core/Logger';
 
+function isFrontEnd(value) {
+    return ['fe', true, false].indexOf(value) !== -1;
+}
+
+function isBackEnd(value) {
+    return ['be', false].indexOf(value) !== -1;
+}
+
 export default class Table extends Component {
     constructor(props) {
         super(props);
 
         this.isFrontEnd = this.isFrontEnd.bind(this);
         this.isBackEnd = this.isBackEnd.bind(this);
-    }
-    isFrontEnd(value) {
-        return ['fe', true, false].indexOf(value) !== -1;
-    }
-
-    isBackEnd(value) {
-        return ['be', false].indexOf(value) !== -1;
     }
 
     render() {
@@ -28,8 +29,8 @@ export default class Table extends Component {
             pagination_mode
         } = this.props;
 
-        const isValid = this.isFrontEnd(pagination_mode) ||
-            (this.isBackEnd(filtering) && this.isBackEnd(sorting));
+        const isValid = isFrontEnd(pagination_mode) ||
+            (isBackEnd(filtering) && isBackEnd(sorting));
 
         if (!isValid) {
             Logger.error(`Invalid combination of filtering / sorting / pagination`, filtering, sorting, pagination_mode);
