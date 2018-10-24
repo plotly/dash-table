@@ -411,7 +411,6 @@ export const propTypes = {
      * in the future.
      * Tune in to [https://github.com/plotly/dash-table/issues/168](https://github.com/plotly/dash-table/issues/168)
      */
->>>>>>> :pencil: prop type comments
     column_conditional_dropdowns: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.string.isRequired,
         // .exact
