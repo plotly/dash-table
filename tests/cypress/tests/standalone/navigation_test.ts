@@ -46,6 +46,30 @@ describe('navigate', () => {
                 DashTable.getCell(3, 2).should('have.class', 'focused');
                 DashTable.getCell(3, 2).within(() => cy.get('.dash-cell-value').should('not.have.class', 'focused'));
             });
+
+            it('can move down', () => {
+                DOM.focused.type(Key.ArrowDown);
+                DashTable.getCell(4, 1).should('have.class', 'focused');
+                DashTable.getCell(3, 1).should('not.have.class', 'focused');
+            });
+
+            it('can move left', () => {
+                DOM.focused.type(Key.ArrowLeft);
+                DashTable.getCell(3, 0).should('have.class', 'focused');
+                DashTable.getCell(3, 1).should('not.have.class', 'focused');
+            });
+
+            it('can moved right', () => {
+                DOM.focused.type(Key.ArrowRight);
+                DashTable.getCell(3, 2).should('have.class', 'focused');
+                DashTable.getCell(3, 1).should('not.have.class', 'focused');
+            });
+
+            it('can move up', () => {
+                DOM.focused.type(Key.ArrowUp);
+                DashTable.getCell(2, 1).should('have.class', 'focused');
+                DashTable.getCell(3, 1).should('not.have.class', 'focused');
+            });
         });
 
         describe('into a dropdown cell', () => {
