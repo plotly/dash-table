@@ -451,7 +451,7 @@ export const propTypes = {
 
     /**
      * The `filtering` property controls whether or not the filtering UI
-     * should be displayed and the `filtering` behavior.
+     * should be displayed, and also controls the `filtering` behavior.
      * If `False`, then the filtering UI is not displayed
      * If `fe`, then the filtering UI is displayed and the filtering
      * happens in the "front-end". That is, it is performed on the data
