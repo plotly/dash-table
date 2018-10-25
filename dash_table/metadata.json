@@ -23,7 +23,7 @@
             "value": {
               "clearable": {
                 "name": "bool",
-                "description": "TODO - What does this do?",
+                "description": "If the column is rendered as dropdowns, then the\n`clearable` property determines whether or not\nthe dropdown value can be cleared or not.\n\nNOTE - The name of this property may change in the future,\nsubscribe to [https://github.com/plotly/dash-table/issues/168](https://github.com/plotly/dash-table/issues/168)\nfor more information.",
                 "required": false
               },
               "deletable": {
@@ -41,7 +41,7 @@
               },
               "editable": {
                 "name": "bool",
-                "description": "If True, then the data associated with this column is editable.\nNote that this can be toggled on a per-table basis with the\nhigher level `editable` flag.",
+                "description": "There are two `editable` flags in the table.\nThis is the  column-level editable flag and there is\nalso the table-level `editable` flag.\n\nThese flags determine whether the contents of the table\nare editable or not.\n\nIn order for this property to apply, the table-level `editable`\nflag must be `True`. That is, if you want to only make a single\ncolumn editable, then you must set the table-level `editable`\nflag to `True`, the particular column `editable` flag to True,\nand all of the column-level editable flags to `False`.\n\nNOTE - This behavior may change in the future.\nSubscribe to [https://github.com/plotly/dash-table/issues/175](https://github.com/plotly/dash-table/issues/175)\nfor more information.",
                 "required": false
               },
               "editable_name": {
@@ -54,7 +54,7 @@
                     "name": "number"
                   }
                 ],
-                "description": "If True, then the name of this column is editable.",
+                "description": "If True, then the name of this column is editable.\nIf there are multiple column headers (if `name` is a list of strings),\nthen `editable_name` can refer to _which_ column header should be\neditable by setting it to the column header index.\nAlso, updating the name in a merged column header cell will\nupdate the name of each column.",
                 "required": false
               },
               "hidden": {
@@ -114,7 +114,7 @@
                     }
                   }
                 },
-                "description": "DEPRECATED\nPlease use `column_static_dropdown` instead",
+                "description": "DEPRECATED\nPlease use `column_static_dropdown` instead.\nNOTE - Dropdown behaviour will likely change in the future,\nsubscribe to [https://github.com/plotly/dash-table/issues/168](https://github.com/plotly/dash-table/issues/168)\nfor more information.",
                 "required": false
               },
               "type": {
@@ -161,7 +161,7 @@
           ]
         },
         "required": false,
-        "description": "`content_style` toggles between a set of CSS styles for\ntwo common behaviors:\nTODO - `fit` - The table will ...?\n`grow` - The table will expand to its parents container.",
+        "description": "`content_style` toggles between a set of CSS styles for\ntwo common behaviors:\n- `fit`: The table container's width be equal to the width of its content.\n- `grow`: The table container's width will grow to be the size of the container.\n\nNOTE - This property will likely change in the future,\nsubscribe to [https://github.com/plotly/dash-table/issues/176](https://github.com/plotly/dash-table/issues/176)\nfor more details.",
         "defaultValue": {
           "value": "'fit'",
           "computed": false
@@ -185,7 +185,7 @@
           }
         },
         "required": false,
-        "description": "css is a way to embed CSS selectors and rules\nonto the page.\nWe recommend starting with the `style_*` properties\nbefore using this `css` property.\n\nExample:\n[\n    {\"selector\": \".dash-spreadsheet\", \"rule\": 'font-family: \"monospace\"'}\n]",
+        "description": "The `css` property is a way to embed CSS selectors and rules\nonto the page.\nWe recommend starting with the `style_*` properties\nbefore using this `css` property.\n\nExample:\n[\n    {\"selector\": \".dash-spreadsheet\", \"rule\": 'font-family: \"monospace\"'}\n]",
         "defaultValue": {
           "value": "[]",
           "computed": false
@@ -199,7 +199,7 @@
           }
         },
         "required": false,
-        "description": "The contents of the table.\nThe keys in item in data should match the column IDs.\nExample:\n\n[\n     {'column-1': 4.5, 'column-2': 'montreal', 'column-3': 'canada'},\n     {'column-1': 8, 'column-2': 'boston', 'column-3': 'america'}\n]",
+        "description": "The contents of the table.\nThe keys of each item in data should match the column IDs.\nExample:\n\n[\n     {'column-1': 4.5, 'column-2': 'montreal', 'column-3': 'canada'},\n     {'column-1': 8, 'column-2': 'boston', 'column-3': 'america'}\n]",
         "defaultValue": {
           "value": "[]",
           "computed": false
@@ -227,7 +227,7 @@
           "name": "bool"
         },
         "required": false,
-        "description": "If True, then the data in all of the cells is editable.\nNote that this can be toggled on a per-column basis with the\n`editable` flag inside the `columns` property.",
+        "description": "If True, then the data in all of the cells is editable.\nWhen `editable` is True, particular columns can be made\nuneditable by setting `editable` to `False` inside the `columns`\nproperty.\n\nNOTE - This behavior may change in the future, subscribe to\n[https://github.com/plotly/dash-table/issues/175](https://github.com/plotly/dash-table/issues/175)\nfor more details.",
         "defaultValue": {
           "value": "false",
           "computed": false
@@ -276,7 +276,7 @@
           "name": "number"
         },
         "required": false,
-        "description": "`n_fixed_rows` will \"fix\" the set of rows so that\nthey remain visible when scrolling vertically down\nthe table. `n_fixed_rows` fixes rows\nfrom top-to-bottom, starting from the headers,\nso `n_fixed_columns=1` will fix the header row,\n`n_fixed_rows=2` will fix the header row and the first row,\nor the first two header rows (if there are multiple headers)."
+        "description": "`n_fixed_rows` will \"fix\" the set of rows so that\nthey remain visible when scrolling vertically down\nthe table. `n_fixed_rows` fixes rows\nfrom top-to-bottom, starting from the headers,\nso `n_fixed_rows=1` will fix the header row,\n`n_fixed_rows=2` will fix the header row and the first row,\nor the first two header rows (if there are multiple headers).\n\nNote that fixing rows introduces some changes to the\nunderlying markup of the table and may impact the\nway that your columns are rendered or sized.\nView the documentation examples to learn more."
       },
       "row_deletable": {
         "type": {
@@ -321,7 +321,7 @@
           }
         },
         "required": false,
-        "description": "`selected_cell` represents the cell that is currently\nselected.\nTODO - How is this different than `active_cell`?",
+        "description": "`selected_cell` represents the set of cells that are selected.\nThis is similar to `active_cell` except that it contains multiple\ncells. Multiple cells can be selected by holding down shift and\nclicking on a different cell or holding down shift and navigating\nwith the arrow keys.\n\nNOTE - This property may change in the future, subscribe to\n[https://github.com/plotly/dash-table/issues/177](https://github.com/plotly/dash-table/issues/177)\nfor more details.",
         "defaultValue": {
           "value": "[[]]",
           "computed": false
@@ -388,7 +388,7 @@
           ]
         },
         "required": false,
-        "description": "\"pagination\" refers to a mode of the table where\nnot all of the rows are displayed at once: only a subset\nare displayed (a \"page\") and the next subset of rows\ncan viewed by clicking \"Next\" or \"Previous\" buttons\nat the bottom of the page.\n\nPagination is used to improve performance: instead of\nrendering all of the rows at once (which can be expensive),\nwe only display a subset of them.\n\nWith pagination, we can either page through data that exists\nin the table (e.g. page through `10,000` rows in `data` `100` rows at a time)\nor we can update the data on-the-fly with callbacks\nwhen the user clicks on the \"Previous\" or \"Next\" buttons.\nThese modes can be toggled with this `pagination_mode` parameter:\n- `'fe'` refers to \"front-end\" paging: passing large data up-front\n- `'be'` refers to \"back-end\" paging: updating the data on the fly via callbacks\n- `False` will disable paging, attempting to render all of the data at once\nTODO - What does `True` do?\n\nNOTE: The `fe` and `be` names may change in the future.\nTune in to [https://github.com/plotly/dash-table/issues/167](https://github.com/plotly/dash-table/issues/167) for more.",
+        "description": "\"pagination\" refers to a mode of the table where\nnot all of the rows are displayed at once: only a subset\nare displayed (a \"page\") and the next subset of rows\ncan viewed by clicking \"Next\" or \"Previous\" buttons\nat the bottom of the page.\n\nPagination is used to improve performance: instead of\nrendering all of the rows at once (which can be expensive),\nwe only display a subset of them.\n\nWith pagination, we can either page through data that exists\nin the table (e.g. page through `10,000` rows in `data` `100` rows at a time)\nor we can update the data on-the-fly with callbacks\nwhen the user clicks on the \"Previous\" or \"Next\" buttons.\nThese modes can be toggled with this `pagination_mode` parameter:\n- `'fe'` refers to \"front-end\" paging: passing large data up-front\n- `'be'` refers to \"back-end\" paging: updating the data on the fly via callbacks\n- `False` will disable paging, attempting to render all of the data at once\n- `True` is the same as `fe`\n\nNOTE: The `fe` and `be` names may change in the future.\nTune in to [https://github.com/plotly/dash-table/issues/167](https://github.com/plotly/dash-table/issues/167) for more.",
         "defaultValue": {
           "value": "'fe'",
           "computed": false
@@ -413,7 +413,7 @@
           }
         },
         "required": false,
-        "description": "`pagination_settings` controls the pagination settings\n_and_ represents the current state of the pagination UI.\n- `page_size` represents the number of rows that will be\ndisplayed on a particular page.\n- `current_page` represents which page the user is on.\nUse this property to index through data in your callbacks with\nbackend paging.\nTODO - What does `displayed_pages` to?",
+        "description": "`pagination_settings` controls the pagination settings\n_and_ represents the current state of the pagination UI.\n- `page_size` represents the number of rows that will be\ndisplayed on a particular page.\n- `current_page` represents which page the user is on.\nUse this property to index through data in your callbacks with\nbackend paging.\n- `displayed_pages` is DEPRECATED.",
         "defaultValue": {
           "value": "{\n    displayed_pages: 1,\n    current_page: 0,\n    page_size: 250\n}",
           "computed": false
@@ -556,7 +556,7 @@
           ]
         },
         "required": false,
-        "description": "The `filtering` controls whether or not the filtering UI\nshould be displayed and the `filtering` behavior.\nIf `False`, then the filtering UI is not displayed\nIf `fe`, then the filtering UI is displayed and the filtering\nhappens in the \"front-end\". That is, it is performed on the data\nthat exists in the `data` property.\nIf `be`, then the filtering UI is displayed but it is the\nresponsibility of the developer to program the filtering\nthrough a callback (where `filtering_settings` would be the input\nand `data` would be the output).\nTODO - What does `True` do?\nNOTE - Several aspects of filtering may change in the future,\nincluding the naming of this property.\nTune in to [https://github.com/plotly/dash-table/issues/167](https://github.com/plotly/dash-table/issues/167)",
+        "description": "The `filtering` property controls the behavior of the `filtering` UI.\nIf `False`, then the filtering UI is not displayed\nIf `fe` or True, then the filtering UI is displayed and the filtering\nhappens in the \"front-end\". That is, it is performed on the data\nthat exists in the `data` property.\nIf `be`, then the filtering UI is displayed but it is the\nresponsibility of the developer to program the filtering\nthrough a callback (where `filtering_settings` would be the input\nand `data` would be the output).\n\nNOTE - Several aspects of filtering may change in the future,\nincluding the naming of this property.\nTune in to [https://github.com/plotly/dash-table/issues/167](https://github.com/plotly/dash-table/issues/167)",
         "defaultValue": {
           "value": "false",
           "computed": false
@@ -633,7 +633,7 @@
           ]
         },
         "required": false,
-        "description": "The `sorting` property enables data to be\nsorted on a per-column basis.\nEnabling `sorting` will display a UI element\non each of the columns (up and down arrows).\n\nSorting can be performed in the \"front-end\"\nwith the `fe` setting or via a callback in your\npython \"back-end\" with the `be` setting.\nClicking on the sort arrows will update the\n`sorting_settings` property.",
+        "description": "The `sorting` property enables data to be\nsorted on a per-column basis.\nEnabling `sorting` will display a UI element\non each of the columns (up and down arrows).\n\nSorting can be performed in the \"front-end\"\nwith the `fe` (or True) setting or via a callback in your\npython \"back-end\" with the `be` setting.\nClicking on the sort arrows will update the\n`sorting_settings` property.",
         "defaultValue": {
           "value": "false",
           "computed": false
@@ -654,7 +654,7 @@
           ]
         },
         "required": false,
-        "description": "Sorting can be performed across multiple columns\n(e.g. sort by country, and within each country,\n sort by year) or by a single column.\n\nNOTE - With multi-column sort, it's currently\nnot possible to determine the order in which\nthe columns were sorted through the UI.\nSee [https://github.com/plotly/dash-table/issues/170](https://github.com/plotly/dash-table/issues/170)",
+        "description": "Sorting can be performed across multiple columns\n(e.g. sort by country, sort within each country,\n sort by year) or by a single column.\n\nNOTE - With multi-column sort, it's currently\nnot possible to determine the order in which\nthe columns were sorted through the UI.\nSee [https://github.com/plotly/dash-table/issues/170](https://github.com/plotly/dash-table/issues/170)",
         "defaultValue": {
           "value": "'single'",
           "computed": false
@@ -707,7 +707,7 @@
           "name": "bool"
         },
         "required": false,
-        "description": "When we sort, should empty strings (`''`) be considered\nvalid values (they will appear first when sorting ascending)\nor should they be ignored (always appearing last)?"
+        "description": "If False, then empty strings (`''`) are considered\nvalid values (they will appear first when sorting ascending).\nIf True, empty strings will be ignored, causing these cells to always\nappear last."
       },
       "style_table": {
         "type": {
@@ -946,7 +946,7 @@
           }
         },
         "required": false,
-        "description": "TODO - Is this the `selected_rows` or just the indicies w.r.t.\nthe original data?",
+        "description": "`derived_viewport_indices` indicates the order in which the original\nrows appear after being filtered, sorted, and/or paged.\n`derived_viewport_indices` contains indices for the current page,\nwhile `derived_virtual_indices` contains indices for across all pages.",
         "defaultValue": {
           "value": "[]",
           "computed": false
@@ -974,7 +974,7 @@
           }
         },
         "required": false,
-        "description": "TODO - Is this the `selected_rows` or just the indicies w.r.t.\nthe original data?",
+        "description": "`derived_viewport_indices` indicates the order in which the original\nrows appear after being filtered, sorted, and/or paged.\n`derived_viewport_indices` contains indices for the current page,\nwhile `derived_virtual_indices` contains indices for across all pages.",
         "defaultValue": {
           "value": "[]",
           "computed": false
@@ -985,7 +985,7 @@
           "name": "any"
         },
         "required": false,
-        "description": "DEPRECATED"
+        "description": "DEPRECATED\nSubscribe to [https://github.com/plotly/dash-table/issues/168](https://github.com/plotly/dash-table/issues/168)\nfor updates on the dropdown API."
       }
     }
   }

@@ -98,7 +98,13 @@ export const propTypes = {
     columns: PropTypes.arrayOf(PropTypes.shape({
 
         /**
-         * TODO - What does this do?
+         * If the column is rendered as dropdowns, then the
+         * `clearable` property determines whether or not
+         * the dropdown value can be cleared or not.
+         *
+         * NOTE - The name of this property may change in the future,
+         * subscribe to [https://github.com/plotly/dash-table/issues/168](https://github.com/plotly/dash-table/issues/168)
+         * for more information.
          */
         clearable: PropTypes.bool,
 
@@ -119,14 +125,32 @@ export const propTypes = {
         ]),
 
         /**
-         * If True, then the data associated with this column is editable.
-         * Note that this can be toggled on a per-table basis with the
-         * higher level `editable` flag.
+         * There are two `editable` flags in the table.
+         * This is the  column-level editable flag and there is
+         * also the table-level `editable` flag.
+         *
+         * These flags determine whether the contents of the table
+         * are editable or not.
+         *
+         * In order for this property to apply, the table-level `editable`
+         * flag must be `True`. That is, if you want to only make a single
+         * column editable, then you must set the table-level `editable`
+         * flag to `True`, the particular column `editable` flag to True,
+         * and all of the column-level editable flags to `False`.
+         *
+         * NOTE - This behavior may change in the future.
+         * Subscribe to [https://github.com/plotly/dash-table/issues/175](https://github.com/plotly/dash-table/issues/175)
+         * for more information.
          */
         editable: PropTypes.bool,
 
         /**
          * If True, then the name of this column is editable.
+         * If there are multiple column headers (if `name` is a list of strings),
+         * then `editable_name` can refer to _which_ column header should be
+         * editable by setting it to the column header index.
+         * Also, updating the name in a merged column header cell will
+         * update the name of each column.
          */
         editable_name: PropTypes.oneOfType([
             PropTypes.bool,
@@ -161,7 +185,10 @@ export const propTypes = {
 
         /**
          * DEPRECATED
-         * Please use `column_static_dropdown` instead
+         * Please use `column_static_dropdown` instead.
+         * NOTE - Dropdown behaviour will likely change in the future,
+         * subscribe to [https://github.com/plotly/dash-table/issues/168](https://github.com/plotly/dash-table/issues/168)
+         * for more information.
          */
         options: PropTypes.arrayOf(PropTypes.shape({
             label: PropTypes.oneOfType([
@@ -192,8 +219,12 @@ export const propTypes = {
     /**
      * `content_style` toggles between a set of CSS styles for
      * two common behaviors:
-     * TODO - `fit` - The table will ...?
-     * `grow` - The table will expand to its parents container.
+     * - `fit`: The table container's width be equal to the width of its content.
+     * - `grow`: The table container's width will grow to be the size of the container.
+     *
+     * NOTE - This property will likely change in the future,
+     * subscribe to [https://github.com/plotly/dash-table/issues/176](https://github.com/plotly/dash-table/issues/176)
+     * for more details.
      */
     content_style: PropTypes.oneOf(['fit', 'grow']),
     /**
@@ -215,7 +246,7 @@ export const propTypes = {
 
     /**
      * The contents of the table.
-     * The keys in item in data should match the column IDs.
+     * The keys of each item in data should match the column IDs.
      * Example:
      *
      * [
@@ -246,8 +277,13 @@ export const propTypes = {
 
     /**
      * If True, then the data in all of the cells is editable.
-     * Note that this can be toggled on a per-column basis with the
-     * `editable` flag inside the `columns` property.
+     * When `editable` is True, particular columns can be made
+     * uneditable by setting `editable` to `False` inside the `columns`
+     * property.
+     *
+     * NOTE - This behavior may change in the future, subscribe to
+     * [https://github.com/plotly/dash-table/issues/175](https://github.com/plotly/dash-table/issues/175)
+     * for more details.
      */
     editable: PropTypes.bool,
 
@@ -297,9 +333,14 @@ export const propTypes = {
      * they remain visible when scrolling vertically down
      * the table. `n_fixed_rows` fixes rows
      * from top-to-bottom, starting from the headers,
-     * so `n_fixed_columns=1` will fix the header row,
+     * so `n_fixed_rows=1` will fix the header row,
      * `n_fixed_rows=2` will fix the header row and the first row,
      * or the first two header rows (if there are multiple headers).
+     *
+     * Note that fixing rows introduces some changes to the
+     * underlying markup of the table and may impact the
+     * way that your columns are rendered or sized.
+     * View the documentation examples to learn more.
      */
     n_fixed_rows: PropTypes.number,
 
@@ -323,9 +364,15 @@ export const propTypes = {
     row_selectable: PropTypes.oneOf(['single', 'multi', false]),
 
     /**
-     * `selected_cell` represents the cell that is currently
-     * selected.
-     * TODO - How is this different than `active_cell`?
+     * `selected_cell` represents the set of cells that are selected.
+     * This is similar to `active_cell` except that it contains multiple
+     * cells. Multiple cells can be selected by holding down shift and
+     * clicking on a different cell or holding down shift and navigating
+     * with the arrow keys.
+     *
+     * NOTE - This property may change in the future, subscribe to
+     * [https://github.com/plotly/dash-table/issues/177](https://github.com/plotly/dash-table/issues/177)
+     * for more details.
      */
     selected_cell: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
 
@@ -371,7 +418,7 @@ export const propTypes = {
      * - `'fe'` refers to "front-end" paging: passing large data up-front
      * - `'be'` refers to "back-end" paging: updating the data on the fly via callbacks
      * - `False` will disable paging, attempting to render all of the data at once
-     * TODO - What does `True` do?
+     * - `True` is the same as `fe`
      *
      * NOTE: The `fe` and `be` names may change in the future.
      * Tune in to [https://github.com/plotly/dash-table/issues/167](https://github.com/plotly/dash-table/issues/167) for more.
@@ -386,7 +433,7 @@ export const propTypes = {
      * - `current_page` represents which page the user is on.
      * Use this property to index through data in your callbacks with
      * backend paging.
-     * TODO - What does `displayed_pages` to?
+     * - `displayed_pages` is DEPRECATED.
      */
     pagination_settings: PropTypes.shape({
         displayed_pages: PropTypes.number.isRequired,
@@ -450,17 +497,16 @@ export const propTypes = {
     })),
 
     /**
-     * The `filtering` property controls whether or not the filtering UI
-     * should be displayed, and also controls the `filtering` behavior.
-     * If `False`, then the filtering UI is not displayed.
-     * If `fe`, then the filtering UI is displayed and the filtering
+     * The `filtering` property controls the behavior of the `filtering` UI.
+     * If `False`, then the filtering UI is not displayed
+     * If `fe` or True, then the filtering UI is displayed and the filtering
      * happens in the "front-end". That is, it is performed on the data
      * that exists in the `data` property.
      * If `be`, then the filtering UI is displayed but it is the
      * responsibility of the developer to program the filtering
      * through a callback (where `filtering_settings` would be the input
      * and `data` would be the output).
-     * TODO - What does `True` do?
+     *
      * NOTE - Several aspects of filtering may change in the future,
      * including the naming of this property.
      * Tune in to [https://github.com/plotly/dash-table/issues/167](https://github.com/plotly/dash-table/issues/167)
@@ -507,7 +553,7 @@ export const propTypes = {
      * on each of the columns (up and down arrows).
      *
      * Sorting can be performed in the "front-end"
-     * with the `fe` setting or via a callback in your
+     * with the `fe` (or True) setting or via a callback in your
      * python "back-end" with the `be` setting.
      * Clicking on the sort arrows will update the
      * `sorting_settings` property.
@@ -550,9 +596,10 @@ export const propTypes = {
         })),
 
     /**
-     * When we sort, should empty strings (`''`) be considered
-     * valid values (they will appear first when sorting ascending)
-     * or should they be ignored (always appearing last)?
+     * If False, then empty strings (`''`) are considered
+     * valid values (they will appear first when sorting ascending).
+     * If True, empty strings will be ignored, causing these cells to always
+     * appear last.
      */
     sorting_treat_empty_string_as_none: PropTypes.bool,
 
@@ -658,8 +705,10 @@ export const propTypes = {
     derived_viewport_data: PropTypes.arrayOf(PropTypes.object),
 
     /**
-     * TODO - Is this the `selected_rows` or just the indicies w.r.t.
-     * the original data?
+     * `derived_viewport_indices` indicates the order in which the original
+     * rows appear after being filtered, sorted, and/or paged.
+     * `derived_viewport_indices` contains indices for the current page,
+     * while `derived_virtual_indices` contains indices for across all pages.
      */
     derived_viewport_indices: PropTypes.arrayOf(PropTypes.number),
 
@@ -671,15 +720,19 @@ export const propTypes = {
     derived_virtual_data: PropTypes.arrayOf(PropTypes.object),
 
     /**
-     * TODO - Is this the `selected_rows` or just the indicies w.r.t.
-     * the original data?
+     * `derived_viewport_indices` indicates the order in which the original
+     * rows appear after being filtered, sorted, and/or paged.
+     * `derived_viewport_indices` contains indices for the current page,
+     * while `derived_virtual_indices` contains indices for across all pages.
      */
     derived_virtual_indices: PropTypes.arrayOf(PropTypes.number),
 
-    /**
-     * DEPRECATED
-     */
-    dropdown_properties: PropTypes.any,
+     /**
+      * DEPRECATED
+      * Subscribe to [https://github.com/plotly/dash-table/issues/168](https://github.com/plotly/dash-table/issues/168)
+      * for updates on the dropdown API.
+      */
+     dropdown_properties: PropTypes.any,
 };
 
 Table.defaultProps = defaultProps;
