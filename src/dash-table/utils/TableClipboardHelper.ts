@@ -84,13 +84,22 @@ export default class TableClipboardHelper {
             );
         }
 
+        const lastEntry = derived_viewport_indices.slice(-1)[0] || -1;
+        const viewportSize = derived_viewport_indices.length;
+
         values.forEach((row: string[], i: number) =>
             row.forEach((cell: string, j: number) => {
-                const iOffset = activeCell[0] + i;
-                if (derived_viewport_indices.length <= activeCell[0] + i) {
+                const viewportIndex = activeCell[0] + i;
+
+                let iRealCell: number | undefined = viewportSize > viewportIndex ?
+                    derived_viewport_indices[viewportIndex] :
+                    overflowRows ?
+                        lastEntry + (viewportIndex - viewportSize + 1) :
+                        undefined;
+
+                if (iRealCell === undefined) {
                     return;
                 }
-                const iRealCell = derived_viewport_indices[iOffset];
 
                 const jOffset = activeCell[1] + j;
                 const col = newColumns[jOffset];
