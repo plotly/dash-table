@@ -343,7 +343,8 @@ def layout():
                     id='vertical-scrolling-with-height',
                     data=df.to_dict('rows'),
                     columns=[{'id': c, 'name': c} for c in df.columns],
-                    style_table={'height': '300'},
+                    content_style='grow',
+                    style_table={'width': '100%', 'height': '300'},
                 ),
 
                 section_title("Vertical Scrolling via Fixed Rows"),
