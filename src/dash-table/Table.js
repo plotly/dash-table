@@ -197,7 +197,7 @@ export const propTypes = {
      */
     content_style: PropTypes.oneOf(['fit', 'grow']),
     /**
-     * css is a way to embed CSS selectors and rules
+     * The `css` property is a way to embed CSS selectors and rules
      * onto the page.
      * We recommend starting with the `style_*` properties
      * before using this `css` property.
