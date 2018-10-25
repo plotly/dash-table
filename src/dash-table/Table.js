@@ -61,6 +61,7 @@ export const defaultProps = {
     sorting: false,
     sorting_type: 'single',
     sorting_settings: [],
+    style_as_list_view: false,
 
     derived_viewport_data: [],
     derived_viewport_indices: [],
@@ -100,7 +101,10 @@ export const propTypes = {
         ]),
         hidden: PropTypes.bool,
         id: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
+        name: PropTypes.oneOfType([
+            PropTypes.arrayOf(PropTypes.string),
+            PropTypes.string
+        ]).isRequired,
         // .exact
         options: PropTypes.arrayOf(PropTypes.shape({
             label: PropTypes.oneOfType([

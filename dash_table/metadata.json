@@ -62,7 +62,18 @@
                 "required": true
               },
               "name": {
-                "name": "string",
+                "name": "union",
+                "value": [
+                  {
+                    "name": "arrayOf",
+                    "value": {
+                      "name": "string"
+                    }
+                  },
+                  {
+                    "name": "string"
+                  }
+                ],
                 "required": true
               },
               "options": {
@@ -343,7 +354,11 @@
           "name": "bool"
         },
         "required": false,
-        "description": ""
+        "description": "",
+        "defaultValue": {
+          "value": "false",
+          "computed": false
+        }
       },
       "pagination_mode": {
         "type": {
