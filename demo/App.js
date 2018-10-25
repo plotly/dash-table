@@ -30,7 +30,6 @@ class App extends Component {
                 sorting: true,
                 n_fixed_rows: 4,
                 n_fixed_columns: 2,
-                style_as_list_view: true,
                 merge_duplicate_headers: false,
                 row_deletable: true,
                 row_selectable: 'single',
