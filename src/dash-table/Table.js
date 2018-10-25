@@ -450,7 +450,7 @@ export const propTypes = {
     })),
 
     /**
-     * The `filtering` controls whether or not the filtering UI
+     * The `filtering` property controls whether or not the filtering UI
      * should be displayed and the `filtering` behavior.
      * If `False`, then the filtering UI is not displayed
      * If `fe`, then the filtering UI is displayed and the filtering
