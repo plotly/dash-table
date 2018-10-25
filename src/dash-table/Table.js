@@ -516,7 +516,7 @@ export const propTypes = {
 
     /**
      * Sorting can be performed across multiple columns
-     * (e.g. sort by country, and within each country,
+     * (e.g. sort by country, sort within each country,
      *  sort by year) or by a single column.
      *
      * NOTE - With multi-column sort, it's currently
