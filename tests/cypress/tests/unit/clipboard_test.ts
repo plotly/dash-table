@@ -87,7 +87,7 @@ describe('clipboard', () => {
         });
     });
 
-    describe('with column overflow allowed', () => {
+    describe('with column overflow allowed, row overflow not allowed', () => {
         it('pastes one line at [0, 0] in one line df', () => {
             const res = applyClipboardToData(
                 R.range(0, 1).map(value => [`${value}`]),
