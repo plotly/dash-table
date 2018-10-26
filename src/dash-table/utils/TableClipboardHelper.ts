@@ -36,7 +36,7 @@ export default class TableClipboardHelper {
         overflowColumns: boolean = true,
         overflowRows: boolean = true
     ): { data: Data, columns: Columns } | void {
-        const text = Clipboard.get(ev as ClipboardEvent);
+        const text = Clipboard.get(ev);
         Logger.trace('TableClipboard -- get clipboard data: ', text);
 
         if (!text) {
