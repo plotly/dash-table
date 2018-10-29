@@ -593,7 +593,7 @@ export const propTypes = {
     sorting_settings: PropTypes.arrayOf(
         // .exact
         PropTypes.shape({
-            columnId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+            column_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
             direction: PropTypes.oneOf(['asc', 'desc']).isRequired
         })),
 

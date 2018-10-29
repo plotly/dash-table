@@ -670,7 +670,7 @@
           "value": {
             "name": "shape",
             "value": {
-              "columnId": {
+              "column_id": {
                 "name": "union",
                 "value": [
                   {

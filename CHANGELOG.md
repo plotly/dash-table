@@ -418,3 +418,7 @@ Derived properties allow the component to expose complex state that can be usefu
 ## RC12 - Rename selected_cell -> selected_cells
 
     Issue: https://github.com/plotly/dash-table/issues/177
+
+## RC13 - Rename sorting_settings columnId -> column_id
+
+    Issue: https://github.com/plotly/dash-table/issues/171
