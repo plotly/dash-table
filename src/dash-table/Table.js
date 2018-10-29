@@ -584,11 +584,6 @@ export const propTypes = {
      * For multi-column sorting, this will be a list of
      * sorting parameters, in the order in which they were
      * clicked.
-     *
-     * NOTE - We may rename `columnId` to `column_id` in
-     * the future.
-     * Subscribe to [https://github.com/plotly/dash-table/issues/171](https://github.com/plotly/dash-table/issues/171)
-     * for details.
      */
     sorting_settings: PropTypes.arrayOf(
         // .exact
