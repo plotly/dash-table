@@ -155,6 +155,21 @@ describe('navigate', () => {
             DashTable.getCell(2, 1).should('have.class', 'focused');
             DashTable.getCell(3, 1).should('not.have.class', 'focused');
         });
+
+        it.only('does not allow the caret to be moved, instead it will select the entire text', () => {
+            DashTable.getCell(3, 1).click();
+            DOM.focused.type('abc');
+            // Click again - clicking with something like .click('right') doesn't work
+            // for some reason: DOM.focused will fail.
+            DashTable.getCell(3, 1).click();
+            DOM.focused.type('def');
+            cy.tab();
+
+            DashTable.getCell(3, 1).within(() => cy.get('.dash-cell-value').then($inputs => {
+                const input = $inputs[0] as HTMLInputElement;
+                expect(input.innerHTML).to.equal('def');
+            }));
+        })
     });
 
     describe('with mouse', () => {
