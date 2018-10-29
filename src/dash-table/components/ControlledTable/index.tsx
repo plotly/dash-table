@@ -210,7 +210,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
         if (
             e.keyCode === KEY_CODES.ENTER &&
             !is_focused &&
-            isEditable(editable, columns[active_cell[1]])
+            isEditable(editable, columns[active_cell[1]].editable)
         ) {
             setProps({ is_focused: true });
             return;
@@ -237,7 +237,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
             // if we have any non-meta key enter editable mode
 
             !this.props.is_focused &&
-            isEditable(editable, columns[active_cell[1]]) &&
+            isEditable(editable, columns[active_cell[1]].editable) &&
             !isMetaKey(e.keyCode)
         ) {
             setProps({ is_focused: true });
@@ -380,7 +380,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
         );
 
         realCells.forEach(cell => {
-            if (isEditable(editable, columns[cell[1]])) {
+            if (isEditable(editable, columns[cell[1]].editable)) {
                 newData = R.set(
                     R.lensPath([cell[0], columns[cell[1]].id]),
                     '',
