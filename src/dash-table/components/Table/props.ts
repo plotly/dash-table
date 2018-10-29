@@ -57,7 +57,7 @@ export interface IVisibleColumn {
     editable?: boolean;
     editable_name?: boolean | number;
     id: ColumnId;
-    name: string;
+    name: string | string[];
     options?: { label: string | number, value: string | number }[]; // legacy
     type?: ColumnType;
 }
@@ -129,13 +129,14 @@ interface IProps {
     n_fixed_rows?: number;
     row_deletable?: boolean;
     row_selectable?: RowSelection;
-    selected_cell?: SelectedCells;
+    selected_cells?: SelectedCells;
     selected_rows?: number[];
     setProps?: SetProps;
     sorting?: Sorting;
     sorting_settings?: SortSettings;
     sorting_type?: SortingType;
     sorting_treat_empty_string_as_none?: boolean;
+    style_as_list_view?: boolean;
     pagination_mode?: PaginationMode;
     pagination_settings?: IPaginationSettings;
 
@@ -170,12 +171,13 @@ interface IDefaultProps {
     n_fixed_rows: number;
     row_deletable: boolean;
     row_selectable: RowSelection;
-    selected_cell: SelectedCells;
+    selected_cells: SelectedCells;
     selected_rows: number[];
     sorting: Sorting;
     sorting_settings: SortSettings;
     sorting_type: SortingType;
     sorting_treat_empty_string_as_none: boolean;
+    style_as_list_view: boolean;
 
     pagination_mode: PaginationMode;
     pagination_settings: IPaginationSettings;
@@ -227,7 +229,7 @@ export interface ICellFactoryOptions {
     paginator: IPaginator;
     row_deletable: boolean;
     row_selectable: RowSelection;
-    selected_cell: SelectedCells;
+    selected_cells: SelectedCells;
     selected_rows: number[];
     setProps: SetProps;
     style_cell: Style;

@@ -64,10 +64,10 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
 
     componentDidMount() {
         if (
-            this.props.selected_cell.length &&
-            !R.contains(this.props.active_cell, this.props.selected_cell)
+            this.props.selected_cells.length &&
+            !R.contains(this.props.active_cell, this.props.selected_cells)
         ) {
-            this.props.setProps({ active_cell: this.props.selected_cell[0] });
+            this.props.setProps({ active_cell: this.props.selected_cells[0] });
         }
 
         this.applyStyle();
@@ -259,7 +259,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
         const {
             active_cell,
             columns,
-            selected_cell,
+            selected_cells,
             setProps,
             viewport
         } = this.props;
@@ -276,7 +276,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
         // with the "is_focused" prop. We should find the better way.
         this.$el.focus();
 
-        const hasSelection = selected_cell.length > 1;
+        const hasSelection = selected_cells.length > 1;
         const isEnterOrTab =
             e.keyCode === KEY_CODES.ENTER || e.keyCode === KEY_CODES.TAB;
 
@@ -302,7 +302,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
             });
             setProps({
                 is_focused: false,
-                selected_cell: [nextCell],
+                selected_cells: [nextCell],
                 active_cell: nextCell
             });
             return;
@@ -312,8 +312,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
         // with shift.
         let targetCells: any[] = [];
         let removeCells: any[] = [];
-        const selectedRows = sortNumerical(R.uniq(R.pluck(0, selected_cell)));
-        const selectedCols = sortNumerical(R.uniq(R.pluck(1, selected_cell)));
+        const selectedRows = sortNumerical(R.uniq(R.pluck(0, selected_cells)));
+        const selectedCols = sortNumerical(R.uniq(R.pluck(1, selected_cells)));
 
         const minRow = selectedRows[0];
         const minCol = selectedCols[0];
@@ -360,11 +360,11 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
 
         const newSelectedCell = R.without(
             removeCells,
-            R.uniq(R.concat(targetCells, selected_cell))
+            R.uniq(R.concat(targetCells, selected_cells))
         );
         setProps({
             is_focused: false,
-            selected_cell: newSelectedCell
+            selected_cells: newSelectedCell
         });
     }
 
@@ -373,7 +373,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
             columns,
             data,
             editable,
-            selected_cell,
+            selected_cells,
             setProps,
             viewport
         } = this.props;
@@ -384,7 +384,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
 
         const realCells: [number, number][] = R.map(
             cell => [viewport.indices[cell[0]], cell[1]] as [number, number],
-            selected_cell
+            selected_cells
         );
 
         realCells.forEach(cell => {
@@ -403,7 +403,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
     }
 
     getNextCell = (event: any, { restrictToSelection, currentCell }: any) => {
-        const { columns, selected_cell, viewport } = this.props;
+        const { columns, selected_cells, viewport } = this.props;
 
         const e = event;
 
@@ -412,7 +412,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
                 return restrictToSelection
                     ? selectionCycle(
                         [currentCell[0], currentCell[1] - 1],
-                        selected_cell
+                        selected_cells
                     )
                     : [
                         currentCell[0],
@@ -424,7 +424,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
                 return restrictToSelection
                     ? selectionCycle(
                         [currentCell[0], currentCell[1] + 1],
-                        selected_cell
+                        selected_cells
                     )
                     : [
                         currentCell[0],
@@ -435,7 +435,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
                 return restrictToSelection
                     ? selectionCycle(
                         [currentCell[0] - 1, currentCell[1]],
-                        selected_cell
+                        selected_cells
                     )
                     : [R.max(0, currentCell[0] - 1), currentCell[1]];
 
@@ -444,7 +444,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
                 return restrictToSelection
                     ? selectionCycle(
                         [currentCell[0] + 1, currentCell[1]],
-                        selected_cell
+                        selected_cells
                     )
                     : [
                         R.min(viewport.data.length - 1, currentCell[0] + 1),
@@ -461,11 +461,11 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
     onCopy = (e: any) => {
         const {
             columns,
-            selected_cell,
+            selected_cells,
             viewport
         } = this.props;
 
-        TableClipboardHelper.toClipboard(e, selected_cell, columns, viewport.data);
+        TableClipboardHelper.toClipboard(e, selected_cells, columns, viewport.data);
         this.$el.focus();
     }
 
@@ -607,6 +607,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
             content_style,
             n_fixed_columns,
             n_fixed_rows,
+            style_as_list_view,
             style_table
         } = this.props;
 
@@ -615,6 +616,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
             'dash-spreadsheet',
             ...(n_fixed_rows ? ['dash-freeze-top'] : []),
             ...(n_fixed_columns ? ['dash-freeze-left'] : []),
+            ...(style_as_list_view ? ['dash-list-view'] : []),
             [`dash-${content_style}`]
         ];
 
@@ -623,6 +625,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
             'dash-spreadsheet-container',
             ...(n_fixed_rows ? ['dash-freeze-top'] : []),
             ...(n_fixed_columns ? ['dash-freeze-left'] : []),
+            ...(style_as_list_view ? ['dash-list-view'] : []),
             [`dash-${content_style}`]
         ];
 
