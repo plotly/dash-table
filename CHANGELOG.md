@@ -418,3 +418,7 @@ Derived properties allow the component to expose complex state that can be usefu
 ## RC12 - Rename selected_cell -> selected_cells
 
     Issue: https://github.com/plotly/dash-table/issues/177
+
+## RC13 - Column 'editable' takes precedence over table 'editable'
+
+    Issue: https://github.com/plotly/dash-table/issues/175
