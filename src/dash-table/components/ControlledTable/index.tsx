@@ -216,14 +216,22 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
             return;
         }
 
+        Logger.debug('is_focused', is_focused)
+
+        if(!is_focused &&
+            isNavKey(e.keyCode)
+        ) {
+            this.switchCell(e);
+        }
+
         if (
             is_focused &&
-            (!isNavKey(e.keyCode))
+            !isNavKey(e.keyCode)
         ) {
             return;
         }
 
-        if (isNavKey(e.keyCode)) {
+        if (e.keyCode === KEY_CODES.TAB || e.keyCode === KEY_CODES.ENTER) {
             this.switchCell(e);
             return;
         }
@@ -236,11 +244,11 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
         } else if (
             // if we have any non-meta key enter editable mode
 
-            !this.props.is_focused &&
+            !is_focused &&
             isEditable(editable, columns[active_cell[1]]) &&
             !isMetaKey(e.keyCode)
         ) {
-            setProps({ is_focused: true });
+            // setProps({ is_focused: true });
         }
 
         return;

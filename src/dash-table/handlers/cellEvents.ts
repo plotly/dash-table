@@ -1,5 +1,6 @@
 import * as R from 'ramda';
 import { SelectedCells, ICellFactoryOptions } from 'dash-table/components/Table/props';
+import isActive from 'dash-table/derived/cell/isActive';
 
 function isCellSelected(selectedCells: SelectedCells, idx: number, i: number) {
     return selectedCells && R.contains([idx, i], selectedCells);
@@ -8,19 +9,15 @@ function isCellSelected(selectedCells: SelectedCells, idx: number, i: number) {
 export const handleClick = (propsFn: () => ICellFactoryOptions, idx: number, i: number, e: any) => {
     const {
         editable,
-        is_focused,
         selected_cell,
         setProps
     } = propsFn();
 
-    const selected = isCellSelected(selected_cell, idx, i);
-
     if (!editable) {
         return;
     }
-    if (!is_focused) {
-        e.preventDefault();
-    }
+
+    const selected = isCellSelected(selected_cell, idx, i);
 
     // don't update if already selected
     if (selected) {
@@ -105,6 +102,22 @@ export const handleChange = (propsFn: () => ICellFactoryOptions, idx: number, i:
     setProps({
         data: newData
     });
+
+};
+
+export const handleOnMouseUp = (propsFn: () => ICellFactoryOptions, idx: number, i: number, e: any) => {
+    const {
+        active_cell,
+        is_focused,
+    } = propsFn();
+
+    const active = isActive(active_cell, idx, i);
+
+    if(!is_focused && active) {
+        e.preventDefault();
+        const input = e.target;
+        input.setSelectionRange(0, input.value ? input.value.length : 0);
+    }
 };
 
 export const handlePaste = (_propsFn: () => ICellFactoryOptions, _idx: number, _i: number, e: ClipboardEvent) => {

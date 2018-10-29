@@ -47,28 +47,39 @@ describe('navigate', () => {
                 DashTable.getCell(3, 2).within(() => cy.get('.dash-cell-value').should('not.have.class', 'focused'));
             });
 
-            it('can move down', () => {
-                DOM.focused.type(Key.ArrowDown);
-                DashTable.getCell(4, 1).should('have.class', 'focused');
-                DashTable.getCell(3, 1).should('not.have.class', 'focused');
-            });
-
-            it('can move left', () => {
+            it('pressing left and right arrows moves caret', () => {
+                const inputText = 'abc';
+                DOM.focused.type(inputText);
                 DOM.focused.type(Key.ArrowLeft);
-                DashTable.getCell(3, 0).should('have.class', 'focused');
-                DashTable.getCell(3, 1).should('not.have.class', 'focused');
-            });
 
-            it('can moved right', () => {
+                DashTable.getCell(3, 1).within(() => cy.get('.dash-cell-value').then($inputs => {
+                    const input = $inputs[0] as HTMLInputElement;
+                    expect(input.selectionStart).to.equal(inputText.length - 1);
+                    expect(input.selectionEnd).to.equal(inputText.length - 1);
+                }));
+
                 DOM.focused.type(Key.ArrowRight);
-                DashTable.getCell(3, 2).should('have.class', 'focused');
-                DashTable.getCell(3, 1).should('not.have.class', 'focused');
+                DashTable.getCell(3, 1).within(() => cy.get('.dash-cell-value').then($inputs => {
+                    const input = $inputs[0] as HTMLInputElement;
+                    expect(input.selectionStart).to.equal(inputText.length);
+                    expect(input.selectionEnd).to.equal(inputText.length);
+                }));
             });
-
-            it('can move up', () => {
+            // TODO: same test but for up and down arrows as above ^. This currently isn't working
+            // because Cypress doesn't move the input cursor upon up and down keys, 
+            // so the test will fail. For now, we test if up and down arrows at least
+            // don't move focus to other cell
+            it('does not focus on next cell input on "arrow up"', () => {
+                DOM.focused.type('abc');
                 DOM.focused.type(Key.ArrowUp);
-                DashTable.getCell(2, 1).should('have.class', 'focused');
-                DashTable.getCell(3, 1).should('not.have.class', 'focused');
+                DashTable.getCell(3, 1).within(() => cy.get('.dash-cell-value').should('have.class', 'focused'));
+                DashTable.getCell(2, 1).should('not.have.class', 'focused');
+            });
+            it('does not focus on next cell input on "arrow down"', () => {
+                DOM.focused.type('abc');
+                DOM.focused.type(Key.ArrowDown);
+                DashTable.getCell(3, 1).within(() => cy.get('.dash-cell-value').should('have.class', 'focused'));
+                DashTable.getCell(4, 1).should('not.have.class', 'focused');
             });
         });
 
