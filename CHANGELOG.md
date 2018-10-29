@@ -415,6 +415,11 @@ Derived properties allow the component to expose complex state that can be usefu
 
     - Fix regressions linked to the style_as_list_view feature / prop
 
-## RC12 - Fix copy/paste behavior when copied rows larger than data
+## RC12 - Rename selected_cell -> selected_cells
 
-    Issue: https://github.com/plotly/dash-table/issues/142
+    Issue: https://github.com/plotly/dash-table/issues/177
+    
+
+## RC13 - Fix copy/paste behavior when copied rows larger than data
+
+    Issue: https://github.com/plotly/dash-table/issues/142    
