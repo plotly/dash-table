@@ -115,6 +115,8 @@ export const handleOnMouseUp = (propsFn: () => ICellFactoryOptions, idx: number,
 
     if(!is_focused && active) {
         e.preventDefault();
+        // We do this because mouseMove can change the selection, we don't want
+        // to check for all mouse movements, for performance reasons.
         const input = e.target;
         input.setSelectionRange(0, input.value ? input.value.length : 0);
     }
