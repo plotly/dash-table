@@ -24,7 +24,7 @@ Use the review apps to verify callback functionality (note these examples are wr
 ## Running Tests
 #### Run tests locally
 `npm test`
-#### Run locally with hot reload:
+#### Run tests locally with hot reload:
 `npm run test.watch`
 #### Run tests in CircleCI CLI
 `circleci build --job test`
