@@ -5,7 +5,6 @@ import {
     KEY_CODES,
     isCtrlMetaKey,
     isCtrlDown,
-    isMetaKey,
     isNavKey
 } from 'dash-table/utils/unicode';
 import { selectionCycle } from 'dash-table/utils/navigation';
@@ -170,11 +169,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
 
     handleKeyDown = (e: any) => {
         const {
-            active_cell,
-            columns,
             setProps,
-            is_focused,
-            editable
+            is_focused
         } = this.props;
 
         Logger.trace(`handleKeyDown: ${e.key}`);
@@ -207,7 +203,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
             return;
         }
 
-        if(!is_focused &&
+        if (!is_focused &&
             isNavKey(e.keyCode)
         ) {
             this.switchCell(e);
