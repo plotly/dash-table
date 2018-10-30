@@ -62,7 +62,6 @@ describe('copy paste', () => {
         it('on cell modification', () => {
             DashTable.getCell(0, 0).click();
             DOM.focused.type(`10${Key.Enter}`);
-            DashTable.getCell(1, 1).click();
 
             DashTable
                 .getCell(0, 0)
