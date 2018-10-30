@@ -59,7 +59,7 @@ describe('copy paste', () => {
     // Commenting this test as Cypress team is having issues with the copy/paste scenario
     // LINK: https://github.com/cypress-io/cypress/issues/2386
     describe('BE roundtrip on copy-paste', () => {
-        it.only('on cell modification', () => {
+        it('on cell modification', () => {
             DashTable.getCell(0, 0).click();
             DOM.focused.type(`10${Key.Enter}`);
             DashTable.getCell(1, 1).click();
