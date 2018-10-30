@@ -1,9 +1,10 @@
-# Dash Table 3.0
+# Dash Table 3.1
 Advanced Table component for [Dash](https://dash.plot.ly/).
 
 ## Setup
-1. Install Node v8+
-2. Install CircleCI CLI (https://circleci.com/docs/2.0/local-cli/)
+1. Install Python 3.x (python 3 is required to run the demo apps and tests)
+2. Install Node v8+
+3. Install CircleCI CLI (https://circleci.com/docs/2.0/local-cli/)
 
 `npm install`
 
@@ -15,8 +16,10 @@ Use to verify the frontend functionality of the table during development or init
 2. Visit [http://localhost:8080/](http://localhost:8080/)
 #### Local Server Review Apps
 Use the review apps to verify callback functionality (note these examples are written in python: the end-user syntax). This will run `index.py` found in the root of the directory and run the examples found in: `/tests/dash/`. To add more examples create a .py file in the `/tests/dash/` directory prepended with `app_` ie: `app_your_example.py`. This example will automatically get added to the example index page.
-1. From the root of the directory run `gunicorn index:server`
-2. Visit [http://127.0.0.1:8000](http://localhost:8000)
+1. We recommend creating a virtual enviornment to install the requirements and run the examples. Create a virtual env with `virtualenv venv` and run with: `source venv/bin/activate`.
+2. Run `pip install -r requirements.txt` from the root of the directory to install the requirements. 
+3. From the root of the directory run `gunicorn index:server`
+4. Visit [http://127.0.0.1:8000](http://localhost:8000)
 
 ## Running Tests
 #### Run tests locally
@@ -30,6 +33,6 @@ Use the review apps to verify callback functionality (note these examples are wr
 `npm run build:js && npm run build:py`
 
 ## Local Dist Build
-python setup.py sdist
+`python setup.py sdist`
 
 Note: Distributable file will be located in ./dist
