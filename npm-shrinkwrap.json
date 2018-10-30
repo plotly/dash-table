@@ -1,6 +1,6 @@
 {
   "name": "dash-table",
-  "version": "3.0.0rc18",
+  "version": "3.1.0rc8",
   "lockfileVersion": 1,
   "requires": true,
   "dependencies": {
@@ -19430,9 +19430,9 @@
       }
     },
     "webpack-preprocessor": {
-      "version": "0.1.11",
-      "resolved": "https://registry.npmjs.org/webpack-preprocessor/-/webpack-preprocessor-0.1.11.tgz",
-      "integrity": "sha512-hTP75j0BnRLW/ulDQoBJJOQbLsXZH9+3yErzwnFT0ro4MOaeyUc4kxPGzBLebEA0LWmRtm63S3LyjiGqBHdY2g==",
+      "version": "0.1.12",
+      "resolved": "https://registry.npmjs.org/webpack-preprocessor/-/webpack-preprocessor-0.1.12.tgz",
+      "integrity": "sha512-zqwSznL718VWQuVWyS86kne7C8aJnQVKBzMfsSAt4NHEExqyEPBVZk90aGv0LjKgCJ/Nl0nf0Fo1FnApqm8Hqw==",
       "dev": true,
       "requires": {
         "lodash": "4.17.10"

@@ -1,5 +1,6 @@
 import * as R from 'ramda';
 import { SelectedCells, ICellFactoryOptions } from 'dash-table/components/Table/props';
+import isActive from 'dash-table/derived/cell/isActive';
 
 function isCellSelected(selectedCells: SelectedCells, idx: number, i: number) {
     return selectedCells && R.contains([idx, i], selectedCells);
@@ -8,19 +9,15 @@ function isCellSelected(selectedCells: SelectedCells, idx: number, i: number) {
 export const handleClick = (propsFn: () => ICellFactoryOptions, idx: number, i: number, e: any) => {
     const {
         editable,
-        is_focused,
-        selected_cell,
+        selected_cells,
         setProps
     } = propsFn();
-
-    const selected = isCellSelected(selected_cell, idx, i);
 
     if (!editable) {
         return;
     }
-    if (!is_focused) {
-        e.preventDefault();
-    }
+
+    const selected = isCellSelected(selected_cells, idx, i);
 
     // don't update if already selected
     if (selected) {
@@ -34,13 +31,13 @@ export const handleClick = (propsFn: () => ICellFactoryOptions, idx: number, i: 
         active_cell: cellLocation
     };
 
-    const selectedRows = R.uniq(R.pluck(0, selected_cell)).sort((a, b) => a - b);
-    const selectedCols = R.uniq(R.pluck(1, selected_cell)).sort((a, b) => a - b);
+    const selectedRows = R.uniq(R.pluck(0, selected_cells)).sort((a, b) => a - b);
+    const selectedCols = R.uniq(R.pluck(1, selected_cells)).sort((a, b) => a - b);
     const minRow = selectedRows[0];
     const minCol = selectedCols[0];
 
     if (e.shiftKey) {
-        newProps.selected_cell = R.xprod(
+        newProps.selected_cells = R.xprod(
             R.range(
                 R.min(minRow, cellLocation[0]),
                 R.max(minRow, cellLocation[0]) + 1
@@ -51,7 +48,7 @@ export const handleClick = (propsFn: () => ICellFactoryOptions, idx: number, i: 
             )
         ) as any;
     } else {
-        newProps.selected_cell = [cellLocation];
+        newProps.selected_cells = [cellLocation];
     }
 
     setProps(newProps);
@@ -73,7 +70,7 @@ export const handleDoubleClick = (propsFn: () => ICellFactoryOptions, idx: numbe
     if (!is_focused) {
         e.preventDefault();
         const newProps = {
-            selected_cell: [cellLocation],
+            selected_cells: [cellLocation],
             active_cell: cellLocation,
             is_focused: true
         };
@@ -105,6 +102,24 @@ export const handleChange = (propsFn: () => ICellFactoryOptions, idx: number, i:
     setProps({
         data: newData
     });
+
+};
+
+export const handleOnMouseUp = (propsFn: () => ICellFactoryOptions, idx: number, i: number, e: any) => {
+    const {
+        active_cell,
+        is_focused,
+    } = propsFn();
+
+    const active = isActive(active_cell, idx, i);
+
+    if(!is_focused && active) {
+        e.preventDefault();
+        // We do this because mouseMove can change the selection, we don't want
+        // to check for all mouse movements, for performance reasons.
+        const input = e.target;
+        input.setSelectionRange(0, input.value ? input.value.length : 0);
+    }
 };
 
 export const handlePaste = (_propsFn: () => ICellFactoryOptions, _idx: number, _i: number, e: ClipboardEvent) => {

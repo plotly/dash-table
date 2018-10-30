@@ -57,13 +57,37 @@ export interface IVisibleColumn {
     editable?: boolean;
     editable_name?: boolean | number;
     id: ColumnId;
-    name: string;
-    options?: { label: string | number, value: any }[]; // legacy
+    name: string | string[];
+    options?: { label: string | number, value: string | number }[]; // legacy
     type?: ColumnType;
 }
 
 interface IDatumObject {
     [key: string]: any;
+}
+
+interface IDropdownValue {
+    label: string;
+    value: string | number;
+}
+
+interface IConditionalDropdown {
+    condition: string;
+    dropdown: IDropdownValue[];
+}
+
+export  interface IColumnDropdown {
+    id: string;
+    dropdown: IDropdownValue[];
+}
+
+export interface IConditionalColumnDropdown {
+    id: string;
+    dropdowns: IConditionalDropdown[];
+}
+
+export interface IDropdownProperties {
+    [key: string]: { options: IDropdownValue[] }[];
 }
 
 interface IStylesheetRule {
@@ -88,8 +112,8 @@ interface IProps {
 
     active_cell?: ActiveCell;
     columns?: Columns;
-    column_conditional_dropdowns?: any[];
-    column_static_dropdown?: any;
+    column_conditional_dropdowns?: IConditionalColumnDropdown[];
+    column_static_dropdown?: IColumnDropdown[];
     content_style: ContentStyle;
     css?: IStylesheetRule[];
     data?: Data;
@@ -105,13 +129,14 @@ interface IProps {
     n_fixed_rows?: number;
     row_deletable?: boolean;
     row_selectable?: RowSelection;
-    selected_cell?: SelectedCells;
+    selected_cells?: SelectedCells;
     selected_rows?: number[];
     setProps?: SetProps;
     sorting?: Sorting;
     sorting_settings?: SortSettings;
     sorting_type?: SortingType;
     sorting_treat_empty_string_as_none?: boolean;
+    style_as_list_view?: boolean;
     pagination_mode?: PaginationMode;
     pagination_settings?: IPaginationSettings;
 
@@ -131,8 +156,8 @@ interface IProps {
 interface IDefaultProps {
     active_cell: ActiveCell;
     columns: Columns;
-    column_conditional_dropdowns: any[];
-    column_static_dropdown: any;
+    column_conditional_dropdowns: IConditionalColumnDropdown[];
+    column_static_dropdown: IColumnDropdown[];
     css: IStylesheetRule[];
     data: Data;
     editable: boolean;
@@ -146,12 +171,13 @@ interface IDefaultProps {
     n_fixed_rows: number;
     row_deletable: boolean;
     row_selectable: RowSelection;
-    selected_cell: SelectedCells;
+    selected_cells: SelectedCells;
     selected_rows: number[];
     sorting: Sorting;
     sorting_settings: SortSettings;
     sorting_type: SortingType;
     sorting_treat_empty_string_as_none: boolean;
+    style_as_list_view: boolean;
 
     pagination_mode: PaginationMode;
     pagination_settings: IPaginationSettings;
@@ -191,8 +217,8 @@ export type ControlledTableProps = PropsWithDefaults & {
 export interface ICellFactoryOptions {
     active_cell: ActiveCell;
     columns: VisibleColumns;
-    column_conditional_dropdowns: any[];
-    column_static_dropdown: any;
+    column_conditional_dropdowns: IConditionalColumnDropdown[];
+    column_static_dropdown: IColumnDropdown[];
     data: Data;
     dropdown_properties: any; // legacy
     editable: boolean;
@@ -203,7 +229,7 @@ export interface ICellFactoryOptions {
     paginator: IPaginator;
     row_deletable: boolean;
     row_selectable: RowSelection;
-    selected_cell: SelectedCells;
+    selected_cells: SelectedCells;
     selected_rows: number[];
     setProps: SetProps;
     style_cell: Style;
