@@ -207,17 +207,6 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
             return;
         }
 
-        if (
-            e.keyCode === KEY_CODES.ENTER &&
-            !is_focused &&
-            isEditable(editable, columns[active_cell[1]])
-        ) {
-            setProps({ is_focused: true });
-            return;
-        }
-
-        Logger.debug('is_focused', is_focused)
-
         if(!is_focused &&
             isNavKey(e.keyCode)
         ) {

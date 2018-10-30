@@ -30,7 +30,7 @@ describe('navigate', () => {
                 DashTable.getCell(3, 1).within(() => cy.get('.dash-cell-value').should('have.class', 'focused'));
             });
 
-            it('does not focus on next cell input on "enter"', () => {
+            it('does focus on next cell input on "enter"', () => {
                 DOM.focused.type(Key.Enter);
                 DashTable.getCell(3, 1).within(() => cy.get('.dash-cell-value').should('not.have.class', 'focused'));
 
@@ -38,7 +38,15 @@ describe('navigate', () => {
                 DashTable.getCell(4, 1).within(() => cy.get('.dash-cell-value').should('not.have.class', 'focused'));
             });
 
-            it('does not focus on next cell input on "tab"', () => {
+            it.only('does focus on next cell input on text + "enter"', () => {
+                DOM.focused.type(`abc${Key.Enter}`);
+                DashTable.getCell(3, 1).within(() => cy.get('.dash-cell-value').should('not.have.class', 'focused'));
+
+                DashTable.getCell(4, 1).should('have.class', 'focused');
+                DashTable.getCell(4, 1).within(() => cy.get('.dash-cell-value').should('not.have.class', 'focused'));
+            });
+
+            it('does focus on next cell input on "tab"', () => {
                 cy.tab();
 
                 DashTable.getCell(3, 1).should('not.have.class', 'focused');
@@ -156,7 +164,7 @@ describe('navigate', () => {
             DashTable.getCell(3, 1).should('not.have.class', 'focused');
         });
 
-        it.only('does not allow the caret to be moved, instead it will select the entire text', () => {
+        it('does not allow the caret to be moved, instead it will select the entire text', () => {
             DashTable.getCell(3, 1).click();
             DOM.focused.type('abc');
             // Click again - clicking with something like .click('right') doesn't work
