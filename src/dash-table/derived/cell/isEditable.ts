@@ -1,6 +1,6 @@
 export default (
-    editable: boolean,
-    editableColumn: boolean | undefined
-): boolean => editableColumn === undefined ?
-        editable :
-        editableColumn;
+    isEditableTable: boolean,
+    isEditableColumn: boolean | undefined
+): boolean => isEditableColumn === undefined ?
+        isEditableTable :
+        isEditableColumn;
