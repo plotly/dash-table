@@ -26,7 +26,7 @@ describe('navigate', () => {
 
         describe('from a focused cell input', () => {
             beforeEach(() => {
-                DOM.focused.type(Key.Enter);
+                DashTable.getCell(3, 1).within(() => cy.get('.dash-cell-value').dblclick());
                 DashTable.getCell(3, 1).within(() => cy.get('.dash-cell-value').should('have.class', 'focused'));
             });
 
@@ -38,7 +38,7 @@ describe('navigate', () => {
                 DashTable.getCell(4, 1).within(() => cy.get('.dash-cell-value').should('not.have.class', 'focused'));
             });
 
-            it.only('does focus on next cell input on text + "enter"', () => {
+            it('does focus on next cell input on text + "enter"', () => {
                 DOM.focused.type(`abc${Key.Enter}`);
                 DashTable.getCell(3, 1).within(() => cy.get('.dash-cell-value').should('not.have.class', 'focused'));
 
