@@ -219,7 +219,7 @@ Version 3.1 of the Dash-Table builds upon the 3.0 table and solidifies the exter
 Derived Properties
 - Derived properties are new to 3.1
 - They are readonly properties that represent a transform from multiple 'first-class' properties of the component.
-- For example, derived_viewport_dataframe is a readonly view based on f(dataframe, filtering params, sorting params, pagination params) --> derived_viewport_dataframe
+- For example, `derived_viewport_dataframe` is a readonly view based on `(dataframe, filtering params, sorting params, pagination params) --> derived_viewport_dataframe`
 
 Derived properties allow the component to expose complex state that can be useful for a Dash Server developer but without introducing dual states, a situation where multiple properties may represent the same state within the component, making it necessary to reconcile them on each prop update.
 
