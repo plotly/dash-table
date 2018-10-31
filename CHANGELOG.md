@@ -374,7 +374,7 @@ New props for Conditional Style, Conditional Dropdown, Filter
 - dropdown_properties prop
 
 ## [3.0.0-rc4]
-# Added
+### Added
 Version 3.0 of the Dash-Table expands vastly on the capability of the 2.x table and provides features:
 - visually freezing rows and/or columns
 - filtering in either FE or BE, basic filtering UI
@@ -409,5 +409,5 @@ Performance Improvements
 - Table now renders and navigates faster
 - Typing in cell does not modify dataframe until focus is lost / edit is confirmed ("enter" or "tab)
 
-## Deprecated
+### Deprecated
 - prop "update_on_unfocus" has been removed
