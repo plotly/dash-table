@@ -228,7 +228,7 @@ Virtual and Viewport Dataframe
     1. the filtered and sorted dataframe and the indices mapping
     2. the filtered, sorted and paginated dataframe and the indices mapping
 
-    - derived_viewport_dataframe
+    - `derived_viewport_dataframe`
     - derived_viewport_indices
     - derived_virtual_dataframe
     - derived_virtual_indices
