@@ -231,7 +231,7 @@ Virtual and Viewport Dataframe
     - `derived_viewport_dataframe`
     - `derived_viewport_indices`
     - `derived_virtual_dataframe`
-    - derived_virtual_indices
+    - `derived_virtual_indices`
 
     In the event where sorting, filtering or pagination is done on the Dash Server, it is possible that some or all derived dataframes will be equal to the dataframe prop.
 
