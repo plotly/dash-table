@@ -436,6 +436,10 @@ Derived properties allow the component to expose complex state that can be usefu
 
     Issue: https://github.com/plotly/dash-table/issues/142
 
-## RC17 - Rename table component
+## RC17- Linux install
+
+    Issue: https://github.com/plotly/dash-table/issues/137
+
+## RC18 - Rename table component
 
     Issue: https://github.com/plotly/dash-table/issues/154
