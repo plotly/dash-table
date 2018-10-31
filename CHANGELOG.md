@@ -343,7 +343,7 @@ Consolidating virtualization, sorting, filtering
 New Props
 - sorting -> ['fe', 'be', true, false] (default: false) -- replaces `sortable` prop
 - sorting_settings -> array of { field, ascending } -- replaces `sort` prop
-- virtual_dataframe (READONLY)
+- `virtual_dataframe` (READONLY)
 - virtual_dataframe_indices (READONLY; not officially supported yet -- IN DEVELOPMENT)
 
 virtual_dataframe vs. dataframe
