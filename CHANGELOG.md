@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.1.0-rc18] - 2018-10-31
+### Changed
+- Rename table component to DataTable [#187](https://github.com/plotly/dash-table/pull/187) [#154](https://github.com/plotly/dash-table/issues/154)
+
+## [3.1.0-rc17] - 2018-10-31
+### Fixed
+- Fix install on Linux [#184](https://github.com/plotly/dash-table/pull/184) [#137](https://github.com/plotly/dash-table/issues/137)
+
 ## [3.1.0-rc16] - 2018-10-30
 ### Fixed
 - Fix copy/paste behavior when copying rows larger than data [#180](https://github.com/plotly/dash-table/pull/180) [#142](https://github.com/plotly/dash-table/issues/142)
