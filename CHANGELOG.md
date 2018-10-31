@@ -344,7 +344,7 @@ New Props
 - sorting -> ['fe', 'be', true, false] (default: false) -- replaces `sortable` prop
 - sorting_settings -> array of { field, ascending } -- replaces `sort` prop
 - `virtual_dataframe` (READONLY)
-- virtual_dataframe_indices (READONLY; not officially supported yet -- IN DEVELOPMENT)
+- `virtual_dataframe_indices` (READONLY; not officially supported yet -- IN DEVELOPMENT)
 
 virtual_dataframe vs. dataframe
 - the virtual dataframe is the content of the viewport for the user (e.g. user has a 10k rows dataframe with FE/250 lines paging, on 1st page -> the virtual_dataframe contains items [0,250[ of the dataframe); the dataframe still contains 10k items
