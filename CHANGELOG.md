@@ -4,7 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [3.1.0-rc16] - 2018-10-30
 ### Fixed
-- Fix copy/paste behavior when copied rows larger than data [#180](https://github.com/plotly/dash-table/pull/180) [#142](https://github.com/plotly/dash-table/issues/142)
+- Fix copy/paste behavior when copying rows larger than data [#180](https://github.com/plotly/dash-table/pull/180) [#142](https://github.com/plotly/dash-table/issues/142)
 
 ## [3.1.0-rc15] - 2018-10-30
 ### Changed
