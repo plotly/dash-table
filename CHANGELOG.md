@@ -8,7 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [3.1.0-rc15] - 2018-10-30
 ### Changed
-- Column 'editable' takes precedence over table 'editable' [#182](https://github.com/plotly/dash-table/pull/182) [#175](https://github.com/plotly/dash-table/issues/175)
+- Column 'editable' prop takes precedence over table 'editable' prop[#182](https://github.com/plotly/dash-table/pull/182) [#175](https://github.com/plotly/dash-table/issues/175)
 
 ## [3.1.0-rc14] - 2018-10-30
 ### Changed
