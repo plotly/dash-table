@@ -275,7 +275,7 @@ Basic Filtering & Preparation work for advaced filtering
     This prop defines what type of filtering are available to the user
     The default value is ['basic']
 
-    Note: This value needs to be consistent with filtering_type
+    Note: This value needs to be consistent with `filtering_type`
 
 ## [3.0.0-rc17]
 ### Added
