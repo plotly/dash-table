@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import RealTable from 'dash-table/components/Table';
 
-import 'dash-table/style/component.less';
 import Logger from 'core/Logger';
 
 import genRandomId from './utils/generate';
