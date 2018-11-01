@@ -52,7 +52,7 @@ export const defaultProps = {
     },
     navigation: 'page',
 
-    content_style: 'fit',
+    content_style: 'grow',
     css: [],
     filtering: false,
     filtering_settings: '',
