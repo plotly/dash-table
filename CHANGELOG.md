@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.1.0-rc20] - 2018-11-01
+### Fixed
+- Fire submit when pressing enter key in `IsolatedInput`. Fixes issue [#194](https://github.com/plotly/dash-table/issues/194)
+
 ## [3.1.0-rc19] - 2018-11-01
 ### Changed
 - Change default styles [#193](https://github.com/plotly/dash-table/pull/193) [#150](https://github.com/plotly/dash-table/issues/150)
