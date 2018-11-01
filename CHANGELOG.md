@@ -4,7 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [3.1.0-rc19] - 2018-11-01
 ### Changed
-- Change default styles [#]() [#150](https://github.com/plotly/dash-table/issues/150)
+- Change default styles [#193](https://github.com/plotly/dash-table/pull/193) [#150](https://github.com/plotly/dash-table/issues/150)
     - prop `content_style` defaults to 'grow' instead of 'fit'
     - prop `style_table` width nested property defaults to '100%' if not provided
 
