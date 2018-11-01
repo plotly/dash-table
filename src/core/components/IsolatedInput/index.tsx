@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { KEY_CODES } from 'dash-table/utils/unicode';
 
 type Submit = (value: string | undefined) => void;
 
@@ -41,13 +42,23 @@ export default class IsolatedInput extends PureComponent<IProps, IState> {
         };
     }
 
-    handleChange = (ev: any) => this.setState({
-        value: ev.target.value
-    })
+    handleKeyDown(e: any, stopPropagation: boolean) {
+        if(stopPropagation) e.stopPropagation();
+        if(e.keyCode === KEY_CODES.ENTER) {
+            this.submit();
+        } 
+    }
+
+    handleChange = (ev: any) => {
+        this.setState({
+            value: ev.target.value
+        })
+    }
 
     submit = () =>
         this.state.value !== this.props.value &&
         this.props.submit(this.state.value)
+
 
     render() {
         const {
@@ -58,7 +69,7 @@ export default class IsolatedInput extends PureComponent<IProps, IState> {
 
         let props = {
             onBlur: updateOnBlur ? this.submit : undefined,
-            onKeyDown: stopPropagation ? (ev: any) => ev.stopPropagation() : undefined,
+            onKeyDown: (e: any) => this.handleKeyDown(e, stopPropagation),
             onSubmit: updateOnSubmit ? this.submit : undefined
         };
 
