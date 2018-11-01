@@ -30,7 +30,16 @@ const props = Object.assign({}, baseProps, {
     columns: columns.map((id => ({ id: id, name: id.toUpperCase() }))),
     style_cell: {
         width: '33%'
-    }
+    },
+    style_table: {
+        width: '100%',
+        min_width: '100%',
+        max_width: '100%'
+    },
+    css: [{
+        selector: '.dash-fixed-column',
+        rule: 'width: 33%;'
+    }]
 });
 
 storiesOf('DashTable/Width percentages', module)
