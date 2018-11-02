@@ -4,6 +4,7 @@ import { KEY_CODES } from 'dash-table/utils/unicode';
 type Submit = (value: string | undefined) => void;
 
 interface IProps {
+    placeholder?: string;
     updateOnBlur?: boolean;
     updateOnSubmit?: boolean;
     updateOnEnter: boolean;
@@ -70,6 +71,7 @@ export default class IsolatedInput extends PureComponent<IProps, IState> {
 
     render() {
         const {
+            placeholder,
             updateOnBlur,
             updateOnSubmit
         } = this.propsWithDefaults;
@@ -85,6 +87,7 @@ export default class IsolatedInput extends PureComponent<IProps, IState> {
             type='text'
             value={this.state.value || ''}
             onChange={this.handleChange}
+            placeholder={placeholder}
             {...props}
         />);
     }

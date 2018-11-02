@@ -2,16 +2,24 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [3.1.0-rc20] - 2018-11-01
+## [3.1.0-rc21] - 2018-11-02
 ### Fixed
 - Fire submit when pressing enter key in `IsolatedInput`. Fixes issue [#194](https://github.com/plotly/dash-table/issues/194)
+
+## [3.1.0-rc20] - 2018-11-01
+### Fixed
+- Fix performance degradation on load [#200](https://github.com/plotly/dash-table/pull/200) [#198](https://github.com/plotly/dash-table/issues/198)
+
 
 ## [3.1.0-rc19] - 2018-11-01
 ### Changed
 - Change default styles [#193](https://github.com/plotly/dash-table/pull/193) [#150](https://github.com/plotly/dash-table/issues/150)
     - prop `content_style` defaults to 'grow' instead of 'fit'
     - prop `style_table` width nested property defaults to '100%' if not provided
-    - update default font-family from 'monospace' to `'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace`
+- Change cell styling and filter display [#196](https://github.com/plotly/dash-table/pull/196) [#150](https://github.com/plotly/dash-table/issues/150)
+    - uneditable cells can be clicked & navigated, the mouse cursor is the default one
+    - filter inputs have a placeholder that is visible on hover and focus
+    - first filter input placeholder is always visible
 
 ## [3.1.0-rc18] - 2018-10-31
 ### Changed
