@@ -6,7 +6,7 @@ type Submit = (value: string | undefined) => void;
 interface IProps {
     updateOnBlur?: boolean;
     updateOnSubmit?: boolean;
-    submitOnEnter: boolean;
+    updateOnEnter: boolean;
     stopPropagation?: boolean;
     submit: Submit;
     value: string | undefined;
@@ -14,7 +14,7 @@ interface IProps {
 
 interface IDefaultProps {
     stopPropagation: boolean;
-    submitOnEnter: boolean;
+    updateOnEnter: boolean;
     updateOnBlur: boolean;
     updateOnSubmit: boolean;
 }
@@ -28,7 +28,7 @@ type PropsWithDefaults = IProps & IDefaultProps;
 export default class IsolatedInput extends PureComponent<IProps, IState> {
     public static readonly defaultProps = {
         stopPropagation: false,
-        submitOnEnter: true,
+        updateOnEnter: true,
         updateOnBlur: true,
         updateOnSubmit: true
     };
@@ -48,11 +48,11 @@ export default class IsolatedInput extends PureComponent<IProps, IState> {
     handleKeyDown = (e: React.KeyboardEvent) => {
         const {
             stopPropagation,
-            submitOnEnter
+           updateOnEnter 
         } = this.propsWithDefaults;
 
         if(stopPropagation) e.stopPropagation();
-        if(submitOnEnter && e.keyCode === KEY_CODES.ENTER) {
+        if(updateOnEnter&& e.keyCode === KEY_CODES.ENTER) {
             this.submit();
         } 
     }
