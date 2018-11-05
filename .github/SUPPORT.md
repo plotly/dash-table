@@ -3,6 +3,6 @@ examples, can be found here:
 [https://dash.plot.ly/datatable](https://dash.plot.ly/datatable).
 
 Our team is happy to provide implementation help on our
-[community forum](https://community.plot.ly) (tagged
-[`dash`](http://community.plot.ly/c/dash)) or on Stack Overflow
-(tagged [`dash`](https://stackoverflow.com/questions/tagged/dash)).
+[Dash Community Forum](https://community.plot.ly/c/dash). If you've searched
+through previous topics and found that your question hasn't been addressed yet,
+go ahead and open a new topic!
