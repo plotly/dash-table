@@ -16,7 +16,7 @@ module.exports = (preprocessor = {}, mode = 'development') => {
         },
         mode: mode,
         output: {
-            path: path.resolve(__dirname, './../../dist'),
+            path: path.resolve(__dirname, './../../lib'),
             filename: '[name].js',
             library: dashLibraryName,
             libraryTarget: 'umd'
