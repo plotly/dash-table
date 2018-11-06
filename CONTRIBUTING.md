@@ -54,12 +54,9 @@ _For larger features, your contribution will have a higher likelihood of getting
 1. Create a pull request and tag the Plotly team (`@plotly/dash`) and tag / request review from [@Marc-Andre-Rivet](https://github.com/Marc-Andre-Rivet) and [@valentijnnieman ](https://github.com/valentijnnieman).
 2. After a review has been done and your changes have been approved, create a prerelease and comment in the PR. Version numbers should follow [semantic versioning][]. To create a prerelease:
     * Add `-rc1` to `package.json` e.g. `0.14.0-rc1`
-    * Run `npm run publish-all`.
+    * Run `npm publish`.
+    * Upload your release to pypi with: `twine upload dist/dash_table-X.X.X.tar.gz`
         - If needed, ask @chriddyp to get NPM / PyPi package publishing access.
-        - If the `publish-all` script fails on the `twine` command, try running
-            ```sh
-            twine upload dist/dash_table-X.X.X.tar.gz # where xx.x.x is the version number
-            ```
 3. Comment in the PR with the prerelease version
 4. Update the top-level comment to include info about how to install, a summary of the changes, and a simple example.
     * This makes it easier for a community member to come in and try it out. As more folks review, it's harder to find the installation instructions deep in the PR
