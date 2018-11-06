@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [3.1.4-rc2] - 2018-11-06
+## [3.1.4-rc4] - 2018-11-06
 ### Added
 - Package library the UMD way [#212](https://github.com/plotly/dash-table/issues/212)
 
