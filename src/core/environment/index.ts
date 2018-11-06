@@ -14,8 +14,8 @@ export default class Environment {
             typeof URL !== 'undefined' &&
             URL.prototype &&
             URL.prototype.constructor &&
-            new URL(window.location.href
-        ).searchParams) || { get: () => null };
+            new URL(window.location.href).searchParams
+        ) || { get: () => null };
     }
 
     public static get debugLevel(): DebugLevel {
