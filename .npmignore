@@ -28,4 +28,5 @@ vv
 venv
 .travis.yml
 CHANGELOG.md
+npm-shrinkwrap.json
 README.md
