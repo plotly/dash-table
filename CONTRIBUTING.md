@@ -4,6 +4,7 @@
 Refer to the [readme](README.md) for installation and basic use instructions.
 
 ## Coding Style
+Please lint any Javascript / TypeScript additions with `npm run lint`.
 Please lint any additions to Python code with `pylint` and `flake8`.
 
 ## Pull Request Guidelines
@@ -53,7 +54,6 @@ _For larger features, your contribution will have a higher likelihood of getting
 1. Create a pull request and tag the Plotly team (`@plotly/dash`) and tag / request review from [@Marc-Andre-Rivet](https://github.com/Marc-Andre-Rivet) and [@valentijnnieman ](https://github.com/valentijnnieman).
 2. After a review has been done and your changes have been approved, create a prerelease and comment in the PR. Version numbers should follow [semantic versioning][]. To create a prerelease:
     * Add `-rc1` to `package.json` e.g. `0.14.0-rc1`
-    * Update the `unpkg` link in `./dash_table/__init__.py`, replacing `__version__` with your release candidate (e.g. `"0.14.0-rc1"`)
     * Run `npm run publish-all`.
         - If needed, ask @chriddyp to get NPM / PyPi package publishing access.
         - If the `publish-all` script fails on the `twine` command, try running
