@@ -1,8 +1,8 @@
 {
   "name": "dash-table",
-  "version": "3.1.4-rc4",
+  "version": "3.1.4-rc5",
   "description": "Dash table",
-  "main": "dash_table/bundle.js",
+  "main": "dist/bundle.js",
   "scripts": {
     "preprivate::opentests": "run-s private::wait*",
     "preprivate::runtests": "run-s private::wait*",
@@ -19,6 +19,7 @@
     "private::runtests": "cypress run --browser chrome",
     "build.watch": "webpack-dev-server --content-base dash_table --mode development",
     "build:js": "run-s \"private::build -- --mode production\"",
+    "postbuild:js": "cp -R dist dash_table",
     "build:js-dev": "run-s \"private::build -- --mode development\"",
     "build:js-test": "run-s \"private::build -- --config webpack.test.config.js\"",
     "build:js-test-watch": "run-s \"private::build -- --config webpack.test.config.js --watch\"",
@@ -78,8 +79,7 @@
     "webpack-preprocessor": "^0.1.12"
   },
   "files": [
-    "./dash_table/bundle.js",
-    "./**/*.md"
+    "/dist/bundle.js"
   ],
   "peerDependencies": {
     "react": ">=0.14",
