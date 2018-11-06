@@ -145,10 +145,6 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
             (!invalidatedPagination.cached && !invalidatedPagination.first && pagination_mode === 'be') ||
             (!invalidatedSort.cached && !invalidatedSort.first && sorting === 'be');
 
-        if (virtualCached && viewportCached && !invalidateSelection) {
-            return;
-        }
-
         const { setProps } = this;
         let newProps: Partial<PropsWithDefaultsAndDerived> = {};
 
@@ -174,6 +170,10 @@ export default class Table extends Component<PropsWithDefaultsAndDerived> {
             newProps.active_cell = undefined;
             newProps.selected_cells = undefined;
             newProps.selected_rows = undefined;
+        }
+
+        if (!R.keys(newProps).length) {
+            return;
         }
 
         setTimeout(() => setProps(newProps), 0);
