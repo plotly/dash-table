@@ -19,12 +19,22 @@ module.exports = (preprocessor = {}, mode = 'development') => {
             path: path.resolve(__dirname, './../..', dashLibraryName),
             filename: '[name].js',
             library: dashLibraryName,
-            libraryTarget: 'window',
+            libraryTarget: 'umd'
         },
         externals: {
-            react: 'React',
-            'react-dom': 'ReactDOM',
-            'plotly.js': 'Plotly',
+            react: {
+                commonjs: "react",
+                commonjs2: "react",
+                amd: "React",
+                root: "React"
+            },
+            "react-dom": {
+                commonjs: "react-dom",
+                commonjs2: "react-dom",
+                amd: "ReactDOM",
+                root: "ReactDOM"
+            },
+            'plotly.js': 'Plotly'
         },
         module: {
             rules: [
