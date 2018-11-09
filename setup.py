@@ -1,7 +1,7 @@
 from setuptools import setup
 import json
 
-with open('bundle.json') as f:
+with open('package.json') as f:
     package = json.load(f)
 
 package_name = str(package["name"].replace(" ", "_").replace("-", "_"))
