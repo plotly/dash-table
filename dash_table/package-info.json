@@ -6,7 +6,7 @@
   "scripts": {
     "preprivate::opentests": "run-s private::wait*",
     "preprivate::runtests": "run-s private::wait*",
-    "private::build": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack --display-reasons --bail --verbose",
+    "private::build": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack --display-reasons --bail",
     "private::build:js": "run-s \"private::build -- --mode production\"",
     "private::build:js-dev": "run-s \"private::build -- --mode development\"",
     "private::build:js-test": "run-s \"private::build -- --config webpack.test.config.js\"",
@@ -66,7 +66,7 @@
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.12.0",
     "eslint-plugin-react": "^7.9.1",
-    "file-loader": "^2.0.0",
+    "file-loader": "^1.1.11",
     "http-server": "^0.11.1",
     "less": "^3.8.0",
     "less-loader": "^4.1.0",
