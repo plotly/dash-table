@@ -5,7 +5,6 @@ export default (): Promise<number> => {
     parent.style.width = '100px';
     parent.style.height = '100px';
     parent.style.overflow = 'scroll';
-    parent.style.backgroundColor = 'blue';
 
     const child = document.createElement('div');
     child.style.width = '100px';
