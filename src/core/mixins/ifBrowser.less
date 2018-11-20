@@ -1,0 +1,19 @@
+.if-edge(@rule) {
+    // Applies to non-Edge browsers
+    // Ref: https://browserstrangeness.github.io/css_hacks.html
+    @supports (-ms-ime-align:auto) {
+        & { @rule(); }
+    }
+}
+
+.if-firefox(@rule) {
+    @supports (-moz-appearance:none) {
+        & { @rule(); }
+    }
+}
+
+.if-ie11(@rule) {
+    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+        @rule();
+    }
+}

@@ -1,25 +1,5 @@
 @import (reference) '~dash-table/style/reset.less';
 
-.if-edge(@rule) {
-    // Applies to non-Edge browsers
-    // Ref: https://browserstrangeness.github.io/css_hacks.html
-    @supports (-ms-ime-align:auto) {
-        & { @rule(); }
-    }
-}
-
-.if-firefox(@rule) {
-    @supports (-moz-appearance:none) {
-        & { @rule(); }
-    }
-}
-
-.if-ie11(@rule) {
-    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-        @rule();
-    }
-}
-
 .inset-shadow(@color, @left, @top, @right, @bottom) {
     box-shadow: inset @left 0px 0px 0px @color,
         inset 0px @top 0px 0px @color,
@@ -294,13 +274,10 @@
         &.dash-grow {
             .cell-0-1,
             .cell-1-1 {
-                display: flex;
-                flex-direction: row;
                 flex: 1 0 auto;
             }
 
             table {
-                flex: 1 0 0;
                 width: 100%;
             }
         }
