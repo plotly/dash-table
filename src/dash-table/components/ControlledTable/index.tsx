@@ -9,6 +9,7 @@ import {
 } from 'dash-table/utils/unicode';
 import { selectionCycle } from 'dash-table/utils/navigation';
 
+import isFirefox from 'core/browser/isFirefox';
 import getScrollbarWidth from 'core/browser/scrollbarWidth';
 import Logger from 'core/Logger';
 import { memoizeOne } from 'core/memoizer';
@@ -554,7 +555,9 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
         if (n_fixed_rows) {
             Array.from(r1c1.querySelectorAll('tr:first-of-type td, tr:first-of-type th')).forEach((td, index) => {
                 const style = getComputedStyle(td);
-                const width = style.width;
+                const width = isFirefox ?
+                    `${Stylesheet.getValue(style.width) - Stylesheet.getValue(style.paddingLeft) - Stylesheet.getValue(style.paddingRight)}px` :
+                    style.width;
 
                 this.stylesheet.setRule(
                     `.dash-fixed-row:not(.dash-fixed-column) th:nth-of-type(${index + 1})`,
@@ -567,7 +570,9 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
         if (n_fixed_columns && n_fixed_rows) {
             Array.from(r1c0.querySelectorAll('tr:first-of-type td, tr:first-of-type th')).forEach((td, index) => {
                 const style = getComputedStyle(td);
-                const width = style.width;
+                const width = isFirefox ?
+                    `${Stylesheet.getValue(style.width) - Stylesheet.getValue(style.paddingLeft) - Stylesheet.getValue(style.paddingRight)}px` :
+                    style.width;
 
                 this.stylesheet.setRule(
                     `.dash-fixed-column.dash-fixed-row th:nth-of-type(${index + 1})`,

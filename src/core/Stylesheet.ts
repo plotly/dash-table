@@ -68,6 +68,15 @@ export default class Stylesheet {
             /^\d+(\.\d+)?(px|em|rem|%)$/.test(dimension);
     }
 
+    static getValue(dimension: any): number {
+        if (typeof dimension !== 'string') {
+            return 0;
+        }
+
+        const match = dimension.match(/^(\d+(\.\d+)?)/);
+        return (match && match[1] && Number(match[1])) || 0;
+    }
+
     constructor(private readonly prefix: string) {
         this.stylesheet = new StylesheetFacade(`${prefix}-dynamic-inline.css`);
     }

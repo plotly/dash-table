@@ -1,0 +1,1 @@
+export default /Mozilla/.test(navigator.userAgent) && /Firefox/.test(navigator.userAgent);

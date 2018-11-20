@@ -17,7 +17,7 @@ export default (): Promise<number> => {
         setTimeout(() => {
             const width = child.clientWidth - parent.clientWidth;
 
-            document.removeChild(parent);
+            document.body.removeChild(parent);
             resolve(width);
         }, 0);
     });
