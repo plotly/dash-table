@@ -15,9 +15,11 @@ export default (): Promise<number> => {
     document.body.appendChild(parent);
 
     return new Promise<number>(resolve => {
-        setTimeout(
-            () => resolve(child.clientWidth - parent.clientWidth),
-            0
-        );
+        setTimeout(() => {
+            const width = child.clientWidth - parent.clientWidth;
+
+            document.removeChild(parent);
+            resolve(width);
+        }, 0);
     });
 };
