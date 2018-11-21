@@ -662,8 +662,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps,
                         onScroll={this.onScroll}
                     >{row.map((cell, columnIndex) => (<div
                         key={columnIndex}
-                            ref={`r${rowIndex}c${columnIndex}`}
-                            style={fragmentStyles[rowIndex][columnIndex]}
+                        ref={`r${rowIndex}c${columnIndex}`}
+                        style={fragmentStyles[rowIndex][columnIndex]}
                         className={`cell cell-${rowIndex}-${columnIndex} ${fragmentClasses[rowIndex][columnIndex]}`}
                     >{cell}</div>))
                         }</div>))}
