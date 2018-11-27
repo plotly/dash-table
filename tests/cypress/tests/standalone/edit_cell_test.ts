@@ -32,13 +32,13 @@ Object.values(AppMode).forEach(mode => {
         });
 
         it('can delete dropdown', () => {
-            DashTable.getCell(0, 6).trigger('mouseover');
+            DashTable.getCell(0, 6).trigger('mouseover', { force: true });
             DashTable.getCell(0, 6).within(() => cy.get('.Select-clear').click({ force : true }));
             DashTable.getCell(0, 6).within(() => cy.get('.Select-placeholder').should('exist'));
         });
 
         it('can delete dropdown and set value', () => {
-            DashTable.getCell(0, 6).trigger('mouseover');
+            DashTable.getCell(0, 6).trigger('mouseover', { force: true });
             DashTable.getCell(0, 6).within(() => cy.get('.Select-clear').click({ force: true }));
             DashTable.getCell(0, 6).within(() => cy.get('.Select-placeholder').should('exist'));
 
