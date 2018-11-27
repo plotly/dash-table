@@ -68,8 +68,13 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
     private updateUiViewport() {
         const {
             setState,
-            uiViewport
+            uiViewport,
+            virtualization
         } = this.props;
+
+        if (!virtualization) {
+            return;
+        }
 
         const { r1c1 } = this.refs as { [key: string]: HTMLElement };
         let parent: any = r1c1.parentElement;
@@ -129,8 +134,13 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
         const {
             setState,
-            uiCell
+            uiCell,
+            virtualization
         } = this.props;
+
+        if (!virtualization) {
+            return;
+        }
 
         if (uiCell) {
             return;
@@ -195,7 +205,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
         this.updateStylesheet();
 
-        getScrollbarWidth().then((scrollbarWidth: number) => this.setState({ scrollbarWidth }));
+        getScrollbarWidth().then((scrollbarWidth: number) => setState({ scrollbarWidth }));
 
         const { r0c0, r0c1, r1c0, r1c1 } = this.refs as { [key: string]: HTMLElement };
 
