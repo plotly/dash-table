@@ -98,11 +98,17 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
     }
 
     componentDidMount() {
-        if (
-            this.props.selected_cells.length &&
-            !R.contains(this.props.active_cell, this.props.selected_cells)
+        const {
+            active_cell,
+            selected_cells,
+            setProps
+        } = this.props;
+
+        if (selected_cells.length &&
+            active_cell.length &&
+            !R.contains(active_cell, selected_cells)
         ) {
-            this.props.setProps({ active_cell: this.props.selected_cells[0] });
+            setProps({ active_cell: selected_cells[0] });
         }
 
         this.applyStyle();
