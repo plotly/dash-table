@@ -9,6 +9,7 @@ import {
 } from 'dash-table/utils/unicode';
 import { selectionCycle } from 'dash-table/utils/navigation';
 
+import getScrollbarWidth from 'core/browser/scrollbarWidth';
 import Logger from 'core/Logger';
 import { arrayMap3 } from 'core/math/arrayZipMap';
 import { memoizeOne } from 'core/memoizer';
@@ -193,6 +194,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         }
 
         this.updateStylesheet();
+
+        getScrollbarWidth().then((scrollbarWidth: number) => this.setState({ scrollbarWidth }));
 
         const { r0c0, r0c1, r1c0, r1c1 } = this.refs as { [key: string]: HTMLElement };
 

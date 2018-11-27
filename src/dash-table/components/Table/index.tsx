@@ -47,12 +47,10 @@ export default class Table extends Component<PropsWithDefaultsAndDerived, Standa
         const props: any = this.props;
         const state: any = this.state;
 
-        let res = R.any(key =>
+        return R.any(key =>
             !DERIVED_REGEX.test(key) && props[key] !== nextProps[key],
             R.keysIn(props)
         ) || !isEqual(state, nextState, false);
-
-        return res;
     }
 
     render() {
