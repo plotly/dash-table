@@ -173,13 +173,17 @@
 }
 
 .dash-spreadsheet {
-    &.dash-freeze-left {
+    &.dash-freeze-left,
+    &.dash-freeze-top {
         .fit-content-polyfill();
+    }
+
+    &.dash-freeze-left {
         max-width: 500px;
     }
 
-    &.dash-freeze-top {
-        .fit-content-polyfill();
+    &.dash-freeze-top,
+    &.dash-virtualized {
         max-height: 500px;
     }
 }
@@ -238,7 +242,8 @@
         }
 
         &.dash-freeze-left,
-        &.dash-freeze-top {
+        &.dash-freeze-top,
+        &.dash-virtualized {
             overflow: hidden !important;
 
             .row-0 {
