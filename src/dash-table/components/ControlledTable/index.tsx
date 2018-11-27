@@ -673,7 +673,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         const containerClasses = [
             'dash-spreadsheet',
             'dash-spreadsheet-container',
-            ...(virtualized ? ['dash-virtualized'] : []),
+            ...(virtualization ? ['dash-virtualized'] : []),
             ...(n_fixed_rows ? ['dash-freeze-top'] : []),
             ...(n_fixed_columns ? ['dash-freeze-left'] : []),
             ...(style_as_list_view ? ['dash-list-view'] : []),
@@ -683,7 +683,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         const classes = [
             'dash-spreadsheet',
             'dash-spreadsheet-inner',
-            ...(virtualized ? ['dash-virtualized'] : []),
+            ...(virtualization ? ['dash-virtualized'] : []),
             ...(n_fixed_rows ? ['dash-freeze-top'] : []),
             ...(n_fixed_columns ? ['dash-freeze-left'] : []),
             ...(style_as_list_view ? ['dash-list-view'] : []),
