@@ -4,7 +4,7 @@ import Key from 'cypress/Key';
 
 import { AppMode } from 'demo/AppMode';
 
-Object.values(AppMode).forEach(mode => {
+Object.values([AppMode.Default]).forEach(mode => {
     describe(`edit, mode=${mode}`, () => {
         beforeEach(() => {
             cy.visit(`http://localhost:8080?mode=${mode}`);
@@ -84,6 +84,30 @@ Object.values(AppMode).forEach(mode => {
             DashTable.getCell(0, 6).within(() => {
                 cy.get('.Select-value-label').should('have.html', expectedValue);
             });
+        });
+
+        it('can edit on 2nd page', () => {
+            DashTable.getCell(0, 1).click();
+            DashTable.getCell(0, 1).within(() => cy.get('input').should('have.value', '1'));
+            cy.get('button.next-page').click();
+            DashTable.getCell(0, 1).within(() => cy.get('input').should('have.value', '251'));
+
+            DOM.focused.type(`abc${Key.Enter}`);
+            DashTable.getCell(0, 1).click();
+            DashTable.getCell(0, 1).within(() => cy.get('input').should('have.value', 'abc'));
+        });
+
+        it('can delete then edit on 2nd page', () => {
+            DashTable.getCell(0, 1).click();
+            DashTable.getCell(0, 1).within(() => cy.get('input').should('have.value', '1'));
+            cy.get('button.next-page').click();
+            DashTable.getCell(0, 1).within(() => cy.get('input').should('have.value', '251'));
+            DashTable.getDelete(0).click();
+            DashTable.getCell(0, 1).within(() => cy.get('input').should('have.value', '252'));
+
+            DOM.focused.type(`abc${Key.Enter}`);
+            DashTable.getCell(0, 1).click();
+            DashTable.getCell(0, 1).within(() => cy.get('input').should('have.value', 'abc'));
         });
 
         // https://github.com/plotly/dash-table/issues/50
