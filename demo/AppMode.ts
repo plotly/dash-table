@@ -28,6 +28,7 @@ function getBaseTableProps(mock: IDataMock) {
                 }))
             }
         ],
+        pagination_mode: false,
         style_table: {
             max_height: '800px',
             height: '800px',

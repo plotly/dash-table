@@ -43,7 +43,7 @@ export default class DataTable extends Component {
 }
 
 export const defaultProps = {
-    pagination_mode: false,
+    pagination_mode: 'fe',
     pagination_settings: {
         displayed_pages: 1,
         current_page: 0,
