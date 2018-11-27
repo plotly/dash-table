@@ -394,7 +394,7 @@
         "required": false,
         "description": "\"pagination\" refers to a mode of the table where\nnot all of the rows are displayed at once: only a subset\nare displayed (a \"page\") and the next subset of rows\ncan viewed by clicking \"Next\" or \"Previous\" buttons\nat the bottom of the page.\n\nPagination is used to improve performance: instead of\nrendering all of the rows at once (which can be expensive),\nwe only display a subset of them.\n\nWith pagination, we can either page through data that exists\nin the table (e.g. page through `10,000` rows in `data` `100` rows at a time)\nor we can update the data on-the-fly with callbacks\nwhen the user clicks on the \"Previous\" or \"Next\" buttons.\nThese modes can be toggled with this `pagination_mode` parameter:\n- `'fe'` refers to \"front-end\" paging: passing large data up-front\n- `'be'` refers to \"back-end\" paging: updating the data on the fly via callbacks\n- `False` will disable paging, attempting to render all of the data at once\n- `True` is the same as `fe`\n\nNOTE: The `fe` and `be` names may change in the future.\nTune in to [https://github.com/plotly/dash-table/issues/167](https://github.com/plotly/dash-table/issues/167) for more.",
         "defaultValue": {
-          "value": "'fe'",
+          "value": "false",
           "computed": false
         }
       },
@@ -925,6 +925,17 @@
         "description": "Conditional CSS styles for the header cells.\n\nThis can be used to apply styles to header cells on a per-column basis.",
         "defaultValue": {
           "value": "[]",
+          "computed": false
+        }
+      },
+      "virtualization": {
+        "type": {
+          "name": "bool"
+        },
+        "required": false,
+        "description": "This property tells the table to use virtualization when rendering.\n\nAssumptions are that:\n- the width of the columns is fixed\n- the height of the rows is always the same\n- runtime styling changes will not affect width and height vs. first rendering",
+        "defaultValue": {
+          "value": "false",
           "computed": false
         }
       },
