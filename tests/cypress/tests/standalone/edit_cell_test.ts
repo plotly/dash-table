@@ -39,10 +39,10 @@ Object.values(AppMode).forEach(mode => {
 
         it('can delete dropdown and set value', () => {
             DashTable.getCell(0, 6).trigger('mouseover');
-            DashTable.getCell(0, 6).within(() => cy.get('.Select-clear').click());
+            DashTable.getCell(0, 6).within(() => cy.get('.Select-clear').click({ force: true }));
             DashTable.getCell(0, 6).within(() => cy.get('.Select-placeholder').should('exist'));
 
-            DashTable.getCell(0, 6).within(() => cy.get('.Select-arrow').click()).then(() => {
+            DashTable.getCell(0, 6).within(() => cy.get('.Select-arrow').click({ force: true })).then(() => {
                 DashTable.getCell(0, 6).within(() => {
                     cy.get('.Select-option').then($options => {
                         const target = $options[0];
