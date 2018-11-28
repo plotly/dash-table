@@ -1,0 +1,7 @@
+{
+  "extends": "./../../../.eslintrc",
+  "globals": {
+    "Cypress": true,
+    "cy": true
+  },
+}

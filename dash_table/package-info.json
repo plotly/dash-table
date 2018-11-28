@@ -1,6 +1,6 @@
 {
   "name": "dash-table",
-  "version": "3.1.8-rc1",
+  "version": "3.1.8-rc2",
   "description": "Dash table",
   "main": "dash_table/bundle.js",
   "scripts": {
@@ -23,8 +23,8 @@
     "private::wait_dash8082": "wait-on http://localhost:8082",
     "private::wait_dash8083": "wait-on http://localhost:8083",
     "private::wait_js": "wait-on http://localhost:8080",
-    "private::lint.js": "eslint src",
-    "private::lint.ts": "tslint --project . src/**/*.ts",
+    "private::lint.js": "eslint '{src,demo,tests}/**/*.js'",
+    "private::lint.ts": "tslint '{src,demo,tests}/**/*.{ts,tsx}' --exclude '**/@Types/*.*'",
     "private::opentests": "cypress open",
     "private::runtests": "cypress run --browser chrome",
     "build.watch": "webpack-dev-server --content-base dash_table --mode development",
