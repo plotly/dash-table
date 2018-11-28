@@ -8,7 +8,6 @@ Object.values(AppMode).forEach(mode => {
     describe(`navigate, mode=${mode}`, () => {
         beforeEach(() => {
             cy.visit(`http://localhost:8080?mode=${mode}`);
-            DashTable.toggleScroll(false);
         });
 
         it('does not change column width', () => {
