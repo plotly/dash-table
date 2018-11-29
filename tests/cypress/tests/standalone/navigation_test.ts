@@ -181,7 +181,7 @@ Object.values(AppMode).forEach(mode => {
                     const input = $inputs[0] as HTMLInputElement;
                     expect(input.innerHTML).to.equal('def');
                 }));
-            })
+            });
         });
 
         describe('with mouse', () => {

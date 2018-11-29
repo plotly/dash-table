@@ -71,7 +71,6 @@ export default class IsolatedInput extends PureComponent<IProps, IState> {
         this.state.value !== this.props.value &&
         this.props.submit(this.state.value)
 
-
     render() {
         const {
             placeholder,

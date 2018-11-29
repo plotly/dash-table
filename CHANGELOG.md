@@ -2,10 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [3.1.8] - 2018-11-21
+## [3.1.8] - 2018-11-29
 ### Added
 - Virtualization [#234](https://github.com/plotly/dash-table/issues/234)
-
+### Fixed
+- Linting correctly applied to all code [#254](https://github.com/plotly/dash-table/issues/254)
 ### Changed
 - Update dependencies [#251](https://github.com/plotly/dash-table/pull/251)
 
