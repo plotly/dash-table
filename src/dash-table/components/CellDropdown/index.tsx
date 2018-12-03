@@ -54,6 +54,11 @@ export default class CellDropdown extends PureComponent<IProps> {
     }
 
     private setFocus() {
+        const { active } = this.props;
+        if (!active) {
+            return;
+        }
+
         const dropdown = this.refs.dropdown as any;
 
         if (dropdown && document.activeElement !== dropdown) {
@@ -66,11 +71,6 @@ export default class CellDropdown extends PureComponent<IProps> {
     }
 
     private handleOpenDropdown = () => {
-        const { active } = this.props;
-        if (!active) {
-            return;
-        }
-
         const { dropdown }: { [key: string]: any } = this.refs;
 
         dropdownHelper(dropdown.wrapper.querySelector('.Select-menu-outer'));
