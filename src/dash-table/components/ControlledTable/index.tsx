@@ -154,11 +154,12 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
         const { r1c1 } = this.refs as { [key: string]: HTMLElement };
         const contentTd = r1c1.querySelector('tr > td:first-of-type');
-        const contentThs = r1c1.querySelectorAll('tr th:first-of-type');
 
         if (!contentTd) {
             return;
         }
+
+        const contentThs = r1c1.querySelectorAll('tr th:first-of-type');
 
         setState({
             uiCell: {
