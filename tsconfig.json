@@ -19,6 +19,7 @@
         },
         "sourceMap": false,
         "strict": true,
+        "strictNullChecks": false,
         "strictPropertyInitialization": false,
         "target": "esnext",
         "traceResolution": false
