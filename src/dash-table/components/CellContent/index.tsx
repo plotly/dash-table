@@ -11,7 +11,7 @@ import {
     ICellProps,
     ICellPropsWithDefaults,
     ICellState
-} from 'dash-table/components/CellInput/props';
+} from 'dash-table/components/CellContent/props';
 
 import {
     KEY_CODES, isNavKey
@@ -19,7 +19,7 @@ import {
 import { ColumnType } from 'dash-table/components/Table/props';
 import dropdownHelper from 'dash-table/components/dropdownHelper';
 
-export default class CellInput extends PureComponent<ICellProps, ICellState> {
+export default class CellContent extends PureComponent<ICellProps, ICellState> {
 
     public static defaultProps: ICellDefaultProps = {
         conditionalDropdowns: [],

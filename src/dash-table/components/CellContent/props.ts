@@ -3,7 +3,7 @@ import { ChangeEvent } from 'react';
 import {
     IConditionalDropdown,
     IDropdownOptions
-} from 'dash-table/components/CellInput/types';
+} from 'dash-table/components/CellContent/types';
 
 import {
     ColumnId,

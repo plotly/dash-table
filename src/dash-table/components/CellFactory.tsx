@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ICellFactoryProps } from 'dash-table/components/Table/props';
 import derivedCellWrappers from 'dash-table/derived/cell/wrappers';
-import derivedCellInputs from 'dash-table/derived/cell/inputs';
+import derivedCellContents from 'dash-table/derived/cell/contents';
 import derivedCellOperations from 'dash-table/derived/cell/operations';
 import derivedCellStyles from 'dash-table/derived/cell/wrapperStyles';
 import derivedDropdowns from 'dash-table/derived/cell/dropdowns';
@@ -12,7 +12,7 @@ import { matrixMap3 } from 'core/math/matrixZipMap';
 import { arrayMap } from 'core/math/arrayZipMap';
 
 export default class CellFactory {
-    private readonly cellInputs = derivedCellInputs();
+    private readonly cellContents = derivedCellContents();
     private readonly cellOperations = derivedCellOperations();
     private readonly cellDropdowns = derivedDropdowns();
 
@@ -92,7 +92,7 @@ export default class CellFactory {
             dropdown_properties
         );
 
-        const inputs = this.cellInputs(
+        const inputs = this.cellContents(
             active_cell,
             columns,
             virtualized.data,
