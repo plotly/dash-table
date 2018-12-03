@@ -92,14 +92,13 @@ export default class CellFactory {
             dropdown_properties
         );
 
-        const inputs = this.cellContents(
+        const contents = this.cellContents(
             active_cell,
             columns,
             virtualized.data,
             virtualized.offset,
             editable,
             !!is_focused,
-            id,
             dropdowns,
             this.propsFn
         );
@@ -107,8 +106,8 @@ export default class CellFactory {
         const cells = matrixMap3(
             wrappers,
             wrapperStyles,
-            inputs,
-            (w, s, i) => React.cloneElement(w, { children: [i], style: s })
+            contents,
+            (w, s, c) => React.cloneElement(w, { children: [c], style: s })
         );
 
         return arrayMap(

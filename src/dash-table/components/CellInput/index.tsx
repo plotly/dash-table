@@ -1,26 +1,33 @@
 import React, {
-    PureComponent,
-    KeyboardEvent
+    ChangeEvent,
+    ClipboardEvent,
+    KeyboardEvent,
+    MouseEvent,
+    PureComponent
 } from 'react';
-
-import {
-    ICellDefaultProps,
-    ICellProps,
-    ICellPropsWithDefaults,
-    ICellState
-} from 'dash-table/components/CellContent/props';
 
 import {
     KEY_CODES, isNavKey
 } from 'dash-table/utils/unicode';
-import { ColumnType } from 'dash-table/components/Table/props';
 
-export default class CellContent extends PureComponent<ICellProps, ICellState> {
+interface ICellProps {
+    active: boolean;
+    className: string;
+    focused: boolean;
+    onChange: (e: ChangeEvent) => void;
+    onClick: (e: MouseEvent) => void;
+    onDoubleClick: (e: MouseEvent) => void;
+    onMouseUp: (e: MouseEvent) => void;
+    onPaste: (e: ClipboardEvent<Element>) => void;
+    type?: string;
+    value: any;
+}
 
-    public static defaultProps: ICellDefaultProps = {
-        conditionalDropdowns: [],
-        type: ColumnType.Text
-    };
+interface ICellState {
+    value: any;
+}
+
+export default class CellInput extends PureComponent<ICellProps, ICellState> {
 
     constructor(props: ICellProps) {
         super(props);
@@ -30,33 +37,15 @@ export default class CellContent extends PureComponent<ICellProps, ICellState> {
         };
     }
 
-    private get propsWithDefaults(): ICellPropsWithDefaults {
-        return this.props as ICellPropsWithDefaults;
-    }
-
-    private renderInput() {
+    render() {
         const {
-            active,
-            focused,
+            className,
             onClick,
             onDoubleClick,
             onMouseUp,
             onPaste,
             value
-        } = this.propsWithDefaults;
-
-        const classes = [
-            ...(active ? ['input-active'] : []),
-            ...(focused ? ['focused'] : ['unfocused']),
-            ...['dash-cell-value']
-        ];
-
-        const attributes = {
-            className: classes.join(' '),
-            onClick: onClick,
-            onDoubleClick: onDoubleClick,
-            onMouseUp: onMouseUp
-        };
+        } = this.props;
 
         return (<div className='dash-input-cell-value-container dash-cell-value-container'>
             <div className='input-cell-value-shadow cell-value-shadow'>
@@ -65,26 +54,17 @@ export default class CellContent extends PureComponent<ICellProps, ICellState> {
             <input
                 ref='textInput'
                 type='text'
-                value={this.state.value}
+                className={className}
                 onBlur={this.propagateChange}
                 onChange={this.handleChange}
+                onClick={onClick}
+                onDoubleClick={onDoubleClick}
                 onKeyDown={this.handleKeyDown}
+                onMouseUp={onMouseUp}
                 onPaste={onPaste}
-                {...attributes}
+                value={this.state.value}
             />
         </div>);
-    }
-
-    render() {
-        const { type } = this.props;
-
-        switch (type) {
-            case ColumnType.Text:
-            case ColumnType.Numeric:
-                return this.renderInput();
-            default:
-                throw new Error(`unknown type ${type}`);
-        }
     }
 
     propagateChange = () => {
@@ -117,7 +97,7 @@ export default class CellContent extends PureComponent<ICellProps, ICellState> {
         this.propagateChange();
     }
 
-    componentWillReceiveProps(nextProps: ICellPropsWithDefaults) {
+    componentWillReceiveProps(nextProps: ICellProps) {
         const { value: nextValue } = nextProps;
 
         if (this.state.value !== nextValue) {
@@ -136,7 +116,7 @@ export default class CellContent extends PureComponent<ICellProps, ICellState> {
     }
 
     private setFocus() {
-        const { active } = this.propsWithDefaults;
+        const { active } = this.props;
         if (!active) {
             return;
         }

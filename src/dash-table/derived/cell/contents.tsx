@@ -13,7 +13,7 @@ import {
     IViewportOffset,
     ColumnType
 } from 'dash-table/components/Table/props';
-import CellContent from 'dash-table/components/CellContent';
+import CellInput from 'dash-table/components/CellInput';
 import derivedCellEventHandlerProps from 'dash-table/derived/cell/eventHandlerProps';
 import isActiveCell from 'dash-table/derived/cell/isActive';
 import isCellEditable from './isEditable';
@@ -25,7 +25,13 @@ const mapRow = R.addIndex<IVisibleColumn, JSX.Element>(R.map);
 
 const cellEventHandlerProps = derivedCellEventHandlerProps();
 
-function isCellLabel(
+enum CellType {
+    Dropdown,
+    Input,
+    Label
+}
+
+function getCellType(
     active: boolean,
     editable: boolean,
     dropdown: any,
@@ -34,16 +40,12 @@ function isCellLabel(
     switch (type) {
         case ColumnType.Text:
         case ColumnType.Numeric:
-            return !active || !editable;
+            return (!active || !editable) ? CellType.Label : CellType.Input;
         case ColumnType.Dropdown:
-            return !dropdown || !editable;
+            return (!dropdown || !editable) ? CellType.Label : CellType.Dropdown;
         default:
-            return true;
+            return CellType.Label;
     }
-}
-
-function isCellInput(type: ColumnType = ColumnType.Text) {
-    return type === ColumnType.Text || type === ColumnType.Numeric;
 }
 
 const getter = (
@@ -53,7 +55,6 @@ const getter = (
     offset: IViewportOffset,
     editable: boolean,
     isFocused: boolean,
-    tableId: string,
     dropdowns: any[][],
     propsFn: () => ICellFactoryProps
 ): JSX.Element[][] => mapData(
@@ -65,36 +66,16 @@ const getter = (
             const handlers = cellEventHandlerProps(propsFn)(rowIndex, columnIndex);
 
             const isEditable = isCellEditable(editable, column.editable);
-            const isLabel = isCellLabel(active, isEditable, dropdown, column.type);
 
-            return isLabel ?
-                (<CellLabel
-                    className={[
-                        ...(active ? ['input-active'] : []),
-                        ...(isFocused ? ['focused'] : ['unfocused']),
-                        ...['dash-cell-value']
-                    ].join(' ')}
-                    key={`column-${columnIndex}`}
-                    onClick={handlers.onClick}
-                    onDoubleClick={handlers.onDoubleClick}
-                    value={datum[column.id]}
-                />) :
-                isCellInput(column.type) ?
-                    (<CellContent
-                        key={`column-${columnIndex}`}
-                        active={active}
-                        clearable={column.clearable}
-                        datum={datum}
-                        dropdown={dropdown}
-                        editable={isEditable}
-                        focused={isFocused}
-                        property={column.id}
-                        tableId={tableId}
-                        type={column.type}
-                        value={datum[column.id]}
-                        {...handlers}
-                    />) :
-                    (<CellDropdown
+            const className = [
+                ...(active ? ['input-active'] : []),
+                ...(isFocused ? ['focused'] : ['unfocused']),
+                ...['dash-cell-value']
+            ].join(' ');
+
+            switch (getCellType(active, isEditable, dropdown, column.type)) {
+                case CellType.Dropdown:
+                    return (<CellDropdown
                         key={`column-${columnIndex}`}
                         active={active}
                         clearable={column.clearable}
@@ -102,6 +83,30 @@ const getter = (
                         onChange={handlers.onChange}
                         value={datum[column.id]}
                     />);
+                case CellType.Input:
+                    return (<CellInput
+                        key={`column-${columnIndex}`}
+                        active={active}
+                        className={className}
+                        focused={isFocused}
+                        onChange={handlers.onChange}
+                        onClick={handlers.onClick}
+                        onDoubleClick={handlers.onDoubleClick}
+                        onMouseUp={handlers.onMouseUp}
+                        onPaste={handlers.onPaste}
+                        type={column.type}
+                        value={datum[column.id]}
+                    />);
+                case CellType.Label:
+                default:
+                    return (<CellLabel
+                        className={className}
+                        key={`column-${columnIndex}`}
+                        onClick={handlers.onClick}
+                        onDoubleClick={handlers.onDoubleClick}
+                        value={datum[column.id]}
+                    />);
+            }
         },
         columns
     ),

@@ -8,7 +8,7 @@ import DOM from 'core/browser/DOM';
 
 import dropdownHelper from 'dash-table/components/dropdownHelper';
 
-import { IDropdownOptions } from '../CellContent/types';
+import { IDropdownOptions } from './types';
 
 interface IProps {
     active: boolean;
