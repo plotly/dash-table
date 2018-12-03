@@ -22,7 +22,7 @@ export interface ICellProps extends ICellHandlerProps {
     active: boolean;
     clearable?: boolean;
     datum: any;
-    dropdown: IDropdownOptions | undefined;
+    dropdown: IDropdownOptions;
     editable: boolean;
     focused: boolean;
     property: ColumnId;

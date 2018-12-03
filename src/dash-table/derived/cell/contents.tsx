@@ -24,13 +24,18 @@ const mapRow = R.addIndex<IVisibleColumn, JSX.Element>(R.map);
 
 const cellEventHandlerProps = derivedCellEventHandlerProps();
 
-function isCellLabel(type: ColumnType | undefined, _active: boolean, _editable: boolean, _dropdown: any) {
+function isCellLabel(
+    active: boolean,
+    editable: boolean,
+    dropdown: any,
+    type: ColumnType = ColumnType.Text,
+) {
     switch (type) {
         case ColumnType.Text:
         case ColumnType.Numeric:
-            return false;
+            return !active && !editable;
         case ColumnType.Dropdown:
-            return false;
+            return !dropdown && !editable;
         default:
             return true;
     }
@@ -55,7 +60,7 @@ const getter = (
             const handlers = cellEventHandlerProps(propsFn)(rowIndex, columnIndex);
 
             const isEditable = isCellEditable(editable, column.editable);
-            const isLabel = isCellLabel(column.type, active, isEditable, dropdown);
+            const isLabel = isCellLabel(active, isEditable, dropdown, column.type);
 
             return isLabel ?
                 (<CellLabel

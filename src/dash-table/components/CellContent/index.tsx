@@ -40,61 +40,39 @@ export default class CellContent extends PureComponent<ICellProps, ICellState> {
 
     private renderDropdown() {
         const {
-            active,
             clearable,
             dropdown,
-            editable,
-            focused,
             onChange,
-            onClick,
-            onDoubleClick,
             value
         } = this.propsWithDefaults;
 
-        const classes = [
-            ...(active ? ['input-active'] : []),
-            ...(focused ? ['focused'] : ['unfocused']),
-            ...['dash-cell-value']
-        ];
-
-        const attributes = {
-            className: classes.join(' '),
-            onClick: onClick,
-            onDoubleClick: onDoubleClick
-        };
-
-        const readonly = !editable;
-
-        return !dropdown || readonly ?
-            this.renderValue(attributes) :
-            (<div className='dash-dropdown-cell-value-container dash-cell-value-container'>
-                {this.renderValue(
-                    { className: 'dropdown-cell-value-shadow cell-value-shadow' },
-                    (dropdown.find(entry => entry.value === value) || { label: undefined }).label
-                )}
-                <Dropdown
-                    ref='dropdown'
-                    clearable={clearable}
-                    onChange={(newValue: any) => {
-                        onChange(newValue ? newValue.value : newValue);
-                    }}
-                    onOpen={this.handleOpenDropdown}
-                    options={dropdown}
-                    placeholder={''}
-                    value={value}
-                />
-            </div>);
+        return (<div className='dash-dropdown-cell-value-container dash-cell-value-container'>
+            <div className='dropdown-cell-value-shadow cell-value-shadow'>
+                {(dropdown.find(entry => entry.value === value) || { label: undefined }).label}
+            </div>
+            <Dropdown
+                ref='dropdown'
+                clearable={clearable}
+                onChange={(newValue: any) => {
+                    onChange(newValue ? newValue.value : newValue);
+                }}
+                onOpen={this.handleOpenDropdown}
+                options={dropdown}
+                placeholder={''}
+                value={value}
+            />
+        </div>);
     }
 
     private renderInput() {
         const {
             active,
-            editable,
             focused,
             onClick,
             onDoubleClick,
             onMouseUp,
-            onPaste
+            onPaste,
+            value
         } = this.propsWithDefaults;
 
         const classes = [
@@ -110,32 +88,20 @@ export default class CellContent extends PureComponent<ICellProps, ICellState> {
             onMouseUp: onMouseUp
         };
 
-        const readonly = (!active && this.state.value === this.props.value) || !editable;
-
-        return readonly ?
-            this.renderValue(attributes) :
-            (<div className='dash-input-cell-value-container dash-cell-value-container'>
-                {this.renderValue({ className: 'input-cell-value-shadow cell-value-shadow' })}
-                <input
-                    ref='textInput'
-                    type='text'
-                    value={this.state.value}
-                    onBlur={this.propagateChange}
-                    onChange={this.handleChange}
-                    onKeyDown={this.handleKeyDown}
-                    onPaste={onPaste}
-                    {...attributes}
-                />
-            </div>);
-    }
-
-    private renderValue(attributes = {}, value?: string) {
-        value = value || this.propsWithDefaults.value;
-
-        return (<div
-            {...attributes}
-        >
-            {value}
+        return (<div className='dash-input-cell-value-container dash-cell-value-container'>
+            <div className='input-cell-value-shadow cell-value-shadow'>
+                {value}
+            </div>
+            <input
+                ref='textInput'
+                type='text'
+                value={this.state.value}
+                onBlur={this.propagateChange}
+                onChange={this.handleChange}
+                onKeyDown={this.handleKeyDown}
+                onPaste={onPaste}
+                {...attributes}
+            />
         </div>);
     }
 
