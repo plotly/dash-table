@@ -9,6 +9,7 @@
         },
         "types": [
             "cypress"
-        ]
+        ],
+        "noImplicitAny": false
     }
 }
