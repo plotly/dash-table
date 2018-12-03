@@ -149,7 +149,7 @@ export default class CellContent extends PureComponent<ICellProps, ICellState> {
             case ColumnType.Dropdown:
                 return this.renderDropdown();
             default:
-                return this.renderValue();
+                throw new Error(`unknown type ${type}`);
         }
     }
 
