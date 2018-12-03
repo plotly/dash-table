@@ -28,7 +28,7 @@ function isCellLabel(
     active: boolean,
     editable: boolean,
     dropdown: any,
-    type: ColumnType = ColumnType.Text,
+    type: ColumnType = ColumnType.Text
 ) {
     switch (type) {
         case ColumnType.Text:
