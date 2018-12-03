@@ -169,6 +169,14 @@ export default class CellContent extends PureComponent<ICellProps, ICellState> {
     }
 
     componentDidUpdate() {
+        this.setFocus();
+    }
+
+    componentDidMount() {
+        this.setFocus();
+    }
+
+    private setFocus() {
         const { active } = this.propsWithDefaults;
         if (!active) {
             return;
