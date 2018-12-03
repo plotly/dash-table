@@ -2,9 +2,6 @@ import React, {
     PureComponent,
     KeyboardEvent
 } from 'react';
-import Dropdown from 'react-select';
-
-import DOM from 'core/browser/DOM';
 
 import {
     ICellDefaultProps,
@@ -17,7 +14,6 @@ import {
     KEY_CODES, isNavKey
 } from 'dash-table/utils/unicode';
 import { ColumnType } from 'dash-table/components/Table/props';
-import dropdownHelper from 'dash-table/components/dropdownHelper';
 
 export default class CellContent extends PureComponent<ICellProps, ICellState> {
 
@@ -36,32 +32,6 @@ export default class CellContent extends PureComponent<ICellProps, ICellState> {
 
     private get propsWithDefaults(): ICellPropsWithDefaults {
         return this.props as ICellPropsWithDefaults;
-    }
-
-    private renderDropdown() {
-        const {
-            clearable,
-            dropdown,
-            onChange,
-            value
-        } = this.propsWithDefaults;
-
-        return (<div className='dash-dropdown-cell-value-container dash-cell-value-container'>
-            <div className='dropdown-cell-value-shadow cell-value-shadow'>
-                {(dropdown.find(entry => entry.value === value) || { label: undefined }).label}
-            </div>
-            <Dropdown
-                ref='dropdown'
-                clearable={clearable}
-                onChange={(newValue: any) => {
-                    onChange(newValue ? newValue.value : newValue);
-                }}
-                onOpen={this.handleOpenDropdown}
-                options={dropdown}
-                placeholder={''}
-                value={value}
-            />
-        </div>);
     }
 
     private renderInput() {
@@ -112,8 +82,6 @@ export default class CellContent extends PureComponent<ICellProps, ICellState> {
             case ColumnType.Text:
             case ColumnType.Numeric:
                 return this.renderInput();
-            case ColumnType.Dropdown:
-                return this.renderDropdown();
             default:
                 throw new Error(`unknown type ${type}`);
         }
@@ -149,15 +117,6 @@ export default class CellContent extends PureComponent<ICellProps, ICellState> {
         this.propagateChange();
     }
 
-    handleOpenDropdown = () => {
-        const { dropdown, td }: { [key: string]: any } = this.refs;
-
-        dropdownHelper(
-            dropdown.wrapper.querySelector('.Select-menu-outer'),
-            td
-        );
-    }
-
     componentWillReceiveProps(nextProps: ICellPropsWithDefaults) {
         const { value: nextValue } = nextProps;
 
@@ -183,19 +142,10 @@ export default class CellContent extends PureComponent<ICellProps, ICellState> {
         }
 
         const input = this.refs.textInput as HTMLInputElement;
-        const dropdown = this.refs.dropdown as any;
 
         if (input && document.activeElement !== input) {
             input.focus();
             input.setSelectionRange(0, input.value ? input.value.length : 0);
-        }
-
-        if (dropdown && document.activeElement !== dropdown) {
-            // Limitation. If React >= 16 --> Use React.createRef instead to pass parent ref to child
-            const tdParent = DOM.getFirstParentOfType(dropdown.wrapper, 'td');
-            if (tdParent) {
-                tdParent.focus();
-            }
         }
     }
 }

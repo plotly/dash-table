@@ -18,6 +18,7 @@ import derivedCellEventHandlerProps from 'dash-table/derived/cell/eventHandlerPr
 import isActiveCell from 'dash-table/derived/cell/isActive';
 import isCellEditable from './isEditable';
 import CellLabel from 'dash-table/components/CellLabel';
+import CellDropdown from 'dash-table/components/CellDropdown';
 
 const mapData = R.addIndex<Datum, JSX.Element[]>(R.map);
 const mapRow = R.addIndex<IVisibleColumn, JSX.Element>(R.map);
@@ -33,12 +34,16 @@ function isCellLabel(
     switch (type) {
         case ColumnType.Text:
         case ColumnType.Numeric:
-            return !active && !editable;
+            return !active || !editable;
         case ColumnType.Dropdown:
-            return !dropdown && !editable;
+            return !dropdown || !editable;
         default:
             return true;
     }
+}
+
+function isCellInput(type: ColumnType = ColumnType.Text) {
+    return type === ColumnType.Text || type === ColumnType.Numeric;
 }
 
 const getter = (
@@ -74,20 +79,28 @@ const getter = (
                     onDoubleClick={handlers.onDoubleClick}
                     value={datum[column.id]}
                 />) :
-                (<CellContent
-                    key={`column-${columnIndex}`}
-                    active={active}
-                    clearable={column.clearable}
-                    datum={datum}
-                    dropdown={dropdown}
-                    editable={isEditable}
-                    focused={isFocused}
-                    property={column.id}
-                    tableId={tableId}
-                    type={column.type}
-                    value={datum[column.id]}
-                    {...handlers}
-                />);
+                (isCellInput ?
+                    (<CellContent
+                        key={`column-${columnIndex}`}
+                        active={active}
+                        clearable={column.clearable}
+                        datum={datum}
+                        dropdown={dropdown}
+                        editable={isEditable}
+                        focused={isFocused}
+                        property={column.id}
+                        tableId={tableId}
+                        type={column.type}
+                        value={datum[column.id]}
+                        {...handlers}
+                    />) :
+                    (<CellDropdown
+                        key={`column-${columnIndex}`}
+                        clearable={column.clearable}
+                        dropdown={dropdown}
+                        onChange={handlers.onChange}
+                        value={datum[column.id]}
+                    />));
         },
         columns
     ),
