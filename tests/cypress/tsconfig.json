@@ -1,6 +1,7 @@
 {
     "extends": "./../../tsconfig.base.json",
     "compilerOptions": {
+        "baseUrl": "./../..",
         "paths": {
             "cypress/*": ["./src/*"],
             "core/*": ["./../../src/core/*"],
