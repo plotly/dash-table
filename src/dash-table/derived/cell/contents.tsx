@@ -96,6 +96,7 @@ const getter = (
                     />) :
                     (<CellDropdown
                         key={`column-${columnIndex}`}
+                        active={active}
                         clearable={column.clearable}
                         dropdown={dropdown}
                         onChange={handlers.onChange}

@@ -11,6 +11,7 @@ import dropdownHelper from 'dash-table/components/dropdownHelper';
 import { IDropdownOptions } from '../CellContent/types';
 
 interface IProps {
+    active: boolean;
     clearable?: boolean;
     dropdown: IDropdownOptions;
     onChange: (e: ChangeEvent) => void;
@@ -65,11 +66,13 @@ export default class CellDropdown extends PureComponent<IProps> {
     }
 
     private handleOpenDropdown = () => {
-        const { dropdown, td }: { [key: string]: any } = this.refs;
+        const { active } = this.props;
+        if (!active) {
+            return;
+        }
 
-        dropdownHelper(
-            dropdown.wrapper.querySelector('.Select-menu-outer'),
-            td
-        );
+        const { dropdown }: { [key: string]: any } = this.refs;
+
+        dropdownHelper(dropdown.wrapper.querySelector('.Select-menu-outer'));
     }
 }
