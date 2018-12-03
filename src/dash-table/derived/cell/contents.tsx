@@ -79,7 +79,7 @@ const getter = (
                     onDoubleClick={handlers.onDoubleClick}
                     value={datum[column.id]}
                 />) :
-                (isCellInput ?
+                isCellInput(column.type) ?
                     (<CellContent
                         key={`column-${columnIndex}`}
                         active={active}
@@ -100,7 +100,7 @@ const getter = (
                         dropdown={dropdown}
                         onChange={handlers.onChange}
                         value={datum[column.id]}
-                    />));
+                    />);
         },
         columns
     ),
