@@ -6,13 +6,16 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Refactoring in preparation for data types
 
-## [3.1.8] - 2018-11-29
+## [3.1.8] - 2018-12-04
 ### Added
 - Virtualization [#234](https://github.com/plotly/dash-table/issues/234)
 ### Fixed
 - Linting correctly applied to all code [#254](https://github.com/plotly/dash-table/issues/254)
 ### Changed
+- Update dependencies [#278](https://github.com/plotly/dash-table/pull/278)
+- Update dependencies [#274](https://github.com/plotly/dash-table/pull/274)
 - Update dependencies [#251](https://github.com/plotly/dash-table/pull/251)
+
 
 ## [3.1.7] - 2018-11-19
 ### Fixed
