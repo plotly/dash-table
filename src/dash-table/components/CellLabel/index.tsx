@@ -5,8 +5,8 @@ import React, {
 
 interface IProps {
     className: string;
-    onClick?: (e: MouseEvent) => void;
-    onDoubleClick?: (e: MouseEvent) => void;
+    onClick: (e: MouseEvent) => void;
+    onDoubleClick: (e: MouseEvent) => void;
     value: any;
 }
 
