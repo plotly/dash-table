@@ -6,6 +6,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Source map [#284](https://github.com/plotly/dash-table/issues/284)
     Related Dash issue [#480](https://github.com/plotly/dash/issues/480)
+### Changed
+- Refactoring in preparation for data types [#280](https://github.com/plotly/dash-table/issues/280)
 
 ## [3.1.8] - 2018-12-04
 ### Added
@@ -16,6 +18,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Update dependencies [#278](https://github.com/plotly/dash-table/pull/278)
 - Update dependencies [#274](https://github.com/plotly/dash-table/pull/274)
 - Update dependencies [#251](https://github.com/plotly/dash-table/pull/251)
+
 
 ## [3.1.7] - 2018-11-19
 ### Fixed
