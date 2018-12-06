@@ -17,15 +17,15 @@ import SyntaxTree from 'core/syntax-tree';
 import memoizerCache from 'core/memoizerCache';
 import { IConditionalDropdown } from 'dash-table/components/CellDropdown/types';
 
-const mapData = R.addIndex<Datum, DropdownValues[]>(R.map);
+const mapData = R.addIndex<Datum, (DropdownValues | undefined)[]>(R.map);
 
 const getDropdown = (
     astCache: (key: [ColumnId, number], query: string) => SyntaxTree,
     conditionalDropdowns: IConditionalDropdown[],
     datum: Datum,
     property: ColumnId,
-    staticDropdown: DropdownValues
-): DropdownValues => {
+    staticDropdown: DropdownValues | undefined
+): DropdownValues | undefined => {
     const dropdowns = [
         ...(staticDropdown ? [staticDropdown] : []),
         ...R.map(
@@ -50,7 +50,7 @@ const getter = (
     columnConditionalDropdown: IConditionalColumnDropdown[],
     columnStaticDropdown: IColumnDropdown[],
     dropdown_properties: IDropdownProperties
-): DropdownValues[][] => mapData((datum, rowIndex) => R.map(column => {
+): (DropdownValues | undefined)[][] => mapData((datum, rowIndex) => R.map(column => {
     const realIndex = indices[rowIndex];
 
     let legacyDropdown = (
@@ -83,7 +83,7 @@ const decoratedGetter = (_id: string): ((
     columnConditionalDropdown: any,
     columnStaticDropdown: any,
     dropdown_properties: any
-) => DropdownValues[][]) => {
+) => (DropdownValues | undefined)[][]) => {
     const astCache = memoizerCache<[ColumnId, number], [string], SyntaxTree>(
         (query: string) => new SyntaxTree(query)
     );

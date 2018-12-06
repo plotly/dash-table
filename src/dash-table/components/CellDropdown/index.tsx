@@ -13,7 +13,7 @@ import { DropdownValues } from '../Table/props';
 interface IProps {
     active: boolean;
     clearable?: boolean;
-    dropdown: DropdownValues;
+    dropdown?: DropdownValues;
     onChange: (e: ChangeEvent) => void;
     value: any;
 }
@@ -29,7 +29,7 @@ export default class CellDropdown extends PureComponent<IProps> {
 
         return (<div className='dash-dropdown-cell-value-container dash-cell-value-container'>
             <div className='dropdown-cell-value-shadow cell-value-shadow'>
-                {(dropdown.find(entry => entry.value === value) || { label: undefined }).label}
+                {(dropdown && dropdown.find(entry => entry.value === value) || { label: undefined }).label}
             </div>
             <Dropdown
                 ref='dropdown'

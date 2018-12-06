@@ -35,7 +35,7 @@ enum CellType {
 function getCellType(
     active: boolean,
     editable: boolean,
-    dropdown: DropdownValues,
+    dropdown: DropdownValues | undefined,
     type: ColumnType = ColumnType.Text
 ) {
     switch (type) {
@@ -56,7 +56,7 @@ const getter = (
     offset: IViewportOffset,
     editable: boolean,
     isFocused: boolean,
-    dropdowns: DropdownValues[][],
+    dropdowns: (DropdownValues | undefined)[][],
     propsFn: () => ICellFactoryProps
 ): JSX.Element[][] => mapData(
     (datum, rowIndex) => mapRow(
