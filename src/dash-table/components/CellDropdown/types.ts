@@ -1,11 +1,6 @@
-export interface IDropdownOption {
-    label: string;
-    value: string;
-}
-
-export type IDropdownOptions = IDropdownOption[];
+import { DropdownValues } from '../Table/props';
 
 export interface IConditionalDropdown {
     condition: string;
-    dropdown: IDropdownOptions;
+    dropdown: DropdownValues;
 }

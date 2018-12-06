@@ -8,12 +8,12 @@ import DOM from 'core/browser/DOM';
 
 import dropdownHelper from 'dash-table/components/dropdownHelper';
 
-import { IDropdownOptions } from './types';
+import { DropdownValues } from '../Table/props';
 
 interface IProps {
     active: boolean;
     clearable?: boolean;
-    dropdown: IDropdownOptions;
+    dropdown: DropdownValues;
     onChange: (e: ChangeEvent) => void;
     value: any;
 }

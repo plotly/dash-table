@@ -11,7 +11,8 @@ import {
     VisibleColumns,
     ICellFactoryProps,
     IViewportOffset,
-    ColumnType
+    ColumnType,
+    DropdownValues
 } from 'dash-table/components/Table/props';
 import CellInput from 'dash-table/components/CellInput';
 import derivedCellEventHandlerProps from 'dash-table/derived/cell/eventHandlerProps';
@@ -34,7 +35,7 @@ enum CellType {
 function getCellType(
     active: boolean,
     editable: boolean,
-    dropdown: any,
+    dropdown: DropdownValues,
     type: ColumnType = ColumnType.Text
 ) {
     switch (type) {
@@ -55,7 +56,7 @@ const getter = (
     offset: IViewportOffset,
     editable: boolean,
     isFocused: boolean,
-    dropdowns: any[][],
+    dropdowns: DropdownValues[][],
     propsFn: () => ICellFactoryProps
 ): JSX.Element[][] => mapData(
     (datum, rowIndex) => mapRow(
