@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.1.10] - 2018-12-10
+### Fixed
+- Selection, navigation, copy from readonly cell [#276](https://github.com/plotly/dash-table/issues/276)
+
 ## [3.1.9] - 2018-12-06
 ### Added
 - Source map [#284](https://github.com/plotly/dash-table/issues/284)
