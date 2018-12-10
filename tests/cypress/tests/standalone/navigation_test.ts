@@ -28,7 +28,6 @@ Object.values(AppMode).forEach(mode => {
                 DashTable.getCell(3, 1).click();
             });
 
-
             it('can navigate 9-10 selected cells', () => {
                 DashTable.getCell(9, 1).click();
                 DOM.focused.type(Key.Shift, { release: false });
