@@ -29,6 +29,27 @@ Object.values(ReadWriteModes).forEach(mode => {
                     });
                 });
             });
+
+            describe('paste', () => {
+                let copiedValue;
+
+                beforeEach(() => {
+                    DashTable.getCellById(0, 'rows').within(
+                        () => cy.get('.dash-cell-value').then($cells => copiedValue = $cells[0].innerHTML)
+                    );
+
+                    DashTable.getCellById(0, 'rows').click();
+                    DOM.focused.type(`${Key.Meta}c`);
+                });
+
+                it('does nothing', () => {
+                    DashTable.getCellById(0, 'bbb-readonly').click();
+                    DOM.focused.type(`${Key.Meta}v`);
+                    DashTable.getCellById(0, 'bbb-readonly').within(
+                        () => cy.get('.dash-cell-value').should('not.have.html', copiedValue)
+                    );
+                });
+            });
         });
 
         it('can delete dropdown', () => {
