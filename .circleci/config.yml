@@ -164,7 +164,7 @@ jobs:
 
         environment:
             PERCY_ENABLED: True
-            PERCY_PROJECT: plotly/dash-table-python
+            PERCY_PROJECT: plotly/dash-table-python-v0
 
         steps:
             - checkout
@@ -199,7 +199,7 @@ jobs:
 
         environment:
             PERCY_ENABLED: True
-            PERCY_PROJECT: plotly/dash-table-python
+            PERCY_PROJECT: plotly/dash-table-python-v1
 
         steps:
             - checkout
