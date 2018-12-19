@@ -232,7 +232,9 @@ workflows:
     version: 2
     build:
         jobs:
-            - "python-3.6"
+            - "python-3.6-v0"
+            - "python-3.6-v1"
             - "node"
-            - "test"
+            - "test-v0"
+            - "test-v1"
             - "visual-test"
