@@ -13,7 +13,8 @@ from .utils import section_title
 ID_PREFIX = "app_dropdown"
 IDS = {
     "dropdown": ID_PREFIX,
-    "dropdown-by-cell": '{}-row-by-cell'.format(ID_PREFIX)
+    "dropdown-by-cell": '{}-row-by-cell'.format(ID_PREFIX),
+    "dropdown-by-cell-deprecated": '{}-row-by-cell'.format(ID_PREFIX)
 }
 
 
