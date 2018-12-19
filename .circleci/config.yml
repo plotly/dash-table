@@ -172,7 +172,7 @@ jobs:
             - run:
                 name: Inject Percy Environment variables
                 command: |
-                  echo 'export PERCY_TOKEN="$PERCY_PYTHON_TOKEN"' >> $BASH_ENV
+                  echo 'export PERCY_TOKEN="$PERCY_PYTHON_TOKEN_V0"' >> $BASH_ENV
 
             - run:
                 name: Create virtualenv
@@ -207,7 +207,7 @@ jobs:
             - run:
                 name: Inject Percy Environment variables
                 command: |
-                  echo 'export PERCY_TOKEN="$PERCY_PYTHON_TOKEN"' >> $BASH_ENV
+                  echo 'export PERCY_TOKEN="$PERCY_PYTHON_TOKEN_V1"' >> $BASH_ENV
 
             - run:
                 name: Create virtualenv
