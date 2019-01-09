@@ -50,7 +50,7 @@ jobs:
                 name: Run tests
                 command: |
                     . venv/bin/activate
-                    npm run test-v0
+                    TOOL_NODE_FLAGS="--max_old_space_size=4096" npm run test-v0
 
 
     "test-v1":
@@ -102,7 +102,7 @@ jobs:
                 name: Run tests
                 command: |
                     . venv/bin/activate
-                    npm run test-v1
+                    TOOL_NODE_FLAGS="--max_old_space_size=4096" npm run test-v1
 
 
     "visual-test":
