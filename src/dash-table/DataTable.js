@@ -153,6 +153,20 @@ export const propTypes = {
         ]),
 
         /**
+         * If True, the cells for this column will be dropdowns.
+         * If False, the cells for this column will not be dropdowns.
+         * If 'maybe', the cells for this column will be dropdowns if a dropdown is found on a row-by-row basis
+         * (matching dropdown_properties, column options, column_static_dropdown, column_conditional_dropdowns).
+         *
+         * Defaults to 'maybe' is undefined.
+         */
+        enumeration: PropTypes.oneOf([
+            false,
+            true,
+            'maybe'
+        ]),
+
+        /**
          * If True, then the column and its data is hidden.
          * This can be useful if you want to transport extra
          * meta data (like a data index) to and from callbacks

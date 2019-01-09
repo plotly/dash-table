@@ -12,7 +12,8 @@ import {
     ICellFactoryProps,
     IViewportOffset,
     ColumnType,
-    DropdownValues
+    DropdownValues,
+    Enumeration
 } from 'dash-table/components/Table/props';
 import CellInput from 'dash-table/components/CellInput';
 import derivedCellEventHandlerProps from 'dash-table/derived/cell/eventHandlerProps';
@@ -36,16 +37,16 @@ function getCellType(
     active: boolean,
     editable: boolean,
     dropdown: DropdownValues | undefined,
-    type: ColumnType = ColumnType.Text
-) {
-    switch (type) {
-        case ColumnType.Text:
-        case ColumnType.Numeric:
-            return (!active || !editable) ? CellType.Label : CellType.Input;
-        case ColumnType.Dropdown:
+    enumeration: Enumeration = 'maybe',
+    type: ColumnType = ColumnType.String
+): CellType {
+    switch (enumeration) {
+        case true:
             return (!dropdown || !editable) ? CellType.Label : CellType.Dropdown;
-        default:
-            return CellType.Label;
+        case false:
+            return (!active || !editable) ? CellType.Label : CellType.Input;
+        case 'maybe':
+            return getCellType(active, editable, dropdown, Boolean(dropdown), type);
     }
 }
 
@@ -74,7 +75,7 @@ const getter = (
                 ...['dash-cell-value']
             ].join(' ');
 
-            switch (getCellType(active, isEditable, dropdown, column.type)) {
+            switch (getCellType(active, isEditable, dropdown, column.enumeration, column.type)) {
                 case CellType.Dropdown:
                     return (<CellDropdown
                         key={`column-${columnIndex}`}

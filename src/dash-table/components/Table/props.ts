@@ -10,9 +10,10 @@ import {
 } from 'dash-table/derived/style/props';
 
 export enum ColumnType {
-    Dropdown = 'dropdown',
-    Numeric = 'numeric',
-    Text = 'text'
+    Number = 'number',
+    String = 'string'
+    // Numeric = 'numeric', // deprecated
+    // Text = 'text' // deprecated
 }
 
 export enum FilteringType {
@@ -52,7 +53,8 @@ export type CellCoordinates = [number, number];
 export type ColumnId = string | number;
 export type Columns = IColumn[];
 export type Data = Datum[];
-export type Datum =  IDatumObject | any;
+export type Datum = IDatumObject | any;
+export type Enumeration = boolean | 'maybe';
 export type Filtering = 'fe' | 'be' | boolean;
 export type Indices = number[];
 export type Navigation = 'page';
@@ -75,6 +77,7 @@ export interface IVisibleColumn {
     editable?: boolean;
     editable_name?: boolean | number;
     id: ColumnId;
+    enumeration?: Enumeration;
     name: string | string[];
     options?: IDropdownValue[]; // legacy
     type?: ColumnType;
