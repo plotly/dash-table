@@ -2,8 +2,8 @@ import * as R from 'ramda';
 
 import Logger from 'core/Logger';
 
-import { ActiveCell, Columns, Data, ColumnType } from 'dash-table/components/Table/props';
-import coerce from 'dash-table/type/coerce';
+import { ActiveCell, Columns, Data, ColumnType, ValidationFailure } from 'dash-table/components/Table/props';
+import coerce, { ICoerceResult } from 'dash-table/type/coerce';
 import isEditable from 'dash-table/derived/cell/isEditable';
 
 export default (
@@ -23,8 +23,9 @@ export default (
         Logger.debug(`Clipboard -- Do not create new columns`);
     }
 
-    let newData = data;
-    const newColumns = columns;
+    // don't modify the data and columns directly -- we may abort the paste
+    let newData = R.clone(data);
+    const newColumns = R.clone(columns);
 
     if (overflowColumns && values[0].length + (activeCell as any)[1] >= columns.length) {
         for (
@@ -57,8 +58,9 @@ export default (
     const lastEntry = derived_viewport_indices.slice(-1)[0] || 0;
     const viewportSize = derived_viewport_indices.length;
 
-    values.forEach((row: string[], i: number) =>
-        row.forEach((cell: string, j: number) => {
+    // coerce & reconcile all values -> matrix
+    const coercedValues = values.map((row: string[], i: number) =>
+        row.map((cell: string, j: number) => {
             const viewportIndex = (activeCell as any)[0] + i;
 
             let iRealCell: number | undefined = viewportSize > viewportIndex ?
@@ -74,15 +76,36 @@ export default (
             const jOffset = (activeCell as any)[1] + j;
             const col = newColumns[jOffset];
 
-            const result = coerce(cell, col);
+            return coerce(cell, col);
+        })
+    );
 
-            if (!result.success) {
-                Logger.info(`invalid value ${cell} for type ${col.type}`);
+    const flattenValues = R.unnest(coercedValues);
+
+    const prevent: boolean = R.any(v => Boolean(v && v.action === ValidationFailure.Prevent), flattenValues);
+    if (prevent) {
+        return;
+    }
+
+    // matrix -> apply values
+    coercedValues.forEach((row: (ICoerceResult | undefined)[], i: number) =>
+        row.forEach((result: ICoerceResult | undefined, j: number) => {
+            const viewportIndex = (activeCell as any)[0] + i;
+
+            let iRealCell: number | undefined = viewportSize > viewportIndex ?
+                derived_viewport_indices[viewportIndex] :
+                overflowRows ?
+                    lastEntry + (viewportIndex - viewportSize + 1) :
+                    undefined;
+
+            if (iRealCell === undefined) {
+                return;
             }
 
-            if (col && isEditable(true, col.editable) && result.success) {
-                Logger.info(`valid value coerce(${cell}) -> ${result.value}, ${typeof result.value}`);
+            const jOffset = (activeCell as any)[1] + j;
+            const col = newColumns[jOffset];
 
+            if (col && isEditable(true, col.editable) && result && result.success) {
                 newData = R.set(
                     R.lensPath([iRealCell, col.id]),
                     result.value,

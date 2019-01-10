@@ -73,7 +73,7 @@
                     "computed": false
                   }
                 ],
-                "description": "If True, the cells for this column will be dropdowns.\nIf False, the cells for this column will not be dropdowns.\nIf 'maybe', the cells for this column will be dropdowns if a dropdown is found on a row-by-row basis\n(matching dropdown_properties, column options, column_static_dropdown, column_conditional_dropdowns).\n\nDefaults to 'maybe' is undefined.",
+                "description": "If True, the cells for this column will be dropdowns.\nIf False, the cells for this column will not be dropdowns.\nIf 'maybe', the cells for this column will be dropdowns if a dropdown is found on a row-by-row basis\n(matching dropdown_properties, column options, column_static_dropdown, column_conditional_dropdowns).\n\nDefaults to 'maybe' if undefined.",
                 "required": false
               },
               "hidden": {
@@ -101,6 +101,70 @@
                 ],
                 "description": "The `name` of the column,\nas it appears in the column header.\nIf `name` is a list of strings, then the columns\nwill render with multiple headers rows.",
                 "required": true
+              },
+              "number": {
+                "name": "shape",
+                "value": {
+                  "validation": {
+                    "name": "shape",
+                    "value": {
+                      "allow_nan": {
+                        "name": "bool",
+                        "required": false
+                      },
+                      "on_failure": {
+                        "name": "enum",
+                        "value": [
+                          {
+                            "value": "'NaN'",
+                            "computed": false
+                          },
+                          {
+                            "value": "'prevent'",
+                            "computed": false
+                          },
+                          {
+                            "value": "'skip'",
+                            "computed": false
+                          }
+                        ],
+                        "required": false
+                      }
+                    },
+                    "required": false
+                  }
+                },
+                "required": false
+              },
+              "text": {
+                "name": "shape",
+                "value": {
+                  "validation": {
+                    "name": "shape",
+                    "value": {
+                      "allow_nully": {
+                        "name": "bool",
+                        "required": false
+                      },
+                      "on_failure": {
+                        "name": "enum",
+                        "value": [
+                          {
+                            "value": "'prevent'",
+                            "computed": false
+                          },
+                          {
+                            "value": "'skip'",
+                            "computed": false
+                          }
+                        ],
+                        "required": false
+                      }
+                    },
+                    "required": false
+                  }
+                },
+                "required": false
               },
               "options": {
                 "name": "arrayOf",
@@ -140,19 +204,19 @@
                 "name": "enum",
                 "value": [
                   {
-                    "value": "'dropdown'",
+                    "value": "'any'",
                     "computed": false
                   },
                   {
-                    "value": "'numeric'",
+                    "value": "'number'",
                     "computed": false
                   },
                   {
-                    "value": "'text'",
+                    "value": "'string'",
                     "computed": false
                   }
                 ],
-                "description": "The data-type of the column's data.\n`numeric` and `text` are currently the same.\n`dropdown` is used to render cells as dropdowns.\nNOTE: This feature has not been fully implemented.\nIn the future, it's data types will impact things like\ntext formatting options in the cell (e.g. display 2 decimals\nfor a number), filtering options and behavior, and editing\nbehavior.\nStay tuned by following [https://github.com/plotly/dash-table/issues/166](https://github.com/plotly/dash-table/issues/166)",
+                "description": "The data-type of the column's data.\n'number': represents both floats and ints\n'text': represents a string\n'any': represents any type of data\n\nDefaults to 'any' if undefined.\n\nNOTE: This feature has not been fully implemented.\nIn the future, it's data types will impact things like\ntext formatting options in the cell (e.g. display 2 decimals\nfor a number), filtering options and behavior, and editing\nbehavior.\nStay tuned by following [https://github.com/plotly/dash-table/issues/166](https://github.com/plotly/dash-table/issues/166)",
                 "required": false
               }
             }

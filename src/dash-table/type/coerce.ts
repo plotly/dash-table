@@ -9,7 +9,7 @@ import {
     IVisibleColumn
 } from 'dash-table/components/Table/props';
 
-interface ICoerceResult {
+export interface ICoerceResult {
     action?: ValidationFailure;
     success: boolean;
     value?: any;

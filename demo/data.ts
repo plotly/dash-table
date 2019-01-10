@@ -81,6 +81,11 @@ export const generateMockData = (rows: number) => unpackIntoColumnsAndData([
         id: 'aaa',
         name: ['', 'Weather', 'Temperature'],
         type: ColumnType.Number,
+        number: {
+            validation: {
+                on_failure: 'prevent'
+            }
+        },
         data: gendata(i => i + 1, rows)
     },
 
