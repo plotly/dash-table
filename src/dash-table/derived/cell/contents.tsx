@@ -38,7 +38,7 @@ function getCellType(
     editable: boolean,
     dropdown: DropdownValues | undefined,
     enumeration: Enumeration = 'maybe',
-    type: ColumnType = ColumnType.String
+    type: ColumnType = ColumnType.Any
 ): CellType {
     switch (enumeration) {
         case true:

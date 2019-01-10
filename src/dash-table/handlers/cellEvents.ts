@@ -1,6 +1,8 @@
 import * as R from 'ramda';
 import { SelectedCells, ICellFactoryProps } from 'dash-table/components/Table/props';
 import isActive from 'dash-table/derived/cell/isActive';
+import coerce from 'dash-table/type/coerce';
+import Logger from 'core/Logger';
 
 function isCellSelected(selectedCells: SelectedCells, idx: number, i: number) {
     return selectedCells && R.contains([idx, i], selectedCells);
@@ -98,9 +100,16 @@ export const handleChange = (propsFn: () => ICellFactoryProps, idx: number, i: n
         return;
     }
 
+    const result = coerce(value, c);
+
+    if (!result.success) {
+        return Logger.info(`invalid value ${value} for type ${c.type}`);
+    }
+
+    Logger.info(`valid value coerce(${value}) -> ${result.value}, ${typeof result.value}`);
     const newData = R.set(
         R.lensPath([realIdx, c.id]),
-        value,
+        result.value,
         data
     );
     setProps({

@@ -10,10 +10,9 @@ import {
 } from 'dash-table/derived/style/props';
 
 export enum ColumnType {
+    Any = 'any',
     Number = 'number',
-    String = 'string'
-    // Numeric = 'numeric', // deprecated
-    // Text = 'text' // deprecated
+    Text = 'text'
 }
 
 export enum FilteringType {
@@ -67,6 +66,32 @@ export type Sorting = 'fe' | 'be' | boolean;
 export type SortingType = 'multi' | 'single';
 export type VisibleColumns = IVisibleColumn[];
 
+export enum ValidationFailure {
+    Prevent = 'prevent',
+    Skip = 'skip'
+}
+
+export enum NumberSpecificValidationFailure {
+    NaN = 'NaN'
+}
+
+export type NumberValidationFailure = ValidationFailure | NumberSpecificValidationFailure;
+export type TextValidationFailure = ValidationFailure;
+
+export interface INumberTypeConfiguration {
+    validation: {
+        allow_nan: boolean;
+        on_failure: NumberValidationFailure;
+    };
+}
+
+export interface ITextTypeConfiguration {
+    validation: {
+        allow_nully: boolean;
+        on_failure: TextValidationFailure;
+    };
+}
+
 export interface IColumn extends IVisibleColumn {
     hidden?: boolean;
 }
@@ -79,6 +104,8 @@ export interface IVisibleColumn {
     id: ColumnId;
     enumeration?: Enumeration;
     name: string | string[];
+    number?: INumberTypeConfiguration;
+    text?: ITextTypeConfiguration;
     options?: IDropdownValue[]; // legacy
     type?: ColumnType;
 }

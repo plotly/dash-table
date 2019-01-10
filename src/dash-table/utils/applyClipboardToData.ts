@@ -3,6 +3,7 @@ import * as R from 'ramda';
 import Logger from 'core/Logger';
 
 import { ActiveCell, Columns, Data, ColumnType } from 'dash-table/components/Table/props';
+import coerce from 'dash-table/type/coerce';
 import isEditable from 'dash-table/derived/cell/isEditable';
 
 export default (
@@ -34,7 +35,7 @@ export default (
             newColumns.push({
                 id: `Column ${i + 1}`,
                 name: `Column ${i + 1}`,
-                type: ColumnType.String
+                type: ColumnType.Any
             });
             newData.forEach(row => (row[`Column ${i}`] = ''));
         }
@@ -72,10 +73,19 @@ export default (
 
             const jOffset = (activeCell as any)[1] + j;
             const col = newColumns[jOffset];
-            if (col && isEditable(true, col.editable)) {
+
+            const result = coerce(cell, col);
+
+            if (!result.success) {
+                Logger.info(`invalid value ${cell} for type ${col.type}`);
+            }
+
+            if (col && isEditable(true, col.editable) && result.success) {
+                Logger.info(`valid value coerce(${cell}) -> ${result.value}, ${typeof result.value}`);
+
                 newData = R.set(
                     R.lensPath([iRealCell, col.id]),
-                    cell,
+                    result.value,
                     newData
                 );
             }

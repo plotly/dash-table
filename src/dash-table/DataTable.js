@@ -158,7 +158,7 @@ export const propTypes = {
          * If 'maybe', the cells for this column will be dropdowns if a dropdown is found on a row-by-row basis
          * (matching dropdown_properties, column options, column_static_dropdown, column_conditional_dropdowns).
          *
-         * Defaults to 'maybe' is undefined.
+         * Defaults to 'maybe' if undefined.
          */
         enumeration: PropTypes.oneOf([
             false,
@@ -192,6 +192,27 @@ export const propTypes = {
             PropTypes.arrayOf(PropTypes.string)
         ]).isRequired,
 
+        number: PropTypes.shape({
+            validation: PropTypes.shape({
+                allow_nan: PropTypes.bool,
+                on_failure: PropTypes.oneOf([
+                    'NaN',
+                    'prevent',
+                    'skip'
+                ])
+            })
+        }),
+
+        text: PropTypes.shape({
+            validation: PropTypes.shape({
+                allow_nully: PropTypes.bool,
+                on_failure: PropTypes.oneOf([
+                    'prevent',
+                    'skip'
+                ])
+            })
+        }),
+
         /**
          * DEPRECATED
          * Please use `column_static_dropdown` instead.
@@ -212,8 +233,12 @@ export const propTypes = {
 
         /**
          * The data-type of the column's data.
-         * `numeric` and `text` are currently the same.
-         * `dropdown` is used to render cells as dropdowns.
+         * 'number': represents both floats and ints
+         * 'text': represents a string
+         * 'any': represents any type of data
+         *
+         * Defaults to 'any' if undefined.
+         *
          * NOTE: This feature has not been fully implemented.
          * In the future, it's data types will impact things like
          * text formatting options in the cell (e.g. display 2 decimals
@@ -221,7 +246,7 @@ export const propTypes = {
          * behavior.
          * Stay tuned by following [https://github.com/plotly/dash-table/issues/166](https://github.com/plotly/dash-table/issues/166)
          */
-        type: PropTypes.oneOf(['dropdown', 'numeric', 'text'])
+        type: PropTypes.oneOf(['any', 'number', 'string'])
 
     })),
 

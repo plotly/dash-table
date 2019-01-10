@@ -23,7 +23,7 @@ function getIsDropdown(
     editable: boolean,
     dropdown: DropdownValues | undefined,
     enumeration: Enumeration = 'maybe',
-    type: ColumnType = ColumnType.String
+    type: ColumnType = ColumnType.Any
 ): boolean {
     return enumeration === 'maybe' ?
         getIsDropdown(active, editable, dropdown, Boolean(dropdown), type) :
@@ -38,7 +38,7 @@ function getter(
     offset: IViewportOffset,
     editable: boolean,
     selectedCells: SelectedCells,
-    dropdowns: (DropdownValues | undefined)[][],
+    dropdowns: (DropdownValues | undefined)[][]
 ): JSX.Element[][] {
     return R.addIndex<Datum, JSX.Element[]>(R.map)(
         (_, rowIndex) => R.addIndex<IVisibleColumn, JSX.Element>(R.map)(
@@ -70,7 +70,7 @@ function decorator(_id: string): ((
     offset: IViewportOffset,
     editable: boolean,
     selectedCells: SelectedCells,
-    dropdowns: (DropdownValues | undefined)[][],
+    dropdowns: (DropdownValues | undefined)[][]
 ) => JSX.Element[][]) {
     const elementCache = memoizerCache<Key, [boolean, string, number, ColumnId], JSX.Element>(
         (active: boolean, classes: string, columnIndex: number, columnId: ColumnId) => (<Cell
