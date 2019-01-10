@@ -67,12 +67,13 @@ export type SortingType = 'multi' | 'single';
 export type VisibleColumns = IVisibleColumn[];
 
 export enum ValidationFailure {
+    Passthrough = 'passthrough',
     Prevent = 'prevent',
     Skip = 'skip'
 }
 
 export enum NumberSpecificValidationFailure {
-    NaN = 'NaN'
+    NaN = 'nan'
 }
 
 export type NumberValidationFailure = ValidationFailure | NumberSpecificValidationFailure;

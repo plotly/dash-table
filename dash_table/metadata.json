@@ -116,7 +116,11 @@
                         "name": "enum",
                         "value": [
                           {
-                            "value": "'NaN'",
+                            "value": "'nan'",
+                            "computed": false
+                          },
+                          {
+                            "value": "'passthrough'",
                             "computed": false
                           },
                           {
@@ -149,6 +153,10 @@
                       "on_failure": {
                         "name": "enum",
                         "value": [
+                          {
+                            "value": "'passthrough'",
+                            "computed": false
+                          },
                           {
                             "value": "'prevent'",
                             "computed": false

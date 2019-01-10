@@ -196,7 +196,8 @@ export const propTypes = {
             validation: PropTypes.shape({
                 allow_nan: PropTypes.bool,
                 on_failure: PropTypes.oneOf([
-                    'NaN',
+                    'nan',
+                    'passthrough',
                     'prevent',
                     'skip'
                 ])
@@ -207,6 +208,7 @@ export const propTypes = {
             validation: PropTypes.shape({
                 allow_nully: PropTypes.bool,
                 on_failure: PropTypes.oneOf([
+                    'passthrough',
                     'prevent',
                     'skip'
                 ])

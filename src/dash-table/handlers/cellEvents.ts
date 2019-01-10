@@ -1,7 +1,7 @@
 import * as R from 'ramda';
 import { SelectedCells, ICellFactoryProps } from 'dash-table/components/Table/props';
 import isActive from 'dash-table/derived/cell/isActive';
-import coerce from 'dash-table/type/coerce';
+import coerce from 'dash-table/coerce';
 import Logger from 'core/Logger';
 
 function isCellSelected(selectedCells: SelectedCells, idx: number, i: number) {

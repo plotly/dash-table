@@ -3,7 +3,7 @@ import * as R from 'ramda';
 import Logger from 'core/Logger';
 
 import { ActiveCell, Columns, Data, ColumnType, ValidationFailure } from 'dash-table/components/Table/props';
-import coerce, { ICoerceResult } from 'dash-table/type/coerce';
+import coerce, { ICoerceResult } from 'dash-table/coerce';
 import isEditable from 'dash-table/derived/cell/isEditable';
 
 export default (
