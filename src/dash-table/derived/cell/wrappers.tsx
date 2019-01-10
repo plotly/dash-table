@@ -7,7 +7,7 @@ import Cell from 'dash-table/components/Cell';
 import isActiveCell from 'dash-table/derived/cell/isActive';
 import isSelectedCell from 'dash-table/derived/cell/isSelected';
 import memoizerCache from 'core/memoizerCache';
-import { getTypeOptions } from 'dash-table/coerce';
+import { Presentation } from './presentations';
 
 type Key = [number, number];
 type ElementCacheFn = (
@@ -22,6 +22,7 @@ function getter(
     elementCache: ElementCacheFn,
     activeCell: ActiveCell,
     columns: VisibleColumns,
+    presentations: Map<IVisibleColumn, Presentation>,
     data: Data,
     offset: IViewportOffset,
     selectedCells: SelectedCells
@@ -32,8 +33,7 @@ function getter(
                 const active = isActiveCell(activeCell, rowIndex + offset.rows, columnIndex + offset.columns);
                 const selected = isSelectedCell(selectedCells, rowIndex + offset.rows, columnIndex + offset.columns);
 
-                const options = getTypeOptions(column);
-                const presentation = options && options.presentation;
+                const presentation = presentations.get(column);
 
                 const isDropdown = presentation === 'dropdown';
 
@@ -55,6 +55,7 @@ function getter(
 function decorator(_id: string): ((
     activeCell: ActiveCell,
     columns: VisibleColumns,
+    presentations: Map<IVisibleColumn, Presentation>,
     data: Data,
     offset: IViewportOffset,
     selectedCells: SelectedCells

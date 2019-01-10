@@ -19,7 +19,7 @@ import isActiveCell from 'dash-table/derived/cell/isActive';
 import isCellEditable from './isEditable';
 import CellLabel from 'dash-table/components/CellLabel';
 import CellDropdown from 'dash-table/components/CellDropdown';
-import { getTypeOptions } from 'dash-table/coerce';
+import { Presentation } from './presentations';
 
 const mapData = R.addIndex<Datum, JSX.Element[]>(R.map);
 const mapRow = R.addIndex<IVisibleColumn, JSX.Element>(R.map);
@@ -36,7 +36,7 @@ function getCellType(
     active: boolean,
     editable: boolean,
     dropdown: DropdownValues | undefined,
-    presentation?: 'input' | 'dropdown'
+    presentation: Presentation
 ): CellType {
     switch (presentation) {
         case 'input':
@@ -51,6 +51,7 @@ function getCellType(
 const getter = (
     activeCell: ActiveCell,
     columns: VisibleColumns,
+    presentations: Map<IVisibleColumn, Presentation>,
     data: Data,
     offset: IViewportOffset,
     editable: boolean,
@@ -73,8 +74,7 @@ const getter = (
                 ...['dash-cell-value']
             ].join(' ');
 
-            const options = getTypeOptions(column);
-            const presentation = options && options.presentation;
+            const presentation = presentations.get(column);
 
             switch (getCellType(active, isEditable, dropdown, presentation)) {
                 case CellType.Dropdown:
