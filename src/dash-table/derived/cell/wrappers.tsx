@@ -2,12 +2,11 @@ import * as R from 'ramda';
 import React from 'react';
 
 import { memoizeAll, memoizeOne } from 'core/memoizer';
-import { Data, IVisibleColumn, VisibleColumns, ActiveCell, SelectedCells, Datum, ColumnId, IViewportOffset } from 'dash-table/components/Table/props';
+import { Data, IVisibleColumn, VisibleColumns, ActiveCell, SelectedCells, Datum, ColumnId, IViewportOffset, Presentation } from 'dash-table/components/Table/props';
 import Cell from 'dash-table/components/Cell';
 import isActiveCell from 'dash-table/derived/cell/isActive';
 import isSelectedCell from 'dash-table/derived/cell/isSelected';
 import memoizerCache from 'core/memoizerCache';
-import { Presentation } from './presentations';
 
 type Key = [number, number];
 type ElementCacheFn = (
@@ -22,7 +21,7 @@ function getter(
     elementCache: ElementCacheFn,
     activeCell: ActiveCell,
     columns: VisibleColumns,
-    presentations: Map<IVisibleColumn, Presentation>,
+    presentations: Map<IVisibleColumn, Presentation | undefined>,
     data: Data,
     offset: IViewportOffset,
     selectedCells: SelectedCells
@@ -55,7 +54,7 @@ function getter(
 function decorator(_id: string): ((
     activeCell: ActiveCell,
     columns: VisibleColumns,
-    presentations: Map<IVisibleColumn, Presentation>,
+    presentations: Map<IVisibleColumn, Presentation | undefined>,
     data: Data,
     offset: IViewportOffset,
     selectedCells: SelectedCells

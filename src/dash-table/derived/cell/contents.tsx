@@ -11,7 +11,8 @@ import {
     VisibleColumns,
     ICellFactoryProps,
     IViewportOffset,
-    DropdownValues
+    DropdownValues,
+    Presentation
 } from 'dash-table/components/Table/props';
 import CellInput from 'dash-table/components/CellInput';
 import derivedCellEventHandlerProps from 'dash-table/derived/cell/eventHandlerProps';
@@ -19,7 +20,6 @@ import isActiveCell from 'dash-table/derived/cell/isActive';
 import isCellEditable from './isEditable';
 import CellLabel from 'dash-table/components/CellLabel';
 import CellDropdown from 'dash-table/components/CellDropdown';
-import { Presentation } from './presentations';
 
 const mapData = R.addIndex<Datum, JSX.Element[]>(R.map);
 const mapRow = R.addIndex<IVisibleColumn, JSX.Element>(R.map);
@@ -36,7 +36,7 @@ function getCellType(
     active: boolean,
     editable: boolean,
     dropdown: DropdownValues | undefined,
-    presentation: Presentation
+    presentation: Presentation | undefined
 ): CellType {
     switch (presentation) {
         case 'input':
@@ -51,7 +51,7 @@ function getCellType(
 const getter = (
     activeCell: ActiveCell,
     columns: VisibleColumns,
-    presentations: Map<IVisibleColumn, Presentation>,
+    presentations: Map<IVisibleColumn, Presentation | undefined>,
     data: Data,
     offset: IViewportOffset,
     editable: boolean,
