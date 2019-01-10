@@ -11,9 +11,7 @@ import {
     VisibleColumns,
     ICellFactoryProps,
     IViewportOffset,
-    ColumnType,
-    DropdownValues,
-    Enumeration
+    DropdownValues
 } from 'dash-table/components/Table/props';
 import CellInput from 'dash-table/components/CellInput';
 import derivedCellEventHandlerProps from 'dash-table/derived/cell/eventHandlerProps';
@@ -21,6 +19,7 @@ import isActiveCell from 'dash-table/derived/cell/isActive';
 import isCellEditable from './isEditable';
 import CellLabel from 'dash-table/components/CellLabel';
 import CellDropdown from 'dash-table/components/CellDropdown';
+import { getTypeOptions } from 'dash-table/coerce';
 
 const mapData = R.addIndex<Datum, JSX.Element[]>(R.map);
 const mapRow = R.addIndex<IVisibleColumn, JSX.Element>(R.map);
@@ -37,16 +36,15 @@ function getCellType(
     active: boolean,
     editable: boolean,
     dropdown: DropdownValues | undefined,
-    enumeration: Enumeration = 'maybe',
-    type: ColumnType = ColumnType.Any
+    presentation?: 'input' | 'dropdown'
 ): CellType {
-    switch (enumeration) {
-        case true:
-            return (!dropdown || !editable) ? CellType.Label : CellType.Dropdown;
-        case false:
+    switch (presentation) {
+        case 'input':
             return (!active || !editable) ? CellType.Label : CellType.Input;
-        case 'maybe':
-            return getCellType(active, editable, dropdown, Boolean(dropdown), type);
+        case 'dropdown':
+            return (!dropdown || !editable) ? CellType.Label : CellType.Dropdown;
+        default:
+            return (!active || !editable) ? CellType.Label : CellType.Input;
     }
 }
 
@@ -75,7 +73,10 @@ const getter = (
                 ...['dash-cell-value']
             ].join(' ');
 
-            switch (getCellType(active, isEditable, dropdown, column.enumeration, column.type)) {
+            const options = getTypeOptions(column);
+            const presentation = options && options.presentation;
+
+            switch (getCellType(active, isEditable, dropdown, presentation)) {
                 case CellType.Dropdown:
                     return (<CellDropdown
                         key={`column-${columnIndex}`}

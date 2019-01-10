@@ -2,12 +2,12 @@ import * as R from 'ramda';
 import React from 'react';
 
 import { memoizeAll, memoizeOne } from 'core/memoizer';
-import { Data, IVisibleColumn, VisibleColumns, ColumnType, ActiveCell, SelectedCells, Datum, ColumnId, IViewportOffset, DropdownValues, Enumeration } from 'dash-table/components/Table/props';
+import { Data, IVisibleColumn, VisibleColumns, ActiveCell, SelectedCells, Datum, ColumnId, IViewportOffset } from 'dash-table/components/Table/props';
 import Cell from 'dash-table/components/Cell';
 import isActiveCell from 'dash-table/derived/cell/isActive';
 import isSelectedCell from 'dash-table/derived/cell/isSelected';
 import memoizerCache from 'core/memoizerCache';
-import isCellEditable from './isEditable';
+import { getTypeOptions } from 'dash-table/coerce';
 
 type Key = [number, number];
 type ElementCacheFn = (
@@ -18,35 +18,24 @@ type ElementCacheFn = (
     columnId: ColumnId
 ) => JSX.Element;
 
-function getIsDropdown(
-    active: boolean,
-    editable: boolean,
-    dropdown: DropdownValues | undefined,
-    enumeration: Enumeration = 'maybe',
-    type: ColumnType = ColumnType.Any
-): boolean {
-    return enumeration === 'maybe' ?
-        getIsDropdown(active, editable, dropdown, Boolean(dropdown), type) :
-        enumeration;
-}
-
 function getter(
     elementCache: ElementCacheFn,
     activeCell: ActiveCell,
     columns: VisibleColumns,
     data: Data,
     offset: IViewportOffset,
-    editable: boolean,
-    selectedCells: SelectedCells,
-    dropdowns: (DropdownValues | undefined)[][]
+    selectedCells: SelectedCells
 ): JSX.Element[][] {
     return R.addIndex<Datum, JSX.Element[]>(R.map)(
         (_, rowIndex) => R.addIndex<IVisibleColumn, JSX.Element>(R.map)(
             (column, columnIndex) => {
                 const active = isActiveCell(activeCell, rowIndex + offset.rows, columnIndex + offset.columns);
-                const isEditable = isCellEditable(editable, column.editable);
                 const selected = isSelectedCell(selectedCells, rowIndex + offset.rows, columnIndex + offset.columns);
-                const isDropdown = getIsDropdown(active, isEditable, dropdowns[rowIndex][columnIndex], column.enumeration, column.type);
+
+                const options = getTypeOptions(column);
+                const presentation = options && options.presentation;
+
+                const isDropdown = presentation === 'dropdown';
 
                 const classes =
                     'dash-cell' +
@@ -68,9 +57,7 @@ function decorator(_id: string): ((
     columns: VisibleColumns,
     data: Data,
     offset: IViewportOffset,
-    editable: boolean,
-    selectedCells: SelectedCells,
-    dropdowns: (DropdownValues | undefined)[][]
+    selectedCells: SelectedCells
 ) => JSX.Element[][]) {
     const elementCache = memoizerCache<Key, [boolean, string, number, ColumnId], JSX.Element>(
         (active: boolean, classes: string, columnIndex: number, columnId: ColumnId) => (<Cell

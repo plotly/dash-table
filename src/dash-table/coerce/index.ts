@@ -1,6 +1,6 @@
 import {
     ColumnType,
-    ValidationFailure,
+    ChangeValidation,
     IVisibleColumn
 } from 'dash-table/components/Table/props';
 
@@ -9,7 +9,7 @@ import coerceNumber from './number';
 import coerceText from './text';
 
 export interface ICoerceResult {
-    action?: ValidationFailure | any;
+    action?: ChangeValidation | any;
     success: boolean;
     value?: any;
 }
@@ -21,10 +21,10 @@ export function coerceData(value: any, action: any, c: () => ICoerceResult, r?: 
     }
 
     switch (action) {
-        case ValidationFailure.Passthrough:
+        case ChangeValidation.Passthrough:
             return { success: true, value, action };
-        case ValidationFailure.Prevent:
-        case ValidationFailure.Skip:
+        case ChangeValidation.Prevent:
+        case ChangeValidation.Skip:
             return { success: false, value, action };
         default:
             return r ? r() : { success: false, value, action };
@@ -33,13 +33,28 @@ export function coerceData(value: any, action: any, c: () => ICoerceResult, r?: 
 }
 
 export default (value: any, c: IVisibleColumn) => {
+    let coercer;
     switch (c.type) {
         case ColumnType.Number:
-            return coerceNumber(value, c.number);
+            coercer = coerceNumber;
         case ColumnType.Text:
-            return coerceText(value, c.text);
+            coercer = coerceText;
         case ColumnType.Any:
         default:
-            return coerceAny(value);
+            coercer = coerceAny;
     }
+
+    return coercer(value, getTypeOptions(c));
 };
+
+export function getTypeOptions(c: IVisibleColumn) {
+    switch (c.type) {
+        case ColumnType.Number:
+            return c.number;
+        case ColumnType.Text:
+            return c.text;
+        case ColumnType.Any:
+        default:
+            return;
+    }
+}

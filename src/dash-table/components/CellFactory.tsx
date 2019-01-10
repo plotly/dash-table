@@ -89,9 +89,7 @@ export default class CellFactory {
             columns,
             virtualized.data,
             virtualized.offset,
-            editable,
-            selected_cells,
-            dropdowns
+            selected_cells
         );
 
         const contents = this.cellContents(

@@ -153,20 +153,6 @@ export const propTypes = {
         ]),
 
         /**
-         * If True, the cells for this column will be dropdowns.
-         * If False, the cells for this column will not be dropdowns.
-         * If 'maybe', the cells for this column will be dropdowns if a dropdown is found on a row-by-row basis
-         * (matching dropdown_properties, column options, column_static_dropdown, column_conditional_dropdowns).
-         *
-         * Defaults to 'maybe' if undefined.
-         */
-        enumeration: PropTypes.oneOf([
-            false,
-            true,
-            'maybe'
-        ]),
-
-        /**
          * If True, then the column and its data is hidden.
          * This can be useful if you want to transport extra
          * meta data (like a data index) to and from callbacks
@@ -193,9 +179,10 @@ export const propTypes = {
         ]).isRequired,
 
         number: PropTypes.shape({
+            presentation: PropTypes.oneOf(['input', 'dropdown']),
             validation: PropTypes.shape({
                 allow_nan: PropTypes.bool,
-                on_failure: PropTypes.oneOf([
+                on_change: PropTypes.oneOf([
                     'nan',
                     'passthrough',
                     'prevent',
@@ -205,9 +192,10 @@ export const propTypes = {
         }),
 
         text: PropTypes.shape({
+            presentation: PropTypes.oneOf(['input', 'dropdown']),
             validation: PropTypes.shape({
                 allow_nully: PropTypes.bool,
-                on_failure: PropTypes.oneOf([
+                on_change: PropTypes.oneOf([
                     'passthrough',
                     'prevent',
                     'skip'
@@ -248,7 +236,7 @@ export const propTypes = {
          * behavior.
          * Stay tuned by following [https://github.com/plotly/dash-table/issues/166](https://github.com/plotly/dash-table/issues/166)
          */
-        type: PropTypes.oneOf(['any', 'number', 'string'])
+        type: PropTypes.oneOf(['any', 'number', 'text'])
 
     })),
 
@@ -680,7 +668,8 @@ export const propTypes = {
     style_cell_conditional: PropTypes.arrayOf(PropTypes.shape({
         // .exact
         if: PropTypes.shape({
-            column_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+            column_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+            type: PropTypes.oneOf(['any', 'number', 'text'])
         })
     })),
 
@@ -696,7 +685,8 @@ export const propTypes = {
             row_index: PropTypes.oneOfType([
                 PropTypes.number,
                 PropTypes.oneOf(['odd', 'even'])
-            ])
+            ]),
+            type: PropTypes.oneOf(['any', 'number', 'text'])
         })
     })),
 
@@ -708,7 +698,8 @@ export const propTypes = {
     style_filter_conditional: PropTypes.arrayOf(PropTypes.shape({
         // .exact
         if: PropTypes.shape({
-            column_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+            column_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+            type: PropTypes.oneOf(['any', 'number', 'text'])
         })
     })),
 
@@ -724,7 +715,8 @@ export const propTypes = {
             header_index: PropTypes.oneOfType([
                 PropTypes.number,
                 PropTypes.oneOf(['odd', 'even'])
-            ])
+            ]),
+            type: PropTypes.oneOf(['any', 'number', 'text'])
         })
     })),
 

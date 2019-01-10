@@ -2,7 +2,7 @@ import * as R from 'ramda';
 
 import Logger from 'core/Logger';
 
-import { ActiveCell, Columns, Data, ColumnType, ValidationFailure } from 'dash-table/components/Table/props';
+import { ActiveCell, Columns, Data, ColumnType, ChangeValidation } from 'dash-table/components/Table/props';
 import coerce, { ICoerceResult } from 'dash-table/coerce';
 import isEditable from 'dash-table/derived/cell/isEditable';
 
@@ -82,7 +82,7 @@ export default (
 
     const flattenValues = R.unnest(coercedValues);
 
-    const prevent: boolean = R.any(v => Boolean(v && v.action === ValidationFailure.Prevent), flattenValues);
+    const prevent: boolean = R.any(v => Boolean(v && v.action === ChangeValidation.Prevent), flattenValues);
     if (prevent) {
         return;
     }

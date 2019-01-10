@@ -57,7 +57,9 @@ export const generateMockData = (rows: number) => unpackIntoColumnsAndData([
         id: 'bbb',
         name: ['', 'Weather', 'Climate'],
         type: ColumnType.Text,
-        enumeration: true,
+        text: {
+            presentation: 'dropdown'
+        },
         clearable: true,
         data: gendata(
             i => ['Humid', 'Wet', 'Snowy', 'Tropical Beaches'][i % 4],
@@ -69,8 +71,6 @@ export const generateMockData = (rows: number) => unpackIntoColumnsAndData([
         id: 'bbb-readonly',
         name: ['', 'Weather', 'Climate-RO'],
         type: ColumnType.Text,
-        // enumeration: true,
-        // editable: false,
         data: gendata(
             i => ['Humid', 'Wet', 'Snowy', 'Tropical Beaches'][i % 4],
             rows
@@ -105,7 +105,9 @@ export const mockDataSimple = (rows: number) => unpackIntoColumnsAndData([
         id: 'bbb',
         name: 'Climate',
         type: ColumnType.Text,
-        enumeration: true,
+        text: {
+            presentation: 'dropdown'
+        },
         options: ['Humid', 'Wet', 'Snowy', 'Tropical Beaches'].map(i => ({
             label: i,
             value: i

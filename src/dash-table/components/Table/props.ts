@@ -53,7 +53,6 @@ export type ColumnId = string | number;
 export type Columns = IColumn[];
 export type Data = Datum[];
 export type Datum = IDatumObject | any;
-export type Enumeration = boolean | 'maybe';
 export type Filtering = 'fe' | 'be' | boolean;
 export type Indices = number[];
 export type Navigation = 'page';
@@ -66,30 +65,32 @@ export type Sorting = 'fe' | 'be' | boolean;
 export type SortingType = 'multi' | 'single';
 export type VisibleColumns = IVisibleColumn[];
 
-export enum ValidationFailure {
+export enum ChangeValidation {
     Passthrough = 'passthrough',
     Prevent = 'prevent',
     Skip = 'skip'
 }
 
-export enum NumberSpecificValidationFailure {
+export enum NumberSpecificChangeValidation {
     NaN = 'nan'
 }
 
-export type NumberValidationFailure = ValidationFailure | NumberSpecificValidationFailure;
-export type TextValidationFailure = ValidationFailure;
+export type NumberChangeValidation = ChangeValidation | NumberSpecificChangeValidation;
+export type TextChangeValidation = ChangeValidation;
 
 export interface INumberTypeConfiguration {
+    presentation: 'input' | 'dropdown';
     validation: {
         allow_nan: boolean;
-        on_change: NumberValidationFailure;
+        on_change: NumberChangeValidation;
     };
 }
 
 export interface ITextTypeConfiguration {
+    presentation: 'input' | 'dropdown';
     validation: {
         allow_nully: boolean;
-        on_change: TextValidationFailure;
+        on_change: TextChangeValidation;
     };
 }
 
@@ -103,7 +104,6 @@ export interface IVisibleColumn {
     editable?: boolean;
     editable_name?: boolean | number;
     id: ColumnId;
-    enumeration?: Enumeration;
     name: string | string[];
     number?: INumberTypeConfiguration;
     text?: ITextTypeConfiguration;

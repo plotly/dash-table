@@ -57,25 +57,6 @@
                 "description": "If True, then the name of this column is editable.\nIf there are multiple column headers (if `name` is a list of strings),\nthen `editable_name` can refer to _which_ column header should be\neditable by setting it to the column header index.\nAlso, updating the name in a merged column header cell will\nupdate the name of each column.",
                 "required": false
               },
-              "enumeration": {
-                "name": "enum",
-                "value": [
-                  {
-                    "value": "false",
-                    "computed": false
-                  },
-                  {
-                    "value": "true",
-                    "computed": false
-                  },
-                  {
-                    "value": "'maybe'",
-                    "computed": false
-                  }
-                ],
-                "description": "If True, the cells for this column will be dropdowns.\nIf False, the cells for this column will not be dropdowns.\nIf 'maybe', the cells for this column will be dropdowns if a dropdown is found on a row-by-row basis\n(matching dropdown_properties, column options, column_static_dropdown, column_conditional_dropdowns).\n\nDefaults to 'maybe' if undefined.",
-                "required": false
-              },
               "hidden": {
                 "name": "bool",
                 "description": "If True, then the column and its data is hidden.\nThis can be useful if you want to transport extra\nmeta data (like a data index) to and from callbacks\nbut you don't necessarily want to display that data.",
@@ -105,6 +86,20 @@
               "number": {
                 "name": "shape",
                 "value": {
+                  "presentation": {
+                    "name": "enum",
+                    "value": [
+                      {
+                        "value": "'input'",
+                        "computed": false
+                      },
+                      {
+                        "value": "'dropdown'",
+                        "computed": false
+                      }
+                    ],
+                    "required": false
+                  },
                   "validation": {
                     "name": "shape",
                     "value": {
@@ -112,7 +107,7 @@
                         "name": "bool",
                         "required": false
                       },
-                      "on_failure": {
+                      "on_change": {
                         "name": "enum",
                         "value": [
                           {
@@ -143,6 +138,20 @@
               "text": {
                 "name": "shape",
                 "value": {
+                  "presentation": {
+                    "name": "enum",
+                    "value": [
+                      {
+                        "value": "'input'",
+                        "computed": false
+                      },
+                      {
+                        "value": "'dropdown'",
+                        "computed": false
+                      }
+                    ],
+                    "required": false
+                  },
                   "validation": {
                     "name": "shape",
                     "value": {
@@ -150,7 +159,7 @@
                         "name": "bool",
                         "required": false
                       },
-                      "on_failure": {
+                      "on_change": {
                         "name": "enum",
                         "value": [
                           {
@@ -220,7 +229,7 @@
                     "computed": false
                   },
                   {
-                    "value": "'string'",
+                    "value": "'text'",
                     "computed": false
                   }
                 ],
@@ -859,6 +868,24 @@
                       }
                     ],
                     "required": false
+                  },
+                  "type": {
+                    "name": "enum",
+                    "value": [
+                      {
+                        "value": "'any'",
+                        "computed": false
+                      },
+                      {
+                        "value": "'number'",
+                        "computed": false
+                      },
+                      {
+                        "value": "'text'",
+                        "computed": false
+                      }
+                    ],
+                    "required": false
                   }
                 },
                 "required": false
@@ -915,6 +942,24 @@
                       }
                     ],
                     "required": false
+                  },
+                  "type": {
+                    "name": "enum",
+                    "value": [
+                      {
+                        "value": "'any'",
+                        "computed": false
+                      },
+                      {
+                        "value": "'number'",
+                        "computed": false
+                      },
+                      {
+                        "value": "'text'",
+                        "computed": false
+                      }
+                    ],
+                    "required": false
                   }
                 },
                 "required": false
@@ -946,6 +991,24 @@
                       },
                       {
                         "name": "number"
+                      }
+                    ],
+                    "required": false
+                  },
+                  "type": {
+                    "name": "enum",
+                    "value": [
+                      {
+                        "value": "'any'",
+                        "computed": false
+                      },
+                      {
+                        "value": "'number'",
+                        "computed": false
+                      },
+                      {
+                        "value": "'text'",
+                        "computed": false
                       }
                     ],
                     "required": false
@@ -998,6 +1061,24 @@
                             "computed": false
                           }
                         ]
+                      }
+                    ],
+                    "required": false
+                  },
+                  "type": {
+                    "name": "enum",
+                    "value": [
+                      {
+                        "value": "'any'",
+                        "computed": false
+                      },
+                      {
+                        "value": "'number'",
+                        "computed": false
+                      },
+                      {
+                        "value": "'text'",
+                        "computed": false
                       }
                     ],
                     "required": false
