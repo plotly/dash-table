@@ -2,9 +2,10 @@ import { ICoerceResult, reconcile } from '.';
 import { TextValidationFailure, ValidationFailure, ITextTypeConfiguration } from 'dash-table/components/Table/props';
 
 function coerceText(value: any, allowNully: boolean) {
+    const isNully = value === undefined || value === null;
     return {
-        success: (value !== undefined && value !== null) || allowNully,
-        value: value.toString()
+        success: !isNully || allowNully,
+        value: isNully ? value : value.toString()
     };
 }
 
