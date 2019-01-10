@@ -14,7 +14,7 @@ export interface ICoerceResult {
     value?: any;
 }
 
-export function reconcile(value: any, action: any, c: () => ICoerceResult, r: () => ICoerceResult) {
+export function coerceData(value: any, action: any, c: () => ICoerceResult, r?: () => ICoerceResult) {
     const result = c();
     if (result.success) {
         return result;
@@ -27,7 +27,7 @@ export function reconcile(value: any, action: any, c: () => ICoerceResult, r: ()
         case ValidationFailure.Skip:
             return { success: false, value, action };
         default:
-            return r();
+            return r ? r() : { success: false, value, action };
 
     }
 }

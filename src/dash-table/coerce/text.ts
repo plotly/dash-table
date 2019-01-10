@@ -1,7 +1,7 @@
-import { ICoerceResult, reconcile } from '.';
-import { TextValidationFailure, ValidationFailure, ITextTypeConfiguration } from 'dash-table/components/Table/props';
+import { coerceData } from '.';
+import { ValidationFailure, ITextTypeConfiguration } from 'dash-table/components/Table/props';
 
-function coerceText(value: any, allowNully: boolean) {
+export function coerce(value: any, allowNully: boolean) {
     const isNully = value === undefined || value === null;
     return {
         success: !isNully || allowNully,
@@ -9,20 +9,13 @@ function coerceText(value: any, allowNully: boolean) {
     };
 }
 
-function reconcileText(value: any, action: TextValidationFailure) {
-    return action === ValidationFailure.Passthrough ?
-        { success: true, value, action } :
-        { success: false, action };
-}
-
-export default (value: any, options?: ITextTypeConfiguration): ICoerceResult => {
+export default (value: any, options?: ITextTypeConfiguration) => {
     const allowNully = Boolean(options && options.validation && options.validation.allow_nully);
     const onFailure = (options && options.validation && options.validation.on_failure) || ValidationFailure.Passthrough;
 
-    return reconcile(
+    return coerceData(
         value,
         onFailure,
-        () => coerceText(value, allowNully),
-        () => reconcileText(value, onFailure)
+        () => coerce(value, allowNully)
     );
 };

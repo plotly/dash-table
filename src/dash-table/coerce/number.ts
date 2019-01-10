@@ -1,7 +1,7 @@
-import { ICoerceResult, reconcile } from '.';
+import { coerceData } from '.';
 import { NumberValidationFailure, ValidationFailure, INumberTypeConfiguration } from 'dash-table/components/Table/props';
 
-function coerceNumber(value: any, allowNaN: boolean): ICoerceResult {
+export function coerce(value: any, allowNaN: boolean) {
     const type = typeof value;
 
     switch (type) {
@@ -17,18 +17,18 @@ function coerceNumber(value: any, allowNaN: boolean): ICoerceResult {
     }
 }
 
-function reconcileNumber(_value: any, action: NumberValidationFailure): ICoerceResult {
+export function reconcile(_value: any, action: NumberValidationFailure) {
     return { success: true, value: NaN, action };
 }
 
-export default (value: any, options?: INumberTypeConfiguration): ICoerceResult => {
+export default (value: any, options?: INumberTypeConfiguration) => {
     const allowNaN = Boolean(options && options.validation && options.validation.allow_nan);
     const onFailure = (options && options.validation && options.validation.on_failure) || ValidationFailure.Passthrough;
 
-    return reconcile(
+    return coerceData(
         value,
         onFailure,
-        () => coerceNumber(value, allowNaN),
-        () => reconcileNumber(value, onFailure)
+        () => coerce(value, allowNaN),
+        () => reconcile(value, onFailure)
     );
 };
