@@ -82,14 +82,14 @@ export type TextValidationFailure = ValidationFailure;
 export interface INumberTypeConfiguration {
     validation: {
         allow_nan: boolean;
-        on_failure: NumberValidationFailure;
+        on_change: NumberValidationFailure;
     };
 }
 
 export interface ITextTypeConfiguration {
     validation: {
         allow_nully: boolean;
-        on_failure: TextValidationFailure;
+        on_change: TextValidationFailure;
     };
 }
 
