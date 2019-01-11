@@ -293,7 +293,6 @@ describe('coerce to number', () => {
         });
     });
 
-
     describe('a non-number string', () => {
         const value = 'abc';
 
