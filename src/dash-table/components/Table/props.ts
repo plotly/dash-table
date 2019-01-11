@@ -65,16 +65,38 @@ export type Sorting = 'fe' | 'be' | boolean;
 export type SortingType = 'multi' | 'single';
 export type VisibleColumns = IVisibleColumn[];
 
+export enum ChangeValidation {
+    Passthrough = 'passthrough',
+    Prevent = 'prevent',
+    Skip = 'skip'
+}
+
+export enum NumberSpecificChangeValidation {
+    NaN = 'nan'
+}
+
 export enum Presentation {
     Dropdown = 'dropdown',
     Input = 'input'
 }
 
+export type NumberChangeValidation = ChangeValidation | NumberSpecificChangeValidation;
+export type TextChangeValidation = ChangeValidation;
+
 export interface INumberTypeConfiguration {
     presentation?: Presentation.Input | Presentation.Dropdown;
+    validation?: {
+        allow_nan: boolean;
+        on_change?: NumberChangeValidation;
+    };
+}
 
 export interface ITextTypeConfiguration {
     presentation?: Presentation.Input | Presentation.Dropdown;
+    validation?: {
+        allow_nully: boolean;
+        on_change?: TextChangeValidation;
+    };
 }
 
 export interface IColumn extends IVisibleColumn {

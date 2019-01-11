@@ -181,11 +181,26 @@ export const propTypes = {
         number: PropTypes.shape({
             presentation: PropTypes.oneOf(['input', 'dropdown']),
             validation: PropTypes.shape({
+                allow_nan: PropTypes.bool,
+                on_change: PropTypes.oneOf([
+                    'nan',
+                    'passthrough',
+                    'prevent',
+                    'skip'
+                ])
+            })
         }),
 
         text: PropTypes.shape({
             presentation: PropTypes.oneOf(['input', 'dropdown']),
             validation: PropTypes.shape({
+                allow_nully: PropTypes.bool,
+                on_change: PropTypes.oneOf([
+                    'passthrough',
+                    'prevent',
+                    'skip'
+                ])
+            })
         }),
 
         /**
