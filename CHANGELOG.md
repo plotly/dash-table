@@ -2,9 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [3.1.12] - 2019-01-11
-### Fixed
-- Regression, misaligned header [#324](https://github.com/plotly/dash-core/issues/324)
+## [Unreleased]
 ### Added
 - Data type support & coercion / reconciliation / validation [#297](https://github.com/plotly/dash-core/issues/297)
 ### Regression
@@ -13,6 +11,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
     - column.type 'dropdown' changed in favor of
         - number: { presentation: 'dropdown' }
         - text: { presentation: 'dropdown' }
+
+## [3.1.12] - 2019-01-11
+### Fixed
+- Regression, misaligned header [#324](https://github.com/plotly/dash-core/issues/324)
 ### Maintenance
 - Test with head of both Dash v0.x and Dash v1.x [#20](https://github.com/plotly/dash-core/issues/20)
 
