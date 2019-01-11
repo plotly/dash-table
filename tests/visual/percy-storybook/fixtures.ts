@@ -1,3 +1,5 @@
+import { ColumnType, Presentation } from "dash-table/components/Table/props";
+
 export default [
     {
         name: 'fixed rows -> dropdown',
@@ -7,7 +9,10 @@ export default [
                 {
                     name: 'Column 1',
                     id: 'column-1',
-                    type: 'dropdown',
+                    type: ColumnType.Text,
+                    text: {
+                        presentation: Presentation.Dropdown
+                    },
                     options: [
                         {
                             label: 'Montréal',
@@ -132,7 +137,10 @@ export default [
                 {
                     name: 'Column 1',
                     id: 'column-1',
-                    type: 'dropdown',
+                    type: ColumnType.Text,
+                    text: {
+                        presentation: 'dropdown'
+                    },
                     options: [
                         {
                             label: 'Montréal',
@@ -168,7 +176,10 @@ export default [
                 {
                     name: 'Column 1',
                     id: 'column-1',
-                    type: 'dropdown',
+                    type: ColumnType.Text,
+                    text: {
+                        presentation: Presentation.Dropdown
+                    },
                     options: [
                         {
                             label: 'Montréal',
@@ -183,7 +194,10 @@ export default [
                 {
                     name: 'Column 2',
                     id: 'column-2',
-                    type: 'dropdown',
+                    type: ColumnType.Text,
+                    text: {
+                        presentation: Presentation.Dropdown
+                    },
                     options: [
                         {
                             label: 'Montréal',
@@ -198,7 +212,10 @@ export default [
                 {
                     name: 'Column 3',
                     id: 'column-3',
-                    type: 'dropdown',
+                    type: ColumnType.Text,
+                    text: {
+                        presentation: Presentation.Dropdown
+                    },
                     options: [
                         {
                             label: 'Montréal',
@@ -248,7 +265,10 @@ export default [
                 {
                     name: ['Region', ''],
                     id: 'region',
-                    type: 'dropdown',
+                    type: ColumnType.Text,
+                    text: {
+                        presentation: 'dropdown'
+                    },
                     options: [
                         {
                             label: 'Hawaii',
@@ -490,7 +510,10 @@ export default [
                 {
                     id: 'column-1',
                     name: 'Column 1',
-                    type: 'dropdown'
+                    type: ColumnType.Text,
+                    text: {
+                        presentation: Presentation.Dropdown
+                    }
                 },
                 {
                     id: 'column-2',
