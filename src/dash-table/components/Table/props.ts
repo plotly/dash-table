@@ -75,18 +75,23 @@ export enum NumberSpecificChangeValidation {
     NaN = 'nan'
 }
 
+export enum TextSpecificChangeValidation {
+    ToString = 'to_string'
+}
+
 export enum Presentation {
     Dropdown = 'dropdown',
     Input = 'input'
 }
 
 export type NumberChangeValidation = ChangeValidation | NumberSpecificChangeValidation;
-export type TextChangeValidation = ChangeValidation;
+export type TextChangeValidation = ChangeValidation | TextSpecificChangeValidation;
 
 export interface INumberTypeConfiguration {
     presentation?: Presentation.Input | Presentation.Dropdown;
     validation?: {
-        allow_nan: boolean;
+        allow_nan?: boolean;
+        allow_nully?: boolean;
         on_change?: NumberChangeValidation;
     };
 }
@@ -94,7 +99,7 @@ export interface INumberTypeConfiguration {
 export interface ITextTypeConfiguration {
     presentation?: Presentation.Input | Presentation.Dropdown;
     validation?: {
-        allow_nully: boolean;
+        allow_nully?: boolean;
         on_change?: TextChangeValidation;
     };
 }
