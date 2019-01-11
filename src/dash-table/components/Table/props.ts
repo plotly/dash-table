@@ -10,8 +10,8 @@ import {
 } from 'dash-table/derived/style/props';
 
 export enum ColumnType {
-    Dropdown = 'dropdown',
-    Numeric = 'numeric',
+    Any = 'any',
+    Number = 'number',
     Text = 'text'
 }
 
@@ -65,6 +65,18 @@ export type Sorting = 'fe' | 'be' | boolean;
 export type SortingType = 'multi' | 'single';
 export type VisibleColumns = IVisibleColumn[];
 
+export enum Presentation {
+    Dropdown = 'dropdown',
+    Input = 'input'
+}
+
+export interface INumberTypeConfiguration {
+    presentation?: Presentation.Input | Presentation.Dropdown;
+
+export interface ITextTypeConfiguration {
+    presentation?: Presentation.Input | Presentation.Dropdown;
+}
+
 export interface IColumn extends IVisibleColumn {
     hidden?: boolean;
 }
@@ -76,6 +88,8 @@ export interface IVisibleColumn {
     editable_name?: boolean | number;
     id: ColumnId;
     name: string | string[];
+    number?: INumberTypeConfiguration;
+    text?: ITextTypeConfiguration;
     options?: IDropdownValue[]; // legacy
     type?: ColumnType;
 }
