@@ -46,7 +46,7 @@ Object.values(ReadWriteModes).forEach(mode => {
                     DashTable.getCellById(0, 'bbb-readonly').click();
                     DOM.focused.type(`${Key.Meta}v`);
                     DashTable.getCellById(0, 'bbb-readonly').within(
-                        () => cy.get('.dash-cell-value').should('not.have.html', copiedValue)
+                        () => cy.get('.dash-cell-value').should('not.have.value', copiedValue)
                     );
                 });
             });
@@ -157,8 +157,9 @@ describe(`edit, mode=${AppMode.Typed}`, () => {
             it('does nothing', () => {
                 DashTable.getCellById(0, 'ccc').click();
                 DOM.focused.type(`${Key.Meta}v`);
+                DashTable.getCellById(0, 'bbb-readonly').click();
                 DashTable.getCellById(0, 'ccc').within(
-                    () => cy.get('.dash-cell-value').should('not.have.html', copiedValue)
+                    () => cy.get('.dash-cell-value').should('not.have.value', copiedValue)
                 );
             });
         });
@@ -179,7 +180,7 @@ describe(`edit, mode=${AppMode.Typed}`, () => {
                 DashTable.getCellById(0, 'ccc').click();
                 DOM.focused.type(`${Key.Meta}v`);
                 DashTable.getCellById(0, 'ccc').within(
-                    () => cy.get('.dash-cell-value').should('have.html', copiedValue)
+                    () => cy.get('.dash-cell-value').should('have.value', copiedValue)
                 );
             });
         });
