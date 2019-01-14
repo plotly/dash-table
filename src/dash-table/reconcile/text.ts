@@ -1,12 +1,12 @@
-import { ITextOptions } from 'dash-table/components/Table/props';
+import { ITextColumn } from 'dash-table/components/Table/props';
 
-export function coerce(value: any, options?: ITextOptions) {
+export function coerce(value: any, options?: ITextColumn) {
     const validation = validate(value, options);
     if (validation.success) {
         return validation;
     }
 
-    const allowNully = Boolean(options && options.allow_nully);
+    const allowNully = Boolean(options && options.validation && options.validation.allow_nully);
     const isNully = value === undefined || value === null;
 
     return {
@@ -15,8 +15,8 @@ export function coerce(value: any, options?: ITextOptions) {
     };
 }
 
-export function validate(value: any, options?: ITextOptions) {
-    const allowNully = Boolean(options && options.allow_nully);
+export function validate(value: any, options?: ITextColumn) {
+    const allowNully = Boolean(options && options.validation && options.validation.allow_nully);
 
     const isNully = value === undefined || value === null;
     if (isNully && allowNully) {

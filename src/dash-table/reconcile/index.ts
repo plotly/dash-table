@@ -2,7 +2,7 @@ import {
     ChangeAction,
     ChangeFailure,
     ColumnType,
-    IVisibleColumn
+    IColumnType
 } from 'dash-table/components/Table/props';
 
 import reconcileAny from './any';
@@ -16,46 +16,7 @@ export interface IReconciliation {
     value?: any;
 }
 
-export default (value: any, c: IVisibleColumn) => {
-    const config = getConfiguration(c);
-    const options = config && config.validation;
-    const action = (config && config.on_change && config.on_change.action) || ChangeAction.Passthrough;
-
-    // Coerce or validate
-    let res;
-    switch (action) {
-        case ChangeAction.Coerce:
-            res = { action, ...(getCoercer(c) as any)(value, options) };
-            break;
-        case ChangeAction.Passthrough:
-            res = { success: true, value, action };
-            break;
-        case ChangeAction.Validate:
-            res = { action, ...(getValidator(c) as any)(value, options) };
-            break;
-    }
-
-    if (res.success) {
-        return res;
-    }
-
-    // If c/v unsuccessful, process failure
-    const failure = (config && config.on_change && config.on_change.failure) || ChangeFailure.Skip;
-    res.failure = failure;
-
-    // If Skip/Prevent
-    if (failure !== ChangeFailure.Default) {
-        return res;
-    }
-
-    // If Default, apply default
-    res.success = true;
-    res.value = config && config.validation && config.validation.default;
-
-    return res;
-};
-
-function getCoercer(c: IVisibleColumn) {
+function getCoercer(c: IColumnType): (value: any, c?: any) => IReconciliation {
     switch (c.type) {
         case ColumnType.Number:
             return coerceNumber;
@@ -67,7 +28,7 @@ function getCoercer(c: IVisibleColumn) {
     }
 }
 
-function getValidator(c: IVisibleColumn) {
+function getValidator(c: IColumnType): (value: any, c?: any) => IReconciliation {
     switch (c.type) {
         case ColumnType.Number:
             return validateNumber;
@@ -79,14 +40,42 @@ function getValidator(c: IVisibleColumn) {
     }
 }
 
-export function getConfiguration(c: IVisibleColumn) {
-    switch (c.type) {
-        case ColumnType.Number:
-            return c.number;
-        case ColumnType.Text:
-            return c.text;
-        case ColumnType.Any:
-        default:
-            return;
+function doAction(value: any, c: IColumnType) {
+    const action = (c && c.on_change && c.on_change.action) || ChangeAction.Passthrough;
+
+    switch (action) {
+        case ChangeAction.Coerce:
+            return { action, ...getCoercer(c)(value, c) };
+        case ChangeAction.Passthrough:
+            return { success: true, value, action };
+        case ChangeAction.Validate:
+            return { action, ...getValidator(c)(value, c) };
     }
 }
+
+function doFailureRecovery(result: IReconciliation, c: IColumnType) {
+    // If c/v unsuccessful, process failure
+    const failure = (c && c.on_change && c.on_change.failure) || ChangeFailure.Skip;
+    result.failure = failure;
+
+    // If Skip/Prevent
+    if (failure !== ChangeFailure.Default) {
+        return result;
+    }
+
+    // If Default, apply default
+    result.success = true;
+    result.value = c && c.validation && c.validation.default;
+
+    return result;
+}
+
+export default (value: any, c: IColumnType) => {
+    let res: IReconciliation = doAction(value, c);
+
+    if (res.success) {
+        return res;
+    }
+
+    return doFailureRecovery(res, c);
+};

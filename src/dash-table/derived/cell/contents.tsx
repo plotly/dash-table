@@ -51,7 +51,6 @@ function getCellType(
 const getter = (
     activeCell: ActiveCell,
     columns: VisibleColumns,
-    presentations: Map<IVisibleColumn, Presentation | undefined>,
     data: Data,
     offset: IViewportOffset,
     editable: boolean,
@@ -74,9 +73,7 @@ const getter = (
                 ...['dash-cell-value']
             ].join(' ');
 
-            const presentation = presentations.get(column);
-
-            switch (getCellType(active, isEditable, dropdown, presentation)) {
+            switch (getCellType(active, isEditable, dropdown, column.presentation)) {
                 case CellType.Dropdown:
                     return (<CellDropdown
                         key={`column-${columnIndex}`}

@@ -4,7 +4,6 @@ import { ICellFactoryProps } from 'dash-table/components/Table/props';
 import derivedCellWrappers from 'dash-table/derived/cell/wrappers';
 import derivedCellContents from 'dash-table/derived/cell/contents';
 import derivedCellOperations from 'dash-table/derived/cell/operations';
-import derivedCellPresentations from 'dash-table/derived/cell/presentations';
 import derivedCellStyles from 'dash-table/derived/cell/wrapperStyles';
 import derivedDropdowns from 'dash-table/derived/cell/dropdowns';
 import { derivedRelevantCellStyles } from 'dash-table/derived/style';
@@ -85,12 +84,9 @@ export default class CellFactory {
             dropdown_properties
         );
 
-        const presentations = derivedCellPresentations(columns);
-
         const wrappers = this.cellWrappers(
             active_cell,
             columns,
-            presentations,
             virtualized.data,
             virtualized.offset,
             selected_cells
@@ -99,7 +95,6 @@ export default class CellFactory {
         const contents = this.cellContents(
             active_cell,
             columns,
-            presentations,
             virtualized.data,
             virtualized.offset,
             editable,

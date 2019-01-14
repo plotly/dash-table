@@ -82,50 +82,55 @@ export enum Presentation {
     Input = 'input'
 }
 
-export interface INumberOptions {
-    allow_nan?: boolean;
-    allow_nully?: boolean;
-    default?: 'NaN' | number;
-}
-
-export interface ITextOptions {
-    allow_nully?: boolean;
-    default?: undefined | null | string;
-}
-
 export interface IChangeOptions {
     action?: ChangeAction;
     failure?: ChangeFailure;
 }
 
-export interface INumberConfiguration {
-    presentation?: Presentation.Input | Presentation.Dropdown;
+export interface IAnyColumn {
+    on_change?: undefined;
+    presentation?: undefined;
+    type: ColumnType.Any | undefined;
+    validation?: undefined;
+}
+
+export interface INumberColumn {
     on_change?: IChangeOptions;
-    validation?: INumberOptions;
-}
-
-export interface ITextConfiguration {
     presentation?: Presentation.Input | Presentation.Dropdown;
+    type: ColumnType.Number;
+    validation: {
+        allow_nan?: boolean;
+        allow_nully?: boolean;
+        default?: 'NaN' | number;
+    };
+}
+
+export interface ITextColumn {
     on_change?: IChangeOptions;
-    validation?: ITextOptions;
+    presentation?: Presentation.Input | Presentation.Dropdown;
+    type: ColumnType.Text;
+    validation: {
+        allow_nully?: boolean;
+        default?: undefined | null | string;
+    };
 }
 
-export interface IColumn extends IVisibleColumn {
-    hidden?: boolean;
-}
-
-export interface IVisibleColumn {
+export interface IBaseVisibleColumn {
     clearable?: boolean;
     deletable?: boolean | number;
     editable?: boolean;
     editable_name?: boolean | number;
     id: ColumnId;
     name: string | string[];
-    number?: INumberConfiguration;
-    text?: ITextConfiguration;
     options?: IDropdownValue[]; // legacy
-    type?: ColumnType;
 }
+
+export type IColumnType = INumberColumn | ITextColumn | IAnyColumn;
+export type IVisibleColumn = IBaseVisibleColumn & IColumnType;
+
+export type IColumn = IVisibleColumn & {
+    hidden?: boolean;
+};
 
 interface IDatumObject {
     [key: string]: any;

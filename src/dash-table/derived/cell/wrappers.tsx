@@ -21,7 +21,6 @@ function getter(
     elementCache: ElementCacheFn,
     activeCell: ActiveCell,
     columns: VisibleColumns,
-    presentations: Map<IVisibleColumn, Presentation | undefined>,
     data: Data,
     offset: IViewportOffset,
     selectedCells: SelectedCells
@@ -32,9 +31,7 @@ function getter(
                 const active = isActiveCell(activeCell, rowIndex + offset.rows, columnIndex + offset.columns);
                 const selected = isSelectedCell(selectedCells, rowIndex + offset.rows, columnIndex + offset.columns);
 
-                const presentation = presentations.get(column);
-
-                const isDropdown = presentation === Presentation.Dropdown;
+                const isDropdown = column.presentation === Presentation.Dropdown;
 
                 const classes =
                     'dash-cell' +
@@ -54,7 +51,6 @@ function getter(
 function decorator(_id: string): ((
     activeCell: ActiveCell,
     columns: VisibleColumns,
-    presentations: Map<IVisibleColumn, Presentation | undefined>,
     data: Data,
     offset: IViewportOffset,
     selectedCells: SelectedCells

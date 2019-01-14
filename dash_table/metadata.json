@@ -83,149 +83,75 @@
                 "description": "The `name` of the column,\nas it appears in the column header.\nIf `name` is a list of strings, then the columns\nwill render with multiple headers rows.",
                 "required": true
               },
-              "number": {
+              "presentation": {
+                "name": "enum",
+                "value": [
+                  {
+                    "value": "'input'",
+                    "computed": false
+                  },
+                  {
+                    "value": "'dropdown'",
+                    "computed": false
+                  }
+                ],
+                "required": false
+              },
+              "on_change": {
                 "name": "shape",
                 "value": {
-                  "presentation": {
+                  "action": {
                     "name": "enum",
                     "value": [
                       {
-                        "value": "'input'",
+                        "value": "'passthrough'",
                         "computed": false
                       },
                       {
-                        "value": "'dropdown'",
+                        "value": "'coerce'",
+                        "computed": false
+                      },
+                      {
+                        "value": "'validate'",
                         "computed": false
                       }
                     ],
                     "required": false
                   },
-                  "on_change": {
-                    "name": "shape",
-                    "value": {
-                      "action": {
-                        "name": "enum",
-                        "value": [
-                          {
-                            "value": "'passthrough'",
-                            "computed": false
-                          },
-                          {
-                            "value": "'coerce'",
-                            "computed": false
-                          },
-                          {
-                            "value": "'validate'",
-                            "computed": false
-                          }
-                        ],
-                        "required": false
+                  "failure": {
+                    "name": "enum",
+                    "value": [
+                      {
+                        "value": "'default'",
+                        "computed": false
                       },
-                      "failure": {
-                        "name": "enum",
-                        "value": [
-                          {
-                            "value": "'default'",
-                            "computed": false
-                          },
-                          {
-                            "value": "'prevent'",
-                            "computed": false
-                          },
-                          {
-                            "value": "'skip'",
-                            "computed": false
-                          }
-                        ],
-                        "required": false
-                      }
-                    },
-                    "required": false
-                  },
-                  "validation": {
-                    "name": "shape",
-                    "value": {
-                      "allow_nan": {
-                        "name": "bool",
-                        "required": false
+                      {
+                        "value": "'prevent'",
+                        "computed": false
                       },
-                      "allow_nully": {
-                        "name": "bool",
-                        "required": false
+                      {
+                        "value": "'skip'",
+                        "computed": false
                       }
-                    },
+                    ],
                     "required": false
                   }
                 },
                 "required": false
               },
-              "text": {
+              "validation": {
                 "name": "shape",
                 "value": {
-                  "presentation": {
-                    "name": "enum",
-                    "value": [
-                      {
-                        "value": "'input'",
-                        "computed": false
-                      },
-                      {
-                        "value": "'dropdown'",
-                        "computed": false
-                      }
-                    ],
+                  "allow_nan": {
+                    "name": "bool",
                     "required": false
                   },
-                  "on_change": {
-                    "name": "shape",
-                    "value": {
-                      "action": {
-                        "name": "enum",
-                        "value": [
-                          {
-                            "value": "'passthrough'",
-                            "computed": false
-                          },
-                          {
-                            "value": "'coerce'",
-                            "computed": false
-                          },
-                          {
-                            "value": "'validate'",
-                            "computed": false
-                          }
-                        ],
-                        "required": false
-                      },
-                      "failure": {
-                        "name": "enum",
-                        "value": [
-                          {
-                            "value": "'default'",
-                            "computed": false
-                          },
-                          {
-                            "value": "'prevent'",
-                            "computed": false
-                          },
-                          {
-                            "value": "'skip'",
-                            "computed": false
-                          }
-                        ],
-                        "required": false
-                      }
-                    },
+                  "allow_nully": {
+                    "name": "bool",
                     "required": false
                   },
-                  "validation": {
-                    "name": "shape",
-                    "value": {
-                      "allow_nully": {
-                        "name": "bool",
-                        "required": false
-                      }
-                    },
+                  "default": {
+                    "name": "any",
                     "required": false
                   }
                 },

@@ -7,7 +7,8 @@ import {
     ContentStyle,
     PropsWithDefaults,
     ChangeAction,
-    ChangeFailure
+    ChangeFailure,
+    IVisibleColumn
 } from 'dash-table/components/Table/props';
 
 export enum AppMode {
@@ -97,17 +98,9 @@ function getTypedState() {
     const state = getDefaultState();
 
     R.forEach(column => {
-        column.number = {
-            on_change: {
-                action: ChangeAction.Coerce,
-                failure: ChangeFailure.Skip
-            }
-        };
-        column.text = {
-            on_change: {
-                action: ChangeAction.Coerce,
-                failure: ChangeFailure.Skip
-            }
+        (column as IVisibleColumn).on_change = {
+            action: ChangeAction.Coerce,
+            failure: ChangeFailure.Skip
         };
     }, state.tableProps.columns || []);
 

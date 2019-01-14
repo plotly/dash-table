@@ -178,43 +178,25 @@ export const propTypes = {
             PropTypes.arrayOf(PropTypes.string)
         ]).isRequired,
 
-        number: PropTypes.shape({
-            presentation: PropTypes.oneOf(['input', 'dropdown']),
-            on_change: PropTypes.shape({
-                action: PropTypes.oneOf([
-                    'passthrough',
-                    'coerce',
-                    'validate'
-                ]),
-                failure: PropTypes.oneOf([
-                    'default',
-                    'prevent',
-                    'skip'
-                ])
-            }),
-            validation: PropTypes.shape({
-                allow_nan: PropTypes.bool,
-                allow_nully: PropTypes.bool
-            })
+        presentation: PropTypes.oneOf(['input', 'dropdown']),
+
+        on_change: PropTypes.shape({
+            action: PropTypes.oneOf([
+                'passthrough',
+                'coerce',
+                'validate'
+            ]),
+            failure: PropTypes.oneOf([
+                'default',
+                'prevent',
+                'skip'
+            ])
         }),
 
-        text: PropTypes.shape({
-            presentation: PropTypes.oneOf(['input', 'dropdown']),
-            on_change: PropTypes.shape({
-                action: PropTypes.oneOf([
-                    'passthrough',
-                    'coerce',
-                    'validate'
-                ]),
-                failure: PropTypes.oneOf([
-                    'default',
-                    'prevent',
-                    'skip'
-                ])
-            }),
-            validation: PropTypes.shape({
-                allow_nully: PropTypes.bool
-            })
+        validation: PropTypes.shape({
+            allow_nan: PropTypes.bool,
+            allow_nully: PropTypes.bool,
+            default: PropTypes.any
         }),
 
         /**
