@@ -5,13 +5,16 @@ import Environment from 'core/environment';
 import { generateMockData, IDataMock } from './data';
 import {
     ContentStyle,
-    PropsWithDefaults
+    PropsWithDefaults,
+    ChangeAction,
+    ChangeFailure
 } from 'dash-table/components/Table/props';
 
 export enum AppMode {
     Default = 'default',
     FixedVirtualized = 'fixed,virtualized',
     ReadOnly = 'readonly',
+    Typed = 'typed',
     Virtualized = 'virtualized'
 }
 
@@ -90,6 +93,27 @@ function getReadonlyState() {
     return state;
 }
 
+function getTypedState() {
+    const state = getDefaultState();
+
+    R.forEach(column => {
+        column.number = {
+            on_change: {
+                action: ChangeAction.Coerce,
+                failure: ChangeFailure.Skip
+            }
+        };
+        column.text = {
+            on_change: {
+                action: ChangeAction.Coerce,
+                failure: ChangeFailure.Skip
+            }
+        };
+    }, state.tableProps.columns || []);
+
+    return state;
+}
+
 function getVirtualizedState() {
     const mock = generateMockData(5000);
 
@@ -138,6 +162,8 @@ function getState() {
             return getReadonlyState();
         case AppMode.Virtualized:
             return getVirtualizedState();
+        case AppMode.Typed:
+            return getTypedState();
         case AppMode.Default:
         default:
             return getDefaultState();

@@ -1,7 +1,7 @@
 import * as R from 'ramda';
 import { SelectedCells, ICellFactoryProps } from 'dash-table/components/Table/props';
 import isActive from 'dash-table/derived/cell/isActive';
-import coerce from 'dash-table/coerce';
+import reconcile from 'dash-table/reconcile';
 
 function isCellSelected(selectedCells: SelectedCells, idx: number, i: number) {
     return selectedCells && R.contains([idx, i], selectedCells);
@@ -99,7 +99,7 @@ export const handleChange = (propsFn: () => ICellFactoryProps, idx: number, i: n
         return;
     }
 
-    const result = coerce(value, c);
+    const result = reconcile(value, c);
 
     if (!result.success) {
         return;

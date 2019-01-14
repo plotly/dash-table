@@ -65,18 +65,16 @@ export type Sorting = 'fe' | 'be' | boolean;
 export type SortingType = 'multi' | 'single';
 export type VisibleColumns = IVisibleColumn[];
 
-export enum ChangeValidation {
+export enum ChangeAction {
+    Coerce = 'coerce',
     Passthrough = 'passthrough',
+    Validate = 'validate'
+}
+
+export enum ChangeFailure {
+    Default = 'default',
     Prevent = 'prevent',
     Skip = 'skip'
-}
-
-export enum NumberSpecificChangeValidation {
-    NaN = 'nan'
-}
-
-export enum TextSpecificChangeValidation {
-    ToString = 'to_string'
 }
 
 export enum Presentation {
@@ -84,24 +82,32 @@ export enum Presentation {
     Input = 'input'
 }
 
-export type NumberChangeValidation = ChangeValidation | NumberSpecificChangeValidation;
-export type TextChangeValidation = ChangeValidation | TextSpecificChangeValidation;
-
-export interface INumberTypeConfiguration {
-    presentation?: Presentation.Input | Presentation.Dropdown;
-    validation?: {
-        allow_nan?: boolean;
-        allow_nully?: boolean;
-        on_change?: NumberChangeValidation;
-    };
+export interface INumberOptions {
+    allow_nan?: boolean;
+    allow_nully?: boolean;
+    default?: 'NaN' | number;
 }
 
-export interface ITextTypeConfiguration {
+export interface ITextOptions {
+    allow_nully?: boolean;
+    default?: undefined | null | string;
+}
+
+export interface IChangeOptions {
+    action?: ChangeAction;
+    failure?: ChangeFailure;
+}
+
+export interface INumberConfiguration {
     presentation?: Presentation.Input | Presentation.Dropdown;
-    validation?: {
-        allow_nully?: boolean;
-        on_change?: TextChangeValidation;
-    };
+    on_change?: IChangeOptions;
+    validation?: INumberOptions;
+}
+
+export interface ITextConfiguration {
+    presentation?: Presentation.Input | Presentation.Dropdown;
+    on_change?: IChangeOptions;
+    validation?: ITextOptions;
 }
 
 export interface IColumn extends IVisibleColumn {
@@ -115,8 +121,8 @@ export interface IVisibleColumn {
     editable_name?: boolean | number;
     id: ColumnId;
     name: string | string[];
-    number?: INumberTypeConfiguration;
-    text?: ITextTypeConfiguration;
+    number?: INumberConfiguration;
+    text?: ITextConfiguration;
     options?: IDropdownValue[]; // legacy
     type?: ColumnType;
 }
