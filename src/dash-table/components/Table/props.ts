@@ -89,7 +89,7 @@ export interface IChangeOptions {
 
 export interface IAnyColumn {
     on_change?: undefined;
-    presentation?: undefined;
+    presentation?: Presentation.Input | Presentation.Dropdown;
     type?: ColumnType.Any;
     validation?: undefined;
 }
