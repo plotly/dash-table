@@ -100,22 +100,32 @@
                     ],
                     "required": false
                   },
-                  "validation": {
+                  "on_change": {
                     "name": "shape",
                     "value": {
-                      "allow_nan": {
-                        "name": "bool",
-                        "required": false
-                      },
-                      "on_change": {
+                      "action": {
                         "name": "enum",
                         "value": [
                           {
-                            "value": "'nan'",
+                            "value": "'passthrough'",
                             "computed": false
                           },
                           {
-                            "value": "'passthrough'",
+                            "value": "'coerce'",
+                            "computed": false
+                          },
+                          {
+                            "value": "'validate'",
+                            "computed": false
+                          }
+                        ],
+                        "required": false
+                      },
+                      "failure": {
+                        "name": "enum",
+                        "value": [
+                          {
+                            "value": "'default'",
                             "computed": false
                           },
                           {
@@ -127,6 +137,20 @@
                             "computed": false
                           }
                         ],
+                        "required": false
+                      }
+                    },
+                    "required": false
+                  },
+                  "validation": {
+                    "name": "shape",
+                    "value": {
+                      "allow_nan": {
+                        "name": "bool",
+                        "required": false
+                      },
+                      "allow_nully": {
+                        "name": "bool",
                         "required": false
                       }
                     },
@@ -152,18 +176,32 @@
                     ],
                     "required": false
                   },
-                  "validation": {
+                  "on_change": {
                     "name": "shape",
                     "value": {
-                      "allow_nully": {
-                        "name": "bool",
-                        "required": false
-                      },
-                      "on_change": {
+                      "action": {
                         "name": "enum",
                         "value": [
                           {
                             "value": "'passthrough'",
+                            "computed": false
+                          },
+                          {
+                            "value": "'coerce'",
+                            "computed": false
+                          },
+                          {
+                            "value": "'validate'",
+                            "computed": false
+                          }
+                        ],
+                        "required": false
+                      },
+                      "failure": {
+                        "name": "enum",
+                        "value": [
+                          {
+                            "value": "'default'",
                             "computed": false
                           },
                           {
@@ -175,6 +213,16 @@
                             "computed": false
                           }
                         ],
+                        "required": false
+                      }
+                    },
+                    "required": false
+                  },
+                  "validation": {
+                    "name": "shape",
+                    "value": {
+                      "allow_nully": {
+                        "name": "bool",
                         "required": false
                       }
                     },

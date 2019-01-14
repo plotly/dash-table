@@ -180,26 +180,40 @@ export const propTypes = {
 
         number: PropTypes.shape({
             presentation: PropTypes.oneOf(['input', 'dropdown']),
-            validation: PropTypes.shape({
-                allow_nan: PropTypes.bool,
-                on_change: PropTypes.oneOf([
-                    'nan',
+            on_change: PropTypes.shape({
+                action: PropTypes.oneOf([
                     'passthrough',
+                    'coerce',
+                    'validate'
+                ]),
+                failure: PropTypes.oneOf([
+                    'default',
                     'prevent',
                     'skip'
                 ])
+            }),
+            validation: PropTypes.shape({
+                allow_nan: PropTypes.bool,
+                allow_nully: PropTypes.bool
             })
         }),
 
         text: PropTypes.shape({
             presentation: PropTypes.oneOf(['input', 'dropdown']),
-            validation: PropTypes.shape({
-                allow_nully: PropTypes.bool,
-                on_change: PropTypes.oneOf([
+            on_change: PropTypes.shape({
+                action: PropTypes.oneOf([
                     'passthrough',
+                    'coerce',
+                    'validate'
+                ]),
+                failure: PropTypes.oneOf([
+                    'default',
                     'prevent',
                     'skip'
                 ])
+            }),
+            validation: PropTypes.shape({
+                allow_nully: PropTypes.bool
             })
         }),
 
