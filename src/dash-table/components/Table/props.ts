@@ -90,7 +90,7 @@ export interface IChangeOptions {
 export interface IAnyColumn {
     on_change?: undefined;
     presentation?: undefined;
-    type: ColumnType.Any | undefined;
+    type?: ColumnType.Any;
     validation?: undefined;
 }
 
@@ -98,7 +98,7 @@ export interface INumberColumn {
     on_change?: IChangeOptions;
     presentation?: Presentation.Input | Presentation.Dropdown;
     type: ColumnType.Number;
-    validation: {
+    validation?: {
         allow_nan?: boolean;
         allow_nully?: boolean;
         default?: 'NaN' | number;
@@ -109,7 +109,7 @@ export interface ITextColumn {
     on_change?: IChangeOptions;
     presentation?: Presentation.Input | Presentation.Dropdown;
     type: ColumnType.Text;
-    validation: {
+    validation?: {
         allow_nully?: boolean;
         default?: undefined | null | string;
     };

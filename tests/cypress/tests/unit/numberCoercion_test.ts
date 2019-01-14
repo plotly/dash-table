@@ -1,3 +1,4 @@
+import { ColumnType, INumberColumn } from 'dash-table/components/Table/props';
 import { coerce } from 'dash-table/reconcile/number';
 
 const DEFAULT_COERCE_SUCCESS = [
@@ -50,7 +51,12 @@ describe('coerce to number', () => {
     });
 
     describe('allow_nan=true', () => {
-        const options = { allow_nan: true };
+        const options: INumberColumn = {
+            type: ColumnType.Number,
+            validation: {
+                allow_nan: true
+            }
+        };
 
         ALLOW_NAN_COERCE_SUCCESS.forEach(entry => {
             it(entry.name, () => {
@@ -81,7 +87,12 @@ describe('coerce to number', () => {
     });
 
     describe('allow_nully=true', () => {
-        const options = { allow_nully: true };
+        const options: INumberColumn = {
+            type: ColumnType.Number,
+            validation: {
+                allow_nully: true
+            }
+        };
 
         ALLOW_NULLY_COERCE_SUCCESS.forEach(entry => {
             it(entry.name, () => {

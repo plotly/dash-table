@@ -1,3 +1,4 @@
+import { ColumnType, ITextColumn } from 'dash-table/components/Table/props';
 import { coerce } from 'dash-table/reconcile/text';
 
 const DEFAULT_COERCE_SUCCESS = [
@@ -34,7 +35,12 @@ describe('coerce to string', () => {
     });
 
     describe('allow_nully=true', () => {
-        const options = { allow_nully: true };
+        const options: ITextColumn = {
+            type: ColumnType.Text,
+            validation: {
+                allow_nully: true
+            }
+        };
 
         DEFAULT_COERCE_SUCCESS.forEach(entry => {
             it(entry.name, () => {

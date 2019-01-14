@@ -1,3 +1,4 @@
+import { ColumnType, ITextColumn } from 'dash-table/components/Table/props';
 import { validate } from 'dash-table/reconcile/text';
 
 const DEFAULT_VALIDATE_SUCCESS = [
@@ -41,7 +42,12 @@ describe('validate string', () => {
     });
 
     describe('allow_nully=true', () => {
-        const options = { allow_nully: true };
+        const options: ITextColumn = {
+            type: ColumnType.Text,
+            validation: {
+                allow_nully: true
+            }
+        };
 
         DEFAULT_VALIDATE_SUCCESS.forEach(entry => {
             it(entry.name, () => {
