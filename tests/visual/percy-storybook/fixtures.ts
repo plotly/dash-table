@@ -10,9 +10,7 @@ export default [
                     name: 'Column 1',
                     id: 'column-1',
                     type: ColumnType.Text,
-                    text: {
-                        presentation: Presentation.Dropdown
-                    },
+                    presentation: Presentation.Dropdown,
                     options: [
                         {
                             label: 'Montréal',
@@ -138,9 +136,7 @@ export default [
                     name: 'Column 1',
                     id: 'column-1',
                     type: ColumnType.Text,
-                    text: {
-                        presentation: 'dropdown'
-                    },
+                    presentation: Presentation.Dropdown,
                     options: [
                         {
                             label: 'Montréal',
@@ -177,9 +173,7 @@ export default [
                     name: 'Column 1',
                     id: 'column-1',
                     type: ColumnType.Text,
-                    text: {
-                        presentation: Presentation.Dropdown
-                    },
+                    presentation: Presentation.Dropdown,
                     options: [
                         {
                             label: 'Montréal',
@@ -195,9 +189,7 @@ export default [
                     name: 'Column 2',
                     id: 'column-2',
                     type: ColumnType.Text,
-                    text: {
-                        presentation: Presentation.Dropdown
-                    },
+                    presentation: Presentation.Dropdown,
                     options: [
                         {
                             label: 'Montréal',
@@ -213,9 +205,7 @@ export default [
                     name: 'Column 3',
                     id: 'column-3',
                     type: ColumnType.Text,
-                    text: {
-                        presentation: Presentation.Dropdown
-                    },
+                    presentation: Presentation.Dropdown,
                     options: [
                         {
                             label: 'Montréal',
@@ -266,9 +256,7 @@ export default [
                     name: ['Region', ''],
                     id: 'region',
                     type: ColumnType.Text,
-                    text: {
-                        presentation: 'dropdown'
-                    },
+                    presentation: Presentation.Dropdown,
                     options: [
                         {
                             label: 'Hawaii',
@@ -511,9 +499,7 @@ export default [
                     id: 'column-1',
                     name: 'Column 1',
                     type: ColumnType.Text,
-                    text: {
-                        presentation: Presentation.Dropdown
-                    }
+                    presentation: Presentation.Dropdown
                 },
                 {
                     id: 'column-2',

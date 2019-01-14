@@ -57,9 +57,7 @@ export const generateMockData = (rows: number) => unpackIntoColumnsAndData([
         id: 'bbb',
         name: ['', 'Weather', 'Climate'],
         type: ColumnType.Text,
-        text: {
-            presentation: 'dropdown'
-        },
+        presentation: 'dropdown',
         clearable: true,
         data: gendata(
             i => ['Humid', 'Wet', 'Snowy', 'Tropical Beaches'][i % 4],
@@ -105,9 +103,7 @@ export const mockDataSimple = (rows: number) => unpackIntoColumnsAndData([
         id: 'bbb',
         name: 'Climate',
         type: ColumnType.Text,
-        text: {
-            presentation: 'dropdown'
-        },
+        presentation: 'dropdown',
         options: ['Humid', 'Wet', 'Snowy', 'Tropical Beaches'].map(i => ({
             label: i,
             value: i

@@ -9,8 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Caused by [#297](https://github.com/plotly/dash-core/issues/297)
     - column.type 'numeric' changed to 'number'
     - column.type 'dropdown' changed in favor of
-        - number: { presentation: 'dropdown' }
-        - text: { presentation: 'dropdown' }
+        - presentation: 'dropdown'
 
 ## [3.1.12] - 2019-01-11
 ### Fixed
