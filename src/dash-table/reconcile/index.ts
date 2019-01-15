@@ -41,12 +41,12 @@ function getValidator(c: IColumnType): (value: any, c?: any) => IReconciliation 
 }
 
 function doAction(value: any, c: IColumnType) {
-    const action = (c && c.on_change && c.on_change.action) || ChangeAction.Passthrough;
+    const action = (c && c.on_change && c.on_change.action) || ChangeAction.None;
 
     switch (action) {
         case ChangeAction.Coerce:
             return { action, ...getCoercer(c)(value, c) };
-        case ChangeAction.Passthrough:
+        case ChangeAction.None:
             return { success: true, value, action };
         case ChangeAction.Validate:
             return { action, ...getValidator(c)(value, c) };
@@ -55,7 +55,7 @@ function doAction(value: any, c: IColumnType) {
 
 function doFailureRecovery(result: IReconciliation, c: IColumnType) {
     // If c/v unsuccessful, process failure
-    const failure = (c && c.on_change && c.on_change.failure) || ChangeFailure.Skip;
+    const failure = (c && c.on_change && c.on_change.failure) || ChangeFailure.Reject;
     result.failure = failure;
 
     // If Skip/Prevent

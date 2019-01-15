@@ -2,7 +2,7 @@ import * as R from 'ramda';
 
 import Logger from 'core/Logger';
 
-import { ActiveCell, Columns, Data, ColumnType, ChangeFailure } from 'dash-table/components/Table/props';
+import { ActiveCell, Columns, Data, ColumnType } from 'dash-table/components/Table/props';
 import reconcile from 'dash-table/reconcile';
 import isEditable from 'dash-table/derived/cell/isEditable';
 
@@ -79,9 +79,6 @@ export default (
             }
 
             const coerced = reconcile(value, col);
-            if (coerced.failure === ChangeFailure.Prevent) {
-                return; // abort the 'paste' as it has been prevented
-            }
 
             if (!coerced.success) {
                 continue;

@@ -100,7 +100,7 @@ function getTypedState() {
     R.forEach(column => {
         (column as IVisibleColumn).on_change = {
             action: ChangeAction.Coerce,
-            failure: ChangeFailure.Skip
+            failure: ChangeFailure.Reject
         };
     }, state.tableProps.columns || []);
 

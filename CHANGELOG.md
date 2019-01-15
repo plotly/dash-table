@@ -4,12 +4,24 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
-- Data type support & coercion / reconciliation / validation [#297](https://github.com/plotly/dash-core/issues/297)
-### Regression
-- Caused by [#297](https://github.com/plotly/dash-core/issues/297)
-    - column.type 'numeric' changed to 'number'
-    - column.type 'dropdown' changed in favor of
-        - presentation: 'dropdown'
+[#297](https://github.com/plotly/dash-core/issues/297)
+- Added column.validation nested prop to tweak coercion and validation behavior
+    - allow_nan (boolean): [number] Allow NaN number value
+    - allow_nully (boolean): [number, text] Allow null/undefined value
+    - default (any): [number, text] Default value to use on validation/coercion failure
+- Added on user-initiated data change processing (column.on_change.action)
+    - Coerce: As Validation + attempts to convert the user-provided value into the destination type
+    - None: Accept the user-provided value without verification
+    - Validation: Check if the user-provided value is of the correct type/format/etc.
+- Added on user-initiated data change failure processing (column.on_change.failure)
+    This comes into effect after the column.on_change.action has failed
+    - Accept: Accept the user-provide value
+    - Default Applies the value defined in column.validation.default
+    - Reject: Confirms the failure
+### Changed
+[#297](https://github.com/plotly/dash-core/issues/297)
+- Renamed column.type `numeric` to `number`
+- Moved column.type `dropdown` to column.presentation=`dropdown`
 
 ## [3.1.12] - 2019-01-11
 ### Fixed

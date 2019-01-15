@@ -67,14 +67,14 @@ export type VisibleColumns = IVisibleColumn[];
 
 export enum ChangeAction {
     Coerce = 'coerce',
-    Passthrough = 'passthrough',
+    None = 'none',
     Validate = 'validate'
 }
 
 export enum ChangeFailure {
     Default = 'default',
-    Prevent = 'prevent',
-    Skip = 'skip'
+    Accept = 'accept',
+    Reject = 'reject'
 }
 
 export enum Presentation {
