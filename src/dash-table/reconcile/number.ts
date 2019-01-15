@@ -1,4 +1,5 @@
 import { INumberColumn } from 'dash-table/components/Table/props';
+import isNully from './isNully';
 
 export function coerce(value: any, options?: INumberColumn) {
     const validation = validate(value, options);
@@ -15,16 +16,17 @@ export function coerce(value: any, options?: INumberColumn) {
 }
 
 export function validate(value: any, options?: INumberColumn) {
-    const allowNaN = Boolean(options && options.validation && options.validation.allow_nan);
-    const allowNully = Boolean(options && options.validation && options.validation.allow_nully);
+    const allowNull = Boolean(options && options.validation && options.validation.allow_null);
 
-    const isNully = value === undefined || value === null;
-    if (isNully && allowNully) {
-        return { success: true, value };
+    const nully = isNully(value);
+    if (nully && allowNull) {
+        return { success: true, value: null };
     }
 
+    value = nully ? null : value;
+
     if (typeof value === 'number') {
-        return { success: Boolean(!isNaN(value) || allowNaN), value };
+        return { success: !nully, value };
     } else {
         return { success: false, value };
     }

@@ -194,8 +194,7 @@ export const propTypes = {
         }),
 
         validation: PropTypes.shape({
-            allow_nan: PropTypes.bool,
-            allow_nully: PropTypes.bool,
+            allow_null: PropTypes.bool,
             default: PropTypes.any
         }),
 

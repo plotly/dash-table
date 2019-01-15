@@ -99,9 +99,8 @@ export interface INumberColumn {
     presentation?: Presentation.Input | Presentation.Dropdown;
     type: ColumnType.Numeric;
     validation?: {
-        allow_nan?: boolean;
-        allow_nully?: boolean;
-        default?: 'NaN' | number;
+        allow_null?: boolean;
+        default?: null | number;
     };
 }
 
@@ -110,8 +109,8 @@ export interface ITextColumn {
     presentation?: Presentation.Input | Presentation.Dropdown;
     type: ColumnType.Text;
     validation?: {
-        allow_nully?: boolean;
-        default?: undefined | null | string;
+        allow_null?: boolean;
+        default?: null | string;
     };
 }
 

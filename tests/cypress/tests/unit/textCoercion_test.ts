@@ -10,7 +10,8 @@ const DEFAULT_COERCE_SUCCESS = [
 ];
 
 const DEFAULT_COERCE_FAILURE = [
-    { input: undefined, output: undefined, name: 'from undefined' },
+    { input: NaN, output: null, name: 'from NaN' },
+    { input: undefined, output: null, name: 'from undefined' },
     { input: null, output: null, name: 'from null' }
 ];
 
@@ -34,11 +35,11 @@ describe('coerce to string', () => {
         });
     });
 
-    describe('allow_nully=true', () => {
+    describe('allow_null=true', () => {
         const options: ITextColumn = {
             type: ColumnType.Text,
             validation: {
-                allow_nully: true
+                allow_null: true
             }
         };
 

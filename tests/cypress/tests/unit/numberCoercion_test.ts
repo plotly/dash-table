@@ -1,4 +1,5 @@
 import { ColumnType, INumberColumn } from 'dash-table/components/Table/props';
+import isNully from 'dash-table/reconcile/isNully';
 import { coerce } from 'dash-table/reconcile/number';
 
 const DEFAULT_COERCE_SUCCESS = [
@@ -9,12 +10,9 @@ const DEFAULT_COERCE_SUCCESS = [
     { input: '-4.242', output: -4.242, name: 'from negative float string' }
 ];
 
-const ALLOW_NAN_COERCE_SUCCESS = [
-    { input: NaN, output: NaN, name: 'from NaN' }
-];
-
-const ALLOW_NULLY_COERCE_SUCCESS = [
-    { input: undefined, output: undefined, name: 'from undefined' },
+const ALLOW_NULL_COERCE_SUCCESS = [
+    { input: NaN, output: null, name: 'from NaN' },
+    { input: undefined, output: null, name: 'from undefined' },
     { input: null, output: null, name: 'from null' }
 ];
 
@@ -27,8 +25,7 @@ const DEFAULT_COERCE_FAILURE = [
     { input: 'abc', name: 'from alphanumeric string' }
 ];
 
-const ALLOW_NAN_COERCE_FAILURE = DEFAULT_COERCE_FAILURE.filter(entry => typeof entry.input !== 'number' || !isNaN(entry.input));
-const ALLOW_NULLY_COERCE_FAILURE = DEFAULT_COERCE_FAILURE.filter(entry => entry.input !== undefined && entry.input !== null);
+const ALLOW_NULL_COERCE_FAILURE = DEFAULT_COERCE_FAILURE.filter(entry => !isNully(entry.input));
 
 describe('coerce to number', () => {
     describe('default', () => {
@@ -50,51 +47,15 @@ describe('coerce to number', () => {
         });
     });
 
-    describe('allow_nan=true', () => {
+    describe('allow_null=true', () => {
         const options: INumberColumn = {
             type: ColumnType.Numeric,
             validation: {
-                allow_nan: true
+                allow_null: true
             }
         };
 
-        ALLOW_NAN_COERCE_SUCCESS.forEach(entry => {
-            it(entry.name, () => {
-                const res = coerce(entry.input, options);
-
-                expect(res.success).to.equal(true);
-                expect(isNaN(res.value)).to.equal(true);
-
-            });
-        });
-
-        DEFAULT_COERCE_SUCCESS.forEach(entry => {
-            it(entry.name, () => {
-                const res = coerce(entry.input, options);
-
-                expect(res.success).to.equal(true);
-                expect(res.value).to.equal(entry.output);
-            });
-        });
-
-        ALLOW_NAN_COERCE_FAILURE.forEach(entry => {
-            it(entry.name, () => {
-                const res = coerce(entry.input, options);
-
-                expect(res.success).to.equal(false);
-            });
-        });
-    });
-
-    describe('allow_nully=true', () => {
-        const options: INumberColumn = {
-            type: ColumnType.Numeric,
-            validation: {
-                allow_nully: true
-            }
-        };
-
-        ALLOW_NULLY_COERCE_SUCCESS.forEach(entry => {
+        ALLOW_NULL_COERCE_SUCCESS.forEach(entry => {
             it(entry.name, () => {
                 const res = coerce(entry.input, options);
 
@@ -112,7 +73,7 @@ describe('coerce to number', () => {
             });
         });
 
-        ALLOW_NULLY_COERCE_FAILURE.forEach(entry => {
+        ALLOW_NULL_COERCE_FAILURE.forEach(entry => {
             it(entry.name, () => {
                 const res = coerce(entry.input, options);
 

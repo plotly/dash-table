@@ -142,11 +142,7 @@
               "validation": {
                 "name": "shape",
                 "value": {
-                  "allow_nan": {
-                    "name": "bool",
-                    "required": false
-                  },
-                  "allow_nully": {
+                  "allow_null": {
                     "name": "bool",
                     "required": false
                   },

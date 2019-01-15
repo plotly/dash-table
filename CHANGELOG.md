@@ -6,8 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 [#297](https://github.com/plotly/dash-core/issues/297)
 - Added column.validation nested prop to tweak coercion and validation behavior
-    - allow_nan (boolean): [numeric] Allow NaN numeric value
-    - allow_nully (boolean): [numeric, text] Allow null/undefined value
+    - allow_null (boolean): [numeric, text] Allow null/undefined/NaN value
     - default (any): [numeric, text] Default value to use on validation/coercion failure
 - Added on user-initiated data change processing (column.on_change.action)
     - Coerce: As Validation + attempts to convert the user-provided value into the destination type

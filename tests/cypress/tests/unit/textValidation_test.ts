@@ -1,17 +1,20 @@
 import { ColumnType, ITextColumn } from 'dash-table/components/Table/props';
+import isNully from 'dash-table/reconcile/isNully';
 import { validate } from 'dash-table/reconcile/text';
 
 const DEFAULT_VALIDATE_SUCCESS = [
     { input: '42', output: '42', name: 'from string' }
 ];
 
-const ALLOW_NULLY_VALIDATE_SUCCESS = [
-    { input: undefined, output: undefined, name: 'from undefined' },
+const ALLOW_NULL_VALIDATE_SUCCESS = [
+    { input: NaN, output: null, name: 'from NaN' },
+    { input: undefined, output: null, name: 'from undefined' },
     { input: null, output: null, name: 'from null' }
 ];
 
 const DEFAULT_VALIDATE_FAILURE = [
-    { input: undefined, output: undefined, name: 'from undefined' },
+    { input: NaN, output: null, name: 'from NaN' },
+    { input: undefined, output: null, name: 'from undefined' },
     { input: null, output: null, name: 'from null' },
     { input: 42, output: '42', name: 'from number' },
     { input: true, output: 'true', name: 'from boolean' },
@@ -19,7 +22,7 @@ const DEFAULT_VALIDATE_FAILURE = [
     { input: {}, output: '{}', name: 'from object' }
 ];
 
-const ALLOW_NULLY_VALIDATE_FAILURE = DEFAULT_VALIDATE_FAILURE.filter(entry => entry.input !== undefined && entry.input !== null);
+const ALLOW_NULL_VALIDATE_FAILURE = DEFAULT_VALIDATE_FAILURE.filter(entry => !isNully(entry.input));
 
 describe('validate string', () => {
     describe('default', () => {
@@ -41,11 +44,11 @@ describe('validate string', () => {
         });
     });
 
-    describe('allow_nully=true', () => {
+    describe('allow_null=true', () => {
         const options: ITextColumn = {
             type: ColumnType.Text,
             validation: {
-                allow_nully: true
+                allow_null: true
             }
         };
 
@@ -58,7 +61,7 @@ describe('validate string', () => {
             });
         });
 
-        ALLOW_NULLY_VALIDATE_SUCCESS.forEach(entry => {
+        ALLOW_NULL_VALIDATE_SUCCESS.forEach(entry => {
             it(entry.name, () => {
                 const res = validate(entry.input, options);
 
@@ -67,7 +70,7 @@ describe('validate string', () => {
             });
         });
 
-        ALLOW_NULLY_VALIDATE_FAILURE.forEach(entry => {
+        ALLOW_NULL_VALIDATE_FAILURE.forEach(entry => {
             it(entry.name, () => {
                 const res = validate(entry.input, options);
 

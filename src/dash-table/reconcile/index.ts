@@ -64,8 +64,9 @@ function doFailureRecovery(result: IReconciliation, c: IColumnType) {
     }
 
     // If Default, apply default
+    const defaultValue = (c && c.validation && c.validation.default) || null;
     result.success = true;
-    result.value = c && c.validation && c.validation.default;
+    result.value = defaultValue;
 
     return result;
 }
