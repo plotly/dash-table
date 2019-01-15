@@ -178,21 +178,43 @@ export const propTypes = {
             PropTypes.arrayOf(PropTypes.string)
         ]).isRequired,
 
+        /**
+         * The `presentation` to use to display the value.
+         * Defaults to 'input' for ['numeric', 'text', 'any'].
+         */
         presentation: PropTypes.oneOf(['input', 'dropdown']),
 
+        /**
+         * The `on_change` behavior of the column for user-initiated modifications.
+         * 'action' (default 'coerce'):
+         *  none: do not validate data
+         *  coerce: check if the data corresponds to the destination type and
+         *  attempts to coerce it into the destination type if not
+         *  validate: check if the data corresponds to the destination type (no coercion)
+         *
+         * 'failure' (default 'reject'): what to do with the value if the action fails
+         *  accept: use the invalid value
+         *  default: replace the provided value with `validation.default`
+         *  reject: do not modify the existing value
+         */
         on_change: PropTypes.shape({
             action: PropTypes.oneOf([
-                'passthrough',
                 'coerce',
+                'none',
                 'validate'
             ]),
             failure: PropTypes.oneOf([
+                'accept',
                 'default',
-                'prevent',
-                'skip'
+                'reject'
             ])
         }),
 
+        /**
+         * The `validation` options.
+         * 'allow_null': Allow the use of nully values (undefined, null, NaN) (default: false)
+         * 'default': The default value to apply with on_change.failure = 'default' (default: null)
+         */
         validation: PropTypes.shape({
             allow_null: PropTypes.bool,
             default: PropTypes.any
@@ -218,7 +240,7 @@ export const propTypes = {
 
         /**
          * The data-type of the column's data.
-         * 'number': represents both floats and ints
+         * 'numeric': represents both floats and ints
          * 'text': represents a string
          * 'any': represents any type of data
          *
@@ -231,7 +253,7 @@ export const propTypes = {
          * behavior.
          * Stay tuned by following [https://github.com/plotly/dash-table/issues/166](https://github.com/plotly/dash-table/issues/166)
          */
-        type: PropTypes.oneOf(['any', 'number', 'text'])
+        type: PropTypes.oneOf(['any', 'numeric', 'text'])
 
     })),
 
