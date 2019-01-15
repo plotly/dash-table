@@ -52,7 +52,7 @@ describe('validate number', () => {
 
     describe('allow_nan=true', () => {
         const options: INumberColumn = {
-            type: ColumnType.Number,
+            type: ColumnType.Numeric,
             validation: {
                 allow_nan: true
             }
@@ -88,7 +88,7 @@ describe('validate number', () => {
 
     describe('allow_nully=true', () => {
         const options: INumberColumn = {
-            type: ColumnType.Number,
+            type: ColumnType.Numeric,
             validation: {
                 allow_nully: true
             }

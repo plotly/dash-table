@@ -11,7 +11,7 @@ import {
 
 export enum ColumnType {
     Any = 'any',
-    Number = 'number',
+    Numeric = 'numeric',
     Text = 'text'
 }
 
@@ -97,7 +97,7 @@ export interface IAnyColumn {
 export interface INumberColumn {
     on_change?: IChangeOptions;
     presentation?: Presentation.Input | Presentation.Dropdown;
-    type: ColumnType.Number;
+    type: ColumnType.Numeric;
     validation?: {
         allow_nan?: boolean;
         allow_nully?: boolean;

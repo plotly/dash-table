@@ -30,6 +30,9 @@ function getBaseTableProps(mock: IDataMock) {
         id: 'table',
         columns: mock.columns.map((col: any) => R.merge(col, {
             name: col.name || col.id,
+            on_change: {
+                action: ChangeAction.None
+            },
             editable_name: true,
             deletable: true
             //     type: 'dropdown'

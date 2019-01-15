@@ -18,7 +18,7 @@ export interface IReconciliation {
 
 function getCoercer(c: IColumnType): (value: any, c?: any) => IReconciliation {
     switch (c.type) {
-        case ColumnType.Number:
+        case ColumnType.Numeric:
             return coerceNumber;
         case ColumnType.Text:
             return coerceText;
@@ -30,7 +30,7 @@ function getCoercer(c: IColumnType): (value: any, c?: any) => IReconciliation {
 
 function getValidator(c: IColumnType): (value: any, c?: any) => IReconciliation {
     switch (c.type) {
-        case ColumnType.Number:
+        case ColumnType.Numeric:
             return validateNumber;
         case ColumnType.Text:
             return validateText;
@@ -41,7 +41,7 @@ function getValidator(c: IColumnType): (value: any, c?: any) => IReconciliation 
 }
 
 function doAction(value: any, c: IColumnType) {
-    const action = (c && c.on_change && c.on_change.action) || ChangeAction.None;
+    const action = (c && c.on_change && c.on_change.action) || ChangeAction.Coerce;
 
     switch (action) {
         case ChangeAction.Coerce:

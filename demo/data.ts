@@ -12,7 +12,7 @@ export interface IDataMock {
 export const generateMockData = (rows: number) => unpackIntoColumnsAndData([
     {
         id: 'rows',
-        type: ColumnType.Number,
+        type: ColumnType.Numeric,
         editable: false,
         data: gendata(i => i, rows)
     },
@@ -20,35 +20,35 @@ export const generateMockData = (rows: number) => unpackIntoColumnsAndData([
     {
         id: 'ccc',
         name: ['City', 'Canada', 'Toronto'],
-        type: ColumnType.Number,
+        type: ColumnType.Numeric,
         data: gendata(i => i, rows)
     },
 
     {
         id: 'ddd',
         name: ['City', 'Canada', 'Montréal'],
-        type: ColumnType.Number,
+        type: ColumnType.Numeric,
         data: gendata(i => i * 100, rows)
     },
 
     {
         id: 'eee',
         name: ['City', 'America', 'New York City'],
-        type: ColumnType.Number,
+        type: ColumnType.Numeric,
         data: gendata(i => i, rows)
     },
 
     {
         id: 'fff',
         name: ['City', 'America', 'Boston'],
-        type: ColumnType.Number,
+        type: ColumnType.Numeric,
         data: gendata(i => i + 1, rows)
     },
 
     {
         id: 'ggg',
         name: ['City', 'France', 'Paris'],
-        type: ColumnType.Number,
+        type: ColumnType.Numeric,
         editable: true,
         data: gendata(i => i * 10, rows)
     },
@@ -79,14 +79,14 @@ export const generateMockData = (rows: number) => unpackIntoColumnsAndData([
     {
         id: 'aaa',
         name: ['', 'Weather', 'Temperature'],
-        type: ColumnType.Number,
+        type: ColumnType.Numeric,
         data: gendata(i => i + 1, rows)
     },
 
     {
         id: 'aaa-readonly',
         name: ['', 'Weather', 'Temperature-RO'],
-        type: ColumnType.Number,
+        type: ColumnType.Numeric,
         editable: false,
         data: gendata(i => i + 1, rows)
     }
@@ -96,7 +96,7 @@ export const mockDataSimple = (rows: number) => unpackIntoColumnsAndData([
     {
         id: 'aaa',
         name: 'Temperature',
-        type: ColumnType.Number,
+        type: ColumnType.Numeric,
         data: gendata(i => i + 1, rows)
     },
 
