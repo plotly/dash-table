@@ -8,18 +8,22 @@ const DEFAULT_VALIDATE_SUCCESS = [
 
 const ALLOW_NULL_VALIDATE_SUCCESS = [
     { input: NaN, output: null, name: 'from NaN' },
+    { input: Infinity, output: null, name: 'from +Infinity' },
+    { input: -Infinity, output: null, name: 'from -Infinity' },
     { input: undefined, output: null, name: 'from undefined' },
     { input: null, output: null, name: 'from null' }
 ];
 
 const DEFAULT_VALIDATE_FAILURE = [
-    { input: NaN, output: null, name: 'from NaN' },
-    { input: undefined, output: null, name: 'from undefined' },
-    { input: null, output: null, name: 'from null' },
-    { input: 42, output: '42', name: 'from number' },
-    { input: true, output: 'true', name: 'from boolean' },
-    { input: [], output: '[]', name: 'from array' },
-    { input: {}, output: '{}', name: 'from object' }
+    { input: NaN, name: 'from NaN' },
+    { input: Infinity, name: 'from +Infinity' },
+    { input: -Infinity, name: 'from -Infinity' },
+    { input: undefined, name: 'from undefined' },
+    { input: null, name: 'from null' },
+    { input: 42, name: 'from number' },
+    { input: true, name: 'from boolean' },
+    { input: [], name: 'from array' },
+    { input: {}, name: 'from object' }
 ];
 
 const ALLOW_NULL_VALIDATE_FAILURE = DEFAULT_VALIDATE_FAILURE.filter(entry => !isNully(entry.input));

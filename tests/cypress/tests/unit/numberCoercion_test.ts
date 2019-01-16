@@ -8,14 +8,16 @@ const DEFAULT_COERCE_SUCCESS = [
     { input: '-42', output: -42, name: 'from negative number string' },
     { input: '4.242', output: 4.242, name: 'from float string' },
     { input: '-4.242', output: -4.242, name: 'from negative float string' },
-    { input: '0x2A', output: 42, name: 'from negative hex string' },
-    { input: '0o52', output: 42, name: 'from negative octal string' },
-    { input: '42e0', output: 42, name: 'from negative exponent string' },
-    { input: '0b101010', output: 42, name: 'from negative exponent string' }
+    { input: '0x2A', output: 42, name: 'from hex string' },
+    { input: '0o52', output: 42, name: 'from octal string' },
+    { input: '42e0', output: 42, name: 'from exponent string' },
+    { input: '0b101010', output: 42, name: 'from exponent string' }
 ];
 
 const ALLOW_NULL_COERCE_SUCCESS = [
     { input: NaN, output: null, name: 'from NaN' },
+    { input: Infinity, output: null, name: 'from +Infinity' },
+    { input: -Infinity, output: null, name: 'from -Infinity' },
     { input: undefined, output: null, name: 'from undefined' },
     { input: null, output: null, name: 'from null' }
 ];
@@ -24,6 +26,8 @@ const DEFAULT_COERCE_FAILURE = [
     { input: undefined, name: 'from undefined' },
     { input: null, name: 'from null' },
     { input: NaN, name: 'from NaN' },
+    { input: Infinity, name: 'from +Infinity' },
+    { input: -Infinity, name: 'from -Infinity' },
     { input: {}, name: 'from object' },
     { input: true, name: 'from boolean' },
     { input: 'abc', name: 'from alphanumeric string' },

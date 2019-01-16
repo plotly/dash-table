@@ -10,9 +10,11 @@ const DEFAULT_COERCE_SUCCESS = [
 ];
 
 const DEFAULT_COERCE_FAILURE = [
-    { input: NaN, output: null, name: 'from NaN' },
-    { input: undefined, output: null, name: 'from undefined' },
-    { input: null, output: null, name: 'from null' }
+    { input: NaN, name: 'from NaN' },
+    { input: Infinity, name: 'from +Infinity' },
+    { input: -Infinity, name: 'from -Infinity' },
+    { input: undefined, name: 'from undefined' },
+    { input: null, name: 'from null' }
 ];
 
 describe('coerce to string', () => {
@@ -59,7 +61,6 @@ describe('coerce to string', () => {
                 const res = coerce(entry.input, options);
 
                 expect(res.success).to.equal(true);
-                expect(res.value).to.equal(entry.output);
             });
         });
     });

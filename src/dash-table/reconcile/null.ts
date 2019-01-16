@@ -17,4 +17,7 @@ export const reconcileNull = (
 export const isNully = (value: any) =>
     value === undefined ||
     value === null ||
-    (typeof value === 'number' && isNaN(value));
+    (
+        typeof value === 'number' &&
+        (isNaN(value) || !isFinite(value))
+    );
