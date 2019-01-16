@@ -94,24 +94,22 @@ export interface IAnyColumn {
     validation?: undefined;
 }
 
-export interface INumberColumn {
+export interface ITypeColumn {
     on_change?: IChangeOptions;
-    presentation?: Presentation.Input | Presentation.Dropdown;
-    type: ColumnType.Numeric;
     validation?: {
         allow_null?: boolean;
         default?: null | number;
     };
 }
 
-export interface ITextColumn {
-    on_change?: IChangeOptions;
+export interface INumberColumn extends ITypeColumn {
+    presentation?: Presentation.Input | Presentation.Dropdown;
+    type: ColumnType.Numeric;
+}
+
+export interface ITextColumn extends ITypeColumn {
     presentation?: Presentation.Input | Presentation.Dropdown;
     type: ColumnType.Text;
-    validation?: {
-        allow_null?: boolean;
-        default?: null | string;
-    };
 }
 
 export interface IBaseVisibleColumn {

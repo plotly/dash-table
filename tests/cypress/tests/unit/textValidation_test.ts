@@ -1,5 +1,5 @@
 import { ColumnType, ITextColumn } from 'dash-table/components/Table/props';
-import isNully from 'dash-table/reconcile/isNully';
+import { isNully } from 'dash-table/reconcile/null';
 import { validate } from 'dash-table/reconcile/text';
 
 const DEFAULT_VALIDATE_SUCCESS = [
@@ -26,9 +26,11 @@ const ALLOW_NULL_VALIDATE_FAILURE = DEFAULT_VALIDATE_FAILURE.filter(entry => !is
 
 describe('validate string', () => {
     describe('default', () => {
+        const options = undefined;
+
         DEFAULT_VALIDATE_SUCCESS.forEach(entry => {
             it(entry.name, () => {
-                const res = validate(entry.input);
+                const res = validate(entry.input, options);
 
                 expect(res.success).to.equal(true);
                 expect(res.value).to.equal(entry.output);
@@ -37,7 +39,7 @@ describe('validate string', () => {
 
         DEFAULT_VALIDATE_FAILURE.forEach(entry => {
             it(entry.name, () => {
-                const res = validate(entry.input);
+                const res = validate(entry.input, options);
 
                 expect(res.success).to.equal(false);
             });

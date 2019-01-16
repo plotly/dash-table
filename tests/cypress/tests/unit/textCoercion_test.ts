@@ -17,9 +17,11 @@ const DEFAULT_COERCE_FAILURE = [
 
 describe('coerce to string', () => {
     describe('default', () => {
+        const options = undefined;
+
         DEFAULT_COERCE_SUCCESS.forEach(entry => {
             it(entry.name, () => {
-                const res = coerce(entry.input);
+                const res = coerce(entry.input, options);
 
                 expect(res.success).to.equal(true);
                 expect(res.value).to.equal(entry.output);
@@ -28,7 +30,7 @@ describe('coerce to string', () => {
 
         DEFAULT_COERCE_FAILURE.forEach(entry => {
             it(entry.name, () => {
-                const res = coerce(entry.input);
+                const res = coerce(entry.input, options);
 
                 expect(res.success).to.equal(false);
             });
