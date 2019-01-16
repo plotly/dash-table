@@ -8,6 +8,11 @@ import {
     Headers,
     Style
 } from 'dash-table/derived/style/props';
+import {
+    ConditionalTooltip,
+    StaticTooltip,
+    Tooltip
+} from 'dash-table/tooltips/props';
 
 export enum ColumnType {
     Any = 'any',
@@ -198,6 +203,10 @@ interface IProps {
     start_cell?: [number, number];
 
     id: string;
+
+    tooltips?: Tooltip[][];
+    static_tooltip: StaticTooltip[];
+    conditional_tooltips: ConditionalTooltip[];
 
     active_cell?: ActiveCell;
     columns?: Columns;

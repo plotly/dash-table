@@ -11,14 +11,17 @@ import {
     DataCells,
     BasicFilters,
     Headers,
-    IConditionalElement,
-    IIndexedHeaderElement,
-    IIndexedRowElement,
-    INamedElement,
     Style,
     Table
 } from './props';
 import converter, { StyleProperty } from './py2jsCssProperties';
+
+import {
+    IConditionalElement,
+    IIndexedHeaderElement,
+    IIndexedRowElement,
+    INamedElement
+ } from 'dash-table/conditional';
 
 export interface IConvertedStyle {
     style: CSSProperties;

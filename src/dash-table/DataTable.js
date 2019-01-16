@@ -83,7 +83,10 @@ export const defaultProps = {
     style_data_conditional: [],
     style_cell_conditional: [],
     style_header_conditional: [],
-    virtualization: false
+    virtualization: false,
+
+    column_static_tooltip: [],
+    column_conditional_tooltips: []
 };
 
 export const propTypes = {
@@ -536,6 +539,49 @@ export const propTypes = {
             ]).isRequired
         })).isRequired
     })),
+
+    column_static_tooltip: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        type: PropTypes.oneOf([
+            'text',
+            'markdown'
+        ]),
+        value: PropTypes.string
+    })),
+
+    column_conditional_tooltips: PropTypes.arrayOf(PropTypes.shape({
+        if: PropTypes.shape({
+            filter: PropTypes.string,
+            row_index: PropTypes.oneOfType([
+                PropTypes.number,
+                PropTypes.oneOf([
+                    'odd',
+                    'even'
+                ])
+            ]),
+            column_id: PropTypes.string
+        }).isRequired,
+        type: PropTypes.oneOf([
+            'text',
+            'markdown'
+        ]),
+        value: PropTypes.string.isRequired
+    })),
+
+    tooltips: PropTypes.arrayOf(
+        PropTypes.arrayOf(
+            PropTypes.oneOfType([
+                PropTypes.string,
+                PropTypes.shape({
+                    type: PropTypes.oneOf([
+                        'text',
+                        'markdown'
+                    ]),
+                    value: PropTypes.string.isRequired
+                })
+            ])
+        )
+    ),
 
     /**
      * The `filtering` property controls the behavior of the `filtering` UI.
