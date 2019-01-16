@@ -11,7 +11,7 @@ const DEFAULT_COERCE_SUCCESS = [
     { input: '0x2A', output: 42, name: 'from hex string' },
     { input: '0o52', output: 42, name: 'from octal string' },
     { input: '42e0', output: 42, name: 'from exponent string' },
-    { input: '0b101010', output: 42, name: 'from exponent string' }
+    { input: '0b101010', output: 42, name: 'from binary string' }
 ];
 
 const ALLOW_NULL_COERCE_SUCCESS = [
