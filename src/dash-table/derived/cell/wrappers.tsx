@@ -14,6 +14,7 @@ type ElementCacheFn = (
     active: boolean,
     classes: string,
     columnIndex: number,
+    rowIndex: number,
     columnId: ColumnId
 ) => JSX.Element;
 
@@ -40,7 +41,7 @@ function getter(
                     (selected ? ' cell--selected' : '') +
                     (isDropdown  ? ' dropdown' : '');
 
-                return elementCache([rowIndex, columnIndex], active, classes, columnIndex, column.id);
+                return elementCache([rowIndex, columnIndex], active, classes, columnIndex, rowIndex, column.id);
             },
             columns
         ),
@@ -55,12 +56,15 @@ function decorator(_id: string): ((
     offset: IViewportOffset,
     selectedCells: SelectedCells
 ) => JSX.Element[][]) {
-    const elementCache = memoizerCache<Key, [boolean, string, number, ColumnId], JSX.Element>(
-        (active: boolean, classes: string, columnIndex: number, columnId: ColumnId) => (<Cell
+    const elementCache = memoizerCache<Key, [boolean, string, number, number, ColumnId], JSX.Element>(
+        (active: boolean, classes: string, columnIndex: number, rowIndex: number, columnId: ColumnId) => (<Cell
             active={active}
             classes={classes}
             key={`column-${columnIndex}`}
-            property={columnId}
+            attributes={{
+                'data-dash-column': columnId,
+                'data-dash-row': rowIndex
+            }}
         />)
     );
 

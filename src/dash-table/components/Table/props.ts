@@ -164,6 +164,10 @@ export interface IDropdownProperties {
     [key: string]: { options: IDropdownValue[] }[];
 }
 
+export interface ITableTooltips {
+    [key: string]: Tooltip[];
+}
+
 interface IStylesheetRule {
     selector: string;
     rule: string;
@@ -204,9 +208,9 @@ interface IProps {
 
     id: string;
 
-    tooltips?: Tooltip[][];
-    static_tooltip: StaticTooltip[];
-    conditional_tooltips: ConditionalTooltip[];
+    tooltips?: ITableTooltips;
+    column_static_tooltip: StaticTooltip[];
+    column_conditional_tooltips: ConditionalTooltip[];
 
     active_cell?: ActiveCell;
     columns?: Columns;
@@ -346,9 +350,14 @@ export interface ICellFactoryProps {
     style_filter_conditional: BasicFilters;
     style_header_conditional: Headers;
     style_table: Table;
+    tooltips?: ITableTooltips;
     uiCell?: IUserInterfaceCell;
     uiViewport?: IUserInterfaceViewport;
     viewport: IDerivedData;
     virtualization: boolean;
     virtualized: IVirtualizedDerivedData;
+
+    column_static_tooltip: StaticTooltip[];
+    column_conditional_tooltips: ConditionalTooltip[];
+
 }

@@ -1,13 +1,13 @@
 import { CSSProperties } from 'react';
 
-import {
-    ColumnId
-} from 'dash-table/components/Table/props';
+interface IAttributes {
+    [key: string]: string | number | boolean;
+}
 
 export interface ICellProps {
     active: boolean;
     classes: string;
-    property: ColumnId;
+    attributes: IAttributes;
     style?: CSSProperties;
 }
 

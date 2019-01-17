@@ -35,7 +35,6 @@ function getBaseTableProps(mock: IDataMock) {
             },
             editable_name: true,
             deletable: true
-            //     type: 'dropdown'
         })),
         column_static_dropdown: [
             {
@@ -44,6 +43,17 @@ function getBaseTableProps(mock: IDataMock) {
                     label: i,
                     value: i
                 }))
+            }
+        ],
+        column_static_tooltip: [
+            {
+                id: 'ccc',
+                type: 'markdown',
+                value: `### ccc
+                    This is a randomly generated number that has no meaning at all.
+
+                    [Evil Empire](www.google.com)
+                `
             }
         ],
         pagination_mode: false,
@@ -57,7 +67,8 @@ function getBaseTableProps(mock: IDataMock) {
             { max_width: 150, min_width: 150, width: 150 },
             { if: { column_id: 'rows' }, max_width: 60, min_width: 60, width: 60 },
             { if: { column_id: 'bbb' }, max_width: 200, min_width: 200, width: 200 },
-            { if: { column_id: 'bbb-readonly' }, max_width: 200, min_width: 200, width: 200 }
+            { if: { column_id: 'bbb-readonly' }, max_width: 200, min_width: 200, width: 200 },
+            { if: { column_id: 'ccc' }, background_color: '#FFE8E8' }
         ]
     };
 }

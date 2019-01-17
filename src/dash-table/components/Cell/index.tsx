@@ -20,7 +20,7 @@ export default class Cell extends Component<ICellProps> {
     }
 
     render() {
-        const { classes, property, style } = this.propsWithDefaults;
+        const { attributes, classes, style } = this.propsWithDefaults;
 
         return (<td
             ref='td'
@@ -28,7 +28,7 @@ export default class Cell extends Component<ICellProps> {
             tabIndex={-1}
             className={classes}
             style={style}
-            data-dash-column={property}
+            {...attributes}
         />);
     }
 

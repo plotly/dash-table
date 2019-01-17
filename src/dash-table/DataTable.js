@@ -569,7 +569,7 @@ export const propTypes = {
     })),
 
     tooltips: PropTypes.arrayOf(
-        PropTypes.arrayOf(
+        PropTypes.objectOf(PropTypes.arrayOf(
             PropTypes.oneOfType([
                 PropTypes.string,
                 PropTypes.shape({
@@ -580,7 +580,7 @@ export const propTypes = {
                     value: PropTypes.string.isRequired
                 })
             ])
-        )
+        ))
     ),
 
     /**
