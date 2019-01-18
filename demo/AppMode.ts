@@ -10,6 +10,7 @@ import {
     ChangeFailure,
     IVisibleColumn
 } from 'dash-table/components/Table/props';
+import { TooltipSyntax } from 'dash-table/tooltips/props';
 
 export enum AppMode {
     Default = 'default',
@@ -45,15 +46,34 @@ function getBaseTableProps(mock: IDataMock) {
                 }))
             }
         ],
-        column_static_tooltip: [
+        column_static_tooltip: {
+            ccc: {
+                type: TooltipSyntax.Markdown,
+                value: `### ccc 1\nThis tooltip 1`
+            }
+        },
+        column_conditional_tooltips: [
             {
-                id: 'ccc',
-                type: 'markdown',
-                value: `### ccc
-                    This is a randomly generated number that has no meaning at all.
-
-                    [Evil Empire](www.google.com)
-                `
+                if: {
+                    column_id: 'ccc',
+                    row_index: 5
+                },
+                type: TooltipSyntax.Markdown,
+                value: `### ccc 2\nThis tooltip 2`
+            },
+            {
+                if: {
+                    filter: 'ccc eq num(20)'
+                },
+                type: TooltipSyntax.Markdown,
+                value: `### ccc 3\nThis tooltip 3`
+            },
+            {
+                if: {
+                    filter: 'ccc eq num(15)'
+                },
+                type: TooltipSyntax.Text,
+                value: `### ccc 4\nThis tooltip 4`
             }
         ],
         pagination_mode: false,
@@ -77,7 +97,7 @@ function getDefaultState(): {
     filter: string,
     tableProps: Partial<PropsWithDefaults>
 } {
-    const mock = generateMockData(5000);
+    const mock = generateMockData(500);
 
     return {
         filter: '',

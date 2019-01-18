@@ -10,7 +10,6 @@ import {
 } from 'dash-table/derived/style/props';
 import {
     ConditionalTooltip,
-    StaticTooltip,
     Tooltip
 } from 'dash-table/tooltips/props';
 
@@ -168,6 +167,10 @@ export interface ITableTooltips {
     [key: string]: Tooltip[];
 }
 
+export interface ITableStaticTooltips {
+    [key: string]: Tooltip;
+}
+
 interface IStylesheetRule {
     selector: string;
     rule: string;
@@ -209,7 +212,7 @@ interface IProps {
     id: string;
 
     tooltips?: ITableTooltips;
-    column_static_tooltip: StaticTooltip[];
+    column_static_tooltip: ITableStaticTooltips;
     column_conditional_tooltips: ConditionalTooltip[];
 
     active_cell?: ActiveCell;
@@ -357,7 +360,7 @@ export interface ICellFactoryProps {
     virtualization: boolean;
     virtualized: IVirtualizedDerivedData;
 
-    column_static_tooltip: StaticTooltip[];
+    column_static_tooltip: ITableStaticTooltips;
     column_conditional_tooltips: ConditionalTooltip[];
 
 }

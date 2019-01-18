@@ -540,8 +540,7 @@ export const propTypes = {
         })).isRequired
     })),
 
-    column_static_tooltip: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.string.isRequired,
+    column_static_tooltip: PropTypes.objectOf(PropTypes.shape({
         type: PropTypes.oneOf([
             'text',
             'markdown'
