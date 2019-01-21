@@ -20,7 +20,8 @@ import {
     IConditionalElement,
     IIndexedHeaderElement,
     IIndexedRowElement,
-    INamedElement
+    INamedElement,
+    ifColumnId
  } from 'dash-table/conditional';
 
 export interface IConvertedStyle {
@@ -38,10 +39,7 @@ function convertElement(style: GenericStyle) {
     let ast: SyntaxTree;
 
     return {
-        matchesColumn: (column: IVisibleColumn) =>
-            !style.if ||
-            !style.if.column_id ||
-            style.if.column_id === column.id,
+        matchesColumn: (column: IVisibleColumn) => ifColumnId(style.if, column.id),
         matchesRow: (index: number) =>
             indexFilter === undefined ?
                 true :

@@ -3,9 +3,10 @@ import React, { PureComponent } from 'react';
 
 import DOM from 'core/browser/DOM';
 
-import { ColumnId, IVirtualizedDerivedData, ITableStaticTooltips, ITableTooltips } from '../Table/props';
+import { ifColumnId, ifRowIndex, ifFilter } from 'dash-table/conditional';
 import { Tooltip, ConditionalTooltip, TooltipSyntax } from 'dash-table/tooltips/props';
-import SyntaxTree from 'core/syntax-tree';
+
+import { ColumnId, IVirtualizedDerivedData, ITableStaticTooltips, ITableTooltips } from '../Table/props';
 
 interface IProps {
     column_static_tooltip: ITableStaticTooltips;
@@ -56,27 +57,9 @@ export default class TooltipCursorDecorator extends PureComponent<IProps, IState
 
         const conditionalTooltips = R.filter(tt => {
             return !tt.if ||
-                (
-                    (
-                        tt.if.column_id === undefined ||
-                        tt.if.column_id === columnId
-                    ) &&
-                    (
-                        tt.if.row_index === undefined ||
-                        tt.if.row_index === realIndex ||
-                        (tt.if.row_index === 'odd' && realIndex % 2 === 1) ||
-                        (tt.if.row_index === 'even' && realIndex % 2 === 0)
-                    ) &&
-                    (
-                        tt.if.filter === undefined ||
-                        (() => {
-                            const ast = new SyntaxTree(tt.if.filter);
-                            return ast.isValid && ast.evaluate(
-                                this.props.virtualized.data[realIndex - this.props.virtualized.offset.rows]
-                            );
-                        })()
-                    )
-                );
+                ifColumnId(tt.if, columnId) ||
+                ifRowIndex(tt.if, realIndex) ||
+                ifFilter(tt.if, this.props.virtualized.data[realIndex - this.props.virtualized.offset.rows]);
         }, column_conditional_tooltips);
 
         return conditionalTooltips.length ?
