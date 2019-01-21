@@ -606,6 +606,154 @@
           "computed": false
         }
       },
+      "column_static_tooltip": {
+        "type": {
+          "name": "objectOf",
+          "value": {
+            "name": "shape",
+            "value": {
+              "type": {
+                "name": "enum",
+                "value": [
+                  {
+                    "value": "'text'",
+                    "computed": false
+                  },
+                  {
+                    "value": "'markdown'",
+                    "computed": false
+                  }
+                ],
+                "required": false
+              },
+              "value": {
+                "name": "string",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "[]",
+          "computed": false
+        }
+      },
+      "column_conditional_tooltips": {
+        "type": {
+          "name": "arrayOf",
+          "value": {
+            "name": "shape",
+            "value": {
+              "if": {
+                "name": "shape",
+                "value": {
+                  "filter": {
+                    "name": "string",
+                    "required": false
+                  },
+                  "row_index": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "number"
+                      },
+                      {
+                        "name": "enum",
+                        "value": [
+                          {
+                            "value": "'odd'",
+                            "computed": false
+                          },
+                          {
+                            "value": "'even'",
+                            "computed": false
+                          }
+                        ]
+                      }
+                    ],
+                    "required": false
+                  },
+                  "column_id": {
+                    "name": "string",
+                    "required": false
+                  }
+                },
+                "required": true
+              },
+              "type": {
+                "name": "enum",
+                "value": [
+                  {
+                    "value": "'text'",
+                    "computed": false
+                  },
+                  {
+                    "value": "'markdown'",
+                    "computed": false
+                  }
+                ],
+                "required": false
+              },
+              "value": {
+                "name": "string",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "[]",
+          "computed": false
+        }
+      },
+      "tooltips": {
+        "type": {
+          "name": "arrayOf",
+          "value": {
+            "name": "objectOf",
+            "value": {
+              "name": "arrayOf",
+              "value": {
+                "name": "union",
+                "value": [
+                  {
+                    "name": "string"
+                  },
+                  {
+                    "name": "shape",
+                    "value": {
+                      "type": {
+                        "name": "enum",
+                        "value": [
+                          {
+                            "value": "'text'",
+                            "computed": false
+                          },
+                          {
+                            "value": "'markdown'",
+                            "computed": false
+                          }
+                        ],
+                        "required": false
+                      },
+                      "value": {
+                        "name": "string",
+                        "required": true
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "required": false,
+        "description": ""
+      },
       "filtering": {
         "type": {
           "name": "enum",
