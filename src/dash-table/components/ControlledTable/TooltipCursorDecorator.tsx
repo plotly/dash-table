@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react';
 import DOM from 'core/browser/DOM';
 
 import { ColumnId, IVirtualizedDerivedData, ITableStaticTooltips, ITableTooltips } from '../Table/props';
-import { Tooltip, ConditionalTooltip } from 'dash-table/tooltips/props';
+import { Tooltip, ConditionalTooltip, TooltipSyntax } from 'dash-table/tooltips/props';
 import SyntaxTree from 'core/syntax-tree';
 
 interface IProps {
@@ -143,7 +143,7 @@ export default class TooltipCursorDecorator extends PureComponent<IProps, IState
                 dangerouslySetInnerHTML={{
                     __html: typeof tooltip === 'string' ?
                         tooltip :
-                        tooltip.type === 'markdown' ?
+                        tooltip.type === TooltipSyntax.Markdown ?
                             this.state.md.render(tooltip.value) :
                             tooltip.value
                 }}
