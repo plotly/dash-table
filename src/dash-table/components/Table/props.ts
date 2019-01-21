@@ -330,7 +330,9 @@ export interface ICellFactoryProps {
     active_cell: ActiveCell;
     columns: VisibleColumns;
     column_conditional_dropdowns: IConditionalColumnDropdown[];
+    column_conditional_tooltips: ConditionalTooltip[];
     column_static_dropdown: IColumnDropdown[];
+    column_static_tooltip: ITableStaticTooltips;
     data: Data;
     dropdown_properties: any; // legacy
     editable: boolean;
@@ -359,8 +361,4 @@ export interface ICellFactoryProps {
     viewport: IDerivedData;
     virtualization: boolean;
     virtualized: IVirtualizedDerivedData;
-
-    column_static_tooltip: ITableStaticTooltips;
-    column_conditional_tooltips: ConditionalTooltip[];
-
 }
