@@ -84,6 +84,36 @@ export default class TooltipCursorDecorator extends PureComponent<IProps, IState
             legacyTooltip || staticTooltip;
     }
 
+    componentDidUpdate() {
+        const { tooltip } = this.refs as { [key: string]: HTMLElement };
+        if (!tooltip) {
+            return;
+        }
+
+        // x-axis view start / end
+        const xvs = document.body.offsetLeft;
+        const xve = document.body.offsetLeft + document.body.clientWidth;
+
+        // x-asix tooltip start / end
+        const xts = tooltip.offsetLeft;
+        const xte = tooltip.offsetLeft + tooltip.clientWidth;
+
+        // x-axis view-tooltip delta start / end
+        // positive: tooltip is in the view
+        // negative: tooltip is out of view
+        // inverted to keep the same meaning on both sides
+        const xds = xts - xvs;
+        const xde = xve - xte;
+
+        if (xde >= 0) {
+            return;
+        }
+
+        // the tooltip can only exceed the view in one direction (right)
+        // bound the adjustment to whatever is smallest (the right excess, or the left space)
+        tooltip.style.marginLeft = `${Math.max(xde, -xds)}px`;
+    }
+
     render() {
         let children = (this.props as any).children;
 
