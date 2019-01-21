@@ -104,18 +104,11 @@ export default class TooltipCursorDecorator extends PureComponent<IProps, IState
         tooltipComponent = (!tooltip || !this.state.md) ?
             null :
             (<div
-                className='dash-tooltip'
+                className='dash-table-tooltip'
                 ref='tooltip'
                 style={{
-                    backgroundColor: '#F0F0F0',
-                    border: '1px solid #E0E0E0',
-                    borderRadius: '5px',
                     left: this.state.pageX,
-                    maxWidth: '300px',
-                    padding: '2px 10px',
-                    position: 'absolute',
-                    top: this.state.pageY,
-                    zIndex: 1000000
+                    top: this.state.pageY
                 }}
                 dangerouslySetInnerHTML={{
                     __html: typeof tooltip === 'string' ?

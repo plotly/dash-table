@@ -47,6 +47,10 @@ function getBaseTableProps(mock: IDataMock) {
             }
         ],
         column_static_tooltip: {
+            'aaa-readonly': {
+                type: TooltipSyntax.Markdown,
+                value: `### aaa-readonly 1\nThis tooltip 1`
+            },
             ccc: {
                 type: TooltipSyntax.Markdown,
                 value: `### ccc 1\nThis tooltip 1`
