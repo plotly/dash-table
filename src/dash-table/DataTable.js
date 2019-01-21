@@ -71,6 +71,9 @@ export const defaultProps = {
     column_conditional_dropdowns: [],
     column_static_dropdown: [],
 
+    column_static_tooltip: [],
+    column_conditional_tooltips: [],
+
     data: [],
     columns: [],
     editable: false,
@@ -83,10 +86,7 @@ export const defaultProps = {
     style_data_conditional: [],
     style_cell_conditional: [],
     style_header_conditional: [],
-    virtualization: false,
-
-    column_static_tooltip: [],
-    column_conditional_tooltips: []
+    virtualization: false
 };
 
 export const propTypes = {
