@@ -57,9 +57,11 @@ export default class TooltipCursorDecorator extends PureComponent<IProps, IState
 
         const conditionalTooltips = R.filter(tt => {
             return !tt.if ||
-                ifColumnId(tt.if, columnId) ||
-                ifRowIndex(tt.if, realIndex) ||
-                ifFilter(tt.if, this.props.virtualized.data[realIndex - this.props.virtualized.offset.rows]);
+                (
+                    ifColumnId(tt.if, columnId) &&
+                    ifRowIndex(tt.if, realIndex) &&
+                    ifFilter(tt.if, this.props.virtualized.data[realIndex - this.props.virtualized.offset.rows])
+                );
         }, column_conditional_tooltips);
 
         return conditionalTooltips.length ?

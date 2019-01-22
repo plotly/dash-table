@@ -171,12 +171,65 @@ dropdown.
 NOTE: The naming and the behavior of this option may change
 in the future.
 Tune in to [https://github.com/plotly/dash-table/issues/168](https://github.com/plotly/dash-table/issues/168)
-- column_static_tooltip (optional): . column_static_tooltip has the following type: dict with strings as keys and values of type dict containing keys 'type', 'value'.
+- column_static_tooltip (optional): `column_static_tooltip` represents the tooltip shown
+for different columns.
+The `property` name refers to the column ID.
+The `type` refers to the type of tooltip syntax used
+for the tooltip generation. Can either be `markdown`
+or `text`. Defaults to `text`.
+The `value` refers to the syntax-based content of
+the tooltip. This value is required.
+
+Alternatively, the value of the property can also be
+a plain string. The `text` syntax will be used in
+that case.. column_static_tooltip has the following type: dict with strings as keys and values of type dict containing keys 'type', 'value'.
 Those keys have the following types: 
   - type (a value equal to: 'text', 'markdown'; optional)
-  - value (string; optional)
-- column_conditional_tooltips (list; optional)
-- tooltips (list; optional)
+  - value (string; required) | string
+- column_conditional_tooltips (list; optional): `column_conditional_tooltips` represents the tooltip shown
+for different columns and cells.
+
+This property allows you to specify different tooltips for
+depending on certain conditions. For example, you may have
+different tooltips in the same column based on the value
+of a certain data property.
+
+Priority is from first to last defined conditional tooltip
+in the list. Higher priority (more specific) conditional
+tooltips should be put at the beginning of the list.
+
+The `if` refers to the condtion that needs to be fulfilled
+in order for the associated tooltip configuration to be
+used. If multiple conditions are defined, all conditions
+must be met for the tooltip to be used by a cell.
+
+The `if` nested property `column_id` refers to the column
+ID that must be matched.
+The `if` nested property `row_index` refers to the index
+of the row in the source `data`.
+The `if` nested property `filter` refers to the query that
+must evaluate to True.
+
+The `type` refers to the type of tooltip syntax used
+for the tooltip generation. Can either be `markdown`
+or `text`. Defaults to `text`.
+The `value` refers to the syntax-based content of
+the tooltip. This value is required.
+- tooltips (dict with strings as keys and values of type list; optional): `tooltips` represents the tooltip shown
+for different columns and cells.
+The `property` name refers to the column ID. Each property
+contains a list of tooltips mapped to the source `data`
+row index.
+
+The `type` refers to the type of tooltip syntax used
+for the tooltip generation. Can either be `markdown`
+or `text`. Defaults to `text`.
+The `value` refers to the syntax-based content of
+the tooltip. This value is required.
+
+Alternatively, the value of the property can also be
+a plain string. The `text` syntax will be used in
+that case.
 - filtering (a value equal to: 'fe', 'be', true, false; optional): The `filtering` property controls the behavior of the `filtering` UI.
 If `False`, then the filtering UI is not displayed
 If `fe` or True, then the filtering UI is displayed and the filtering

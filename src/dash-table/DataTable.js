@@ -540,14 +540,64 @@ export const propTypes = {
         })).isRequired
     })),
 
-    column_static_tooltip: PropTypes.objectOf(PropTypes.shape({
-        type: PropTypes.oneOf([
-            'text',
-            'markdown'
-        ]),
-        value: PropTypes.string
-    })),
+    /**
+     * `column_static_tooltip` represents the tooltip shown
+     * for different columns.
+     * The `property` name refers to the column ID.
+     * The `type` refers to the type of tooltip syntax used
+     * for the tooltip generation. Can either be `markdown`
+     * or `text`. Defaults to `text`.
+     * The `value` refers to the syntax-based content of
+     * the tooltip. This value is required.
+     *
+     * Alternatively, the value of the property can also be
+     * a plain string. The `text` syntax will be used in
+     * that case.
+     */
+    column_static_tooltip: PropTypes.objectOf(
+        PropTypes.oneOfType([
+            PropTypes.shape({
+                type: PropTypes.oneOf([
+                    'text',
+                    'markdown'
+                ]),
+                value: PropTypes.string.isRequired
+            }),
+            PropTypes.string
+        ])
+    ),
 
+    /**
+     * `column_conditional_tooltips` represents the tooltip shown
+     * for different columns and cells.
+     *
+     * This property allows you to specify different tooltips for
+     * depending on certain conditions. For example, you may have
+     * different tooltips in the same column based on the value
+     * of a certain data property.
+     *
+     * Priority is from first to last defined conditional tooltip
+     * in the list. Higher priority (more specific) conditional
+     * tooltips should be put at the beginning of the list.
+     *
+     * The `if` refers to the condtion that needs to be fulfilled
+     * in order for the associated tooltip configuration to be
+     * used. If multiple conditions are defined, all conditions
+     * must be met for the tooltip to be used by a cell.
+     *
+     * The `if` nested property `column_id` refers to the column
+     * ID that must be matched.
+     * The `if` nested property `row_index` refers to the index
+     * of the row in the source `data`.
+     * The `if` nested property `filter` refers to the query that
+     * must evaluate to True.
+     *
+     * The `type` refers to the type of tooltip syntax used
+     * for the tooltip generation. Can either be `markdown`
+     * or `text`. Defaults to `text`.
+     * The `value` refers to the syntax-based content of
+     * the tooltip. This value is required.
+     */
     column_conditional_tooltips: PropTypes.arrayOf(PropTypes.shape({
         if: PropTypes.shape({
             filter: PropTypes.string,
@@ -567,19 +617,34 @@ export const propTypes = {
         value: PropTypes.string.isRequired
     })),
 
-    tooltips: PropTypes.arrayOf(
-        PropTypes.objectOf(PropTypes.arrayOf(
-            PropTypes.oneOfType([
-                PropTypes.string,
-                PropTypes.shape({
-                    type: PropTypes.oneOf([
-                        'text',
-                        'markdown'
-                    ]),
-                    value: PropTypes.string.isRequired
-                })
-            ])
-        ))
+    /**
+     * `tooltips` represents the tooltip shown
+     * for different columns and cells.
+     * The `property` name refers to the column ID. Each property
+     * contains a list of tooltips mapped to the source `data`
+     * row index.
+     *
+     * The `type` refers to the type of tooltip syntax used
+     * for the tooltip generation. Can either be `markdown`
+     * or `text`. Defaults to `text`.
+     * The `value` refers to the syntax-based content of
+     * the tooltip. This value is required.
+     *
+     * Alternatively, the value of the property can also be
+     * a plain string. The `text` syntax will be used in
+     * that case.
+     */
+    tooltips: PropTypes.objectOf(PropTypes.arrayOf(
+        PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.shape({
+                type: PropTypes.oneOf([
+                    'text',
+                    'markdown'
+                ]),
+                value: PropTypes.string.isRequired
+            })
+        ]))
     ),
 
     /**
