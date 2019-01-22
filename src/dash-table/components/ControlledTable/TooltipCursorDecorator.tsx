@@ -99,6 +99,26 @@ export default class TooltipCursorDecorator extends PureComponent<IProps, IState
         tooltip.style.marginLeft = `${Math.max(xde, -xds)}px`;
     }
 
+    private renderTooltip(tooltip: Tooltip, md: Remarkable) {
+        const isText = typeof tooltip === 'string' || tooltip.type === TooltipSyntax.Text;
+        const tooltipValue = typeof tooltip === 'string' ? tooltip : tooltip.value;
+
+        const props = {
+            className: 'dash-table-tooltip',
+            ref: 'tooltip',
+            style: {
+                left: this.state.pageX,
+                top: this.state.pageY
+            }
+        };
+
+        const extraProps = isText ?
+            { children: tooltipValue } :
+            { dangerouslySetInnerHTML: { __html: md.render(tooltipValue) } };
+
+        return (<div {...props} {...extraProps} />);
+    }
+
     render() {
         let children = (this.props as any).children;
 
@@ -118,21 +138,7 @@ export default class TooltipCursorDecorator extends PureComponent<IProps, IState
 
         tooltipComponent = (!tooltip || !this.state.md) ?
             null :
-            (<div
-                className='dash-table-tooltip'
-                ref='tooltip'
-                style={{
-                    left: this.state.pageX,
-                    top: this.state.pageY
-                }}
-                dangerouslySetInnerHTML={{
-                    __html: typeof tooltip === 'string' ?
-                        tooltip :
-                        tooltip.type === TooltipSyntax.Markdown ?
-                            this.state.md.render(tooltip.value) :
-                            tooltip.value
-                }}
-            />);
+            this.renderTooltip(tooltip, this.state.md);
 
         children = Array.isArray(children) ?
             [...children, tooltipComponent] :
