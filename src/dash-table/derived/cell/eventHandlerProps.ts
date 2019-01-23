@@ -15,6 +15,8 @@ export type CacheFn = (...args: CacheArgs) => {
     onChange: (e: ChangeEvent) => void;
     onClick: (e: MouseEvent) => void;
     onDoubleClick: (e: MouseEvent) => void;
+    onEnter: (e: MouseEvent) => void;
+    onLeave: (e: MouseEvent) => void;
     onMouseUp: (e: MouseEvent) => void;
     onPaste: (e: ClipboardEvent<Element>) => void;
 };
@@ -33,6 +35,8 @@ const getter = (propsFn: () => ICellFactoryProps): CacheFn => {
             onChange: derivedHandlers(Handler.Change, rowIndex, columnIndex),
             onClick: derivedHandlers(Handler.Click, rowIndex, columnIndex),
             onDoubleClick: derivedHandlers(Handler.DoubleClick, rowIndex, columnIndex),
+            onEnter: derivedHandlers(Handler.Enter, rowIndex, columnIndex),
+            onLeave: derivedHandlers(Handler.Leave, rowIndex, columnIndex),
             onMouseUp: derivedHandlers(Handler.MouseUp, rowIndex, columnIndex),
             onPaste: derivedHandlers(Handler.Paste, rowIndex, columnIndex)
         } as any;

@@ -195,6 +195,7 @@ export interface IUserInterfaceViewport {
 export interface IState {
     forcedResizeOnly: boolean;
     scrollbarWidth: number;
+    tooltip?: { id: ColumnId, row: number };
     uiViewport?: IUserInterfaceViewport;
     uiCell?: IUserInterfaceCell;
     uiHeaders?: IUserInterfaceCell[];
@@ -346,6 +347,7 @@ export interface ICellFactoryProps {
     selected_cells: SelectedCells;
     selected_rows: number[];
     setProps: SetProps;
+    setState: SetState;
     style_cell: Style;
     style_data: Style;
     style_filter: Style;

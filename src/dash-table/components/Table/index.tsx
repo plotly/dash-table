@@ -4,7 +4,6 @@ import * as R from 'ramda';
 import { memoizeOne, memoizeOneWithFlag } from 'core/memoizer';
 
 import ControlledTable from 'dash-table/components/ControlledTable';
-import TooltipCursorDecorator from 'dash-table/components/ControlledTable/TooltipCursorDecorator';
 
 import derivedPaginator from 'dash-table/derived/paginator';
 import derivedSelectedRows from 'dash-table/derived/selectedRows';
@@ -58,15 +57,7 @@ export default class Table extends Component<PropsWithDefaultsAndDerived, Standa
         this.controlled = this.getControlledProps();
         this.updateDerivedProps();
 
-        return (<TooltipCursorDecorator
-            column_static_tooltip={this.controlled.column_static_tooltip}
-            column_conditional_tooltips={this.controlled.column_conditional_tooltips}
-            tooltips={this.controlled.tooltips}
-            delay={500}
-            virtualized={this.controlled.virtualized}
-        >
-            <ControlledTable {...this.controlled} />
-        </TooltipCursorDecorator>);
+        return (<ControlledTable {...this.controlled} />);
     }
 
     private getControlledProps(): ControlledTableProps {

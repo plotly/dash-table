@@ -18,6 +18,7 @@ import lexer from 'core/syntax-tree/lexer';
 import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
 import { ControlledTableProps } from 'dash-table/components/Table/props';
 import dropdownHelper from 'dash-table/components/dropdownHelper';
+import { ifColumnId, ifRowIndex, ifFilter } from 'dash-table/conditional';
 
 import derivedTable from 'dash-table/derived/table';
 import derivedTableFragments from 'dash-table/derived/table/fragments';
@@ -25,6 +26,8 @@ import derivedTableFragmentStyles from 'dash-table/derived/table/fragmentStyles'
 import isEditable from 'dash-table/derived/cell/isEditable';
 import { derivedTableStyle } from 'dash-table/derived/style';
 import { IStyle } from 'dash-table/derived/style/props';
+import TooltipCursorDecorator from './CellTooltip';
+import tooltipHelper from '../tooltipHelper';
 
 const sortNumerical = R.sort<number>((a, b) => a - b);
 
@@ -137,6 +140,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         this.applyStyle();
         this.handleResize();
         this.handleDropdown();
+        this.adjustTooltipPosition();
 
         const {
             setState,
@@ -658,6 +662,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
         this.updateUiViewport();
         this.handleDropdown();
+        this.adjustTooltipPosition();
     }
 
     render() {
@@ -669,6 +674,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             scrollbarWidth,
             style_as_list_view,
             style_table,
+            tooltip,
             uiCell,
             uiHeaders,
             uiViewport,
@@ -732,7 +738,15 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             onCopy={this.onCopy}
             onKeyDown={this.handleKeyDown}
             onPaste={this.onPaste}
+            style={{ position: 'relative' }}
         >
+            <TooltipCursorDecorator
+                ref='tooltip'
+                column={tooltip && tooltip.id}
+                row={tooltip && tooltip.row}
+                delay={350}
+                tooltip={this.getTooltip()}
+            />
             <div className={containerClasses.join(' ')} style={tableStyle}>
                 <div className={classes.join(' ')} style={tableStyle}>
                     {grid.map((row, rowIndex) => (<div
@@ -759,5 +773,65 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                 </div>
             )}
         </div>);
+    }
+
+    private adjustTooltipPosition() {
+        const { tooltip, virtualized } = this.props;
+
+        if (!tooltip) {
+            return;
+        }
+
+        const id = tooltip.id;
+        const row = tooltip.row - virtualized.offset.rows;
+
+        const { r1c1, tooltip: t } = this.refs as { [key: string]: any };
+        const realTooltip = t && t.refs.innerTooltip;
+
+        if (!t) {
+            return;
+        }
+
+        const cell = r1c1.querySelector(`td[data-dash-column="${id}"][data-dash-row="${row}"]`);
+
+        tooltipHelper(realTooltip, cell);
+    }
+
+    private getTooltip() {
+        const { tooltip } = this.props;
+
+        if (!tooltip) {
+            return undefined;
+        }
+
+        const { id, row } = tooltip;
+        if (id === undefined || row === undefined) {
+            return undefined;
+        }
+
+        const { tooltips, column_conditional_tooltips, column_static_tooltip } = this.props;
+
+        const legacyTooltip = tooltips &&
+            tooltips[id] &&
+            (
+                tooltips[id].length > row ?
+                tooltips[id][row] :
+                    null
+            );
+
+        const staticTooltip = column_static_tooltip[id];
+
+        const conditionalTooltips = R.filter(tt => {
+            return !tt.if ||
+                (
+                    ifColumnId(tt.if, id) &&
+                ifRowIndex(tt.if, row) &&
+                ifFilter(tt.if, this.props.virtualized.data[row - this.props.virtualized.offset.rows])
+                );
+        }, column_conditional_tooltips);
+
+        return conditionalTooltips.length ?
+            conditionalTooltips[0] :
+            legacyTooltip || staticTooltip;
     }
 }

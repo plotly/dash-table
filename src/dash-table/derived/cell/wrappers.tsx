@@ -1,12 +1,17 @@
 import * as R from 'ramda';
-import React from 'react';
+import React, { MouseEvent } from 'react';
 
 import { memoizeAll, memoizeOne } from 'core/memoizer';
-import { Data, IVisibleColumn, VisibleColumns, ActiveCell, SelectedCells, Datum, ColumnId, IViewportOffset, Presentation } from 'dash-table/components/Table/props';
+import memoizerCache from 'core/memoizerCache';
+
+import { Data, IVisibleColumn, VisibleColumns, ActiveCell, SelectedCells, Datum, ColumnId, IViewportOffset, Presentation, ICellFactoryProps } from 'dash-table/components/Table/props';
 import Cell from 'dash-table/components/Cell';
+
+import derivedCellEventHandlerProps from 'dash-table/derived/cell/eventHandlerProps';
 import isActiveCell from 'dash-table/derived/cell/isActive';
 import isSelectedCell from 'dash-table/derived/cell/isSelected';
-import memoizerCache from 'core/memoizerCache';
+
+const cellEventHandlerProps = derivedCellEventHandlerProps();
 
 type Key = [number, number];
 type ElementCacheFn = (
@@ -15,7 +20,9 @@ type ElementCacheFn = (
     classes: string,
     columnIndex: number,
     rowIndex: number,
-    columnId: ColumnId
+    columnId: ColumnId,
+    onEnter: (e: MouseEvent) => void,
+    onLeave: (e: MouseEvent) => void
 ) => JSX.Element;
 
 function getter(
@@ -24,7 +31,8 @@ function getter(
     columns: VisibleColumns,
     data: Data,
     offset: IViewportOffset,
-    selectedCells: SelectedCells
+    selectedCells: SelectedCells,
+    propsFn: () => ICellFactoryProps
 ): JSX.Element[][] {
     return R.addIndex<Datum, JSX.Element[]>(R.map)(
         (_, rowIndex) => R.addIndex<IVisibleColumn, JSX.Element>(R.map)(
@@ -34,6 +42,8 @@ function getter(
 
                 const isDropdown = column.presentation === Presentation.Dropdown;
 
+                const handlers = cellEventHandlerProps(propsFn)(rowIndex, columnIndex);
+
                 const classes =
                     'dash-cell' +
                     ` column-${columnIndex}` +
@@ -41,7 +51,7 @@ function getter(
                     (selected ? ' cell--selected' : '') +
                     (isDropdown  ? ' dropdown' : '');
 
-                return elementCache([rowIndex, columnIndex], active, classes, columnIndex, rowIndex, column.id);
+                return elementCache([rowIndex, columnIndex], active, classes, columnIndex, rowIndex, column.id, handlers.onEnter, handlers.onLeave);
             },
             columns
         ),
@@ -54,10 +64,19 @@ function decorator(_id: string): ((
     columns: VisibleColumns,
     data: Data,
     offset: IViewportOffset,
-    selectedCells: SelectedCells
+    selectedCells: SelectedCells,
+    propsFn: () => ICellFactoryProps
 ) => JSX.Element[][]) {
-    const elementCache = memoizerCache<Key, [boolean, string, number, number, ColumnId], JSX.Element>(
-        (active: boolean, classes: string, columnIndex: number, rowIndex: number, columnId: ColumnId) => (<Cell
+    const elementCache = memoizerCache<Key, [boolean, string, number, number, ColumnId, (e: MouseEvent) => void, (e: MouseEvent) => void], JSX.Element>(
+        (
+            active: boolean,
+            classes: string,
+            columnIndex: number,
+            rowIndex: number,
+            columnId: ColumnId,
+            onEnter: (e: MouseEvent) => void,
+            onLeave: (e: MouseEvent) => void
+        ) => (<Cell
             active={active}
             classes={classes}
             key={`column-${columnIndex}`}
@@ -65,6 +84,8 @@ function decorator(_id: string): ((
                 'data-dash-column': columnId,
                 'data-dash-row': rowIndex
             }}
+            onMouseEnter={onEnter}
+            onMouseLeave={onLeave}
         />)
     );
 

@@ -20,13 +20,21 @@ export default class Cell extends Component<ICellProps> {
     }
 
     render() {
-        const { attributes, classes, style } = this.propsWithDefaults;
+        const {
+            attributes,
+            classes,
+            onMouseEnter,
+            onMouseLeave,
+            style
+        } = this.propsWithDefaults;
 
         return (<td
             ref='td'
             children={(this as any).props.children}
             tabIndex={-1}
             className={classes}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
             style={style}
             {...attributes}
         />);

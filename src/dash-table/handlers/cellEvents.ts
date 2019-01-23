@@ -116,6 +116,32 @@ export const handleChange = (propsFn: () => ICellFactoryProps, idx: number, i: n
 
 };
 
+export const handleEnter = (propsFn: () => ICellFactoryProps, idx: number, i: number) => {
+    const {
+        columns,
+        virtualized,
+        setState
+    } = propsFn();
+
+    const c = columns[i];
+    const realIdx = virtualized.indices[idx];
+
+    setState({
+        tooltip: {
+            id: c.id,
+            row: realIdx
+        }
+    });
+};
+
+export const handlerLeave = (propsFn: () => ICellFactoryProps, _idx: number, _i: number) => {
+    const {
+        setState
+    } = propsFn();
+
+    setState({ tooltip: undefined });
+};
+
 export const handleOnMouseUp = (propsFn: () => ICellFactoryProps, idx: number, i: number, e: any) => {
     const {
         active_cell,

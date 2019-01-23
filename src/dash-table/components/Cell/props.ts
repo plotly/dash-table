@@ -1,4 +1,4 @@
-import { CSSProperties } from 'react';
+import { CSSProperties, MouseEvent } from 'react';
 
 interface IAttributes {
     [key: string]: string | number | boolean;
@@ -6,8 +6,10 @@ interface IAttributes {
 
 export interface ICellProps {
     active: boolean;
-    classes: string;
     attributes: IAttributes;
+    classes: string;
+    onMouseEnter: (e: MouseEvent) => void;
+    onMouseLeave: (e: MouseEvent) => void;
     style?: CSSProperties;
 }
 
