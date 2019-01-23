@@ -4,6 +4,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
+[#342](https://github.com/plotly/dash-core/issues/342)
+- Added `column_type` condition to style `if`; allows applying styles based on the type of the column for props
+    - `style_cell_conditional`
+    - `style_data_conditional`
+    - `style_filter_conditional`
+    - `style_header_conditional`
 [#297](https://github.com/plotly/dash-core/issues/297)
 - Added column.validation nested prop to tweak coercion and validation behavior
     - allow_null (boolean): [numeric, text] Allow null/undefined/NaN value

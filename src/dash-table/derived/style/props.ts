@@ -1,4 +1,4 @@
-import { ColumnId } from 'dash-table/components/Table/props';
+import { ColumnId, ColumnType } from 'dash-table/components/Table/props';
 import IStyle from './IStyle';
 
 export interface IConditionalElement {
@@ -17,10 +17,14 @@ export interface INamedElement {
     column_id?: ColumnId;
 }
 
-type ConditionalBasicFilter = INamedElement;
-type ConditionalDataCell = IConditionalElement & IIndexedRowElement & INamedElement;
-type ConditionalCell = INamedElement;
-type ConditionalHeader = IIndexedHeaderElement & INamedElement;
+export interface ITypedElement {
+    column_type?: ColumnType;
+}
+
+type ConditionalBasicFilter = INamedElement & ITypedElement;
+type ConditionalDataCell = IConditionalElement & IIndexedRowElement & INamedElement & ITypedElement;
+type ConditionalCell = INamedElement & ITypedElement;
+type ConditionalHeader = IIndexedHeaderElement & INamedElement & ITypedElement;
 
 export { IStyle };
 

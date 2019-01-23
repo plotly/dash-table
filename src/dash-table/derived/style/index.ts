@@ -4,7 +4,7 @@ import { CSSProperties } from 'react';
 import SyntaxTree from 'core/syntax-tree';
 import { memoizeOneFactory } from 'core/memoizer';
 
-import { Datum, IVisibleColumn } from 'dash-table/components/Table/props';
+import { Datum, IVisibleColumn, ColumnType } from 'dash-table/components/Table/props';
 
 import {
     Cells,
@@ -15,6 +15,7 @@ import {
     IIndexedHeaderElement,
     IIndexedRowElement,
     INamedElement,
+    ITypedElement,
     Style,
     Table
 } from './props';
@@ -27,7 +28,7 @@ export interface IConvertedStyle {
     matchesFilter: (datum: Datum) => boolean;
 }
 
-type GenericIf = Partial<IConditionalElement & IIndexedHeaderElement & IIndexedRowElement & INamedElement>;
+type GenericIf = Partial<IConditionalElement & IIndexedHeaderElement & IIndexedRowElement & INamedElement & ITypedElement>;
 type GenericStyle = Style & Partial<{ if: GenericIf }>;
 
 function convertElement(style: GenericStyle) {
@@ -36,9 +37,13 @@ function convertElement(style: GenericStyle) {
 
     return {
         matchesColumn: (column: IVisibleColumn) =>
-            !style.if ||
-            !style.if.column_id ||
-            style.if.column_id === column.id,
+            !style.if || (
+                !style.if.column_id ||
+                style.if.column_id === column.id
+            ) && (
+                !style.if.column_type ||
+                style.if.column_type === (column.type || ColumnType.Any)
+            ),
         matchesRow: (index: number) =>
             indexFilter === undefined ?
                 true :
