@@ -39,8 +39,27 @@ export default (
 
     const parentBounds = parent.getBoundingClientRect();
 
-    const left = (parentBounds.left - positionalBounds.left) + positionalParent.scrollLeft;
-    const top = (parentBounds.top - positionalBounds.top) + positionalParent.scrollTop + parentBounds.height;
+    const leftCorrection = (parentBounds.width - el.clientWidth) / 2;
+    let left = (parentBounds.left - positionalBounds.left) + positionalParent.scrollLeft + leftCorrection;
+    let top = (parentBounds.top - positionalBounds.top) + positionalParent.scrollTop + parentBounds.height;
+
+    const { clientWidth: elWidth, clientHeight: elHeight } = el;
+    const { clientWidth: vwWidth, clientHeight: vwHeight } = document.body;
+
+    // too far left
+    if (left < 0) {
+        left = 0;
+    }
+
+    // too far right
+    if (left + elWidth > vwWidth) {
+        left = vwWidth - elWidth;
+    }
+
+    // too low
+    if (top + elHeight > vwHeight) {
+        top = (parentBounds.top - positionalBounds.top) + positionalParent.scrollTop - elHeight;
+    }
 
     el.style.top = `${top}px`;
     el.style.left = `${left}px`;
