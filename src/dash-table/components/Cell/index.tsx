@@ -37,6 +37,7 @@ export default class Cell extends Component<ICellProps> {
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
             onMouseMove={onMouseMove}
+            onMouseOver={onMouseMove}
             style={style}
             {...attributes}
         />);

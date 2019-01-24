@@ -44,20 +44,20 @@ export default (
     let top = (parentBounds.top - positionalBounds.top) + positionalParent.scrollTop + parentBounds.height;
 
     const { clientWidth: elWidth, clientHeight: elHeight } = el;
-    const { clientWidth: vwWidth, clientHeight: vwHeight } = document.body;
+    const { scrollLeft: vwLeft, scrollTop: vwTop, clientWidth: vwWidth, clientHeight: vwHeight } = document.body;
 
     // too far left
-    if (left < 0) {
-        left = 0;
+    if (left < vwLeft) {
+        left = vwLeft;
     }
 
     // too far right
-    if (left + elWidth > vwWidth) {
-        left = vwWidth - elWidth;
+    if (left + elWidth > vwLeft + vwWidth) {
+        left = (vwLeft + vwWidth) - elWidth;
     }
 
     // too low
-    if (top + elHeight > vwHeight) {
+    if (top + elHeight > vwTop + vwHeight) {
         top = (parentBounds.top - positionalBounds.top) + positionalParent.scrollTop - elHeight;
     }
 
