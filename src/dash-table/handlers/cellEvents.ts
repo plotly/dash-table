@@ -134,12 +134,35 @@ export const handleEnter = (propsFn: () => ICellFactoryProps, idx: number, i: nu
     });
 };
 
-export const handlerLeave = (propsFn: () => ICellFactoryProps, _idx: number, _i: number) => {
+export const handleLeave = (propsFn: () => ICellFactoryProps, _idx: number, _i: number) => {
     const {
         setState
     } = propsFn();
 
     setState({ tooltip: undefined });
+};
+
+export const handleMove = (propsFn: () => ICellFactoryProps, idx: number, i: number) => {
+    const {
+        columns,
+        virtualized,
+        setState,
+        tooltip
+    } = propsFn();
+
+    const c = columns[i];
+    const realIdx = virtualized.indices[idx];
+
+    if (tooltip && tooltip.id === c.id && tooltip.row === realIdx) {
+        return;
+    }
+
+    setState({
+        tooltip: {
+            id: c.id,
+            row: realIdx
+        }
+    });
 };
 
 export const handleOnMouseUp = (propsFn: () => ICellFactoryProps, idx: number, i: number, e: any) => {

@@ -25,6 +25,7 @@ export default class Cell extends Component<ICellProps> {
             classes,
             onMouseEnter,
             onMouseLeave,
+            onMouseMove,
             style
         } = this.propsWithDefaults;
 
@@ -35,6 +36,7 @@ export default class Cell extends Component<ICellProps> {
             className={classes}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
+            onMouseMove={onMouseMove}
             style={style}
             {...attributes}
         />);

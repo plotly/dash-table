@@ -10,6 +10,7 @@ export interface ICellProps {
     classes: string;
     onMouseEnter: (e: MouseEvent) => void;
     onMouseLeave: (e: MouseEvent) => void;
+    onMouseMove: (e: MouseEvent) => void;
     style?: CSSProperties;
 }
 

@@ -22,7 +22,8 @@ type ElementCacheFn = (
     rowIndex: number,
     columnId: ColumnId,
     onEnter: (e: MouseEvent) => void,
-    onLeave: (e: MouseEvent) => void
+    onLeave: (e: MouseEvent) => void,
+    onMove: (e: MouseEvent) => void
 ) => JSX.Element;
 
 function getter(
@@ -51,7 +52,16 @@ function getter(
                     (selected ? ' cell--selected' : '') +
                     (isDropdown  ? ' dropdown' : '');
 
-                return elementCache([rowIndex, columnIndex], active, classes, columnIndex, rowIndex, column.id, handlers.onEnter, handlers.onLeave);
+                return elementCache([rowIndex, columnIndex],
+                    active,
+                    classes,
+                    columnIndex,
+                    rowIndex,
+                    column.id,
+                    handlers.onEnter,
+                    handlers.onLeave,
+                    handlers.onMove
+                );
             },
             columns
         ),
@@ -67,7 +77,16 @@ function decorator(_id: string): ((
     selectedCells: SelectedCells,
     propsFn: () => ICellFactoryProps
 ) => JSX.Element[][]) {
-    const elementCache = memoizerCache<Key, [boolean, string, number, number, ColumnId, (e: MouseEvent) => void, (e: MouseEvent) => void], JSX.Element>(
+    const elementCache = memoizerCache<Key, [
+        boolean,
+        string,
+        number,
+        number,
+        ColumnId,
+        (e: MouseEvent) => void,
+        (e: MouseEvent) => void,
+        (e: MouseEvent) => void
+    ], JSX.Element>(
         (
             active: boolean,
             classes: string,
@@ -75,7 +94,8 @@ function decorator(_id: string): ((
             rowIndex: number,
             columnId: ColumnId,
             onEnter: (e: MouseEvent) => void,
-            onLeave: (e: MouseEvent) => void
+            onLeave: (e: MouseEvent) => void,
+            onMove: (e: MouseEvent) => void
         ) => (<Cell
             active={active}
             classes={classes}
@@ -86,6 +106,7 @@ function decorator(_id: string): ((
             }}
             onMouseEnter={onEnter}
             onMouseLeave={onLeave}
+            onMouseMove={onMove}
         />)
     );
 

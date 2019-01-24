@@ -192,10 +192,15 @@ export interface IUserInterfaceViewport {
     width: number;
 }
 
+export interface IUSerInterfaceTooltip {
+    id: ColumnId;
+    row: number;
+}
+
 export interface IState {
     forcedResizeOnly: boolean;
     scrollbarWidth: number;
-    tooltip?: { id: ColumnId, row: number };
+    tooltip?: IUSerInterfaceTooltip;
     uiViewport?: IUserInterfaceViewport;
     uiCell?: IUserInterfaceCell;
     uiHeaders?: IUserInterfaceCell[];
@@ -320,6 +325,7 @@ export type ControlledTableProps = PropsWithDefaults & IState & {
 
     columns: VisibleColumns;
     paginator: IPaginator;
+    tooltip: IUSerInterfaceTooltip;
     viewport: IDerivedData;
     viewport_selected_rows: Indices;
     virtual: IDerivedData;
@@ -357,6 +363,7 @@ export interface ICellFactoryProps {
     style_filter_conditional: BasicFilters;
     style_header_conditional: Headers;
     style_table: Table;
+    tooltip: IUSerInterfaceTooltip;
     tooltips?: ITableTooltips;
     uiCell?: IUserInterfaceCell;
     uiViewport?: IUserInterfaceViewport;
