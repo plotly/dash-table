@@ -6,6 +6,7 @@ import { ColumnId } from '../Table/props';
 interface IProps {
     column?: ColumnId;
     delay: number;
+    duration: number;
     row?: number;
     tooltip?: Tooltip;
 }
@@ -13,7 +14,8 @@ interface IProps {
 interface IState {
     md?: Remarkable;
     display: boolean;
-    tooltipTimeoutId?: any;
+    displayTooltipId?: any;
+    hideTooltipId?: any;
 }
 
 export default class CellTooltip extends PureComponent<IProps, IState> {
@@ -25,13 +27,20 @@ export default class CellTooltip extends PureComponent<IProps, IState> {
         };
     }
 
-    componentWillReceiveProps() {
+    componentWillReceiveProps(nextProps: IProps) {
         const { state } = this;
+        const { column, row, tooltip } = this.props;
+
+        if (column === nextProps.column && row === nextProps.row && tooltip === nextProps.tooltip) {
+            return;
+        }
 
         this.setState({
             display: false,
-            tooltipTimeoutId: Boolean(clearTimeout(state.tooltipTimeoutId)) ||
-                setTimeout(() => this.setState({ display: true }), this.props.delay)
+            displayTooltipId: Boolean(clearTimeout(state.displayTooltipId)) ||
+                setTimeout(() => this.setState({ display: true }), this.props.delay),
+            hideTooltipId: Boolean(clearTimeout(state.hideTooltipId)) ||
+                setTimeout(() => this.setState({ display: false }), this.props.delay + this.props.duration)
         });
     }
 

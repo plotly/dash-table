@@ -745,6 +745,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                 column={tooltip && tooltip.id}
                 row={tooltip && tooltip.row}
                 delay={350}
+                duration={1500}
                 tooltip={this.getTooltip()}
             />
             <div className={containerClasses.join(' ')} style={tableStyle}>
