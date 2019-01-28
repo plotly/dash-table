@@ -183,7 +183,7 @@ the tooltip. This value is required.
 Alternatively, the value of the property can also be
 a plain string. The `text` syntax will be used in
 that case.. column_static_tooltip has the following type: dict with strings as keys and values of type dict containing keys 'type', 'value'.
-Those keys have the following types: 
+Those keys have the following types:
   - type (a value equal to: 'text', 'markdown'; optional)
   - value (string; required) | string
 - column_conditional_tooltips (list; optional): `column_conditional_tooltips` represents the tooltip shown
