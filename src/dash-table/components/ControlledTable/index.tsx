@@ -26,7 +26,7 @@ import derivedTableFragmentStyles from 'dash-table/derived/table/fragmentStyles'
 import isEditable from 'dash-table/derived/cell/isEditable';
 import { derivedTableStyle } from 'dash-table/derived/style';
 import { IStyle } from 'dash-table/derived/style/props';
-import TooltipCursorDecorator from './CellTooltip';
+import CellTooltip from './CellTooltip';
 import tooltipHelper from '../tooltipHelper';
 
 const sortNumerical = R.sort<number>((a, b) => a - b);
@@ -740,7 +740,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             onPaste={this.onPaste}
             style={{ position: 'relative' }}
         >
-            <TooltipCursorDecorator
+            <CellTooltip
                 ref='tooltip'
                 column={tooltip && tooltip.id}
                 row={tooltip && tooltip.row}
@@ -831,7 +831,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         }, column_conditional_tooltips);
 
         return conditionalTooltips.length ?
-            conditionalTooltips[0] :
+            conditionalTooltips.slice(-1)[0] :
             legacyTooltip || staticTooltip;
     }
 }
