@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 
 import { Tooltip, TooltipSyntax } from 'dash-table/tooltips/props';
 import { ColumnId } from '../Table/props';
+import Remarkable from 'remarkable';
 
 interface IProps {
     column?: ColumnId;
@@ -12,7 +13,7 @@ interface IProps {
 }
 
 interface IState {
-    md?: Remarkable;
+    md: Remarkable;
     display: boolean;
     displayTooltipId?: any;
     hideTooltipId?: any;
@@ -23,7 +24,8 @@ export default class CellTooltip extends PureComponent<IProps, IState> {
         super(props);
 
         this.state = {
-            display: false
+            display: false,
+            md: new Remarkable()
         };
     }
 
@@ -70,16 +72,7 @@ export default class CellTooltip extends PureComponent<IProps, IState> {
         const { tooltip } = this.props;
         const { md } = this.state;
 
-        if (tooltip && !md) {
-            import(/* webpackChunkName: "markdown" */ 'remarkable')
-                .then(lib => lib.default)
-                .then(Remarkable => {
-                    this.setState({ md: new Remarkable() });
-                });
-            return null;
-        }
-
-        return (!tooltip || !md) ?
+        return (!tooltip) ?
             null :
             this.renderTooltip(tooltip, md);
     }

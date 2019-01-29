@@ -19,7 +19,6 @@ module.exports = (preprocessor = {}, mode = 'development') => {
             path: path.resolve(__dirname, `./../../${dashLibraryName}`),
             filename: '[name].js',
             library: dashLibraryName,
-            publicPath: '/_dash-component-suites/dash_table/',
             libraryTarget: 'umd'
         },
         devtool: 'source-map',
