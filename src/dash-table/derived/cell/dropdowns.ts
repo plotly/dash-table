@@ -1,7 +1,7 @@
 import * as R from 'ramda';
 
 import { memoizeOne } from 'core/memoizer';
-import { memoizerCache2 } from 'core/memoizerCache';
+import memoizerCache from 'core/cache/memoizer';
 import SyntaxTree from 'core/syntax-tree';
 
 import {
@@ -53,7 +53,7 @@ class Dropdowns {
     /**
      * Returns the list of applicable dropdowns for a cell.
      */
-    private readonly applicable = memoizerCache2<[ColumnId, number]>()((
+    private readonly applicable = memoizerCache<[ColumnId, number]>()((
         column: IBaseVisibleColumn,
         realIndex: number,
         columnConditionalDropdown: any,
@@ -85,7 +85,7 @@ class Dropdowns {
      * Returns the highest priority dropdown from the
      * applicable dropdowns.
      */
-    private readonly dropdown = memoizerCache2<[ColumnId, number]>()((
+    private readonly dropdown = memoizerCache<[ColumnId, number]>()((
         applicableDropdowns: [any, any],
         column: IVisibleColumn,
         datum: Datum
@@ -114,14 +114,14 @@ class Dropdowns {
     /**
      * Get the query's AST.
      */
-    private readonly ast = memoizerCache2<[ColumnId, number]>()((
+    private readonly ast = memoizerCache<[ColumnId, number]>()((
         query: string
     ) => new SyntaxTree(query));
 
     /**
      * Evaluate if the query matches the cell's data.
      */
-    private readonly evaluation = memoizerCache2<[ColumnId, number]>()((
+    private readonly evaluation = memoizerCache<[ColumnId, number]>()((
         ast: SyntaxTree,
         datum: Datum
     ) => ast.evaluate(datum));

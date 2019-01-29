@@ -2,11 +2,11 @@ import * as R from 'ramda';
 import React from 'react';
 
 import { memoizeOne } from 'core/memoizer';
+import memoizerCache from 'core/cache/memoizer';
 import { Data, IVisibleColumn, VisibleColumns, ActiveCell, SelectedCells, Datum, ColumnId, IViewportOffset, Presentation } from 'dash-table/components/Table/props';
 import Cell from 'dash-table/components/Cell';
 import isActiveCell from 'dash-table/derived/cell/isActive';
 import isSelectedCell from 'dash-table/derived/cell/isSelected';
-import { memoizerCache2 } from 'core/memoizerCache';
 
 export default () => new Wrappers().get;
 
@@ -47,7 +47,7 @@ class Wrappers {
     /**
      * Returns the wrapper for a cell.
      */
-    private wrapper = memoizerCache2<[number, number]>()((
+    private wrapper = memoizerCache<[number, number]>()((
         active: boolean,
         classes: string,
         columnIndex: number,
