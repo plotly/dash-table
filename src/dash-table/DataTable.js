@@ -73,6 +73,8 @@ export const defaultProps = {
 
     column_static_tooltip: [],
     column_conditional_tooltips: [],
+    tooltip_delay: 350,
+    tooltip_duration: 1500,
 
     data: [],
     columns: [],
@@ -549,6 +551,12 @@ export const propTypes = {
      * or `text`. Defaults to `text`.
      * The `value` refers to the syntax-based content of
      * the tooltip. This value is required.
+     * The `delay` represents the delay in milliseconds before
+     * the tooltip is shown when hovering a cell. This overrides
+     * the table's `tooltip_delay` property.
+     * The `duration` represents the duration in milliseconds
+     * during which the tooltip is shown when hovering a cell.
+     * This overrides the table's `tooltip_duration` property.
      *
      * Alternatively, the value of the property can also be
      * a plain string. The `text` syntax will be used in
@@ -557,6 +565,8 @@ export const propTypes = {
     column_static_tooltip: PropTypes.objectOf(
         PropTypes.oneOfType([
             PropTypes.shape({
+                delay: PropTypes.number,
+                duration: PropTypes.number,
                 type: PropTypes.oneOf([
                     'text',
                     'markdown'
@@ -597,6 +607,12 @@ export const propTypes = {
      * or `text`. Defaults to `text`.
      * The `value` refers to the syntax-based content of
      * the tooltip. This value is required.
+     * The `delay` represents the delay in milliseconds before
+     * the tooltip is shown when hovering a cell. This overrides
+     * the table's `tooltip_delay` property.
+     * The `duration` represents the duration in milliseconds
+     * during which the tooltip is shown when hovering a cell.
+     * This overrides the table's `tooltip_duration` property.
      */
     column_conditional_tooltips: PropTypes.arrayOf(PropTypes.shape({
         if: PropTypes.shape({
@@ -610,6 +626,8 @@ export const propTypes = {
             ]),
             column_id: PropTypes.string
         }).isRequired,
+        delay: PropTypes.number,
+        duration: PropTypes.number,
         type: PropTypes.oneOf([
             'text',
             'markdown'
@@ -629,6 +647,12 @@ export const propTypes = {
      * or `text`. Defaults to `text`.
      * The `value` refers to the syntax-based content of
      * the tooltip. This value is required.
+     * The `delay` represents the delay in milliseconds before
+     * the tooltip is shown when hovering a cell. This overrides
+     * the table's `tooltip_delay` property.
+     * The `duration` represents the duration in milliseconds
+     * during which the tooltip is shown when hovering a cell.
+     * This overrides the table's `tooltip_duration` property.
      *
      * Alternatively, the value of the property can also be
      * a plain string. The `text` syntax will be used in
@@ -638,6 +662,8 @@ export const propTypes = {
         PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.shape({
+                delay: PropTypes.number,
+                duration: PropTypes.number,
                 type: PropTypes.oneOf([
                     'text',
                     'markdown'
@@ -646,6 +672,20 @@ export const propTypes = {
             })
         ]))
     ),
+
+    /**
+     * `tooltip_delay` represents the table-wide delay in milliseconds before
+     * the tooltip is shown when hovering a cell.
+     *
+     * Default to 350.
+     */
+    tooltip_delay: PropTypes.number,
+
+    /**
+     * `tooltip_duration` represents the table-wide duration in milliseconds
+     * during which the tooltip will be displayed when hovering a cell.
+     */
+    tooltip_duration: PropTypes.number,
 
     /**
      * The `filtering` property controls the behavior of the `filtering` UI.

@@ -134,6 +134,8 @@ function getTooltipsState() {
         if: {
             column_id: 'bbb-readonly'
         },
+        delay: 1000,
+        duration: 5000,
         type: TooltipSyntax.Markdown,
         value: `### Go Proverbs\nUrgent points before big points\n![Sensei](https://senseis.xmp.net/images/stone-hello.png)`
     }];

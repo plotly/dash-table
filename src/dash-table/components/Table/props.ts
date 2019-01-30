@@ -193,6 +193,8 @@ export interface IUserInterfaceViewport {
 }
 
 export interface IUSerInterfaceTooltip {
+    delay?: number;
+    duration?: number;
     id: ColumnId;
     row: number;
 }
@@ -218,6 +220,8 @@ interface IProps {
     id: string;
 
     tooltips?: ITableTooltips;
+    tooltip_delay: number;
+    tooltip_duration: number;
     column_static_tooltip: ITableStaticTooltips;
     column_conditional_tooltips: ConditionalTooltip[];
 

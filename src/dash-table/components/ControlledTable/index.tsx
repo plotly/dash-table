@@ -1,4 +1,6 @@
 import React, { PureComponent } from 'react';
+import ReactDOM from 'react-dom';
+
 import * as R from 'ramda';
 import Stylesheet from 'core/Stylesheet';
 import {
@@ -17,6 +19,7 @@ import lexer from 'core/syntax-tree/lexer';
 
 import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
 import { ControlledTableProps } from 'dash-table/components/Table/props';
+import TooltipComponent from 'dash-table/components/Tooltip';
 import dropdownHelper from 'dash-table/components/dropdownHelper';
 import { ifColumnId, ifRowIndex, ifFilter } from 'dash-table/conditional';
 
@@ -26,8 +29,8 @@ import derivedTableFragmentStyles from 'dash-table/derived/table/fragmentStyles'
 import isEditable from 'dash-table/derived/cell/isEditable';
 import { derivedTableStyle } from 'dash-table/derived/style';
 import { IStyle } from 'dash-table/derived/style/props';
-import CellTooltip from './CellTooltip';
 import tooltipHelper from '../tooltipHelper';
+import { TooltipSyntax } from 'dash-table/tooltips/props';
 
 const sortNumerical = R.sort<number>((a, b) => a - b);
 
@@ -675,6 +678,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             style_as_list_view,
             style_table,
             tooltip,
+            tooltip_delay,
+            tooltip_duration,
             uiCell,
             uiHeaders,
             uiViewport,
@@ -733,6 +738,24 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             scrollbarWidth
         );
 
+    /* Tooltip */
+        let uiTooltip = this.getTooltip();
+        let delay: number = tooltip_delay;
+        let duration: number = tooltip_duration;
+        let type: TooltipSyntax = TooltipSyntax.Text;
+        let value: string | undefined;
+
+        if (uiTooltip) {
+            if (typeof uiTooltip === 'string') {
+                value = uiTooltip;
+            } else {
+                type = uiTooltip.type || TooltipSyntax.Text;
+                value = uiTooltip.value;
+                delay = typeof tooltip.delay === 'number' ? tooltip.delay : tooltip_delay;
+                duration = typeof tooltip.duration === 'number' ? tooltip.duration : tooltip_duration;
+            }
+        }
+
         return (<div
             id={id}
             onCopy={this.onCopy}
@@ -740,13 +763,13 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             onPaste={this.onPaste}
             style={{ position: 'relative' }}
         >
-            <CellTooltip
+            <TooltipComponent
                 ref='tooltip'
-                column={tooltip && tooltip.id}
-                row={tooltip && tooltip.row}
-                delay={350}
-                duration={1500}
-                tooltip={this.getTooltip()}
+                className='dash-table-tooltip'
+                delay={delay}
+                duration={duration}
+                type={type}
+                value={value}
             />
             <div className={containerClasses.join(' ')} style={tableStyle}>
                 <div className={classes.join(' ')} style={tableStyle}>
@@ -787,15 +810,13 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         const row = tooltip.row - virtualized.offset.rows;
 
         const { r1c1, tooltip: t } = this.refs as { [key: string]: any };
-        const realTooltip = t && t.refs.innerTooltip;
 
-        if (!t) {
-            return;
+        if (t) {
+            const cell = r1c1.querySelector(`td[data-dash-column="${id}"][data-dash-row="${row}"]`);
+
+            tooltipHelper(ReactDOM.findDOMNode(t) as any, cell);
+
         }
-
-        const cell = r1c1.querySelector(`td[data-dash-column="${id}"][data-dash-row="${row}"]`);
-
-        tooltipHelper(realTooltip, cell);
     }
 
     private getTooltip() {
@@ -806,6 +827,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         }
 
         const { id, row } = tooltip;
+
         if (id === undefined || row === undefined) {
             return undefined;
         }
@@ -816,7 +838,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             tooltips[id] &&
             (
                 tooltips[id].length > row ?
-                tooltips[id][row] :
+                    tooltips[id][row] :
                     null
             );
 
@@ -826,8 +848,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             return !tt.if ||
                 (
                     ifColumnId(tt.if, id) &&
-                ifRowIndex(tt.if, row) &&
-                ifFilter(tt.if, this.props.virtualized.data[row - this.props.virtualized.offset.rows])
+                    ifRowIndex(tt.if, row) &&
+                    ifFilter(tt.if, this.props.virtualized.data[row - this.props.virtualized.offset.rows])
                 );
         }, column_conditional_tooltips);
 

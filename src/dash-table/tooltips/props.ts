@@ -6,6 +6,8 @@ export enum TooltipSyntax {
 }
 
 export interface ITooltip {
+    delay?: number;
+    duration?: number;
     type?: TooltipSyntax;
     value: string;
 }
