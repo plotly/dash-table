@@ -13,7 +13,7 @@ export default <TKey extends CacheKeyFragment[]>() => {
             return (
                 nestedCache.get(lastKey) ||
                 nestedCache.set(lastKey, memoizeOne(fn)).get(lastKey)
-            ) as TEntryFn;
+            );
         }
 
         return { get };
