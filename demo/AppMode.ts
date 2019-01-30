@@ -112,7 +112,7 @@ function getTooltipsState() {
         ]
     };
     state.tableProps.column_static_tooltip = {
-        ccc: { type: TooltipSyntax.Text, value: `There is death in the hane` },
+        ccc: { type: TooltipSyntax.Text, value: `There is death in the hane`, delay: 1000, duration: 5000 },
         ddd: { type: TooltipSyntax.Markdown, value: `Hane, Cut, Placement` },
         rows: `Learn the eyestealing tesuji`
     };
