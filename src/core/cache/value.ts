@@ -9,10 +9,9 @@ export default <TKey extends CacheKeyFragment[]>() =>
 
             const nestedCache = getCache(cache, ...key);
 
-            return (
-                nestedCache.get(lastKey) ||
-                nestedCache.set(lastKey, fn(...key)).get(lastKey)
-            ) as TEntry;
+            return nestedCache.has(lastKey) ?
+                nestedCache.get(lastKey) :
+                nestedCache.set(lastKey, fn(...key)).get(lastKey);
         }
 
         return { get };
