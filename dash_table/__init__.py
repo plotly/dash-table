@@ -38,25 +38,9 @@ _js_dist = [
         'namespace': package_name
     },
     {
-        'relative_package_path': 'vendors~markdown.js',
-        'external_url': (
-            'https://unpkg.com/dash-table@{}/dash_table/vendors~markdown.js'
-        ).format(__version__),
-        'namespace': package_name,
-        'dynamic': True
-    },
-    {
         'relative_package_path': 'bundle.js.map',
         'external_url': (
             'https://unpkg.com/dash-table@{}/dash_table/bundle.js.map'
-        ).format(__version__),
-        'namespace': package_name,
-        'dynamic': True
-    },
-    {
-        'relative_package_path': 'vendors~markdown.js.map',
-        'external_url': (
-            'https://unpkg.com/dash-table@{}/dash_table/vendors~markdown.js.map'
         ).format(__version__),
         'namespace': package_name,
         'dynamic': True
