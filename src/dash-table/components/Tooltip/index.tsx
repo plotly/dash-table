@@ -2,8 +2,10 @@ import * as R from 'ramda';
 import React, { PureComponent } from 'react';
 import Remarkable from 'remarkable';
 
-import { TooltipSyntax } from 'dash-table/tooltips/props';
 import { isEqual } from 'core/comparer';
+
+import { MAX_32BITS } from 'dash-table/derived/table/tooltip';
+import { TooltipSyntax } from 'dash-table/tooltips/props';
 
 export enum Arrow {
     Bottom = 'bottom',
@@ -54,7 +56,10 @@ export default class Tooltip extends PureComponent<ITooltipProps, ITooltipState>
             displayTooltipId: Boolean(clearTimeout(this.state.displayTooltipId)) ||
                 setTimeout(() => this.setState({ display: true }), delay),
             hideTooltipId: Boolean(clearTimeout(this.state.hideTooltipId)) ||
-                setTimeout(() => this.setState({ display: false }), delay + duration)
+                setTimeout(
+                    () => this.setState({ display: false }),
+                    Math.min(delay + duration, MAX_32BITS)
+                )
         });
     }
 

@@ -251,11 +251,15 @@ Alternatively, the value of the property can also be
 a plain string. The `text` syntax will be used in
 that case.
 - tooltip_delay (number; optional): `tooltip_delay` represents the table-wide delay in milliseconds before
-the tooltip is shown when hovering a cell.
+the tooltip is shown when hovering a cell. If set to `null`, the tooltip
+will be shown immediately.
 
-Default to 350.
+Defaults to 350.
 - tooltip_duration (number; optional): `tooltip_duration` represents the table-wide duration in milliseconds
-during which the tooltip will be displayed when hovering a cell.
+during which the tooltip will be displayed when hovering a cell. If
+set to `null`, the tooltip will not disappear.
+
+Defaults to 2000.
 - filtering (a value equal to: 'fe', 'be', true, false; optional): The `filtering` property controls the behavior of the `filtering` UI.
 If `False`, then the filtering UI is not displayed
 If `fe` or True, then the filtering UI is displayed and the filtering

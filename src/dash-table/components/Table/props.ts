@@ -220,8 +220,8 @@ interface IProps {
     id: string;
 
     tooltips?: ITableTooltips;
-    tooltip_delay: number;
-    tooltip_duration: number;
+    tooltip_delay: number | null;
+    tooltip_duration: number | null;
     column_static_tooltip: ITableStaticTooltips;
     column_conditional_tooltips: ConditionalTooltip[];
 

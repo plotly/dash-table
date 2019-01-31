@@ -74,7 +74,7 @@ export const defaultProps = {
     column_static_tooltip: [],
     column_conditional_tooltips: [],
     tooltip_delay: 350,
-    tooltip_duration: 1500,
+    tooltip_duration: 2000,
 
     data: [],
     columns: [],
@@ -675,15 +675,19 @@ export const propTypes = {
 
     /**
      * `tooltip_delay` represents the table-wide delay in milliseconds before
-     * the tooltip is shown when hovering a cell.
+     * the tooltip is shown when hovering a cell. If set to `null`, the tooltip
+     * will be shown immediately.
      *
-     * Default to 350.
+     * Defaults to 350.
      */
     tooltip_delay: PropTypes.number,
 
     /**
      * `tooltip_duration` represents the table-wide duration in milliseconds
-     * during which the tooltip will be displayed when hovering a cell.
+     * during which the tooltip will be displayed when hovering a cell. If
+     * set to `null`, the tooltip will not disappear.
+     *
+     * Defaults to 2000.
      */
     tooltip_duration: PropTypes.number,
 

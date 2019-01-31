@@ -57,11 +57,16 @@ export default class TableTooltip extends PureComponent<ITooltipProps, IState> {
         const positionalBounds = positionalParent.getBoundingClientRect();
         const parentBounds = parent.getBoundingClientRect();
 
-        const leftCorrection = (parentBounds.width - el.clientWidth) / 2;
+        const { clientWidth: elWidth, clientHeight: elHeight } = el;
+        const elAnchorHeight = Math.max(
+            parseFloat(getComputedStyle(el, ':before').borderWidth || '0'),
+            parseFloat(getComputedStyle(el, ':after').borderWidth || '0')
+        );
+
+        const leftCorrection = (parentBounds.width - elWidth) / 2;
         let left = (parentBounds.left - positionalBounds.left) + positionalParent.scrollLeft + leftCorrection;
         let top = (parentBounds.top - positionalBounds.top) + positionalParent.scrollTop + parentBounds.height;
 
-        const { clientWidth: elWidth, clientHeight: elHeight } = el;
         const { scrollLeft: vwLeft, scrollTop: vwTop, clientWidth: vwWidth, clientHeight: vwHeight } = document.body;
 
         let arrow: Arrow | undefined = Arrow.Top;
@@ -87,7 +92,7 @@ export default class TableTooltip extends PureComponent<ITooltipProps, IState> {
 
         // too low
         if (top + elHeight > vwTop + vwHeight) {
-            top = (parentBounds.top - positionalBounds.top) + positionalParent.scrollTop - elHeight;
+            top = (parentBounds.top - positionalBounds.top) + positionalParent.scrollTop - (elHeight + elAnchorHeight);
             arrow = Arrow.Bottom;
         }
 
