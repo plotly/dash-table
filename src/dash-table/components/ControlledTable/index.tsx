@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import ReactDOM from 'react-dom';
 
 import * as R from 'ramda';
 import Stylesheet from 'core/Stylesheet';
@@ -19,7 +18,6 @@ import lexer from 'core/syntax-tree/lexer';
 
 import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
 import { ControlledTableProps } from 'dash-table/components/Table/props';
-import TooltipComponent from 'dash-table/components/Tooltip';
 import dropdownHelper from 'dash-table/components/dropdownHelper';
 
 import derivedTable from 'dash-table/derived/table';
@@ -29,7 +27,7 @@ import derivedTooltips from 'dash-table/derived/table/tooltip';
 import isEditable from 'dash-table/derived/cell/isEditable';
 import { derivedTableStyle } from 'dash-table/derived/style';
 import { IStyle } from 'dash-table/derived/style/props';
-import tooltipHelper from '../tooltipHelper';
+import TableTooltip from './fragments/TableTooltip';
 
 const sortNumerical = R.sort<number>((a, b) => a - b);
 
@@ -758,10 +756,11 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             onPaste={this.onPaste}
             style={{ position: 'relative' }}
         >
-            <TooltipComponent
+            <TableTooltip
+                key='tooltip'
                 ref='tooltip'
                 className='dash-table-tooltip'
-                {...tableTooltip}
+                tooltip={tableTooltip}
             />
             <div className={containerClasses.join(' ')} style={tableStyle}>
                 <div className={classes.join(' ')} style={tableStyle}>
@@ -806,8 +805,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         if (t) {
             const cell = r1c1.querySelector(`td[data-dash-column="${id}"][data-dash-row="${row}"]`);
 
-            tooltipHelper(ReactDOM.findDOMNode(t) as any, cell);
-
+            (this.refs.tooltip as TableTooltip).updateBounds(cell);
         }
     }
 }

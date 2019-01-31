@@ -13,7 +13,7 @@ export default (
     })();
 
     if (!el || !parent) {
-        return;
+        return {};
     }
 
     let positionalParent = el;
@@ -35,33 +35,5 @@ export default (
         relativeParent = relativeParent.parentElement;
     }
 
-    const positionalBounds = positionalParent.getBoundingClientRect();
-
-    const parentBounds = parent.getBoundingClientRect();
-
-    const leftCorrection = (parentBounds.width - el.clientWidth) / 2;
-    let left = (parentBounds.left - positionalBounds.left) + positionalParent.scrollLeft + leftCorrection;
-    let top = (parentBounds.top - positionalBounds.top) + positionalParent.scrollTop + parentBounds.height;
-
-    const { clientWidth: elWidth, clientHeight: elHeight } = el;
-    const { scrollLeft: vwLeft, scrollTop: vwTop, clientWidth: vwWidth, clientHeight: vwHeight } = document.body;
-
-    // too far left
-    if (left < vwLeft) {
-        left = vwLeft;
-    }
-
-    // too far right
-    if (left + elWidth > vwLeft + vwWidth) {
-        left = (vwLeft + vwWidth) - elWidth;
-    }
-
-    // too low
-    if (top + elHeight > vwTop + vwHeight) {
-        top = (parentBounds.top - positionalBounds.top) + positionalParent.scrollTop - elHeight;
-    }
-
-    el.style.top = `${top}px`;
-    el.style.left = `${left}px`;
-    el.style.position = 'absolute';
+    return { positionalParent, parent };
 };
