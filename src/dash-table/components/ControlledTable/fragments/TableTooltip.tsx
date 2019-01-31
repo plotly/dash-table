@@ -85,15 +85,15 @@ export default class TableTooltip extends PureComponent<ITooltipProps, IState> {
             left = (vwLeft + vwWidth) - elWidth;
         }
 
-        delta = Math.abs(delta);
-        if (delta > parent.clientWidth / 2) {
-            arrow = undefined;
-        }
-
         // too low
         if (top + elHeight > vwTop + vwHeight) {
             top = (parentBounds.top - positionalBounds.top) + positionalParent.scrollTop - (elHeight + elAnchorHeight);
             arrow = Arrow.Bottom;
+        }
+
+        delta = Math.abs(delta);
+        if (delta > parent.clientWidth / 2) {
+            arrow = undefined;
         }
 
         el.style.top = `${top}px`;
