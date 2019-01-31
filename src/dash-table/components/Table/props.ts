@@ -16,7 +16,8 @@ import {
 export enum ColumnType {
     Any = 'any',
     Numeric = 'numeric',
-    Text = 'text'
+    Text = 'text',
+    Datetime = 'datetime'
 }
 
 export enum FilteringType {
@@ -116,6 +117,11 @@ export interface ITextColumn extends ITypeColumn {
     type: ColumnType.Text;
 }
 
+export interface IDatetimeColumn extends ITypeColumn {
+    presentation?: Presentation.Input | Presentation.Dropdown;
+    type: ColumnType.Datetime;
+}
+
 export interface IBaseVisibleColumn {
     clearable?: boolean;
     deletable?: boolean | number;
@@ -126,7 +132,7 @@ export interface IBaseVisibleColumn {
     options?: IDropdownValue[]; // legacy
 }
 
-export type IColumnType = INumberColumn | ITextColumn | IAnyColumn;
+export type IColumnType = INumberColumn | ITextColumn | IDatetimeColumn | IAnyColumn;
 export type IVisibleColumn = IBaseVisibleColumn & IColumnType;
 
 export type IColumn = IVisibleColumn & {

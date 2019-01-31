@@ -247,6 +247,8 @@ export const propTypes = {
          * The data-type of the column's data.
          * 'numeric': represents both floats and ints
          * 'text': represents a string
+         * 'datetime': a string representing a date or date-time, in the form:
+         *   'YYYY-MM-DD HH:MM:SS.ssssss' or some truncation thereof
          * 'any': represents any type of data
          *
          * Defaults to 'any' if undefined.
@@ -258,7 +260,7 @@ export const propTypes = {
          * behavior.
          * Stay tuned by following [https://github.com/plotly/dash-table/issues/166](https://github.com/plotly/dash-table/issues/166)
          */
-        type: PropTypes.oneOf(['any', 'numeric', 'text'])
+        type: PropTypes.oneOf(['any', 'numeric', 'text', 'datetime'])
 
     })),
 
