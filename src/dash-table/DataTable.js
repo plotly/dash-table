@@ -553,10 +553,12 @@ export const propTypes = {
      * the tooltip. This value is required.
      * The `delay` represents the delay in milliseconds before
      * the tooltip is shown when hovering a cell. This overrides
-     * the table's `tooltip_delay` property.
+     * the table's `tooltip_delay` property. If set to `null`,
+     * the tooltip will be shown immediately.
      * The `duration` represents the duration in milliseconds
      * during which the tooltip is shown when hovering a cell.
      * This overrides the table's `tooltip_duration` property.
+     * If set to `null`, the tooltip will not disappear.
      *
      * Alternatively, the value of the property can also be
      * a plain string. The `text` syntax will be used in
@@ -609,10 +611,12 @@ export const propTypes = {
      * the tooltip. This value is required.
      * The `delay` represents the delay in milliseconds before
      * the tooltip is shown when hovering a cell. This overrides
-     * the table's `tooltip_delay` property.
+     * the table's `tooltip_delay` property. If set to `null`,
+     * the tooltip will be shown immediately.
      * The `duration` represents the duration in milliseconds
      * during which the tooltip is shown when hovering a cell.
      * This overrides the table's `tooltip_duration` property.
+     * If set to `null`, the tooltip will not disappear.
      */
     column_conditional_tooltips: PropTypes.arrayOf(PropTypes.shape({
         if: PropTypes.shape({
@@ -649,10 +653,12 @@ export const propTypes = {
      * the tooltip. This value is required.
      * The `delay` represents the delay in milliseconds before
      * the tooltip is shown when hovering a cell. This overrides
-     * the table's `tooltip_delay` property.
+     * the table's `tooltip_delay` property. If set to `null`,
+     * the tooltip will be shown immediately.
      * The `duration` represents the duration in milliseconds
      * during which the tooltip is shown when hovering a cell.
      * This overrides the table's `tooltip_duration` property.
+     * If set to `null`, the tooltip will not disappear.
      *
      * Alternatively, the value of the property can also be
      * a plain string. The `text` syntax will be used in
