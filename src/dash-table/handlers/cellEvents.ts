@@ -182,6 +182,6 @@ export const handleOnMouseUp = (propsFn: () => ICellFactoryProps, idx: number, i
     }
 };
 
-export const handlePaste = (_propsFn: () => ICellFactoryProps, _idx: number, _i: number, e: ClipboardEvent) => {
+export const handlePaste = (_propsFn: () => ICellFactoryProps, _idx: number, _i: number, e: any) => {
     e.preventDefault();
 };
