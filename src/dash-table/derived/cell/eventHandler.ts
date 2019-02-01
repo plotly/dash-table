@@ -3,8 +3,6 @@ import valueCache from 'core/cache/value';
 import { ICellFactoryProps } from 'dash-table/components/Table/props';
 import { handleChange, handleClick, handleDoubleClick, handleOnMouseUp, handlePaste } from 'dash-table/handlers/cellEvents';
 
-type CacheArgs = [Handler, number, number];
-
 export enum Handler {
     Change = 'change',
     Click = 'click',
@@ -12,9 +10,6 @@ export enum Handler {
     MouseUp = 'mouseup',
     Paste = 'paste'
 }
-
-export type CacheFn = (...args: CacheArgs) => Function;
-export type HandlerFn = (idx: number, i: number, e: any) => void;
 
 export default (propsFn: () => ICellFactoryProps) => new EventHandler(propsFn).get;
 
