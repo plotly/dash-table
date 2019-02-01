@@ -14,7 +14,7 @@ export enum Handler {
 }
 
 export type CacheFn = (...args: CacheArgs) => Function;
-export type HandlerFn = (...args: any[]) => any;
+export type HandlerFn = (idx: number, i: number, e: any) => void;
 
 export default (propsFn: () => ICellFactoryProps) => new EventHandler(propsFn).get;
 
