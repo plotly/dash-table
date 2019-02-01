@@ -23,22 +23,25 @@ class EventHandler {
 
     }
 
-    private readonly handlers = new Map<Handler, HandlerFn>([
-        [Handler.Change, handleChange.bind(undefined, this.propsFn)],
-        [Handler.Click, handleClick.bind(undefined, this.propsFn)],
-        [Handler.DoubleClick, handleDoubleClick.bind(undefined, this.propsFn)],
-        [Handler.MouseUp, handleOnMouseUp.bind(undefined, this.propsFn)],
-        [Handler.Paste, handlePaste.bind(undefined, this.propsFn)]
-    ]);
-
     private readonly cache = valueCache<[Handler, number, number]>()((
         handler: Handler,
         columnIndex: number,
         rowIndex: number
     ) => {
-        let handlerFn = this.handlers.get(handler);
-
-        return handlerFn && handlerFn.bind(undefined, rowIndex, columnIndex);
+        switch (handler) {
+            case Handler.Change:
+                return handleChange.bind(undefined, this.propsFn, rowIndex, columnIndex);
+            case Handler.Click:
+                return handleClick.bind(undefined, this.propsFn, rowIndex, columnIndex);
+            case Handler.DoubleClick:
+                return handleDoubleClick.bind(undefined, this.propsFn, rowIndex, columnIndex);
+            case Handler.MouseUp:
+                return handleOnMouseUp.bind(undefined, this.propsFn, rowIndex, columnIndex);
+            case Handler.Paste:
+                return handlePaste.bind(undefined, this.propsFn, rowIndex, columnIndex);
+            default:
+                throw new Error(`unexpected handler ${handler}`);
+        }
     });
 
     get = (

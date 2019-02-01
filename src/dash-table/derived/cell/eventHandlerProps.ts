@@ -1,4 +1,3 @@
-
 import {
     ChangeEvent,
     ClipboardEvent,
@@ -20,7 +19,7 @@ export type CacheFn = (...args: CacheArgs) => {
 };
 export type HandlerFn = (...args: any[]) => any;
 
-const getter = (propsFn: () => ICellFactoryProps): CacheFn => {
+const getter = (propsFn: () => ICellFactoryProps) => {
     const derivedHandlers = cellEventHandler(propsFn);
 
     return (...args: CacheArgs) => {
@@ -35,7 +34,7 @@ const getter = (propsFn: () => ICellFactoryProps): CacheFn => {
             onDoubleClick: derivedHandlers(Handler.DoubleClick, columnIndex, rowIndex),
             onMouseUp: derivedHandlers(Handler.MouseUp, columnIndex, rowIndex),
             onPaste: derivedHandlers(Handler.Paste, columnIndex, rowIndex)
-        } as any;
+        };
     };
 };
 
