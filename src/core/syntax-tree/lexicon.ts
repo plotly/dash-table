@@ -31,10 +31,21 @@ const isPrime = (c: number) => {
     return true;
 };
 
-const baseOperand = {
+const operand = {
     resolve: (target: any, tree: ISyntaxTree) => {
-        Logger.trace('resolve -> exp', target, tree);
+        if (/^('.*')|(".*")$/.test(tree.value)) {
+            return target[
+                tree.value.slice(1, tree.value.length - 1)
+            ];
+        } else if (/^(\w|[:.\-_+])+$/.test(tree.value)) {
+            return target[tree.value];
+        }
+    },
+    regexp: /^('([^()']|\\')+'|"([^()"]|\\")+"|(\w|[:.\-_+])+)/
+};
 
+const expression = {
+    resolve: (target: any, tree: ISyntaxTree) => {
         if (/^('.*')|(".*")$/.test(tree.value)) {
             return tree.value.slice(1, tree.value.length - 1);
         } else if (/^\w+\(.*\)$/.test(tree.value)) {
@@ -122,9 +133,10 @@ const lexicon: ILexeme[] = [
         },
         when: [LexemeType.UnaryNot]
     },
-    Object.assign({
+    {
+        ...operand,
         name: LexemeType.Operand
-    }, baseOperand),
+    },
     {
         evaluate: (target, tree) => {
             Logger.trace('evaluate -> binary', target, tree);
@@ -224,10 +236,11 @@ const lexicon: ILexeme[] = [
         },
         when: [LexemeType.UnaryNot]
     },
-    Object.assign({
+    {
+        ...expression,
         name: LexemeType.Expression,
         when: [LexemeType.BinaryOperator]
-    }, baseOperand)
+    }
 ];
 
 export default lexicon;
