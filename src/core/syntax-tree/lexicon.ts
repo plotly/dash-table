@@ -37,11 +37,11 @@ const operand = {
             return target[
                 tree.value.slice(1, tree.value.length - 1)
             ];
-        } else if (/^(\w|[:.\-_+])+$/.test(tree.value)) {
+        } else if (/^(\w|[:.\-+])+$/.test(tree.value)) {
             return target[tree.value];
         }
     },
-    regexp: /^('([^()']|\\')+'|"([^()"]|\\")+"|(\w|[:.\-_+])+)/
+    regexp: /^('([^()']|\\')+'|"([^()"]|\\")+"|(\w|[:.\-+])+)/
 };
 
 const expression = {
