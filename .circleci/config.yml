@@ -35,6 +35,7 @@ jobs:
                     . venv/bin/activate
                     pip install -r requirements-base.txt --quiet
                     pip install -r requirements-v0.txt --quiet
+                    pip install -e .
 
             - run:
                 name: Run build:js
@@ -87,6 +88,7 @@ jobs:
                     . venv/bin/activate
                     pip install -r requirements-base.txt --quiet
                     pip install -r requirements-v1.txt --quiet
+                    pip install -e .
 
             - run:
                 name: Run build:js
