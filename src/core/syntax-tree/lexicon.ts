@@ -33,7 +33,7 @@ const isPrime = (c: number) => {
 
 const operand = {
     resolve: (target: any, tree: ISyntaxTree) => {
-        if (/^(('([^'\\]|\\'|\\)+')|("([^"\\]|\\"|\\)+")|(`([^`\\]|\\`|\\)+`))$/.test(tree.value)) {
+        if (/^(('([^'\\]|\\.)+')|("([^"\\]|\\.")+")|(`([^`\\]|\\.)+`))$/.test(tree.value)) {
             return target[
                 tree.value.slice(1, tree.value.length - 1)
             ];
@@ -41,12 +41,12 @@ const operand = {
             return target[tree.value];
         }
     },
-    regexp: /^(('([^'\\]|\\'|\\)+')|("([^"\\]|\\"|\\)+")|(`([^`\\]|\\`|\\)+`)|(\w|[:.\-+])+)/
+    regexp: /^(('([^'\\]|\\.)+')|("([^"\\]|\\.)+")|(`([^`\\]|\\.)+`)|(\w|[:.\-+])+)/
 };
 
 const expression = {
     resolve: (target: any, tree: ISyntaxTree) => {
-        if (/^(('([^'\\]|\\'|\\)+')|("([^"\\]|\\"|\\)+")|(`([^`\\]|\\`|\\)+`))$/.test(tree.value)) {
+        if (/^(('([^'\\]|\\.)+')|("([^"\\]|\\.)+")|(`([^`\\]|\\.)+`))$/.test(tree.value)) {
             return tree.value.slice(1, tree.value.length - 1);
         } else if (/^(num|str)\(.*\)$/.test(tree.value)) {
             const res = tree.value.match(/^(\w+)\((.*)\)$/);
@@ -67,7 +67,7 @@ const expression = {
             return target[tree.value];
         }
     },
-    regexp: /^(((num|str)\([^()]*\))|('([^'\\]|\\'|\\)+')|("([^"\\]|\\"|\\)+")|(`([^`\\]|\\`|\\)+`)|(\w|[:.\-+])+)/
+    regexp: /^(((num|str)\([^()]*\))|('([^'\\]|\\.)+')|("([^"\\]|\\.)+")|(`([^`\\]|\\.)+`)|(\w|[:.\-+])+)/
 };
 
 const lexicon: ILexeme[] = [

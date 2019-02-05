@@ -7,6 +7,30 @@ describe('Syntax Tree', () => {
     const data3 = { a: '3', b: '1', c: 3, d: false, 'a.dot': '3.dot', 'a-dot': '3-dot', a_dot: '3_dot', 'a+dot': '3+dot', 'a dot': '3 dot', 'a:dot': '3:dot', '_-6.:+** *@$': '3*dot', '\'""\'': '3\'"dot' };
 
     describe('operands', () => {
+        it('does not support badly formed operands', () => {
+            expect(new SyntaxTree(`'myField' eq num(0)`).isValid).to.equal(true);
+            expect(new SyntaxTree(`"myField" eq num(0)`).isValid).to.equal(true);
+            expect(new SyntaxTree('`myField` eq num(0)').isValid).to.equal(true);
+            expect(new SyntaxTree(`'myField\\' eq num(0)`).isValid).to.equal(false);
+            expect(new SyntaxTree(`"myField\\" eq num(0)`).isValid).to.equal(false);
+            expect(new SyntaxTree('`myField\\` eq num(0)').isValid).to.equal(false);
+            expect(new SyntaxTree(`\\'myField' eq num(0)`).isValid).to.equal(false);
+            expect(new SyntaxTree(`\\"myField" eq num(0)`).isValid).to.equal(false);
+            expect(new SyntaxTree('\\`myField` eq num(0)').isValid).to.equal(false);
+        });
+
+        it('does not support badly formed expression', () => {
+            expect(new SyntaxTree(`myField eq 'value'`).isValid).to.equal(true);
+            expect(new SyntaxTree(`myField eq "value"`).isValid).to.equal(true);
+            expect(new SyntaxTree('myField eq `value`').isValid).to.equal(true);
+            expect(new SyntaxTree(`myField eq 'value\\'`).isValid).to.equal(false);
+            expect(new SyntaxTree(`myField eq "value\\"`).isValid).to.equal(false);
+            expect(new SyntaxTree('myField eq `value\\`').isValid).to.equal(false);
+            expect(new SyntaxTree(`myField eq \\'value'`).isValid).to.equal(false);
+            expect(new SyntaxTree(`myField eq \\"value"`).isValid).to.equal(false);
+            expect(new SyntaxTree('myField eq \\`value`').isValid).to.equal(false);
+        });
+
         it('support arbitrary quoted column name', () => {
             const tree = new SyntaxTree(`'_-6.:+** *@$' eq "1*dot" || '_-6.:+** *@$' eq "2*dot"`);
 
