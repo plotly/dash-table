@@ -121,6 +121,8 @@ function getFixedTooltipsState() {
 function getTooltipsState() {
     const state = getDefaultState();
 
+    state.tableProps.tooltip_delay = 250;
+    state.tableProps.tooltip_duration = 1000;
     state.tableProps.tooltips = {
         ccc: [
             { type: TooltipSyntax.Markdown, value: `### Go Proverb\nThe enemy's key point is yours` },
@@ -132,7 +134,7 @@ function getTooltipsState() {
         ]
     };
     state.tableProps.column_static_tooltip = {
-        ccc: { type: TooltipSyntax.Text, value: `There is death in the hane`, delay: 1000, duration: 5000 },
+        ccc: { type: TooltipSyntax.Text, value: `There is death in the hane` },
         ddd: { type: TooltipSyntax.Markdown, value: `Hane, Cut, Placement` },
         rows: `Learn the eyestealing tesuji`
     };
@@ -154,8 +156,6 @@ function getTooltipsState() {
         if: {
             column_id: 'bbb-readonly'
         },
-        delay: 1000,
-        duration: 5000,
         type: TooltipSyntax.Markdown,
         value: `### Go Proverbs\nUrgent points before big points\n![Sensei](https://senseis.xmp.net/images/stone-hello.png)`
     }];

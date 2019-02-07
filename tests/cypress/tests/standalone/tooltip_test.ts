@@ -15,7 +15,7 @@ describe(`tooltips, mode=${AppMode.Tooltips}`, () => {
         cy.get('.dash-table-tooltip').should('be.visible');
         cy.get('.dash-table-tooltip').within(t => expect(t[0].innerHTML).to.not.be.undefined);
         cy.get('.dash-table-tooltip').within(t => expect(!!t[0].children && !!t[0].children.length).to.be.true);
-        cy.wait(5000);
+        cy.wait(1500);
         cy.get('.dash-table-tooltip').should('not.be.visible');
     });
 
@@ -26,7 +26,7 @@ describe(`tooltips, mode=${AppMode.Tooltips}`, () => {
         cy.get('.dash-table-tooltip').should('be.visible');
         cy.get('.dash-table-tooltip').within(t => expect(t[0].innerText).to.equal('There is death in the hane'));
         cy.get('.dash-table-tooltip').within(t => expect(!!t[0].children && !!t[0].children.length).to.be.false);
-        cy.wait(5000);
+        cy.wait(1500);
         cy.get('.dash-table-tooltip').should('not.be.visible');
     });
 });
@@ -53,7 +53,7 @@ describe(`tooltips, mode=${AppMode.FixedTooltips}`, () => {
                 expect(bounds.top).to.be.greaterThan(cellBounds.top + cellBounds.height);
             });
         });
-        cy.wait(5000);
+        cy.wait(1500);
         cy.get('.dash-table-tooltip').should('not.be.visible');
     });
 
@@ -73,7 +73,7 @@ describe(`tooltips, mode=${AppMode.FixedTooltips}`, () => {
                 expect(bounds.top).to.be.greaterThan(cellBounds.top + cellBounds.height);
             });
         });
-        cy.wait(5000);
+        cy.wait(1500);
         cy.get('.dash-table-tooltip').should('not.be.visible');
     });
 
@@ -94,7 +94,7 @@ describe(`tooltips, mode=${AppMode.FixedTooltips}`, () => {
                 expect(bounds.top).to.be.greaterThan(cellBounds.top + cellBounds.height);
             });
         });
-        cy.wait(5000);
+        cy.wait(1500);
         cy.get('.dash-table-tooltip').should('not.be.visible');
     });
 });
