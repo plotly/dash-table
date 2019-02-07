@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [3.4.0] - 2019-02-07
+## [Unreleased]
 ### Changed
 [#224](https://github.com/plotly/dash-table/issues/224)
 - Added support for unquoted column id with
