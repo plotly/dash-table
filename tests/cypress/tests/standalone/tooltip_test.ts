@@ -63,7 +63,7 @@ describe(`tooltips, mode=${AppMode.FixedTooltips}`, () => {
         cy.wait(0);
         cy.get('.dash-table-tooltip').should('be.visible');
         cy.get('.dash-table-tooltip').then(t => {
-            expect(t[0].innerText).to.equal('Hane, Cut, Placement');
+            expect(t[0].innerText).to.equal('Hane, Cut, Placement\n\n');
 
             const bounds = t[0].getBoundingClientRect();
 
