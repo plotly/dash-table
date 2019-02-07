@@ -8,11 +8,13 @@ import {
     PropsWithDefaults,
     ChangeAction,
     ChangeFailure,
-    IVisibleColumn
+    IVisibleColumn,
+    ColumnType
 } from 'dash-table/components/Table/props';
 import { TooltipSyntax } from 'dash-table/tooltips/props';
 
 export enum AppMode {
+    Date = 'date',
     Default = 'default',
     FixedVirtualized = 'fixed,virtualized',
     ReadOnly = 'readonly',
@@ -166,6 +168,36 @@ function getTypedState() {
     return state;
 }
 
+function getDateState() {
+    const state = getTypedState();
+
+    (state.tableProps.columns || []).forEach(column => {
+        if (column.id === 'ccc') {
+            column.name = ['Date', 'only'];
+            column.type = ColumnType.Datetime;
+            (state.tableProps.data || []).forEach((row, i) => {
+                const d = new Date(Date.UTC(2018, 0, 1));
+                // three day increment
+                d.setUTCDate(3 * i + 1);
+                // date only
+                row.ccc = d.toISOString().substr(0, 10);
+            });
+        } else if (column.id === 'ddd') {
+            column.name = ['Date', 'with', 'time'];
+            column.type = ColumnType.Datetime;
+            (state.tableProps.data || []).forEach((row, i) => {
+                const d = new Date(Date.UTC(2018, 0, 1));
+                // two hours and 11 seconds increment
+                d.setUTCSeconds(i * 7211);
+                // datetime ending with seconds
+                row.ddd = d.toISOString().substr(0, 19).replace('T', ' ');
+            });
+        }
+    });
+
+    return state;
+}
+
 function getVirtualizedState() {
     const mock = generateMockData(5000);
 
@@ -208,6 +240,8 @@ function getState() {
     const mode = Environment.searchParams.get('mode');
 
     switch (mode) {
+        case AppMode.Date:
+            return getDateState();
         case AppMode.FixedVirtualized:
             return getFixedVirtualizedState();
         case AppMode.ReadOnly:
