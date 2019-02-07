@@ -204,9 +204,13 @@
                   {
                     "value": "'text'",
                     "computed": false
+                  },
+                  {
+                    "value": "'datetime'",
+                    "computed": false
                   }
                 ],
-                "description": "The data-type of the column's data.\n'numeric': represents both floats and ints\n'text': represents a string\n'any': represents any type of data\n\nDefaults to 'any' if undefined.\n\nNOTE: This feature has not been fully implemented.\nIn the future, it's data types will impact things like\ntext formatting options in the cell (e.g. display 2 decimals\nfor a number), filtering options and behavior, and editing\nbehavior.\nStay tuned by following [https://github.com/plotly/dash-table/issues/166](https://github.com/plotly/dash-table/issues/166)",
+                "description": "The data-type of the column's data.\n'numeric': represents both floats and ints\n'text': represents a string\n'datetime': a string representing a date or date-time, in the form:\n  'YYYY-MM-DD HH:MM:SS.ssssss' or some truncation thereof\n'any': represents any type of data\n\nDefaults to 'any' if undefined.\n\nNOTE: This feature has not been fully implemented.\nIn the future, it's data types will impact things like\ntext formatting options in the cell (e.g. display 2 decimals\nfor a number), filtering options and behavior, and editing\nbehavior.\nStay tuned by following [https://github.com/plotly/dash-table/issues/166](https://github.com/plotly/dash-table/issues/166)",
                 "required": false
               }
             }
