@@ -14,6 +14,7 @@ import { TooltipSyntax } from 'dash-table/tooltips/props';
 
 export enum AppMode {
     Default = 'default',
+    FixedTooltips = 'fixed, tooltips',
     FixedVirtualized = 'fixed,virtualized',
     ReadOnly = 'readonly',
     ColumnsInSpace = 'columnsInSpace',
@@ -104,6 +105,15 @@ function getReadonlyState() {
 function getSpaceInColumn() {
     const state = getDefaultState(generateSpaceMockData);
     state.tableProps.filtering = true;
+
+    return state;
+}
+
+function getFixedTooltipsState() {
+    const state = getTooltipsState();
+
+    state.tableProps.n_fixed_columns = 3;
+    state.tableProps.n_fixed_rows = 4;
 
     return state;
 }
@@ -208,6 +218,8 @@ function getState() {
     const mode = Environment.searchParams.get('mode');
 
     switch (mode) {
+        case AppMode.FixedTooltips:
+            return getFixedTooltipsState();
         case AppMode.FixedVirtualized:
             return getFixedVirtualizedState();
         case AppMode.ReadOnly:
