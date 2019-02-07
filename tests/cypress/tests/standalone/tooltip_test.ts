@@ -31,7 +31,7 @@ describe(`tooltips, mode=${AppMode.Tooltips}`, () => {
     });
 });
 
-describe.only(`tooltips, mode=${AppMode.FixedTooltips}`, () => {
+describe(`tooltips, mode=${AppMode.FixedTooltips}`, () => {
     beforeEach(() => {
         cy.visit(`http://localhost:8080?mode=${AppMode.FixedTooltips}`);
     });
