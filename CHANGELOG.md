@@ -4,7 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
-[#364](https://github.com/plotly/dash-table/pull/224)
+[#364](https://github.com/plotly/dash-table/pull/364)
 - Added the `datetime` data type
 
 ### Changed
