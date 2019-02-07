@@ -14,7 +14,7 @@ import { TooltipSyntax } from 'dash-table/tooltips/props';
 
 export enum AppMode {
     Default = 'default',
-    FixedTooltips = 'fixed, tooltips',
+    FixedTooltips = 'fixed,tooltips',
     FixedVirtualized = 'fixed,virtualized',
     ReadOnly = 'readonly',
     ColumnsInSpace = 'columnsInSpace',

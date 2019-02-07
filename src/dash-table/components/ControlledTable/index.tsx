@@ -802,10 +802,10 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         const id = tooltip.id;
         const row = tooltip.row - virtualized.offset.rows;
 
-        const { table, tooltip: t } = this.refs as { [key: string]: any };
+        const { r1c1, tooltip: t } = this.refs as { [key: string]: any };
 
         if (t) {
-            const cell = table.querySelector(`td[data-dash-column="${id}"][data-dash-row="${row}"]`);
+            const cell = r1c1.querySelector(`td[data-dash-column="${id}"][data-dash-row="${row}"]`);
 
             (this.refs.tooltip as TableTooltip).updateBounds(cell);
         }

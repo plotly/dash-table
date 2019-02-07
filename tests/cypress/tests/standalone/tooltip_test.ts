@@ -31,10 +31,9 @@ describe(`tooltips, mode=${AppMode.Tooltips}`, () => {
     });
 });
 
-describe(`tooltips, mode=${AppMode.FixedTooltips}`, () => {
+describe.only(`tooltips, mode=${AppMode.FixedTooltips}`, () => {
     beforeEach(() => {
         cy.visit(`http://localhost:8080?mode=${AppMode.FixedTooltips}`);
-        DashTable.toggleScroll(false);
     });
 
     it('displays in fixed column', () => {
@@ -42,8 +41,18 @@ describe(`tooltips, mode=${AppMode.FixedTooltips}`, () => {
         cy.get('.dash-table-tooltip').should('not.be.visible');
         cy.wait(0);
         cy.get('.dash-table-tooltip').should('be.visible');
-        cy.get('.dash-table-tooltip').within(t => expect(t[0].innerText).to.equal('Learn the eyestealing tesuji'));
-        cy.get('.dash-table-tooltip').within(t => expect(!!t[0].children && !!t[0].children.length).to.be.false);
+        cy.get('.dash-table-tooltip').then(t => {
+            expect(t[0].innerText).to.equal('Learn the eyestealing tesuji');
+            expect(!!t[0].children && !!t[0].children.length).to.equal(false);
+
+            const bounds = t[0].getBoundingClientRect();
+
+            DashTable.getCellById(6, 'rows').then(table => {
+                const cellBounds = table[0].getBoundingClientRect();
+
+                expect(bounds.top).to.be.greaterThan(cellBounds.top + cellBounds.height);
+            });
+        });
         cy.wait(5000);
         cy.get('.dash-table-tooltip').should('not.be.visible');
     });
@@ -53,7 +62,17 @@ describe(`tooltips, mode=${AppMode.FixedTooltips}`, () => {
         cy.get('.dash-table-tooltip').should('not.be.visible');
         cy.wait(0);
         cy.get('.dash-table-tooltip').should('be.visible');
-        cy.get('.dash-table-tooltip').within(t => expect(t[0].innerText).to.equal('Hane, Cut, Placement'));
+        cy.get('.dash-table-tooltip').then(t => {
+            expect(t[0].innerText).to.equal('Hane, Cut, Placement');
+
+            const bounds = t[0].getBoundingClientRect();
+
+            DashTable.getCellById(0, 'ddd').then(table => {
+                const cellBounds = table[0].getBoundingClientRect();
+
+                expect(bounds.top).to.be.greaterThan(cellBounds.top + cellBounds.height);
+            });
+        });
         cy.wait(5000);
         cy.get('.dash-table-tooltip').should('not.be.visible');
     });
@@ -63,8 +82,18 @@ describe(`tooltips, mode=${AppMode.FixedTooltips}`, () => {
         cy.get('.dash-table-tooltip').should('not.be.visible');
         cy.wait(0);
         cy.get('.dash-table-tooltip').should('be.visible');
-        cy.get('.dash-table-tooltip').within(t => expect(t[0].innerText).to.equal('Learn the eyestealing tesuji'));
-        cy.get('.dash-table-tooltip').within(t => expect(!!t[0].children && !!t[0].children.length).to.be.false);
+        cy.get('.dash-table-tooltip').then(t => {
+            expect(t[0].innerText).to.equal('Learn the eyestealing tesuji');
+            expect(!!t[0].children && !!t[0].children.length).to.equal(false);
+
+            const bounds = t[0].getBoundingClientRect();
+
+            DashTable.getCellById(0, 'rows').then(table => {
+                const cellBounds = table[0].getBoundingClientRect();
+
+                expect(bounds.top).to.be.greaterThan(cellBounds.top + cellBounds.height);
+            });
+        });
         cy.wait(5000);
         cy.get('.dash-table-tooltip').should('not.be.visible');
     });
