@@ -99,12 +99,14 @@ export interface IAnyColumn {
     validation?: undefined;
 }
 
+export interface ITypeValidation {
+    allow_null?: boolean;
+    default?: null | number;
+}
+
 export interface ITypeColumn {
     on_change?: IChangeOptions;
-    validation?: {
-        allow_null?: boolean;
-        default?: null | number;
-    };
+    validation?: ITypeValidation;
 }
 
 export interface INumberColumn extends ITypeColumn {
@@ -117,9 +119,14 @@ export interface ITextColumn extends ITypeColumn {
     type: ColumnType.Text;
 }
 
+export interface IDateValidation extends ITypeValidation {
+    allow_YY?: boolean;
+}
+
 export interface IDatetimeColumn extends ITypeColumn {
     presentation?: Presentation.Input | Presentation.Dropdown;
     type: ColumnType.Datetime;
+    validation?: IDateValidation;
 }
 
 export interface IBaseVisibleColumn {

@@ -6,41 +6,52 @@ import { IReconciliation } from '.';
 // (simplified - no international calendars for now)
 // https://github.com/plotly/plotly.js/blob/master/src/lib/dates.js
 // Note we allow timezone info but ignore it - at least for now.
-const DATETIME_REGEXP = /^\s*(-?\d\d\d\d|\d\d)(-(\d?\d)(-(\d?\d)([ Tt]([01]?\d|2[0-3])(:([0-5]\d)(:([0-5]\d(\.\d+)?))?(Z|z|[+\-]\d\d:?\d\d)?)?)?)?)?\s*$/m;
-
-const ONESEC = 1000;
+const DATETIME_REGEXP = /^\s*(-?\d{4}|\d{2})(-(\d{1,2})(-(\d{1,2})([ Tt]([01]?\d|2[0-3])(:([0-5]\d)(:([0-5]\d(\.\d+)?))?(Z|z|[+\-]\d{2}:?\d{2})?)?)?)?)?\s*$/m;
 
 // for 2-digit years, the first year we map them onto
 // Also pulled from plotly.js - see discussion there for details
 // Please don't use 2-digit years!
 const YFIRST = new Date().getFullYear() - 70;
 
-export function convertToMs(value: any): number | null {
-    // stringify numbers, in case of a year as a number
-    const stringVal = typeof value === 'number' ? String(value) : value;
-    if (typeof stringVal !== 'string') {
+export function normalizeDate(value: any, options: IDatetimeColumn | undefined): string | null {
+    // unlike plotly.js, do not accept year as a number - only strings.
+    if (typeof value !== 'string') {
         return null;
     }
 
-    const match = stringVal.match(DATETIME_REGEXP);
+    const match = value.match(DATETIME_REGEXP);
     if (!match) {
         return null;
     }
 
-    const yStr = match[1];
-    const y = yStr.length === 2 ?
-        (Number(yStr) + 2000 - YFIRST) % 100 + YFIRST :
-        Number(yStr);
+    const yearMatch = match[1];
+    const YY = yearMatch.length === 2;
+
+    if (YY && !(options && options.validation && options.validation.allow_YY)) {
+        return null;
+    }
+
+    const y = YY ?
+        (Number(yearMatch) + 2000 - YFIRST) % 100 + YFIRST :
+        Number(yearMatch);
+    const BCE = y < 0;
 
     // js Date objects have months 0-11, not 1-12
-    const m = Number(match[3] || '1') - 1;
+    const monthMatch = match[3];
+    const m = Number(monthMatch || '1') - 1;
 
-    const d = Number(match[5] || 1);
-    const H = Number(match[7] || 0);
-    const M = Number(match[9] || 0);
+    const dayMatch = match[5];
+    const d = Number(dayMatch || 1);
 
-    // includes fractional seconds
-    const S = Number(match[11] || 0);
+    const hourMatch = match[7];
+    const H = Number(hourMatch || 0);
+
+    const minuteMatch = match[9];
+    const M = Number(minuteMatch || 0);
+
+    // includes fractional seconds - but omitted from the
+    // Date constructor because it clips to milliseconds.
+    const secondMatch = match[11];
 
     // javascript takes new Date(0..99,m,d) to mean 1900-1999, so
     // to support years 0-99 we need to use setFullYear explicitly
@@ -54,21 +65,34 @@ export function convertToMs(value: any): number | null {
         return null;
     }
 
-    return date.getTime() + S * ONESEC;
+    // standardize the string format
+    // for negative years, toISOString gives six digits (and the minus sign)
+    // but we only want 4, and we'll put the minus sign back later.
+    const fullDateStr = date.toISOString().substr(BCE ? 3 : 0, 17).replace('T', ' ') + (secondMatch || '');
+
+    // but only include fields the user had in their original input
+    const finalLen = secondMatch ? 29 : // max 9 digits of fractional seconds
+        minuteMatch ? 16 :
+        hourMatch ? 13 :
+        dayMatch ? 10 :
+        monthMatch ? 7 : 4;
+
+    return (BCE ? '-' : '') + fullDateStr.substr(0, finalLen);
 }
 
 export function coerce(value: any, options: IDatetimeColumn | undefined): IReconciliation {
-    return convertToMs(value) !== null ?
+    const normalizedDate = normalizeDate(value, options);
+    return normalizedDate !== null ?
         {
             success: true,
             // TODO: also convert to 4-digit year and 2-digit month & day?
-            value: String(value).trim()
+            value: normalizedDate
         } :
         reconcileNull(value, options);
 }
 
 export function validate(value: any, options: IDatetimeColumn | undefined): IReconciliation {
-    return (typeof value === 'string') && (convertToMs(value) !== null) ?
+    return (typeof value === 'string') && (normalizeDate(value, options) !== null) ?
         { success: true, value: value.trim() } :
         reconcileNull(value, options);
 }

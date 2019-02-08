@@ -175,6 +175,7 @@ function getDateState() {
         if (column.id === 'ccc') {
             column.name = ['Date', 'only'];
             column.type = ColumnType.Datetime;
+            column.validation = { allow_YY: true };
             (state.tableProps.data || []).forEach((row, i) => {
                 const d = new Date(Date.UTC(2018, 0, 1));
                 // three day increment

@@ -10,9 +10,10 @@ const DEFAULT_VALIDATE_SUCCESS = [
     { input: '9999-12-29 03:15 ', output: '9999-12-29 03:15', name: 'year-month-day hour:minute' },
     { input: '-9999-01-01 23:59:59 ', output: '-9999-01-01 23:59:59', name: 'year-month-day hour:minute:second' },
     { input: '0003-01-01 23:59:59.9999 ', output: '0003-01-01 23:59:59.9999', name: 'year-month-day hour:minute:second.fraction' },
-    { input: '93', output: '93', name: 'short year' },
-    { input: '13-1', output: '13-1', name: 'short year-month' },
-    { input: '27-5-7', output: '27-5-7', name: 'short year-month-day' },
+    { input: '93', output: '93', name: 'short year', YY: true },
+    { input: '13-1', output: '13-1', name: 'short year-month', YY: true },
+    { input: '27-5-7', output: '27-5-7', name: 'short year-month-day', YY: true },
+    { input: '00-1-1 12:34:56.789', output: '00-1-1 12:34:56.789', name: 'short year with time', YY: true },
     { input: '2000-01-01T12:00:00', output: '2000-01-01T12:00:00', name: 'iso8601' },
     { input: '2000-01-01t12:00:00', output: '2000-01-01t12:00:00', name: 'iso8601 lower' },
     { input: '2000-01-01 12:00:00Z', output: '2000-01-01 12:00:00Z', name: 'with "Z"' },
@@ -67,10 +68,21 @@ const ALLOW_NULL_VALIDATE_FAILURE = DEFAULT_VALIDATE_FAILURE.filter(entry => !is
 describe('validate date', () => {
     describe('default', () => {
         const options = undefined;
+        const optionsYY: IDatetimeColumn = {
+            type: ColumnType.Datetime,
+            validation: {
+                allow_YY: true
+            }
+        };
 
         DEFAULT_VALIDATE_SUCCESS.forEach(entry => {
             it(entry.name, () => {
-                const res = validate(entry.input, options);
+                let res = validate(entry.input, options);
+
+                if (entry.YY) {
+                    expect(res.success).to.equal(false);
+                    res = validate(entry.input, optionsYY);
+                }
 
                 expect(res.success).to.equal(true);
                 expect(res.value).to.equal(entry.output);
@@ -105,10 +117,12 @@ describe('validate date', () => {
 
         DEFAULT_VALIDATE_SUCCESS.forEach(entry => {
             it(entry.name, () => {
-                const res = validate(entry.input, options);
+                if (!entry.YY) {
+                    const res = validate(entry.input, options);
 
-                expect(res.success).to.equal(true);
-                expect(res.value).to.equal(entry.output);
+                    expect(res.success).to.equal(true);
+                    expect(res.value).to.equal(entry.output);
+                }
             });
         });
 

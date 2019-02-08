@@ -194,7 +194,7 @@ describe(`edit, mode=${AppMode.Date}`, () => {
 
     it('can edit date cell with a date string', () => {
         DashTable.getCellById(0, 'ccc').click();
-        DOM.focused.type(`2017-08-21${Key.Enter}`);
+        DOM.focused.type(`17-8-21${Key.Enter}`);
         DashTable.getCellById(0, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', `2017-08-21`));
     });
 
