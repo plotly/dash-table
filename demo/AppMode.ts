@@ -16,6 +16,7 @@ import { TooltipSyntax } from 'dash-table/tooltips/props';
 export enum AppMode {
     Date = 'date',
     Default = 'default',
+    FixedTooltips = 'fixed,tooltips',
     FixedVirtualized = 'fixed,virtualized',
     ReadOnly = 'readonly',
     ColumnsInSpace = 'columnsInSpace',
@@ -110,9 +111,20 @@ function getSpaceInColumn() {
     return state;
 }
 
+function getFixedTooltipsState() {
+    const state = getTooltipsState();
+
+    state.tableProps.n_fixed_columns = 3;
+    state.tableProps.n_fixed_rows = 4;
+
+    return state;
+}
+
 function getTooltipsState() {
     const state = getDefaultState();
 
+    state.tableProps.tooltip_delay = 250;
+    state.tableProps.tooltip_duration = 1000;
     state.tableProps.tooltips = {
         ccc: [
             { type: TooltipSyntax.Markdown, value: `### Go Proverb\nThe enemy's key point is yours` },
@@ -124,7 +136,7 @@ function getTooltipsState() {
         ]
     };
     state.tableProps.column_static_tooltip = {
-        ccc: { type: TooltipSyntax.Text, value: `There is death in the hane`, delay: 1000, duration: 5000 },
+        ccc: { type: TooltipSyntax.Text, value: `There is death in the hane` },
         ddd: { type: TooltipSyntax.Markdown, value: `Hane, Cut, Placement` },
         rows: `Learn the eyestealing tesuji`
     };
@@ -146,8 +158,6 @@ function getTooltipsState() {
         if: {
             column_id: 'bbb-readonly'
         },
-        delay: 1000,
-        duration: 5000,
         type: TooltipSyntax.Markdown,
         value: `### Go Proverbs\nUrgent points before big points\n![Sensei](https://senseis.xmp.net/images/stone-hello.png)`
     }];
@@ -243,6 +253,8 @@ function getState() {
     switch (mode) {
         case AppMode.Date:
             return getDateState();
+        case AppMode.FixedTooltips:
+            return getFixedTooltipsState();
         case AppMode.FixedVirtualized:
             return getFixedVirtualizedState();
         case AppMode.ReadOnly:
