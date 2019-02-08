@@ -253,7 +253,8 @@ export const propTypes = {
          * 'numeric': represents both floats and ints
          * 'text': represents a string
          * 'datetime': a string representing a date or date-time, in the form:
-         *   'YYYY-MM-DD HH:MM:SS.ssssss' or some truncation thereof. Also
+         *   'YYYY-MM-DD HH:MM:SS.ssssss' or some truncation thereof. Years must
+         *   have 4 digits, unless you use `validation.allow_YY: true`. Also
          *   accepts 'T' or 't' between date and time, and allows timezone info
          *   at the end. To convert these strings to Python `datetime` objects,
          *   use `dateutil.parser.isoparse`. In R use `parse_iso_8601` from the

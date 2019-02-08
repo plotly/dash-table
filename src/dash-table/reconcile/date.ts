@@ -85,7 +85,6 @@ export function coerce(value: any, options: IDatetimeColumn | undefined): IRecon
     return normalizedDate !== null ?
         {
             success: true,
-            // TODO: also convert to 4-digit year and 2-digit month & day?
             value: normalizedDate
         } :
         reconcileNull(value, options);
