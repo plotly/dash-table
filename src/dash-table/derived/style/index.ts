@@ -4,22 +4,27 @@ import { CSSProperties } from 'react';
 import SyntaxTree from 'core/syntax-tree';
 import { memoizeOneFactory } from 'core/memoizer';
 
-import { Datum, IVisibleColumn, ColumnType } from 'dash-table/components/Table/props';
+import { Datum, IVisibleColumn } from 'dash-table/components/Table/props';
 
 import {
     Cells,
     DataCells,
     BasicFilters,
     Headers,
+    Style,
+    Table
+} from './props';
+import converter, { StyleProperty } from './py2jsCssProperties';
+
+import {
     IConditionalElement,
     IIndexedHeaderElement,
     IIndexedRowElement,
     INamedElement,
     ITypedElement,
-    Style,
-    Table
-} from './props';
-import converter, { StyleProperty } from './py2jsCssProperties';
+    ifColumnId,
+    ifColumnType
+ } from 'dash-table/conditional';
 
 export interface IConvertedStyle {
     style: CSSProperties;
@@ -38,11 +43,8 @@ function convertElement(style: GenericStyle) {
     return {
         matchesColumn: (column: IVisibleColumn) =>
             !style.if || (
-                !style.if.column_id ||
-                style.if.column_id === column.id
-            ) && (
-                !style.if.column_type ||
-                style.if.column_type === (column.type || ColumnType.Any)
+                ifColumnId(style.if, column.id) &&
+                ifColumnType(style.if, column.type)
             ),
         matchesRow: (index: number) =>
             indexFilter === undefined ?

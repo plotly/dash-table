@@ -2,7 +2,32 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [3.4.0] - 2019-02-08
+### Added
+[#364](https://github.com/plotly/dash-table/pull/364)
+- Added the `datetime` data type
+
+### Changed
+[#224](https://github.com/plotly/dash-table/issues/224)
+- Added support for unquoted column id with
+  - letters, numbers, [-+:.]
+- Added support for single and double quoted column id with arbitrary name
+
+### Fixed
+[#365](https://github.com/plotly/dash-table/issues/365)
+- Incorrect tooltip behavior if cell is in a fixed row or column
+
+- Incorrect default value for `column_static_tooltip` changed from [] to {}
+
+## [3.3.0] - 2019-02-01
+### Added
+[#307](https://github.com/plotly/dash-core/issues/307)
+- Added tooltip_delay and tooltip_duration props to tweak table's tooltips display behavior
+- Added tooltips, column_static_tooltip, column_conditional_tooltips to define the tooltip
+applicable to a certain cell in the table with nested props delay and duration to override
+table's default behavior
+
+## [3.2.0] - 2019-01-25
 ### Added
 [#342](https://github.com/plotly/dash-core/issues/342)
 - Added `column_type` condition to style `if`; allows applying styles based on the type of the column for props

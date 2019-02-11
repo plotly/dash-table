@@ -8,11 +8,16 @@ import {
     Headers,
     Style
 } from 'dash-table/derived/style/props';
+import {
+    ConditionalTooltip,
+    Tooltip
+} from 'dash-table/tooltips/props';
 
 export enum ColumnType {
     Any = 'any',
     Numeric = 'numeric',
-    Text = 'text'
+    Text = 'text',
+    Datetime = 'datetime'
 }
 
 export enum FilteringType {
@@ -94,12 +99,14 @@ export interface IAnyColumn {
     validation?: undefined;
 }
 
+export interface ITypeValidation {
+    allow_null?: boolean;
+    default?: null | number;
+}
+
 export interface ITypeColumn {
     on_change?: IChangeOptions;
-    validation?: {
-        allow_null?: boolean;
-        default?: null | number;
-    };
+    validation?: ITypeValidation;
 }
 
 export interface INumberColumn extends ITypeColumn {
@@ -112,6 +119,16 @@ export interface ITextColumn extends ITypeColumn {
     type: ColumnType.Text;
 }
 
+export interface IDateValidation extends ITypeValidation {
+    allow_YY?: boolean;
+}
+
+export interface IDatetimeColumn extends ITypeColumn {
+    presentation?: Presentation.Input | Presentation.Dropdown;
+    type: ColumnType.Datetime;
+    validation?: IDateValidation;
+}
+
 export interface IBaseVisibleColumn {
     clearable?: boolean;
     deletable?: boolean | number;
@@ -122,7 +139,7 @@ export interface IBaseVisibleColumn {
     options?: IDropdownValue[]; // legacy
 }
 
-export type IColumnType = INumberColumn | ITextColumn | IAnyColumn;
+export type IColumnType = INumberColumn | ITextColumn | IDatetimeColumn | IAnyColumn;
 export type IVisibleColumn = IBaseVisibleColumn & IColumnType;
 
 export type IColumn = IVisibleColumn & {
@@ -159,6 +176,14 @@ export interface IDropdownProperties {
     [key: string]: { options: IDropdownValue[] }[];
 }
 
+export interface ITableTooltips {
+    [key: string]: Tooltip[];
+}
+
+export interface ITableStaticTooltips {
+    [key: string]: Tooltip;
+}
+
 interface IStylesheetRule {
     selector: string;
     rule: string;
@@ -180,9 +205,17 @@ export interface IUserInterfaceViewport {
     width: number;
 }
 
+export interface IUSerInterfaceTooltip {
+    delay?: number;
+    duration?: number;
+    id: ColumnId;
+    row: number;
+}
+
 export interface IState {
     forcedResizeOnly: boolean;
     scrollbarWidth: number;
+    tooltip?: IUSerInterfaceTooltip;
     uiViewport?: IUserInterfaceViewport;
     uiCell?: IUserInterfaceCell;
     uiHeaders?: IUserInterfaceCell[];
@@ -198,6 +231,12 @@ interface IProps {
     start_cell?: [number, number];
 
     id: string;
+
+    tooltips?: ITableTooltips;
+    tooltip_delay: number | null;
+    tooltip_duration: number | null;
+    column_static_tooltip: ITableStaticTooltips;
+    column_conditional_tooltips: ConditionalTooltip[];
 
     active_cell?: ActiveCell;
     columns?: Columns;
@@ -303,6 +342,7 @@ export type ControlledTableProps = PropsWithDefaults & IState & {
 
     columns: VisibleColumns;
     paginator: IPaginator;
+    tooltip: IUSerInterfaceTooltip;
     viewport: IDerivedData;
     viewport_selected_rows: Indices;
     virtual: IDerivedData;
@@ -314,7 +354,9 @@ export interface ICellFactoryProps {
     active_cell: ActiveCell;
     columns: VisibleColumns;
     column_conditional_dropdowns: IConditionalColumnDropdown[];
+    column_conditional_tooltips: ConditionalTooltip[];
     column_static_dropdown: IColumnDropdown[];
+    column_static_tooltip: ITableStaticTooltips;
     data: Data;
     dropdown_properties: any; // legacy
     editable: boolean;
@@ -328,6 +370,7 @@ export interface ICellFactoryProps {
     selected_cells: SelectedCells;
     selected_rows: number[];
     setProps: SetProps;
+    setState: SetState;
     style_cell: Style;
     style_data: Style;
     style_filter: Style;
@@ -337,6 +380,8 @@ export interface ICellFactoryProps {
     style_filter_conditional: BasicFilters;
     style_header_conditional: Headers;
     style_table: Table;
+    tooltip: IUSerInterfaceTooltip;
+    tooltips?: ITableTooltips;
     uiCell?: IUserInterfaceCell;
     uiViewport?: IUserInterfaceViewport;
     viewport: IDerivedData;

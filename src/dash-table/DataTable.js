@@ -71,6 +71,11 @@ export const defaultProps = {
     column_conditional_dropdowns: [],
     column_static_dropdown: [],
 
+    column_static_tooltip: {},
+    column_conditional_tooltips: [],
+    tooltip_delay: 350,
+    tooltip_duration: 2000,
+
     data: [],
     columns: [],
     editable: false,
@@ -214,10 +219,15 @@ export const propTypes = {
          * The `validation` options.
          * 'allow_null': Allow the use of nully values (undefined, null, NaN) (default: false)
          * 'default': The default value to apply with on_change.failure = 'default' (default: null)
+         * 'allow_YY': `datetime` columns only, allow 2-digit years (default: false).
+         *   If true, we interpret years as ranging from now-70 to now+29 - in 2019
+         *   this is 1949 to 2048 but in 2020 it will be different. If used with
+         *   `action: 'coerce'`, will convert user input to a 4-digit year.
          */
         validation: PropTypes.shape({
             allow_null: PropTypes.bool,
-            default: PropTypes.any
+            default: PropTypes.any,
+            allow_YY: PropTypes.bool
         }),
 
         /**
@@ -242,6 +252,17 @@ export const propTypes = {
          * The data-type of the column's data.
          * 'numeric': represents both floats and ints
          * 'text': represents a string
+         * 'datetime': a string representing a date or date-time, in the form:
+         *   'YYYY-MM-DD HH:MM:SS.ssssss' or some truncation thereof. Years must
+         *   have 4 digits, unless you use `validation.allow_YY: true`. Also
+         *   accepts 'T' or 't' between date and time, and allows timezone info
+         *   at the end. To convert these strings to Python `datetime` objects,
+         *   use `dateutil.parser.isoparse`. In R use `parse_iso_8601` from the
+         *   `parsedate` library.
+         *   WARNING: these parsers do not work with 2-digit years, if you use
+         *   `validation.allow_YY: true` and do not coerce to 4-digit years.
+         *   And parsers that do work with 2-digit years may make a different
+         *   guess about the century than we make on the front end.
          * 'any': represents any type of data
          *
          * Defaults to 'any' if undefined.
@@ -253,7 +274,7 @@ export const propTypes = {
          * behavior.
          * Stay tuned by following [https://github.com/plotly/dash-table/issues/166](https://github.com/plotly/dash-table/issues/166)
          */
-        type: PropTypes.oneOf(['any', 'numeric', 'text'])
+        type: PropTypes.oneOf(['any', 'numeric', 'text', 'datetime'])
 
     })),
 
@@ -536,6 +557,161 @@ export const propTypes = {
             ]).isRequired
         })).isRequired
     })),
+
+    /**
+     * `column_static_tooltip` represents the tooltip shown
+     * for different columns.
+     * The `property` name refers to the column ID.
+     * The `type` refers to the type of tooltip syntax used
+     * for the tooltip generation. Can either be `markdown`
+     * or `text`. Defaults to `text`.
+     * The `value` refers to the syntax-based content of
+     * the tooltip. This value is required.
+     * The `delay` represents the delay in milliseconds before
+     * the tooltip is shown when hovering a cell. This overrides
+     * the table's `tooltip_delay` property. If set to `null`,
+     * the tooltip will be shown immediately.
+     * The `duration` represents the duration in milliseconds
+     * during which the tooltip is shown when hovering a cell.
+     * This overrides the table's `tooltip_duration` property.
+     * If set to `null`, the tooltip will not disappear.
+     *
+     * Alternatively, the value of the property can also be
+     * a plain string. The `text` syntax will be used in
+     * that case.
+     */
+    column_static_tooltip: PropTypes.objectOf(
+        PropTypes.oneOfType([
+            PropTypes.shape({
+                delay: PropTypes.number,
+                duration: PropTypes.number,
+                type: PropTypes.oneOf([
+                    'text',
+                    'markdown'
+                ]),
+                value: PropTypes.string.isRequired
+            }),
+            PropTypes.string
+        ])
+    ),
+
+    /**
+     * `column_conditional_tooltips` represents the tooltip shown
+     * for different columns and cells.
+     *
+     * This property allows you to specify different tooltips for
+     * depending on certain conditions. For example, you may have
+     * different tooltips in the same column based on the value
+     * of a certain data property.
+     *
+     * Priority is from first to last defined conditional tooltip
+     * in the list. Higher priority (more specific) conditional
+     * tooltips should be put at the beginning of the list.
+     *
+     * The `if` refers to the condtion that needs to be fulfilled
+     * in order for the associated tooltip configuration to be
+     * used. If multiple conditions are defined, all conditions
+     * must be met for the tooltip to be used by a cell.
+     *
+     * The `if` nested property `column_id` refers to the column
+     * ID that must be matched.
+     * The `if` nested property `row_index` refers to the index
+     * of the row in the source `data`.
+     * The `if` nested property `filter` refers to the query that
+     * must evaluate to True.
+     *
+     * The `type` refers to the type of tooltip syntax used
+     * for the tooltip generation. Can either be `markdown`
+     * or `text`. Defaults to `text`.
+     * The `value` refers to the syntax-based content of
+     * the tooltip. This value is required.
+     * The `delay` represents the delay in milliseconds before
+     * the tooltip is shown when hovering a cell. This overrides
+     * the table's `tooltip_delay` property. If set to `null`,
+     * the tooltip will be shown immediately.
+     * The `duration` represents the duration in milliseconds
+     * during which the tooltip is shown when hovering a cell.
+     * This overrides the table's `tooltip_duration` property.
+     * If set to `null`, the tooltip will not disappear.
+     */
+    column_conditional_tooltips: PropTypes.arrayOf(PropTypes.shape({
+        if: PropTypes.shape({
+            filter: PropTypes.string,
+            row_index: PropTypes.oneOfType([
+                PropTypes.number,
+                PropTypes.oneOf([
+                    'odd',
+                    'even'
+                ])
+            ]),
+            column_id: PropTypes.string
+        }).isRequired,
+        delay: PropTypes.number,
+        duration: PropTypes.number,
+        type: PropTypes.oneOf([
+            'text',
+            'markdown'
+        ]),
+        value: PropTypes.string.isRequired
+    })),
+
+    /**
+     * `tooltips` represents the tooltip shown
+     * for different columns and cells.
+     * The `property` name refers to the column ID. Each property
+     * contains a list of tooltips mapped to the source `data`
+     * row index.
+     *
+     * The `type` refers to the type of tooltip syntax used
+     * for the tooltip generation. Can either be `markdown`
+     * or `text`. Defaults to `text`.
+     * The `value` refers to the syntax-based content of
+     * the tooltip. This value is required.
+     * The `delay` represents the delay in milliseconds before
+     * the tooltip is shown when hovering a cell. This overrides
+     * the table's `tooltip_delay` property. If set to `null`,
+     * the tooltip will be shown immediately.
+     * The `duration` represents the duration in milliseconds
+     * during which the tooltip is shown when hovering a cell.
+     * This overrides the table's `tooltip_duration` property.
+     * If set to `null`, the tooltip will not disappear.
+     *
+     * Alternatively, the value of the property can also be
+     * a plain string. The `text` syntax will be used in
+     * that case.
+     */
+    tooltips: PropTypes.objectOf(PropTypes.arrayOf(
+        PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.shape({
+                delay: PropTypes.number,
+                duration: PropTypes.number,
+                type: PropTypes.oneOf([
+                    'text',
+                    'markdown'
+                ]),
+                value: PropTypes.string.isRequired
+            })
+        ]))
+    ),
+
+    /**
+     * `tooltip_delay` represents the table-wide delay in milliseconds before
+     * the tooltip is shown when hovering a cell. If set to `null`, the tooltip
+     * will be shown immediately.
+     *
+     * Defaults to 350.
+     */
+    tooltip_delay: PropTypes.number,
+
+    /**
+     * `tooltip_duration` represents the table-wide duration in milliseconds
+     * during which the tooltip will be displayed when hovering a cell. If
+     * set to `null`, the tooltip will not disappear.
+     *
+     * Defaults to 2000.
+     */
+    tooltip_duration: PropTypes.number,
 
     /**
      * The `filtering` property controls the behavior of the `filtering` UI.

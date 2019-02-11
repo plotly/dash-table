@@ -1,51 +1,58 @@
 
-import { memoizeOneFactory } from 'core/memoizer';
-import memoizerCache from 'core/memoizerCache';
+import valueCache from 'core/cache/value';
 import { ICellFactoryProps } from 'dash-table/components/Table/props';
-import { handleChange, handleClick, handleDoubleClick, handleOnMouseUp, handlePaste } from 'dash-table/handlers/cellEvents';
-
-type CacheArgs = [Handler, number, number];
-type GetterArgs = [HandlerFn, number, number];
+import { handleChange, handleClick, handleDoubleClick, handleEnter, handleLeave, handleMove, handleOnMouseUp, handlePaste } from 'dash-table/handlers/cellEvents';
 
 export enum Handler {
     Change = 'change',
     Click = 'click',
     DoubleClick = 'doubleclick',
+    Enter = 'enter',
+    Leave = 'leave',
+    Move = 'move',
     MouseUp = 'mouseup',
     Paste = 'paste'
 }
 
-export type CacheFn = (...args: CacheArgs) => Function;
-export type HandlerFn = (...args: any[]) => any;
+export default (propsFn: () => ICellFactoryProps) => new EventHandler(propsFn).get;
 
-const getter = (propsFn: () => ICellFactoryProps): CacheFn => {
-    const cache = memoizerCache<CacheArgs, GetterArgs, Function>((...args: GetterArgs) => {
-        let [
-            handler,
-            rowIndex,
-            columnIndex
-        ] = args;
+class EventHandler {
+    constructor(private readonly propsFn: () => ICellFactoryProps) {
 
-        return handler && handler.bind(undefined, rowIndex, columnIndex);
+    }
+
+    private readonly cache = valueCache<[Handler, number, number]>()((
+        handler: Handler,
+        columnIndex: number,
+        rowIndex: number
+    ) => {
+        switch (handler) {
+            case Handler.Change:
+                return handleChange.bind(undefined, this.propsFn, rowIndex, columnIndex);
+            case Handler.Click:
+                return handleClick.bind(undefined, this.propsFn, rowIndex, columnIndex);
+            case Handler.DoubleClick:
+                return handleDoubleClick.bind(undefined, this.propsFn, rowIndex, columnIndex);
+            case Handler.Enter:
+                return handleEnter.bind(undefined, this.propsFn, rowIndex, columnIndex);
+            case Handler.Leave:
+                return handleLeave.bind(undefined, this.propsFn, rowIndex, columnIndex);
+            case Handler.Move:
+                return handleMove.bind(undefined, this.propsFn, rowIndex, columnIndex);
+            case Handler.MouseUp:
+                return handleOnMouseUp.bind(undefined, this.propsFn, rowIndex, columnIndex);
+            case Handler.Paste:
+                return handlePaste.bind(undefined, this.propsFn, rowIndex, columnIndex);
+            default:
+                throw new Error(`unexpected handler ${handler}`);
+        }
     });
 
-    const handlers = new Map<Handler, HandlerFn>([
-        [Handler.Change, handleChange.bind(undefined, propsFn)],
-        [Handler.Click, handleClick.bind(undefined, propsFn)],
-        [Handler.DoubleClick, handleDoubleClick.bind(undefined, propsFn)],
-        [Handler.MouseUp, handleOnMouseUp.bind(undefined, propsFn)],
-        [Handler.Paste, handlePaste.bind(undefined, propsFn)]
-    ]);
-
-    return (...args: CacheArgs) => {
-        let [
-            handler,
-            rowIndex,
-            columnIndex
-        ] = args;
-
-        return cache(args, handlers.get(handler) as HandlerFn, rowIndex, columnIndex);
-    };
-};
-
-export default memoizeOneFactory(getter);
+    get = (
+        handler: Handler,
+        columnIndex: number,
+        rowIndex: number
+    ) => {
+        return this.cache.get(handler, columnIndex, rowIndex);
+    }
+}

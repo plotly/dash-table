@@ -1,4 +1,3 @@
-
 import {
     ChangeEvent,
     ClipboardEvent,
@@ -9,33 +8,31 @@ import { memoizeOneFactory } from 'core/memoizer';
 import { ICellFactoryProps } from 'dash-table/components/Table/props';
 import cellEventHandler, { Handler } from 'dash-table/derived/cell/eventHandler';
 
-type CacheArgs = [number, number];
-
-export type CacheFn = (...args: CacheArgs) => {
+interface IFunctionCache {
     onChange: (e: ChangeEvent) => void;
     onClick: (e: MouseEvent) => void;
     onDoubleClick: (e: MouseEvent) => void;
+    onEnter: (e: MouseEvent) => void;
+    onLeave: (e: MouseEvent) => void;
+    onMove: (e: MouseEvent) => void;
     onMouseUp: (e: MouseEvent) => void;
     onPaste: (e: ClipboardEvent<Element>) => void;
-};
-export type HandlerFn = (...args: any[]) => any;
+}
 
-const getter = (propsFn: () => ICellFactoryProps): CacheFn => {
-    const derivedHandlers = cellEventHandler()(propsFn);
+const getter = (propsFn: () => ICellFactoryProps) => {
+    const derivedHandlers = cellEventHandler(propsFn);
 
-    return (...args: CacheArgs) => {
-        const [
-            rowIndex,
-            columnIndex
-        ] = args;
-
+    return (rowIndex: number, columnIndex: number): IFunctionCache => {
         return {
-            onChange: derivedHandlers(Handler.Change, rowIndex, columnIndex),
-            onClick: derivedHandlers(Handler.Click, rowIndex, columnIndex),
-            onDoubleClick: derivedHandlers(Handler.DoubleClick, rowIndex, columnIndex),
-            onMouseUp: derivedHandlers(Handler.MouseUp, rowIndex, columnIndex),
-            onPaste: derivedHandlers(Handler.Paste, rowIndex, columnIndex)
-        } as any;
+            onChange: derivedHandlers(Handler.Change, columnIndex, rowIndex),
+            onClick: derivedHandlers(Handler.Click, columnIndex, rowIndex),
+            onDoubleClick: derivedHandlers(Handler.DoubleClick, columnIndex, rowIndex),
+            onEnter: derivedHandlers(Handler.Enter, columnIndex, rowIndex),
+            onLeave: derivedHandlers(Handler.Leave, columnIndex, rowIndex),
+            onMove: derivedHandlers(Handler.Move, columnIndex, rowIndex),
+            onMouseUp: derivedHandlers(Handler.MouseUp, columnIndex, rowIndex),
+            onPaste: derivedHandlers(Handler.Paste, columnIndex, rowIndex)
+        };
     };
 };
 
