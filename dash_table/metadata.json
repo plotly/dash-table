@@ -1119,6 +1119,10 @@
                     ],
                     "required": false
                   },
+                  "filter": {
+                    "name": "string",
+                    "required": false
+                  },
                   "row_index": {
                     "name": "union",
                     "value": [

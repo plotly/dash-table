@@ -876,6 +876,7 @@ export const propTypes = {
         if: PropTypes.shape({
             column_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
             column_type: PropTypes.oneOf(['any', 'numeric', 'text']),
+            filter: PropTypes.string,
             row_index: PropTypes.oneOfType([
                 PropTypes.number,
                 PropTypes.oneOf(['odd', 'even'])
