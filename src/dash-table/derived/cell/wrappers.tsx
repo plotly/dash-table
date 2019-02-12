@@ -49,9 +49,9 @@ class Wrappers {
                     columnIndex,
                     column.id,
                     rowIndex,
-                    this.handlers(Handler.Enter, columnIndex, rowIndex),
-                    this.handlers(Handler.Leave, columnIndex, rowIndex),
-                    this.handlers(Handler.Move, columnIndex, rowIndex)
+                    this.handlers(Handler.Enter, rowIndex, columnIndex),
+                    this.handlers(Handler.Leave, rowIndex, columnIndex),
+                    this.handlers(Handler.Move, rowIndex, columnIndex)
                 );
             }, columns
         ), data));
