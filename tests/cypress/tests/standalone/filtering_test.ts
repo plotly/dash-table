@@ -41,8 +41,8 @@ describe(`filter`, () => {
             DashTable.toggleScroll(false);
         });
 
-        it('updates results and filter fields', () => {
-            DashTable.getFilterById
-        });
+        // it('updates results and filter fields', () => {
+        //     DashTable.getFilterById
+        // });
     });
 });
