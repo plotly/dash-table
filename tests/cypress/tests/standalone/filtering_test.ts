@@ -41,8 +41,35 @@ describe(`filter`, () => {
             DashTable.toggleScroll(false);
         });
 
-        // it('updates results and filter fields', () => {
-        //     DashTable.getFilterById
-        // });
+        it('updates results and filter fields', () => {
+            let cell_0;
+            let cell_1;
+
+            DashTable.getCellById(0, 'ccc')
+                .within(() => cy.get('.dash-cell-value')
+                    .then($el => cell_0 = $el[0].innerHTML));
+
+            DashTable.getCellById(1, 'ccc')
+                .within(() => cy.get('.dash-cell-value')
+                    .then($el => cell_1 = $el[0].innerHTML));
+
+            DashTable.getFilterById('ccc').click();
+            DOM.focused.type(`gt num(100)`);
+            DashTable.getFilterById('ddd').click();
+            DOM.focused.type('lt num(20000)');
+            DashTable.getFilterById('eee').click();
+            DOM.focused.type('is prime');
+            DashTable.getFilterById('bbb').click();
+            DOM.focused.type(`eq "Wet"`);
+            DashTable.getFilterById('ccc').click();
+
+            DashTable.getCellById(0, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', '101'));
+            DashTable.getCellById(1, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', '109'));
+
+            cy.get('.clear-filters').click();
+
+            DashTable.getCellById(0, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', cell_0));
+            DashTable.getCellById(1, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', cell_1));
+        });
     });
 });

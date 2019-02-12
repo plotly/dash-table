@@ -33,12 +33,15 @@ class App extends Component {
         const mode = Environment.searchParams.get('mode');
 
         if (mode === AppMode.Filtering) {
-            return (<button onClick={() => {
-                const tableProps = R.clone(this.state.tableProps);
-                tableProps.filtering_settings = '';
+            return (<button
+                className='clear-filters'
+                onClick={() => {
+                    const tableProps = R.clone(this.state.tableProps);
+                    tableProps.filtering_settings = '';
 
-                this.setState({ tableProps });
-            }}>Clear Filter</button>);
+                    this.setState({ tableProps });
+                }}
+            >Clear Filter</button>);
         }
     }
 
