@@ -32,8 +32,8 @@ class EventHandler {
 
     private readonly cache = valueCache<[Handler, number, number]>()((
         handler: Handler,
-        columnIndex: number,
-        rowIndex: number
+        rowIndex: number,
+        columnIndex: number
     ) => {
         switch (handler) {
             case Handler.Change:
@@ -59,9 +59,9 @@ class EventHandler {
 
     get = (
         handler: Handler,
-        columnIndex: number,
-        rowIndex: number
+        rowIndex: number,
+        columnIndex: number
     ) => {
-        return this.cache.get(handler, columnIndex, rowIndex);
+        return this.cache.get(handler, rowIndex, columnIndex);
     }
 }
