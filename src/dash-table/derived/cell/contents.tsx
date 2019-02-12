@@ -74,8 +74,8 @@ class Contents {
 
                 const className = [
                     ...(active ? ['input-active'] : []),
-                    ...(isFocused ? ['focused'] : ['unfocused']),
-                    ...['dash-cell-value']
+                    isFocused ? 'focused' : 'unfocused',
+                    'dash-cell-value'
                 ].join(' ');
 
                 switch (getCellType(active, isEditable, dropdown, column.presentation)) {
