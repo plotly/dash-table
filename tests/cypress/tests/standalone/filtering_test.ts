@@ -70,6 +70,11 @@ describe(`filter`, () => {
 
             DashTable.getCellById(0, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', cell_0));
             DashTable.getCellById(1, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', cell_1));
+
+            DashTable.getFilterById('bbb').within(() => cy.get('input').should('have.value', ''));
+            DashTable.getFilterById('ccc').within(() => cy.get('input').should('have.value', ''));
+            DashTable.getFilterById('ddd').within(() => cy.get('input').should('have.value', ''));
+            DashTable.getFilterById('eee').within(() => cy.get('input').should('have.value', ''));
         });
     });
 });
