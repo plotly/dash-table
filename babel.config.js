@@ -10,7 +10,12 @@ const presets = [
             ]
         },
         useBuiltIns: "usage",
-    }]
+    }],
+    "@babel/preset-react"
+];
+
+const plugins = [
+    "@babel/plugin-syntax-dynamic-import"  
 ];
 
 module.exports = { presets };
