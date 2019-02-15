@@ -111,6 +111,7 @@ export interface ITypeColumn {
 
 export interface INumberColumn extends ITypeColumn {
     presentation?: Presentation.Input | Presentation.Dropdown;
+    formatting?: string;
     type: ColumnType.Numeric;
 }
 

@@ -274,8 +274,9 @@ export const propTypes = {
          * behavior.
          * Stay tuned by following [https://github.com/plotly/dash-table/issues/166](https://github.com/plotly/dash-table/issues/166)
          */
-        type: PropTypes.oneOf(['any', 'numeric', 'text', 'datetime'])
+        type: PropTypes.oneOf(['any', 'numeric', 'text', 'datetime']),
 
+        formatting: PropTypes.string
     })),
 
     /**
