@@ -15,6 +15,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [#347](https://github.com/plotly/dash-core/issues/347)
 - Fixed table behavior when `filtering_settings` is updated through a callback
 
+[#322](https://github.com/plotly/dash-core/issues/322)
+- Added LICENSE file to Python distributable
+
 [#342](https://github.com/plotly/dash-core/issues/342)
 - Added already supported `filter` nested prop / condition to `style_data_conditional` props definition
 
