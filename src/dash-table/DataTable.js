@@ -1,3 +1,4 @@
+import * as R from 'ramda';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
@@ -24,21 +25,48 @@ export default class DataTable extends Component {
     }
 
     render() {
+        if (!this.isValid()) {
+            Logger.error(`Invalid combination of filtering / sorting / pagination`);
+            return (<div>Invalid props combination</div>);
+        }
+
+        if (!this.validColumns()) {
+            Logger.error(`Invalid column format`);
+            return (<div>Invalid props combination</div>);
+        }
+
+        return this.props.id ? (<RealTable {...this.props} />) : (<RealTable {...this.props} id={this.getId()} />);
+    }
+
+    private isValid() {
         const {
             filtering,
             sorting,
             pagination_mode
         } = this.props;
 
-        const isValid = isFrontEnd(pagination_mode) ||
+        return isFrontEnd(pagination_mode) ||
             (isBackEnd(filtering) && isBackEnd(sorting));
+    }
 
-        if (!isValid) {
-            Logger.error(`Invalid combination of filtering / sorting / pagination`, filtering, sorting, pagination_mode);
-            return (<div>Invalid props combination</div>);
-        }
+    private allValidColumns() {
+        const {
+            columns
+        } = this.props;
 
-        return this.props.id ? (<RealTable {...this.props} />) : (<RealTable {...this.props} id={this.getId()} />);
+        return !R.has(column =>
+            column.format && (
+                (
+                    column.format.currency &&
+                    column.format.currency.length !== 2
+                ) || (
+                    column.format.grouping &&
+                    column.format.grouping.length === 0
+                ) || (
+                    column.format.numerals &&
+                    column.format.numerals.length !== 10
+                )
+            ), columns);
     }
 }
 
