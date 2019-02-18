@@ -30,7 +30,7 @@ export default class DataTable extends Component {
             return (<div>Invalid props combination</div>);
         }
 
-        if (!this.validColumns()) {
+        if (!this.allValidColumns()) {
             Logger.error(`Invalid column format`);
             return (<div>Invalid props combination</div>);
         }
