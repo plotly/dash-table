@@ -276,7 +276,14 @@ export const propTypes = {
          */
         type: PropTypes.oneOf(['any', 'numeric', 'text', 'datetime']),
 
-        formatting: PropTypes.string
+        formatting: PropTypes.string,
+
+        locale: PropTypes.shape({
+            decimal: PropTypes.string,
+            thousands: PropTypes.string,
+            grouping: PropTypes.arrayOf(PropTypes.number),
+            currency: PropTypes.arrayOf(PropTypes.string)
+        })
     })),
 
     /**

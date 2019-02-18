@@ -109,9 +109,18 @@ export interface ITypeColumn {
     validation?: ITypeValidation;
 }
 
+export interface INumberLocale {
+    decimal: string;
+    thousands: string;
+    grouping: number[];
+    currency: [string, string];
+
+}
+
 export interface INumberColumn extends ITypeColumn {
     presentation?: Presentation.Input | Presentation.Dropdown;
     formatting?: string;
+    locale?: Partial<INumberLocale>;
     type: ColumnType.Numeric;
 }
 
