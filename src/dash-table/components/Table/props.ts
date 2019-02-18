@@ -110,17 +110,19 @@ export interface ITypeColumn {
 }
 
 export interface INumberLocale {
-    decimal: string;
-    thousands: string;
-    grouping: number[];
     currency: [string, string];
-
+    decimal: string;
+    grouping: number[];
+    numerals: string[];
+    percent: string;
+    thousands: string;
 }
 
 export interface INumberColumn extends ITypeColumn {
+    format?: {
+        specifier: string;
+    } & Partial<INumberLocale>;
     presentation?: Presentation.Input | Presentation.Dropdown;
-    formatting?: string;
-    locale?: Partial<INumberLocale>;
     type: ColumnType.Numeric;
 }
 

@@ -276,13 +276,16 @@ export const propTypes = {
          */
         type: PropTypes.oneOf(['any', 'numeric', 'text', 'datetime']),
 
-        formatting: PropTypes.string,
-
-        locale: PropTypes.shape({
-            decimal: PropTypes.string,
-            thousands: PropTypes.string,
-            grouping: PropTypes.arrayOf(PropTypes.number),
-            currency: PropTypes.arrayOf(PropTypes.string)
+        format: PropTypes.shape({
+            locale: PropTypes.shape({
+                currency: PropTypes.arrayOf(PropTypes.string),
+                decimal: PropTypes.string,
+                grouping: PropTypes.arrayOf(PropTypes.number),
+                numerals: PropTypes.arrayOf(PropTypes.string),
+                percent: PropTypes.string,
+                thousands: PropTypes.string
+            }),
+            specifier: PropTypes.string
         })
     })),
 

@@ -20,13 +20,16 @@ export function coerce(value: any, options: INumberColumn | undefined): IReconci
 }
 
 export function getFormatter(options: INumberColumn | undefined) {
-    if (!options || !options.formatting) {
+    if (!options || !options.format) {
         return;
     }
 
     return formatLocale(
-        R.merge(DEFAULT_LOCALE, options.locale || {})
-    ).format(options.formatting);
+        R.merge(
+            DEFAULT_LOCALE,
+            R.omit(['specifier'], options.format || {})
+        )
+    ).format(options.format.specifier);
 }
 
 export function validate(value: any, options: INumberColumn | undefined): IReconciliation {
