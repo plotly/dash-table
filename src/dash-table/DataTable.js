@@ -38,7 +38,7 @@ export default class DataTable extends Component {
         return this.props.id ? (<RealTable {...this.props} />) : (<RealTable {...this.props} id={this.getId()} />);
     }
 
-    private isValid() {
+    isValid() {
         const {
             filtering,
             sorting,
@@ -49,7 +49,7 @@ export default class DataTable extends Component {
             (isBackEnd(filtering) && isBackEnd(sorting));
     }
 
-    private allValidColumns() {
+    allValidColumns() {
         const {
             columns
         } = this.props;
