@@ -24,12 +24,16 @@ export function getFormatter(options: INumberColumn | undefined) {
         return;
     }
 
-    return formatLocale(
+    const locale = formatLocale(
         R.merge(
             DEFAULT_LOCALE,
-            R.omit(['specifier'], options.format || {})
+            R.omit(['specifier', 'prefix'], options.format || {})
         )
-    ).format(options.format.specifier);
+    );
+
+    return options.format.prefix ?
+        locale.formatPrefix(options.format.specifier, options.format.prefix) :
+        locale.format(options.format.specifier);
 }
 
 export function validate(value: any, options: INumberColumn | undefined): IReconciliation {

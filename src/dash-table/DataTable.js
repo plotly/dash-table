@@ -313,6 +313,7 @@ export const propTypes = {
                 percent: PropTypes.string,
                 thousands: PropTypes.string
             }),
+            prefix: PropTypes.number,
             specifier: PropTypes.string
         })
     })),

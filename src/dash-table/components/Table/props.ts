@@ -120,6 +120,7 @@ export interface INumberLocale {
 
 export interface INumberColumn extends ITypeColumn {
     format?: {
+        prefix?: number;
         specifier: string;
     } & Partial<INumberLocale>;
     presentation?: Presentation.Input | Presentation.Dropdown;
