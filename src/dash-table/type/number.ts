@@ -2,16 +2,9 @@ import * as R from 'ramda';
 import { formatLocale } from 'd3-format';
 import isNumeric from 'fast-isnumeric';
 
-import { INumberColumn } from 'dash-table/components/Table/props';
+import { INumberColumn, LocaleFormat } from 'dash-table/components/Table/props';
 import { reconcileNull, isNully } from './null';
 import { IReconciliation } from './reconcile';
-
-const DEFAULT_LOCALE = {
-    decimal: '.',
-    thousands: '',
-    grouping: [3],
-    currency: ['$', '']
-};
 
 export function coerce(value: any, options: INumberColumn | undefined): IReconciliation {
     return isNumeric(value) ?
@@ -19,15 +12,18 @@ export function coerce(value: any, options: INumberColumn | undefined): IReconci
         reconcileNull(value, options);
 }
 
-export function getFormatter(options: INumberColumn | undefined) {
+export function getFormatter(
+    defaultLocale: LocaleFormat,
+    options: INumberColumn | undefined
+) {
     if (!options || !options.format) {
         return;
     }
 
     const locale = formatLocale(
         R.merge(
-            DEFAULT_LOCALE,
-            R.omit(['specifier', 'prefix'], options.format || {})
+            defaultLocale,
+            R.omit(['specifier', 'prefix'], options.format)
         )
     );
 

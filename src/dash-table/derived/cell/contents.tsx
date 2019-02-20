@@ -5,12 +5,13 @@ import {
     ActiveCell,
     Data,
     Datum,
-    IVisibleColumn,
-    VisibleColumns,
+    DropdownValues,
     ICellFactoryProps,
     IViewportOffset,
-    DropdownValues,
-    Presentation
+    IVisibleColumn,
+    LocaleFormat,
+    Presentation,
+    VisibleColumns
 } from 'dash-table/components/Table/props';
 import CellInput from 'dash-table/components/CellInput';
 import derivedCellEventHandlerProps, { Handler } from 'dash-table/derived/cell/eventHandlerProps';
@@ -59,13 +60,15 @@ class Contents {
     get = memoizeOne((
         activeCell: ActiveCell,
         columns: VisibleColumns,
+        defaultLocale: LocaleFormat,
         data: Data,
         offset: IViewportOffset,
         editable: boolean,
         isFocused: boolean,
         dropdowns: (DropdownValues | undefined)[][]
     ): JSX.Element[][] => {
-        const formatters = R.map(getFormatter, columns);
+        const localizedFormatter = getFormatter(defaultLocale);
+        const formatters = R.map(localizedFormatter, columns);
 
         return mapData(
             (datum, rowIndex) => mapRow(

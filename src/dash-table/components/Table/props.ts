@@ -118,6 +118,8 @@ export interface INumberLocale {
     thousands: string;
 }
 
+export type LocaleFormat = INumberLocale | undefined;
+
 export interface INumberColumn extends ITypeColumn {
     format?: {
         prefix?: number;
@@ -264,6 +266,7 @@ interface IProps {
     filtering_settings?: string;
     filtering_type?: FilteringType;
     filtering_types?: FilteringType[];
+    locale_format?: LocaleFormat;
     merge_duplicate_headers?: boolean;
     navigation?: Navigation;
     n_fixed_columns?: number;
@@ -375,6 +378,7 @@ export interface ICellFactoryProps {
     editable: boolean;
     id: string;
     is_focused?: boolean;
+    locale_format?: LocaleFormat;
     n_fixed_columns: number;
     n_fixed_rows: number;
     paginator: IPaginator;

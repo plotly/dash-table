@@ -37,6 +37,7 @@ export default class CellFactory {
             dropdown_properties, // legacy
             editable,
             is_focused,
+            locale_format,
             row_deletable,
             row_selectable,
             selected_cells,
@@ -94,6 +95,7 @@ export default class CellFactory {
         const contents = this.cellContents(
             active_cell,
             columns,
+            locale_format,
             virtualized.data,
             virtualized.offset,
             editable,

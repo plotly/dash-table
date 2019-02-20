@@ -39,14 +39,14 @@ export default class DataTable extends Component {
     }
 
     isValid() {
-        const {
-            filtering,
-            sorting,
-            pagination_mode
-        } = this.props;
+            const {
+                filtering,
+                sorting,
+                pagination_mode
+            } = this.props;
 
-        return isFrontEnd(pagination_mode) ||
-            (isBackEnd(filtering) && isBackEnd(sorting));
+            return isFrontEnd(pagination_mode) ||
+                (isBackEnd(filtering) && isBackEnd(sorting));
     }
 
     allValidColumns() {
@@ -68,7 +68,21 @@ export default class DataTable extends Component {
                 )
             ), columns);
     }
-}
+
+    render() {
+        if (!this.isValid()) {
+            Logger.error(`Invalid combination of filtering / sorting / pagination`);
+            return (<div>Invalid props combination</div>);
+        }
+
+        if (!this.allValidColumns()) {
+            Logger.error(`Invalid column format`);
+            return (<div>Invalid props combination</div>);
+        }
+
+        return this.props.id ? (<RealTable {...this.props} />) : (<RealTable {...this.props} id={this.getId()} />);
+    }
+    }
 
 export const defaultProps = {
     pagination_mode: 'fe',
@@ -317,6 +331,15 @@ export const propTypes = {
             specifier: PropTypes.string
         })
     })),
+
+    locale_format: PropTypes.shape({
+        currency: PropTypes.arrayOf(PropTypes.string),
+        decimal: PropTypes.string,
+        grouping: PropTypes.arrayOf(PropTypes.number),
+        numerals: PropTypes.arrayOf(PropTypes.string),
+        percent: PropTypes.string,
+        thousands: PropTypes.string
+    }),
 
     /**
      * `content_style` toggles between a set of CSS styles for

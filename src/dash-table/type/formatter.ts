@@ -1,18 +1,20 @@
 import {
     ColumnType,
-    IColumnType
+    IColumnType,
+    LocaleFormat
 } from 'dash-table/components/Table/props';
 
 import { getFormatter as getNumberFormatter } from './number';
 
 const DEFAULT_FORMATTER = (value: any) => value;
-export default (c: IColumnType) => {
-    let formatter;
-    switch (c.type) {
-        case ColumnType.Numeric:
-            formatter = getNumberFormatter(c);
-            break;
-    }
+export default (locale: LocaleFormat) =>
+    (c: IColumnType) => {
+        let formatter;
+        switch (c.type) {
+            case ColumnType.Numeric:
+                formatter = getNumberFormatter(locale, c);
+                break;
+        }
 
-    return formatter || DEFAULT_FORMATTER;
-};
+        return formatter || DEFAULT_FORMATTER;
+    };
