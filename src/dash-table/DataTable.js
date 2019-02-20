@@ -200,6 +200,44 @@ export const propTypes = {
         ]),
 
         /**
+         * The formatting applied to the column's data.
+         *
+         * This prop is derived from the [d3-format](https://github.com/d3/d3-format) library specification. Apart from
+         * being structured slightly differently (under a single prop), the usage
+         * is the same.
+         *
+         * 'locale': represents localization specific formatting information
+         *   When left unspecified, will use the default value provided by d3-format.
+         *
+         *   'currency': a list of two strings representing the currency
+         *   prefix and suffix symbols
+         *   'decimal': the string used for the decimal separator
+         *   'grouping': a list of integers representing the grouping pattern
+         *   'numerals': a list of ten strings used as replacements for numbers 0-9
+         *   'percent': the string used for the percentage symbol
+         *   'thousands': the string used for the groups separator
+         *
+         * 'prefix': a number representing the SI unit to use during formatting
+         *   See `dash_table.Format.Prefix` enumeration for the list of valid values
+         * 'specifier': represents the rules to apply when formatting the number
+         *
+         * dash_table.FormatTemplate contains helper functions to rapidly use certain
+         * typical number formats.
+         */
+        format: PropTypes.shape({
+            locale: PropTypes.shape({
+                currency: PropTypes.arrayOf(PropTypes.string),
+                decimal: PropTypes.string,
+                grouping: PropTypes.arrayOf(PropTypes.number),
+                numerals: PropTypes.arrayOf(PropTypes.string),
+                percent: PropTypes.string,
+                thousands: PropTypes.string
+            }),
+            prefix: PropTypes.number,
+            specifier: PropTypes.string
+        }),
+
+        /**
          * If True, then the column and its data is hidden.
          * This can be useful if you want to transport extra
          * meta data (like a data index) to and from callbacks
@@ -316,22 +354,24 @@ export const propTypes = {
          * behavior.
          * Stay tuned by following [https://github.com/plotly/dash-table/issues/166](https://github.com/plotly/dash-table/issues/166)
          */
-        type: PropTypes.oneOf(['any', 'numeric', 'text', 'datetime']),
-
-        format: PropTypes.shape({
-            locale: PropTypes.shape({
-                currency: PropTypes.arrayOf(PropTypes.string),
-                decimal: PropTypes.string,
-                grouping: PropTypes.arrayOf(PropTypes.number),
-                numerals: PropTypes.arrayOf(PropTypes.string),
-                percent: PropTypes.string,
-                thousands: PropTypes.string
-            }),
-            prefix: PropTypes.number,
-            specifier: PropTypes.string
-        })
+        type: PropTypes.oneOf(['any', 'numeric', 'text', 'datetime'])
     })),
 
+    /**
+     * The localization specific formatting information applied to all columns in the table.
+     *
+     * This prop is derived from the [d3.formatLocale](https://github.com/d3/d3-format#formatLocale) data structure specification.
+     *
+     * When left unspecified, will use the default value provided by d3-format.
+     *
+     *   'currency': a list of two strings representing the currency
+     *   prefix and suffix symbols
+     *   'decimal': the string used for the decimal separator
+     *   'grouping': a list of integers representing the grouping pattern
+     *   'numerals': a list of ten strings used as replacements for numbers 0-9
+     *   'percent': the string used for the percentage symbol
+     *   'thousands': the string used for the groups separator
+     */
     locale_format: PropTypes.shape({
         currency: PropTypes.arrayOf(PropTypes.string),
         decimal: PropTypes.string,
