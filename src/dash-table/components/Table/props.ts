@@ -113,16 +113,14 @@ export interface INumberLocale {
     currency: [string, string];
     decimal: string;
     grouping: number[];
-    numerals: string[];
+    numerals?: string[];
     percent: string;
     thousands: string;
 }
 
-export type LocaleFormat = Partial<INumberLocale> | undefined;
-
 export type NumberFormat = ({
-    locale?: Partial<INumberLocale>;
-    nully?: string | number;
+    locale: INumberLocale;
+    nully: any;
     prefix?: number;
     specifier: string;
 }) | undefined;
@@ -270,7 +268,7 @@ interface IProps {
     filtering_settings?: string;
     filtering_type?: FilteringType;
     filtering_types?: FilteringType[];
-    locale_format?: LocaleFormat;
+    locale_format: INumberLocale;
     merge_duplicate_headers?: boolean;
     navigation?: Navigation;
     n_fixed_columns?: number;
@@ -382,7 +380,6 @@ export interface ICellFactoryProps {
     editable: boolean;
     id: string;
     is_focused?: boolean;
-    locale_format?: LocaleFormat;
     n_fixed_columns: number;
     n_fixed_rows: number;
     paginator: IPaginator;

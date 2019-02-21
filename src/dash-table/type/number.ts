@@ -1,19 +1,9 @@
-import * as R from 'ramda';
 import { formatLocale } from 'd3-format';
 import isNumeric from 'fast-isnumeric';
 
-import { INumberColumn, LocaleFormat, NumberFormat } from 'dash-table/components/Table/props';
+import { INumberColumn, NumberFormat } from 'dash-table/components/Table/props';
 import { reconcileNull, isNully } from './null';
 import { IReconciliation } from './reconcile';
-
-const DEFAULT_LOCALE = {
-    currency: ['$', ''],
-    decimal: '.',
-    thousands: ',',
-    grouping: [3],
-    percent: '%'
-};
-const DEFAULT_NULLY = '';
 
 export function coerce(value: any, options: INumberColumn | undefined): IReconciliation {
     return isNumeric(value) ?
@@ -21,35 +11,22 @@ export function coerce(value: any, options: INumberColumn | undefined): IReconci
         reconcileNull(value, options);
 }
 
-export function getFormatter(
-    defaultLocale: LocaleFormat,
-    format: NumberFormat
-) {
+export function getFormatter(format: NumberFormat) {
     if (!format) {
-        return;
+        return (value: any) => value;
     }
 
-    const locale = formatLocale(
-        R.mergeAll([
-            DEFAULT_LOCALE,
-            defaultLocale,
-            format.locale
-        ])
-    );
+    const locale = formatLocale(format.locale);
 
     const numberFormatter = format.prefix ?
         locale.formatPrefix(format.specifier, format.prefix) :
         locale.format(format.specifier);
 
-    const nully = typeof format.nully === 'undefined' ?
-        DEFAULT_NULLY :
-        format.nully;
-
     return (value: any) => {
         if (isNully(value)) {
-            return typeof nully === 'number' ?
-                numberFormatter(nully) :
-                nully;
+            return typeof format.nully === 'number' ?
+                numberFormatter(format.nully) :
+                format.nully;
         } else if (typeof value === 'number') {
             return numberFormatter(value);
         } else {

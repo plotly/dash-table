@@ -7,14 +7,8 @@ import RealTable from 'dash-table/components/Table';
 import Logger from 'core/Logger';
 
 import genRandomId from './utils/generate';
-
-function isFrontEnd(value) {
-    return ['fe', true, false].indexOf(value) !== -1;
-}
-
-function isBackEnd(value) {
-    return ['be', false].indexOf(value) !== -1;
-}
+import isValidProps from './DataTable.validate';
+import sanitizeProps from './DataTable.sanitize';
 
 export default class DataTable extends Component {
     constructor(props) {
@@ -25,64 +19,24 @@ export default class DataTable extends Component {
     }
 
     render() {
-        if (!this.isValid()) {
-            Logger.error(`Invalid combination of filtering / sorting / pagination`);
+        if (isValidProps(this.props)) {
+            return this.props.id ? (<RealTable {...this.props} />) : (<RealTable {...this.props} id={this.getId()} />);
+        } else {
             return (<div>Invalid props combination</div>);
         }
-
-        if (!this.allValidColumns()) {
-            Logger.error(`Invalid column format`);
-            return (<div>Invalid props combination</div>);
-        }
-
-        return this.props.id ? (<RealTable {...this.props} />) : (<RealTable {...this.props} id={this.getId()} />);
-    }
-
-    isValid() {
-            const {
-                filtering,
-                sorting,
-                pagination_mode
-            } = this.props;
-
-            return isFrontEnd(pagination_mode) ||
-                (isBackEnd(filtering) && isBackEnd(sorting));
-    }
-
-    allValidColumns() {
-        const {
-            columns
-        } = this.props;
-
-        return !R.has(column =>
-            column.format && (
-                (
-                    column.format.currency &&
-                    column.format.currency.length !== 2
-                ) || (
-                    column.format.grouping &&
-                    column.format.grouping.length === 0
-                ) || (
-                    column.format.numerals &&
-                    column.format.numerals.length !== 10
-                )
-            ), columns);
     }
 
     render() {
-        if (!this.isValid()) {
-            Logger.error(`Invalid combination of filtering / sorting / pagination`);
+        if (!isValidProps(this.props)) {
             return (<div>Invalid props combination</div>);
         }
 
-        if (!this.allValidColumns()) {
-            Logger.error(`Invalid column format`);
-            return (<div>Invalid props combination</div>);
-        }
-
-        return this.props.id ? (<RealTable {...this.props} />) : (<RealTable {...this.props} id={this.getId()} />);
+        const sanitizedProps = sanitizeProps(this.props);
+        return this.props.id ?
+            (<RealTable {...sanitizedProps} />) :
+            (<RealTable {...sanitizedProps} id={this.getId()} />);
     }
-    }
+}
 
 export const defaultProps = {
     pagination_mode: 'fe',

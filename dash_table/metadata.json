@@ -2,22 +2,7 @@
   "src/dash-table/DataTable.js": {
     "description": "",
     "displayName": "DataTable",
-    "methods": [
-      {
-        "name": "isValid",
-        "docblock": null,
-        "modifiers": [],
-        "params": [],
-        "returns": null
-      },
-      {
-        "name": "allValidColumns",
-        "docblock": null,
-        "modifiers": [],
-        "params": [],
-        "returns": null
-      }
-    ],
+    "methods": [],
     "props": {
       "active_cell": {
         "type": {
