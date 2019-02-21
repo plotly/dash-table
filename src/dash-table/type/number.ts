@@ -1,3 +1,4 @@
+import * as R from 'ramda';
 import { formatLocale } from 'd3-format';
 import isNumeric from 'fast-isnumeric';
 
@@ -7,7 +8,7 @@ import { IReconciliation } from './reconcile';
 
 const convertToD3 = ({ group, ...others }: INumberLocale) => ({
     thousands: group,
-    ...others
+    ...R.omit(['separate_4digits'], others)
 });
 
 export function coerce(value: any, options: INumberColumn | undefined): IReconciliation {
@@ -27,16 +28,22 @@ export function getFormatter(format: NumberFormat) {
         locale.formatPrefix(format.specifier, format.prefix) :
         locale.format(format.specifier);
 
+    const thousandsSpecifier = format.locale.separate_4digits ?
+        format.specifier :
+        format.specifier.replace(/,/, '');
+
+    const thousandsFormatter = format.prefix ?
+        locale.formatPrefix(thousandsSpecifier, format.prefix) :
+        locale.format(thousandsSpecifier);
+
     return (value: any) => {
-        if (isNully(value)) {
-            return typeof format.nully === 'number' ?
-                numberFormatter(format.nully) :
-                format.nully;
-        } else if (typeof value === 'number') {
-            return numberFormatter(value);
-        } else {
-            return value;
-        }
+        value = isNully(value) ? format.nully : value;
+
+        return typeof value !== 'number' ?
+            value :
+            Math.abs(value) < 10000 ?
+                thousandsFormatter(value) :
+                numberFormatter(value);
     };
 }
 

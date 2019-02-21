@@ -101,6 +101,26 @@ describe('formatting', () => {
             });
         });
 
+        describe('with nully handling / partial locale override with separate_4digits', () => {
+            it('formats significant digits and grouping separator', () => {
+                const formatter = getFormatter({
+                    locale: getLocale({
+                        grouping: [2, 1],
+                        separate_4digits: false
+                    }),
+                    nully: getNully('42.4242'),
+                    specifier: ',.2f'
+                });
+
+                assert.isOk(formatter);
+
+                expect(formatter(-1299)).to.equal('-1299.00');
+                expect(formatter(-1299431)).to.equal('-1,2,99,4,31.00');
+                expect(formatter(1299)).to.equal('1299.00');
+                expect(formatter(1299431)).to.equal('1,2,99,4,31.00');
+            });
+        });
+
         describe('without nully handling / default locale / si prefix', () => {
             it('formats currency', () => {
                 const formatter = getFormatter({

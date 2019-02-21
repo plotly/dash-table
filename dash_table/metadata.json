@@ -95,6 +95,10 @@
                       "percent": {
                         "name": "string",
                         "required": false
+                      },
+                      "separate_4digits": {
+                        "name": "bool",
+                        "required": false
                       }
                     },
                     "required": false
@@ -112,7 +116,7 @@
                     "required": true
                   }
                 },
-                "description": "The formatting applied to the column's data.\n\nThis prop is derived from the [d3-format](https://github.com/d3/d3-format) library specification. Apart from\nbeing structured slightly differently (under a single prop), the usage\nis the same.\n\n'locale': represents localization specific formatting information\n  When left unspecified, will use the default value provided by d3-format.\n\n  'currency': a list of two strings representing the currency\n  prefix and suffix symbols\n  'decimal': the string used for the decimal separator\n  'group': the string used for the groups separator\n  'grouping': a list of integers representing the grouping pattern\n  'numerals': a list of ten strings used as replacements for numbers 0-9\n  'percent': the string used for the percentage symbol\n\n'nully': a value that will be used in place of the nully value during formatting\n  If the value type matches the column type, it will be formatted normally\n'prefix': a number representing the SI unit to use during formatting\n  See `dash_table.Format.Prefix` enumeration for the list of valid values\n'specifier': (mandatory) represents the rules to apply when formatting the number\n\ndash_table.FormatTemplate contains helper functions to rapidly use certain\ntypical number formats.",
+                "description": "The formatting applied to the column's data.\n\nThis prop is derived from the [d3-format](https://github.com/d3/d3-format) library specification. Apart from\nbeing structured slightly differently (under a single prop), the usage\nis the same.\n\n'locale': represents localization specific formatting information\n  When left unspecified, will use the default value provided by d3-format.\n\n  'currency': (default: '$') a list of two strings representing the currency\n  prefix and suffix symbols\n  'decimal': (default: '.') the string used for the decimal separator\n  'group': (default: ',') the string used for the groups separator\n  'grouping': (default: [3]) a list of integers representing the grouping pattern\n  'numerals': a list of ten strings used as replacements for numbers 0-9\n  'percent': (default: '%') the string used for the percentage symbol\n  'separate_4digits': (default: True) separate integers with 4-digits or less\n\n'nully': a value that will be used in place of the nully value during formatting\n  If the value type matches the column type, it will be formatted normally\n'prefix': a number representing the SI unit to use during formatting\n  See `dash_table.Format.Prefix` enumeration for the list of valid values\n'specifier': (mandatory) represents the rules to apply when formatting the number\n\ndash_table.FormatTemplate contains helper functions to rapidly use certain\ntypical number formats.",
                 "required": false
               },
               "hidden": {
@@ -321,11 +325,15 @@
             "percent": {
               "name": "string",
               "required": false
+            },
+            "separate_4digits": {
+              "name": "bool",
+              "required": false
             }
           }
         },
         "required": false,
-        "description": "The localization specific formatting information applied to all columns in the table.\n\nThis prop is derived from the [d3.formatLocale](https://github.com/d3/d3-format#formatLocale) data structure specification.\n\nWhen left unspecified, will use the default value provided by d3-format.\n\n  'currency': a list of two strings representing the currency\n  prefix and suffix symbols\n  'decimal': the string used for the decimal separator\n  'group': the string used for the groups separator\n  'grouping': a list of integers representing the grouping pattern\n  'numerals': a list of ten strings used as replacements for numbers 0-9\n  'percent': the string used for the percentage symbol"
+        "description": "The localization specific formatting information applied to all columns in the table.\n\nThis prop is derived from the [d3.formatLocale](https://github.com/d3/d3-format#formatLocale) data structure specification.\n\nWhen left unspecified, each individual nested prop will default to a pre-determined value.\n\n  'currency': (default: '$') a list of two strings representing the currency\n  prefix and suffix symbols\n  'decimal': (default: '.') the string used for the decimal separator\n  'group': (default: ',') the string used for the groups separator\n  'grouping': (default: [3]) a list of integers representing the grouping pattern\n  'numerals': a list of ten strings used as replacements for numbers 0-9\n  'percent': (default: '%') the string used for the percentage symbol\n  'separate_4digits': (default: True) separate integers with 4-digits or less"
       },
       "content_style": {
         "type": {

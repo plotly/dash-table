@@ -116,6 +116,7 @@ export interface INumberLocale {
     grouping: number[];
     numerals?: string[];
     percent: string;
+    separate_4digits?: boolean;
 }
 
 export type NumberFormat = ({

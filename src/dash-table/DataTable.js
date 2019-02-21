@@ -19,14 +19,6 @@ export default class DataTable extends Component {
     }
 
     render() {
-        if (isValidProps(this.props)) {
-            return this.props.id ? (<RealTable {...this.props} />) : (<RealTable {...this.props} id={this.getId()} />);
-        } else {
-            return (<div>Invalid props combination</div>);
-        }
-    }
-
-    render() {
         if (!isValidProps(this.props)) {
             return (<div>Invalid props combination</div>);
         }
@@ -163,13 +155,14 @@ export const propTypes = {
          * 'locale': represents localization specific formatting information
          *   When left unspecified, will use the default value provided by d3-format.
          *
-         *   'currency': a list of two strings representing the currency
+         *   'currency': (default: '$') a list of two strings representing the currency
          *   prefix and suffix symbols
-         *   'decimal': the string used for the decimal separator
-         *   'group': the string used for the groups separator
-         *   'grouping': a list of integers representing the grouping pattern
+         *   'decimal': (default: '.') the string used for the decimal separator
+         *   'group': (default: ',') the string used for the groups separator
+         *   'grouping': (default: [3]) a list of integers representing the grouping pattern
          *   'numerals': a list of ten strings used as replacements for numbers 0-9
-         *   'percent': the string used for the percentage symbol
+         *   'percent': (default: '%') the string used for the percentage symbol
+         *   'separate_4digits': (default: True) separate integers with 4-digits or less
          *
          * 'nully': a value that will be used in place of the nully value during formatting
          *   If the value type matches the column type, it will be formatted normally
@@ -187,7 +180,8 @@ export const propTypes = {
                 group: PropTypes.string,
                 grouping: PropTypes.arrayOf(PropTypes.number),
                 numerals: PropTypes.arrayOf(PropTypes.string),
-                percent: PropTypes.string
+                percent: PropTypes.string,
+                separate_4digits: PropTypes.bool
             }),
             nully: PropTypes.any,
             prefix: PropTypes.number,
@@ -319,15 +313,16 @@ export const propTypes = {
      *
      * This prop is derived from the [d3.formatLocale](https://github.com/d3/d3-format#formatLocale) data structure specification.
      *
-     * When left unspecified, will use the default value provided by d3-format.
+     * When left unspecified, each individual nested prop will default to a pre-determined value.
      *
-     *   'currency': a list of two strings representing the currency
+     *   'currency': (default: '$') a list of two strings representing the currency
      *   prefix and suffix symbols
-     *   'decimal': the string used for the decimal separator
-     *   'group': the string used for the groups separator
-     *   'grouping': a list of integers representing the grouping pattern
+     *   'decimal': (default: '.') the string used for the decimal separator
+     *   'group': (default: ',') the string used for the groups separator
+     *   'grouping': (default: [3]) a list of integers representing the grouping pattern
      *   'numerals': a list of ten strings used as replacements for numbers 0-9
-     *   'percent': the string used for the percentage symbol
+     *   'percent': (default: '%') the string used for the percentage symbol
+     *   'separate_4digits': (default: True) separate integers with 4-digits or less
      */
     locale_format: PropTypes.shape({
         currency: PropTypes.arrayOf(PropTypes.string),
@@ -335,7 +330,8 @@ export const propTypes = {
         group: PropTypes.string,
         grouping: PropTypes.arrayOf(PropTypes.number),
         numerals: PropTypes.arrayOf(PropTypes.string),
-        percent: PropTypes.string
+        percent: PropTypes.string,
+        separate_4digits: PropTypes.bool
     }),
 
     /**

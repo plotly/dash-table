@@ -9,7 +9,8 @@ const D3_DEFAULT_LOCALE: INumberLocale = {
     decimal: '.',
     group: ',',
     grouping: [3],
-    percent: '%'
+    percent: '%',
+    separate_4digits: true
 };
 
 const DEFAULT_NULLY = '';
