@@ -20,7 +20,7 @@ export default class TableClipboardHelper {
             R.props(selectedCols, R.props(R.pluck('id', columns) as any, row) as any)
         );
 
-        const value = SheetClip.prototype.stringify(df);
+        const value = `\`\`\`__json__${JSON.stringify(df)}__nosj__\`\`\``;
 
         Logger.trace('TableClipboard -- set clipboard data: ', value);
 
@@ -43,7 +43,9 @@ export default class TableClipboardHelper {
             return;
         }
 
-        const values = SheetClip.prototype.parse(text);
+        const values = /^```__json__(.*)__nosj__```$/.test(text) ?
+            JSON.parse(text.replace(/^```__json__|__nosj__```$/g, '')) :
+            SheetClip.prototype.parse(text);
 
         return applyClipboardToData(
             values,

@@ -288,15 +288,27 @@ function getFormattingState() {
         } else if (column.id === 'ddd') {
             column.format = {
                 locale: {
-                    currency: ['($ eq.) ', ' £'],
+                    currency: ['eq. $ ', ''],
                     separate_4digits: false
                 },
+                nully: 0,
                 specifier: '$,.2f'
+            };
+            column.on_change = {
+                action: 'coerce',
+                failure: 'default'
+            };
+            column.validation = {
+                allow_nully: true
             };
         } else if (column.id === 'eee') {
             column.format = {
                 nully: 'N/A',
                 specifier: ''
+            };
+            column.on_change = {
+                action: 'coerce',
+                failure: 'default'
             };
         }
     }, state.tableProps.columns as any);
