@@ -7,7 +7,7 @@ import reconcile from 'dash-table/type/reconcile';
 import isEditable from 'dash-table/derived/cell/isEditable';
 
 export default (
-    values: string[][],
+    values: any[][],
     activeCell: ActiveCell,
     derived_viewport_indices: number[],
     columns: Columns,

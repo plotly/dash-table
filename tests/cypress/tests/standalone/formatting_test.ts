@@ -30,7 +30,7 @@ describe('formatting', () => {
             () => cy.get('.dash-cell-value').should('have.html', '3')
         );
         DashTable.getCellById(2, 'eee').click();
-        DOM.focused.type(`${Key.Shift}${Key.ArrowDown}`);
+        DOM.focused.type(`${Key.Shift}${Key.ArrowDown}${Key.ArrowDown}`);
         DOM.focused.type(`${Key.Meta}c`);
 
         DashTable.getCellById(2, 'ddd').click();
@@ -42,6 +42,9 @@ describe('formatting', () => {
             () => cy.get('.dash-cell-value').should('have.html', 'eq. $ 3.00')
         );
         DashTable.getCellById(3, 'ddd').within(
+            () => cy.get('.dash-cell-value').should('have.html', 'eq. $ 0.00')
+        );
+        DashTable.getCellById(4, 'ddd').within(
             () => cy.get('.dash-cell-value').should('have.html', 'eq. $ 0.00')
         );
     });

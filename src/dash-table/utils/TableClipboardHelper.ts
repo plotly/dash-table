@@ -8,6 +8,8 @@ import { ActiveCell, Columns, Data, SelectedCells } from 'dash-table/components/
 import applyClipboardToData from './applyClipboardToData';
 
 export default class TableClipboardHelper {
+    private static lastLocalCopy: any[][] = [[]];
+
     public static toClipboard(e: any, selectedCells: SelectedCells, columns: Columns, data: Data) {
         const selectedRows = R.uniq(R.pluck(0, selectedCells).sort((a, b) => a - b));
         const selectedCols: any = R.uniq(R.pluck(1, selectedCells).sort((a, b) => a - b));
@@ -20,7 +22,8 @@ export default class TableClipboardHelper {
             R.props(selectedCols, R.props(R.pluck('id', columns) as any, row) as any)
         );
 
-        const value = `\`\`\`__json__${JSON.stringify(df)}__nosj__\`\`\``;
+        const value = SheetClip.prototype.stringify(df);
+        TableClipboardHelper.lastLocalCopy = df;
 
         Logger.trace('TableClipboard -- set clipboard data: ', value);
 
@@ -43,8 +46,10 @@ export default class TableClipboardHelper {
             return;
         }
 
-        const values = /^```__json__(.*)__nosj__```$/.test(text) ?
-            JSON.parse(text.replace(/^```__json__|__nosj__```$/g, '')) :
+        const localDf = SheetClip.prototype.stringify(TableClipboardHelper.lastLocalCopy);
+
+        const values = localDf === text ?
+            TableClipboardHelper.lastLocalCopy :
             SheetClip.prototype.parse(text);
 
         return applyClipboardToData(
