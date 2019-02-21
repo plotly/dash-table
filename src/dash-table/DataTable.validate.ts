@@ -53,4 +53,4 @@ export default (props: any): boolean => {
     }
 
     return true;
-}
+};
