@@ -118,13 +118,17 @@ export interface INumberLocale {
     thousands: string;
 }
 
-export type LocaleFormat = INumberLocale | undefined;
+export type LocaleFormat = Partial<INumberLocale> | undefined;
+
+export type NumberFormat = ({
+    locale?: Partial<INumberLocale>;
+    nully?: string | number;
+    prefix?: number;
+    specifier: string;
+}) | undefined;
 
 export interface INumberColumn extends ITypeColumn {
-    format?: {
-        prefix?: number;
-        specifier: string;
-    } & Partial<INumberLocale>;
+    format?: NumberFormat;
     presentation?: Presentation.Input | Presentation.Dropdown;
     type: ColumnType.Numeric;
 }

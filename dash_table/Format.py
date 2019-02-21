@@ -72,6 +72,7 @@ class Type(Enum):
 class Format():
     def __init__(self):
         self.locale = {}
+        self.nully = ''
         self.prefix = Prefix.UNDEFINED
         self.specifier = {
             'align': Align.UNDEFINED,
@@ -175,6 +176,11 @@ class Format():
         self.locale['grouping'] = groups
         return self
 
+    # Nully
+    def nully(self, nully):
+        self.nully = nully
+        return self
+
     # Prefix
     def si_prefix(self, prefix: Prefix = Prefix.UNDEFINED):
         prefix = prefix if isinstance(prefix, Prefix) else Prefix.UNDEFINED
@@ -183,6 +189,7 @@ class Format():
 
     def create(self):
         f = self.locale.copy()
+        f['nully'] = self.nully
         f['prefix'] = self.prefix.value
         f['specifier'] = '{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}'.format(
             self.specifier['fill'] if self.specifier['align'] != Align.UNDEFINED else '',

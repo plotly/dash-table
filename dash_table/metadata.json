@@ -2,7 +2,22 @@
   "src/dash-table/DataTable.js": {
     "description": "",
     "displayName": "DataTable",
-    "methods": [],
+    "methods": [
+      {
+        "name": "isValid",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      },
+      {
+        "name": "allValidColumns",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      }
+    ],
     "props": {
       "active_cell": {
         "type": {
@@ -55,6 +70,64 @@
                   }
                 ],
                 "description": "If True, then the name of this column is editable.\nIf there are multiple column headers (if `name` is a list of strings),\nthen `editable_name` can refer to _which_ column header should be\neditable by setting it to the column header index.\nAlso, updating the name in a merged column header cell will\nupdate the name of each column.",
+                "required": false
+              },
+              "format": {
+                "name": "shape",
+                "value": {
+                  "locale": {
+                    "name": "shape",
+                    "value": {
+                      "currency": {
+                        "name": "arrayOf",
+                        "value": {
+                          "name": "string"
+                        },
+                        "required": false
+                      },
+                      "decimal": {
+                        "name": "string",
+                        "required": false
+                      },
+                      "grouping": {
+                        "name": "arrayOf",
+                        "value": {
+                          "name": "number"
+                        },
+                        "required": false
+                      },
+                      "numerals": {
+                        "name": "arrayOf",
+                        "value": {
+                          "name": "string"
+                        },
+                        "required": false
+                      },
+                      "percent": {
+                        "name": "string",
+                        "required": false
+                      },
+                      "thousands": {
+                        "name": "string",
+                        "required": false
+                      }
+                    },
+                    "required": false
+                  },
+                  "nully": {
+                    "name": "any",
+                    "required": false
+                  },
+                  "prefix": {
+                    "name": "number",
+                    "required": false
+                  },
+                  "specifier": {
+                    "name": "string",
+                    "required": true
+                  }
+                },
+                "description": "The formatting applied to the column's data.\n\nThis prop is derived from the [d3-format](https://github.com/d3/d3-format) library specification. Apart from\nbeing structured slightly differently (under a single prop), the usage\nis the same.\n\n'locale': represents localization specific formatting information\n  When left unspecified, will use the default value provided by d3-format.\n\n  'currency': a list of two strings representing the currency\n  prefix and suffix symbols\n  'decimal': the string used for the decimal separator\n  'grouping': a list of integers representing the grouping pattern\n  'numerals': a list of ten strings used as replacements for numbers 0-9\n  'percent': the string used for the percentage symbol\n  'thousands': the string used for the groups separator\n\n'nully': a value that will be used in place of the nully value during formatting\n  If the value type matches the column type, it will be formatted normally\n'prefix': a number representing the SI unit to use during formatting\n  See `dash_table.Format.Prefix` enumeration for the list of valid values\n'specifier': (mandatory) represents the rules to apply when formatting the number\n\ndash_table.FormatTemplate contains helper functions to rapidly use certain\ntypical number formats.",
                 "required": false
               },
               "hidden": {
@@ -216,59 +289,6 @@
                 ],
                 "description": "The data-type of the column's data.\n'numeric': represents both floats and ints\n'text': represents a string\n'datetime': a string representing a date or date-time, in the form:\n  'YYYY-MM-DD HH:MM:SS.ssssss' or some truncation thereof. Years must\n  have 4 digits, unless you use `validation.allow_YY: true`. Also\n  accepts 'T' or 't' between date and time, and allows timezone info\n  at the end. To convert these strings to Python `datetime` objects,\n  use `dateutil.parser.isoparse`. In R use `parse_iso_8601` from the\n  `parsedate` library.\n  WARNING: these parsers do not work with 2-digit years, if you use\n  `validation.allow_YY: true` and do not coerce to 4-digit years.\n  And parsers that do work with 2-digit years may make a different\n  guess about the century than we make on the front end.\n'any': represents any type of data\n\nDefaults to 'any' if undefined.\n\nNOTE: This feature has not been fully implemented.\nIn the future, it's data types will impact things like\ntext formatting options in the cell (e.g. display 2 decimals\nfor a number), filtering options and behavior, and editing\nbehavior.\nStay tuned by following [https://github.com/plotly/dash-table/issues/166](https://github.com/plotly/dash-table/issues/166)",
                 "required": false
-              },
-              "format": {
-                "name": "shape",
-                "value": {
-                  "locale": {
-                    "name": "shape",
-                    "value": {
-                      "currency": {
-                        "name": "arrayOf",
-                        "value": {
-                          "name": "string"
-                        },
-                        "required": false
-                      },
-                      "decimal": {
-                        "name": "string",
-                        "required": false
-                      },
-                      "grouping": {
-                        "name": "arrayOf",
-                        "value": {
-                          "name": "number"
-                        },
-                        "required": false
-                      },
-                      "numerals": {
-                        "name": "arrayOf",
-                        "value": {
-                          "name": "string"
-                        },
-                        "required": false
-                      },
-                      "percent": {
-                        "name": "string",
-                        "required": false
-                      },
-                      "thousands": {
-                        "name": "string",
-                        "required": false
-                      }
-                    },
-                    "required": false
-                  },
-                  "prefix": {
-                    "name": "number",
-                    "required": false
-                  },
-                  "specifier": {
-                    "name": "string",
-                    "required": false
-                  }
-                },
-                "required": false
               }
             }
           }
@@ -320,7 +340,7 @@
           }
         },
         "required": false,
-        "description": ""
+        "description": "The localization specific formatting information applied to all columns in the table.\n\nThis prop is derived from the [d3.formatLocale](https://github.com/d3/d3-format#formatLocale) data structure specification.\n\nWhen left unspecified, will use the default value provided by d3-format.\n\n  'currency': a list of two strings representing the currency\n  prefix and suffix symbols\n  'decimal': the string used for the decimal separator\n  'grouping': a list of integers representing the grouping pattern\n  'numerals': a list of ten strings used as replacements for numbers 0-9\n  'percent': the string used for the percentage symbol\n  'thousands': the string used for the groups separator"
       },
       "content_style": {
         "type": {

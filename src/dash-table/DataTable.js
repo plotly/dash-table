@@ -217,9 +217,11 @@ export const propTypes = {
          *   'percent': the string used for the percentage symbol
          *   'thousands': the string used for the groups separator
          *
+         * 'nully': a value that will be used in place of the nully value during formatting
+         *   If the value type matches the column type, it will be formatted normally
          * 'prefix': a number representing the SI unit to use during formatting
          *   See `dash_table.Format.Prefix` enumeration for the list of valid values
-         * 'specifier': represents the rules to apply when formatting the number
+         * 'specifier': (mandatory) represents the rules to apply when formatting the number
          *
          * dash_table.FormatTemplate contains helper functions to rapidly use certain
          * typical number formats.
@@ -233,8 +235,9 @@ export const propTypes = {
                 percent: PropTypes.string,
                 thousands: PropTypes.string
             }),
+            nully: PropTypes.any,
             prefix: PropTypes.number,
-            specifier: PropTypes.string
+            specifier: PropTypes.string.isRequired
         }),
 
         /**

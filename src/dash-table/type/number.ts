@@ -2,9 +2,18 @@ import * as R from 'ramda';
 import { formatLocale } from 'd3-format';
 import isNumeric from 'fast-isnumeric';
 
-import { INumberColumn, LocaleFormat } from 'dash-table/components/Table/props';
+import { INumberColumn, LocaleFormat, NumberFormat } from 'dash-table/components/Table/props';
 import { reconcileNull, isNully } from './null';
 import { IReconciliation } from './reconcile';
+
+const DEFAULT_LOCALE = {
+    currency: ['$', ''],
+    decimal: '.',
+    thousands: ',',
+    grouping: [3],
+    percent: '%'
+};
+const DEFAULT_NULLY = '';
 
 export function coerce(value: any, options: INumberColumn | undefined): IReconciliation {
     return isNumeric(value) ?
@@ -14,22 +23,39 @@ export function coerce(value: any, options: INumberColumn | undefined): IReconci
 
 export function getFormatter(
     defaultLocale: LocaleFormat,
-    options: INumberColumn | undefined
+    format: NumberFormat
 ) {
-    if (!options || !options.format) {
+    if (!format) {
         return;
     }
 
     const locale = formatLocale(
-        R.merge(
+        R.mergeAll([
+            DEFAULT_LOCALE,
             defaultLocale,
-            R.omit(['specifier', 'prefix'], options.format)
-        )
+            format.locale
+        ])
     );
 
-    return options.format.prefix ?
-        locale.formatPrefix(options.format.specifier, options.format.prefix) :
-        locale.format(options.format.specifier);
+    const numberFormatter = format.prefix ?
+        locale.formatPrefix(format.specifier, format.prefix) :
+        locale.format(format.specifier);
+
+    const nully = typeof format.nully === 'undefined' ?
+        DEFAULT_NULLY :
+        format.nully;
+
+    return (value: any) => {
+        if (isNully(value)) {
+            return typeof nully === 'number' ?
+                numberFormatter(nully) :
+                nully;
+        } else if (typeof value === 'number') {
+            return numberFormatter(value);
+        } else {
+            return value;
+        }
+    };
 }
 
 export function validate(value: any, options: INumberColumn | undefined): IReconciliation {

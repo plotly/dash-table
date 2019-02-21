@@ -12,7 +12,19 @@ Keyword arguments:
 active.
 - columns (list; optional): Columns describes various aspects about each individual column.
 `name` and `id` are the only required parameters.
-- locale_format (optional): . locale_format has the following type: dict containing keys 'currency', 'decimal', 'grouping', 'numerals', 'percent', 'thousands'.
+- locale_format (optional): The localization specific formatting information applied to all columns in the table.
+
+This prop is derived from the [d3.formatLocale](https://github.com/d3/d3-format#formatLocale) data structure specification.
+
+When left unspecified, will use the default value provided by d3-format.
+
+  'currency': a list of two strings representing the currency
+  prefix and suffix symbols
+  'decimal': the string used for the decimal separator
+  'grouping': a list of integers representing the grouping pattern
+  'numerals': a list of ten strings used as replacements for numbers 0-9
+  'percent': the string used for the percentage symbol
+  'thousands': the string used for the groups separator. locale_format has the following type: dict containing keys 'currency', 'decimal', 'grouping', 'numerals', 'percent', 'thousands'.
 Those keys have the following types:
   - currency (list; optional)
   - decimal (string; optional)

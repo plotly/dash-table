@@ -12,7 +12,7 @@ export default (locale: LocaleFormat) =>
         let formatter;
         switch (c.type) {
             case ColumnType.Numeric:
-                formatter = getNumberFormatter(locale, c);
+                formatter = getNumberFormatter(locale, c.format);
                 break;
         }
 
