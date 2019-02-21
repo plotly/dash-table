@@ -4,7 +4,7 @@ import { memoizeOne } from 'core/memoizer';
 
 import { Columns, ColumnType, INumberLocale } from './components/Table/props';
 
-const DEFAULT_LOCALE = {
+const DEFAULT_LOCALE: INumberLocale = {
     currency: ['$', ''],
     decimal: '.',
     thousands: ',',
@@ -14,26 +14,17 @@ const DEFAULT_LOCALE = {
 
 const DEFAULT_NULLY = '';
 
-const applyDefaultToLocale = memoizeOne((locale: INumberLocale) =>
-    R.merge(
-        DEFAULT_LOCALE,
-        locale
-    )
-);
+const applyDefaultToLocale = memoizeOne((locale: INumberLocale) => getLocale(locale));
 
 const applyDefaultsToColumns = memoizeOne(
     (defaultLocale: INumberLocale, columns: Columns) => R.map(column => {
-        if (column.type === ColumnType.Numeric && column.format) {
-            column.format.locale = R.mergeAll([
-                DEFAULT_LOCALE,
-                defaultLocale,
-                column.format.locale
-            ]);
-            column.format.nully = column.format.nully === undefined ?
-                DEFAULT_NULLY :
-                column.format.nully;
+        const c = R.clone(column);
+
+        if (c.type === ColumnType.Numeric && c.format) {
+            c.format.locale = getLocale(defaultLocale, c.format.locale);
+            c.format.nully = getNully(c.format.nully);
         }
-        return column;
+        return c;
     }, columns)
 );
 
@@ -48,3 +39,13 @@ export default (props: any) => {
         }
     ]);
 };
+
+export const getLocale = (...locales: Partial<INumberLocale>[]): INumberLocale =>
+    R.mergeAll([
+        DEFAULT_LOCALE,
+        ...locales
+    ]);
+
+export const getNully = (nully?: any) => nully === undefined ?
+    DEFAULT_NULLY :
+    nully;
