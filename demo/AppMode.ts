@@ -19,6 +19,7 @@ export enum AppMode {
     Filtering = 'filtering',
     FixedTooltips = 'fixed,tooltips',
     FixedVirtualized = 'fixed,virtualized',
+    Formatting = 'formatting',
     ReadOnly = 'readonly',
     ColumnsInSpace = 'columnsInSpace',
     Tooltips = 'tooltips',
@@ -260,6 +261,49 @@ function getFixedVirtualizedState() {
     };
 }
 
+function getFormattingState() {
+    const state = getDefaultState();
+
+    R.forEach((datum: any) => {
+        if (datum.eee % 2 === 0) {
+            datum.eee = undefined;
+        } else if (datum.eee % 10 === 5) {
+            datum.eee = `xx-${datum.eee}-xx`;
+        }
+    }, state.tableProps.data as any);
+
+    R.forEach((column: any) => {
+        if (column.id === 'rows') {
+            column.format = {
+                specifier: '.^5'
+            };
+        } else if (column.id === 'ccc') {
+            column.format = {
+                locale: {
+                    separate_4digits: false
+                },
+                prefix: 1000,
+                specifier: '.3f'
+            };
+        } else if (column.id === 'ddd') {
+            column.format = {
+                locale: {
+                    currency: ['($ eq.) ', ' £'],
+                    separate_4digits: false
+                },
+                specifier: '$,.2f'
+            };
+        } else if (column.id === 'eee') {
+            column.format = {
+                nully: 'N/A',
+                specifier: ''
+            };
+        }
+    }, state.tableProps.columns as any);
+
+    return state;
+}
+
 function getState() {
     const mode = Environment.searchParams.get('mode');
 
@@ -272,6 +316,8 @@ function getState() {
             return getFixedTooltipsState();
         case AppMode.FixedVirtualized:
             return getFixedVirtualizedState();
+        case AppMode.Formatting:
+            return getFormattingState();
         case AppMode.ReadOnly:
             return getReadonlyState();
         case AppMode.ColumnsInSpace:

@@ -88,9 +88,9 @@ class Format():
         }
 
     # Specifier
-    def align(self, align: Align = Align.UNDEFINED):
+    def align(self, align: Align = Align.UNDEFINED, count: int):
         align = align if isinstance(align, Align) else Align.UNDEFINED
-        self.specifier['align'] = align
+        self.specifier['align'] = ('{0}{1}'.format(align, count) if align is not Align.UNDEFINED else align)
         return self
 
     def fill(self, value: str):
