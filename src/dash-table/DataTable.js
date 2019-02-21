@@ -166,10 +166,10 @@ export const propTypes = {
          *   'currency': a list of two strings representing the currency
          *   prefix and suffix symbols
          *   'decimal': the string used for the decimal separator
+         *   'group': the string used for the groups separator
          *   'grouping': a list of integers representing the grouping pattern
          *   'numerals': a list of ten strings used as replacements for numbers 0-9
          *   'percent': the string used for the percentage symbol
-         *   'thousands': the string used for the groups separator
          *
          * 'nully': a value that will be used in place of the nully value during formatting
          *   If the value type matches the column type, it will be formatted normally
@@ -184,10 +184,10 @@ export const propTypes = {
             locale: PropTypes.shape({
                 currency: PropTypes.arrayOf(PropTypes.string),
                 decimal: PropTypes.string,
+                group: PropTypes.string,
                 grouping: PropTypes.arrayOf(PropTypes.number),
                 numerals: PropTypes.arrayOf(PropTypes.string),
-                percent: PropTypes.string,
-                thousands: PropTypes.string
+                percent: PropTypes.string
             }),
             nully: PropTypes.any,
             prefix: PropTypes.number,
@@ -324,18 +324,18 @@ export const propTypes = {
      *   'currency': a list of two strings representing the currency
      *   prefix and suffix symbols
      *   'decimal': the string used for the decimal separator
+     *   'group': the string used for the groups separator
      *   'grouping': a list of integers representing the grouping pattern
      *   'numerals': a list of ten strings used as replacements for numbers 0-9
      *   'percent': the string used for the percentage symbol
-     *   'thousands': the string used for the groups separator
      */
     locale_format: PropTypes.shape({
         currency: PropTypes.arrayOf(PropTypes.string),
         decimal: PropTypes.string,
+        group: PropTypes.string,
         grouping: PropTypes.arrayOf(PropTypes.number),
         numerals: PropTypes.arrayOf(PropTypes.string),
-        percent: PropTypes.string,
-        thousands: PropTypes.string
+        percent: PropTypes.string
     }),
 
     /**

@@ -1,9 +1,14 @@
 import { formatLocale } from 'd3-format';
 import isNumeric from 'fast-isnumeric';
 
-import { INumberColumn, NumberFormat } from 'dash-table/components/Table/props';
+import { INumberColumn, INumberLocale, NumberFormat } from 'dash-table/components/Table/props';
 import { reconcileNull, isNully } from './null';
 import { IReconciliation } from './reconcile';
+
+const convertToD3 = ({ group, ...others }: INumberLocale) => ({
+    thousands: group,
+    ...others
+});
 
 export function coerce(value: any, options: INumberColumn | undefined): IReconciliation {
     return isNumeric(value) ?
@@ -16,7 +21,7 @@ export function getFormatter(format: NumberFormat) {
         return (value: any) => value;
     }
 
-    const locale = formatLocale(format.locale);
+    const locale = formatLocale(convertToD3(format.locale));
 
     const numberFormatter = format.prefix ?
         locale.formatPrefix(format.specifier, format.prefix) :

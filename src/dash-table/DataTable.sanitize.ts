@@ -4,10 +4,10 @@ import { memoizeOne } from 'core/memoizer';
 
 import { Columns, ColumnType, INumberLocale } from './components/Table/props';
 
-const DEFAULT_LOCALE: INumberLocale = {
+const D3_DEFAULT_LOCALE: INumberLocale = {
     currency: ['$', ''],
     decimal: '.',
-    thousands: ',',
+    group: ',',
     grouping: [3],
     percent: '%'
 };
@@ -42,7 +42,7 @@ export default (props: any) => {
 
 export const getLocale = (...locales: Partial<INumberLocale>[]): INumberLocale =>
     R.mergeAll([
-        DEFAULT_LOCALE,
+        D3_DEFAULT_LOCALE,
         ...locales
     ]);
 

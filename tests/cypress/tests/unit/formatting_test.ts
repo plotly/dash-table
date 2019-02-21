@@ -74,6 +74,7 @@ describe('formatting', () => {
                 const formatter = getFormatter({
                     locale: getLocale({
                         decimal: 'x',
+                        group: 'y',
                         grouping: [2, 1]
                     }),
                     nully: getNully('42.4242'),
@@ -87,8 +88,8 @@ describe('formatting', () => {
                 expect(formatter(0.131)).to.equal('0x13');
                 expect(formatter(1.23)).to.equal('1x23');
                 expect(formatter(1.299)).to.equal('1x30');
-                expect(formatter(1299)).to.equal('1,2,99x00');
-                expect(formatter(1299431)).to.equal('1,2,99,4,31x00');
+                expect(formatter(1299)).to.equal('1y2y99x00');
+                expect(formatter(1299431)).to.equal('1y2y99y4y31x00');
                 expect(formatter(''), 'Empty string case').to.equal('');
                 expect(formatter('foo'), 'Foo string case').to.equal('foo');
                 expect(formatter(true), 'Empty string case').to.equal(true);

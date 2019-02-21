@@ -21,17 +21,17 @@ When left unspecified, will use the default value provided by d3-format.
   'currency': a list of two strings representing the currency
   prefix and suffix symbols
   'decimal': the string used for the decimal separator
+  'group': the string used for the groups separator
   'grouping': a list of integers representing the grouping pattern
   'numerals': a list of ten strings used as replacements for numbers 0-9
-  'percent': the string used for the percentage symbol
-  'thousands': the string used for the groups separator. locale_format has the following type: dict containing keys 'currency', 'decimal', 'grouping', 'numerals', 'percent', 'thousands'.
+  'percent': the string used for the percentage symbol. locale_format has the following type: dict containing keys 'currency', 'decimal', 'group', 'grouping', 'numerals', 'percent'.
 Those keys have the following types:
   - currency (list; optional)
   - decimal (string; optional)
+  - group (string; optional)
   - grouping (list; optional)
   - numerals (list; optional)
   - percent (string; optional)
-  - thousands (string; optional)
 - content_style (a value equal to: 'fit', 'grow'; optional): `content_style` toggles between a set of CSS styles for
 two common behaviors:
 - `fit`: The table container's width be equal to the width of its content.

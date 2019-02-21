@@ -112,10 +112,10 @@ export interface ITypeColumn {
 export interface INumberLocale {
     currency: [string, string];
     decimal: string;
+    group: string;
     grouping: number[];
     numerals?: string[];
     percent: string;
-    thousands: string;
 }
 
 export type NumberFormat = ({
