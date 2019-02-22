@@ -1,5 +1,5 @@
 import { getFormatter } from 'dash-table/type/number';
-import { getLocale, getNully } from 'dash-table/DataTable.sanitize';
+import { getLocale, getNully, getSpecifier } from 'dash-table/DataTable.sanitize';
 
 describe('formatting', () => {
     describe('number', () => {
@@ -18,7 +18,7 @@ describe('formatting', () => {
                 const formatter = getFormatter({
                     locale: getLocale(),
                     nully: getNully(),
-                    specifier: '$.2f'
+                    specifier: getSpecifier('$.2f')
                 });
 
                 assert.isOk(formatter);
@@ -46,7 +46,7 @@ describe('formatting', () => {
                 const formatter = getFormatter({
                     locale: getLocale(),
                     nully: 42.42,
-                    specifier: ',.2r'
+                    specifier: getSpecifier(',.2r')
                 });
 
                 assert.isOk(formatter);
@@ -78,7 +78,7 @@ describe('formatting', () => {
                         grouping: [2, 1]
                     }),
                     nully: getNully('42.4242'),
-                    specifier: ',.2f'
+                    specifier: getSpecifier(',.2f')
                 });
 
                 assert.isOk(formatter);
@@ -109,7 +109,7 @@ describe('formatting', () => {
                         separate_4digits: false
                     }),
                     nully: getNully('42.4242'),
-                    specifier: ',.2f'
+                    specifier: getSpecifier(',.2f')
                 });
 
                 assert.isOk(formatter);
@@ -127,7 +127,7 @@ describe('formatting', () => {
                     locale: getLocale(),
                     nully: getNully(),
                     prefix: 0.001,
-                    specifier: '.0f'
+                    specifier: getSpecifier('.0f')
                 });
 
                 assert.isOk(formatter);

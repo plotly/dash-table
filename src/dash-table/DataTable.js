@@ -168,7 +168,7 @@ export const propTypes = {
          *   If the value type matches the column type, it will be formatted normally
          * 'prefix': a number representing the SI unit to use during formatting
          *   See `dash_table.Format.Prefix` enumeration for the list of valid values
-         * 'specifier': (mandatory) represents the rules to apply when formatting the number
+         * 'specifier': (default: '') represents the rules to apply when formatting the number
          *
          * dash_table.FormatTemplate contains helper functions to rapidly use certain
          * typical number formats.
@@ -185,7 +185,7 @@ export const propTypes = {
             }),
             nully: PropTypes.any,
             prefix: PropTypes.number,
-            specifier: PropTypes.string.isRequired
+            specifier: PropTypes.string
         }),
 
         /**

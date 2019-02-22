@@ -14,6 +14,7 @@ const D3_DEFAULT_LOCALE: INumberLocale = {
 };
 
 const DEFAULT_NULLY = '';
+const DEFAULT_SPECIFIER = '';
 
 const applyDefaultToLocale = memoizeOne((locale: INumberLocale) => getLocale(locale));
 
@@ -24,6 +25,7 @@ const applyDefaultsToColumns = memoizeOne(
         if (c.type === ColumnType.Numeric && c.format) {
             c.format.locale = getLocale(defaultLocale, c.format.locale);
             c.format.nully = getNully(c.format.nully);
+            c.format.specifier = getSpecifier(c.format.specifier);
         }
         return c;
     }, columns)
@@ -46,6 +48,10 @@ export const getLocale = (...locales: Partial<INumberLocale>[]): INumberLocale =
         D3_DEFAULT_LOCALE,
         ...locales
     ]);
+
+export const getSpecifier = (specifier?: string) => specifier === undefined ?
+    DEFAULT_SPECIFIER :
+    specifier;
 
 export const getNully = (nully?: any) => nully === undefined ?
     DEFAULT_NULLY :
