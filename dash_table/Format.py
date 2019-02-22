@@ -1,146 +1,182 @@
-from enum import Enum
 import json
+from typing import Union
+import collections
 
-class Align(Enum):
-    UNDEFINED = ''
-    RIGHT = '>'
-    LEFT = '<'
-    CENTER = '^'
-    RIGHT_SIGN = '='
 
-class GroupSeparator(Enum):
-    NO = ''
-    YES = ','
+def get_named_tuple(name: str, dict: dict):
+    return collections.namedtuple(name, dict.keys())(*dict.values())
 
-class Padding(Enum):
-    NO = ''
-    YES = '0'
 
-class Prefix(Enum):
-    YOCTO = 10**-24
-    ZEPTO = 10**-21
-    ATTO = 10**-18
-    FEMTO = 10**-15
-    PICO = 10**-12
-    NANO = 10**-9
-    MICRO = 10**-6
-    MILLI = 10**-3
-    UNDEFINED = None
-    KILO = 10**3
-    MEGA = 10**6
-    GIGA = 10**9
-    TERA = 10**12
-    PETA = 10**15
-    EXA = 10**18
-    ZETTA = 10**21
-    YOTTA = 10**24
+Align = get_named_tuple('align', {
+    'default': '',
+    'left': '<',
+    'right': '>',
+    'center': '^',
+    "right_sign": '='
+})
 
-class Sign(Enum):
-    UNDEFINED  = ''
-    NEGATIVE = '-'
-    POSITIVE = '+'
-    PARANTHESES = '('
-    SPACE = ' '
+Group = get_named_tuple('group', {
+    'no': '',
+    'yes': ','
+})
 
-class Symbol(Enum):
-    UNDEFINED = ''
-    CURRENCY = '$'
-    BINARY = '#b'
-    OCTAL = '#o'
-    HEX = '#x'
+Padding = get_named_tuple('padding', {
+    'no': '',
+    'yes': '0'
+})
 
-class Trim(Enum):
-    NO = ''
-    YES = '~'
+Prefix = get_named_tuple('prefix', {
+    'yocto': 10**-24,
+    'zepto': 10**-21,
+    'atto': 10**-18,
+    'femto': 10**-15,
+    'pico': 10**-12,
+    'nano': 10**-9,
+    'micro': 10**-6,
+    'milli': 10**-3,
+    'none': None,
+    'kilo': 10**3,
+    'mega': 10**6,
+    'giga': 10**9,
+    'tera': 10**12,
+    'peta': 10**15,
+    'exa': 10**18,
+    'zetta': 10**21,
+    'yotta': 10**24
+})
 
-class Type(Enum):
-    UNDEFINED = ''
-    EXPONENT = 'e'
-    FIXED_POINT = 'f'
-    DECIMAL_OR_EXPONENT = 'g'
-    DECIMAL = 'r'
-    DECIMAL_SI_PREFIX = 's'
-    PERCENTAGE = '%'
-    PERCENTAGE_ROUNDED = 'p'
-    BINARY = 'b'
-    OCTAL = 'o'
-    DECIMAL_INTEGER = 'd'
-    LOWER_CASE_HEX = 'x'
-    UPPER_CASE_HEX = 'X'
-    UNICODE = 'c'
+Scheme = get_named_tuple('scheme', {
+    'default': '',
+    'decimal': 'r',
+    'decimal_integer': 'd',
+    'decimal_or_exponent': 'g',
+    'decimal_si_prefix': 's',
+    'exponent': 'e',
+    'fixed': 'f',
+    'percentage': '%',
+    'percentage_rounded': 'p',
+    'binary': 'b',
+    'octal': 'o',
+    'lower_case_hex': 'x',
+    'upper_case_hex': 'X',
+    'unicode': 'c'
+})
+
+Sign = get_named_tuple('sign', {
+    'default': '',
+    'negative': '-',
+    'positive': '+',
+    'parantheses': '(',
+    'space': ' '
+})
+
+Symbol = get_named_tuple('symbol', {
+    'none': '',
+    'currency': '$',
+    'binary': '#b',
+    'octal': '#o',
+    'hex': '#x'
+})
+
+Trim = get_named_tuple('trim', {
+    'no': '',
+    'yes': '~'
+})
+
 
 class Format():
     def __init__(self):
         self.locale = {}
         self.nully = ''
-        self.prefix = Prefix.UNDEFINED
+        self.prefix = Prefix.none
         self.specifier = {
-            'align': Align.UNDEFINED,
+            'align': Align.default,
             'fill': '',
-            'group': GroupSeparator.NO,
+            'group': Group.no,
             'width': '',
-            'padding': Padding.NO,
+            'padding': Padding.no,
             'precision': '',
-            'sign': Sign.UNDEFINED,
-            'symbol': Symbol.UNDEFINED,
-            'trim': Trim.NO,
-            'type': Type.UNDEFINED
+            'sign': Sign.default,
+            'symbol': Symbol.none,
+            'trim': Trim.no,
+            'type': Scheme.default
         }
 
     # Specifier
-    def align(self, align: Align = Align.UNDEFINED, count: int):
-        align = align if isinstance(align, Align) else Align.UNDEFINED
-        self.specifier['align'] = ('{0}{1}'.format(align, count) if align is not Align.UNDEFINED else align)
+    def align(self, value):
+        if value not in Align:
+            raise Exception('expected value to be one of', str(list(Align)))
+
+        self.specifier['align'] = value
         return self
 
-    def fill(self, value: str):
+    def fill(self, value):
         self.specifier['fill'] = value
         return self
 
-    def group(self, value: bool = False):
-        value = value if isinstance(value, bool) else False
-        value = GroupSeparator.YES if value == True else GroupSeparator.NO
+    def group(self, value):
+        if isinstance(value, bool):
+            value = Group.yes if value else Group.no
+
+        if value not in Group:
+            raise Exception('expected value to be one of', str(list(Group)))
+
         self.specifier['group'] = value
         return self
 
-    def pad(self, value: bool = False):
-        value = value if isinstance(value, bool) else False
-        value = value.YES if value == True else Padding.NO
+    def padding(self, value, count=0):
+        if isinstance(value, bool):
+            value = Padding.yes if value else Padding.no
+
+        if value not in Padding:
+            raise Exception('expected value to be one of', str(list(Padding)))
+
+        if not isinstance(count, int) or count < 0:
+            raise Exception('expected count to be a non-negative integer', str(count))
+
         self.specifier['padding'] = value
+        self.specifier['width'] = count
         return self
 
-    def precision(self, value: int = ''):
-        value = '.{}'.format(value) if isinstance(value, int) or value != '' else ''
-        self.specifier['precision'] = value
-        return self
+    def scheme(self, value, precision=0):
+        if value not in Scheme:
+            raise Exception('expected value to be one of', str(list(Scheme)))
 
-    def sign(self, value: Sign = Sign.UNDEFINED):
-        value = value if isinstance(value, Sign) else Sign.UNDEFINED
-        self.specifier['sign'] = value
-        return self
+        if precision is not None and (not isinstance(precision, int) or precision < 0):
+            raise Exception('expected precision to be a non-negative integer or None', str(precision))
 
-    def symbol(self, value: Symbol = Symbol.UNDEFINED):
-        value = value if isinstance(value, Symbol) else Symbol.UNDEFINED
-        self.specifier['symbol'] = value
-        return self
-
-    def trim(self, value: bool = False):
-        value = value if isinstance(value, bool) else False
-        value = Trim.YES if value == True else Trim.NO
-        self.specifier['trim'] = value
-        return self
-
-    def type(self, value: Type = Type.UNDEFINED):
-        value = value if isinstance(value, Type) else Type.UNDEFINED
+        self.specifier['precision'] = '.{0}'.format(precision) if precision is not None else ''
         self.specifier['type'] = value
         return self
 
-    def width(self, value: int = ''):
-        value = value if isinstance(value, int) or value == '' else ''
-        self.specifier['width'] = str(value)
+    def sign(self, value):
+        if value not in Sign:
+            raise Exception('expected value to be one of', str(list(Sign)))
+
+        self.specifier['sign'] = value
         return self
 
-    def currency_prefix(self, symbol: str):
+    def symbol(self, value):
+        if value not in Symbol:
+            raise Exception('expected value to be one of', str(list(Symbol)))
+
+        self.specifier['symbol'] = value
+        return self
+
+    def trim(self, value):
+        if isinstance(value, bool):
+            value = Trim.yes if value else Trim.no
+
+        if value not in Trim:
+            raise Exception('expected value to be one of', str(list(Trim)))
+
+        self.specifier['trim'] = value
+        return self
+
+    def currency_prefix(self, symbol):
+        if not isinstance(symbol, str):
+            raise Exception('expected symbol to be a string')
+
         if 'currency' not in self.locale:
             self.locale['currency'] = [symbol, '']
         else:
@@ -149,7 +185,10 @@ class Format():
         return self
 
     # Locale
-    def currency_suffix(self, symbol: str):
+    def currency_suffix(self, symbol):
+        if not isinstance(symbol, str):
+            raise Exception('expected symbol to be a string')
+
         if 'currency' not in self.locale:
             self.locale['currency'] = ['', symbol]
         else:
@@ -157,21 +196,30 @@ class Format():
 
         return self
 
-    def decimal_delimitor(self, symbol: str):
+    def decimal_delimitor(self, symbol):
+        if not isinstance(symbol, str):
+            raise Exception('expected symbol to be a string')
+
         self.locale['decimal'] = symbol
         return self
 
-    def group_delimitor(self, symbol: str):
-        self.locale['thousands'] = symbol
+    def group_delimitor(self, symbol):
+        if not isinstance(symbol, str):
+            raise Exception('expected symbol to be a string')
+
+        self.locale['group'] = symbol
         return self
 
-    def groups(self, groups: list):
+    def groups(self, groups):
         groups = groups if isinstance(groups, list) else \
             [groups] if isinstance(groups, int) else None
 
+        if not isinstance(groups, list):
+            raise Exception('expected groups to be an integer or a list of integers')
+
         for group in groups:
-            if not isinstance(group, int):
-                raise Exception('expected "group" to be an int')
+            if not isinstance(group, int) or group < 0:
+                raise Exception('expected entry to be a non-negative integer')
 
         self.locale['grouping'] = groups
         return self
@@ -182,26 +230,28 @@ class Format():
         return self
 
     # Prefix
-    def si_prefix(self, prefix: Prefix = Prefix.UNDEFINED):
-        prefix = prefix if isinstance(prefix, Prefix) else Prefix.UNDEFINED
-        self.prefix = prefix
+    def si_prefix(self, value):
+        if value not in Prefix:
+            raise Exception('expected value to be one of', str(list(Prefix)))
+
+        self.prefix = value
         return self
 
     def create(self):
         f = self.locale.copy()
         f['nully'] = self.nully
-        f['prefix'] = self.prefix.value
+        f['prefix'] = self.prefix
         f['specifier'] = '{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}'.format(
-            self.specifier['fill'] if self.specifier['align'] != Align.UNDEFINED else '',
-            self.specifier['align'].value,
-            self.specifier['sign'].value,
-            self.specifier['symbol'].value,
-            self.specifier['padding'].value,
+            self.specifier['fill'] if self.specifier['align'] != Align.default else '',
+            self.specifier['align'],
+            self.specifier['sign'],
+            self.specifier['symbol'],
+            self.specifier['padding'],
             self.specifier['width'],
-            self.specifier['group'].value,
+            self.specifier['group'],
             self.specifier['precision'],
-            self.specifier['trim'].value,
-            self.specifier['type'].value
+            self.specifier['trim'],
+            self.specifier['type']
         )
 
         return f

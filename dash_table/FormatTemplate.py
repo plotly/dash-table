@@ -1,21 +1,14 @@
 from enum import Enum
-from .Format import Format, Sign, Symbol, Type
-
-def money(decimals: int = 2, sign: Sign = Sign.UNDEFINED):
-    decimals = decimals if isinstance(decimals, int) else 2
-
-    return Format() \
-    .precision(decimals) \
-    .sign(sign) \
-    .symbol(Symbol.CURRENCY) \
-    .type(Type.FIXED_POINT) \
-    .create()
+from .Format import Format, Scheme, Sign, Symbol
 
 
-def percentage(decimals: int = 0):
-    decimals = decimals if isinstance(decimals, int) else 0
+def money(decimals, sign=Sign.default):
+    return Format().sign(sign).scheme(Scheme.fixed, decimals).symbol(Symbol.currency).create()
 
-    return Format() \
-    .precision(decimals) \
-    .type(Type.PERCENTAGE) \
-    .create()
+
+def percentage(decimals, rounded: bool=True):
+    if not isinstance(rounded, bool):
+        raise Exception('expected rounded to be a boolean')
+
+    rounded = Scheme.percentage_rounded if rounded else Scheme.percentage
+    return Format().scheme(rounded, decimals).create()
