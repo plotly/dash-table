@@ -137,10 +137,14 @@ jobs:
 
     "node":
         docker:
-            - image: circleci/node:8.11.3
+            - image: circleci/python:3.6.7-node
 
         steps:
             - checkout
+
+            - run:
+                  name: Create virtual env
+                  command: python -m venv || virtualenv venv
 
             - restore_cache:
                 key: deps1-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}
@@ -153,6 +157,13 @@ jobs:
                 key: deps1-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}
                 paths:
                     - node_modules
+
+            - run:
+                name: Install requirements
+                command: |
+                    sudo pip install virtualenv --upgrade
+                    . venv/bin/activate
+                    pip install flake8 --quiet
 
             - run:
                 name: Run eslint
