@@ -162,7 +162,7 @@ jobs:
                 name: Install requirements
                 command: |
                     . venv/bin/activate
-                    pip install -r requirements-base.txt --quiet
+                    pip install flake8 --quiet
 
             - run:
                 name: Run eslint
