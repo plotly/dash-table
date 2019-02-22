@@ -1,5 +1,6 @@
 import json
 from typing import Union
+import inspect
 import collections
 
 
@@ -85,7 +86,7 @@ Trim = get_named_tuple('trim', {
 
 
 class Format():
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.locale = {}
         self.nully = ''
         self.prefix = Prefix.none
@@ -101,6 +102,14 @@ class Format():
             'trim': Trim.no,
             'type': Scheme.default
         }
+
+        valid_methods = [m for m in dir(self) if m != '__init__' and m != 'create' and inspect.ismethod(getattr(self, m))]
+
+        for arg in kwargs:
+            if arg not in valid_methods:
+                raise Exception('{0} is not a format method. Expected one of'.format(arg), str(list(valid_methods)))
+
+            getattr(self, arg)(kwargs[arg])
 
     # Specifier
     def align(self, value):
@@ -124,28 +133,34 @@ class Format():
         self.specifier['group'] = value
         return self
 
-    def padding(self, value, count=0):
+    def padding(self, value):
         if isinstance(value, bool):
             value = Padding.yes if value else Padding.no
 
         if value not in Padding:
             raise Exception('expected value to be one of', str(list(Padding)))
 
-        if not isinstance(count, int) or count < 0:
-            raise Exception('expected count to be a non-negative integer', str(count))
-
         self.specifier['padding'] = value
-        self.specifier['width'] = count
         return self
 
-    def scheme(self, value, precision=0):
+    def padding_width(self, value):
+        if not isinstance(value, int) or value < 0:
+            raise Exception('expected value to be a non-negative integer or None', str(value))
+
+        self.specifier['width'] = value
+        return self
+
+    def precision(self, value):
+        if not isinstance(value, int) or value < 0:
+            raise Exception('expected value to be a non-negative integer or None', str(value))
+
+        self.specifier['precision'] = '.{0}'.format(value) if value is not None else ''
+        return self
+
+    def scheme(self, value):
         if value not in Scheme:
             raise Exception('expected value to be one of', str(list(Scheme)))
 
-        if precision is not None and (not isinstance(precision, int) or precision < 0):
-            raise Exception('expected precision to be a non-negative integer or None', str(precision))
-
-        self.specifier['precision'] = '.{0}'.format(precision) if precision is not None else ''
         self.specifier['type'] = value
         return self
 
