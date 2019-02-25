@@ -3,7 +3,12 @@ from .Format import Format, Scheme, Sign, Symbol
 
 
 def money(decimals, sign=Sign.default):
-    return Format().sign(sign).scheme(Scheme.fixed, decimals).symbol(Symbol.currency).create()
+    return Format(
+        sign=sign,
+        scheme=Scheme.fixed,
+        precision=decimals
+        symbol=Symbol.yes
+    )
 
 
 def percentage(decimals, rounded: bool=True):
@@ -11,4 +16,7 @@ def percentage(decimals, rounded: bool=True):
         raise Exception('expected rounded to be a boolean')
 
     rounded = Scheme.percentage_rounded if rounded else Scheme.percentage
-    return Format().scheme(rounded, decimals).create()
+    return Format(
+        scheme=rounded,
+        precision=decimals
+    )
