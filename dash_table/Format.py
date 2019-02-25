@@ -1,6 +1,7 @@
 import collections
 import inspect
 
+
 def get_named_tuple(name: str, dict: dict):
     return collections.namedtuple(name, dict.keys())(*dict.values())
 
