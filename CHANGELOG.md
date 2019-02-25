@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [3.5.0] - 2019-02-25
 ### Added
 [#189](https://github.com/plotly/dash-table/issues/189)
 - Added `format` nested prop to columns
