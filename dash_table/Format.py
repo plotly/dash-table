@@ -227,14 +227,13 @@ class Format():
         return self
 
     def groups(self, groups):
-        groups = groups if isinstance(groups, list) else \
-            [groups] if isinstance(groups, int) else None
+        groups = groups if isinstance(groups, list) else [groups] if isinstance(groups, int) else None
 
-        if not isinstance(groups, list):
+        if not isinstance(groups, list) or len(groups) == 0:
             raise Exception('expected groups to be an integer or a list of integers')
 
         for group in groups:
-            if not isinstance(group, int) or group < 0:
+            if not isinstance(group, int) or group <= 0:
                 raise Exception('expected entry to be a non-negative integer')
 
         self._locale['grouping'] = groups
