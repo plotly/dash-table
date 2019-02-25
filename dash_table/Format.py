@@ -1,6 +1,5 @@
-import inspect
 import collections
-
+import inspect
 
 def get_named_tuple(name: str, dict: dict):
     return collections.namedtuple(name, dict.keys())(*dict.values())
@@ -101,7 +100,7 @@ class Format():
             'type': Scheme.default
         }
 
-        valid_methods = [m for m in dir(self.__class__) if m[0] != '_' and m != 'create']
+        valid_methods = [m for m in dir(self.__class__) if m[0] != '_' and m != 'to_plotly_json']
 
         for kw, val in kwargs.items():
             if kw not in valid_methods:
@@ -253,7 +252,7 @@ class Format():
         self._prefix = value
         return self
 
-    def create(self):
+    def to_plotly_json(self):
         f = {}
         f['locale'] = self._locale.copy()
         f['nully'] = self._nully
