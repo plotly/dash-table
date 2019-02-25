@@ -85,10 +85,10 @@ Trim = get_named_tuple('trim', {
 
 class Format():
     def __init__(self, **kwargs):
-        self.locale = {}
-        self.nully = ''
-        self.prefix = Prefix.none
-        self.specifier = {
+        self._locale = {}
+        self._nully = ''
+        self._prefix = Prefix.none
+        self._specifier = {
             'align': Align.default,
             'fill': '',
             'group': Group.no,
@@ -101,24 +101,27 @@ class Format():
             'type': Scheme.default
         }
 
-        valid_methods = [m for m in dir(self) if m != '__init__' and m != 'create' and inspect.ismethod(getattr(self, m))]
+        valid_methods = [m for m in dir(self.__class__) if m[0] != '_' and m != 'create']
 
-        for arg in kwargs:
-            if arg not in valid_methods:
-                raise Exception('{0} is not a format method. Expected one of'.format(arg), str(list(valid_methods)))
+        for kw, val in kwargs.items():
+            if kw not in valid_methods:
+                raise Exception('{0} is not a format method. Expected one of'.format(kw), str(list(valid_methods)))
 
-            getattr(self, arg)(kwargs[arg])
+            getattr(self, kw)(val)
 
     # Specifier
     def align(self, value):
         if value not in Align:
             raise Exception('expected value to be one of', str(list(Align)))
 
-        self.specifier['align'] = value
+        self._specifier['align'] = value
         return self
 
     def fill(self, value):
-        self.specifier['fill'] = value
+        if not isinstance(value, str) or len(value) != 1:
+            raise Exception('expected value to be a string of length one')
+
+        self._specifier['fill'] = value
         return self
 
     def group(self, value):
@@ -128,7 +131,7 @@ class Format():
         if value not in Group:
             raise Exception('expected value to be one of', str(list(Group)))
 
-        self.specifier['group'] = value
+        self._specifier['group'] = value
         return self
 
     def padding(self, value):
@@ -138,42 +141,42 @@ class Format():
         if value not in Padding:
             raise Exception('expected value to be one of', str(list(Padding)))
 
-        self.specifier['padding'] = value
+        self._specifier['padding'] = value
         return self
 
     def padding_width(self, value):
         if not isinstance(value, int) or value < 0:
             raise Exception('expected value to be a non-negative integer or None', str(value))
 
-        self.specifier['width'] = value
+        self._specifier['width'] = value
         return self
 
     def precision(self, value):
         if not isinstance(value, int) or value < 0:
             raise Exception('expected value to be a non-negative integer or None', str(value))
 
-        self.specifier['precision'] = '.{0}'.format(value) if value is not None else ''
+        self._specifier['precision'] = '.{0}'.format(value) if value is not None else ''
         return self
 
     def scheme(self, value):
         if value not in Scheme:
             raise Exception('expected value to be one of', str(list(Scheme)))
 
-        self.specifier['type'] = value
+        self._specifier['type'] = value
         return self
 
     def sign(self, value):
         if value not in Sign:
             raise Exception('expected value to be one of', str(list(Sign)))
 
-        self.specifier['sign'] = value
+        self._specifier['sign'] = value
         return self
 
     def symbol(self, value):
         if value not in Symbol:
             raise Exception('expected value to be one of', str(list(Symbol)))
 
-        self.specifier['symbol'] = value
+        self._specifier['symbol'] = value
         return self
 
     def trim(self, value):
@@ -183,17 +186,17 @@ class Format():
         if value not in Trim:
             raise Exception('expected value to be one of', str(list(Trim)))
 
-        self.specifier['trim'] = value
+        self._specifier['trim'] = value
         return self
 
     def currency_prefix(self, symbol):
         if not isinstance(symbol, str):
             raise Exception('expected symbol to be a string')
 
-        if 'currency' not in self.locale:
-            self.locale['currency'] = [symbol, '']
+        if 'currency' not in self._locale:
+            self._locale['currency'] = [symbol, '']
         else:
-            self.locale['currency'][0] = symbol
+            self._locale['currency'][0] = symbol
 
         return self
 
@@ -202,10 +205,10 @@ class Format():
         if not isinstance(symbol, str):
             raise Exception('expected symbol to be a string')
 
-        if 'currency' not in self.locale:
-            self.locale['currency'] = ['', symbol]
+        if 'currency' not in self._locale:
+            self._locale['currency'] = ['', symbol]
         else:
-            self.locale['currency'][1] = symbol
+            self._locale['currency'][1] = symbol
 
         return self
 
@@ -213,14 +216,14 @@ class Format():
         if not isinstance(symbol, str):
             raise Exception('expected symbol to be a string')
 
-        self.locale['decimal'] = symbol
+        self._locale['decimal'] = symbol
         return self
 
     def group_delimitor(self, symbol):
         if not isinstance(symbol, str):
             raise Exception('expected symbol to be a string')
 
-        self.locale['group'] = symbol
+        self._locale['group'] = symbol
         return self
 
     def groups(self, groups):
@@ -234,12 +237,12 @@ class Format():
             if not isinstance(group, int) or group < 0:
                 raise Exception('expected entry to be a non-negative integer')
 
-        self.locale['grouping'] = groups
+        self._locale['grouping'] = groups
         return self
 
     # Nully
-    def nully(self, nully):
-        self.nully = nully
+    def nully(self, value):
+        self._nully = value
         return self
 
     # Prefix
@@ -247,24 +250,25 @@ class Format():
         if value not in Prefix:
             raise Exception('expected value to be one of', str(list(Prefix)))
 
-        self.prefix = value
+        self._prefix = value
         return self
 
     def create(self):
-        f = self.locale.copy()
-        f['nully'] = self.nully
-        f['prefix'] = self.prefix
+        f = {}
+        f['locale'] = self._locale.copy()
+        f['nully'] = self._nully
+        f['prefix'] = self._prefix
         f['specifier'] = '{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}'.format(
-            self.specifier['fill'] if self.specifier['align'] != Align.default else '',
-            self.specifier['align'],
-            self.specifier['sign'],
-            self.specifier['symbol'],
-            self.specifier['padding'],
-            self.specifier['width'],
-            self.specifier['group'],
-            self.specifier['precision'],
-            self.specifier['trim'],
-            self.specifier['type']
+            self._specifier['fill'] if self._specifier['align'] != Align.default else '',
+            self._specifier['align'],
+            self._specifier['sign'],
+            self._specifier['symbol'],
+            self._specifier['padding'],
+            self._specifier['width'],
+            self._specifier['group'],
+            self._specifier['precision'],
+            self._specifier['trim'],
+            self._specifier['type']
         )
 
         return f
