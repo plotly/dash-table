@@ -2,6 +2,7 @@ import unittest
 
 import dash_table.Format as f
 from dash_table.Format import Format
+import dash_table.FormatTemplate as FormatTemplate
 
 class FormatTest(unittest.TestCase):
     def validate_complex(self, res):
@@ -39,6 +40,16 @@ class FormatTest(unittest.TestCase):
         res = Format().align(f.Align.center).fill('.').group(f.Group.yes).padding(True).padding_width(10).precision(6).scheme('s').sign(f.Sign.parantheses).symbol(f.Symbol.yes).symbol_prefix('a').symbol_suffix('bc').decimal_delimitor('x').group_delimitor('y').groups([2, 2, 2, 3]).nully('N/A').si_prefix(f.Prefix.none)
 
         self.validate_complex(res.to_plotly_json())
+
+    def test_money_template(self):
+        res = FormatTemplate.money(2).to_plotly_json()
+
+        self.assertEqual(res['specifier'], '$.2f')
+
+    def test_percentage_template(self):
+        res = FormatTemplate.percentage(1, False).to_plotly_json()
+
+        self.assertEqual(res['specifier'], '.1%')
 
     def test_valid_align_named(self):
         Format().align(f.Align.center)

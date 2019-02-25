@@ -6,7 +6,7 @@ def money(decimals, sign=Sign.default):
     return Format(
         sign=sign,
         scheme=Scheme.fixed,
-        precision=decimals
+        precision=decimals,
         symbol=Symbol.yes
     )
 
