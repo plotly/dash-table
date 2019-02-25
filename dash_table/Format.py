@@ -69,8 +69,8 @@ Sign = get_named_tuple('sign', {
 })
 
 Symbol = get_named_tuple('symbol', {
-    'none': '',
-    'currency': '$',
+    'no': '',
+    'yes': '$',
     'binary': '#b',
     'octal': '#o',
     'hex': '#x'
@@ -95,7 +95,7 @@ class Format():
             'padding': Padding.no,
             'precision': '',
             'sign': Sign.default,
-            'symbol': Symbol.none,
+            'symbol': Symbol.no,
             'trim': Trim.no,
             'type': Scheme.default
         }
@@ -188,41 +188,41 @@ class Format():
         self._specifier['trim'] = value
         return self
 
-    def currency_prefix(self, symbol):
-        if not isinstance(symbol, str):
-            raise Exception('expected symbol to be a string')
+    def symbol_prefix(self, value):
+        if not isinstance(value, str):
+            raise Exception('expected value to be a string')
 
-        if 'currency' not in self._locale:
-            self._locale['currency'] = [symbol, '']
+        if 'symbol' not in self._locale:
+            self._locale['symbol'] = [value, '']
         else:
-            self._locale['currency'][0] = symbol
+            self._locale['symbol'][0] = value
 
         return self
 
     # Locale
-    def currency_suffix(self, symbol):
-        if not isinstance(symbol, str):
-            raise Exception('expected symbol to be a string')
+    def symbol_suffix(self, value):
+        if not isinstance(value, str):
+            raise Exception('expected value to be a string')
 
-        if 'currency' not in self._locale:
-            self._locale['currency'] = ['', symbol]
+        if 'symbol' not in self._locale:
+            self._locale['symbol'] = ['', value]
         else:
-            self._locale['currency'][1] = symbol
+            self._locale['symbol'][1] = value
 
         return self
 
-    def decimal_delimitor(self, symbol):
-        if not isinstance(symbol, str):
-            raise Exception('expected symbol to be a string')
+    def decimal_delimitor(self, value):
+        if not isinstance(value, str):
+            raise Exception('expected value to be a string')
 
-        self._locale['decimal'] = symbol
+        self._locale['decimal'] = value
         return self
 
-    def group_delimitor(self, symbol):
-        if not isinstance(symbol, str):
-            raise Exception('expected symbol to be a string')
+    def group_delimitor(self, value):
+        if not isinstance(value, str):
+            raise Exception('expected value to be a string')
 
-        self._locale['group'] = symbol
+        self._locale['group'] = value
         return self
 
     def groups(self, groups):

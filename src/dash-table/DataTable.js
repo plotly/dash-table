@@ -155,7 +155,7 @@ export const propTypes = {
          * 'locale': represents localization specific formatting information
          *   When left unspecified, will use the default value provided by d3-format.
          *
-         *   'currency': (default: '$') a list of two strings representing the currency
+         *   'symbol': (default: ['', $']) a list of two strings representing the
          *   prefix and suffix symbols
          *   'decimal': (default: '.') the string used for the decimal separator
          *   'group': (default: ',') the string used for the groups separator
@@ -175,7 +175,7 @@ export const propTypes = {
          */
         format: PropTypes.shape({
             locale: PropTypes.shape({
-                currency: PropTypes.arrayOf(PropTypes.string),
+                symbol: PropTypes.arrayOf(PropTypes.string),
                 decimal: PropTypes.string,
                 group: PropTypes.string,
                 grouping: PropTypes.arrayOf(PropTypes.number),
@@ -315,7 +315,7 @@ export const propTypes = {
      *
      * When left unspecified, each individual nested prop will default to a pre-determined value.
      *
-     *   'currency': (default: '$') a list of two strings representing the currency
+     *   'symbol': (default: ['', $']) a list of two strings representing the
      *   prefix and suffix symbols
      *   'decimal': (default: '.') the string used for the decimal separator
      *   'group': (default: ',') the string used for the groups separator
@@ -325,7 +325,7 @@ export const propTypes = {
      *   'separate_4digits': (default: True) separate integers with 4-digits or less
      */
     locale_format: PropTypes.shape({
-        currency: PropTypes.arrayOf(PropTypes.string),
+        symbol: PropTypes.arrayOf(PropTypes.string),
         decimal: PropTypes.string,
         group: PropTypes.string,
         grouping: PropTypes.arrayOf(PropTypes.number),

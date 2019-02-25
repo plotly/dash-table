@@ -18,8 +18,8 @@ function validColumns(props: any) {
     return !R.any((column: any) =>
         column.format && (
             (
-                column.format.currency &&
-                column.format.currency.length !== 2
+                column.format.symbol &&
+                column.format.symbol.length !== 2
             ) || (
                 column.format.grouping &&
                 column.format.grouping.length === 0

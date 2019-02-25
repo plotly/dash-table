@@ -18,16 +18,16 @@ This prop is derived from the [d3.formatLocale](https://github.com/d3/d3-format#
 
 When left unspecified, each individual nested prop will default to a pre-determined value.
 
-  'currency': (default: '$') a list of two strings representing the currency
+  'symbol': (default: ['', $']) a list of two strings representing the
   prefix and suffix symbols
   'decimal': (default: '.') the string used for the decimal separator
   'group': (default: ',') the string used for the groups separator
   'grouping': (default: [3]) a list of integers representing the grouping pattern
   'numerals': a list of ten strings used as replacements for numbers 0-9
   'percent': (default: '%') the string used for the percentage symbol
-  'separate_4digits': (default: True) separate integers with 4-digits or less. locale_format has the following type: dict containing keys 'currency', 'decimal', 'group', 'grouping', 'numerals', 'percent', 'separate_4digits'.
+  'separate_4digits': (default: True) separate integers with 4-digits or less. locale_format has the following type: dict containing keys 'symbol', 'decimal', 'group', 'grouping', 'numerals', 'percent', 'separate_4digits'.
 Those keys have the following types:
-  - currency (list; optional)
+  - symbol (list; optional)
   - decimal (string; optional)
   - group (string; optional)
   - grouping (list; optional)

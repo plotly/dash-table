@@ -288,7 +288,7 @@ function getFormattingState() {
         } else if (column.id === 'ddd') {
             column.format = {
                 locale: {
-                    currency: ['eq. $ ', ''],
+                    symbol: ['eq. $ ', ''],
                     separate_4digits: false
                 },
                 nully: 0,

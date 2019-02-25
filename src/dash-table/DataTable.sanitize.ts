@@ -5,7 +5,7 @@ import { memoizeOne } from 'core/memoizer';
 import { Columns, ColumnType, INumberLocale } from './components/Table/props';
 
 const D3_DEFAULT_LOCALE: INumberLocale = {
-    currency: ['$', ''],
+    symbol: ['$', ''],
     decimal: '.',
     group: ',',
     grouping: [3],

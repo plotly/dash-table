@@ -110,7 +110,7 @@ export interface ITypeColumn {
 }
 
 export interface INumberLocale {
-    currency: [string, string];
+    symbol: [string, string];
     decimal: string;
     group: string;
     grouping: number[];

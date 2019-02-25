@@ -6,9 +6,10 @@ import { INumberColumn, INumberLocale, NumberFormat } from 'dash-table/component
 import { reconcileNull, isNully } from './null';
 import { IReconciliation } from './reconcile';
 
-const convertToD3 = ({ group, ...others }: INumberLocale) => ({
+const convertToD3 = ({ group, symbol, ...others }: INumberLocale) => ({
+    currency: symbol,
     thousands: group,
-    ...R.omit(['separate_4digits'], others)
+    ...R.omit(['separate_4digits', 'symbol'], others)
 });
 
 export function coerce(value: any, options: INumberColumn | undefined): IReconciliation {

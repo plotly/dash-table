@@ -14,7 +14,7 @@ describe('formatting', () => {
         });
 
         describe('without nully handling / default locale', () => {
-            it('formats currency', () => {
+            it('formats symbol', () => {
                 const formatter = getFormatter({
                     locale: getLocale(),
                     nully: getNully(),
@@ -122,7 +122,7 @@ describe('formatting', () => {
         });
 
         describe('without nully handling / default locale / si prefix', () => {
-            it('formats currency', () => {
+            it('formats symbol', () => {
                 const formatter = getFormatter({
                     locale: getLocale(),
                     nully: getNully(),
