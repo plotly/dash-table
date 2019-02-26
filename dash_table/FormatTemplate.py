@@ -1,6 +1,7 @@
 from enum import Enum
 from .Format import Format, Group, Scheme, Sign, Symbol
 
+
 def money(decimals, sign=Sign.default):
     return Format(
         group=Group.yes,
