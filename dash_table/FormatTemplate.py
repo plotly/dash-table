@@ -1,10 +1,9 @@
 from enum import Enum
 from .Format import Format, Group, Scheme, Sign, Symbol
 
-
 def money(decimals, sign=Sign.default):
     return Format(
-        group=Group.yes
+        group=Group.yes,
         precision=decimals,
         scheme=Scheme.fixed,
         sign=sign,
@@ -12,7 +11,7 @@ def money(decimals, sign=Sign.default):
     )
 
 
-def percentage(decimals, rounded: bool=False):
+def percentage(decimals, rounded=False):
     if not isinstance(rounded, bool):
         raise Exception('expected rounded to be a boolean')
 
