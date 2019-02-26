@@ -1,17 +1,18 @@
 from enum import Enum
-from .Format import Format, Scheme, Sign, Symbol
+from .Format import Format, Group, Scheme, Sign, Symbol
 
 
 def money(decimals, sign=Sign.default):
     return Format(
-        sign=sign,
-        scheme=Scheme.fixed,
+        group=Group.yes
         precision=decimals,
+        scheme=Scheme.fixed,
+        sign=sign,
         symbol=Symbol.yes
     )
 
 
-def percentage(decimals, rounded: bool=True):
+def percentage(decimals, rounded: bool=False):
     if not isinstance(rounded, bool):
         raise Exception('expected rounded to be a boolean')
 
