@@ -44,10 +44,10 @@ class FormatTest(unittest.TestCase):
     def test_money_template(self):
         res = FormatTemplate.money(2).to_plotly_json()
 
-        self.assertEqual(res['specifier'], '$.2f')
+        self.assertEqual(res['specifier'], '$,.2f')
 
     def test_percentage_template(self):
-        res = FormatTemplate.percentage(1, False).to_plotly_json()
+        res = FormatTemplate.percentage(1).to_plotly_json()
 
         self.assertEqual(res['specifier'], '.1%')
 
