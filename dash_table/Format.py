@@ -1,5 +1,6 @@
 import collections
 import inspect
+import sys
 
 
 def get_named_tuple(name, dict):
@@ -83,6 +84,18 @@ Trim = get_named_tuple('trim', {
 })
 
 
+def is_string_py2(value):
+    return isinstance(value, str) or isinstance(value, unicode)
+
+
+def is_string_py3(value):
+    return isinstance(value, str)
+
+
+def is_string(value):
+    return is_string_py3(value) if sys.version_info >= (3, 0) else is_string_py2(value)
+
+
 class Format():
     def __init__(self, **kwargs):
         self._locale = {}
@@ -118,7 +131,7 @@ class Format():
         return self
 
     def fill(self, value):
-        if not isinstance(value, str) or len(value) != 1:
+        if not is_string(value) or len(value) != 1:
             raise Exception('expected value to be a string of length one')
 
         self._specifier['fill'] = value
@@ -190,7 +203,7 @@ class Format():
         return self
 
     def symbol_prefix(self, value):
-        if not isinstance(value, str):
+        if not is_string(value):
             raise Exception('expected value to be a string')
 
         if 'symbol' not in self._locale:
@@ -202,7 +215,7 @@ class Format():
 
     # Locale
     def symbol_suffix(self, value):
-        if not isinstance(value, str):
+        if not is_string(value):
             raise Exception('expected value to be a string')
 
         if 'symbol' not in self._locale:
@@ -213,14 +226,14 @@ class Format():
         return self
 
     def decimal_delimitor(self, value):
-        if not isinstance(value, str):
+        if not is_string(value):
             raise Exception('expected value to be a string')
 
         self._locale['decimal'] = value
         return self
 
     def group_delimitor(self, value):
-        if not isinstance(value, str):
+        if not is_string(value):
             raise Exception('expected value to be a string')
 
         self._locale['group'] = value
