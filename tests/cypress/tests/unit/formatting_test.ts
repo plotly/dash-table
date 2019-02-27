@@ -32,7 +32,7 @@ describe('formatting', () => {
                 expect(formatter(1766)).to.equal('$1766.00');
                 expect(formatter(''), 'Empty string case').to.equal('');
                 expect(formatter('foo'), 'Foo string case').to.equal('foo');
-                expect(formatter(true), 'Empty string case').to.equal(true);
+                expect(formatter(true)).to.equal(true);
                 expect(formatter(NaN), 'NaN case').to.equal('');
                 expect(formatter(Infinity), 'Infinity case').to.equal('');
                 expect(formatter(-Infinity), '-Infinity case').to.equal('');
@@ -60,7 +60,7 @@ describe('formatting', () => {
                 expect(formatter(1299431)).to.equal('1,300,000');
                 expect(formatter(''), 'Empty string case').to.equal('');
                 expect(formatter('foo'), 'Foo string case').to.equal('foo');
-                expect(formatter(true), 'Empty string case').to.equal(true);
+                expect(formatter(true)).to.equal(true);
                 expect(formatter(NaN), 'NaN case').to.equal('42');
                 expect(formatter(Infinity), 'Infinity case').to.equal('42');
                 expect(formatter(-Infinity), '-Infinity case').to.equal('42');
@@ -92,7 +92,7 @@ describe('formatting', () => {
                 expect(formatter(1299431)).to.equal('1y2y99y4y31x00');
                 expect(formatter(''), 'Empty string case').to.equal('');
                 expect(formatter('foo'), 'Foo string case').to.equal('foo');
-                expect(formatter(true), 'Empty string case').to.equal(true);
+                expect(formatter(true)).to.equal(true);
                 expect(formatter(NaN), 'NaN case').to.equal('42.4242');
                 expect(formatter(Infinity), 'Infinity case').to.equal('42.4242');
                 expect(formatter(-Infinity), '-Infinity case').to.equal('42.4242');
@@ -141,7 +141,7 @@ describe('formatting', () => {
                 expect(formatter(1766)).to.equal('1766000m');
                 expect(formatter(''), 'Empty string case').to.equal('');
                 expect(formatter('foo'), 'Foo string case').to.equal('foo');
-                expect(formatter(true), 'Empty string case').to.equal(true);
+                expect(formatter(true)).to.equal(true);
                 expect(formatter(NaN), 'NaN case').to.equal('');
                 expect(formatter(Infinity), 'Infinity case').to.equal('');
                 expect(formatter(-Infinity), '-Infinity case').to.equal('');

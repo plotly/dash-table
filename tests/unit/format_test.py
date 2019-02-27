@@ -58,19 +58,19 @@ class FormatTest(unittest.TestCase):
         Format().align('=')
 
     def test_invalid_align_string(self):
-        self.assertRaises(Exception, Format().align, 'i')
+        self.assertRaises(TypeError, Format().align, 'i')
 
     def test_invalid_align_type(self):
-        self.assertRaises(Exception, Format().align, 7)
+        self.assertRaises(TypeError, Format().align, 7)
 
     def test_valid_fill(self):
         Format().fill('.')
 
     def test_invalid_fill_length(self):
-        self.assertRaises(Exception, Format().fill, 'invalid')
+        self.assertRaises(ValueError, Format().fill, 'invalid')
 
     def test_invalid_fill_type(self):
-        self.assertRaises(Exception, Format().fill, 7)
+        self.assertRaises(TypeError, Format().fill, 7)
 
     def test_valid_group_bool(self):
         Format().group(True)
@@ -82,10 +82,10 @@ class FormatTest(unittest.TestCase):
         Format().group(f.Group.no)
 
     def test_invalid_group_type(self):
-        self.assertRaises(Exception, Format().group, 7)
+        self.assertRaises(TypeError, Format().group, 7)
 
     def test_invalid_group_string(self):
-        self.assertRaises(Exception, Format().group, 'invalid')
+        self.assertRaises(TypeError, Format().group, 'invalid')
 
     def test_valid_padding_bool(self):
         Format().padding(False)
@@ -97,10 +97,10 @@ class FormatTest(unittest.TestCase):
         Format().padding(f.Padding.no)
 
     def test_invalid_padding_type(self):
-        self.assertRaises(Exception, Format().padding, 7)
+        self.assertRaises(TypeError, Format().padding, 7)
 
     def test_invalid_padding_string(self):
-        self.assertRaises(Exception, Format().padding, 'invalid')
+        self.assertRaises(TypeError, Format().padding, 'invalid')
 
     def test_valid_padding_width(self):
         Format().padding_width(10)
@@ -109,10 +109,10 @@ class FormatTest(unittest.TestCase):
         Format().padding_width(0)
 
     def test_invalid_padding_width_negative(self):
-        self.assertRaises(Exception, Format().padding_width, -10)
+        self.assertRaises(ValueError, Format().padding_width, -10)
 
     def test_invalid_padding_width_type(self):
-        self.assertRaises(Exception, Format().padding_width, 7.7)
+        self.assertRaises(TypeError, Format().padding_width, 7.7)
 
     def test_valid_precision(self):
         Format().precision(10)
@@ -121,10 +121,10 @@ class FormatTest(unittest.TestCase):
         Format().precision(0)
 
     def test_invalid_precision_negative(self):
-        self.assertRaises(Exception, Format().precision, -10)
+        self.assertRaises(ValueError, Format().precision, -10)
 
     def test_invalid_precision_type(self):
-        self.assertRaises(Exception, Format().precision, 7.7)
+        self.assertRaises(TypeError, Format().precision, 7.7)
 
     def test_valid_prefix_number(self):
         Format().si_prefix(10**-24)
@@ -133,10 +133,10 @@ class FormatTest(unittest.TestCase):
         Format().si_prefix(f.Prefix.micro)
 
     def test_invalid_prefix_number(self):
-        self.assertRaises(Exception, Format().si_prefix, 10**-23)
+        self.assertRaises(TypeError, Format().si_prefix, 10**-23)
 
     def test_invalid_prefix_type(self):
-        self.assertRaises(Exception, Format().si_prefix, '10**-23')
+        self.assertRaises(TypeError, Format().si_prefix, '10**-23')
 
     def test_valid_scheme_string(self):
         Format().scheme('s')
@@ -145,10 +145,10 @@ class FormatTest(unittest.TestCase):
         Format().scheme(f.Scheme.decimal)
 
     def test_invalid_scheme_string(self):
-        self.assertRaises(Exception, Format().scheme, 'invalid')
+        self.assertRaises(TypeError, Format().scheme, 'invalid')
 
     def test_invalid_scheme_type(self):
-        self.assertRaises(Exception, Format().scheme, 7)
+        self.assertRaises(TypeError, Format().scheme, 7)
 
     def test_valid_sign_string(self):
         Format().sign('+')
@@ -157,10 +157,10 @@ class FormatTest(unittest.TestCase):
         Format().sign(f.Sign.space)
 
     def test_invalid_sign_string(self):
-        self.assertRaises(Exception, Format().sign, 'invalid')
+        self.assertRaises(TypeError, Format().sign, 'invalid')
 
     def test_invalid_sign_type(self):
-        self.assertRaises(Exception, Format().sign, 7)
+        self.assertRaises(TypeError, Format().sign, 7)
 
     def test_valid_symbol_string(self):
         Format().symbol('$')
@@ -169,22 +169,22 @@ class FormatTest(unittest.TestCase):
         Format().symbol(f.Symbol.hex)
 
     def test_invalid_symbol_string(self):
-        self.assertRaises(Exception, Format().symbol, 'invalid')
+        self.assertRaises(TypeError, Format().symbol, 'invalid')
 
     def test_invalid_symbol_type(self):
-        self.assertRaises(Exception, Format().symbol, 7)
+        self.assertRaises(TypeError, Format().symbol, 7)
 
     def test_valid_symbol_prefix(self):
         Format().symbol_prefix('abc+-')
 
     def test_invalid_symbol_prefix_type(self):
-        self.assertRaises(Exception, Format().symbol_prefix, 7)
+        self.assertRaises(TypeError, Format().symbol_prefix, 7)
 
     def test_valid_symbol_suffix(self):
         Format().symbol_suffix('abc+-')
 
     def test_invalid_symbol_suffix(self):
-        self.assertRaises(Exception, Format().symbol_suffix, 7)
+        self.assertRaises(TypeError, Format().symbol_suffix, 7)
 
     def test_valid_trim_boolean(self):
         Format().trim(False)
@@ -196,22 +196,28 @@ class FormatTest(unittest.TestCase):
         Format().trim(f.Trim.yes)
 
     def test_invalid_trim_string(self):
-        self.assertRaises(Exception, Format().trim, 'invalid')
+        self.assertRaises(TypeError, Format().trim, 'invalid')
 
     def test_invalid_trim_type(self):
-        self.assertRaises(Exception, Format().trim, 7)
+        self.assertRaises(TypeError, Format().trim, 7)
 
     def test_valid_decimal_delimitor(self):
-        Format().decimal_delimitor('xyz')
+        Format().decimal_delimitor('x')
+
+    def test_valid_decimal_delimitor(self):
+        self.assertRaises(ValueError, Format().decimal_delimitor, 'xyz')
 
     def test_invalid_decimal_delimitor(self):
-        self.assertRaises(Exception, Format().decimal_delimitor, 7)
+        self.assertRaises(TypeError, Format().decimal_delimitor, 7)
 
     def test_valid_group_delimiator(self):
-        Format().group_delimitor('xyz')
+        Format().group_delimitor('y')
+
+    def test_valid_group_delimiator(self):
+        self.assertRaises(ValueError, Format().group_delimitor, 'xyz')
 
     def test_invalid_group_delimitor(self):
-        self.assertRaises(Exception, Format().group_delimitor, 7)
+        self.assertRaises(TypeError, Format().group_delimitor, 7)
 
     def test_valid_groups(self):
         Format().groups([3])
@@ -223,22 +229,22 @@ class FormatTest(unittest.TestCase):
         Format().groups([2, 2, 3])
 
     def test_invalid_groups_single_0(self):
-        self.assertRaises(Exception, Format().groups, 0)
+        self.assertRaises(ValueError, Format().groups, 0)
 
     def test_invalid_groups_single_negative(self):
-        self.assertRaises(Exception, Format().groups, -7)
+        self.assertRaises(ValueError, Format().groups, -7)
 
     def test_invalid_groups_single_type(self):
-        self.assertRaises(Exception, Format().groups, 7.7)
+        self.assertRaises(TypeError, Format().groups, 7.7)
 
     def test_invalid_groups_empty(self):
-        self.assertRaises(Exception, Format().groups, [])
+        self.assertRaises(ValueError, Format().groups, [])
 
     def test_invalid_groups_nested_type(self):
-        self.assertRaises(Exception, Format().groups, [7.7, 7])
+        self.assertRaises(TypeError, Format().groups, [7.7, 7])
 
     def test_invalid_groups_nested_0(self):
-        self.assertRaises(Exception, Format().groups, [3, 3, 0])
+        self.assertRaises(ValueError, Format().groups, [3, 3, 0])
 
     def test_invalid_groups_nested_negative(self):
-        self.assertRaises(Exception, Format().groups, [3, 3, -7])
+        self.assertRaises(ValueError, Format().groups, [3, 3, -7])

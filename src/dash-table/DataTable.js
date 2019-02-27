@@ -155,8 +155,9 @@ export const propTypes = {
          * 'locale': represents localization specific formatting information
          *   When left unspecified, will use the default value provided by d3-format.
          *
-         *   'symbol': (default: ['', $']) a list of two strings representing the
-         *   prefix and suffix symbols
+         *   'symbol': (default: ['$', '']) a list of two strings representing the
+         *   prefix and suffix symbols. Typically used for currency, and implemented using d3's
+         *   currency format, but you can use this for other symbols such as measurement units.
          *   'decimal': (default: '.') the string used for the decimal separator
          *   'group': (default: ',') the string used for the groups separator
          *   'grouping': (default: [3]) a list of integers representing the grouping pattern
@@ -315,8 +316,9 @@ export const propTypes = {
      *
      * When left unspecified, each individual nested prop will default to a pre-determined value.
      *
-     *   'symbol': (default: ['', $']) a list of two strings representing the
-     *   prefix and suffix symbols
+     *   'symbol': (default: ['$', '']) a list of two strings representing the
+     *   prefix and suffix symbols. Typically used for currency, and implemented using d3's
+     *   currency format, but you can use this for other symbols such as measurement units.
      *   'decimal': (default: '.') the string used for the decimal separator
      *   'group': (default: ',') the string used for the groups separator
      *   'grouping': (default: [3]) a list of integers representing the grouping pattern
