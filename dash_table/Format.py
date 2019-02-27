@@ -84,16 +84,8 @@ Trim = get_named_tuple('trim', {
 })
 
 
-def is_string_py2(value):
-    return isinstance(value, str) or isinstance(value, unicode)
-
-
-def is_string_py3(value):
-    return isinstance(value, str)
-
-
 def is_string(value):
-    return is_string_py3(value) if sys.version_info >= (3, 0) else is_string_py2(value)
+    return isinstance(value, (str, u''.__class__))
 
 
 class Format():
