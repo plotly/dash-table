@@ -225,13 +225,13 @@ class Format():
 
         return self
 
-    def decimal_delimitor(self, value):
+    def decimal_delimiter(self, value):
         self._validate_char(value)
 
         self._locale['decimal'] = value
         return self
 
-    def group_delimitor(self, value):
+    def group_delimiter(self, value):
         self._validate_char(value)
 
         self._locale['group'] = value

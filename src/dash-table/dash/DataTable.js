@@ -265,7 +265,7 @@ export const propTypes = {
         /**
          * DEPRECATED
          * Please use `column_static_dropdown` instead.
-         * NOTE - Dropdown behaviour will likely change in the future,
+         * NOTE - Dropdown behavior will likely change in the future,
          * subscribe to [https://github.com/plotly/dash-table/issues/168](https://github.com/plotly/dash-table/issues/168)
          * for more information.
          */
@@ -666,7 +666,7 @@ export const propTypes = {
      * in the list. Higher priority (more specific) conditional
      * tooltips should be put at the beginning of the list.
      *
-     * The `if` refers to the condtion that needs to be fulfilled
+     * The `if` refers to the condition that needs to be fulfilled
      * in order for the associated tooltip configuration to be
      * used. If multiple conditions are defined, all conditions
      * must be met for the tooltip to be used by a cell.

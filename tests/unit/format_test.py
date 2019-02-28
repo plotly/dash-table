@@ -27,8 +27,8 @@ class FormatTest(unittest.TestCase):
             symbol=f.Symbol.yes,
             symbol_prefix='a',
             symbol_suffix='bc',
-            decimal_delimitor='x',
-            group_delimitor='y',
+            decimal_delimiter='x',
+            group_delimiter='y',
             groups=[2, 2, 2, 3],
             nully='N/A',
             si_prefix=f.Prefix.none
@@ -37,7 +37,7 @@ class FormatTest(unittest.TestCase):
         self.validate_complex(res.to_plotly_json())
 
     def test_complex_and_valid_in_fluent(self):
-        res = Format().align(f.Align.center).fill('.').group(f.Group.yes).padding(True).padding_width(10).precision(6).scheme('s').sign(f.Sign.parantheses).symbol(f.Symbol.yes).symbol_prefix('a').symbol_suffix('bc').decimal_delimitor('x').group_delimitor('y').groups([2, 2, 2, 3]).nully('N/A').si_prefix(f.Prefix.none)
+        res = Format().align(f.Align.center).fill('.').group(f.Group.yes).padding(True).padding_width(10).precision(6).scheme('s').sign(f.Sign.parantheses).symbol(f.Symbol.yes).symbol_prefix('a').symbol_suffix('bc').decimal_delimiter('x').group_delimiter('y').groups([2, 2, 2, 3]).nully('N/A').si_prefix(f.Prefix.none)
 
         self.validate_complex(res.to_plotly_json())
 
@@ -201,23 +201,23 @@ class FormatTest(unittest.TestCase):
     def test_invalid_trim_type(self):
         self.assertRaises(TypeError, Format().trim, 7)
 
-    def test_valid_decimal_delimitor(self):
-        Format().decimal_delimitor('x')
+    def test_valid_decimal_delimiter(self):
+        Format().decimal_delimiter('x')
 
-    def test_valid_decimal_delimitor(self):
-        self.assertRaises(ValueError, Format().decimal_delimitor, 'xyz')
+    def test_valid_decimal_delimiter(self):
+        self.assertRaises(ValueError, Format().decimal_delimiter, 'xyz')
 
-    def test_invalid_decimal_delimitor(self):
-        self.assertRaises(TypeError, Format().decimal_delimitor, 7)
-
-    def test_valid_group_delimiator(self):
-        Format().group_delimitor('y')
+    def test_invalid_decimal_delimiter(self):
+        self.assertRaises(TypeError, Format().decimal_delimiter, 7)
 
     def test_valid_group_delimiator(self):
-        self.assertRaises(ValueError, Format().group_delimitor, 'xyz')
+        Format().group_delimiter('y')
 
-    def test_invalid_group_delimitor(self):
-        self.assertRaises(TypeError, Format().group_delimitor, 7)
+    def test_valid_group_delimiator(self):
+        self.assertRaises(ValueError, Format().group_delimiter, 'xyz')
+
+    def test_invalid_group_delimiter(self):
+        self.assertRaises(TypeError, Format().group_delimiter, 7)
 
     def test_valid_groups(self):
         Format().groups([3])
