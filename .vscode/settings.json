@@ -10,6 +10,9 @@
         ".vscode",
         "typings"
     ],
+    "cSpell.ignoreRegExpList": [
+        "'"
+    ],
     "cSpell.language": "en",
     "cSpell.diagnosticLevel": "Error",
     "cSpell.languageSettings": [

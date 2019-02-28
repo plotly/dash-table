@@ -114,7 +114,7 @@ class Format():
         self._validate_string(value)
 
         if len(value) != 1:
-            raise ValueError('excepted value to a string of length one')
+            raise ValueError('expected value to a string of length one')
 
     def _validate_non_negative_integer_or_none(self, value):
         if value is None:
