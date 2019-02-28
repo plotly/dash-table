@@ -1,5 +1,5 @@
 {
-  "src/dash-table/DataTable.js": {
+  "src/dash-table/dash/DataTable.js": {
     "description": "",
     "displayName": "DataTable",
     "methods": [],

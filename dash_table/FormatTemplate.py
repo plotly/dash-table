@@ -14,7 +14,7 @@ def money(decimals, sign=Sign.default):
 
 def percentage(decimals, rounded=False):
     if not isinstance(rounded, bool):
-        raise Exception('expected rounded to be a boolean')
+        raise TypeError('expected rounded to be a boolean')
 
     rounded = Scheme.percentage_rounded if rounded else Scheme.percentage
     return Format(

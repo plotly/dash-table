@@ -6,9 +6,9 @@ import RealTable from 'dash-table/components/Table';
 
 import Logger from 'core/Logger';
 
-import genRandomId from './utils/generate';
-import isValidProps from './DataTable.validate';
-import sanitizeProps from './DataTable.sanitize';
+import genRandomId from 'dash-table/utils/generate';
+import isValidProps from './validate';
+import sanitizeProps from './sanitize';
 
 export default class DataTable extends Component {
     constructor(props) {

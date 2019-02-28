@@ -128,7 +128,7 @@ class Format():
 
     def _validate_named(self, value, named_values):
         if value not in named_values:
-            raise TypeError('expceted value to be one of', str(list(named_values)))
+            raise TypeError('expected value to be one of', str(list(named_values)))
 
     def _validate_string(self, value):
         if not isinstance(value, (str, u''.__class__)):

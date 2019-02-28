@@ -1,8 +1,8 @@
+
 import * as R from 'ramda';
 
 import { memoizeOne } from 'core/memoizer';
-
-import { Columns, ColumnType, INumberLocale } from './components/Table/props';
+import { Columns, ColumnType, INumberLocale } from 'dash-table/components/Table/props';
 
 const D3_DEFAULT_LOCALE: INumberLocale = {
     symbol: ['$', ''],
