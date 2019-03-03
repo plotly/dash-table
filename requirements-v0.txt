@@ -1,4 +1,4 @@
+dash_renderer-0.20.0rc1.tar.gz
 git+git://github.com/plotly/dash@master#egg=dash
 git+git://github.com/plotly/dash-core-components@master#egg=dash_core_components
 git+git://github.com/plotly/dash-html-components@master#egg=dash_html_components
-dash_renderer-0.20.0rc1.tar.gz
