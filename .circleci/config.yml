@@ -195,6 +195,7 @@ jobs:
                     python -m venv venv || virtualenv venv
                     . venv/bin/activate
                     pip install -r requirements-base.txt --quiet
+                    npm install
 
             - run:
                 name: Install dependencies (dash)
@@ -247,6 +248,7 @@ jobs:
                     . venv/bin/activate
                     pip install -r requirements-base.txt --quiet
                     pip install -r requirements-v1.txt --quiet
+                    npm install
 
             - run:
                 name: Install test requirements
