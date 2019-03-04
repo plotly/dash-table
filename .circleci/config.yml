@@ -90,19 +90,7 @@ jobs:
                     python -m venv venv || virtualenv venv
                     . venv/bin/activate
                     pip install -r requirements-base.txt --quiet
-
-            - run:
-                name: Install dependencies (dash)
-                command: |
-                    git clone -b release-v1 git@github.com:plotly/dash.git
-                    git clone -b release-v1 git@github.com:plotly/dash-renderer.git
-                    git clone -b release-v1 git@github.com:plotly/dash-core-components.git
-                    git clone -b release-v1 git@github.com:plotly/dash-html-components.git
-                    . venv/bin/activate
-                    pip install -e ./dash --quiet
-                    cd dash-renderer && npm install --ignore-scripts && npm run build && pip install -e . && cd ..
-                    cd dash-core-components && npm install --ignore-scripts && npm run build && pip install -e . && cd ..
-                    cd dash-html-components && npm install --ignore-scripts && npm run build && pip install -e . && cd ..
+                    pip install -r requirements-v1.txt --quiet
 
             - run:
                 name: Build
@@ -258,19 +246,7 @@ jobs:
                     python -m venv venv || virtualenv venv
                     . venv/bin/activate
                     pip install -r requirements-base.txt --quiet
-
-            - run:
-                name: Install dependencies (dash)
-                command: |
-                    git clone -b release-v1 git@github.com:plotly/dash.git
-                    git clone -b release-v1 git@github.com:plotly/dash-renderer.git
-                    git clone -b release-v1 git@github.com:plotly/dash-core-components.git
-                    git clone -b release-v1 git@github.com:plotly/dash-html-components.git
-                    . venv/bin/activate
-                    pip install -e ./dash --quiet
-                    cd dash-renderer && npm install --ignore-scripts && npm run build && pip install -e . && cd ..
-                    cd dash-core-components && npm install --ignore-scripts && npm run build && pip install -e . && cd ..
-                    cd dash-html-components && npm install --ignore-scripts && npm run build && pip install -e . && cd ..
+                    pip install -r requirements-v1.txt --quiet
 
             - run:
                 name: Install test requirements
