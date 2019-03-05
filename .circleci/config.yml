@@ -35,10 +35,10 @@ jobs:
             - run:
                 name: Install dependencies (dash)
                 command: |
-                    git clone git@github.com:plotly/dash.git
-                    git clone git@github.com:plotly/dash-renderer.git
-                    git clone git@github.com:plotly/dash-core-components.git
-                    git clone git@github.com:plotly/dash-html-components.git
+                    git clone -b renderer-setprops-20rc1 git@github.com:plotly/dash.git
+                    git clone -b set-props-callback git@github.com:plotly/dash-renderer.git
+                    git clone -b renderer-setprops-20rc1 git@github.com:plotly/dash-core-components.git
+                    git clone -b renderer-setprops-20rc1 git@github.com:plotly/dash-html-components.git
                     . venv/bin/activate
                     pip install -e ./dash --quiet
                     cd dash-renderer && npm install --ignore-scripts && npm run build && pip install -e . && cd ..
@@ -200,10 +200,10 @@ jobs:
             - run:
                 name: Install dependencies (dash)
                 command: |
-                    git clone git@github.com:plotly/dash.git
-                    git clone git@github.com:plotly/dash-renderer.git
-                    git clone git@github.com:plotly/dash-core-components.git
-                    git clone git@github.com:plotly/dash-html-components.git
+                    git clone -b renderer-setprops-20rc1 git@github.com:plotly/dash.git
+                    git clone -b set-props-callback git@github.com:plotly/dash-renderer.git
+                    git clone -b renderer-setprops-20rc1 git@github.com:plotly/dash-core-components.git
+                    git clone -b renderer-setprops-20rc1 git@github.com:plotly/dash-html-components.git
                     . venv/bin/activate
                     pip install -e ./dash --quiet
                     cd dash-renderer && npm install --ignore-scripts && npm run build && pip install -e . && cd ..
