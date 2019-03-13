@@ -3,7 +3,10 @@ import {
 } from '../lexeme';
 import column from './column';
 
-export default [
-    and,
-    ...column
-];
+export default {
+    allowFreeForm: true,
+    lexemes: [
+        and,
+        ...column.lexemes
+    ]
+};

@@ -20,5 +20,11 @@ export interface ILexeme {
     priority?: number;
     regexp: RegExp;
     syntaxer?: (lexs: any[], pivot: any, pivotIndex: number) => any;
-    when?: string[];
+    terminal?: boolean;
+    when?: (string | undefined)[];
+}
+
+export interface ILexicon {
+    allowFreeForm: boolean;
+    lexemes: ILexeme[];
 }

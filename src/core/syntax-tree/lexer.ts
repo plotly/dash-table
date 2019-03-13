@@ -1,4 +1,4 @@
-import { ILexeme } from 'core/syntax-tree/lexicon';
+import { ILexeme, ILexicon } from 'core/syntax-tree/lexicon';
 
 export interface ILexerResult {
     lexemes: ILexemeResult[];
@@ -11,20 +11,20 @@ export interface ILexemeResult {
     value?: string;
 }
 
-export default function lexer(lexicon: ILexeme[], query: string): ILexerResult {
+export default function lexer(lexicon: ILexicon, query: string): ILexerResult {
     let lexeme: ILexeme | null = null;
 
     let result: ILexemeResult[] = [];
     while (query.length) {
         query = query.replace(/^\s+/, '');
 
-        let lexemes: ILexeme[] = lexicon.filter(_lexeme =>
-            lexeme &&
-            _lexeme.when &&
-            _lexeme.when.indexOf(lexeme.name) !== -1);
+        let lexemes: ILexeme[] = lexicon.lexemes.filter(_lexeme => lexeme ?
+            _lexeme.when && _lexeme.when.indexOf(lexeme.name) !== -1 :
+            _lexeme.when && _lexeme.when.indexOf(undefined) !== -1
+        );
 
-        if (!lexemes.length) {
-            lexemes = lexicon;
+        if (lexicon.allowFreeForm && !lexemes.length) {
+            lexemes = lexicon.lexemes;
         }
 
         lexeme = lexemes.find(_lexeme => _lexeme.regexp.test(query)) || null;
@@ -38,5 +38,7 @@ export default function lexer(lexicon: ILexeme[], query: string): ILexerResult {
         query = query.substring(value.length);
     }
 
-    return { lexemes: result, valid: true };
+    const last = result.slice(-1)[0];
+
+    return { lexemes: result, valid: !last || last.lexeme.terminal !== false };
 }

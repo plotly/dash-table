@@ -103,7 +103,7 @@ export default class FilterFactory {
     private isFragmentValid(columnId: ColumnId) {
         const op = this.ops.get(columnId.toString());
 
-        const ast = new SingleColumnSyntaxTree(`"${columnId}" ${op}`);
+        const ast = new SingleColumnSyntaxTree(columnId, op || '');
 
         return ast.isValid;
     }

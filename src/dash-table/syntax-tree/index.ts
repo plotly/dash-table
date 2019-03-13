@@ -1,16 +1,55 @@
 import * as R from 'ramda';
 
 import SyntaxTree from 'core/syntax-tree';
+import { ILexerResult, ILexemeResult } from 'core/syntax-tree/lexer';
 import { LexemeType } from 'core/syntax-tree/lexicon';
 import { ISyntaxTree } from 'core/syntax-tree/syntaxer';
 
+import { ColumnId } from 'dash-table/components/Table/props';
+
+import { operand, binaryOperator } from './lexeme';
 import queryLexicon from './lexicon/query';
 import columnLexicon from './lexicon/column';
 import columnMultiLexicon from './lexicon/columnMulti';
 
+function isBinary(lexemes: ILexemeResult[]) {
+    return lexemes.length === 2;
+}
+
+function isExpression(lexemes: ILexemeResult[]) {
+    return lexemes.length === 1 &&
+        lexemes[0].lexeme.name === LexemeType.Expression;
+}
+
+function isUnary(lexemes: ILexemeResult[]) {
+    return lexemes.length === 1 &&
+        lexemes[0].lexeme.name === LexemeType.UnaryOperator;
+}
+
+function modifyLex(key: ColumnId, res: ILexerResult) {
+    if (!res.valid) {
+        return res;
+    }
+
+    if (isBinary(res.lexemes) || isUnary(res.lexemes)) {
+        res.lexemes = [
+            { lexeme: operand, value: `${key}` },
+            ...res.lexemes
+        ];
+    } else if (isExpression(res.lexemes)) {
+        res.lexemes = [
+            { lexeme: operand, value: `${key}` },
+            { lexeme: binaryOperator, value: 'eq' },
+            ...res.lexemes
+        ];
+    }
+
+    return res;
+}
+
 export class SingleColumnSyntaxTree extends SyntaxTree {
-    constructor(query: string) {
-        super(columnLexicon, query);
+    constructor(key: ColumnId, query: string) {
+        super(columnLexicon, query, modifyLex.bind(undefined, key));
     }
 }
 

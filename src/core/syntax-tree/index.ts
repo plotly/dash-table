@@ -1,7 +1,9 @@
+import * as R from 'ramda';
+
 import Logger from 'core/Logger';
 import lexer, { ILexerResult } from 'core/syntax-tree/lexer';
 import syntaxer, { ISyntaxerResult } from 'core/syntax-tree/syntaxer';
-import { ILexeme } from './lexicon';
+import { ILexicon } from './lexicon';
 
 export default class SyntaxTree {
     protected lexerResult: ILexerResult;
@@ -16,10 +18,11 @@ export default class SyntaxTree {
     }
 
     constructor(
-        private readonly lexicon: ILexeme[],
-        private readonly query: string
+        private readonly lexicon: ILexicon,
+        private readonly query: string,
+        modifyLex: (res: ILexerResult) => ILexerResult = res => res
     ) {
-        this.lexerResult = lexer(this.lexicon, this.query);
+        this.lexerResult = modifyLex(lexer(this.lexicon, this.query));
         this.syntaxerResult = syntaxer(this.lexerResult);
     }
 
@@ -38,5 +41,11 @@ export default class SyntaxTree {
 
     filter = (targets: any[]) => {
         return targets.filter(this.evaluate);
+    }
+
+    toQueryString() {
+        return this.lexerResult.valid ?
+            R.map(l => l.value, this.lexerResult.lexemes).join(' ') :
+            '';
     }
 }
