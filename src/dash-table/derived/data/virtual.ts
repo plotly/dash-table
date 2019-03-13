@@ -2,7 +2,6 @@ import * as R from 'ramda';
 
 import { memoizeOneFactory } from 'core/memoizer';
 import sort, { defaultIsNully, SortSettings } from 'core/sorting';
-import SyntaxTree from 'core/syntax-tree';
 import {
     Data,
     Datum,
@@ -10,6 +9,7 @@ import {
     IDerivedData,
     Sorting
 } from 'dash-table/components/Table/props';
+import { QuerySyntaxTree } from 'dash-table/syntax-tree';
 
 const getter = (
     data: Data,
@@ -25,7 +25,7 @@ const getter = (
     }, data);
 
     if (filtering === 'fe' || filtering === true) {
-        const tree = new SyntaxTree(filtering_settings);
+        const tree = new QuerySyntaxTree(filtering_settings);
 
         data = tree.isValid ?
             tree.filter(data) :

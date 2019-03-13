@@ -1,20 +1,26 @@
 import Logger from 'core/Logger';
-import lexer from 'core/syntax-tree/lexer';
+import lexer, { ILexerResult } from 'core/syntax-tree/lexer';
 import syntaxer, { ISyntaxerResult } from 'core/syntax-tree/syntaxer';
+import { ILexeme } from './lexicon';
 
 export default class SyntaxTree {
-    private result: ISyntaxerResult;
+    protected lexerResult: ILexerResult;
+    protected syntaxerResult: ISyntaxerResult;
 
     get isValid() {
-        return this.result.valid;
+        return this.syntaxerResult.valid;
     }
 
     private get tree() {
-        return this.result.tree;
+        return this.syntaxerResult.tree;
     }
 
-    constructor(private readonly query: string) {
-        this.result = syntaxer(lexer(this.query));
+    constructor(
+        private readonly lexicon: ILexeme[],
+        private readonly query: string
+    ) {
+        this.lexerResult = lexer(this.lexicon, this.query);
+        this.syntaxerResult = syntaxer(this.lexerResult);
     }
 
     evaluate = (target: any) => {

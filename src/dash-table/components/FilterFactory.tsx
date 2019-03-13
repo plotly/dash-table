@@ -2,16 +2,15 @@ import * as R from 'ramda';
 import React from 'react';
 
 import Logger from 'core/Logger';
+import { arrayMap } from 'core/math/arrayZipMap';
+import { LexemeType } from 'core/syntax-tree/lexicon';
 
 import ColumnFilter from 'dash-table/components/Filter/Column';
 import { ColumnId, Filtering, FilteringType, IVisibleColumn, VisibleColumns } from 'dash-table/components/Table/props';
-import lexer, { ILexerResult, ILexemeResult } from 'core/syntax-tree/lexer';
-import { LexemeType } from 'core/syntax-tree/lexicon';
-import syntaxer, { ISyntaxerResult, ISyntaxTree } from 'core/syntax-tree/syntaxer';
 import derivedFilterStyles from 'dash-table/derived/filter/wrapperStyles';
 import { derivedRelevantFilterStyles } from 'dash-table/derived/style';
-import { arrayMap } from 'core/math/arrayZipMap';
-import { Style, Cells, BasicFilters } from 'dash-table/derived/style/props';
+import { BasicFilters, Cells, Style } from 'dash-table/derived/style/props';
+import { MultiColumnsSyntaxTree, SingleColumnSyntaxTree } from 'dash-table/syntax-tree';
 
 type SetFilter = (filter: string) => void;
 
@@ -73,85 +72,26 @@ export default class FilterFactory {
         );
     }
 
-    private respectsBasicSyntax(lexemes: ILexemeResult[], allowMultiple: boolean = true) {
-        const allowedLexemeTypes = [
-            LexemeType.BinaryOperator,
-            LexemeType.Expression,
-            LexemeType.Operand,
-            LexemeType.UnaryOperator
-        ];
-
-        if (allowMultiple) {
-            allowedLexemeTypes.push(LexemeType.And);
-        }
-
-        const allAllowed = R.all(
-            item => R.contains(item.lexeme.name, allowedLexemeTypes),
-            lexemes
-        );
-
-        if (!allAllowed) {
-            return false;
-        }
-
-        const fields = R.map(
-            item => item.value,
-            R.filter(
-                i => i.lexeme.name === LexemeType.Operand,
-                lexemes
-            )
-        );
-
-        const uniqueFields = R.uniq(fields);
-
-        if (fields.length !== uniqueFields.length) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private isBasicFilter(
-        lexerResult: ILexerResult,
-        syntaxerResult: ISyntaxerResult,
-        allowMultiple: boolean = true
-    ) {
-        return lexerResult.valid &&
-            syntaxerResult.valid &&
-            this.respectsBasicSyntax(lexerResult.lexemes, allowMultiple);
-    }
-
     private updateOps(query: string) {
-        const lexerResult = lexer(query);
-        const syntaxerResult = syntaxer(lexerResult);
+        const ast = new MultiColumnsSyntaxTree(query);
 
-        if (!this.isBasicFilter(lexerResult, syntaxerResult)) {
+        if (!ast.isValid) {
             return;
         }
 
-        const { tree } = syntaxerResult;
-        if (!tree) {
+        const statements = ast.statements;
+        if (!statements) {
             this.ops.clear();
             return;
         }
 
-        const toCheck: (ISyntaxTree | undefined)[] = [tree];
-        while (toCheck.length) {
-            const item = toCheck.pop();
-            if (!item) {
-                continue;
+        R.forEach(s => {
+            if (s.lexeme.name === LexemeType.UnaryOperator && s.block) {
+                this.ops.set(s.block.value, s.value);
+            } else if (s.lexeme.name === LexemeType.BinaryOperator && s.left && s.right) {
+                this.ops.set(s.left.value, `${s.value} ${s.right.value}`);
             }
-
-            if (item.lexeme.name === LexemeType.UnaryOperator && item.block) {
-                this.ops.set(item.block.value, item.value);
-            } else if (item.lexeme.name === LexemeType.BinaryOperator && item.left && item.right) {
-                this.ops.set(item.left.value, `${item.value} ${item.right.value}`);
-            } else {
-                toCheck.push(item.left);
-                toCheck.push(item.block);
-                toCheck.push(item.right);
-            }
-        }
+        }, statements);
     }
 
     private isFragmentValidOrNull(columnId: ColumnId) {
@@ -163,10 +103,9 @@ export default class FilterFactory {
     private isFragmentValid(columnId: ColumnId) {
         const op = this.ops.get(columnId.toString());
 
-        const lexerResult = lexer(`"${columnId}" ${op}`);
-        const syntaxerResult = syntaxer(lexerResult);
+        const ast = new SingleColumnSyntaxTree(`"${columnId}" ${op}`);
 
-        return syntaxerResult.valid && this.isBasicFilter(lexerResult, syntaxerResult, false);
+        return ast.isValid;
     }
 
     public createFilters() {

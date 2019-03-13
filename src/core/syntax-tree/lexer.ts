@@ -1,4 +1,4 @@
-import Lexicon, { ILexeme } from 'core/syntax-tree/lexicon';
+import { ILexeme } from 'core/syntax-tree/lexicon';
 
 export interface ILexerResult {
     lexemes: ILexemeResult[];
@@ -11,20 +11,20 @@ export interface ILexemeResult {
     value?: string;
 }
 
-export default function lexer(query: string): ILexerResult {
+export default function lexer(lexicon: ILexeme[], query: string): ILexerResult {
     let lexeme: ILexeme | null = null;
 
     let result: ILexemeResult[] = [];
     while (query.length) {
         query = query.replace(/^\s+/, '');
 
-        let lexemes: ILexeme[] = Lexicon.filter(_lexeme =>
+        let lexemes: ILexeme[] = lexicon.filter(_lexeme =>
             lexeme &&
             _lexeme.when &&
             _lexeme.when.indexOf(lexeme.name) !== -1);
 
         if (!lexemes.length) {
-            lexemes = Lexicon;
+            lexemes = lexicon;
         }
 
         lexeme = lexemes.find(_lexeme => _lexeme.regexp.test(query)) || null;
