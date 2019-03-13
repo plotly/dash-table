@@ -3,7 +3,7 @@ import * as R from 'ramda';
 import Logger from 'core/Logger';
 import lexer, { ILexerResult } from 'core/syntax-tree/lexer';
 import syntaxer, { ISyntaxerResult } from 'core/syntax-tree/syntaxer';
-import { ILexicon } from './lexicon';
+import { Lexicon } from './lexicon';
 
 export default class SyntaxTree {
     protected lexerResult: ILexerResult;
@@ -18,7 +18,7 @@ export default class SyntaxTree {
     }
 
     constructor(
-        private readonly lexicon: ILexicon,
+        private readonly lexicon: Lexicon,
         private readonly query: string,
         modifyLex: (res: ILexerResult) => ILexerResult = res => res
     ) {
