@@ -1,4 +1,5 @@
-import { ISyntaxTree } from 'core/syntax-tree/syntaxer';
+import { ILexemeResult } from './lexer';
+import { ISyntaxTree } from './syntaxer';
 
 export enum LexemeType {
     And = 'and',
@@ -12,7 +13,7 @@ export enum LexemeType {
     UnaryOperator = 'logical-unary-operator'
 }
 
-export interface ILexeme {
+export interface IUnboundedLexeme {
     evaluate?: (target: any, tree: ISyntaxTree) => boolean;
     resolve?: (target: any, tree: ISyntaxTree) => any;
     name: string;
@@ -20,11 +21,15 @@ export interface ILexeme {
     priority?: number;
     regexp: RegExp;
     syntaxer?: (lexs: any[], pivot: any, pivotIndex: number) => any;
-    terminal?: boolean;
-    when?: (string | undefined)[];
 }
 
-export interface ILexicon {
-    allowFreeForm: boolean;
-    lexemes: ILexeme[];
+export interface ILexeme extends IUnboundedLexeme {
+    terminal: boolean | ((lexemes: ILexemeResult[], previous: ILexemeResult) => boolean);
+    if: (string | undefined)[] | ((lexemes: ILexemeResult[], previous: ILexemeResult) => boolean);
 }
+
+export function boundLexeme(lexeme: IUnboundedLexeme) {
+    return { ...lexeme, if: () => false, terminal: false };
+}
+
+export type Lexicon = ILexeme[];

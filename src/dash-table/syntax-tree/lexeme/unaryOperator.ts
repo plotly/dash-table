@@ -1,5 +1,5 @@
 import Logger from 'core/Logger';
-import { LexemeType, ILexeme } from 'core/syntax-tree/lexicon';
+import { LexemeType, IUnboundedLexeme } from 'core/syntax-tree/lexicon';
 
 const isPrime = (c: number) => {
     if (c === 2) { return true; }
@@ -8,7 +8,7 @@ const isPrime = (c: number) => {
     return true;
 };
 
-const unaryOperator: ILexeme = {
+const unaryOperator: IUnboundedLexeme = {
     evaluate: (target, tree) => {
         Logger.trace('evaluate -> unary', target, tree);
 
@@ -43,8 +43,7 @@ const unaryOperator: ILexeme = {
         let [block, lexeme] = lexs;
 
         return Object.assign({ block }, lexeme);
-    },
-    when: [LexemeType.Operand]
+    }
 };
 
 export default unaryOperator;

@@ -1,7 +1,7 @@
-import { LexemeType, ILexeme } from 'core/syntax-tree/lexicon';
+import { LexemeType, IUnboundedLexeme } from 'core/syntax-tree/lexicon';
 import { ISyntaxTree } from 'core/syntax-tree/syntaxer';
 
-const expression: ILexeme = {
+const expression: IUnboundedLexeme = {
     resolve: (target: any, tree: ISyntaxTree) => {
         if (/^(('([^'\\]|\\.)+')|("([^"\\]|\\.)+")|(`([^`\\]|\\.)+`))$/.test(tree.value)) {
             return tree.value.slice(1, tree.value.length - 1);
@@ -25,8 +25,7 @@ const expression: ILexeme = {
         }
     },
     regexp: /^(((num|str)\([^()]*\))|('([^'\\]|\\.)+')|("([^"\\]|\\.)+")|(`([^`\\]|\\.)+`)|(\w|[:.\-+])+)/,
-    name: LexemeType.Expression,
-    when: [LexemeType.BinaryOperator]
+    name: LexemeType.Expression
 };
 
 export default expression;

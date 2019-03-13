@@ -2,7 +2,7 @@ import * as R from 'ramda';
 
 import SyntaxTree from 'core/syntax-tree';
 import { ILexerResult, ILexemeResult } from 'core/syntax-tree/lexer';
-import { LexemeType } from 'core/syntax-tree/lexicon';
+import { LexemeType, boundLexeme } from 'core/syntax-tree/lexicon';
 import { ISyntaxTree } from 'core/syntax-tree/syntaxer';
 
 import { ColumnId } from 'dash-table/components/Table/props';
@@ -33,13 +33,13 @@ function modifyLex(key: ColumnId, res: ILexerResult) {
 
     if (isBinary(res.lexemes) || isUnary(res.lexemes)) {
         res.lexemes = [
-            { lexeme: operand, value: `${key}` },
+            { lexeme: boundLexeme(operand), value: `${key}` },
             ...res.lexemes
         ];
     } else if (isExpression(res.lexemes)) {
         res.lexemes = [
-            { lexeme: operand, value: `${key}` },
-            { lexeme: binaryOperator, value: 'eq' },
+            { lexeme: boundLexeme(operand), value: `${key}` },
+            { lexeme: boundLexeme(binaryOperator), value: 'eq' },
             ...res.lexemes
         ];
     }

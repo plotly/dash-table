@@ -1,7 +1,7 @@
 import Logger from 'core/Logger';
-import { ILexeme, LexemeType } from 'core/syntax-tree/lexicon';
+import { IUnboundedLexeme, LexemeType } from 'core/syntax-tree/lexicon';
 
-const or: ILexeme = {
+const or: IUnboundedLexeme = {
     evaluate: (target, tree) => {
         Logger.trace('evaluate -> ||', target, tree);
 

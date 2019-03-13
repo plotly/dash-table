@@ -1,7 +1,7 @@
-import { LexemeType, ILexeme } from 'core/syntax-tree/lexicon';
+import { LexemeType, IUnboundedLexeme } from 'core/syntax-tree/lexicon';
 import { ISyntaxTree } from 'core/syntax-tree/syntaxer';
 
-const operand: ILexeme = {
+const operand: IUnboundedLexeme = {
     resolve: (target: any, tree: ISyntaxTree) => {
         if (/^(('([^'\\]|\\.)+')|("([^"\\]|\\.")+")|(`([^`\\]|\\.)+`))$/.test(tree.value)) {
             return target[

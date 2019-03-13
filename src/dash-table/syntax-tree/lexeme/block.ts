@@ -1,13 +1,13 @@
 import Logger from 'core/Logger';
-import { LexemeType, ILexeme } from 'core/syntax-tree/lexicon';
+import { LexemeType, IUnboundedLexeme } from 'core/syntax-tree/lexicon';
 
-export const blockClose: ILexeme = {
+export const blockClose: IUnboundedLexeme = {
     name: LexemeType.BlockClose,
     nesting: -1,
     regexp: /^\)/
 };
 
-export const blockOpen: ILexeme = {
+export const blockOpen: IUnboundedLexeme = {
     evaluate: (target, tree) => {
         Logger.trace('evaluate -> ()', target, tree);
 
@@ -23,6 +23,5 @@ export const blockOpen: ILexeme = {
         return Object.assign({
             block: lexs.slice(1, lexs.length - 1)
         }, lexs[0]);
-    },
-    when: [LexemeType.UnaryNot]
+    }
 };

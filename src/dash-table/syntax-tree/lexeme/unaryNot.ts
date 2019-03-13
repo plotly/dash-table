@@ -1,7 +1,7 @@
 import Logger from 'core/Logger';
-import { LexemeType, ILexeme } from 'core/syntax-tree/lexicon';
+import { LexemeType, IUnboundedLexeme } from 'core/syntax-tree/lexicon';
 
-const unaryNot: ILexeme = {
+const unaryNot: IUnboundedLexeme = {
     evaluate: (target, tree) => {
         Logger.trace('evaluate -> unary not', target, tree);
 
@@ -16,8 +16,7 @@ const unaryNot: ILexeme = {
         return Object.assign({
             block: lexs.slice(1, lexs.length)
         }, lexs[0]);
-    },
-    when: [LexemeType.UnaryNot]
+    }
 };
 
 export default unaryNot;

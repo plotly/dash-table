@@ -3,13 +3,27 @@ import {
     expression,
     unaryOperator
 } from '../lexeme';
-import { LexemeType } from 'core/syntax-tree/lexicon';
+import { LexemeType, ILexeme } from 'core/syntax-tree/lexicon';
+import { ILexemeResult } from 'core/syntax-tree/lexer';
 
-export default {
-    allowFreeForm: false,
-    lexemes: [
-        { ...binaryOperator, when: [undefined], terminal: false },
-        { ...unaryOperator, when: [undefined] },
-        { ...expression, when: [undefined, LexemeType.BinaryOperator] }
-    ]
-};
+const lexicon: ILexeme[] = [
+    {
+        ...binaryOperator,
+        terminal: false,
+        if: (_lexs: ILexemeResult[], previous: ILexemeResult) => !previous
+    },
+    {
+        ...unaryOperator,
+        if: (_lexs: ILexemeResult[], previous: ILexemeResult) => !previous,
+        terminal: true
+    },
+    {
+        ...expression,
+        if: (_lexs: ILexemeResult[], previous: ILexemeResult) =>
+            !previous ||
+            previous.lexeme.name === LexemeType.BinaryOperator,
+        terminal: true
+    }
+];
+
+export default lexicon;

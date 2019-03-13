@@ -1,7 +1,7 @@
 import Logger from 'core/Logger';
-import { LexemeType, ILexeme } from 'core/syntax-tree/lexicon';
+import { LexemeType, IUnboundedLexeme } from 'core/syntax-tree/lexicon';
 
-const binaryOperator: ILexeme = {
+const binaryOperator: IUnboundedLexeme = {
     evaluate: (target, tree) => {
         Logger.trace('evaluate -> binary', target, tree);
 
@@ -41,8 +41,7 @@ const binaryOperator: ILexeme = {
         let [left, lexeme, right] = lexs;
 
         return Object.assign({ left, right }, lexeme);
-    },
-    when: [LexemeType.Operand]
+    }
 };
 
 export default binaryOperator;

@@ -1,4 +1,4 @@
-import { ILexeme, ILexicon } from 'core/syntax-tree/lexicon';
+import { ILexeme, Lexicon } from 'core/syntax-tree/lexicon';
 
 export interface ILexerResult {
     lexemes: ILexemeResult[];
@@ -11,34 +11,44 @@ export interface ILexemeResult {
     value?: string;
 }
 
-export default function lexer(lexicon: ILexicon, query: string): ILexerResult {
-    let lexeme: ILexeme | null = null;
-
+export default function lexer(lexicon: Lexicon, query: string): ILexerResult {
     let result: ILexemeResult[] = [];
+
     while (query.length) {
         query = query.replace(/^\s+/, '');
 
-        let lexemes: ILexeme[] = lexicon.lexemes.filter(_lexeme => lexeme ?
-            _lexeme.when && _lexeme.when.indexOf(lexeme.name) !== -1 :
-            _lexeme.when && _lexeme.when.indexOf(undefined) !== -1
+        const previous = result.slice(-1)[0];
+        const previousLexeme = previous ? previous.lexeme : null;
+
+        let lexemes: ILexeme[] = lexicon.filter(lexeme =>
+            lexeme.if &&
+            (!Array.isArray(lexeme.if) ?
+                lexeme.if(result, previous) :
+                (previousLexeme ?
+                    lexeme.if && lexeme.if.indexOf(previousLexeme.name) !== -1 :
+                    lexeme.if && lexeme.if.indexOf(undefined) !== -1)
+            )
         );
 
-        if (lexicon.allowFreeForm && !lexemes.length) {
-            lexemes = lexicon.lexemes;
-        }
-
-        lexeme = lexemes.find(_lexeme => _lexeme.regexp.test(query)) || null;
-        if (!lexeme) {
+        const next = lexemes.find(_lexeme => _lexeme.regexp.test(query)) || null;
+        if (!next) {
             return { lexemes: result, valid: false, error: query };
         }
 
-        const value = (query.match(lexeme.regexp) || [])[0];
-        result.push({ lexeme, value });
+        const value = (query.match(next.regexp) || [])[0];
+        result.push({ lexeme: next, value });
 
         query = query.substring(value.length);
     }
 
     const last = result.slice(-1)[0];
 
-    return { lexemes: result, valid: !last || last.lexeme.terminal !== false };
+    const terminal: boolean = last && (typeof last.lexeme.terminal === 'function' ?
+        last.lexeme.terminal(result, last) :
+        last.lexeme.terminal);
+
+    return {
+        lexemes: result,
+        valid: !last || terminal
+    };
 }
