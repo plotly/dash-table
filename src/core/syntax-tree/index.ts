@@ -20,9 +20,9 @@ export default class SyntaxTree {
     constructor(
         public readonly lexicon: Lexicon,
         public readonly query: string,
-        modifyLex: (res: ILexerResult) => ILexerResult = res => res
+        postProcessor: (res: ILexerResult) => ILexerResult = res => res
     ) {
-        this.lexerResult = modifyLex(lexer(this.lexicon, this.query));
+        this.lexerResult = postProcessor(lexer(this.lexicon, this.query));
         this.syntaxerResult = syntaxer(this.lexerResult);
     }
 

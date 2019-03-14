@@ -1,3 +1,5 @@
+import * as R from 'ramda';
+
 import CellFactory from 'dash-table/components/CellFactory';
 import FilterFactory from 'dash-table/components/FilterFactory';
 import HeaderFactory from 'dash-table/components/HeaderFactory';
@@ -9,41 +11,11 @@ const handleSetFilter = (setProps: SetProps, setState: SetState, filtering_setti
 };
 
 function filterPropsFn(propsFn: () => ControlledTableProps) {
-    const {
-        columns,
-        filtering,
-        filtering_settings,
-        filtering_type,
-        id,
-        rawFilterQuery,
-        row_deletable,
-        row_selectable,
-        setProps,
-        setState,
-        style_cell,
-        style_cell_conditional,
-        style_filter,
-        style_filter_conditional
-    } = propsFn();
+    const props = propsFn();
 
-    const fillerColumns =
-        (row_deletable ? 1 : 0) +
-        (row_selectable ? 1 : 0);
-
-    return {
-        columns,
-        fillerColumns,
-        filtering,
-        filtering_settings,
-        filtering_type,
-        id,
-        rawFilterQuery,
-        setFilter: handleSetFilter.bind(undefined, setProps, setState),
-        style_cell,
-        style_cell_conditional,
-        style_filter,
-        style_filter_conditional
-    };
+    return R.merge(props, {
+        setFilter: handleSetFilter.bind(undefined, props.setProps, props.setState)
+    });
 }
 
 function getter(

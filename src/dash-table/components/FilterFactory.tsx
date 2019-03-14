@@ -6,8 +6,9 @@ import { arrayMap } from 'core/math/arrayZipMap';
 import { LexemeType } from 'core/syntax-tree/lexicon';
 
 import ColumnFilter from 'dash-table/components/Filter/Column';
-import { ColumnId, Filtering, FilteringType, IVisibleColumn, VisibleColumns } from 'dash-table/components/Table/props';
+import { ColumnId, Filtering, FilteringType, IVisibleColumn, VisibleColumns, RowSelection } from 'dash-table/components/Table/props';
 import derivedFilterStyles from 'dash-table/derived/filter/wrapperStyles';
+import derivedHeaderOperations from 'dash-table/derived/header/operations';
 import { derivedRelevantFilterStyles } from 'dash-table/derived/style';
 import { BasicFilters, Cells, Style } from 'dash-table/derived/style/props';
 import { MultiColumnsSyntaxTree, SingleColumnSyntaxTree } from 'dash-table/syntax-tree';
@@ -17,12 +18,13 @@ type SetFilter = (filter: string, rawFilter: string) => void;
 
 export interface IFilterOptions {
     columns: VisibleColumns;
-    fillerColumns: number;
     filtering: Filtering;
     filtering_settings: string;
     filtering_type: FilteringType;
     id: string;
     rawFilterQuery: string;
+    row_deletable: boolean;
+    row_selectable: RowSelection;
     setFilter: SetFilter;
     style_cell: Style;
     style_cell_conditional: Cells;
@@ -35,6 +37,7 @@ export default class FilterFactory {
     private readonly ops = new Map<string, SingleColumnSyntaxTree>();
     private readonly filterStyles = derivedFilterStyles();
     private readonly relevantStyles = derivedRelevantFilterStyles();
+    private readonly headerOperations = derivedHeaderOperations();
 
     private get props() {
         return this.propsFn();
@@ -118,10 +121,11 @@ export default class FilterFactory {
     public createFilters() {
         const {
             columns,
-            fillerColumns,
             filtering,
             filtering_settings,
             filtering_type,
+            row_deletable,
+            row_selectable,
             setFilter,
             style_cell,
             style_cell_conditional,
@@ -167,9 +171,13 @@ export default class FilterFactory {
                 wrapperStyles,
                     (f, s) => React.cloneElement(f, { style: s }));
 
-            const offsets = R.range(0, fillerColumns).map(i => (<th key={`offset-${i}`} />));
+            const operations = this.headerOperations(
+                1,
+                row_selectable,
+                row_deletable
+            )[0];
 
-            return [offsets.concat(styledFilters)];
+            return [operations.concat(styledFilters)];
         } else {
             return [[]];
         }
