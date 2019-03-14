@@ -11,8 +11,9 @@ import derivedFilterStyles from 'dash-table/derived/filter/wrapperStyles';
 import { derivedRelevantFilterStyles } from 'dash-table/derived/style';
 import { BasicFilters, Cells, Style } from 'dash-table/derived/style/props';
 import { MultiColumnsSyntaxTree, SingleColumnSyntaxTree } from 'dash-table/syntax-tree';
+import { memoizeOne } from 'core/memoizer';
 
-type SetFilter = (filter: string) => void;
+type SetFilter = (filter: string, rawFilter: string) => void;
 
 export interface IFilterOptions {
     columns: VisibleColumns;
@@ -21,6 +22,7 @@ export interface IFilterOptions {
     filtering_settings: string;
     filtering_type: FilteringType;
     id: string;
+    rawFilterQuery: string;
     setFilter: SetFilter;
     style_cell: Style;
     style_cell_conditional: Cells;
@@ -55,14 +57,22 @@ export default class FilterFactory {
         }
 
         const globalFilter = R.map(
-            ([, ast]) => (ast && ast.toQueryString()) || '',
+            ast => (ast && ast.toQueryString()) || '',
             R.filter(
-                ([, ast]) => ast && ast.isValid,
-                Array.from(ops.entries())
+                ast => ast && ast.isValid,
+                Array.from(ops.values())
             )
         ).join(' && ');
 
-        setFilter(globalFilter);
+        const rawGlobalFilter = R.map(
+            ast => ast.query || '',
+            R.filter(
+                ast => Boolean(ast),
+                Array.from(ops.values())
+            )
+        ).join(' && ');
+
+        setFilter(globalFilter, rawGlobalFilter);
     }
 
     private getEventHandler = (fn: Function, columnId: ColumnId, ops: Map<ColumnId, SingleColumnSyntaxTree>, setFilter: SetFilter): any => {
@@ -81,7 +91,7 @@ export default class FilterFactory {
         return /^"[^"]+"$/.test(id) ? id : `"${id}"`;
     }
 
-    private updateOps(query: string) {
+    private updateOps = memoizeOne((query: string) => {
         const ast = new MultiColumnsSyntaxTree(query);
 
         if (!ast.isValid) {
@@ -96,14 +106,14 @@ export default class FilterFactory {
 
         R.forEach(s => {
             if (s.lexeme.name === LexemeType.UnaryOperator && s.block) {
-                let safeColumnId = this.getSafeColumnId(s.block.value);
+                const safeColumnId = this.getSafeColumnId(s.block.value);
                 this.ops.set(safeColumnId, new SingleColumnSyntaxTree(safeColumnId, s.value));
             } else if (s.lexeme.name === LexemeType.BinaryOperator && s.left && s.right) {
-                let safeColumnId = this.getSafeColumnId(s.left.value);
+                const safeColumnId = this.getSafeColumnId(s.left.value);
                 this.ops.set(safeColumnId, new SingleColumnSyntaxTree(safeColumnId, `${s.value} ${s.right.value}`));
             }
         }, statements);
-    }
+    });
 
     public createFilters() {
         const {
@@ -139,7 +149,8 @@ export default class FilterFactory {
             );
 
             const filters = R.addIndex<IVisibleColumn, JSX.Element>(R.map)((column, index) => {
-                const ast = this.ops.get(column.id.toString());
+                const safeColumnId = this.getSafeColumnId(column.id.toString());
+                const ast = this.ops.get(safeColumnId);
 
                 return (<ColumnFilter
                     key={`column-${index}`}

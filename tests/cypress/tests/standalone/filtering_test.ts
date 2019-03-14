@@ -55,14 +55,26 @@ describe('filter', () => {
         DashTable.getFilterById('ccc').click();
         DOM.focused.type(`gt`);
         DashTable.getFilterById('ddd').click();
-        DOM.focused.type('num(20000)');
+        DOM.focused.type('numpy(20000)');
         DashTable.getFilterById('eee').click();
         DOM.focused.type('is prime2');
         DashTable.getFilterById('bbb').click();
-        DOM.focused.type(`!`);
+        DOM.focused.type('!');
+        DashTable.getFilterById('ccc').click();
 
         DashTable.getCellById(0, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', cell_0));
         DashTable.getCellById(1, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', cell_1));
+
+        DashTable.getFilterById('bbb').within(() => cy.get('input').should('have.value', '!'));
+        DashTable.getFilterById('ccc').within(() => cy.get('input').should('have.value', 'gt'));
+        DashTable.getFilterById('ddd').within(() => cy.get('input').should('have.value', 'numpy(20000)'));
+        DashTable.getFilterById('eee').within(() => cy.get('input').should('have.value', 'is prime2'));
+
+        DashTable.getFilterById('bbb').should('have.class', 'invalid');
+        DashTable.getFilterById('ccc').should('have.class', 'invalid');
+        DashTable.getFilterById('ddd').should('have.class', 'invalid');
+        DashTable.getFilterById('eee').should('have.class', 'invalid');
+
     });
 
     it('reset updates results and filter fields', () => {

@@ -37,6 +37,7 @@ export default class Table extends Component<PropsWithDefaultsAndDerived, Standa
 
         this.state = {
             forcedResizeOnly: false,
+            rawFilterQuery: '',
             scrollbarWidth: 0
         };
     }

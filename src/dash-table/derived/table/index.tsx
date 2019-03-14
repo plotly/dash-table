@@ -1,9 +1,12 @@
 import CellFactory from 'dash-table/components/CellFactory';
 import FilterFactory from 'dash-table/components/FilterFactory';
 import HeaderFactory from 'dash-table/components/HeaderFactory';
-import { ControlledTableProps, SetProps } from 'dash-table/components/Table/props';
+import { ControlledTableProps, SetProps, SetState } from 'dash-table/components/Table/props';
 
-const handleSetFilter = (setProps: SetProps, filtering_settings: string) => setProps({ filtering_settings });
+const handleSetFilter = (setProps: SetProps, setState: SetState, filtering_settings: string, rawFilterQuery: string) => {
+    setProps({ filtering_settings });
+    setState({ rawFilterQuery });
+};
 
 function filterPropsFn(propsFn: () => ControlledTableProps) {
     const {
@@ -12,9 +15,11 @@ function filterPropsFn(propsFn: () => ControlledTableProps) {
         filtering_settings,
         filtering_type,
         id,
+        rawFilterQuery,
         row_deletable,
         row_selectable,
         setProps,
+        setState,
         style_cell,
         style_cell_conditional,
         style_filter,
@@ -32,7 +37,8 @@ function filterPropsFn(propsFn: () => ControlledTableProps) {
         filtering_settings,
         filtering_type,
         id,
-        setFilter: handleSetFilter.bind(undefined, setProps),
+        rawFilterQuery,
+        setFilter: handleSetFilter.bind(undefined, setProps, setState),
         style_cell,
         style_cell_conditional,
         style_filter,

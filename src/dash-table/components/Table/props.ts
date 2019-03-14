@@ -232,6 +232,7 @@ export interface IUSerInterfaceTooltip {
 
 export interface IState {
     forcedResizeOnly: boolean;
+    rawFilterQuery: string;
     scrollbarWidth: number;
     tooltip?: IUSerInterfaceTooltip;
     uiViewport?: IUserInterfaceViewport;
