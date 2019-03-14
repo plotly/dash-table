@@ -1,10 +1,14 @@
+import * as R from 'ramda';
+
 import {
-    and
+    and,
+    operand,
+    binaryOperator,
+    unaryOperator,
+    expression
 } from '../lexeme';
-import columnLexicon from './column';
 import { ILexeme, LexemeType } from 'core/syntax-tree/lexicon';
 import { ILexemeResult } from 'core/syntax-tree/lexer';
-import R from 'ramda';
 
 const lexicon: ILexeme[] = [
     {
@@ -19,7 +23,42 @@ const lexicon: ILexeme[] = [
             ),
         terminal: false
     },
-    ...columnLexicon
+    {
+        ...operand,
+        if: (_: ILexemeResult[], previous: ILexemeResult) =>
+            !previous || R.contains(
+                previous.lexeme.name,
+                [LexemeType.And]
+            ),
+        terminal: false
+    },
+    {
+        ...binaryOperator,
+        if: (_: ILexemeResult[], previous: ILexemeResult) =>
+            previous && R.contains(
+                previous.lexeme.name,
+                [LexemeType.Operand]
+            ),
+        terminal: false
+    },
+    {
+        ...unaryOperator,
+        if: (_: ILexemeResult[], previous: ILexemeResult) =>
+            previous && R.contains(
+                previous.lexeme.name,
+                [LexemeType.Operand]
+            ),
+        terminal: true
+    },
+    {
+        ...expression,
+        if: (_: ILexemeResult[], previous: ILexemeResult) =>
+            previous && R.contains(
+                previous.lexeme.name,
+                [LexemeType.BinaryOperator]
+            ),
+        terminal: true
+    }
 ];
 
 export default lexicon;

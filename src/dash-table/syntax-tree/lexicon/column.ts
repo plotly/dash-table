@@ -1,3 +1,5 @@
+import * as R from 'ramda';
+
 import {
     binaryOperator,
     expression,
@@ -20,8 +22,10 @@ const lexicon: ILexeme[] = [
     {
         ...expression,
         if: (_lexs: ILexemeResult[], previous: ILexemeResult) =>
-            !previous ||
-            previous.lexeme.name === LexemeType.BinaryOperator,
+            !previous || R.contains(
+                previous.lexeme.name,
+                [LexemeType.BinaryOperator]
+            ),
         terminal: true
     }
 ];

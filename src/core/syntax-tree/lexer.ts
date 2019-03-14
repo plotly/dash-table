@@ -26,8 +26,7 @@ export default function lexer(lexicon: Lexicon, query: string): ILexerResult {
                 lexeme.if(result, previous) :
                 (previousLexeme ?
                     lexeme.if && lexeme.if.indexOf(previousLexeme.name) !== -1 :
-                    lexeme.if && lexeme.if.indexOf(undefined) !== -1)
-            )
+                    lexeme.if && lexeme.if.indexOf(undefined) !== -1))
         );
 
         const next = lexemes.find(_lexeme => _lexeme.regexp.test(query)) || null;
