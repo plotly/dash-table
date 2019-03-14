@@ -30,7 +30,7 @@ export interface IFilterOptions {
 
 export default class FilterFactory {
     private readonly handlers = new Map();
-    private readonly ops = new Map<string, string>();
+    private readonly ops = new Map<string, SingleColumnSyntaxTree>();
     private readonly filterStyles = derivedFilterStyles();
     private readonly relevantStyles = derivedRelevantFilterStyles();
 
@@ -42,27 +42,30 @@ export default class FilterFactory {
 
     }
 
-    private onChange = (columnId: ColumnId, ops: Map<ColumnId, string>, setFilter: SetFilter, ev: any) => {
+    private onChange = (columnId: ColumnId, ops: Map<ColumnId, SingleColumnSyntaxTree>, setFilter: SetFilter, ev: any) => {
         Logger.debug('Filter -- onChange', columnId, ev.target.value && ev.target.value.trim());
 
         const value = ev.target.value.trim();
+        const safeColumnId = `"${columnId}"`;
 
         if (value && value.length) {
-            ops.set(columnId.toString(), value);
+            ops.set(safeColumnId, new SingleColumnSyntaxTree(safeColumnId, value));
         } else {
-            ops.delete(columnId.toString());
+            ops.delete(safeColumnId);
         }
 
-        setFilter(R.map(
-            ([cId, filter]) => `"${cId}" ${filter}`,
+        const globalFilter = R.map(
+            ([, ast]) => (ast && ast.toQueryString()) || '',
             R.filter(
-                ([cId]) => this.isFragmentValid(cId),
+                ([, ast]) => ast && ast.isValid,
                 Array.from(ops.entries())
             )
-        ).join(' && '));
+        ).join(' && ');
+
+        setFilter(globalFilter);
     }
 
-    private getEventHandler = (fn: Function, columnId: ColumnId, ops: Map<ColumnId, string>, setFilter: SetFilter): any => {
+    private getEventHandler = (fn: Function, columnId: ColumnId, ops: Map<ColumnId, SingleColumnSyntaxTree>, setFilter: SetFilter): any => {
         const fnHandler = (this.handlers.get(fn) || this.handlers.set(fn, new Map()).get(fn));
         const columnIdHandler = (fnHandler.get(columnId) || fnHandler.set(columnId, new Map()).get(columnId));
 
@@ -70,6 +73,12 @@ export default class FilterFactory {
             columnIdHandler.get(setFilter) ||
             (columnIdHandler.set(setFilter, fn.bind(this, columnId, ops, setFilter)).get(setFilter))
         );
+    }
+
+    private getSafeColumnId(columnId: ColumnId) {
+        const id = columnId.toString();
+
+        return /^"[^"]+"$/.test(id) ? id : `"${id}"`;
     }
 
     private updateOps(query: string) {
@@ -87,25 +96,13 @@ export default class FilterFactory {
 
         R.forEach(s => {
             if (s.lexeme.name === LexemeType.UnaryOperator && s.block) {
-                this.ops.set(s.block.value, s.value);
+                let safeColumnId = this.getSafeColumnId(s.block.value);
+                this.ops.set(safeColumnId, new SingleColumnSyntaxTree(safeColumnId, s.value));
             } else if (s.lexeme.name === LexemeType.BinaryOperator && s.left && s.right) {
-                this.ops.set(s.left.value, `${s.value} ${s.right.value}`);
+                let safeColumnId = this.getSafeColumnId(s.left.value);
+                this.ops.set(safeColumnId, new SingleColumnSyntaxTree(safeColumnId, `${s.value} ${s.right.value}`));
             }
         }, statements);
-    }
-
-    private isFragmentValidOrNull(columnId: ColumnId) {
-        const op = this.ops.get(columnId.toString());
-
-        return !op || !op.trim().length || this.isFragmentValid(columnId);
-    }
-
-    private isFragmentValid(columnId: ColumnId) {
-        const op = this.ops.get(columnId.toString());
-
-        const ast = new SingleColumnSyntaxTree(columnId, op || '');
-
-        return ast.isValid;
     }
 
     public createFilters() {
@@ -142,13 +139,15 @@ export default class FilterFactory {
             );
 
             const filters = R.addIndex<IVisibleColumn, JSX.Element>(R.map)((column, index) => {
+                const ast = this.ops.get(column.id.toString());
+
                 return (<ColumnFilter
                     key={`column-${index}`}
                     classes={`dash-filter column-${index}`}
                     columnId={column.id}
-                    isValid={this.isFragmentValidOrNull(column.id)}
+                    isValid={!ast || ast.isValid}
                     setFilter={this.getEventHandler(this.onChange, column.id, this.ops, setFilter)}
-                    value={this.ops.get(column.id.toString())}
+                    value={ast && ast.query}
                 />);
             }, columns);
 

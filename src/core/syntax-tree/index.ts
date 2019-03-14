@@ -18,8 +18,8 @@ export default class SyntaxTree {
     }
 
     constructor(
-        private readonly lexicon: Lexicon,
-        private readonly query: string,
+        public readonly lexicon: Lexicon,
+        public readonly query: string,
         modifyLex: (res: ILexerResult) => ILexerResult = res => res
     ) {
         this.lexerResult = modifyLex(lexer(this.lexicon, this.query));
