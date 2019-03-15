@@ -7,14 +7,14 @@ const unaryNot: IUnboundedLexeme = {
 
         const t = tree as any;
 
-        return !t.block.lexeme.evaluate(target, t.block);
+        return !t.right.lexeme.evaluate(target, t.right);
     },
     name: LexemeType.UnaryNot,
     priority: 1.5,
     regexp: /^!/,
     syntaxer: (lexs: any[]) => {
         return Object.assign({
-            block: lexs.slice(1, lexs.length)
+            right: lexs.slice(1, lexs.length)
         }, lexs[0]);
     }
 };

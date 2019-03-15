@@ -13,7 +13,7 @@ const unaryOperator: IUnboundedLexeme = {
         Logger.trace('evaluate -> unary', target, tree);
 
         const t = tree as any;
-        const opValue = t.block.lexeme.resolve(target, t.block);
+        const opValue = t.left.lexeme.resolve(target, t.left);
 
         switch (tree.value.toLowerCase()) {
             case 'is even':
@@ -40,9 +40,9 @@ const unaryOperator: IUnboundedLexeme = {
     priority: 0,
     regexp: /^((is nil)|(is odd)|(is even)|(is bool)|(is num)|(is object)|(is str)|(is prime))/i,
     syntaxer: (lexs: any[]) => {
-        let [block, lexeme] = lexs;
+        let [left, lexeme] = lexs;
 
-        return Object.assign({ block }, lexeme);
+        return Object.assign({ left }, lexeme);
     }
 };
 
