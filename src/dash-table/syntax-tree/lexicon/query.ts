@@ -57,7 +57,7 @@ const lexicon: ILexeme[] = [
     {
         ...blockClose,
         if: (lexemes: ILexemeResult[], previous: ILexemeResult) =>
-            !previous || R.contains(
+            previous && R.contains(
                 previous.lexeme.name,
                 [
                     LexemeType.BlockClose,
