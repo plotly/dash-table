@@ -1,18 +1,22 @@
 import React from 'react';
+import * as R from 'ramda';
 
-import { ICellFactoryProps } from 'dash-table/components/Table/props';
+import {ICellFactoryProps} from 'dash-table/components/Table/props';
 import derivedCellWrappers from 'dash-table/derived/cell/wrappers';
 import derivedCellContents from 'dash-table/derived/cell/contents';
 import derivedCellOperations from 'dash-table/derived/cell/operations';
 import derivedCellStyles from 'dash-table/derived/cell/wrapperStyles';
 import derivedDropdowns from 'dash-table/derived/cell/dropdowns';
-import { derivedRelevantCellStyles } from 'dash-table/derived/style';
+import {derivedRelevantCellStyles} from 'dash-table/derived/style';
+import {
+    derivedVerticalEdges,
+    derivedHorizontalEdges,
+} from 'dash-table/derived/edges/vertical';
 
-import { matrixMap3 } from 'core/math/matrixZipMap';
-import { arrayMap } from 'core/math/arrayZipMap';
+import {matrixMap3} from 'core/math/matrixZipMap';
+import {arrayMap} from 'core/math/arrayZipMap';
 
 export default class CellFactory {
-
     private get props() {
         return this.propsFn();
     }
@@ -24,8 +28,10 @@ export default class CellFactory {
         private readonly cellOperations = derivedCellOperations(),
         private readonly cellStyles = derivedCellStyles(),
         private readonly cellWrappers = derivedCellWrappers(propsFn),
-        private readonly relevantStyles = derivedRelevantCellStyles()
-    ) { }
+        private readonly relevantStyles = derivedRelevantCellStyles(),
+        private readonly verticalEdges = derivedVerticalEdges(),
+        private readonly horizontalEdges = derivedHorizontalEdges()
+    ) {}
 
     public createCells() {
         const {
@@ -46,7 +52,7 @@ export default class CellFactory {
             style_cell_conditional,
             style_data,
             style_data_conditional,
-            virtualized
+            virtualized,
         } = this.props;
 
         const operations = this.cellOperations(
@@ -67,11 +73,36 @@ export default class CellFactory {
             style_data_conditional
         );
 
+        const borderStyles = R.filter(
+            style =>
+                R.has('border', style.style) ||
+                R.has('borderTop', style.style) ||
+                R.has('borderRight', style.style) ||
+                R.has('borderBottom', style.style) ||
+                R.has('borderLeft', style.style),
+            relevantStyles
+        );
+
+        const vertical_edges_matrix = this.verticalEdges(
+            columns,
+            virtualized.data,
+            borderStyles,
+            virtualized.offset
+        );
+        const horizontal_edges_matrix = this.horizontalEdges(
+            columns,
+            virtualized.data,
+            borderStyles,
+            virtualized.offset
+        );
+
         const wrapperStyles = this.cellStyles(
             columns,
             relevantStyles,
             virtualized.data,
-            virtualized.offset
+            virtualized.offset,
+            vertical_edges_matrix,
+            horizontal_edges_matrix
         );
 
         const dropdowns = this.cellDropdowns(
@@ -101,17 +132,12 @@ export default class CellFactory {
             dropdowns
         );
 
-        const cells = matrixMap3(
-            wrappers,
-            wrapperStyles,
-            contents,
-            (w, s, c) => React.cloneElement(w, { children: [c], style: s })
+        const cells = matrixMap3(wrappers, wrapperStyles, contents, (w, s, c) =>
+            React.cloneElement(w, {children: [c], style: s})
         );
 
-        return arrayMap(
-            operations,
-            cells,
-            (o, c) => Array.prototype.concat(o, c)
+        return arrayMap(operations, cells, (o, c) =>
+            Array.prototype.concat(o, c)
         );
     }
 }

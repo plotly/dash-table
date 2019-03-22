@@ -153,6 +153,7 @@ export interface IBaseVisibleColumn {
     editable?: boolean;
     editable_name?: boolean | number;
     id: ColumnId;
+    borders?: any;
     name: string | string[];
     options?: IDropdownValue[]; // legacy
 }

@@ -41,8 +41,9 @@ export const BasicModes = [
 function getBaseTableProps(mock: IDataMock) {
     return {
         id: 'table',
-        columns: mock.columns.map((col: any) => R.merge(col, {
+        columns: mock.columns.map((col: any, index: number) => R.merge(col, {
             name: col.name || col.id,
+            borders: (index===2) ? {visible: true, color: 'hotpink'} : undefined,
             on_change: {
                 action: ChangeAction.None
             },
@@ -65,11 +66,35 @@ function getBaseTableProps(mock: IDataMock) {
             max_width: '1000px',
             width: '1000px'
         },
+        style_data:{
+            border: "1px solid grey"
+        },
         style_data_conditional: [
             { max_width: 150, min_width: 150, width: 150 },
-            { if: { column_id: 'rows' }, max_width: 60, min_width: 60, width: 60 },
-            { if: { column_id: 'bbb' }, max_width: 200, min_width: 200, width: 200 },
-            { if: { column_id: 'bbb-readonly' }, max_width: 200, min_width: 200, width: 200 }
+            {
+                if: {
+                    row_index: 2,
+                    column_id: 'ddd'
+                },
+                border: '2px solid red'
+            },
+            {
+                if: {
+                    row_index: 3,
+                    column_id: 'ddd'
+                },
+                border: '2px solid green'
+            },
+            {
+                if: {
+                    row_index: 5,
+                    column_id: 'ddd'
+                },
+                border: '2px solid gold'
+            },
+            { if: { column_id: 'rows' }, max_width: 60, min_width: 60, width: 60, border: '1px solid black' },
+            { if: { column_id: 'bbb' }, max_width: 200, min_width: 200, width: 200, border: '1px solid cyan' },
+            { if: { column_id: 'bbb-readonly' }, max_width: 200, min_width: 200, width: 200, border: '1px solid magenta' }
         ]
     };
 }

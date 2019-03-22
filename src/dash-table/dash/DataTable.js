@@ -103,6 +103,11 @@ export const propTypes = {
          */
         clearable: PropTypes.bool,
 
+        borders: PropTypes.shape({
+            visible: PropTypes.bool,
+            color: PropTypes.string
+        }),
+
         /**
          * If True, the user can delete the column by clicking on a little `x`
          * button on the column.
