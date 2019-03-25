@@ -9,9 +9,6 @@ const presets = [
                 'Explorer 11'
             ]
         },
-        useBuiltIns: 'usage'
-    }],
-    ['@babel/preset-env', {
         useBuiltIns: 'usage',
         corejs: 3,
     }],
