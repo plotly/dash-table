@@ -51,7 +51,7 @@ export default class FilterFactory {
         Logger.debug('Filter -- onChange', columnId, ev.target.value && ev.target.value.trim());
 
         const value = ev.target.value.trim();
-        const safeColumnId = `"${columnId}"`;
+        const safeColumnId = this.getSafeColumnId(columnId);
 
         if (value && value.length) {
             ops.set(safeColumnId, new SingleColumnSyntaxTree(safeColumnId, value));
@@ -89,9 +89,7 @@ export default class FilterFactory {
     }
 
     private getSafeColumnId(columnId: ColumnId) {
-        const id = columnId.toString();
-
-        return /^"[^"]+"$/.test(id) ? id : `"${id}"`;
+        return columnId.toString();
     }
 
     private updateOps = memoizeOne((query: string) => {
@@ -113,7 +111,7 @@ export default class FilterFactory {
                 this.ops.set(safeColumnId, new SingleColumnSyntaxTree(safeColumnId, s.value));
             } else if (s.lexeme.name === LexemeType.BinaryOperator && s.left && s.right) {
                 const safeColumnId = this.getSafeColumnId(s.left.value);
-                this.ops.set(safeColumnId, new SingleColumnSyntaxTree(safeColumnId, `${s.value} ${s.right.value}`));
+                this.ops.set(safeColumnId, new SingleColumnSyntaxTree(s.left.value, `${s.value} ${s.right.value}`));
             }
         }, statements);
     });
