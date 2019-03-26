@@ -18,9 +18,7 @@ class Tests(IntegrationTests):
 
         def visit_and_snapshot(href):
             self.driver.get(href)
-            WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located((By.ID, "waitfor"))
-            )
+
             time.sleep(2)
             self.snapshot(href)
             self.driver.back()
