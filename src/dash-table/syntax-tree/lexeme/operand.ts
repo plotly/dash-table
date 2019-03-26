@@ -1,17 +1,19 @@
 import { LexemeType, IUnboundedLexeme } from 'core/syntax-tree/lexicon';
 import { ISyntaxTree } from 'core/syntax-tree/syntaxer';
 
+const REGEX = /^{(([^{}\\]|\\{|\\}|\\)+)}/;
+
 const operand: IUnboundedLexeme = {
     resolve: (target: any, tree: ISyntaxTree) => {
-        if (/^(('([^'\\]|\\.)+')|("([^"\\]|\\.")+")|(`([^`\\]|\\.)+`))$/.test(tree.value)) {
+        if (REGEX.test(tree.value)) {
             return target[
-                tree.value.slice(1, tree.value.length - 1)
+                tree.value.slice(1, tree.value.length - 1).replace(/\\([{}])/g, '$1')
             ];
-        } else if (/^(\w|[:.\-+])+$/.test(tree.value)) {
-            return target[tree.value];
+        } else {
+            throw new Error();
         }
     },
-    regexp: /^(('([^'\\]|\\.)+')|("([^"\\]|\\.)+")|(`([^`\\]|\\.)+`)|(\w|[:.\-+])+)/,
+    regexp: REGEX,
     name: LexemeType.Operand
 };
 

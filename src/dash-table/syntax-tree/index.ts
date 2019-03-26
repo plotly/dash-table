@@ -33,12 +33,12 @@ function modifyLex(key: ColumnId, res: ILexerResult) {
 
     if (isBinary(res.lexemes) || isUnary(res.lexemes)) {
         res.lexemes = [
-            { lexeme: boundLexeme(operand), value: `${key}` },
+            { lexeme: boundLexeme(operand), value: `{${key}}` },
             ...res.lexemes
         ];
     } else if (isExpression(res.lexemes)) {
         res.lexemes = [
-            { lexeme: boundLexeme(operand), value: `${key}` },
+            { lexeme: boundLexeme(operand), value: `{${key}}` },
             { lexeme: boundLexeme(binaryOperator), value: 'eq' },
             ...res.lexemes
         ];

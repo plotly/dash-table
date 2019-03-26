@@ -150,7 +150,7 @@ function getTooltipsState() {
     state.tableProps.column_conditional_tooltips = [{
         if: {
             column_id: 'aaa-readonly',
-            filter: `aaa is prime`
+            filter: `{aaa} is prime`
         },
         type: TooltipSyntax.Markdown,
         value: `### Go Proverbs\nCapture three to get an eye`
