@@ -1,15 +1,27 @@
-import and from './and';
-import binaryOperator from './binaryOperator';
+import and from './logical/and';
+import or from './logical/or';
+import {
+    equal,
+    greaterOrEqual,
+    greaterThan,
+    lessOrEqual,
+    lessThan,
+    notEqual
+} from './relational';
 import { blockClose, blockOpen } from './block';
-import expression from './expression';
-import operand from './operand';
-import or from './or';
-import unaryNot from './unaryNot';
-import unaryOperator from './unaryOperator';
+import expression from './argument/expression';
+import operand from './argument/operand';
+import unaryNot from './unary/not';
+import unaryOperator from './unary';
 
 export {
     and,
-    binaryOperator,
+    equal,
+    greaterOrEqual,
+    greaterThan,
+    lessOrEqual,
+    lessThan,
+    notEqual,
     blockClose,
     blockOpen,
     expression,

@@ -4,7 +4,7 @@ import { LexemeType, boundLexeme } from 'core/syntax-tree/lexicon';
 
 import { ColumnId } from 'dash-table/components/Table/props';
 
-import { operand, binaryOperator } from './lexeme';
+import { operand, equal } from './lexeme';
 import columnLexicon from './lexicon/column';
 
 function isBinary(lexemes: ILexemeResult[]) {
@@ -34,7 +34,7 @@ export function modifyLex(key: ColumnId, res: ILexerResult) {
     } else if (isExpression(res.lexemes)) {
         res.lexemes = [
             { lexeme: boundLexeme(operand), value: `{${key}}` },
-            { lexeme: boundLexeme(binaryOperator), value: 'eq' },
+            { lexeme: boundLexeme(equal), value: 'eq' },
             ...res.lexemes
         ];
     }

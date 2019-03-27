@@ -5,7 +5,7 @@ export enum LexemeType {
     And = 'and',
     BlockClose = 'close-block',
     BlockOpen = 'open-block',
-    BinaryOperator = 'logical-binary-operator',
+    RelationalOperator = 'relational-operator',
     Expression = 'expression',
     Or = 'or',
     Operand = 'operand',

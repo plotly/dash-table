@@ -3,7 +3,12 @@ import * as R from 'ramda';
 import {
     and,
     operand,
-    binaryOperator,
+    equal,
+    greaterOrEqual,
+    greaterThan,
+    lessOrEqual,
+    lessThan,
+    notEqual,
     unaryOperator,
     expression
 } from '../lexeme';
@@ -32,15 +37,15 @@ const lexicon: ILexeme[] = [
             ),
         terminal: false
     },
-    {
-        ...binaryOperator,
+    ...[equal, greaterOrEqual, greaterThan, lessOrEqual, lessThan, notEqual].map(op => ({
+        ...op,
         if: (_: ILexemeResult[], previous: ILexemeResult) =>
             previous && R.contains(
                 previous.lexeme.name,
                 [LexemeType.Operand]
             ),
         terminal: false
-    },
+    })),
     {
         ...unaryOperator,
         if: (_: ILexemeResult[], previous: ILexemeResult) =>
@@ -55,7 +60,7 @@ const lexicon: ILexeme[] = [
         if: (_: ILexemeResult[], previous: ILexemeResult) =>
             previous && R.contains(
                 previous.lexeme.name,
-                [LexemeType.BinaryOperator]
+                [LexemeType.RelationalOperator]
             ),
         terminal: true
     }

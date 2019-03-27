@@ -2,7 +2,12 @@ import * as R from 'ramda';
 
 import {
     and,
-    binaryOperator,
+    equal,
+    greaterOrEqual,
+    greaterThan,
+    lessOrEqual,
+    lessThan,
+    notEqual,
     blockClose,
     blockOpen,
     expression,
@@ -24,7 +29,7 @@ const isTerminal = (lexemes: ILexemeResult[], previous: ILexemeResult) =>
 const ifExpression = (_: ILexemeResult[], previous: ILexemeResult) =>
     previous && R.contains(
         previous.lexeme.name,
-        [LexemeType.BinaryOperator]
+        [LexemeType.RelationalOperator]
     );
 
 const ifLogicalOperator = (_: ILexemeResult[], previous: ILexemeResult) =>
@@ -95,11 +100,11 @@ const lexicon: ILexeme[] = [
             ),
         terminal: false
     },
-    {
-        ...binaryOperator,
+    ...[equal, greaterOrEqual, greaterThan, lessOrEqual, lessThan, notEqual].map(op => ({
+        ...op,
         if: ifOperator,
         terminal: false
-    },
+    })),
     {
         ...unaryOperator,
         if: ifOperator,

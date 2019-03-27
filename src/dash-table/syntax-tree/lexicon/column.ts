@@ -1,7 +1,12 @@
 import * as R from 'ramda';
 
 import {
-    binaryOperator,
+    equal,
+    greaterOrEqual,
+    greaterThan,
+    lessOrEqual,
+    lessThan,
+    notEqual,
     expression,
     unaryOperator
 } from '../lexeme';
@@ -9,11 +14,11 @@ import { LexemeType, ILexeme } from 'core/syntax-tree/lexicon';
 import { ILexemeResult } from 'core/syntax-tree/lexer';
 
 const lexicon: ILexeme[] = [
-    {
-        ...binaryOperator,
+    ...[equal, greaterOrEqual, greaterThan, lessOrEqual, lessThan, notEqual].map(op => ({
+        ...op,
         terminal: false,
         if: (_lexs: ILexemeResult[], previous: ILexemeResult) => !previous
-    },
+    })),
     {
         ...unaryOperator,
         if: (_lexs: ILexemeResult[], previous: ILexemeResult) => !previous,
@@ -24,7 +29,7 @@ const lexicon: ILexeme[] = [
         if: (_lexs: ILexemeResult[], previous: ILexemeResult) =>
             !previous || R.contains(
                 previous.lexeme.name,
-                [LexemeType.BinaryOperator]
+                [LexemeType.RelationalOperator]
             ),
         terminal: true
     }
