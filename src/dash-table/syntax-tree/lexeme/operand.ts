@@ -14,7 +14,7 @@ const operand: IUnboundedLexeme = {
         }
     },
     regexp: REGEX,
-    name: LexemeType.Operand
+    type: LexemeType.Operand
 };
 
 export default operand;

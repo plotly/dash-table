@@ -28,10 +28,10 @@ export const getSingleColumnMap = (ast: MultiColumnsSyntaxTree) => {
     }
 
     R.forEach(s => {
-        if (s.lexeme.name === LexemeType.UnaryOperator && s.left) {
+        if (s.lexeme.type === LexemeType.UnaryOperator && s.left) {
             const sanitizedColumnId = s.left.value.replace(EXTRACT_COLUMN_REGEX, '');
             map.set(sanitizedColumnId, new SingleColumnSyntaxTree(sanitizedColumnId, s.value));
-        } else if (s.lexeme.name === LexemeType.RelationalOperator && s.left && s.right) {
+        } else if (s.lexeme.type === LexemeType.RelationalOperator && s.left && s.right) {
             const sanitizedColumnId = s.left.value.replace(EXTRACT_COLUMN_REGEX, '');
             map.set(sanitizedColumnId, new SingleColumnSyntaxTree(sanitizedColumnId, `${s.value} ${s.right.value}`));
         }

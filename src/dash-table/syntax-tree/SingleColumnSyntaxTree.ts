@@ -4,7 +4,9 @@ import { LexemeType, boundLexeme } from 'core/syntax-tree/lexicon';
 
 import { ColumnId } from 'dash-table/components/Table/props';
 
-import { operand, equal } from './lexeme';
+import operand from './lexeme/operand';
+import { equal } from './lexeme/relational';
+
 import columnLexicon from './lexicon/column';
 
 function isBinary(lexemes: ILexemeResult[]) {
@@ -13,12 +15,12 @@ function isBinary(lexemes: ILexemeResult[]) {
 
 function isExpression(lexemes: ILexemeResult[]) {
     return lexemes.length === 1 &&
-        lexemes[0].lexeme.name === LexemeType.Expression;
+        lexemes[0].lexeme.type === LexemeType.Expression;
 }
 
 function isUnary(lexemes: ILexemeResult[]) {
     return lexemes.length === 1 &&
-        lexemes[0].lexeme.name === LexemeType.UnaryOperator;
+        lexemes[0].lexeme.type === LexemeType.UnaryOperator;
 }
 
 export function modifyLex(key: ColumnId, res: ILexerResult) {

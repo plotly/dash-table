@@ -9,7 +9,7 @@ const unaryNot: IUnboundedLexeme = {
 
         return !t.right.lexeme.evaluate(target, t.right);
     },
-    name: LexemeType.UnaryNot,
+    type: LexemeType.UnaryNot,
     priority: 1.5,
     regexp: /^!/,
     syntaxer: (lexs: any[]) => {

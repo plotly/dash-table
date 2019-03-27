@@ -25,7 +25,7 @@ const expression: IUnboundedLexeme = {
         }
     },
     regexp: /^(((num|str)\([^()]*\))|('([^'\\]|\\.)+')|("([^"\\]|\\.)+")|(`([^`\\]|\\.)+`)|(\w|[:.\-+])+)/,
-    name: LexemeType.Expression
+    type: LexemeType.Expression
 };
 
 export default expression;

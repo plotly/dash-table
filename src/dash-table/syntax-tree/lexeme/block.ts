@@ -2,9 +2,9 @@ import Logger from 'core/Logger';
 import { LexemeType, IUnboundedLexeme } from 'core/syntax-tree/lexicon';
 
 export const blockClose: IUnboundedLexeme = {
-    name: LexemeType.BlockClose,
     nesting: -1,
-    regexp: /^\)/
+    regexp: /^\)/,
+    type: LexemeType.BlockClose
 };
 
 export const blockOpen: IUnboundedLexeme = {
@@ -15,7 +15,7 @@ export const blockOpen: IUnboundedLexeme = {
 
         return t.block.lexeme.evaluate(target, t.block);
     },
-    name: LexemeType.BlockOpen,
+    type: LexemeType.BlockOpen,
     nesting: 1,
     priority: 1,
     regexp: /^\(/,

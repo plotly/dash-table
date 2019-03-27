@@ -30,9 +30,9 @@ function relationalEvaluator(
 }
 
 const LEXEME_BASE = {
-    name: LexemeType.RelationalOperator,
     priority: 0,
-    syntaxer: relationalSyntaxer
+    syntaxer: relationalSyntaxer,
+    type: LexemeType.RelationalOperator
 };
 
 export const equal: IUnboundedLexeme = R.merge({

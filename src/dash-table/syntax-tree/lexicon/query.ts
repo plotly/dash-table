@@ -1,10 +1,23 @@
 import * as R from 'ramda';
 
+import and from '../lexeme/and';
+import expression from '../lexeme/expression';
+import operand from '../lexeme/operand';
+import or from '../lexeme/or';
+import unaryNot from '../lexeme/not';
 import {
-    and,
+    blockClose,
+    blockOpen
+} from '../lexeme/block';
+import {
     equal,
     greaterOrEqual,
     greaterThan,
+    lessOrEqual,
+    lessThan,
+    notEqual
+} from '../lexeme/relational';
+import {
     isBool,
     isEven,
     isNil,
@@ -12,17 +25,9 @@ import {
     isObject,
     isOdd,
     isPrime,
-    isStr,
-    lessOrEqual,
-    lessThan,
-    notEqual,
-    blockClose,
-    blockOpen,
-    expression,
-    operand,
-    or,
-    unaryNot
-} from '../lexeme';
+    isStr
+} from '../lexeme/unary';
+
 import { ILexemeResult } from 'core/syntax-tree/lexer';
 import { LexemeType, ILexeme } from 'core/syntax-tree/lexicon';
 
@@ -35,13 +40,13 @@ const isTerminal = (lexemes: ILexemeResult[], previous: ILexemeResult) =>
 
 const ifExpression = (_: ILexemeResult[], previous: ILexemeResult) =>
     previous && R.contains(
-        previous.lexeme.name,
+        previous.lexeme.type,
         [LexemeType.RelationalOperator]
     );
 
 const ifLogicalOperator = (_: ILexemeResult[], previous: ILexemeResult) =>
     previous && R.contains(
-        previous.lexeme.name,
+        previous.lexeme.type,
         [
             LexemeType.BlockClose,
             LexemeType.Expression,
@@ -51,7 +56,7 @@ const ifLogicalOperator = (_: ILexemeResult[], previous: ILexemeResult) =>
 
 const ifOperator = (_: ILexemeResult[], previous: ILexemeResult) =>
     previous && R.contains(
-        previous.lexeme.name,
+        previous.lexeme.type,
         [LexemeType.Operand]
     );
 
@@ -70,7 +75,7 @@ const lexicon: ILexeme[] = [
         ...blockClose,
         if: (lexemes: ILexemeResult[], previous: ILexemeResult) =>
             previous && R.contains(
-                previous.lexeme.name,
+                previous.lexeme.type,
                 [
                     LexemeType.BlockClose,
                     LexemeType.BlockOpen,
@@ -84,7 +89,7 @@ const lexicon: ILexeme[] = [
         ...blockOpen,
         if: (_: ILexemeResult[], previous: ILexemeResult) =>
             !previous || R.contains(
-                previous.lexeme.name,
+                previous.lexeme.type,
                 [
                     LexemeType.And,
                     LexemeType.BlockOpen,
@@ -98,7 +103,7 @@ const lexicon: ILexeme[] = [
         ...operand,
         if: (_: ILexemeResult[], previous: ILexemeResult) =>
             !previous || R.contains(
-                previous.lexeme.name,
+                previous.lexeme.type,
                 [
                     LexemeType.And,
                     LexemeType.BlockOpen,
@@ -135,7 +140,7 @@ const lexicon: ILexeme[] = [
         ...unaryNot,
         if: (_: ILexemeResult[], previous: ILexemeResult) =>
             !previous || R.contains(
-                previous.lexeme.name,
+                previous.lexeme.type,
                 [
                     LexemeType.And,
                     LexemeType.Or,

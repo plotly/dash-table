@@ -36,9 +36,9 @@ function relationalEvaluator(
 }
 
 const LEXEME_BASE = {
-    name: LexemeType.UnaryOperator,
     priority: 0,
-    syntaxer: relationalSyntaxer
+    syntaxer: relationalSyntaxer,
+    type: LexemeType.UnaryOperator
 };
 
 export const isBool: IUnboundedLexeme = R.merge({

@@ -16,7 +16,7 @@ export enum LexemeType {
 export interface IUnboundedLexeme {
     evaluate?: (target: any, tree: ISyntaxTree) => boolean;
     resolve?: (target: any, tree: ISyntaxTree) => any;
-    name: string;
+    type: string;
     nesting?: number;
     priority?: number;
     regexp: RegExp;

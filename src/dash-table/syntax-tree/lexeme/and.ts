@@ -10,7 +10,7 @@ const and: IUnboundedLexeme = {
         const rv = t.right.lexeme.evaluate(target, t.right);
         return lv && rv;
     },
-    name: LexemeType.And,
+    type: LexemeType.And,
     priority: 2,
     regexp: /^(and\s|&&)/i,
     syntaxer: (lexs: any[], pivot: any, pivotIndex: number) => {

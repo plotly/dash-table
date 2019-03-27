@@ -1,9 +1,15 @@
 import * as R from 'ramda';
 
+import expression from '../lexeme/expression';
 import {
     equal,
     greaterOrEqual,
     greaterThan,
+    lessOrEqual,
+    lessThan,
+    notEqual
+} from '../lexeme/relational';
+import {
     isBool,
     isEven,
     isNil,
@@ -11,12 +17,9 @@ import {
     isObject,
     isOdd,
     isPrime,
-    isStr,
-    lessOrEqual,
-    lessThan,
-    notEqual,
-    expression
-} from '../lexeme';
+    isStr
+} from '../lexeme/unary';
+
 import { LexemeType, ILexeme } from 'core/syntax-tree/lexicon';
 import { ILexemeResult } from 'core/syntax-tree/lexer';
 
@@ -49,7 +52,7 @@ const lexicon: ILexeme[] = [
         ...expression,
         if: (_lexs: ILexemeResult[], previous: ILexemeResult) =>
             !previous || R.contains(
-                previous.lexeme.name,
+                previous.lexeme.type,
                 [LexemeType.RelationalOperator]
             ),
         terminal: true

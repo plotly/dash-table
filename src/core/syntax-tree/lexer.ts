@@ -25,7 +25,7 @@ export default function lexer(lexicon: Lexicon, query: string): ILexerResult {
             (!Array.isArray(lexeme.if) ?
                 lexeme.if(result, previous) :
                 (previousLexeme ?
-                    lexeme.if && lexeme.if.indexOf(previousLexeme.name) !== -1 :
+                    lexeme.if && lexeme.if.indexOf(previousLexeme.type) !== -1 :
                     lexeme.if && lexeme.if.indexOf(undefined) !== -1))
         );
 

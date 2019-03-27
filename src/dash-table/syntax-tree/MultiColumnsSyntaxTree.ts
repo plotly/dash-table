@@ -39,7 +39,7 @@ export default class MultiColumnsSyntaxTree extends SyntaxTree {
         return statements;
     }
     private respectsBasicSyntax() {
-        const fields = R.map(item => item.value, R.filter(i => i.lexeme.name === LexemeType.Operand, this.lexerResult.lexemes));
+        const fields = R.map(item => item.value, R.filter(i => i.lexeme.type === LexemeType.Operand, this.lexerResult.lexemes));
         const uniqueFields = R.uniq(fields);
         return fields.length === uniqueFields.length;
     }
