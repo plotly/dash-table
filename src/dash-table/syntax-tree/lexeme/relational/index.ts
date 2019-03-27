@@ -1,6 +1,13 @@
 import Logger from 'core/Logger';
-import { LexemeType, IUnboundedLexeme } from 'core/syntax-tree/lexicon';
+import { LexemeType } from 'core/syntax-tree/lexicon';
 import { ISyntaxTree } from 'core/syntax-tree/syntaxer';
+
+import equal from './equal';
+import greaterOrEqual from './greaterOrEqual';
+import greaterThan from './greaterThan';
+import lessOrEqual from './lessOrEqual';
+import lessThan from './lessThan';
+import notEqual from './notEqual';
 
 function evaluator(
     target: any,
@@ -17,51 +24,21 @@ function evaluator(
     return [opValue, expValue];
 }
 
-function relationalEvaluator(
+function relationalSyntaxer([left, lexeme, right]: any[]) {
+    return Object.assign({ left, right }, lexeme);
+}
+
+export function relationalEvaluator(
     fn: ([opValue, expValue]: any[]) => boolean
 ) {
     return (target: any, tree: ISyntaxTree) => fn(evaluator(target, tree));
 }
 
-function relationalSyntaxer([left, lexeme, right]: any[]) {
-    return Object.assign({ left, right }, lexeme);
-}
-
-const LEXEME_BASE = {
+export const LEXEME_BASE = {
     name: LexemeType.RelationalOperator,
     priority: 0,
     regexp: /^(=|eq)/i,
     syntaxer: relationalSyntaxer
-};
-
-const equal: IUnboundedLexeme = {
-    evaluate: relationalEvaluator(([op, exp]) => op === exp),
-    ...LEXEME_BASE
-};
-
-const greaterOrEqual: IUnboundedLexeme = {
-    evaluate: relationalEvaluator(([op, exp]) => op >= exp),
-    ...LEXEME_BASE
-};
-
-const greaterThan: IUnboundedLexeme = {
-    evaluate: relationalEvaluator(([op, exp]) => op > exp),
-    ...LEXEME_BASE
-};
-
-const lessOrEqual: IUnboundedLexeme = {
-    evaluate: relationalEvaluator(([op, exp]) => op <= exp),
-    ...LEXEME_BASE
-};
-
-const lessThan: IUnboundedLexeme = {
-    evaluate: relationalEvaluator(([op, exp]) => op < exp),
-    ...LEXEME_BASE
-};
-
-const notEqual: IUnboundedLexeme = {
-    evaluate: relationalEvaluator(([op, exp]) => op !== exp),
-    ...LEXEME_BASE
 };
 
 export { equal, greaterOrEqual, greaterThan, lessOrEqual, lessThan, notEqual };
