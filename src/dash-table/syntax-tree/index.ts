@@ -6,6 +6,8 @@ import MultiColumnsSyntaxTree from './MultiColumnsSyntaxTree';
 import QuerySyntaxTree from './QuerySyntaxTree';
 import SingleColumnSyntaxTree from './SingleColumnSyntaxTree';
 
+const EXTRACT_COLUMN_REGEX = /^{|}$/g;
+
 export const getMultiColumnQueryString = (
     asts: SingleColumnSyntaxTree[]
 ) => R.map(
@@ -26,10 +28,12 @@ export const getSingleColumnMap = (ast: MultiColumnsSyntaxTree) => {
     }
 
     R.forEach(s => {
-        if (s.lexeme.name === LexemeType.UnaryOperator && s.block) {
-            map.set(s.block.value, new SingleColumnSyntaxTree(s.block.value, s.value));
+        if (s.lexeme.name === LexemeType.UnaryOperator && s.left) {
+            const sanitizedColumnId = s.left.value.replace(EXTRACT_COLUMN_REGEX, '');
+            map.set(sanitizedColumnId, new SingleColumnSyntaxTree(sanitizedColumnId, s.value));
         } else if (s.lexeme.name === LexemeType.RelationalOperator && s.left && s.right) {
-            map.set(s.left.value, new SingleColumnSyntaxTree(s.left.value, `${s.value} ${s.right.value}`));
+            const sanitizedColumnId = s.left.value.replace(EXTRACT_COLUMN_REGEX, '');
+            map.set(sanitizedColumnId, new SingleColumnSyntaxTree(sanitizedColumnId, `${s.value} ${s.right.value}`));
         }
     }, statements);
 

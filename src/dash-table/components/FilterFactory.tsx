@@ -47,19 +47,19 @@ export default class FilterFactory {
 
     }
 
-    private onChange = (columnId: ColumnId, ops: Map<ColumnId, SingleColumnSyntaxTree>, setFilter: SetFilter, ev: any) => {
+    private onChange = (columnId: ColumnId, setFilter: SetFilter, ev: any) => {
         Logger.debug('Filter -- onChange', columnId, ev.target.value && ev.target.value.trim());
 
         const value = ev.target.value.trim();
         const safeColumnId = columnId.toString();
 
         if (value && value.length) {
-            ops.set(safeColumnId, new SingleColumnSyntaxTree(safeColumnId, value));
+            this.ops.set(safeColumnId, new SingleColumnSyntaxTree(safeColumnId, value));
         } else {
-            ops.delete(safeColumnId);
+            this.ops.delete(safeColumnId);
         }
 
-        const asts = Array.from(ops.values());
+        const asts = Array.from(this.ops.values());
         const globalFilter = getMultiColumnQueryString(asts);
 
         const rawGlobalFilter = R.map(
@@ -70,13 +70,13 @@ export default class FilterFactory {
         setFilter(globalFilter, rawGlobalFilter);
     }
 
-    private getEventHandler = (fn: Function, columnId: ColumnId, ops: Map<ColumnId, SingleColumnSyntaxTree>, setFilter: SetFilter): any => {
+    private getEventHandler = (fn: Function, columnId: ColumnId, setFilter: SetFilter): any => {
         const fnHandler = (this.handlers.get(fn) || this.handlers.set(fn, new Map()).get(fn));
         const columnIdHandler = (fnHandler.get(columnId) || fnHandler.set(columnId, new Map()).get(columnId));
 
         return (
             columnIdHandler.get(setFilter) ||
-            (columnIdHandler.set(setFilter, fn.bind(this, columnId, ops, setFilter)).get(setFilter))
+            (columnIdHandler.set(setFilter, fn.bind(this, columnId, setFilter)).get(setFilter))
         );
     }
 
@@ -128,7 +128,7 @@ export default class FilterFactory {
                     classes={`dash-filter column-${index}`}
                     columnId={column.id}
                     isValid={!ast || ast.isValid}
-                    setFilter={this.getEventHandler(this.onChange, column.id, this.ops, setFilter)}
+                    setFilter={this.getEventHandler(this.onChange, column.id, setFilter)}
                     value={ast && ast.query}
                 />);
             }, columns);
