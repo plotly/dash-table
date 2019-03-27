@@ -37,30 +37,36 @@ const LEXEME_BASE = {
 
 export const equal: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(([op, exp]) => op === exp),
+    present: '=',
     regexp: /^(=|eq)/i
 }, LEXEME_BASE);
 
 export const greaterOrEqual: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(([op, exp]) => op >= exp),
+    present: '>=',
     regexp: /^(>=|ge)/i
 }, LEXEME_BASE);
 
 export const greaterThan: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(([op, exp]) => op > exp),
+    present: '>',
     regexp: /^(>|gt)/i
 }, LEXEME_BASE);
 
 export const lessOrEqual: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(([op, exp]) => op <= exp),
+    present: '<=',
     regexp: /^(<=|le)/i
 }, LEXEME_BASE);
 
 export const lessThan: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(([op, exp]) => op < exp),
+    present: '<',
     regexp: /^(<|lt)/i
 }, LEXEME_BASE);
 
 export const notEqual: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(([op, exp]) => op !== exp),
+    present: '!=',
     regexp: /^(!=|ne)/i
 }, LEXEME_BASE);

@@ -91,10 +91,9 @@ const lexicon: ILexeme[] = [
             !previous || R.contains(
                 previous.lexeme.type,
                 [
-                    LexemeType.And,
                     LexemeType.BlockOpen,
-                    LexemeType.Or,
-                    LexemeType.UnaryNot
+                    LexemeType.LogicalOperator,
+                    LexemeType.UnaryOperator
                 ]
             ),
         terminal: false
@@ -105,9 +104,8 @@ const lexicon: ILexeme[] = [
             !previous || R.contains(
                 previous.lexeme.type,
                 [
-                    LexemeType.And,
                     LexemeType.BlockOpen,
-                    LexemeType.Or
+                    LexemeType.LogicalOperator
                 ]
             ),
         terminal: false
@@ -142,9 +140,8 @@ const lexicon: ILexeme[] = [
             !previous || R.contains(
                 previous.lexeme.type,
                 [
-                    LexemeType.And,
-                    LexemeType.Or,
-                    LexemeType.UnaryNot
+                    LexemeType.LogicalOperator,
+                    LexemeType.UnaryOperator
                 ]
             ),
         terminal: false

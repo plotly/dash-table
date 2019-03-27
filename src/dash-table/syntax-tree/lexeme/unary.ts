@@ -36,6 +36,7 @@ function relationalEvaluator(
 }
 
 const LEXEME_BASE = {
+    present: (tree: ISyntaxTree) => tree.value,
     priority: 0,
     syntaxer: relationalSyntaxer,
     type: LexemeType.UnaryOperator

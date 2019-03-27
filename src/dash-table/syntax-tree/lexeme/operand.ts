@@ -3,12 +3,17 @@ import { ISyntaxTree } from 'core/syntax-tree/syntaxer';
 
 const REGEX = /^{(([^{}\\]|\\{|\\}|\\)+)}/;
 
+const getValue = (
+    value: string
+) => value
+    .slice(1, value.length - 1)
+    .replace(/\\([{}])/g, '$1');
+
 const operand: IUnboundedLexeme = {
+    present: (tree: ISyntaxTree) => getValue(tree.value),
     resolve: (target: any, tree: ISyntaxTree) => {
         if (REGEX.test(tree.value)) {
-            return target[
-                tree.value.slice(1, tree.value.length - 1).replace(/\\([{}])/g, '$1')
-            ];
+            return target[getValue(tree.value)];
         } else {
             throw new Error();
         }

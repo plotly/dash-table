@@ -2,19 +2,18 @@ import { ILexemeResult } from './lexer';
 import { ISyntaxTree } from './syntaxer';
 
 export enum LexemeType {
-    And = 'and',
     BlockClose = 'close-block',
     BlockOpen = 'open-block',
+    LogicalOperator = 'logical-operator',
     RelationalOperator = 'relational-operator',
+    UnaryOperator = 'unary-operator',
     Expression = 'expression',
-    Or = 'or',
-    Operand = 'operand',
-    UnaryNot = 'unary-not',
-    UnaryOperator = 'logical-unary-operator'
+    Operand = 'operand'
 }
 
 export interface IUnboundedLexeme {
     evaluate?: (target: any, tree: ISyntaxTree) => boolean;
+    present?: string | ((tree: ISyntaxTree) => string);
     resolve?: (target: any, tree: ISyntaxTree) => any;
     type: string;
     nesting?: number;

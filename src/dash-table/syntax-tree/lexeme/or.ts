@@ -10,7 +10,8 @@ const or: IUnboundedLexeme = {
         return t.left.lexeme.evaluate(target, t.left) ||
             t.right.lexeme.evaluate(target, t.right);
     },
-    type: LexemeType.Or,
+    type: LexemeType.LogicalOperator,
+    present: '||',
     priority: 3,
     regexp: /^(or\s|\|\|)/i,
     syntaxer: (lexs: any[], pivot: any, pivotIndex: number) => {

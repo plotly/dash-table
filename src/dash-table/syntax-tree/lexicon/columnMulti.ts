@@ -43,7 +43,7 @@ const lexicon: ILexeme[] = [
         if: (_: ILexemeResult[], previous: ILexemeResult) =>
             !previous || R.contains(
                 previous.lexeme.type,
-                [LexemeType.And]
+                [LexemeType.LogicalOperator]
             ),
         terminal: false
     },

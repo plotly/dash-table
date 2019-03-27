@@ -2,6 +2,7 @@ import { LexemeType, IUnboundedLexeme } from 'core/syntax-tree/lexicon';
 import { ISyntaxTree } from 'core/syntax-tree/syntaxer';
 
 const expression: IUnboundedLexeme = {
+    present: (tree: ISyntaxTree) => tree.value,
     resolve: (target: any, tree: ISyntaxTree) => {
         if (/^(('([^'\\]|\\.)+')|("([^"\\]|\\.)+")|(`([^`\\]|\\.)+`))$/.test(tree.value)) {
             return tree.value.slice(1, tree.value.length - 1);

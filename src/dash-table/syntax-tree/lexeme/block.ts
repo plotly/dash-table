@@ -17,6 +17,7 @@ export const blockOpen: IUnboundedLexeme = {
     },
     type: LexemeType.BlockOpen,
     nesting: 1,
+    present: '()',
     priority: 1,
     regexp: /^\(/,
     syntaxer: (lexs: any[]) => {
