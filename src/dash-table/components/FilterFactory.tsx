@@ -3,7 +3,7 @@ import React from 'react';
 
 import Logger from 'core/Logger';
 import { arrayMap } from 'core/math/arrayZipMap';
-import { LexemeType } from 'core/syntax-tree/lexicon';
+import { memoizeOne } from 'core/memoizer';
 
 import ColumnFilter from 'dash-table/components/Filter/Column';
 import { ColumnId, Filtering, FilteringType, IVisibleColumn, VisibleColumns, RowSelection } from 'dash-table/components/Table/props';
@@ -11,8 +11,7 @@ import derivedFilterStyles from 'dash-table/derived/filter/wrapperStyles';
 import derivedHeaderOperations from 'dash-table/derived/header/operations';
 import { derivedRelevantFilterStyles } from 'dash-table/derived/style';
 import { BasicFilters, Cells, Style } from 'dash-table/derived/style/props';
-import { MultiColumnsSyntaxTree, SingleColumnSyntaxTree } from 'dash-table/syntax-tree';
-import { memoizeOne } from 'core/memoizer';
+import { MultiColumnsSyntaxTree, SingleColumnSyntaxTree, getMultiColumnQueryString, getSingleColumnMap } from 'dash-table/syntax-tree';
 
 type SetFilter = (filter: string, rawFilter: string) => void;
 
@@ -34,10 +33,11 @@ export interface IFilterOptions {
 
 export default class FilterFactory {
     private readonly handlers = new Map();
-    private readonly ops = new Map<string, SingleColumnSyntaxTree>();
     private readonly filterStyles = derivedFilterStyles();
     private readonly relevantStyles = derivedRelevantFilterStyles();
     private readonly headerOperations = derivedHeaderOperations();
+
+    private ops = new Map<string, SingleColumnSyntaxTree>();
 
     private get props() {
         return this.propsFn();
@@ -51,7 +51,7 @@ export default class FilterFactory {
         Logger.debug('Filter -- onChange', columnId, ev.target.value && ev.target.value.trim());
 
         const value = ev.target.value.trim();
-        const safeColumnId = this.getSafeColumnId(columnId);
+        const safeColumnId = columnId.toString();
 
         if (value && value.length) {
             ops.set(safeColumnId, new SingleColumnSyntaxTree(safeColumnId, value));
@@ -59,20 +59,12 @@ export default class FilterFactory {
             ops.delete(safeColumnId);
         }
 
-        const globalFilter = R.map(
-            ast => (ast && ast.toQueryString()) || '',
-            R.filter(
-                ast => ast && ast.isValid,
-                Array.from(ops.values())
-            )
-        ).join(' && ');
+        const asts = Array.from(ops.values());
+        const globalFilter = getMultiColumnQueryString(asts);
 
         const rawGlobalFilter = R.map(
             ast => ast.query || '',
-            R.filter(
-                ast => Boolean(ast),
-                Array.from(ops.values())
-            )
+            R.filter(ast => Boolean(ast), asts)
         ).join(' && ');
 
         setFilter(globalFilter, rawGlobalFilter);
@@ -88,32 +80,10 @@ export default class FilterFactory {
         );
     }
 
-    private getSafeColumnId(columnId: ColumnId) {
-        return columnId.toString();
-    }
-
     private updateOps = memoizeOne((query: string) => {
         const ast = new MultiColumnsSyntaxTree(query);
 
-        if (!ast.isValid) {
-            return;
-        }
-
-        const statements = ast.statements;
-        if (!statements) {
-            this.ops.clear();
-            return;
-        }
-
-        R.forEach(s => {
-            if (s.lexeme.name === LexemeType.UnaryOperator && s.block) {
-                const safeColumnId = this.getSafeColumnId(s.block.value);
-                this.ops.set(safeColumnId, new SingleColumnSyntaxTree(safeColumnId, s.value));
-            } else if (s.lexeme.name === LexemeType.BinaryOperator && s.left && s.right) {
-                const safeColumnId = this.getSafeColumnId(s.left.value);
-                this.ops.set(safeColumnId, new SingleColumnSyntaxTree(s.left.value, `${s.value} ${s.right.value}`));
-            }
-        }, statements);
+        this.ops = getSingleColumnMap(ast) || this.ops;
     });
 
     public createFilters() {
@@ -151,8 +121,7 @@ export default class FilterFactory {
             );
 
             const filters = R.addIndex<IVisibleColumn, JSX.Element>(R.map)((column, index) => {
-                const safeColumnId = this.getSafeColumnId(column.id.toString());
-                const ast = this.ops.get(safeColumnId);
+                const ast = this.ops.get(column.id.toString());
 
                 return (<ColumnFilter
                     key={`column-${index}`}
