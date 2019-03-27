@@ -1,13 +1,8 @@
-import Logger from 'core/Logger';
-import { LexemeType } from 'core/syntax-tree/lexicon';
-import { ISyntaxTree } from 'core/syntax-tree/syntaxer';
+import * as R from 'ramda';
 
-import equal from './equal';
-import greaterOrEqual from './greaterOrEqual';
-import greaterThan from './greaterThan';
-import lessOrEqual from './lessOrEqual';
-import lessThan from './lessThan';
-import notEqual from './notEqual';
+import Logger from 'core/Logger';
+import { LexemeType, IUnboundedLexeme } from 'core/syntax-tree/lexicon';
+import { ISyntaxTree } from 'core/syntax-tree/syntaxer';
 
 function evaluator(
     target: any,
@@ -28,17 +23,44 @@ function relationalSyntaxer([left, lexeme, right]: any[]) {
     return Object.assign({ left, right }, lexeme);
 }
 
-export function relationalEvaluator(
+function relationalEvaluator(
     fn: ([opValue, expValue]: any[]) => boolean
 ) {
     return (target: any, tree: ISyntaxTree) => fn(evaluator(target, tree));
 }
 
-export const LEXEME_BASE = {
+const LEXEME_BASE = {
     name: LexemeType.RelationalOperator,
     priority: 0,
-    regexp: /^(=|eq)/i,
     syntaxer: relationalSyntaxer
 };
 
-export { equal, greaterOrEqual, greaterThan, lessOrEqual, lessThan, notEqual };
+export const equal: IUnboundedLexeme = R.merge({
+    evaluate: relationalEvaluator(([op, exp]) => op === exp),
+    regexp: /^(=|eq)/i
+}, LEXEME_BASE);
+
+export const greaterOrEqual: IUnboundedLexeme = R.merge({
+    evaluate: relationalEvaluator(([op, exp]) => op >= exp),
+    regexp: /^(>=|ge)/i
+}, LEXEME_BASE);
+
+export const greaterThan: IUnboundedLexeme = R.merge({
+    evaluate: relationalEvaluator(([op, exp]) => op > exp),
+    regexp: /^(>|gt)/i
+}, LEXEME_BASE);
+
+export const lessOrEqual: IUnboundedLexeme = R.merge({
+    evaluate: relationalEvaluator(([op, exp]) => op <= exp),
+    regexp: /^(<=|le)/i
+}, LEXEME_BASE);
+
+export const lessThan: IUnboundedLexeme = R.merge({
+    evaluate: relationalEvaluator(([op, exp]) => op < exp),
+    regexp: /^(<|lt)/i
+}, LEXEME_BASE);
+
+export const notEqual: IUnboundedLexeme = R.merge({
+    evaluate: relationalEvaluator(([op, exp]) => op !== exp),
+    regexp: /^(!=|ne)/i
+}, LEXEME_BASE);
