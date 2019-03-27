@@ -1,49 +1,82 @@
+import * as R from 'ramda';
+
 import Logger from 'core/Logger';
 import { LexemeType, IUnboundedLexeme } from 'core/syntax-tree/lexicon';
+import { ISyntaxTree } from 'core/syntax-tree/syntaxer';
 
-const isPrime = (c: number) => {
+const checkPrimality = (c: number) => {
     if (c === 2) { return true; }
     if (c < 2 || c % 2 === 0) { return false; }
     for (let n = 3; n * n <= c; n += 2) { if (c % n === 0) { return false; } }
     return true;
 };
 
-const unaryOperator: IUnboundedLexeme = {
-    evaluate: (target, tree) => {
-        Logger.trace('evaluate -> unary', target, tree);
+function evaluator(
+    target: any,
+    tree: ISyntaxTree
+): any {
+    Logger.trace('evaluate -> unary', target, tree);
 
-        const t = tree as any;
-        const opValue = t.left.lexeme.resolve(target, t.left);
+    Logger.trace('evaluate -> unary', target, tree);
 
-        switch (tree.value.toLowerCase()) {
-            case 'is even':
-                return typeof opValue === 'number' && opValue % 2 === 0;
-            case 'is nil':
-                return opValue === undefined || opValue === null;
-            case 'is bool':
-                return typeof opValue === 'boolean';
-            case 'is odd':
-                return typeof opValue === 'number' && opValue % 2 === 1;
-            case 'is num':
-                return typeof opValue === 'number';
-            case 'is object':
-                return opValue !== null && typeof opValue === 'object';
-            case 'is str':
-                return typeof opValue === 'string';
-            case 'is prime':
-                return typeof opValue === 'number' && isPrime(opValue);
-            default:
-                throw new Error();
-        }
-    },
+    const t = tree as any;
+    const opValue = t.left.lexeme.resolve(target, t.left);
+
+    return opValue;
+}
+
+function relationalSyntaxer([left, lexeme]: any[]) {
+    return Object.assign({ left }, lexeme);
+}
+
+function relationalEvaluator(
+    fn: (opValue: any[]) => boolean
+) {
+    return (target: any, tree: ISyntaxTree) => fn(evaluator(target, tree));
+}
+
+const LEXEME_BASE = {
     name: LexemeType.UnaryOperator,
     priority: 0,
-    regexp: /^((is nil)|(is odd)|(is even)|(is bool)|(is num)|(is object)|(is str)|(is prime))/i,
-    syntaxer: (lexs: any[]) => {
-        let [left, lexeme] = lexs;
-
-        return Object.assign({ left }, lexeme);
-    }
+    syntaxer: relationalSyntaxer
 };
 
-export default unaryOperator;
+export const isBool: IUnboundedLexeme = R.merge({
+    evaluate: relationalEvaluator(opValue => typeof opValue === 'boolean'),
+    regexp: /^(is bool)/i
+}, LEXEME_BASE);
+
+export const isEven: IUnboundedLexeme = R.merge({
+    evaluate: relationalEvaluator(opValue => typeof opValue === 'number' && opValue % 2 === 0),
+    regexp: /^(is even)/i
+}, LEXEME_BASE);
+
+export const isNil: IUnboundedLexeme = R.merge({
+    evaluate: relationalEvaluator(opValue => opValue === undefined || opValue === null),
+    regexp: /^(is nil)/i
+}, LEXEME_BASE);
+
+export const isNum: IUnboundedLexeme = R.merge({
+    evaluate: relationalEvaluator(opValue => typeof opValue === 'number'),
+    regexp: /^(is num)/i
+}, LEXEME_BASE);
+
+export const isObject: IUnboundedLexeme = R.merge({
+    evaluate: relationalEvaluator(opValue => opValue !== null && typeof opValue === 'object'),
+    regexp: /^(is object)/i
+}, LEXEME_BASE);
+
+export const isOdd: IUnboundedLexeme = R.merge({
+    evaluate: relationalEvaluator(opValue => typeof opValue === 'number' && opValue % 2 === 1),
+    regexp: /^(is odd)/i
+}, LEXEME_BASE);
+
+export const isPrime: IUnboundedLexeme = R.merge({
+    evaluate: relationalEvaluator(opValue => typeof opValue === 'number' && checkPrimality(opValue)),
+    regexp: /^(is prime)/i
+}, LEXEME_BASE);
+
+export const isStr: IUnboundedLexeme = R.merge({
+    evaluate: relationalEvaluator(opValue => typeof opValue === 'string'),
+    regexp: /^(is str)/i
+}, LEXEME_BASE);

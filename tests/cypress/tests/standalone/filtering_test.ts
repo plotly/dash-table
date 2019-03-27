@@ -40,7 +40,7 @@ describe('filter', () => {
         DashTable.toggleScroll(false);
     });
 
-    it.only('handles invalid queries', () => {
+    it('handles invalid queries', () => {
         let cell_0;
         let cell_1;
 

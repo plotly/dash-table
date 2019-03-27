@@ -6,10 +6,17 @@ import {
     equal,
     greaterOrEqual,
     greaterThan,
+    isBool,
+    isEven,
+    isNil,
+    isNum,
+    isObject,
+    isOdd,
+    isPrime,
+    isStr,
     lessOrEqual,
     lessThan,
     notEqual,
-    unaryOperator,
     expression
 } from '../lexeme';
 import { ILexeme, LexemeType } from 'core/syntax-tree/lexicon';
@@ -37,7 +44,13 @@ const lexicon: ILexeme[] = [
             ),
         terminal: false
     },
-    ...[equal, greaterOrEqual, greaterThan, lessOrEqual, lessThan, notEqual].map(op => ({
+    ...[equal,
+        greaterOrEqual,
+        greaterThan,
+        lessOrEqual,
+        lessThan,
+        notEqual
+    ].map(op => ({
         ...op,
         if: (_: ILexemeResult[], previous: ILexemeResult) =>
             previous && R.contains(
@@ -46,15 +59,23 @@ const lexicon: ILexeme[] = [
             ),
         terminal: false
     })),
-    {
-        ...unaryOperator,
+    ...[isBool,
+        isEven,
+        isNil,
+        isNum,
+        isObject,
+        isOdd,
+        isPrime,
+        isStr
+    ].map(op => ({
+        ...op,
         if: (_: ILexemeResult[], previous: ILexemeResult) =>
             previous && R.contains(
                 previous.lexeme.name,
                 [LexemeType.Operand]
             ),
         terminal: true
-    },
+    })),
     {
         ...expression,
         if: (_: ILexemeResult[], previous: ILexemeResult) =>
