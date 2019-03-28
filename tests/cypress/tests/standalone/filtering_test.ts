@@ -11,26 +11,33 @@ describe(`filter special characters`, () => {
     });
 
     it('can filter on special column id', () => {
+        DashTable.getFilterById('b+bb').click();
+        DOM.focused.type(`Wet${Key.Enter}`);
+
         DashTable.getFilterById('c cc').click();
-        DOM.focused.type(`gt num(90)${Key.Enter}`);
+        DOM.focused.type(`gt 90${Key.Enter}`);
 
         DashTable.getFilterById('d:dd').click();
-        DOM.focused.type(`lt num(12500)${Key.Enter}`);
+        DOM.focused.type(`lt 12500${Key.Enter}`);
 
         DashTable.getFilterById('e-ee').click();
         DOM.focused.type(`is prime${Key.Enter}`);
 
         DashTable.getFilterById('f_ff').click();
-        DOM.focused.type(`le num(106)${Key.Enter}`);
+        DOM.focused.type(`le 106${Key.Enter}`);
 
         DashTable.getFilterById('g.gg').click();
-        DOM.focused.type(`gt num(1000)${Key.Enter}`);
-
+        DOM.focused.type(`gt 1000${Key.Enter}`);
         DashTable.getFilterById('b+bb').click();
-        DOM.focused.type(`eq "Wet"${Key.Enter}`);
 
         DashTable.getCellById(0, 'rows').within(() => cy.get('.dash-cell-value').should('have.html', '101'));
         DashTable.getCellById(1, 'rows').should('not.exist');
+        DashTable.getFilterById('b+bb').within(() => cy.get('input').should('have.value', 'Wet'));
+        DashTable.getFilterById('c cc').within(() => cy.get('input').should('have.value', 'gt 90'));
+        DashTable.getFilterById('d:dd').within(() => cy.get('input').should('have.value', 'lt 12500'));
+        DashTable.getFilterById('e-ee').within(() => cy.get('input').should('have.value', 'is prime'));
+        DashTable.getFilterById('f_ff').within(() => cy.get('input').should('have.value', 'le 106'));
+        DashTable.getFilterById('g.gg').within(() => cy.get('input').should('have.value', 'gt 1000'));
     });
 });
 
@@ -55,19 +62,19 @@ describe('filter', () => {
         DashTable.getFilterById('ccc').click();
         DOM.focused.type(`gt`);
         DashTable.getFilterById('ddd').click();
-        DOM.focused.type('numpy(20000)');
+        DOM.focused.type('20 a000');
         DashTable.getFilterById('eee').click();
         DOM.focused.type('is prime2');
         DashTable.getFilterById('bbb').click();
-        DOM.focused.type('!');
+        DOM.focused.type('! !');
         DashTable.getFilterById('ccc').click();
 
         DashTable.getCellById(0, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', cell_0));
         DashTable.getCellById(1, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', cell_1));
 
-        DashTable.getFilterById('bbb').within(() => cy.get('input').should('have.value', '!'));
+        DashTable.getFilterById('bbb').within(() => cy.get('input').should('have.value', '! !'));
         DashTable.getFilterById('ccc').within(() => cy.get('input').should('have.value', 'gt'));
-        DashTable.getFilterById('ddd').within(() => cy.get('input').should('have.value', 'numpy(20000)'));
+        DashTable.getFilterById('ddd').within(() => cy.get('input').should('have.value', '20 a000'));
         DashTable.getFilterById('eee').within(() => cy.get('input').should('have.value', 'is prime2'));
 
         DashTable.getFilterById('bbb').should('have.class', 'invalid');
@@ -90,17 +97,22 @@ describe('filter', () => {
                 .then($el => cell_1 = $el[0].innerHTML));
 
         DashTable.getFilterById('ccc').click();
-        DOM.focused.type(`gt num(100)`);
+        DOM.focused.type(`gt 100`);
         DashTable.getFilterById('ddd').click();
-        DOM.focused.type('lt num(20000)');
+        DOM.focused.type('lt 20000');
         DashTable.getFilterById('eee').click();
         DOM.focused.type('is prime');
         DashTable.getFilterById('bbb').click();
-        DOM.focused.type(`eq "Wet"`);
+        DOM.focused.type(`Wet`);
         DashTable.getFilterById('ccc').click();
 
         DashTable.getCellById(0, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', '101'));
         DashTable.getCellById(1, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', '109'));
+
+        DashTable.getFilterById('bbb').within(() => cy.get('input').should('have.value', 'Wet'));
+        DashTable.getFilterById('ccc').within(() => cy.get('input').should('have.value', 'gt 100'));
+        DashTable.getFilterById('ddd').within(() => cy.get('input').should('have.value', 'lt 20000'));
+        DashTable.getFilterById('eee').within(() => cy.get('input').should('have.value', 'is prime'));
 
         cy.get('.clear-filters').click();
 

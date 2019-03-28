@@ -5,6 +5,7 @@ import { LexemeType } from 'core/syntax-tree/lexicon';
 import MultiColumnsSyntaxTree from './MultiColumnsSyntaxTree';
 import QuerySyntaxTree from './QuerySyntaxTree';
 import SingleColumnSyntaxTree from './SingleColumnSyntaxTree';
+import { RelationalOperator } from './lexeme/relational';
 
 export const getMultiColumnQueryString = (
     asts: SingleColumnSyntaxTree[]
@@ -31,7 +32,12 @@ export const getSingleColumnMap = (ast: MultiColumnsSyntaxTree) => {
             map.set(sanitizedColumnId, new SingleColumnSyntaxTree(sanitizedColumnId, s.value));
         } else if (s.lexeme.type === LexemeType.RelationalOperator && s.left && s.right) {
             const sanitizedColumnId = s.left.lexeme.present ? s.left.lexeme.present(s.left) : s.left.value;
-            map.set(sanitizedColumnId, new SingleColumnSyntaxTree(sanitizedColumnId, `${s.value} ${s.right.value}`));
+
+            if (s.lexeme.present && s.lexeme.present(s) === RelationalOperator.Equal) {
+                map.set(sanitizedColumnId, new SingleColumnSyntaxTree(sanitizedColumnId, `${s.right.value}`));
+            } else {
+                map.set(sanitizedColumnId, new SingleColumnSyntaxTree(sanitizedColumnId, `${s.value} ${s.right.value}`));
+            }
         }
     }, statements);
 

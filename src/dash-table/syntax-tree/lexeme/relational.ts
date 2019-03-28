@@ -29,7 +29,7 @@ function relationalEvaluator(
     return (target: any, tree: ISyntaxTree) => fn(evaluator(target, tree));
 }
 
-enum RelationalOperator {
+export enum RelationalOperator {
     Equal = '=',
     GreaterOrEqual = '>=',
     GreatherThan = '>',

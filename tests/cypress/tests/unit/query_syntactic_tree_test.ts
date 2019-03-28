@@ -8,15 +8,15 @@ describe('Query Syntax Tree', () => {
 
     describe('operands', () => {
         it('does not support badly formed operands', () => {
-            expect(new QuerySyntaxTree(`{myField} eq num(0)`).isValid).to.equal(true);
-            expect(new QuerySyntaxTree(`{'myField'} eq num(0)`).isValid).to.equal(true);
-            expect(new QuerySyntaxTree(`{"myField"} eq num(0)`).isValid).to.equal(true);
-            expect(new QuerySyntaxTree('{`myField`} eq num(0)').isValid).to.equal(true);
-            expect(new QuerySyntaxTree('{\\{myField\\}} eq num(0)').isValid).to.equal(true);
-            expect(new QuerySyntaxTree('{{myField}} eq num(0)').isValid).to.equal(false);
-            expect(new QuerySyntaxTree(`{myField eq num(0)`).isValid).to.equal(false);
-            expect(new QuerySyntaxTree(`myField} eq num(0)`).isValid).to.equal(false);
-            expect(new QuerySyntaxTree(`myField eq num(0)`).isValid).to.equal(false);
+            expect(new QuerySyntaxTree(`{myField} eq 0`).isValid).to.equal(true);
+            expect(new QuerySyntaxTree(`{'myField'} eq 0`).isValid).to.equal(true);
+            expect(new QuerySyntaxTree(`{"myField"} eq 0`).isValid).to.equal(true);
+            expect(new QuerySyntaxTree('{`myField`} eq 0').isValid).to.equal(true);
+            expect(new QuerySyntaxTree('{\\{myField\\}} eq 0').isValid).to.equal(true);
+            expect(new QuerySyntaxTree('{{myField}} eq 0').isValid).to.equal(false);
+            expect(new QuerySyntaxTree(`{myField eq 0`).isValid).to.equal(false);
+            expect(new QuerySyntaxTree(`myField} eq 0`).isValid).to.equal(false);
+            expect(new QuerySyntaxTree(`myField eq 0`).isValid).to.equal(false);
         });
 
         it('does not support badly formed expression', () => {
@@ -25,10 +25,8 @@ describe('Query Syntax Tree', () => {
             expect(new QuerySyntaxTree('{myField} eq `value`').isValid).to.equal(true);
             expect(new QuerySyntaxTree(`{myField} eq 'value\\'`).isValid).to.equal(false);
             expect(new QuerySyntaxTree(`{myField} eq "value\\"`).isValid).to.equal(false);
-            expect(new QuerySyntaxTree('{myField} eq `value\\`').isValid).to.equal(false);
             expect(new QuerySyntaxTree(`{myField} eq \\'value'`).isValid).to.equal(false);
             expect(new QuerySyntaxTree(`{myField} eq \\"value"`).isValid).to.equal(false);
-            expect(new QuerySyntaxTree('{myField} eq \\`value`').isValid).to.equal(false);
         });
 
         it('support arbitrary quoted column name', () => {
@@ -112,7 +110,7 @@ describe('Query Syntax Tree', () => {
         });
 
         it('support column name with "\\"', () => {
-            const tree = new QuerySyntaxTree('{\\\\{} eq num(1) || {\\\\{} eq num(2)');
+            const tree = new QuerySyntaxTree('{\\\\{} eq 1 || {\\\\{} eq 2');
 
             expect(tree.isValid).to.equal(true);
             expect(tree.evaluate(data0)).to.equal(false);
@@ -122,7 +120,7 @@ describe('Query Syntax Tree', () => {
         });
 
         it('support nesting in quotes', () => {
-            const tree = new QuerySyntaxTree(`{'""'} eq \`1'"dot\` || {'""'} eq \`2'"dot\``);
+            const tree = new QuerySyntaxTree(`{'""'} eq '1\\'"dot' || {'""'} eq '2\\'"dot'`);
 
             expect(tree.isValid).to.equal(true);
             expect(tree.evaluate(data0)).to.equal(false);
@@ -196,7 +194,7 @@ describe('Query Syntax Tree', () => {
 
     describe('data types', () => {
         it('can compare numbers', () => {
-            const tree = new QuerySyntaxTree('{c} eq num(1)');
+            const tree = new QuerySyntaxTree('{c} eq 1');
 
             expect(tree.isValid).to.equal(true);
             expect(tree.evaluate(data0)).to.equal(false);
@@ -206,7 +204,7 @@ describe('Query Syntax Tree', () => {
         });
 
         it('can compare floats', () => {
-            const tree = new QuerySyntaxTree('{field} ge num(1.5)');
+            const tree = new QuerySyntaxTree('{field} ge 1.5');
 
             expect(tree.isValid).to.equal(true);
             expect(tree.evaluate({ field: -1.501 })).to.equal(false);
@@ -218,7 +216,7 @@ describe('Query Syntax Tree', () => {
         });
 
         it('can compare string to number and return false', () => {
-            const tree = new QuerySyntaxTree('{a} eq num(1)');
+            const tree = new QuerySyntaxTree('{a} eq 1');
 
             expect(tree.isValid).to.equal(true);
             expect(tree.evaluate(data0)).to.equal(false);
@@ -228,7 +226,7 @@ describe('Query Syntax Tree', () => {
         });
 
         it('can compare strings', () => {
-            const tree = new QuerySyntaxTree('{a} eq str(1)');
+            const tree = new QuerySyntaxTree('{a} eq "1"');
 
             expect(tree.isValid).to.equal(true);
             expect(tree.evaluate(data0)).to.equal(false);
@@ -238,7 +236,7 @@ describe('Query Syntax Tree', () => {
         });
 
         it('can compare string to number and return false', () => {
-            const tree = new QuerySyntaxTree('{c} eq str(1)');
+            const tree = new QuerySyntaxTree('{c} eq "1"');
 
             expect(tree.isValid).to.equal(true);
             expect(tree.evaluate(data0)).to.equal(false);
