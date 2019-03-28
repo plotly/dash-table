@@ -279,7 +279,10 @@ function getBaseTableProps(mock) {
     columns: mock.columns.map(function (col, index) {
       return ramda__WEBPACK_IMPORTED_MODULE_3__["merge"](col, {
         name: col.name || col.id,
-        border_color: index === 1 ? 'cyan' : 'grey',
+        borders: index === 2 ? {
+          visible: true,
+          color: 'hotpink'
+        } : undefined,
         on_change: {
           action: dash_table_components_Table_props__WEBPACK_IMPORTED_MODULE_6__["ChangeAction"].None
         },
@@ -303,31 +306,55 @@ function getBaseTableProps(mock) {
       max_width: '1000px',
       width: '1000px'
     },
+    style_data: {
+      border: "1px solid grey"
+    },
     style_data_conditional: [{
       max_width: 150,
       min_width: 150,
       width: 150
     }, {
       if: {
+        row_index: 2,
+        column_id: 'ddd'
+      },
+      border: '2px solid red'
+    }, {
+      if: {
+        row_index: 3,
+        column_id: 'ddd'
+      },
+      border: '2px solid green'
+    }, {
+      if: {
+        row_index: 5,
+        column_id: 'ddd'
+      },
+      border: '2px solid gold'
+    }, {
+      if: {
         column_id: 'rows'
       },
       max_width: 60,
       min_width: 60,
-      width: 60
+      width: 60,
+      border: '1px solid black'
     }, {
       if: {
         column_id: 'bbb'
       },
       max_width: 200,
       min_width: 200,
-      width: 200
+      width: 200,
+      border: '1px solid cyan'
     }, {
       if: {
         column_id: 'bbb-readonly'
       },
       max_width: 200,
       min_width: 200,
-      width: 200
+      width: 200,
+      border: '1px solid magenta'
     }]
   };
 }
@@ -39367,15 +39394,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return CellFactory; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var dash_table_derived_cell_wrappers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! dash-table/derived/cell/wrappers */ "./src/dash-table/derived/cell/wrappers.tsx");
-/* harmony import */ var dash_table_derived_cell_contents__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! dash-table/derived/cell/contents */ "./src/dash-table/derived/cell/contents.tsx");
-/* harmony import */ var dash_table_derived_cell_operations__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! dash-table/derived/cell/operations */ "./src/dash-table/derived/cell/operations.tsx");
-/* harmony import */ var dash_table_derived_cell_wrapperStyles__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! dash-table/derived/cell/wrapperStyles */ "./src/dash-table/derived/cell/wrapperStyles.ts");
-/* harmony import */ var dash_table_derived_cell_dropdowns__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! dash-table/derived/cell/dropdowns */ "./src/dash-table/derived/cell/dropdowns.ts");
-/* harmony import */ var dash_table_derived_style__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! dash-table/derived/style */ "./src/dash-table/derived/style/index.ts");
-/* harmony import */ var dash_table_derived_edges_vertical__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! dash-table/derived/edges/vertical */ "./src/dash-table/derived/edges/vertical.ts");
-/* harmony import */ var core_math_matrixZipMap__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core/math/matrixZipMap */ "./src/core/math/matrixZipMap.ts");
-/* harmony import */ var core_math_arrayZipMap__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core/math/arrayZipMap */ "./src/core/math/arrayZipMap.ts");
+/* harmony import */ var ramda__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ramda */ "./node_modules/ramda/es/index.js");
+/* harmony import */ var dash_table_derived_cell_wrappers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! dash-table/derived/cell/wrappers */ "./src/dash-table/derived/cell/wrappers.tsx");
+/* harmony import */ var dash_table_derived_cell_contents__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! dash-table/derived/cell/contents */ "./src/dash-table/derived/cell/contents.tsx");
+/* harmony import */ var dash_table_derived_cell_operations__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! dash-table/derived/cell/operations */ "./src/dash-table/derived/cell/operations.tsx");
+/* harmony import */ var dash_table_derived_cell_wrapperStyles__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! dash-table/derived/cell/wrapperStyles */ "./src/dash-table/derived/cell/wrapperStyles.ts");
+/* harmony import */ var dash_table_derived_cell_dropdowns__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! dash-table/derived/cell/dropdowns */ "./src/dash-table/derived/cell/dropdowns.ts");
+/* harmony import */ var dash_table_derived_style__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! dash-table/derived/style */ "./src/dash-table/derived/style/index.ts");
+/* harmony import */ var dash_table_derived_edges_vertical__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! dash-table/derived/edges/vertical */ "./src/dash-table/derived/edges/vertical.ts");
+/* harmony import */ var core_math_matrixZipMap__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core/math/matrixZipMap */ "./src/core/math/matrixZipMap.ts");
+/* harmony import */ var core_math_arrayZipMap__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core/math/arrayZipMap */ "./src/core/math/arrayZipMap.ts");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -39393,17 +39421,19 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 
 
+
 var CellFactory =
 /*#__PURE__*/
 function () {
   function CellFactory(propsFn) {
-    var cellContents = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : Object(dash_table_derived_cell_contents__WEBPACK_IMPORTED_MODULE_2__["default"])(propsFn);
-    var cellDropdowns = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : Object(dash_table_derived_cell_dropdowns__WEBPACK_IMPORTED_MODULE_5__["default"])();
-    var cellOperations = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : Object(dash_table_derived_cell_operations__WEBPACK_IMPORTED_MODULE_3__["default"])();
-    var cellStyles = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : Object(dash_table_derived_cell_wrapperStyles__WEBPACK_IMPORTED_MODULE_4__["default"])();
-    var cellWrappers = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : Object(dash_table_derived_cell_wrappers__WEBPACK_IMPORTED_MODULE_1__["default"])(propsFn);
-    var relevantStyles = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : Object(dash_table_derived_style__WEBPACK_IMPORTED_MODULE_6__["derivedRelevantCellStyles"])();
-    var verticalEdges = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : Object(dash_table_derived_edges_vertical__WEBPACK_IMPORTED_MODULE_7__["derivedVerticalEdges"])();
+    var cellContents = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : Object(dash_table_derived_cell_contents__WEBPACK_IMPORTED_MODULE_3__["default"])(propsFn);
+    var cellDropdowns = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : Object(dash_table_derived_cell_dropdowns__WEBPACK_IMPORTED_MODULE_6__["default"])();
+    var cellOperations = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : Object(dash_table_derived_cell_operations__WEBPACK_IMPORTED_MODULE_4__["default"])();
+    var cellStyles = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : Object(dash_table_derived_cell_wrapperStyles__WEBPACK_IMPORTED_MODULE_5__["default"])();
+    var cellWrappers = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : Object(dash_table_derived_cell_wrappers__WEBPACK_IMPORTED_MODULE_2__["default"])(propsFn);
+    var relevantStyles = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : Object(dash_table_derived_style__WEBPACK_IMPORTED_MODULE_7__["derivedRelevantCellStyles"])();
+    var verticalEdges = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : Object(dash_table_derived_edges_vertical__WEBPACK_IMPORTED_MODULE_8__["derivedVerticalEdges"])();
+    var horizontalEdges = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : Object(dash_table_derived_edges_vertical__WEBPACK_IMPORTED_MODULE_8__["derivedHorizontalEdges"])();
 
     _classCallCheck(this, CellFactory);
 
@@ -39415,6 +39445,7 @@ function () {
     this.cellWrappers = cellWrappers;
     this.relevantStyles = relevantStyles;
     this.verticalEdges = verticalEdges;
+    this.horizontalEdges = horizontalEdges;
   }
 
   _createClass(CellFactory, [{
@@ -39439,22 +39470,24 @@ function () {
           style_data = _this$props.style_data,
           style_data_conditional = _this$props.style_data_conditional,
           virtualized = _this$props.virtualized;
-      var vertical_edges_matrix = this.verticalEdges(columns, virtualized.data); // const horizontal_edges_matrix = [[]]
-
       var operations = this.cellOperations(active_cell, data, virtualized.data, virtualized.indices, row_selectable, row_deletable, selected_rows, setProps);
       var relevantStyles = this.relevantStyles(style_cell, style_data, style_cell_conditional, style_data_conditional);
-      var wrapperStyles = this.cellStyles(columns, relevantStyles, virtualized.data, virtualized.offset, vertical_edges_matrix // matrices here
-      );
+      var borderStyles = ramda__WEBPACK_IMPORTED_MODULE_1__["filter"](function (style) {
+        return ramda__WEBPACK_IMPORTED_MODULE_1__["has"]('border', style.style) || ramda__WEBPACK_IMPORTED_MODULE_1__["has"]('borderTop', style.style) || ramda__WEBPACK_IMPORTED_MODULE_1__["has"]('borderRight', style.style) || ramda__WEBPACK_IMPORTED_MODULE_1__["has"]('borderBottom', style.style) || ramda__WEBPACK_IMPORTED_MODULE_1__["has"]('borderLeft', style.style);
+      }, relevantStyles);
+      var vertical_edges_matrix = this.verticalEdges(columns, virtualized.data, borderStyles, virtualized.offset);
+      var horizontal_edges_matrix = this.horizontalEdges(columns, virtualized.data, borderStyles, virtualized.offset);
+      var wrapperStyles = this.cellStyles(columns, relevantStyles, virtualized.data, virtualized.offset, vertical_edges_matrix, horizontal_edges_matrix);
       var dropdowns = this.cellDropdowns(columns, virtualized.data, virtualized.indices, column_conditional_dropdowns, column_static_dropdown, dropdown_properties);
       var wrappers = this.cellWrappers(active_cell, columns, virtualized.data, virtualized.offset, selected_cells);
       var contents = this.cellContents(active_cell, columns, virtualized.data, virtualized.offset, editable, !!is_focused, dropdowns);
-      var cells = Object(core_math_matrixZipMap__WEBPACK_IMPORTED_MODULE_8__["matrixMap3"])(wrappers, wrapperStyles, contents, function (w, s, c) {
+      var cells = Object(core_math_matrixZipMap__WEBPACK_IMPORTED_MODULE_9__["matrixMap3"])(wrappers, wrapperStyles, contents, function (w, s, c) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.cloneElement(w, {
           children: [c],
           style: s
         });
       });
-      return Object(core_math_arrayZipMap__WEBPACK_IMPORTED_MODULE_9__["arrayMap"])(operations, cells, function (o, c) {
+      return Object(core_math_arrayZipMap__WEBPACK_IMPORTED_MODULE_10__["arrayMap"])(operations, cells, function (o, c) {
         return Array.prototype.concat(o, c);
       });
     }
@@ -42017,7 +42050,10 @@ var propTypes = {
      * for more information.
      */
     clearable: prop_types__WEBPACK_IMPORTED_MODULE_5___default.a.bool,
-    border_color: prop_types__WEBPACK_IMPORTED_MODULE_5___default.a.string,
+    borders: prop_types__WEBPACK_IMPORTED_MODULE_5___default.a.shape({
+      visible: prop_types__WEBPACK_IMPORTED_MODULE_5___default.a.bool,
+      color: prop_types__WEBPACK_IMPORTED_MODULE_5___default.a.string
+    }),
 
     /**
      * If True, the user can delete the column by clicking on a little `x`
@@ -43541,7 +43577,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function getter(columns, columnStyles, data, offset, vertical_edges) {
+function getter(columns, columnStyles, data, offset, vertical_edges, horizontal_edges) {
   return ramda__WEBPACK_IMPORTED_MODULE_0__["addIndex"](ramda__WEBPACK_IMPORTED_MODULE_0__["map"])(function (datum, index) {
     return ramda__WEBPACK_IMPORTED_MODULE_0__["addIndex"](ramda__WEBPACK_IMPORTED_MODULE_0__["map"])(function (column, colIndex) {
       // get associated verical edges
@@ -43550,18 +43586,16 @@ function getter(columns, columnStyles, data, offset, vertical_edges) {
       }, ramda__WEBPACK_IMPORTED_MODULE_0__["filter"](function (style) {
         return style.matchesColumn(column) && style.matchesRow(index + offset.rows) && style.matchesFilter(datum);
       }, columnStyles));
-      var edge = vertical_edges[index][colIndex];
+      var vertical_edge = vertical_edges[index][colIndex];
+      var next_vertical = vertical_edges[index][colIndex + 1];
+      var horizontal_edge = horizontal_edges[index][colIndex];
+      var next_horizontal = horizontal_edges[index + 1][colIndex];
       relevantStyles.push({
-        borderLeft: "1px solid ".concat(edge.color)
+        borderLeft: vertical_edge.border,
+        borderTop: horizontal_edge.border,
+        borderRight: next_vertical ? next_vertical.border : '',
+        borderBottom: next_horizontal.border
       });
-
-      if (vertical_edges.length < index + 1) {
-        var next_edge = vertical_edges[index + 1][colIndex];
-        relevantStyles.push({
-          borderRight: "1px solid ".concat(next_edge.color)
-        });
-      }
-
       return relevantStyles.length ? ramda__WEBPACK_IMPORTED_MODULE_0__["mergeAll"](relevantStyles) : undefined;
     }, columns);
   }, data);
@@ -43892,12 +43926,13 @@ var getter = function getter(virtualization, uiCell, uiHeaders, uiViewport, view
 /*!**************************************************!*\
   !*** ./src/dash-table/derived/edges/vertical.ts ***!
   \**************************************************/
-/*! exports provided: derivedVerticalEdges */
+/*! exports provided: derivedVerticalEdges, derivedHorizontalEdges */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "derivedVerticalEdges", function() { return derivedVerticalEdges; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "derivedHorizontalEdges", function() { return derivedHorizontalEdges; });
 /* harmony import */ var core_js_modules_es6_string_iterator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es6.string.iterator */ "./node_modules/core-js/modules/es6.string.iterator.js");
 /* harmony import */ var core_js_modules_es6_string_iterator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_string_iterator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var core_js_modules_es6_array_from__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es6.array.from */ "./node_modules/core-js/modules/es6.array.from.js");
@@ -43910,7 +43945,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es6_symbol__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_symbol__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var core_js_modules_web_dom_iterable__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/web.dom.iterable */ "./node_modules/core-js/modules/web.dom.iterable.js");
 /* harmony import */ var core_js_modules_web_dom_iterable__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_iterable__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var core_memoizer__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core/memoizer */ "./src/core/memoizer.ts");
+/* harmony import */ var ramda__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ramda */ "./node_modules/ramda/es/index.js");
+/* harmony import */ var core_memoizer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core/memoizer */ "./src/core/memoizer.ts");
 
 
 
@@ -43927,19 +43963,44 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
 
-var derivedVerticalEdges = Object(core_memoizer__WEBPACK_IMPORTED_MODULE_6__["memoizeOneFactory"])(function (columns, data) {
-  return data.map(function (_datum, _i) {
-    return _toConsumableArray(columns).concat([columns[columns.length]]).map(function (col, _j) {
-      var color = 'black';
 
-      if (col && col.border_color) {
-        color = col.border_color;
+var derivedVerticalEdges = Object(core_memoizer__WEBPACK_IMPORTED_MODULE_7__["memoizeOneFactory"])(function (columns, data, borderStyles, offset) {
+  return data.map(function (datum, i) {
+    return _toConsumableArray(columns).concat([columns[columns.length - 1]]).map(function (col, j, mappedColumns) {
+      var relevantStyle = ramda__WEBPACK_IMPORTED_MODULE_6__["filter"](function (style) {
+        return style.matchesColumn(col) && style.matchesRow(i + offset.rows) && style.matchesFilter(datum) || j > 0 && style.matchesColumn(mappedColumns[j - 1]) && style.matchesRow(i + offset.rows) && style.matchesFilter(data[i - 1]);
+      }, borderStyles);
+      var index = relevantStyle.length - 1;
+
+      if (relevantStyle[index].style && ramda__WEBPACK_IMPORTED_MODULE_6__["has"]('border', relevantStyle[index].style) || ramda__WEBPACK_IMPORTED_MODULE_6__["has"]('borderTop', relevantStyle[index].style) || ramda__WEBPACK_IMPORTED_MODULE_6__["has"]('borderRight', relevantStyle[index].style) || ramda__WEBPACK_IMPORTED_MODULE_6__["has"]('borderBottom', relevantStyle[index].style) || ramda__WEBPACK_IMPORTED_MODULE_6__["has"]('borderLeft', relevantStyle[index].style)) {
+        // TO-DO: different border styles such as top, left, etc
+        // R.pick()
+        var bs = relevantStyle[index].style;
+        return {
+          border: bs.border || bs.borderTop
+        };
       }
 
-      return {
-        visible: true,
-        color: color
-      };
+      return {};
+    });
+  });
+});
+var derivedHorizontalEdges = Object(core_memoizer__WEBPACK_IMPORTED_MODULE_7__["memoizeOneFactory"])(function (columns, data, borderStyles, offset) {
+  return _toConsumableArray(data).concat([data[data.length - 1]]).map(function (datum, i, mappedData) {
+    return columns.map(function (col) {
+      var relevantStyle = ramda__WEBPACK_IMPORTED_MODULE_6__["filter"](function (style) {
+        return style.matchesColumn(col) && style.matchesRow(i + offset.rows) && style.matchesFilter(datum) || i > 0 && style.matchesColumn(col) && style.matchesRow(i + offset.rows - 1) && style.matchesFilter(mappedData[i - 1]);
+      }, borderStyles);
+      var index = relevantStyle.length - 1;
+
+      if (relevantStyle[index].style && ramda__WEBPACK_IMPORTED_MODULE_6__["has"]('border', relevantStyle[index].style) || ramda__WEBPACK_IMPORTED_MODULE_6__["has"]('borderTop', relevantStyle[index].style) || ramda__WEBPACK_IMPORTED_MODULE_6__["has"]('borderRight', relevantStyle[index].style) || ramda__WEBPACK_IMPORTED_MODULE_6__["has"]('borderBottom', relevantStyle[index].style) || ramda__WEBPACK_IMPORTED_MODULE_6__["has"]('borderLeft', relevantStyle[index].style)) {
+        var bs = relevantStyle[index].style;
+        return {
+          border: bs.border || bs.borderTop
+        };
+      }
+
+      return {};
     });
   });
 });
