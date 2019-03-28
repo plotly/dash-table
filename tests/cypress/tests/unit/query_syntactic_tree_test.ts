@@ -1,10 +1,10 @@
 import { QuerySyntaxTree } from 'dash-table/syntax-tree';
 
 describe('Query Syntax Tree', () => {
-    const data0 = { a: '0', b: '0', c: 0, d: null, '\\\{': 0, 'a.dot': '0.dot', 'a-dot': '0-dot', a_dot: '0_dot', 'a+dot': '0+dot', 'a dot': '0 dot', 'a:dot': '0:dot', '_-6.:+** *@$': '0*dot', '{a:dot}': '0*dot*', '\'""\'': '0\'"dot' };
-    const data1 = { a: '1', b: '0', c: 1, d: 0, '\\\{': 1, 'a.dot': '1.dot', 'a-dot': '1-dot', a_dot: '1_dot', 'a+dot': '1+dot', 'a dot': '1 dot', 'a:dot': '1:dot', '_-6.:+** *@$': '1*dot', '{a:dot}': '1*dot*', '\'""\'': '1\'"dot' };
-    const data2 = { a: '2', b: '1', c: 2, d: '', '\\\{': 2, 'a.dot': '2.dot', 'a-dot': '2-dot', a_dot: '2_dot', 'a+dot': '2+dot', 'a dot': '2 dot', 'a:dot': '2:dot', '_-6.:+** *@$': '2*dot', '{a:dot}': '2*dot*', '\'""\'': '2\'"dot' };
-    const data3 = { a: '3', b: '1', c: 3, d: false, '\\\{': 3, 'a.dot': '3.dot', 'a-dot': '3-dot', a_dot: '3_dot', 'a+dot': '3+dot', 'a dot': '3 dot', 'a:dot': '3:dot', '_-6.:+** *@$': '3*dot', '{a:dot}': '3*dot*', '\'""\'': '3\'"dot' };
+    const data0 = { a: '0', b: '0', c: 0, d: null, '\\{': 0, 'a.dot': '0.dot', 'a-dot': '0-dot', a_dot: '0_dot', 'a+dot': '0+dot', 'a dot': '0 dot', 'a:dot': '0:dot', '_-6.:+** *@$': '0*dot', '{a:dot}': '0*dot*', '\'""\'': '0\'"dot' };
+    const data1 = { a: '1', b: '0', c: 1, d: 0, '\\{': 1, 'a.dot': '1.dot', 'a-dot': '1-dot', a_dot: '1_dot', 'a+dot': '1+dot', 'a dot': '1 dot', 'a:dot': '1:dot', '_-6.:+** *@$': '1*dot', '{a:dot}': '1*dot*', '\'""\'': '1\'"dot' };
+    const data2 = { a: '2', b: '1', c: 2, d: '', '\\{': 2, 'a.dot': '2.dot', 'a-dot': '2-dot', a_dot: '2_dot', 'a+dot': '2+dot', 'a dot': '2 dot', 'a:dot': '2:dot', '_-6.:+** *@$': '2*dot', '{a:dot}': '2*dot*', '\'""\'': '2\'"dot' };
+    const data3 = { a: '3', b: '1', c: 3, d: false, '\\{': 3, 'a.dot': '3.dot', 'a-dot': '3-dot', a_dot: '3_dot', 'a+dot': '3+dot', 'a dot': '3 dot', 'a:dot': '3:dot', '_-6.:+** *@$': '3*dot', '{a:dot}': '3*dot*', '\'""\'': '3\'"dot' };
 
     describe('operands', () => {
         it('does not support badly formed operands', () => {
@@ -23,8 +23,10 @@ describe('Query Syntax Tree', () => {
             expect(new QuerySyntaxTree(`{myField} eq 'value'`).isValid).to.equal(true);
             expect(new QuerySyntaxTree(`{myField} eq "value"`).isValid).to.equal(true);
             expect(new QuerySyntaxTree('{myField} eq `value`').isValid).to.equal(true);
-            expect(new QuerySyntaxTree(`{myField} eq 'value\\'`).isValid).to.equal(false);
-            expect(new QuerySyntaxTree(`{myField} eq "value\\"`).isValid).to.equal(false);
+            expect(new QuerySyntaxTree(`{myField} eq 'value\\'`).isValid).to.equal(true);
+            expect(new QuerySyntaxTree(`{myField} eq 'value\\''`).isValid).to.equal(true);
+            expect(new QuerySyntaxTree(`{myField} eq "value\\"`).isValid).to.equal(true);
+            expect(new QuerySyntaxTree('{myField} eq `value\\`').isValid).to.equal(true);
             expect(new QuerySyntaxTree(`{myField} eq \\'value'`).isValid).to.equal(false);
             expect(new QuerySyntaxTree(`{myField} eq \\"value"`).isValid).to.equal(false);
         });

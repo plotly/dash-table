@@ -18,7 +18,7 @@ export interface IUnboundedLexeme {
     type: string;
     nesting?: number;
     priority?: number;
-    regexp: RegExp;
+    regexp: RegExp | RegExp[];
     syntaxer?: (lexs: any[], pivot: any, pivotIndex: number) => any;
 }
 

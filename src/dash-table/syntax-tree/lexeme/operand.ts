@@ -1,24 +1,24 @@
 import { LexemeType, IUnboundedLexeme } from 'core/syntax-tree/lexicon';
 import { ISyntaxTree } from 'core/syntax-tree/syntaxer';
 
-const REGEX = /^{(([^{}\\]|\\{|\\}|\\)+)}/;
+export const FIELD_REGEX = /^{(([^{}\\]|\\{|\\}|\\)+)}/;
 
-const getValue = (
+const getField = (
     value: string
 ) => value
     .slice(1, value.length - 1)
     .replace(/\\([{}])/g, '$1');
 
 const operand: IUnboundedLexeme = {
-    present: (tree: ISyntaxTree) => getValue(tree.value),
+    present: (tree: ISyntaxTree) => getField(tree.value),
     resolve: (target: any, tree: ISyntaxTree) => {
-        if (REGEX.test(tree.value)) {
-            return target[getValue(tree.value)];
+        if (FIELD_REGEX.test(tree.value)) {
+            return target[getField(tree.value)];
         } else {
             throw new Error();
         }
     },
-    regexp: REGEX,
+    regexp: FIELD_REGEX,
     type: LexemeType.Operand
 };
 
