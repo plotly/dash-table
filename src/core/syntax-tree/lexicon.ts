@@ -13,7 +13,7 @@ export enum LexemeType {
 
 export interface IUnboundedLexeme {
     evaluate?: (target: any, tree: ISyntaxTree) => boolean;
-    present?: string | ((tree: ISyntaxTree) => string);
+    present?: (tree: ISyntaxTree) => string;
     resolve?: (target: any, tree: ISyntaxTree) => any;
     type: string;
     nesting?: number;

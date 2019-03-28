@@ -1,14 +1,15 @@
 import * as R from 'ramda';
 
-import and from '../lexeme/and';
 import expression from '../lexeme/expression';
 import operand from '../lexeme/operand';
-import or from '../lexeme/or';
-import unaryNot from '../lexeme/not';
 import {
     blockClose,
     blockOpen
 } from '../lexeme/block';
+import {
+    and,
+    or
+} from '../lexeme/logical';
 import {
     equal,
     greaterOrEqual,
@@ -25,7 +26,8 @@ import {
     isObject,
     isOdd,
     isPrime,
-    isStr
+    isStr,
+    not
 } from '../lexeme/unary';
 
 import { ILexemeResult } from 'core/syntax-tree/lexer';
@@ -135,7 +137,7 @@ const lexicon: ILexeme[] = [
         terminal: isTerminal
     })),
     {
-        ...unaryNot,
+        ...not,
         if: (_: ILexemeResult[], previous: ILexemeResult) =>
             !previous || R.contains(
                 previous.lexeme.type,

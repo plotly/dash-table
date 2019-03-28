@@ -6,8 +6,6 @@ import MultiColumnsSyntaxTree from './MultiColumnsSyntaxTree';
 import QuerySyntaxTree from './QuerySyntaxTree';
 import SingleColumnSyntaxTree from './SingleColumnSyntaxTree';
 
-const EXTRACT_COLUMN_REGEX = /^{|}$/g;
-
 export const getMultiColumnQueryString = (
     asts: SingleColumnSyntaxTree[]
 ) => R.map(
@@ -29,10 +27,10 @@ export const getSingleColumnMap = (ast: MultiColumnsSyntaxTree) => {
 
     R.forEach(s => {
         if (s.lexeme.type === LexemeType.UnaryOperator && s.left) {
-            const sanitizedColumnId = s.left.value.replace(EXTRACT_COLUMN_REGEX, '');
+            const sanitizedColumnId = s.left.lexeme.present ? s.left.lexeme.present(s.left) : s.left.value;
             map.set(sanitizedColumnId, new SingleColumnSyntaxTree(sanitizedColumnId, s.value));
         } else if (s.lexeme.type === LexemeType.RelationalOperator && s.left && s.right) {
-            const sanitizedColumnId = s.left.value.replace(EXTRACT_COLUMN_REGEX, '');
+            const sanitizedColumnId = s.left.lexeme.present ? s.left.lexeme.present(s.left) : s.left.value;
             map.set(sanitizedColumnId, new SingleColumnSyntaxTree(sanitizedColumnId, `${s.value} ${s.right.value}`));
         }
     }, statements);

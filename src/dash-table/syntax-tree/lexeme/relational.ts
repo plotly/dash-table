@@ -29,6 +29,15 @@ function relationalEvaluator(
     return (target: any, tree: ISyntaxTree) => fn(evaluator(target, tree));
 }
 
+enum RelationalOperator {
+    Equal = '=',
+    GreaterOrEqual = '>=',
+    GreatherThan = '>',
+    LessOrEqual = '<=',
+    LessThan = '<',
+    NotEqual = '!='
+}
+
 const LEXEME_BASE = {
     priority: 0,
     syntaxer: relationalSyntaxer,
@@ -37,36 +46,36 @@ const LEXEME_BASE = {
 
 export const equal: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(([op, exp]) => op === exp),
-    present: '=',
+    present: () => RelationalOperator.Equal,
     regexp: /^(=|eq)/i
 }, LEXEME_BASE);
 
 export const greaterOrEqual: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(([op, exp]) => op >= exp),
-    present: '>=',
+    present: () => RelationalOperator.GreaterOrEqual,
     regexp: /^(>=|ge)/i
 }, LEXEME_BASE);
 
 export const greaterThan: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(([op, exp]) => op > exp),
-    present: '>',
+    present: () => RelationalOperator.GreatherThan,
     regexp: /^(>|gt)/i
 }, LEXEME_BASE);
 
 export const lessOrEqual: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(([op, exp]) => op <= exp),
-    present: '<=',
+    present: () => RelationalOperator.LessOrEqual,
     regexp: /^(<=|le)/i
 }, LEXEME_BASE);
 
 export const lessThan: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(([op, exp]) => op < exp),
-    present: '<',
+    present: () => RelationalOperator.LessThan,
     regexp: /^(<|lt)/i
 }, LEXEME_BASE);
 
 export const notEqual: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(([op, exp]) => op !== exp),
-    present: '!=',
+    present: () => RelationalOperator.NotEqual,
     regexp: /^(!=|ne)/i
 }, LEXEME_BASE);

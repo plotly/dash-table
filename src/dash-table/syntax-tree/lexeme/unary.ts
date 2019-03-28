@@ -35,11 +35,34 @@ function relationalEvaluator(
     return (target: any, tree: ISyntaxTree) => fn(evaluator(target, tree));
 }
 
+enum UnaryOperator {
+    Not = '!'
+}
+
 const LEXEME_BASE = {
     present: (tree: ISyntaxTree) => tree.value,
     priority: 0,
     syntaxer: relationalSyntaxer,
     type: LexemeType.UnaryOperator
+};
+
+export const not: IUnboundedLexeme = {
+    evaluate: (target, tree) => {
+        Logger.trace('evaluate -> unary not', target, tree);
+
+        const t = tree as any;
+
+        return !t.right.lexeme.evaluate(target, t.right);
+    },
+    type: LexemeType.UnaryOperator,
+    present: () => UnaryOperator.Not,
+    priority: 1.5,
+    regexp: /^!/,
+    syntaxer: (lexs: any[]) => {
+        return Object.assign({
+            right: lexs.slice(1, lexs.length)
+        }, lexs[0]);
+    }
 };
 
 export const isBool: IUnboundedLexeme = R.merge({

@@ -1,8 +1,10 @@
 import * as R from 'ramda';
 
-import and from '../lexeme/and';
 import expression from '../lexeme/expression';
 import operand from '../lexeme/operand';
+import {
+    and
+} from '../lexeme/logical';
 import {
     equal,
     greaterOrEqual,
