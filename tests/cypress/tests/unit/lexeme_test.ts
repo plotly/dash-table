@@ -25,6 +25,8 @@ describe('expression', () => {
             expect(expression.resolve(undefined, { value: '`\\``' } as ISyntaxTree)).to.equal('`');
 
             expect(expression.resolve({ abc: 3 }, { value: '{abc}' } as ISyntaxTree)).to.equal(3);
+            expect(expression.resolve({ ['a bc']: 3 }, { value: '{a bc}' } as ISyntaxTree)).to.equal(3);
+            expect(expression.resolve({ ['{abc}']: 3 }, { value: '{\\{abc\\}}' } as ISyntaxTree)).to.equal(3);
             expect(expression.resolve({ ['"abc"']: 3 }, { value: '{"abc"}' } as ISyntaxTree)).to.equal(3);
 
             expect(expression.resolve.bind(undefined, undefined, { value: '"' } as ISyntaxTree)).to.throw(Error);
