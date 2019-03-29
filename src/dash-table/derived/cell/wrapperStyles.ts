@@ -45,21 +45,21 @@ function getter(
                         horizontal_edges[index + 1][colIndex];
 
                     relevantStyles.push({
-                        borderLeft: colIndex == 0 ? vertical_edge.border : '',
-                        borderTop: index == 0 ? horizontal_edge.border : '',
+                        borderLeft: colIndex === 0 ? vertical_edge.border : '',
+                        borderTop: index === 0 ? horizontal_edge.border : '',
                         borderRight:
                             next_vertical.border &&
-                            (next_vertical.position == 'border' ||
-                                next_vertical.position == 'left')
+                            (next_vertical.position === 'border' ||
+                                next_vertical.position === 'left')
                                 ? next_vertical.border
                                 : vertical_edge.border,
                         borderBottom:
                             next_horizontal.border &&
-                            (next_horizontal.position == 'border' ||
-                                next_horizontal.position == 'top')
+                            (
+                                next_horizontal.position === 'top')
                                 ? next_horizontal.border
                                 : horizontal_edge.border,
-                        // borderRight: (vertical_edge.position == 'border') ? vertical_edge.border : next_vertical.border,
+                        // borderRight: (vertical_edge.position === 'border') ? vertical_edge.border : next_vertical.border,
                         // borderBottom: (horizontal_edge.position == 'border') ? horizontal_edge.border : next_horizontal.border,
                     });
 
