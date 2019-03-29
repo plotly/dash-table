@@ -14,7 +14,7 @@ class App extends Component {
         super();
 
         this.state = AppState;
-        this.state.temp_filtering = ''
+        this.state.temp_filtering = '';
 
         const setProps = memoizeOne(() => {
             return newProps => {
