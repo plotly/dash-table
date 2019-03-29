@@ -16,33 +16,38 @@ export const derivedVerticalEdges = memoizeOneFactory(
     ): IVerticalEdge[][] => {
         return data.map((datum, i) => {
             return [...columns, columns[columns.length - 1]].map(
-                (col: IVisibleColumn, j, mappedColumns) => {
+                (col: IVisibleColumn, j) => {
                     const relevantStyle = R.filter(style => {
                         return (
                             (style.matchesColumn(col) &&
                                 style.matchesRow(i + offset.rows) &&
-                                style.matchesFilter(datum)) ||
-                            (j > 0 &&
-                                style.matchesColumn(mappedColumns[j - 1]) &&
-                                style.matchesRow(i + offset.rows) &&
-                                style.matchesFilter(data[i - 1]))
+                                style.matchesFilter(datum))
                         );
                     }, borderStyles) as any;
-                    const index = relevantStyle.length - 1;
-                    if (
-                        (relevantStyle[index].style &&
-                            R.has('border', relevantStyle[index].style)) ||
-                        R.has('borderTop', relevantStyle[index].style) ||
-                        R.has('borderRight', relevantStyle[index].style) ||
-                        R.has('borderBottom', relevantStyle[index].style) ||
-                        R.has('borderLeft', relevantStyle[index].style)
-                    ) {
-                        // TO-DO: different border styles such as top, left, etc
-                        // R.pick()
-                        const bs = relevantStyle[index].style;
-                        return {border: bs.border || bs.borderTop};
-                    }
-                    return {} as IVerticalEdge;
+
+                    let borderStyle: any = '1px solid grey';
+                    let position: string = '';
+
+                    R.forEach((s: any) => {
+                        if (s.style.borderLeft) console.log(i, j, s);
+                        if (s.style.border) {
+                            borderStyle = s.style.border;
+                            position = 'border';
+                        }
+                        if (s.style.borderLeft) {
+                            borderStyle = s.style.borderLeft;
+                            position = 'left';
+                        }
+                        if (s.style.borderRight) {
+                            borderStyle = s.style.borderRight;
+                            position = 'right';
+                        }
+                    }, relevantStyle);
+
+                    return {
+                        border: borderStyle,
+                        position: position,
+                    };
                 }
             );
         });
@@ -56,32 +61,38 @@ export const derivedHorizontalEdges = memoizeOneFactory(
         borderStyles: any[],
         offset: IViewportOffset
     ): IVerticalEdge[][] => {
-        return [...data, data[data.length - 1]].map((datum, i, mappedData) => {
+        return [...data, data[data.length - 1]].map((datum, i) => {
             return columns.map((col: IVisibleColumn) => {
                 const relevantStyle = R.filter(style => {
                     return (
                         (style.matchesColumn(col) &&
                             style.matchesRow(i + offset.rows) &&
-                            style.matchesFilter(datum)) ||
-                        (i > 0 &&
-                            style.matchesColumn(col) &&
-                            style.matchesRow(i + offset.rows - 1) &&
-                            style.matchesFilter(mappedData[i - 1]))
+                            style.matchesFilter(datum))
                     );
                 }, borderStyles) as any;
-                const index = relevantStyle.length - 1;
-                if (
-                    (relevantStyle[index].style &&
-                        R.has('border', relevantStyle[index].style)) ||
-                    R.has('borderTop', relevantStyle[index].style) ||
-                    R.has('borderRight', relevantStyle[index].style) ||
-                    R.has('borderBottom', relevantStyle[index].style) ||
-                    R.has('borderLeft', relevantStyle[index].style)
-                ) {
-                    const bs = relevantStyle[index].style;
-                    return {border: bs.border || bs.borderTop};
-                }
-                return {} as IVerticalEdge;
+
+                let borderStyle: any = '1px solid grey';
+                let position: string = '';
+
+                R.forEach((s: any) => {
+                    if (s.style.border) {
+                        borderStyle= s.style.border;
+                        position = 'border';
+                    }
+                    if (s.style.borderTop) {
+                        borderStyle= s.style.borderTop;
+                        position = 'top';
+                    }
+                    if (s.style.borderBottom) {
+                        borderStyle= s.style.borderBottom;
+                        position = 'bottom';
+                    }
+                }, relevantStyle);
+
+                return {
+                    border: borderStyle,
+                    position: position,
+                };
             });
         });
     }

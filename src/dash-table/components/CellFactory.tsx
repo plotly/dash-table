@@ -73,15 +73,37 @@ export default class CellFactory {
             style_data_conditional
         );
 
-        const borderStyles = R.filter(
-            style =>
-                R.has('border', style.style) ||
-                R.has('borderTop', style.style) ||
-                R.has('borderRight', style.style) ||
-                R.has('borderBottom', style.style) ||
-                R.has('borderLeft', style.style),
-            relevantStyles
-        );
+        const borderStyles = R.map(style => {
+            return {
+                ...style,
+                style: R.pick(
+                    [
+                        'border',
+                        'borderTop',
+                        'borderRight',
+                        'borderBottom',
+                        'borderLeft',
+                    ],
+                    style.style
+                ),
+            };
+        }, relevantStyles);
+
+        const relevantStylesWithoutBorders = R.map(style => {
+            return {
+                ...style,
+                style: R.omit(
+                    [
+                        'border',
+                        'borderTop',
+                        'borderRight',
+                        'borderBottom',
+                        'borderLeft',
+                    ],
+                    style.style
+                ),
+            };
+        }, relevantStyles);
 
         const vertical_edges_matrix = this.verticalEdges(
             columns,
@@ -98,7 +120,7 @@ export default class CellFactory {
 
         const wrapperStyles = this.cellStyles(
             columns,
-            relevantStyles,
+            relevantStylesWithoutBorders,
             virtualized.data,
             virtualized.offset,
             vertical_edges_matrix,
