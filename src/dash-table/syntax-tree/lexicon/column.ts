@@ -1,6 +1,10 @@
 import * as R from 'ramda';
 
-import expression from '../lexeme/expression';
+import {
+    fieldExpression,
+    stringExpression,
+    valueExpression
+} from '../lexeme/expression';
 import {
     equal,
     greaterOrEqual,
@@ -48,15 +52,19 @@ const lexicon: ILexeme[] = [
         if: (_lexs: ILexemeResult[], previous: ILexemeResult) => !previous,
         terminal: true
     })),
-    {
-        ...expression,
+    ...[
+        fieldExpression,
+        stringExpression,
+        valueExpression
+    ].map(exp => ({
+        ...exp,
         if: (_lexs: ILexemeResult[], previous: ILexemeResult) =>
             !previous || R.contains(
                 previous.lexeme.type,
                 [LexemeType.RelationalOperator]
             ),
         terminal: true
-    }
+    }))
 ];
 
 export default lexicon;

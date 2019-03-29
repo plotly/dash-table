@@ -983,6 +983,11 @@ export const propTypes = {
     virtualization: PropTypes.bool,
 
     /**
+     * TBD.
+     */
+    derived_filtering: PropTypes.object,
+
+    /**
      * This property represents the current state of `data`
      * on the current page. This property will be updated
      * on paging, sorting, and filtering.

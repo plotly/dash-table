@@ -3,7 +3,7 @@ import { ISyntaxTree } from 'core/syntax-tree/syntaxer';
 
 export const FIELD_REGEX = /^{(([^{}\\]|\\{|\\}|\\)+)}/;
 
-const getField = (
+export const getField = (
     value: string
 ) => value
     .slice(1, value.length - 1)

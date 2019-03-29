@@ -2,28 +2,58 @@ import isNumeric from 'fast-isnumeric';
 
 import { LexemeType, IUnboundedLexeme } from 'core/syntax-tree/lexicon';
 import { ISyntaxTree } from 'core/syntax-tree/syntaxer';
-import operand, { FIELD_REGEX } from './operand';
+import operand, { FIELD_REGEX, getField } from './operand';
 
 const STRING_REGEX = /^(('([^'\\]|\\'|\\)+')|("([^"\\]|\\"|\\)+")|(`([^`\\]|\\`|\\)+`))/;
-const VALUE_REGEX = /^([^\s'"`{}()\\]|\\[\s'"`{}()]?)+/;
+const VALUE_REGEX = /^(([^\s'"`{}()\\]|\\[\s'"`{}()]?)+)(?:[\s)]|$)/;
 
-const expression: IUnboundedLexeme = {
-    present: (tree: ISyntaxTree) => tree.value,
-    resolve: (target: any, tree: ISyntaxTree) => {
-        if (FIELD_REGEX.test(tree.value)) {
-            return operand.resolve && operand.resolve(target, tree);
-        } else if (STRING_REGEX.test(tree.value)) {
-            return tree.value.slice(1, tree.value.length - 1).replace(/\\('|"|`)/g, '$1');
-        } else if (VALUE_REGEX.test(tree.value)) {
-            return isNumeric(tree.value) ?
-                +tree.value :
-                tree.value.replace(/\\([\s'"`{}()])/g, '$1');
+export const fieldExpression: IUnboundedLexeme = {
+    present: (tree: ISyntaxTree) => getField(tree.value),
+    resolve: operand.resolve,
+    regexp: FIELD_REGEX,
+    subType: 'field',
+    type: LexemeType.Expression
+};
+
+const getString = (
+    value: string
+) => value.slice(1, value.length - 1).replace(/\\(['"`])/g, '$1');
+
+const getValue = (
+    value: string
+) => {
+    value = (value.match(VALUE_REGEX) as any)[1];
+
+    return isNumeric(value) ?
+        +value :
+        value.replace(/\\([\s'"`{}()])/g, '$1');
+};
+
+export const stringExpression: IUnboundedLexeme = {
+    present: (tree: ISyntaxTree) => getString(tree.value),
+    resolve: (_target: any, tree: ISyntaxTree) => {
+        if (STRING_REGEX.test(tree.value)) {
+            return getString(tree.value);
         } else {
             throw new Error();
         }
     },
-    regexp: [FIELD_REGEX, STRING_REGEX, VALUE_REGEX],
+    regexp: STRING_REGEX,
+    subType: 'string',
     type: LexemeType.Expression
 };
 
-export default expression;
+export const valueExpression: IUnboundedLexeme = {
+    present: (tree: ISyntaxTree) => getValue(tree.value),
+    resolve: (_target: any, tree: ISyntaxTree) => {
+        if (VALUE_REGEX.test(tree.value)) {
+            return getValue(tree.value);
+        } else {
+            throw new Error();
+        }
+    },
+    regexp: VALUE_REGEX,
+    regexpMatch: 1,
+    subType: 'value',
+    type: LexemeType.Expression
+};

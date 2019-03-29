@@ -2,8 +2,42 @@ import * as R from 'ramda';
 
 import Logger from 'core/Logger';
 import lexer, { ILexerResult } from 'core/syntax-tree/lexer';
-import syntaxer, { ISyntaxerResult } from 'core/syntax-tree/syntaxer';
+import syntaxer, { ISyntaxerResult, ISyntaxTree } from 'core/syntax-tree/syntaxer';
 import { Lexicon } from './lexicon';
+
+interface IStructure {
+    subType?: string;
+    type: string;
+    value: any;
+
+    block?: IStructure;
+    left?: IStructure;
+    right?: IStructure;
+}
+
+function toStructure(tree: ISyntaxTree): IStructure {
+    const { block, left, lexeme, right, value } = tree;
+
+    const res: IStructure = {
+        subType: lexeme.subType,
+        type: lexeme.type,
+        value: lexeme.present ? lexeme.present(tree) : value
+    };
+
+    if (block) {
+        res.block = toStructure(block);
+    }
+
+    if (left) {
+        res.left = toStructure(left);
+    }
+
+    if (right) {
+        res.right = toStructure(right);
+    }
+
+    return res;
+}
 
 export default class SyntaxTree {
     protected lexerResult: ILexerResult;
@@ -47,5 +81,11 @@ export default class SyntaxTree {
         return this.lexerResult.valid ?
             R.map(l => l.value, this.lexerResult.lexemes).join(' ') :
             '';
+    }
+
+    toStructure() {
+        if (this.syntaxerResult.tree) {
+            return toStructure(this.syntaxerResult.tree);
+        }
     }
 }

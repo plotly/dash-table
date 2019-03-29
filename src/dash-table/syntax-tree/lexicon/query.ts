@@ -1,15 +1,19 @@
 import * as R from 'ramda';
 
-import expression from '../lexeme/expression';
-import operand from '../lexeme/operand';
 import {
     blockClose,
     blockOpen
 } from '../lexeme/block';
 import {
+    fieldExpression,
+    stringExpression,
+    valueExpression
+} from '../lexeme/expression';
+import {
     and,
     or
 } from '../lexeme/logical';
+import operand from '../lexeme/operand';
 import {
     equal,
     greaterOrEqual,
@@ -148,11 +152,15 @@ const lexicon: ILexeme[] = [
             ),
         terminal: false
     },
-    {
-        ...expression,
+    ...[
+        fieldExpression,
+        stringExpression,
+        valueExpression
+    ].map(exp => ({
+        ...exp,
         if: ifExpression,
         terminal: isTerminal
-    }
+    }))
 ];
 
 export default lexicon;
