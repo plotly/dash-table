@@ -5,7 +5,7 @@ import { ISyntaxTree } from 'core/syntax-tree/syntaxer';
 import operand, { FIELD_REGEX } from './operand';
 
 const STRING_REGEX = /^(('([^'\\]|\\'|\\)+')|("([^"\\]|\\"|\\)+")|(`([^`\\]|\\`|\\)+`))/;
-const VALUE_REGEX = /^([^\s'"`{}\\]|\\\s|\\'|\\"|\\`|\\{|\\}|\\)+/;
+const VALUE_REGEX = /^([^\s'"`{}()\\]|\\[\s'"`{}()]?)+/;
 
 const expression: IUnboundedLexeme = {
     present: (tree: ISyntaxTree) => tree.value,
@@ -17,7 +17,7 @@ const expression: IUnboundedLexeme = {
         } else if (VALUE_REGEX.test(tree.value)) {
             return isNumeric(tree.value) ?
                 +tree.value :
-                tree.value.replace(/\\(\s|'|"|`|{|})/g, '$1');
+                tree.value.replace(/\\([\s'"`{}()])/g, '$1');
         } else {
             throw new Error();
         }

@@ -288,6 +288,16 @@ describe('Query Syntax Tree', () => {
             expect(tree.evaluate(data2)).to.equal(false);
             expect(tree.evaluate(data3)).to.equal(false);
         });
+
+        it('behave correctly with value expressions', () => {
+            const tree = new QuerySyntaxTree('{a} eq 1 and ({a} eq 0 or ({b} eq 1 or {b} eq 0))');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({ a: 0, b: 0 })).to.equal(false);
+            expect(tree.evaluate({ a: 0, b: 1 })).to.equal(false);
+            expect(tree.evaluate({ a: 1, b: 0 })).to.equal(true);
+            expect(tree.evaluate({ a: 1, b: 1 })).to.equal(true);
+        });
     });
 
     describe('unary operators', () => {
