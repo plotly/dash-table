@@ -18,7 +18,7 @@ export const and: IUnboundedLexeme = {
     type: LexemeType.LogicalOperator,
     priority: 2,
     regexp: /^(and\s|&&)/i,
-    present: () => LogicalOperator.And,
+    subType: LogicalOperator.And,
     syntaxer: (lexs: any[], pivot: any, pivotIndex: number) => {
         return Object.assign({
             left: lexs.slice(0, pivotIndex),
@@ -37,7 +37,7 @@ export const or: IUnboundedLexeme = {
             t.right.lexeme.evaluate(target, t.right);
     },
     type: LexemeType.LogicalOperator,
-    present: () => LogicalOperator.Or,
+    subType: LogicalOperator.Or,
     priority: 3,
     regexp: /^(or\s|\|\|)/i,
     syntaxer: (lexs: any[], pivot: any, pivotIndex: number) => {

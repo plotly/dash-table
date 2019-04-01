@@ -55,7 +55,7 @@ export const not: IUnboundedLexeme = {
         return !t.right.lexeme.evaluate(target, t.right);
     },
     type: LexemeType.UnaryOperator,
-    present: () => UnaryOperator.Not,
+    subType: UnaryOperator.Not,
     priority: 1.5,
     regexp: /^!/,
     syntaxer: (lexs: any[]) => {
