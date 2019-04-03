@@ -9,7 +9,7 @@ import {
     IVisibleColumn,
 } from 'dash-table/components/Table/props';
 import {IConvertedStyle} from '../style';
-import {IVerticalEdge} from 'dash-table/type/edge';
+import {IEdge} from 'dash-table/type/edge';
 
 type Style = CSSProperties | undefined;
 
@@ -18,8 +18,8 @@ function getter(
     columnStyles: IConvertedStyle[],
     data: Data,
     offset: IViewportOffset,
-    vertical_edges: IVerticalEdge[][],
-    horizontal_edges: IVerticalEdge[][]
+    vertical_edges: IEdge[][],
+    horizontal_edges: IEdge[][]
 ): Style[][] {
     return R.addIndex<any, Style[]>(R.map)(
         (datum, index) =>
@@ -38,29 +38,14 @@ function getter(
                     );
 
                     const vertical_edge = vertical_edges[index][colIndex];
-                    const next_vertical = vertical_edges[index][colIndex + 1];
 
                     const horizontal_edge = horizontal_edges[index][colIndex];
-                    const next_horizontal =
-                        horizontal_edges[index + 1][colIndex];
 
                     relevantStyles.push({
                         borderLeft: colIndex === 0 ? vertical_edge.border : '',
                         borderTop: index === 0 ? horizontal_edge.border : '',
-                        borderRight:
-                            next_vertical.border &&
-                            (next_vertical.position === 'border' ||
-                                next_vertical.position === 'left')
-                                ? next_vertical.border
-                                : vertical_edge.border,
-                        borderBottom:
-                            next_horizontal.border &&
-                            (
-                                next_horizontal.position === 'top')
-                                ? next_horizontal.border
-                                : horizontal_edge.border,
-                        // borderRight: (vertical_edge.position === 'border') ? vertical_edge.border : next_vertical.border,
-                        // borderBottom: (horizontal_edge.position == 'border') ? horizontal_edge.border : next_horizontal.border,
+                        borderRight: vertical_edge.border,
+                        borderBottom: horizontal_edge.border,
                     });
 
                     return relevantStyles.length

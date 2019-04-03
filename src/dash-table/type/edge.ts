@@ -1,5 +1,4 @@
 
-export interface IVerticalEdge {
+export interface IEdge{
     border: string;
-    position: string;
 }
