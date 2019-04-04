@@ -36,7 +36,7 @@ export interface IConvertedStyle {
 type GenericIf = Partial<IConditionalElement & IIndexedHeaderElement & IIndexedRowElement & INamedElement & ITypedElement>;
 type GenericStyle = Style & Partial<{ if: GenericIf }>;
 
-function convertElement(style: GenericStyle) {
+function convertElement(style: GenericStyle, index: number) {
     const indexFilter = style.if && (style.if.header_index || style.if.row_index);
     let ast: SyntaxTree;
 
@@ -56,7 +56,8 @@ function convertElement(style: GenericStyle) {
             !style.if ||
             style.if.filter === undefined ||
             (ast = ast || new SyntaxTree(style.if.filter)).evaluate(datum),
-        style: convertStyle(style)
+        style: convertStyle(style),
+        index: index
     };
 }
 
@@ -76,12 +77,12 @@ export const derivedRelevantCellStyles = memoizeOneFactory((
     dataCells: DataCells
 ) => R.concat(
     R.concat(
-        cell ? [convertElement(cell)] : [],
-        R.map(convertElement, cells || [])
+        cell ? [convertElement(cell, 0)] : [],
+        R.addIndex(R.map)(convertElement, cells || []) as IConvertedStyle[]
     ),
     R.concat(
-        dataCell ? [convertElement(dataCell)] : [],
-        R.map(convertElement, dataCells || [])
+        dataCell ? [convertElement(dataCell, 0)] : [],
+        R.addIndex(R.map)(convertElement, dataCells || []) as IConvertedStyle[]
     )
 ));
 
@@ -92,12 +93,12 @@ export const derivedRelevantFilterStyles = memoizeOneFactory((
     filters: BasicFilters
 ) => R.concat(
     R.concat(
-        cell ? [convertElement(cell)] : [],
-        R.map(convertElement, cells || [])
+        cell ? [convertElement(cell, 0)] : [],
+        R.addIndex(R.map)(convertElement, cells || []) as IConvertedStyle[]
     ),
     R.concat(
-        filter ? [convertElement(filter)] : [],
-        R.map(convertElement, filters || [])
+        filter ? [convertElement(filter, 0)] : [],
+        R.addIndex(R.map)(convertElement, filters || []) as IConvertedStyle[]
     )
 ));
 
@@ -108,12 +109,12 @@ export const derivedRelevantHeaderStyles = memoizeOneFactory((
     headers: Headers
 ) => R.concat(
     R.concat(
-        cell ? [convertElement(cell)] : [],
-        R.map(convertElement, cells || [])
+        cell ? [convertElement(cell, 0)] : [],
+        R.addIndex(R.map)(convertElement, cells || []) as IConvertedStyle[]
     ),
     R.concat(
-        header ? [convertElement(header)] : [],
-        R.map(convertElement, headers || [])
+        header ? [convertElement(header, 0)] : [],
+        R.addIndex(R.map)(convertElement, headers || []) as IConvertedStyle[]
     )
 ));
 

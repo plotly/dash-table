@@ -26,13 +26,17 @@ export const derivedVerticalEdges = memoizeOneFactory(
                     }, borderStyles) as any;
 
                     let borderStyle: any = '1px solid #d3d3d3';
+                    let precedence = -1;
 
                     R.forEach((s: any) => {
-                        if (s.style.border) {
-                            borderStyle = s.style.border;
-                        }
-                        if (s.style.borderRight) {
-                            borderStyle = s.style.borderRight;
+                        if (s.index && s.index > precedence) {
+                            precedence = s.index;
+                            if (s.style.border) {
+                                borderStyle = s.style.border;
+                            }
+                            if (s.style.borderRight) {
+                                borderStyle = s.style.borderRight;
+                            }
                         }
                     }, relevantStyle);
 
@@ -48,11 +52,14 @@ export const derivedVerticalEdges = memoizeOneFactory(
                             }, borderStyles) as any;
 
                             R.forEach((s: any) => {
-                                if (s.style.border) {
-                                    borderStyle = s.style.border;
-                                }
-                                if (s.style.borderLeft) {
-                                    borderStyle = s.style.borderLeft;
+                                if (s.index && s.index > precedence) {
+                                    precedence = s.index;
+                                    if (s.style.border) {
+                                        borderStyle = s.style.border;
+                                    }
+                                    if (s.style.borderLeft) {
+                                        borderStyle = s.style.borderLeft;
+                                    }
                                 }
                             }, nextRelevantStyle);
                         }
@@ -60,6 +67,7 @@ export const derivedVerticalEdges = memoizeOneFactory(
 
                     return {
                         border: borderStyle,
+                        precedence,
                     };
                 }
             );
@@ -84,17 +92,18 @@ export const derivedHorizontalEdges = memoizeOneFactory(
                     );
                 }, borderStyles) as any;
 
-                let borderStyle: any = '1px solid #d3d3d3';
-                let position: string = 'border';
+                let borderStyle = '1px solid #d3d3d3';
+                let precedence = -1;
 
                 R.forEach((s: any) => {
-                    if (s.style.border) {
-                        borderStyle = s.style.border;
-                        position = 'border';
-                    }
-                    if (s.style.borderBottom) {
-                        borderStyle = s.style.borderBottom;
-                        position = 'bottom';
+                    if (s.index && s.index > precedence) {
+                        precedence = s.index;
+                        if (s.style.border) {
+                            borderStyle = s.style.border;
+                        }
+                        if (s.style.borderBottom) {
+                            borderStyle = s.style.borderBottom;
+                        }
                     }
                 }, relevantStyle);
 
@@ -110,13 +119,11 @@ export const derivedHorizontalEdges = memoizeOneFactory(
                         }, borderStyles) as any;
 
                         R.forEach((s: any) => {
-                            if (position !== 'border' && s.style.border) {
-                                borderStyle = s.style.border;
-                                position = 'border';
-                            }
-                            if (s.style.borderTop) {
-                                borderStyle = s.style.borderTop;
-                                position = 'left';
+                            if (s.index && s.index > precedence) {
+                                precedence = s.index;
+                                if (s.style.borderTop) {
+                                    borderStyle = s.style.borderTop;
+                                }
                             }
                         }, nextRelevantStyle);
                     }
@@ -124,6 +131,7 @@ export const derivedHorizontalEdges = memoizeOneFactory(
 
                 return {
                     border: borderStyle,
+                    precedence,
                 };
             });
         });
