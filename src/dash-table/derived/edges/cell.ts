@@ -25,21 +25,28 @@ export const derivedVerticalEdges = memoizeOneFactory(
                         );
                     }, borderStyles) as any;
 
-                    let borderStyle: any = '1px solid #d3d3d3';
-                    let precedence = -1;
+                    let borderLeft: string = '1px solid #d3d3d3';
+                    let borderRight: string = '1px solid #d3d3d3';
+                    let precedence: Array<number> = [-1, -1];
 
                     R.forEach((s: any) => {
-                        if (s.index && s.index > precedence) {
-                            precedence = s.index;
+                        if (s.index && s.index > precedence[0]) {
                             if (s.style.border) {
-                                borderStyle = s.style.border;
+                                precedence[0] = s.index;
+                                precedence[1] = s.index;
+                                borderLeft = s.style.border;
+                                borderRight = s.style.border;
                             }
+                        }
+                        if (s.index && s.index > precedence[1]) {
                             if (s.style.borderRight) {
-                                borderStyle = s.style.borderRight;
+                                precedence[1] = s.index;
+                                borderRight = s.style.borderRight;
                             }
                         }
                     }, relevantStyle);
 
+                    // Look ahead at next cell
                     if (j + 1 <= columnData.length) {
                         const nextCol = columnData[j + 1];
                         if (nextCol) {
@@ -52,13 +59,20 @@ export const derivedVerticalEdges = memoizeOneFactory(
                             }, borderStyles) as any;
 
                             R.forEach((s: any) => {
-                                if (s.index && s.index > precedence) {
-                                    precedence = s.index;
+                                if (s.index && s.index > precedence[0]) {
                                     if (s.style.border) {
-                                        borderStyle = s.style.border;
+                                        // If next cell has a border with higher precedence, use that
+                                        precedence[0] = s.index;
+                                        precedence[1] = s.index;
+                                        borderRight = s.style.border;
                                     }
+                                }
+                                if (s.index && s.index > precedence[1]) {
+                                    // If next cell has a LEFT border with higher precedence, set that as
+                                    // this cell's RIGHT border
                                     if (s.style.borderLeft) {
-                                        borderStyle = s.style.borderLeft;
+                                        precedence[1] = s.index;
+                                        borderRight = s.style.borderLeft;
                                     }
                                 }
                             }, nextRelevantStyle);
@@ -66,7 +80,7 @@ export const derivedVerticalEdges = memoizeOneFactory(
                     }
 
                     return {
-                        border: borderStyle,
+                        borders: [borderLeft, borderRight],
                         precedence,
                     };
                 }
@@ -92,21 +106,28 @@ export const derivedHorizontalEdges = memoizeOneFactory(
                     );
                 }, borderStyles) as any;
 
-                let borderStyle = '1px solid #d3d3d3';
-                let precedence = -1;
+                let borderTop: string = '1px solid #d3d3d3';
+                let borderBottom: string = '1px solid #d3d3d3';
+                let precedence = [-1, -1];
 
                 R.forEach((s: any) => {
-                    if (s.index && s.index > precedence) {
-                        precedence = s.index;
+                    if (s.index && s.index > precedence[0]) {
                         if (s.style.border) {
-                            borderStyle = s.style.border;
+                            precedence[0] = s.index;
+                            precedence[1] = s.index;
+                            borderTop = s.style.border;
+                            borderBottom = s.style.border;
                         }
+                    }
+                    if (s.index && s.index > precedence[1]) {
                         if (s.style.borderBottom) {
-                            borderStyle = s.style.borderBottom;
+                            precedence[1] = s.index;
+                            borderBottom = s.style.borderBottom;
                         }
                     }
                 }, relevantStyle);
 
+                // Look ahead at next cell
                 if (i + 1 <= mappedData.length) {
                     const nextDatum = mappedData[i + 1];
                     if (nextDatum) {
@@ -119,10 +140,10 @@ export const derivedHorizontalEdges = memoizeOneFactory(
                         }, borderStyles) as any;
 
                         R.forEach((s: any) => {
-                            if (s.index && s.index > precedence) {
-                                precedence = s.index;
+                            if (s.index && s.index > precedence[0]) {
                                 if (s.style.borderTop) {
-                                    borderStyle = s.style.borderTop;
+                                    precedence[0] = s.index;
+                                    borderBottom = s.style.borderTop;
                                 }
                             }
                         }, nextRelevantStyle);
@@ -130,7 +151,7 @@ export const derivedHorizontalEdges = memoizeOneFactory(
                 }
 
                 return {
-                    border: borderStyle,
+                    borders: [borderTop, borderBottom],
                     precedence,
                 };
             });

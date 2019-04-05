@@ -1,5 +1,4 @@
-
-export interface IEdge{
-    border: string;
-    precedence: number;
+export interface IEdge {
+    borders: string[];
+    precedence: number[];
 }

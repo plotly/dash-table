@@ -42,10 +42,10 @@ function getter(
                     const horizontal_edge = horizontal_edges[index][colIndex];
 
                     relevantStyles.push({
-                        borderLeft: colIndex === 0 ? vertical_edge.border : '',
-                        borderTop: index === 0 ? horizontal_edge.border : '',
-                        borderRight: vertical_edge.border,
-                        borderBottom: horizontal_edge.border,
+                        borderLeft: vertical_edge.borders[0],
+                        borderRight: vertical_edge.borders[1],
+                        borderTop: horizontal_edge.borders[0],
+                        borderBottom: horizontal_edge.borders[1],
                     });
 
                     return relevantStyles.length

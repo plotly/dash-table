@@ -4,14 +4,27 @@ import React from 'react';
 import Logger from 'core/Logger';
 
 import ColumnFilter from 'dash-table/components/Filter/Column';
-import { ColumnId, Filtering, FilteringType, IVisibleColumn, VisibleColumns } from 'dash-table/components/Table/props';
-import lexer, { ILexerResult, ILexemeResult } from 'core/syntax-tree/lexer';
-import { LexemeType } from 'core/syntax-tree/lexicon';
-import syntaxer, { ISyntaxerResult, ISyntaxTree } from 'core/syntax-tree/syntaxer';
+import {
+    ColumnId,
+    Filtering,
+    FilteringType,
+    IVisibleColumn,
+    VisibleColumns,
+} from 'dash-table/components/Table/props';
+import lexer, {ILexerResult, ILexemeResult} from 'core/syntax-tree/lexer';
+import {LexemeType} from 'core/syntax-tree/lexicon';
+import syntaxer, {
+    ISyntaxerResult,
+    ISyntaxTree,
+} from 'core/syntax-tree/syntaxer';
 import derivedFilterStyles from 'dash-table/derived/filter/wrapperStyles';
-import { derivedRelevantFilterStyles } from 'dash-table/derived/style';
-import { arrayMap } from 'core/math/arrayZipMap';
-import { Style, Cells, BasicFilters } from 'dash-table/derived/style/props';
+import {derivedRelevantFilterStyles} from 'dash-table/derived/style';
+import {arrayMap} from 'core/math/arrayZipMap';
+import {Style, Cells, BasicFilters} from 'dash-table/derived/style/props';
+import {
+    derivedVerticalEdges,
+    derivedHorizontalEdges,
+} from 'dash-table/derived/edges/cell';
 
 type SetFilter = (filter: string) => void;
 
@@ -34,17 +47,26 @@ export default class FilterFactory {
     private readonly ops = new Map<string, string>();
     private readonly filterStyles = derivedFilterStyles();
     private readonly relevantStyles = derivedRelevantFilterStyles();
+    private readonly verticalEdges = derivedVerticalEdges();
+    private readonly horizontalEdges = derivedHorizontalEdges();
 
     private get props() {
         return this.propsFn();
     }
 
-    constructor(private readonly propsFn: () => IFilterOptions) {
+    constructor(private readonly propsFn: () => IFilterOptions) {}
 
-    }
-
-    private onChange = (columnId: ColumnId, ops: Map<ColumnId, string>, setFilter: SetFilter, ev: any) => {
-        Logger.debug('Filter -- onChange', columnId, ev.target.value && ev.target.value.trim());
+    private onChange = (
+        columnId: ColumnId,
+        ops: Map<ColumnId, string>,
+        setFilter: SetFilter,
+        ev: any
+    ) => {
+        Logger.debug(
+            'Filter -- onChange',
+            columnId,
+            ev.target.value && ev.target.value.trim()
+        );
 
         const value = ev.target.value.trim();
 
@@ -54,31 +76,46 @@ export default class FilterFactory {
             ops.delete(columnId.toString());
         }
 
-        setFilter(R.map(
-            ([cId, filter]) => `"${cId}" ${filter}`,
-            R.filter(
-                ([cId]) => this.isFragmentValid(cId),
-                Array.from(ops.entries())
-            )
-        ).join(' && '));
-    }
+        setFilter(
+            R.map(
+                ([cId, filter]) => `"${cId}" ${filter}`,
+                R.filter(
+                    ([cId]) => this.isFragmentValid(cId),
+                    Array.from(ops.entries())
+                )
+            ).join(' && ')
+        );
+    };
 
-    private getEventHandler = (fn: Function, columnId: ColumnId, ops: Map<ColumnId, string>, setFilter: SetFilter): any => {
-        const fnHandler = (this.handlers.get(fn) || this.handlers.set(fn, new Map()).get(fn));
-        const columnIdHandler = (fnHandler.get(columnId) || fnHandler.set(columnId, new Map()).get(columnId));
+    private getEventHandler = (
+        fn: Function,
+        columnId: ColumnId,
+        ops: Map<ColumnId, string>,
+        setFilter: SetFilter
+    ): any => {
+        const fnHandler =
+            this.handlers.get(fn) || this.handlers.set(fn, new Map()).get(fn);
+        const columnIdHandler =
+            fnHandler.get(columnId) ||
+            fnHandler.set(columnId, new Map()).get(columnId);
 
         return (
             columnIdHandler.get(setFilter) ||
-            (columnIdHandler.set(setFilter, fn.bind(this, columnId, ops, setFilter)).get(setFilter))
+            columnIdHandler
+                .set(setFilter, fn.bind(this, columnId, ops, setFilter))
+                .get(setFilter)
         );
-    }
+    };
 
-    private respectsBasicSyntax(lexemes: ILexemeResult[], allowMultiple: boolean = true) {
+    private respectsBasicSyntax(
+        lexemes: ILexemeResult[],
+        allowMultiple: boolean = true
+    ) {
         const allowedLexemeTypes = [
             LexemeType.BinaryOperator,
             LexemeType.Expression,
             LexemeType.Operand,
-            LexemeType.UnaryOperator
+            LexemeType.UnaryOperator,
         ];
 
         if (allowMultiple) {
@@ -96,10 +133,7 @@ export default class FilterFactory {
 
         const fields = R.map(
             item => item.value,
-            R.filter(
-                i => i.lexeme.name === LexemeType.Operand,
-                lexemes
-            )
+            R.filter(i => i.lexeme.name === LexemeType.Operand, lexemes)
         );
 
         const uniqueFields = R.uniq(fields);
@@ -116,9 +150,11 @@ export default class FilterFactory {
         syntaxerResult: ISyntaxerResult,
         allowMultiple: boolean = true
     ) {
-        return lexerResult.valid &&
+        return (
+            lexerResult.valid &&
             syntaxerResult.valid &&
-            this.respectsBasicSyntax(lexerResult.lexemes, allowMultiple);
+            this.respectsBasicSyntax(lexerResult.lexemes, allowMultiple)
+        );
     }
 
     private updateOps(query: string) {
@@ -129,7 +165,7 @@ export default class FilterFactory {
             return;
         }
 
-        const { tree } = syntaxerResult;
+        const {tree} = syntaxerResult;
         if (!tree) {
             this.ops.clear();
             return;
@@ -144,8 +180,15 @@ export default class FilterFactory {
 
             if (item.lexeme.name === LexemeType.UnaryOperator && item.block) {
                 this.ops.set(item.block.value, item.value);
-            } else if (item.lexeme.name === LexemeType.BinaryOperator && item.left && item.right) {
-                this.ops.set(item.left.value, `${item.value} ${item.right.value}`);
+            } else if (
+                item.lexeme.name === LexemeType.BinaryOperator &&
+                item.left &&
+                item.right
+            ) {
+                this.ops.set(
+                    item.left.value,
+                    `${item.value} ${item.right.value}`
+                );
             } else {
                 toCheck.push(item.left);
                 toCheck.push(item.block);
@@ -166,7 +209,10 @@ export default class FilterFactory {
         const lexerResult = lexer(`"${columnId}" ${op}`);
         const syntaxerResult = syntaxer(lexerResult);
 
-        return syntaxerResult.valid && this.isBasicFilter(lexerResult, syntaxerResult, false);
+        return (
+            syntaxerResult.valid &&
+            this.isBasicFilter(lexerResult, syntaxerResult, false)
+        );
     }
 
     public createFilters() {
@@ -180,7 +226,7 @@ export default class FilterFactory {
             style_cell,
             style_cell_conditional,
             style_filter,
-            style_filter_conditional
+            style_filter_conditional,
         } = this.props;
 
         if (!filtering) {
@@ -190,35 +236,93 @@ export default class FilterFactory {
         this.updateOps(filtering_settings);
 
         if (filtering_type === FilteringType.Basic) {
-            const filterStyles = this.relevantStyles(
+            const relevantStyles = this.relevantStyles(
                 style_cell,
                 style_filter,
                 style_cell_conditional,
                 style_filter_conditional
             );
 
-            const wrapperStyles = this.filterStyles(
+            const borderStyles = R.map(style => {
+                return {
+                    ...style,
+                    style: R.pick(
+                        [
+                            'border',
+                            'borderTop',
+                            'borderRight',
+                            'borderBottom',
+                            'borderLeft',
+                        ],
+                        style.style
+                    ),
+                };
+            }, relevantStyles);
+            const relevantStylesWithoutBorders = R.map(style => {
+                return {
+                    ...style,
+                    style: R.omit(
+                        [
+                            'border',
+                            'borderTop',
+                            'borderRight',
+                            'borderBottom',
+                            'borderLeft',
+                        ],
+                        style.style
+                    ),
+                };
+            }, relevantStyles);
+
+            const vertical_edges_matrix = this.verticalEdges(
                 columns,
-                filterStyles
+                [0],
+                borderStyles,
+                {rows: 1, columns: columns.length}
+            );
+            const horizontal_edges_matrix = this.horizontalEdges(
+                columns,
+                [0],
+                borderStyles,
+                {rows: 1, columns: columns.length}
             );
 
-            const filters = R.addIndex<IVisibleColumn, JSX.Element>(R.map)((column, index) => {
-                return (<ColumnFilter
-                    key={`column-${index}`}
-                    classes={`dash-filter column-${index}`}
-                    columnId={column.id}
-                    isValid={this.isFragmentValidOrNull(column.id)}
-                    setFilter={this.getEventHandler(this.onChange, column.id, this.ops, setFilter)}
-                    value={this.ops.get(column.id.toString())}
-                />);
-            }, columns);
+            const wrapperStyles = this.filterStyles(
+                columns,
+                [0],
+                relevantStylesWithoutBorders,
+                vertical_edges_matrix,
+                horizontal_edges_matrix
+            );
 
-            const styledFilters = arrayMap(
-                filters,
-                wrapperStyles,
-                    (f, s) => React.cloneElement(f, { style: s }));
+            const filters = R.addIndex<IVisibleColumn, JSX.Element>(R.map)(
+                (column, index) => {
+                    return (
+                        <ColumnFilter
+                            key={`column-${index}`}
+                            classes={`dash-filter column-${index}`}
+                            columnId={column.id}
+                            isValid={this.isFragmentValidOrNull(column.id)}
+                            setFilter={this.getEventHandler(
+                                this.onChange,
+                                column.id,
+                                this.ops,
+                                setFilter
+                            )}
+                            value={this.ops.get(column.id.toString())}
+                        />
+                    );
+                },
+                columns
+            );
 
-            const offsets = R.range(0, fillerColumns).map(i => (<th key={`offset-${i}`} />));
+            const styledFilters = arrayMap(filters, wrapperStyles, (f, s) =>
+                React.cloneElement(f, {style: s})
+            );
+
+            const offsets = R.range(0, fillerColumns).map(i => (
+                <th key={`offset-${i}`} />
+            ));
 
             return [offsets.concat(styledFilters)];
         } else {

@@ -11,7 +11,7 @@ import {derivedRelevantCellStyles} from 'dash-table/derived/style';
 import {
     derivedVerticalEdges,
     derivedHorizontalEdges,
-} from 'dash-table/derived/edges/vertical';
+} from 'dash-table/derived/edges/cell';
 
 import {matrixMap3} from 'core/math/matrixZipMap';
 import {arrayMap} from 'core/math/arrayZipMap';
@@ -54,17 +54,6 @@ export default class CellFactory {
             style_data_conditional,
             virtualized,
         } = this.props;
-
-        const operations = this.cellOperations(
-            active_cell,
-            data,
-            virtualized.data,
-            virtualized.indices,
-            row_selectable,
-            row_deletable,
-            selected_rows,
-            setProps
-        );
 
         const relevantStyles = this.relevantStyles(
             style_cell,
@@ -116,6 +105,19 @@ export default class CellFactory {
             virtualized.data,
             borderStyles,
             virtualized.offset
+        );
+
+        const operations = this.cellOperations(
+            active_cell,
+            data,
+            virtualized.data,
+            virtualized.indices,
+            row_selectable,
+            row_deletable,
+            selected_rows,
+            setProps,
+            vertical_edges_matrix,
+            horizontal_edges_matrix
         );
 
         const wrapperStyles = this.cellStyles(
