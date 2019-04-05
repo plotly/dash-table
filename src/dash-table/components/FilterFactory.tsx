@@ -81,9 +81,30 @@ export default class FilterFactory {
     }
 
     private updateOps = memoizeOne((query: string) => {
-        const ast = new MultiColumnsSyntaxTree(query);
+        const multiQuery = new MultiColumnsSyntaxTree(query);
 
-        this.ops = getSingleColumnMap(ast) || this.ops;
+        const newOps = getSingleColumnMap(multiQuery);
+        if (!newOps) {
+            return;
+        }
+
+        /* Mapping multi-column to single column queries will expand
+         * compressed forms. If the new ast query is equal to the
+         * old one, keep the old one instead.
+         *
+         * If the value was changed by the user, the current ast will
+         * have been modified already and the UI experience will also
+         * be consistent in that case.
+         */
+        R.forEach(([key, ast]) => {
+            const newAst = newOps.get(key);
+
+            if (newAst && newAst.toQueryString() === ast.toQueryString()) {
+                newOps.set(key, ast);
+            }
+        }, Array.from(this.ops.entries()));
+
+        this.ops = newOps;
     });
 
     public createFilters() {
