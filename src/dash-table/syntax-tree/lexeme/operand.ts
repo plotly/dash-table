@@ -19,6 +19,7 @@ const operand: IUnboundedLexeme = {
         }
     },
     regexp: FIELD_REGEX,
+    subType: 'field',
     type: LexemeType.Operand
 };
 

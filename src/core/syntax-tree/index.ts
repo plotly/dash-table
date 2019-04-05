@@ -84,8 +84,10 @@ export default class SyntaxTree {
     }
 
     toStructure() {
-        if (this.syntaxerResult.tree) {
-            return toStructure(this.syntaxerResult.tree);
+        if (!this.isValid || !this.syntaxerResult.tree) {
+            return null;
         }
+
+        return toStructure(this.syntaxerResult.tree);
     }
 }

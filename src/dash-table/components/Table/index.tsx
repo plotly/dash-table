@@ -12,6 +12,8 @@ import derivedVirtualData from 'dash-table/derived/data/virtual';
 import derivedVirtualizedData from 'dash-table/derived/data/virtualized';
 import derivedVisibleColumns from 'dash-table/derived/column/visible';
 
+import QuerySyntaxTree from 'dash-table/syntax-tree/QuerySyntaxTree';
+
 import {
     ControlledTableProps,
     PropsWithDefaultsAndDerived,
@@ -156,6 +158,8 @@ export default class Table extends Component<PropsWithDefaultsAndDerived, Standa
             virtual_selected_rows
         } = controlled;
 
+        const derivedStructureCache = this.structuredQueryCache(filtering_settings);
+
         const viewportCached = this.viewportCache(viewport).cached;
         const virtualCached = this.virtualCache(virtual).cached;
 
@@ -173,6 +177,10 @@ export default class Table extends Component<PropsWithDefaultsAndDerived, Standa
 
         const { controlledSetProps } = this;
         let newProps: Partial<PropsWithDefaultsAndDerived> = {};
+
+        if (!derivedStructureCache.cached) {
+            newProps.derived_query_structure = derivedStructureCache.result;
+        }
 
         if (!virtualCached) {
             newProps.derived_virtual_data = virtual.data;
@@ -261,4 +269,7 @@ export default class Table extends Component<PropsWithDefaultsAndDerived, Standa
     private readonly viewportSelectedRowsCache = memoizeOneWithFlag(viewport => viewport);
     private readonly virtualCache = memoizeOneWithFlag(virtual => virtual);
     private readonly virtualSelectedRowsCache = memoizeOneWithFlag(virtual => virtual);
+    private readonly structuredQueryCache = memoizeOneWithFlag(
+        (query: string) => new QuerySyntaxTree(query).toStructure()
+    );
 }

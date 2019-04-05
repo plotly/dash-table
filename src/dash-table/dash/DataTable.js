@@ -983,9 +983,36 @@ export const propTypes = {
     virtualization: PropTypes.bool,
 
     /**
-     * TBD.
+     * This property represents the current structure of
+     * `filtering_settings` as a tree structure. Each node of the
+     * query structure have:
+     * - type (string; required)
+     *   - 'open-block'
+     *   - 'logical-operator'
+     *   - 'relational-operator'
+     *   - 'unary-operator'
+     *   - 'expression'
+     *   - 'operand'
+     * - subType (string; optional)
+     *   - 'open-block': '()'
+     *   - 'logical-operator': '&&', '||'
+     *   - 'relational-operator': '=', '>=', '>', '<=', '<', '!='
+     *   - 'unary-operator': '!', 'is bool', 'is even', 'is nil', 'is num', 'is object', 'is odd', 'is prime', 'is str'
+     *   - 'expression': 'value', 'field'
+     *   - 'operand': 'field'
+     * - value (any)
+     *   - 'expression, value': passed value
+     *   - 'expression, field': the field/prop name
+     *   - 'operand, field': the field/prop name
+     *
+     * - block (nested query structure; optional)
+     * - left (nested query structure; optional)
+     * - right (nested query structure; optional)
+     *
+     * If the query is invalid or empty, the `derived_query_structure` will
+     * be null.
      */
-    derived_filtering: PropTypes.object,
+    derived_query_structure: PropTypes.object,
 
     /**
      * This property represents the current state of `data`

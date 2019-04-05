@@ -345,6 +345,7 @@ interface IDefaultProps {
 }
 
 interface IDerivedProps {
+    derived_query_structure: object | null;
     derived_viewport_data: Data;
     derived_viewport_indices: Indices;
     derived_viewport_selected_rows: Indices;

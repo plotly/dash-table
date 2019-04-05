@@ -39,7 +39,7 @@ export const stringExpression: IUnboundedLexeme = {
         }
     },
     regexp: STRING_REGEX,
-    subType: 'string',
+    subType: 'value',
     type: LexemeType.Expression
 };
 
