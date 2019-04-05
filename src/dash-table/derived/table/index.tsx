@@ -1,5 +1,7 @@
 import * as R from 'ramda';
 
+import { memoizeOne } from 'core/memoizer';
+
 import CellFactory from 'dash-table/components/CellFactory';
 import FilterFactory from 'dash-table/components/FilterFactory';
 import HeaderFactory from 'dash-table/components/HeaderFactory';
@@ -10,12 +12,10 @@ const handleSetFilter = (setProps: SetProps, setState: SetState, filtering_setti
     setState({ rawFilterQuery });
 };
 
-function filterPropsFn(propsFn: () => ControlledTableProps) {
+function filterPropsFn(propsFn: () => ControlledTableProps, setFilter: any) {
     const props = propsFn();
 
-    return R.merge(props, {
-        setFilter: handleSetFilter.bind(undefined, props.setProps, props.setState)
-    });
+    return R.merge(props, { setFilter });
 }
 
 function getter(
@@ -37,8 +37,17 @@ function getter(
 }
 
 export default (propsFn: () => ControlledTableProps) => {
+    const setFilter = memoizeOne((
+        setProps: SetProps,
+        setState: SetState
+    ) => handleSetFilter.bind(undefined, setProps, setState));
+
     const cellFactory = new CellFactory(propsFn);
-    const filterFactory = new FilterFactory(() => filterPropsFn(propsFn));
+    const filterFactory = new FilterFactory(() => {
+        const props = propsFn();
+
+        return filterPropsFn(propsFn, setFilter(props.setProps, props.setState));
+    });
     const headerFactory = new HeaderFactory(propsFn);
 
     return getter.bind(undefined, cellFactory, filterFactory, headerFactory);

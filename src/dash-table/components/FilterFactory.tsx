@@ -3,6 +3,7 @@ import React from 'react';
 
 import Logger from 'core/Logger';
 import { arrayMap } from 'core/math/arrayZipMap';
+import memoizerCache from 'core/cache/memoizer';
 import { memoizeOne } from 'core/memoizer';
 
 import ColumnFilter from 'dash-table/components/Filter/Column';
@@ -107,6 +108,22 @@ export default class FilterFactory {
         this.ops = newOps;
     });
 
+    private filter = memoizerCache<[ColumnId, number]>()((
+        column: ColumnId,
+        index: number,
+        ast: SingleColumnSyntaxTree | undefined,
+        setFilter: SetFilter
+    ) => {
+        return (<ColumnFilter
+            key={`column-${index}`}
+            classes={`dash-filter column-${index}`}
+            columnId={column}
+            isValid={!ast || ast.isValid}
+            setFilter={this.getEventHandler(this.onChange, column, setFilter)}
+            value={ast && ast.query}
+        />);
+    });
+
     public createFilters() {
         const {
             columns,
@@ -142,16 +159,12 @@ export default class FilterFactory {
             );
 
             const filters = R.addIndex<IVisibleColumn, JSX.Element>(R.map)((column, index) => {
-                const ast = this.ops.get(column.id.toString());
-
-                return (<ColumnFilter
-                    key={`column-${index}`}
-                    classes={`dash-filter column-${index}`}
-                    columnId={column.id}
-                    isValid={!ast || ast.isValid}
-                    setFilter={this.getEventHandler(this.onChange, column.id, setFilter)}
-                    value={ast && ast.query}
-                />);
+                return this.filter.get(column.id, index)(
+                    column.id,
+                    index,
+                    this.ops.get(column.id.toString()),
+                    setFilter
+                );
             }, columns);
 
             const styledFilters = arrayMap(

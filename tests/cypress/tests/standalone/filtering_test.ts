@@ -47,6 +47,18 @@ describe('filter', () => {
         DashTable.toggleScroll(false);
     });
 
+    it('handles hovering onto other filtering cells', () => {
+        DashTable.getFilterById('ccc').click();
+        DOM.focused.type(`gt 100`);
+        DashTable.getFilterById('ddd').click();
+        DOM.focused.type('lt 20000');
+
+        DashTable.getCellById(0, 'eee').trigger('mouseover');
+
+        DashTable.getFilterById('ccc').within(() => cy.get('input').should('have.value', 'gt 100'));
+        DashTable.getFilterById('ddd').within(() => cy.get('input').should('have.value', 'lt 20000'));
+    });
+
     it('handles invalid queries', () => {
         let cell_0;
         let cell_1;
@@ -81,7 +93,6 @@ describe('filter', () => {
         DashTable.getFilterById('ccc').should('have.class', 'invalid');
         DashTable.getFilterById('ddd').should('have.class', 'invalid');
         DashTable.getFilterById('eee').should('have.class', 'invalid');
-
     });
 
     it('reset updates results and filter fields', () => {
