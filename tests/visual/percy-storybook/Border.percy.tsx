@@ -127,14 +127,14 @@ storiesOf('DashTable/ListView style, Border (available space filled)', module)
         <DataTable {...props4} n_fixed_columns={1} n_fixed_rows={1} />
     ));
 
-const props5 = {
+const props_style_data = {
     ...props,
     style_data: {
         border: '1px solid hotpink',
     },
     style_data_conditional: [],
 };
-const props6 = {
+const props_specific_borders = {
     ...props,
     style_data: {},
     style_data_conditional: [
@@ -169,7 +169,7 @@ const props6 = {
     ],
 };
 
-const props7 = {
+const props_sharing_horizontal = {
     ...props,
     style_data: {},
     style_data_conditional: [
@@ -189,16 +189,98 @@ const props7 = {
         },
     ],
 };
+const props_sharing_vertical = {
+    ...props,
+    style_data: {},
+    style_data_conditional: [
+        {
+            if: {
+                row_index: 1,
+                column_id: 'b',
+            },
+            border: '2px solid red',
+        },
+        {
+            if: {
+                row_index: 2,
+                column_id: 'b',
+            },
+            border: '2px solid blue',
+        },
+        {
+            if: {
+                row_index: 3,
+                column_id: 'b',
+            },
+            border: '2px solid magenta',
+        },
+        {
+            if: {
+                row_index: 4,
+                column_id: 'b',
+            },
+            border: '2px solid green',
+        },
+    ],
+};
+const props_top_bottom = {
+    ...props,
+    style_data: {},
+    style_data_conditional: [
+        {
+            if: {
+                row_index: 2,
+                column_id: 'b',
+            },
+            borderTop: '2px solid red',
+        },
+        {
+            if: {
+                row_index: 1,
+                column_id: 'b',
+            },
+            borderBottom: '2px solid blue',
+        },
+    ],
+};
+const props_left_right = {
+    ...props,
+    style_data: {},
+    style_data_conditional: [
+        {
+            if: {
+                row_index: 2,
+                column_id: 'b',
+            },
+            borderRight: '2px solid red',
+        },
+        {
+            if: {
+                row_index: 2,
+                column_id: 'c',
+            },
+            borderLeft: '2px solid blue',
+        },
+    ],
+};
 
 storiesOf('DashTable/Border, custom styles', module)
-    .add('with style_data', () => <DataTable {...props5} />)
+    .add('with style_data', () => <DataTable {...props_style_data} />)
     .add('with style_data conditional, border top, right, bottom, left', () => (
-        <DataTable {...props6} />
+        <DataTable {...props_specific_borders} />
     ))
     .add(
         'with style_data conditional, sharing borders horizontal borders',
-        () => <DataTable {...props7} />
+        () => <DataTable {...props_sharing_horizontal} />
+    )
+    .add('with style_data conditional, sharing vertical borders', () => (
+        <DataTable {...props_sharing_vertical} />
+    ))
+    .add(
+        'with style_data conditional, border-top and border-bottom fighting',
+        () => <DataTable {...props_top_bottom} />
+    )
+    .add(
+        'with style_data conditional, border-left and border-right fighting',
+        () => <DataTable {...props_left_right} />
     );
-// .add('with style_data conditional, sharing vertical borders', () => (
-//     <DataTable {...props4} n_fixed_columns={1} n_fixed_rows={1} />
-// ));

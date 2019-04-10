@@ -32,7 +32,7 @@ export const derivedVerticalEdges = memoizeOneFactory(
         offset: IViewportOffset
     ): IEdge[][] => {
         return data.map((datum, i) => {
-            return [...columns, columns[columns.length - 1]].map(
+            return [...columns, {} as IVisibleColumn].map(
                 (col: IVisibleColumn, j, columnData: any) => {
                     const relevantStyle = getRelevantBorderStyle(
                         borderStyles,
@@ -112,7 +112,7 @@ export const derivedHorizontalEdges = memoizeOneFactory(
         borderStyles: any[],
         offset: IViewportOffset
     ): IEdge[][] => {
-        return [...data, data[data.length - 1]].map((datum, i, mappedData) => {
+        return [...data, {}].map((datum, i, mappedData) => {
             return columns.map((col: IVisibleColumn) => {
                 const relevantStyle = getRelevantBorderStyle(
                     borderStyles,
