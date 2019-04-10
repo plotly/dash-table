@@ -126,7 +126,8 @@ export default class CellFactory {
             virtualized.data,
             virtualized.offset,
             vertical_edges_matrix,
-            horizontal_edges_matrix
+            horizontal_edges_matrix,
+            row_selectable && row_deletable
         );
 
         const dropdowns = this.cellDropdowns(

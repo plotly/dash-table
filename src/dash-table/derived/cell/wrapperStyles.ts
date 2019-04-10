@@ -19,7 +19,8 @@ function getter(
     data: Data,
     offset: IViewportOffset,
     vertical_edges: IEdge[][],
-    horizontal_edges: IEdge[][]
+    horizontal_edges: IEdge[][],
+    has_operations: boolean
 ): Style[][] {
     return R.addIndex<any, Style[]>(R.map)(
         (datum, index) =>
@@ -42,7 +43,9 @@ function getter(
                     const horizontal_edge = horizontal_edges[index][colIndex];
 
                     relevantStyles.push({
-                        borderLeft: vertical_edge.borders[0],
+                        borderLeft: !has_operations
+                            ? vertical_edge.borders[0]
+                            : '',
                         borderRight: vertical_edge.borders[1],
                         borderTop: horizontal_edge.borders[0],
                         borderBottom: horizontal_edge.borders[1],

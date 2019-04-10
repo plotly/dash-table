@@ -41,9 +41,10 @@ function rowSelectCell(
     horizontal_edge: IEdge
 ) {
     const borderStyles = {
-        borderTop: horizontal_edge.borders[0],
+        borderTop: horizontal_edge.borders[1],
         borderBottom: horizontal_edge.borders[0],
         borderLeft: vertical_edge.borders[0],
+        borderRight: vertical_edge.borders[1],
     };
     return (
         <td
@@ -84,9 +85,10 @@ function rowDeleteCell(
     horizontal_edge: IEdge
 ) {
     const borderStyles = {
-        borderTop: horizontal_edge.borders[0],
+        borderTop: horizontal_edge.borders[1],
         borderBottom: horizontal_edge.borders[0],
         borderLeft: vertical_edge.borders[0],
+        borderRight: vertical_edge.borders[1],
     };
     return (
         <td

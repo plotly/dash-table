@@ -124,7 +124,8 @@ export default class HeaderFactory {
             headerRows,
             relevantStylesWithoutBorders,
             vertical_edges_matrix,
-            horizontal_edges_matrix
+            horizontal_edges_matrix,
+            row_selectable && row_deletable
         );
 
         const wrappers = this.headerWrappers(
