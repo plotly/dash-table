@@ -1,5 +1,5 @@
-import {derivedVerticalEdges} from 'dash-table/derived/edges/vertical';
-import {derivedHorizontalEdges} from 'dash-table/derived/edges/vertical';
+import {derivedVerticalEdges} from 'dash-table/derived/edges/cell';
+import {derivedHorizontalEdges} from 'dash-table/derived/edges/cell';
 import {derivedRelevantCellStyles} from 'dash-table/derived/style';
 import IStyle from 'dash-table/derived/style/IStyle';
 import {generateMockData} from 'demo/data';

@@ -150,14 +150,13 @@ export const derivedHorizontalEdges = memoizeOneFactory(
                         const nextRelevantStyle = getRelevantBorderStyle(
                             borderStyles,
                             col,
-                            i,
+                            i + 1,
                             offset,
                             nextDatum
                         );
-
                         R.forEach((s: any) => {
-                            if (s.index > precedence[0] && s.style.borderTop) {
-                                precedence[0] = s.index;
+                            if (s.index > precedence[1] && s.style.borderTop) {
+                                precedence[1] = s.index;
                                 borderBottom = s.style.borderTop;
                             }
                         }, R.filter(s => !R.isEmpty(s.style), nextRelevantStyle));

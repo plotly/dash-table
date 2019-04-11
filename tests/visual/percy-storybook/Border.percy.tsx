@@ -241,6 +241,20 @@ const props_top_bottom = {
             },
             borderBottom: '2px solid blue',
         },
+        {
+            if: {
+                row_index: 1,
+                column_id: 'c',
+            },
+            borderBottom: '2px solid blue',
+        },
+        {
+            if: {
+                row_index: 2,
+                column_id: 'c',
+            },
+            borderTop: '2px solid red',
+        },
     ],
 };
 const props_left_right = {
