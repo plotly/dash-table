@@ -155,6 +155,11 @@ export const derivedHorizontalEdges = memoizeOneFactory(
                             nextDatum
                         );
                         R.forEach((s: any) => {
+                            if (s.index > precedence[0] && s.style.border) {
+                                precedence[0] = s.index;
+                                precedence[1] = s.index;
+                                borderBottom = s.style.border;
+                            }
                             if (s.index > precedence[1] && s.style.borderTop) {
                                 precedence[1] = s.index;
                                 borderBottom = s.style.borderTop;
