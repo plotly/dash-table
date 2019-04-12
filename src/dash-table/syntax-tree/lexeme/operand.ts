@@ -1,9 +1,9 @@
 import { LexemeType, IUnboundedLexeme } from 'core/syntax-tree/lexicon';
 import { ISyntaxTree } from 'core/syntax-tree/syntaxer';
 
-export const FIELD_REGEX = /^{(([^{}\\]|\\{|\\}|\\)+)}/;
+const FIELD_REGEX = /^{(([^{}\\]|\\{|\\}|\\)+)}/;
 
-export const getField = (
+const getField = (
     value: string
 ) => value
     .slice(1, value.length - 1)

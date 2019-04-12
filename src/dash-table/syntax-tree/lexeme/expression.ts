@@ -1,19 +1,19 @@
 import isNumeric from 'fast-isnumeric';
+import * as R from 'ramda';
 
 import { LexemeType, IUnboundedLexeme } from 'core/syntax-tree/lexicon';
 import { ISyntaxTree } from 'core/syntax-tree/syntaxer';
-import operand, { FIELD_REGEX, getField } from './operand';
+import operand from './operand';
 
 const STRING_REGEX = /^(('([^'\\]|\\'|\\)+')|("([^"\\]|\\"|\\)+")|(`([^`\\]|\\`|\\)+`))/;
 const VALUE_REGEX = /^(([^\s'"`{}()\\]|\\[\s'"`{}()]?)+)(?:[\s)]|$)/;
 
-export const fieldExpression: IUnboundedLexeme = {
-    present: (tree: ISyntaxTree) => getField(tree.value),
-    resolve: operand.resolve,
-    regexp: FIELD_REGEX,
-    subType: 'field',
-    type: LexemeType.Expression
-};
+export const fieldExpression: IUnboundedLexeme = R.merge(
+    operand, {
+        subType: 'field',
+        type: LexemeType.Expression
+    }
+);
 
 const getString = (
     value: string
