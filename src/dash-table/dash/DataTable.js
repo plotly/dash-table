@@ -485,15 +485,12 @@ export const propTypes = {
     row_selectable: PropTypes.oneOf(['single', 'multi', false]),
 
     /**
-     * `selected_cells` represents the set of cells that are selected.
+     * `selected_cells` represents the set of cells that are selected,
+     * as a nested array of `[row, column]` indices.
      * This is similar to `active_cell` except that it contains multiple
      * cells. Multiple cells can be selected by holding down shift and
      * clicking on a different cell or holding down shift and navigating
      * with the arrow keys.
-     *
-     * NOTE - This property may change in the future, subscribe to
-     * [https://github.com/plotly/dash-table/issues/177](https://github.com/plotly/dash-table/issues/177)
-     * for more details.
      */
     selected_cells: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
 
