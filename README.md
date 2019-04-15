@@ -7,7 +7,7 @@ An interactive `DataTable` for [Dash](https://dash.plot.ly/).
 ## Quickstart
 
 ```
-pip install dash-table
+pip install dash
 ```
 
 ```python
