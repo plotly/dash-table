@@ -97,7 +97,7 @@ def layout():
                     'dropdowns': [
 
                         {
-                            'condition': 'City eq "NYC"',
+                            'condition': '{City} eq "NYC"',
                             'dropdown': [
                                 {'label': i, 'value': i}
                                 for i in [
@@ -109,7 +109,7 @@ def layout():
                         },
 
                         {
-                            'condition': 'City eq "Montreal"',
+                            'condition': '{City} eq "Montreal"',
                             'dropdown': [
                                 {'label': i, 'value': i}
                                 for i in [
@@ -121,7 +121,7 @@ def layout():
                         },
 
                         {
-                            'condition': 'City eq "Los Angeles"',
+                            'condition': '{City} eq "Los Angeles"',
                             'dropdown': [
                                 {'label': i, 'value': i}
                                 for i in [
