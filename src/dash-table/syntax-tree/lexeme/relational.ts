@@ -30,9 +30,10 @@ function relationalEvaluator(
 }
 
 export enum RelationalOperator {
+    Contains = 'contains',
     Equal = '=',
     GreaterOrEqual = '>=',
-    GreatherThan = '>',
+    GreaterThan = '>',
     LessOrEqual = '<=',
     LessThan = '<',
     NotEqual = '!='
@@ -43,6 +44,16 @@ const LEXEME_BASE = {
     syntaxer: relationalSyntaxer,
     type: LexemeType.RelationalOperator
 };
+
+export const contains: IUnboundedLexeme = R.merge({
+    evaluate: relationalEvaluator(([op, exp]) =>
+        typeof op === 'string' &&
+        typeof exp === 'string' &&
+        op.indexOf(exp) !== -1
+    ),
+    subType: RelationalOperator.Contains,
+    regexp: /^(contains)/i
+}, LEXEME_BASE);
 
 export const equal: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(([op, exp]) => op === exp),
@@ -58,7 +69,7 @@ export const greaterOrEqual: IUnboundedLexeme = R.merge({
 
 export const greaterThan: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(([op, exp]) => op > exp),
-    subType: RelationalOperator.GreatherThan,
+    subType: RelationalOperator.GreaterThan,
     regexp: /^(>|gt)/i
 }, LEXEME_BASE);
 

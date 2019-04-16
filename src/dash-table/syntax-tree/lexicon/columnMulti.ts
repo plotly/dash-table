@@ -10,6 +10,7 @@ import {
 } from '../lexeme/logical';
 import operand from '../lexeme/operand';
 import {
+    contains,
     equal,
     greaterOrEqual,
     greaterThan,
@@ -53,7 +54,8 @@ const lexicon: ILexeme[] = [
             ),
         terminal: false
     },
-    ...[equal,
+    ...[contains,
+        equal,
         greaterOrEqual,
         greaterThan,
         lessOrEqual,

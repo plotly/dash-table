@@ -567,5 +567,13 @@ describe('Query Syntax Tree', () => {
             expect(tree.evaluate(data2)).to.equal(false);
             expect(tree.evaluate(data3)).to.equal(false);
         });
+
+        it('can do contains (contains) test', () => {
+            const tree = new QuerySyntaxTree('{a} contains v');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({ a: 'abc v' })).to.equal(true);
+            expect(tree.evaluate({ a: 'abc w' })).to.equal(false);
+        });
     });
 });

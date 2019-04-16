@@ -6,6 +6,7 @@ import {
     valueExpression
 } from '../lexeme/expression';
 import {
+    contains,
     equal,
     greaterOrEqual,
     greaterThan,
@@ -28,7 +29,8 @@ import { LexemeType, ILexeme } from 'core/syntax-tree/lexicon';
 import { ILexemeResult } from 'core/syntax-tree/lexer';
 
 const lexicon: ILexeme[] = [
-    ...[equal,
+    ...[contains,
+        equal,
         greaterOrEqual,
         greaterThan,
         lessOrEqual,
