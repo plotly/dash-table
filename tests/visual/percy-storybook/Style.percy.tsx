@@ -2,14 +2,9 @@ import * as R from 'ramda';
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import DataTable from 'dash-table/dash/DataTable';
-import fixtures from './fixtures';
 import { ColumnType } from 'dash-table/components/Table/props';
 
 const setProps = () => { };
-
-// Legacy: Tests previously run in Python
-const fixtureStories = storiesOf('DashTable/Fixtures', module);
-fixtures.forEach(fixture => fixtureStories.add(fixture.name, () => (<DataTable {...Object.assign(fixture.props)} />)));
 
 const date = ['2015-01-01', '2015-10-24', '2016-05-10'];
 const region = ['Montreal', 'Vermont', 'New York City'];
