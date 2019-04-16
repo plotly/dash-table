@@ -46,7 +46,7 @@ describe('expression', () => {
             expect(stringExpression.resolve(undefined, { value: '"\\""' } as ISyntaxTree)).to.equal('"');
             expect(stringExpression.resolve(undefined, { value: `'\\''` } as ISyntaxTree)).to.equal(`'`);
             expect(stringExpression.resolve(undefined, { value: '`\\``' } as ISyntaxTree)).to.equal('`');
-            expect(stringExpression.resolve(undefined, { value: '\'\\\'' } as ISyntaxTree)).to.equal('\\');
+            expect(stringExpression.resolve(undefined, { value: '\'\\\\\'' } as ISyntaxTree)).to.equal('\\');
 
             expect(stringExpression.resolve.bind(undefined, {}, { value: '3' } as ISyntaxTree)).to.throw(Error);
             expect(stringExpression.resolve.bind(undefined, {}, { value: 'abc' } as ISyntaxTree)).to.throw(Error);
@@ -72,8 +72,8 @@ describe('expression', () => {
             expect(valueExpression.resolve(undefined, { value: 'abc\\ \\ \\ ' } as ISyntaxTree)).to.equal('abc   ');
             expect(valueExpression.resolve(undefined, { value: '\\ \\ \\ abc' } as ISyntaxTree)).to.equal('   abc');
             expect(valueExpression.resolve(undefined, { value: 'a\\ bc' } as ISyntaxTree)).to.equal('a bc');
-            expect(valueExpression.resolve(undefined, { value: '\\' } as ISyntaxTree)).to.equal('\\');
-            expect(valueExpression.resolve(undefined, { value: 'abc\\' } as ISyntaxTree)).to.equal('abc\\');
+            expect(valueExpression.resolve(undefined, { value: '\\\\' } as ISyntaxTree)).to.equal('\\');
+            expect(valueExpression.resolve(undefined, { value: 'abc\\\\' } as ISyntaxTree)).to.equal('abc\\');
             expect(valueExpression.resolve(undefined, { value: '123' } as ISyntaxTree)).to.equal(123);
             expect(valueExpression.resolve(undefined, { value: '123.45' } as ISyntaxTree)).to.equal(123.45);
             expect(valueExpression.resolve(undefined, { value: '1E6' } as ISyntaxTree)).to.equal(1000000);
