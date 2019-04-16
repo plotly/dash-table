@@ -1,3 +1,5 @@
+import * as R from 'ramda';
+
 import { QuerySyntaxTree } from 'dash-table/syntax-tree';
 
 describe('Query Syntax Tree', () => {
@@ -5,6 +7,27 @@ describe('Query Syntax Tree', () => {
     const data1 = { a: '1', b: '0', c: 1, d: 0, '\\{': 1, 'a.dot': '1.dot', 'a-dot': '1-dot', a_dot: '1_dot', 'a+dot': '1+dot', 'a dot': '1 dot', 'a:dot': '1:dot', '_-6.:+** *@$': '1*dot', '{a:dot}': '1*dot*', '\'""\'': '1\'"dot' };
     const data2 = { a: '2', b: '1', c: 2, d: '', '\\{': 2, 'a.dot': '2.dot', 'a-dot': '2-dot', a_dot: '2_dot', 'a+dot': '2+dot', 'a dot': '2 dot', 'a:dot': '2:dot', '_-6.:+** *@$': '2*dot', '{a:dot}': '2*dot*', '\'""\'': '2\'"dot' };
     const data3 = { a: '3', b: '1', c: 3, d: false, '\\{': 3, 'a.dot': '3.dot', 'a-dot': '3-dot', a_dot: '3_dot', 'a+dot': '3+dot', 'a dot': '3 dot', 'a:dot': '3:dot', '_-6.:+** *@$': '3*dot', '{a:dot}': '3*dot*', '\'""\'': '3\'"dot' };
+
+    describe('special whitespace characters are valid', () => {
+        const cases = [
+            { name: 'suports new line', query: '{a}\neq\n"0"' },
+            { name: 'suports carriage return', query: '{a}\req\r"0"' },
+            { name: 'suports new line ad carriage return combination', query: '{a}\r\neq\r\n"0"' },
+            { name: 'supports tab', query: '{a}\teq\t"0"' },
+            // some random non-standard whitespace character from https://en.wikipedia.org/wiki/Whitespace_character
+            { name: 'supports ogham space mark', query: '{a}\u1680eq\u1680"0"' },
+            { name: 'supports all', query: '{a}\r\n\t\u1680eq\r\n\t\u1680"0"' }
+        ];
+
+        R.forEach(c => {
+            it(c.name, () => {
+                const tree = new QuerySyntaxTree(c.query);
+
+                expect(tree.isValid).to.equal(true);
+                expect(tree.evaluate(data0)).to.equal(true);
+            });
+        }, cases);
+    });
 
     describe('operands', () => {
         it('does not support badly formed operands', () => {
