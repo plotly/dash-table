@@ -18,8 +18,8 @@ type SetFilter = (filter: string, rawFilter: string) => void;
 
 export interface IFilterOptions {
     columns: VisibleColumns;
+    filter: string;
     filtering: Filtering;
-    filtering_settings: string;
     filtering_type: FilteringType;
     id: string;
     rawFilterQuery: string;
@@ -127,8 +127,8 @@ export default class FilterFactory {
     public createFilters() {
         const {
             columns,
+            filter,
             filtering,
-            filtering_settings,
             filtering_type,
             row_deletable,
             row_selectable,
@@ -143,7 +143,7 @@ export default class FilterFactory {
             return [];
         }
 
-        this.updateOps(filtering_settings);
+        this.updateOps(filter);
 
         if (filtering_type === FilteringType.Basic) {
             const filterStyles = this.relevantStyles(

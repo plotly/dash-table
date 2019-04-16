@@ -40,8 +40,8 @@ export const defaultProps = {
 
     content_style: 'grow',
     css: [],
+    filter: '',
     filtering: false,
-    filtering_settings: '',
     filtering_type: 'basic',
     filtering_types: ['basic'],
     sorting: false,
@@ -772,6 +772,16 @@ export const propTypes = {
     tooltip_duration: PropTypes.number,
 
     /**
+     * If `filtering` is enabled, then the current filtering
+     * string is represented in this `filter`
+     * property.
+     * NOTE: The shape and structure of this property will
+     * likely change in the future.
+     * Stay tuned in [https://github.com/plotly/dash-table/issues/169](https://github.com/plotly/dash-table/issues/169)
+     */
+    filter: PropTypes.string,
+
+    /**
      * The `filtering` property controls the behavior of the `filtering` UI.
      * If `False`, then the filtering UI is not displayed
      * If `fe` or True, then the filtering UI is displayed and the filtering
@@ -779,7 +789,7 @@ export const propTypes = {
      * that exists in the `data` property.
      * If `be`, then the filtering UI is displayed but it is the
      * responsibility of the developer to program the filtering
-     * through a callback (where `filtering_settings` would be the input
+     * through a callback (where `filter` would be the input
      * and `data` would be the output).
      *
      * NOTE - Several aspects of filtering may change in the future,
@@ -787,16 +797,6 @@ export const propTypes = {
      * Tune in to [https://github.com/plotly/dash-table/issues/167](https://github.com/plotly/dash-table/issues/167)
      */
     filtering: PropTypes.oneOf(['fe', 'be', true, false]),
-
-    /**
-     * If `filtering` is enabled, then the current filtering
-     * string is represented in this `filtering_settings`
-     * property.
-     * NOTE: The shape and structure of this property will
-     * likely change in the future.
-     * Stay tuned in [https://github.com/plotly/dash-table/issues/169](https://github.com/plotly/dash-table/issues/169)
-     */
-    filtering_settings: PropTypes.string,
 
     /**
      * UNSTABLE
@@ -984,7 +984,7 @@ export const propTypes = {
 
     /**
      * This property represents the current structure of
-     * `filtering_settings` as a tree structure. Each node of the
+     * `filter` as a tree structure. Each node of the
      * query structure have:
      * - type (string; required)
      *   - 'open-block'
@@ -996,7 +996,7 @@ export const propTypes = {
      * - subType (string; optional)
      *   - 'open-block': '()'
      *   - 'logical-operator': '&&', '||'
-     *   - 'relational-operator': '=', '>=', '>', '<=', '<', '!='
+     *   - 'relational-operator': '=', '>=', '>', '<=', '<', '!=', 'contains'
      *   - 'unary-operator': '!', 'is bool', 'is even', 'is nil', 'is num', 'is object', 'is odd', 'is prime', 'is str'
      *   - 'expression': 'value', 'field'
      *   - 'operand': 'field'
@@ -1009,10 +1009,10 @@ export const propTypes = {
      * - left (nested query structure; optional)
      * - right (nested query structure; optional)
      *
-     * If the query is invalid or empty, the `derived_query_structure` will
+     * If the query is invalid or empty, the `derived_filter_structure` will
      * be null.
      */
-    derived_query_structure: PropTypes.object,
+    derived_filter_structure: PropTypes.object,
 
     /**
      * This property represents the current state of `data`

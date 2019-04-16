@@ -7,8 +7,8 @@ import FilterFactory from 'dash-table/components/FilterFactory';
 import HeaderFactory from 'dash-table/components/HeaderFactory';
 import { ControlledTableProps, SetProps, SetState } from 'dash-table/components/Table/props';
 
-const handleSetFilter = (setProps: SetProps, setState: SetState, filtering_settings: string, rawFilterQuery: string) => {
-    setProps({ filtering_settings });
+const handleSetFilter = (setProps: SetProps, setState: SetState, filter: string, rawFilterQuery: string) => {
+    setProps({ filter });
     setState({ rawFilterQuery });
 };
 
