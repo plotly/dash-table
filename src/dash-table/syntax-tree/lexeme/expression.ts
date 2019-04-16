@@ -5,8 +5,8 @@ import { LexemeType, IUnboundedLexeme } from 'core/syntax-tree/lexicon';
 import { ISyntaxTree } from 'core/syntax-tree/syntaxer';
 import operand from './operand';
 
-const STRING_REGEX = /^(('([^'\\]|\\'|\\)+')|("([^"\\]|\\"|\\)+")|(`([^`\\]|\\`|\\)+`))/;
-const VALUE_REGEX = /^(([^\s'"`{}()\\]|\\[\s'"`{}()]?)+)(?:[\s)]|$)/;
+const STRING_REGEX = /^(('([^'\\]|\\.)+')|("([^"\\]|\\.)+")|(`([^`\\]|\\.)+`))/;
+const VALUE_REGEX = /^(([^\s'"`{}()\\]|\\.)+)(?:[\s)]|$)/;
 
 export const fieldExpression: IUnboundedLexeme = R.merge(
     operand, {
@@ -17,7 +17,7 @@ export const fieldExpression: IUnboundedLexeme = R.merge(
 
 const getString = (
     value: string
-) => value.slice(1, value.length - 1).replace(/\\(['"`])/g, '$1');
+) => value.slice(1, value.length - 1).replace(/\\(.)/g, '$1');
 
 const getValue = (
     value: string
@@ -26,7 +26,7 @@ const getValue = (
 
     return isNumeric(value) ?
         +value :
-        value.replace(/\\([\s'"`{}()])/g, '$1');
+        value.replace(/\\(.)/g, '$1');
 };
 
 export const stringExpression: IUnboundedLexeme = {

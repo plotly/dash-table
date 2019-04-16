@@ -40,18 +40,22 @@ describe('Query Syntax Tree', () => {
             expect(new QuerySyntaxTree(`{myField eq 0`).isValid).to.equal(false);
             expect(new QuerySyntaxTree(`myField} eq 0`).isValid).to.equal(false);
             expect(new QuerySyntaxTree(`myField eq 0`).isValid).to.equal(false);
+            expect(new QuerySyntaxTree('{\\\\{myField\\\\}} eq 0').isValid).to.equal(false);
         });
 
         it('does not support badly formed expression', () => {
             expect(new QuerySyntaxTree(`{myField} eq 'value'`).isValid).to.equal(true);
             expect(new QuerySyntaxTree(`{myField} eq "value"`).isValid).to.equal(true);
             expect(new QuerySyntaxTree('{myField} eq `value`').isValid).to.equal(true);
-            expect(new QuerySyntaxTree(`{myField} eq 'value\\'`).isValid).to.equal(true);
+            expect(new QuerySyntaxTree(`{myField} eq 'value\\\\'`).isValid).to.equal(true);
             expect(new QuerySyntaxTree(`{myField} eq 'value\\''`).isValid).to.equal(true);
-            expect(new QuerySyntaxTree(`{myField} eq "value\\"`).isValid).to.equal(true);
-            expect(new QuerySyntaxTree('{myField} eq `value\\`').isValid).to.equal(true);
-            expect(new QuerySyntaxTree(`{myField} eq \\'value'`).isValid).to.equal(false);
-            expect(new QuerySyntaxTree(`{myField} eq \\"value"`).isValid).to.equal(false);
+            expect(new QuerySyntaxTree(`{myField} eq "value\\\\"`).isValid).to.equal(true);
+            expect(new QuerySyntaxTree('{myField} eq `value\\\\`').isValid).to.equal(true);
+            expect(new QuerySyntaxTree(`{myField} eq \\\\'value'`).isValid).to.equal(false);
+            expect(new QuerySyntaxTree(`{myField} eq \\\\"value"`).isValid).to.equal(false);
+            expect(new QuerySyntaxTree(`{myField} eq 'value\\'`).isValid).to.equal(false);
+            expect(new QuerySyntaxTree(`{myField} eq "value\\"`).isValid).to.equal(false);
+            expect(new QuerySyntaxTree('{myField} eq `value\\`').isValid).to.equal(false);
         });
 
         it('support arbitrary quoted column name', () => {
@@ -135,7 +139,7 @@ describe('Query Syntax Tree', () => {
         });
 
         it('support column name with "\\"', () => {
-            const tree = new QuerySyntaxTree('{\\\\{} eq 1 || {\\\\{} eq 2');
+            const tree = new QuerySyntaxTree('{\\\\\\{} eq 1 || {\\\\\\{} eq 2');
 
             expect(tree.isValid).to.equal(true);
             expect(tree.evaluate(data0)).to.equal(false);

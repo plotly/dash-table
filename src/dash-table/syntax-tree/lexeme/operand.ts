@@ -1,13 +1,13 @@
 import { LexemeType, IUnboundedLexeme } from 'core/syntax-tree/lexicon';
 import { ISyntaxTree } from 'core/syntax-tree/syntaxer';
 
-const FIELD_REGEX = /^{(([^{}\\]|\\{|\\}|\\)+)}/;
+const FIELD_REGEX = /^{(([^{}\\]|\\.)+)}/;
 
 const getField = (
     value: string
 ) => value
     .slice(1, value.length - 1)
-    .replace(/\\([{}])/g, '$1');
+    .replace(/\\(.)/g, '$1');
 
 const operand: IUnboundedLexeme = {
     present: (tree: ISyntaxTree) => getField(tree.value),
