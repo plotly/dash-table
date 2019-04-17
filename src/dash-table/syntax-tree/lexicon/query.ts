@@ -67,7 +67,7 @@ const ifOperator = (_: ILexemeResult[], previous: ILexemeResult) =>
         [LexemeType.Operand]
     );
 
-const untypedQueryLexicon = [
+const lexicon: ILexeme[] = [
     {
         ...and,
         if: ifLogicalOperator,
@@ -164,7 +164,5 @@ const untypedQueryLexicon = [
         terminal: isTerminal
     }))
 ];
-
-const lexicon: ILexeme[] = untypedQueryLexicon;
 
 export default lexicon;
