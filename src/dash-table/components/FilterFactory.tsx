@@ -13,6 +13,7 @@ import derivedHeaderOperations from 'dash-table/derived/header/operations';
 import { derivedRelevantFilterStyles } from 'dash-table/derived/style';
 import { BasicFilters, Cells, Style } from 'dash-table/derived/style/props';
 import { MultiColumnsSyntaxTree, SingleColumnSyntaxTree, getMultiColumnQueryString, getSingleColumnMap } from 'dash-table/syntax-tree';
+import SyntaxTree from 'core/syntax-tree';
 
 type SetFilter = (filter: string, rawFilter: string) => void;
 
@@ -65,7 +66,7 @@ export default class FilterFactory {
 
         const rawGlobalFilter = R.map(
             ast => ast.query || '',
-            R.filter(ast => Boolean(ast), asts)
+            R.filter<SyntaxTree>(ast => Boolean(ast), asts)
         ).join(' && ');
 
         setFilter(globalFilter, rawGlobalFilter);

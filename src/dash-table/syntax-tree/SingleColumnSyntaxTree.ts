@@ -46,6 +46,6 @@ export function modifyLex(key: ColumnId, res: ILexerResult) {
 
 export default class SingleColumnSyntaxTree extends SyntaxTree {
     constructor(key: ColumnId, query: string) {
-        super(columnLexicon, query, modifyLex.bind(undefined, key));
+        super(columnLexicon, query, undefined, modifyLex.bind(undefined, key));
     }
 }

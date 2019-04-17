@@ -9,14 +9,14 @@ export interface ISyntaxerResult {
 }
 
 export interface ISyntaxTree {
-    lexeme: ILexeme;
+    lexeme: ILexeme<any>;
     block?: ISyntaxTree;
     left?: ISyntaxTree;
     right: ISyntaxTree;
     value: string;
 }
 
-const parser = (lexs: ILexemeResult[]): ISyntaxTree => {
+const parser = (lexs: ILexemeResult<any>[]): ISyntaxTree => {
     let nesting = 0;
 
     const nestedLexs = lexs.map(lex => {
@@ -57,7 +57,7 @@ const parser = (lexs: ILexemeResult[]): ISyntaxTree => {
     }
 };
 
-export default (lexerResult: ILexerResult): ISyntaxerResult => {
+export default (lexerResult: ILexerResult<any>): ISyntaxerResult => {
     const { lexemes } = lexerResult;
 
     if (!lexerResult.valid) {

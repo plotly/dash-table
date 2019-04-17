@@ -11,7 +11,7 @@ export const getMultiColumnQueryString = (
     asts: SingleColumnSyntaxTree[]
 ) => R.map(
     ast => ast.toQueryString(),
-    R.filter(ast => ast && ast.isValid, asts)
+    R.filter<SingleColumnSyntaxTree>(ast => ast && ast.isValid, asts)
     ).join(' && ');
 
 export const getSingleColumnMap = (ast: MultiColumnsSyntaxTree) => {
