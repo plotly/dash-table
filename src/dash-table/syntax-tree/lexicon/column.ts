@@ -27,10 +27,17 @@ import {
 
 import { LexemeType, ILexeme } from 'core/syntax-tree/lexicon';
 import { ILexemeResult } from 'core/syntax-tree/lexer';
+import { ColumnId, ColumnType } from 'dash-table/components/Table/props';
 
-const lexicon: ILexeme[] = [
-    ...[contains,
-        equal,
+export interface ISingleColumnConfig {
+    id: ColumnId;
+    type: ColumnType | undefined;
+}
+
+type LexemeResult = ILexemeResult<ISingleColumnConfig>;
+
+const lexicon: ILexeme<ISingleColumnConfig>[] = [
+    ...[equal,
         greaterOrEqual,
         greaterThan,
         lessOrEqual,
@@ -39,8 +46,17 @@ const lexicon: ILexeme[] = [
     ].map(op => ({
         ...op,
         terminal: false,
-        if: (_lexs: ILexemeResult[], previous: ILexemeResult) => !previous
+        if: (_lexs: LexemeResult[], previous: LexemeResult) => !previous
     })),
+    {
+        ...contains,
+        terminal: false,
+        if: (
+            _lexs: LexemeResult[],
+            previous: LexemeResult,
+            config: ISingleColumnConfig
+        ) => !previous && config.type === ColumnType.Text
+    },
     ...[isBool,
         isEven,
         isNil,
@@ -51,7 +67,7 @@ const lexicon: ILexeme[] = [
         isStr
     ].map(op => ({
         ...op,
-        if: (_lexs: ILexemeResult[], previous: ILexemeResult) => !previous,
+        if: (_lexs: LexemeResult[], previous: LexemeResult) => !previous,
         terminal: true
     })),
     ...[
@@ -60,7 +76,7 @@ const lexicon: ILexeme[] = [
         valueExpression
     ].map(exp => ({
         ...exp,
-        if: (_lexs: ILexemeResult[], previous: ILexemeResult) =>
+        if: (_lexs: LexemeResult[], previous: LexemeResult) =>
             !previous || R.contains(
                 previous.lexeme.type,
                 [LexemeType.RelationalOperator]
