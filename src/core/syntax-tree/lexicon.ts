@@ -24,13 +24,21 @@ export interface IUnboundedLexeme {
     syntaxer?: (lexs: any[], pivot: any, pivotIndex: number) => any;
 }
 
-export interface ILexeme extends IUnboundedLexeme {
-    terminal: boolean | ((lexemes: ILexemeResult[], previous: ILexemeResult) => boolean);
-    if: (string | undefined)[] | ((lexemes: ILexemeResult[], previous: ILexemeResult) => boolean);
+type Terminal<TConfig = undefined> = boolean |
+    ((lexemes: ILexemeResult<TConfig>[], previous: ILexemeResult<TConfig>) => boolean) |
+    ((lexemes: ILexemeResult<TConfig>[], previous: ILexemeResult<TConfig>, config: TConfig) => boolean);
+
+type If<TConfig = undefined> = (string | undefined)[] |
+    ((lexemes: ILexemeResult<TConfig>[], previous: ILexemeResult<TConfig>) => boolean) |
+    ((lexemes: ILexemeResult<TConfig>[], previous: ILexemeResult<TConfig>, config: TConfig) => boolean);
+
+export interface ILexeme<TConfig = undefined> extends IUnboundedLexeme {
+    terminal: Terminal<TConfig>;
+    if: If<TConfig>;
 }
 
 export function boundLexeme(lexeme: IUnboundedLexeme) {
     return { ...lexeme, if: () => false, terminal: false };
 }
 
-export type Lexicon = ILexeme[];
+export type Lexicon<TConfig = undefined> = ILexeme<TConfig>[];

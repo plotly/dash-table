@@ -2,19 +2,27 @@ import * as R from 'ramda';
 
 import { ILexeme, Lexicon } from 'core/syntax-tree/lexicon';
 
-export interface ILexerResult {
-    lexemes: ILexemeResult[];
+export interface ILexerResult<TConfig = undefined> {
+    lexemes: ILexemeResult<TConfig>[];
     valid: boolean;
     error?: string;
 }
 
-export interface ILexemeResult {
-    lexeme: ILexeme;
+export interface ILexemeResult<TConfig = undefined> {
+    lexeme: ILexeme<TConfig>;
     value?: string;
 }
 
-export default function lexer(lexicon: Lexicon, query: string): ILexerResult {
-    let result: ILexemeResult[] = [];
+export default function lexer(lexicon: Lexicon, query: string) {
+    return configurableLexer<undefined>(lexicon, query, undefined);
+}
+
+export function configurableLexer<TConfig>(
+    lexicon: Lexicon<TConfig>,
+    query: string,
+    config: TConfig
+): ILexerResult<TConfig> {
+    let result: ILexemeResult<TConfig>[] = [];
 
     while (query.length) {
         query = query.replace(/^\s+/, '');
@@ -22,10 +30,10 @@ export default function lexer(lexicon: Lexicon, query: string): ILexerResult {
         const previous = result.slice(-1)[0];
         const previousLexeme = previous ? previous.lexeme : null;
 
-        let lexemes: ILexeme[] = lexicon.filter(lexeme =>
+        let lexemes: ILexeme<TConfig>[] = lexicon.filter(lexeme =>
             lexeme.if &&
             (!Array.isArray(lexeme.if) ?
-                lexeme.if(result, previous) :
+                lexeme.if(result, previous, config) :
                 (previousLexeme ?
                     lexeme.if && lexeme.if.indexOf(previousLexeme.type) !== -1 :
                     lexeme.if && lexeme.if.indexOf(undefined) !== -1))
@@ -45,7 +53,7 @@ export default function lexer(lexicon: Lexicon, query: string): ILexerResult {
     const last = result.slice(-1)[0];
 
     const terminal: boolean = last && (typeof last.lexeme.terminal === 'function' ?
-        last.lexeme.terminal(result, last) :
+        last.lexeme.terminal(result, last, config) :
         last.lexeme.terminal);
 
     return {
