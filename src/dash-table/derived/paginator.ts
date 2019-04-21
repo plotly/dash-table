@@ -2,6 +2,8 @@ import * as R from 'ramda';
 
 import { memoizeOneFactory } from 'core/memoizer';
 
+import { clearSelection } from 'dash-table/utils/actions';
+
 import {
     Data,
     PaginationMode,
@@ -21,7 +23,7 @@ function getBackEndPagination(
     return {
         loadNext: () => {
             pagination_settings.current_page++;
-            setProps({ pagination_settings });
+            setProps({ pagination_settings, ...clearSelection });
         },
         loadPrevious: () => {
             if (pagination_settings.current_page <= 0) {
@@ -29,7 +31,7 @@ function getBackEndPagination(
             }
 
             pagination_settings.current_page--;
-            setProps({ pagination_settings });
+            setProps({ pagination_settings, ...clearSelection });
         }
     };
 }
@@ -51,7 +53,7 @@ function getFrontEndPagination(
                 current_page: pagination_settings.current_page + 1
             });
 
-            setProps({ pagination_settings });
+            setProps({ pagination_settings, ...clearSelection });
         },
         loadPrevious: () => {
             if (pagination_settings.current_page <= 0) {
@@ -62,7 +64,7 @@ function getFrontEndPagination(
                 current_page: pagination_settings.current_page - 1
             });
 
-            setProps({ pagination_settings });
+            setProps({ pagination_settings, ...clearSelection });
         }
     };
 }
