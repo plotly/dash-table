@@ -519,7 +519,9 @@ export const propTypes = {
      * are selected via the UI elements that appear when
      * `row_selectable` is `'single'` or `'multi'`.
      */
-    selected_row_ids: PropTypes.arrayOf(PropTypes.string),
+    selected_row_ids: PropTypes.arrayOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
 
     setProps: PropTypes.func,
 
@@ -1052,7 +1054,9 @@ export const propTypes = {
      * `derived_viewport_row_ids` contains IDs for the current page,
      * while `derived_virtual_row_ids` contains IDs across all pages.
      */
-    derived_viewport_row_ids: PropTypes.arrayOf(PropTypes.string),
+    derived_viewport_row_ids: PropTypes.arrayOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
 
     /**
      * `derived_viewport_selected_rows` represents the indices of the
@@ -1064,7 +1068,9 @@ export const propTypes = {
      * `derived_viewport_selected_row_ids` represents the IDs of the
      * `selected_rows` on the currently visible page.
      */
-    derived_viewport_selected_row_ids: PropTypes.arrayOf(PropTypes.string),
+    derived_viewport_selected_row_ids: PropTypes.arrayOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
 
     /**
      * This property represents the visible state of `data`
@@ -1087,7 +1093,9 @@ export const propTypes = {
      * `derived_viewport_row_ids` contains IDs for the current page,
      * while `derived_virtual_row_ids` contains IDs across all pages.
      */
-    derived_virtual_row_ids: PropTypes.arrayOf(PropTypes.number),
+    derived_virtual_row_ids: PropTypes.arrayOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
 
     /**
      * `derived_virtual_selected_rows` represents the indices of the
@@ -1100,7 +1108,9 @@ export const propTypes = {
      * `selected_rows` as they appear after filtering and sorting,
      * across all pages.
      */
-    derived_virtual_selected_row_ids: PropTypes.arrayOf(PropTypes.string),
+    derived_virtual_selected_row_ids: PropTypes.arrayOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
 
     /**
      * DEPRECATED
