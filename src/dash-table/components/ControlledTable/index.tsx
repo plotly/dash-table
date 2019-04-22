@@ -107,7 +107,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         } = this.props;
 
         if (selected_cells.length &&
-            R.has('row', active_cell) &&
+            active_cell &&
             !R.contains(active_cell, selected_cells)
         ) {
             setProps({ active_cell: selected_cells[0] });
@@ -330,6 +330,13 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         // continue to use it for at least the case we are navigating with
         // TAB
         event.preventDefault();
+
+        if (!active_cell) {
+            // there should always be an active_cell if we got here...
+            // but if for some reason there isn't, bail out rather than
+            // doing something unexpected
+            return;
+        }
 
         // If we are moving yank focus away from whatever input may still have
         // focus.
