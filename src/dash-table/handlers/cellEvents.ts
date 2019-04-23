@@ -15,6 +15,16 @@ export const handleClick = (propsFn: () => ICellFactoryProps, idx: number, i: nu
         viewport
     } = propsFn();
 
+    const row = idx + virtualized.offset.rows;
+    const col = i + virtualized.offset.columns;
+
+    const clickedCell = makeCell(row, col, columns, viewport);
+
+    // clicking again on the already-active cell: ignore
+    if (active_cell && row === active_cell.row && col === active_cell.column) {
+        return;
+    }
+
     e.preventDefault();
 
     /*
@@ -27,15 +37,11 @@ export const handleClick = (propsFn: () => ICellFactoryProps, idx: number, i: nu
      */
     window.getSelection().removeAllRanges();
 
-    const row = idx + virtualized.offset.rows;
-    const col = i + virtualized.offset.columns;
-
-    const clickedCell = makeCell(row, col, columns, viewport);
-
     const selected = isSelected(selected_cells, row, col);
 
-    // if clicking on an already-selected cell (NOT shift-clicking),
-    // don't alter the selection, just move the active cell
+    // if clicking on a *different* already-selected cell (NOT shift-clicking,
+    // not the active cell), don't alter the selection,
+    // just move the active cell
     if (selected && !e.shiftKey) {
         setProps({
             is_focused: false,
