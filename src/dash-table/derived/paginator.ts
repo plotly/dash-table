@@ -16,6 +16,10 @@ export interface IPaginator {
     loadPrevious(): void;
 }
 
+export function lastPage(data: Data, settings: IPaginationSettings) {
+    return Math.max(Math.ceil(data.length / settings.page_size) - 1, 0);
+}
+
 function getBackEndPagination(
     pagination_settings: IPaginationSettings,
     setProps: SetProps
@@ -43,7 +47,7 @@ function getFrontEndPagination(
 ) {
     return {
         loadNext: () => {
-            let maxPageIndex = Math.floor(data.length / pagination_settings.page_size);
+            const maxPageIndex = lastPage(data, pagination_settings);
 
             if (pagination_settings.current_page >= maxPageIndex) {
                 return;
