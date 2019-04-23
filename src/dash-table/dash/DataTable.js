@@ -83,18 +83,16 @@ export const defaultProps = {
     virtualization: false
 };
 
-const cellCoordsIDsProp = PropTypes.exact({
-    row: PropTypes.number,
-    column: PropTypes.number,
-    row_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    column_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-});
-
 export const propTypes = {
     /**
      * The row and column indices and IDs of the currently active cell.
      */
-    active_cell: cellCoordsIDsProp,
+    active_cell: PropTypes.exact({
+        row: PropTypes.number,
+        column: PropTypes.number,
+        row_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        column_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    }),
 
     /**
      * Columns describes various aspects about each individual column.
@@ -429,7 +427,12 @@ export const propTypes = {
      * in one of the corners of the region.
      * `start_cell` represents the coordinates of the other corner.
      */
-    end_cell: cellCoordsIDsProp,
+    end_cell: PropTypes.exact({
+        row: PropTypes.number,
+        column: PropTypes.number,
+        row_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        column_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    }),
 
     /**
      * The ID of the table.
@@ -505,7 +508,12 @@ export const propTypes = {
      * clicking on a different cell or holding down shift and navigating
      * with the arrow keys.
      */
-    selected_cells: PropTypes.arrayOf(cellCoordsIDsProp),
+    selected_cells: PropTypes.arrayOf(PropTypes.exact({
+        row: PropTypes.number,
+        column: PropTypes.number,
+        row_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        column_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    })),
 
     /**
      * `selected_rows` contains the indices of rows that
@@ -532,7 +540,12 @@ export const propTypes = {
      * in one of the corners of the region.
      * `end_cell` represents the coordinates of the other corner.
      */
-    start_cell: cellCoordsIDsProp,
+    start_cell: PropTypes.exact({
+        row: PropTypes.number,
+        column: PropTypes.number,
+        row_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        column_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    }),
 
     /**
      * If True, then the table will be styled like a list view
