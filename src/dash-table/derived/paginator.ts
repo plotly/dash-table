@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import { merge } from 'ramda';
 
 import { memoizeOneFactory } from 'core/memoizer';
 
@@ -49,7 +49,7 @@ function getFrontEndPagination(
                 return;
             }
 
-            pagination_settings = R.merge(pagination_settings, {
+            pagination_settings = merge(pagination_settings, {
                 current_page: pagination_settings.current_page + 1
             });
 
@@ -60,7 +60,7 @@ function getFrontEndPagination(
                 return;
             }
 
-            pagination_settings = R.merge(pagination_settings, {
+            pagination_settings = merge(pagination_settings, {
                 current_page: pagination_settings.current_page - 1
             });
 
