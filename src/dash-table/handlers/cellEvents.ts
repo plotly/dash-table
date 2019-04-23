@@ -8,51 +8,14 @@ import reconcile from 'dash-table/type/reconcile';
 export const handleClick = (propsFn: () => ICellFactoryProps, idx: number, i: number, e: any) => {
     const {
         selected_cells,
-        start_cell,
+        active_cell,
         setProps,
         virtualized,
         columns,
         viewport
     } = propsFn();
 
-    const selected = isSelected(selected_cells, idx, i);
-
-    // don't update if already selected
-    if (selected) {
-        return;
-    }
-
     e.preventDefault();
-
-    const row = idx + virtualized.offset.rows;
-    const col = i + virtualized.offset.columns;
-
-    const activeCell = makeCell(row, col, columns, viewport);
-
-    const newProps: Partial<ICellFactoryProps> = {
-        is_focused: false,
-        active_cell: activeCell,
-        start_cell: activeCell,
-        end_cell: activeCell
-    };
-
-    if (e.shiftKey && start_cell && start_cell.row !== undefined) {
-        newProps.selected_cells = makeSelection(
-            {
-                minRow: min(row, start_cell.row),
-                maxRow: max(row, start_cell.row),
-                minCol: min(col, start_cell.column),
-                maxCol: max(col, start_cell.column)
-            },
-            columns,
-            viewport
-        );
-        delete newProps.start_cell;
-        delete newProps.active_cell;
-
-    } else {
-        newProps.selected_cells = [activeCell];
-    }
 
     /*
      * In some cases this will initiate browser text selection.
@@ -63,6 +26,45 @@ export const handleClick = (propsFn: () => ICellFactoryProps, idx: number, i: nu
      * completely wrong.
      */
     window.getSelection().removeAllRanges();
+
+    const row = idx + virtualized.offset.rows;
+    const col = i + virtualized.offset.columns;
+
+    const clickedCell = makeCell(row, col, columns, viewport);
+
+    const selected = isSelected(selected_cells, row, col);
+
+    // if clicking on an already-selected cell (NOT shift-clicking),
+    // don't alter the selection, just move the active cell
+    if (selected && !e.shiftKey) {
+        setProps({
+            is_focused: false,
+            active_cell: clickedCell
+        });
+        return;
+    }
+
+    const newProps: Partial<ICellFactoryProps> = {
+        is_focused: false,
+        end_cell: clickedCell
+    };
+
+    if (e.shiftKey && active_cell) {
+        newProps.selected_cells = makeSelection(
+            {
+                minRow: min(row, active_cell.row),
+                maxRow: max(row, active_cell.row),
+                minCol: min(col, active_cell.column),
+                maxCol: max(col, active_cell.column)
+            },
+            columns,
+            viewport
+        );
+    } else {
+        newProps.active_cell = clickedCell;
+        newProps.start_cell = clickedCell;
+        newProps.selected_cells = [clickedCell];
+    }
 
     setProps(newProps);
 };
