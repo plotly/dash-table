@@ -37,7 +37,8 @@ export interface ISingleColumnConfig {
 type LexemeResult = ILexemeResult<ISingleColumnConfig>;
 
 const lexicon: ILexeme<ISingleColumnConfig>[] = [
-    ...[equal,
+    ...[contains,
+        equal,
         greaterOrEqual,
         greaterThan,
         lessOrEqual,
@@ -48,15 +49,6 @@ const lexicon: ILexeme<ISingleColumnConfig>[] = [
         terminal: false,
         if: (_lexs: LexemeResult[], previous: LexemeResult) => !previous
     })),
-    {
-        ...contains,
-        terminal: false,
-        if: (
-            _lexs: LexemeResult[],
-            previous: LexemeResult,
-            config: ISingleColumnConfig
-        ) => !previous && config.type === ColumnType.Text
-    },
     ...[isBool,
         isEven,
         isNil,

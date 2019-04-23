@@ -13,7 +13,7 @@ const DATETIME_REGEXP = /^\s*(-?\d{4}|\d{2})(-(\d{1,2})(-(\d{1,2})([ Tt]([01]?\d
 // Please don't use 2-digit years!
 const YFIRST = new Date().getFullYear() - 70;
 
-export function normalizeDate(value: any, options: IDatetimeColumn | undefined): string | null {
+export function normalizeDate(value: any, options?: IDatetimeColumn): string | null {
     // unlike plotly.js, do not accept year as a number - only strings.
     if (typeof value !== 'string') {
         return null;

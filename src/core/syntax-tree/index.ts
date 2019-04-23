@@ -57,6 +57,12 @@ export default class SyntaxTree<TConfig = undefined> {
         public readonly config: TConfig,
         postProcessor: (res: ILexerResult<TConfig>) => ILexerResult<TConfig> = res => res
     ) {
+        this.lexicon = R.map(lexeme => R.merge(lexeme, {
+            evaluate: lexeme.boundedEvaluate ?
+                lexeme.boundedEvaluate.bind(undefined, config) :
+                lexeme.evaluate
+        }), lexicon);
+
         this.lexerResult = postProcessor(configurableLexer<TConfig>(this.lexicon, this.query, this.config));
         this.syntaxerResult = syntaxer(this.lexerResult);
     }

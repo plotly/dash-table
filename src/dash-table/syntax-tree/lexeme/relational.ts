@@ -3,6 +3,7 @@ import * as R from 'ramda';
 import Logger from 'core/Logger';
 import { LexemeType, IUnboundedLexeme } from 'core/syntax-tree/lexicon';
 import { ISyntaxTree } from 'core/syntax-tree/syntaxer';
+import { normalizeDate } from 'dash-table/type/date';
 
 function evaluator(
     target: any,
@@ -36,6 +37,7 @@ export enum RelationalOperator {
     GreaterThan = '>',
     LessOrEqual = '<=',
     LessThan = '<',
+    LikeDate = 'like_date',
     NotEqual = '!='
 }
 
@@ -71,6 +73,20 @@ export const greaterThan: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(([op, exp]) => op > exp),
     subType: RelationalOperator.GreaterThan,
     regexp: /^(>|gt)/i
+}, LEXEME_BASE);
+
+export const likeDate: IUnboundedLexeme = R.merge({
+    evaluate: relationalEvaluator(([op, exp]) => {
+        const normalizedOp = normalizeDate(op);
+        const normalizedExp = normalizeDate(exp);
+
+        return normalizedOp !== null &&
+            normalizedExp !== null &&
+            // IE11 does not support `startsWith`
+            normalizedOp.indexOf(normalizedExp) === 0;
+    }),
+    subType: RelationalOperator.LikeDate,
+    regexp: /^(in)/i
 }, LEXEME_BASE);
 
 export const lessOrEqual: IUnboundedLexeme = R.merge({
