@@ -30,15 +30,15 @@ export function modifyLex(config: ISingleColumnConfig, res: ILexerResult<ISingle
 
     if (isBinary(res.lexemes) || isUnary(res.lexemes)) {
         res.lexemes = [
-            { lexeme: boundLexeme(operand), value: `{${config.id}}` },
+            { lexeme: boundLexeme(operand), value: `{${config.column.id}}` },
             ...res.lexemes
         ];
     } else if (isExpression(res.lexemes)) {
         res.lexemes = [
-            { lexeme: boundLexeme(operand), value: `{${config.id}}` },
+            { lexeme: boundLexeme(operand), value: `{${config.column.id}}` },
             {
                 lexeme: boundLexeme(equal),
-                value: config.type === ColumnType.Text ?
+                value: (config.column.type === ColumnType.Text) ?
                     RelationalOperator.Contains :
                     RelationalOperator.Equal
             },

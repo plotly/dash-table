@@ -27,11 +27,12 @@ import {
 
 import { LexemeType, ILexeme } from 'core/syntax-tree/lexicon';
 import { ILexemeResult } from 'core/syntax-tree/lexer';
-import { ColumnId, ColumnType } from 'dash-table/components/Table/props';
+import { ColumnId, IVisibleColumn } from 'dash-table/components/Table/props';
 
 export interface ISingleColumnConfig {
-    id: ColumnId;
-    type: ColumnType | undefined;
+    column: Partial<IVisibleColumn> & {
+        id: ColumnId
+    };
 }
 
 type LexemeResult = ILexemeResult<ISingleColumnConfig>;

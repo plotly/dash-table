@@ -35,14 +35,22 @@ export const getSingleColumnMap = (
             const sanitizedColumnId = s.left.lexeme.present ? s.left.lexeme.present(s.left) : s.left.value;
 
             const column = R.find(c => c.id === sanitizedColumnId, columns);
-            const config = { id: sanitizedColumnId, type: column && column.type };
+            if (!column) {
+                throw new Error(`column ${sanitizedColumnId} not found`);
+            }
+
+            const config = { column };
 
             map.set(sanitizedColumnId, new SingleColumnSyntaxTree(s.value, config));
         } else if (s.lexeme.type === LexemeType.RelationalOperator && s.left && s.right) {
             const sanitizedColumnId = s.left.lexeme.present ? s.left.lexeme.present(s.left) : s.left.value;
 
             const column = R.find(c => c.id === sanitizedColumnId, columns);
-            const config = { id: sanitizedColumnId, type: column && column.type };
+            if (!column) {
+                throw new Error(`column ${sanitizedColumnId} not found`);
+            }
+
+            const config = { column };
 
             if (s.lexeme.present && s.lexeme.present(s) === RelationalOperator.Equal) {
                 map.set(sanitizedColumnId, new SingleColumnSyntaxTree(`${s.right.value}`, config));

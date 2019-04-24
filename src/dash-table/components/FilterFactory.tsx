@@ -55,7 +55,7 @@ export default class FilterFactory {
         const safeColumnId = column.id.toString();
 
         if (value && value.length) {
-            this.ops.set(safeColumnId, new SingleColumnSyntaxTree(value, { id: column.id, type: column.type }));
+            this.ops.set(safeColumnId, new SingleColumnSyntaxTree(value, { column }));
         } else {
             this.ops.delete(safeColumnId);
         }
