@@ -31,7 +31,10 @@ function expectCellSelection(
         };
     }
 
-    let activeCell: any, startCell: any, endCell: any, selectedCells: any;
+    let activeCell: any;
+    let startCell: any;
+    let endCell: any;
+    let selectedCells: any;
     if (rows.length && cols) {
         activeCell = makeCell(activeItem || [0, 0]);
         startCell = makeCell(startItem || [0, 0]);
@@ -51,7 +54,7 @@ function expectCellSelection(
         expect(JSON.parse($container.text())).to.deep.equal(endCell);
     });
     cy.get('#selected_cells_container').should($container => {
-        if(selectedCells && selectedCells.length) {
+        if (selectedCells && selectedCells.length) {
             expect(JSON.parse($container.text())).to.deep.equal(selectedCells);
         } else {
             expect($container.text()).to.be.oneOf(['null', '[]']);
