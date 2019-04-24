@@ -1,7 +1,7 @@
 import * as R from 'ramda';
 
 import Logger from 'core/Logger';
-import { ILexerResult, configurableLexer } from 'core/syntax-tree/lexer';
+import lexer, { ILexerResult } from 'core/syntax-tree/lexer';
 import syntaxer, { ISyntaxerResult, ISyntaxTree } from 'core/syntax-tree/syntaxer';
 import { Lexicon } from './lexicon';
 
@@ -39,8 +39,8 @@ function toStructure(tree: ISyntaxTree): IStructure {
     return res;
 }
 
-export default class SyntaxTree<TConfig = undefined> {
-    protected lexerResult: ILexerResult<TConfig>;
+export default class SyntaxTree {
+    protected lexerResult: ILexerResult;
     protected syntaxerResult: ISyntaxerResult;
 
     get isValid() {
@@ -52,12 +52,11 @@ export default class SyntaxTree<TConfig = undefined> {
     }
 
     constructor(
-        public readonly lexicon: Lexicon<TConfig>,
+        public readonly lexicon: Lexicon,
         public readonly query: string,
-        public readonly config: TConfig,
-        postProcessor: (res: ILexerResult<TConfig>) => ILexerResult<TConfig> = res => res
+        postProcessor: (res: ILexerResult) => ILexerResult = res => res
     ) {
-        this.lexerResult = postProcessor(configurableLexer<TConfig>(this.lexicon, this.query, this.config));
+        this.lexerResult = postProcessor(lexer(this.lexicon, this.query));
         this.syntaxerResult = syntaxer(this.lexerResult);
     }
 

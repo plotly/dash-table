@@ -9,7 +9,7 @@ import { ILexemeResult } from 'core/syntax-tree/lexer';
 
 export default class MultiColumnsSyntaxTree extends SyntaxTree {
     constructor(query: string) {
-        super(columnMultiLexicon, query, undefined);
+        super(columnMultiLexicon, query);
     }
     get isValid() {
         return super.isValid &&

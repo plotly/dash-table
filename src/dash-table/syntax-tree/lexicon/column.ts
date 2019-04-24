@@ -36,9 +36,7 @@ export interface ISingleColumnConfig {
     };
 }
 
-type LexemeResult = ILexemeResult<ISingleColumnConfig>;
-
-const lexicon: ILexeme<ISingleColumnConfig>[] = [
+const lexicon: ILexeme[] = [
     ...[contains,
         equal,
         greaterOrEqual,
@@ -50,7 +48,7 @@ const lexicon: ILexeme<ISingleColumnConfig>[] = [
     ].map(op => ({
         ...op,
         terminal: false,
-        if: (_lexs: LexemeResult[], previous: LexemeResult) => !previous
+        if: (_lexs: ILexemeResult[], previous: ILexemeResult) => !previous
     })),
     ...[isBool,
         isEven,
@@ -62,7 +60,7 @@ const lexicon: ILexeme<ISingleColumnConfig>[] = [
         isStr
     ].map(op => ({
         ...op,
-        if: (_lexs: LexemeResult[], previous: LexemeResult) => !previous,
+        if: (_lexs: ILexemeResult[], previous: ILexemeResult) => !previous,
         terminal: true
     })),
     ...[
@@ -71,7 +69,7 @@ const lexicon: ILexeme<ISingleColumnConfig>[] = [
         valueExpression
     ].map(exp => ({
         ...exp,
-        if: (_lexs: LexemeResult[], previous: LexemeResult) =>
+        if: (_lexs: ILexemeResult[], previous: ILexemeResult) =>
             !previous || R.contains(
                 previous.lexeme.type,
                 [LexemeType.RelationalOperator]

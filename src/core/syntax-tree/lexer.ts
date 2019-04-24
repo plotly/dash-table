@@ -2,27 +2,19 @@ import * as R from 'ramda';
 
 import { ILexeme, Lexicon } from 'core/syntax-tree/lexicon';
 
-export interface ILexerResult<TConfig = undefined> {
-    lexemes: ILexemeResult<TConfig>[];
+export interface ILexerResult {
+    lexemes: ILexemeResult[];
     valid: boolean;
     error?: string;
 }
 
-export interface ILexemeResult<TConfig = undefined> {
-    lexeme: ILexeme<TConfig>;
+export interface ILexemeResult {
+    lexeme: ILexeme;
     value?: string;
 }
 
-export default function lexer(lexicon: Lexicon, query: string) {
-    return configurableLexer<undefined>(lexicon, query, undefined);
-}
-
-export function configurableLexer<TConfig>(
-    lexicon: Lexicon<TConfig>,
-    query: string,
-    config: TConfig
-): ILexerResult<TConfig> {
-    let result: ILexemeResult<TConfig>[] = [];
+export default function lexer(lexicon: Lexicon, query: string): ILexerResult {
+    let result: ILexemeResult[] = [];
 
     while (query.length) {
         query = query.replace(/^\s+/, '');
@@ -30,10 +22,10 @@ export function configurableLexer<TConfig>(
         const previous = result.slice(-1)[0];
         const previousLexeme = previous ? previous.lexeme : null;
 
-        let lexemes: ILexeme<TConfig>[] = lexicon.filter(lexeme =>
+        let lexemes: ILexeme[] = lexicon.filter(lexeme =>
             lexeme.if &&
             (!Array.isArray(lexeme.if) ?
-                lexeme.if(result, previous, config) :
+                lexeme.if(result, previous) :
                 (previousLexeme ?
                     lexeme.if && lexeme.if.indexOf(previousLexeme.type) !== -1 :
                     lexeme.if && lexeme.if.indexOf(undefined) !== -1))
@@ -53,7 +45,7 @@ export function configurableLexer<TConfig>(
     const last = result.slice(-1)[0];
 
     const terminal: boolean = last && (typeof last.lexeme.terminal === 'function' ?
-        last.lexeme.terminal(result, last, config) :
+        last.lexeme.terminal(result, last) :
         last.lexeme.terminal);
 
     return {
