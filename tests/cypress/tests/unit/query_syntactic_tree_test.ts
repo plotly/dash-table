@@ -244,12 +244,12 @@ describe('Query Syntax Tree', () => {
             expect(tree.evaluate({ field: 2 })).to.equal(true);
         });
 
-        it('can compare string to number and return false', () => {
+        it('can compare string to number', () => {
             const tree = new QuerySyntaxTree('{a} eq 1');
 
             expect(tree.isValid).to.equal(true);
             expect(tree.evaluate(data0)).to.equal(false);
-            expect(tree.evaluate(data1)).to.equal(false);
+            expect(tree.evaluate(data1)).to.equal(true);
             expect(tree.evaluate(data2)).to.equal(false);
             expect(tree.evaluate(data3)).to.equal(false);
         });
@@ -264,12 +264,12 @@ describe('Query Syntax Tree', () => {
             expect(tree.evaluate(data3)).to.equal(false);
         });
 
-        it('can compare string to number and return false', () => {
+        it('can compare string to number', () => {
             const tree = new QuerySyntaxTree('{c} eq "1"');
 
             expect(tree.isValid).to.equal(true);
             expect(tree.evaluate(data0)).to.equal(false);
-            expect(tree.evaluate(data1)).to.equal(false);
+            expect(tree.evaluate(data1)).to.equal(true);
             expect(tree.evaluate(data2)).to.equal(false);
             expect(tree.evaluate(data3)).to.equal(false);
         });
