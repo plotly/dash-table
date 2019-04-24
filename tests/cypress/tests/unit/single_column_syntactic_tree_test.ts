@@ -87,22 +87,22 @@ describe('Single Column Syntax Tree', () => {
         expect(tree.toQueryString()).to.equal('{a} = 1');
     });
 
-    it('`undefined` column type cannot use `contains`', () => {
+    it('`undefined` column type can use `contains`', () => {
         const tree = new SingleColumnSyntaxTree('contains 1', COLUMN_UNDEFINED);
 
-        expect(tree.isValid).to.equal(false);
+        expect(tree.isValid).to.equal(true);
     });
 
-    it('`any` column type cannot use `contains`', () => {
+    it('`any` column type can use `contains`', () => {
         const tree = new SingleColumnSyntaxTree('contains 1', COLUMN_ANY);
 
-        expect(tree.isValid).to.equal(false);
+        expect(tree.isValid).to.equal(true);
     });
 
-    it('`numeric` column type cannot use `contains`', () => {
+    it('`numeric` column type can use `contains`', () => {
         const tree = new SingleColumnSyntaxTree('contains 1', COLUMN_NUMERIC);
 
-        expect(tree.isValid).to.equal(false);
+        expect(tree.isValid).to.equal(true);
     });
 
     it('can be expression with text column type', () => {
