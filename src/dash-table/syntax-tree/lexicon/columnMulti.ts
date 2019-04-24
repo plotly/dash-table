@@ -16,6 +16,7 @@ import {
     greaterThan,
     lessOrEqual,
     lessThan,
+    likeDate,
     notEqual
 } from '../lexeme/relational';
 import {
@@ -60,6 +61,7 @@ const lexicon: ILexeme[] = [
         greaterThan,
         lessOrEqual,
         lessThan,
+        likeDate,
         notEqual
     ].map(op => ({
         ...op,

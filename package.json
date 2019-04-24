@@ -6,7 +6,8 @@
   "scripts": {
     "preprivate::opentests": "run-s private::wait*",
     "preprivate::test.server": "run-s private::wait_dash*",
-    "preprivate::test.standalone": "run-s private::build:js-test private::wait_js",
+    "preprivate::test.standalone": "run-s private::wait_js",
+    "pretest.standalone": "run-s private::build:js-test",
     "private::build": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack --display-reasons --bail",
     "private::build:js": "run-s \"private::build -- --mode production\"",
     "private::build:js-dev": "run-s \"private::build -- --mode development\"",

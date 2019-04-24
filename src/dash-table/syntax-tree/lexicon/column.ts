@@ -12,6 +12,7 @@ import {
     greaterThan,
     lessOrEqual,
     lessThan,
+    likeDate,
     notEqual
 } from '../lexeme/relational';
 import {
@@ -44,6 +45,7 @@ const lexicon: ILexeme<ISingleColumnConfig>[] = [
         greaterThan,
         lessOrEqual,
         lessThan,
+        likeDate,
         notEqual
     ].map(op => ({
         ...op,

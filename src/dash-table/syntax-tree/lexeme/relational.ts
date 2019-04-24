@@ -5,6 +5,7 @@ import Logger from 'core/Logger';
 import { LexemeType, IUnboundedLexeme } from 'core/syntax-tree/lexicon';
 import { ISyntaxTree } from 'core/syntax-tree/syntaxer';
 import { normalizeDate } from 'dash-table/type/date';
+import { IDateValidation } from 'dash-table/components/Table/props';
 
 function evaluator(
     target: any,
@@ -38,7 +39,7 @@ export enum RelationalOperator {
     GreaterThan = '>',
     LessOrEqual = '<=',
     LessThan = '<',
-    LikeDate = 'like_date',
+    LikeDate = 'in',
     NotEqual = '!='
 }
 
@@ -49,13 +50,13 @@ const LEXEME_BASE = {
 };
 
 export const contains: IUnboundedLexeme = R.merge({
-    evaluate: relationalEvaluator(([op, exp]) =>
-        !R.isNil(op) &&
-        !R.isNil(exp) &&
-        R.type(op.toString) === 'Function' &&
-        R.type(exp.toString) === 'Function' &&
-        op.toString().indexOf(exp.toString()) !== -1
-    ),
+    evaluate: relationalEvaluator(([op, exp]) => {
+        if (R.type(exp) !== 'String') {
+            return false;
+        }
+
+        return !R.isNil(op) && R.toString(op).indexOf(exp) !== -1;
+    }),
     subType: RelationalOperator.Contains,
     regexp: /^(contains)/i
 }, LEXEME_BASE);
@@ -82,10 +83,14 @@ export const greaterThan: IUnboundedLexeme = R.merge({
     regexp: /^(>|gt)/i
 }, LEXEME_BASE);
 
+const DATE_OPTIONS: IDateValidation = {
+    allow_YY: true
+};
+
 export const likeDate: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(([op, exp]) => {
-        const normalizedOp = normalizeDate(op);
-        const normalizedExp = normalizeDate(exp);
+        const normalizedOp = normalizeDate(op, DATE_OPTIONS);
+        const normalizedExp = normalizeDate(exp, DATE_OPTIONS);
 
         return !R.isNil(normalizedOp) &&
             !R.isNil(normalizedExp) &&
