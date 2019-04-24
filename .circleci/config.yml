@@ -108,7 +108,9 @@ jobs:
 
             - run:
                 name: Run tests
-                command: npm run test.unit
+                command: |
+                    . venv/bin/activate
+                    npm run test.unit
 
 
     "visual-test":
