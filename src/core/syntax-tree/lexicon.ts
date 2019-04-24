@@ -24,9 +24,6 @@ export interface IUnboundedLexeme {
     syntaxer?: (lexs: any[], pivot: any, pivotIndex: number) => any;
 }
 
-type Evaluate<TConfig = undefined> =
-    ((config: TConfig, target: any, tree: ISyntaxTree) => boolean);
-
 type If<TConfig = undefined> = (string | undefined)[] |
     ((lexemes: ILexemeResult<TConfig>[], previous: ILexemeResult<TConfig>) => boolean) |
     ((lexemes: ILexemeResult<TConfig>[], previous: ILexemeResult<TConfig>, config: TConfig) => boolean);
@@ -36,7 +33,6 @@ type Terminal<TConfig = undefined> = boolean |
     ((lexemes: ILexemeResult<TConfig>[], previous: ILexemeResult<TConfig>, config: TConfig) => boolean);
 
 export interface ILexeme<TConfig = undefined> extends IUnboundedLexeme {
-    boundedEvaluate?: Evaluate<TConfig>;
     if: If<TConfig>;
     terminal: Terminal<TConfig>;
 }
