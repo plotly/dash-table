@@ -50,7 +50,8 @@ function doSort(columnId: ColumnId, sortSettings: SortSettings, sortType: Sortin
             sorting_settings: sortingStrategy(
                 sortSettings,
                 { column_id: columnId, direction }
-            )
+            ),
+            ...actions.clearSelection
         });
     };
 }
