@@ -99,6 +99,14 @@ jobs:
                     - /home/circleci/.cache/Cypress
 
             - run:
+                name: Install requirements
+                command: |
+                    sudo pip install --upgrade virtualenv
+                    python -m venv venv || virtualenv venv
+                    . venv/bin/activate
+                    pip install -r requirements.txt --quiet
+
+            - run:
                 name: Run tests
                 command: npm run test.unit
 
