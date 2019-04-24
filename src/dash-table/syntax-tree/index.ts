@@ -34,7 +34,7 @@ export const getSingleColumnMap = (
         if (s.lexeme.type === LexemeType.UnaryOperator && s.left) {
             const sanitizedColumnId = s.left.lexeme.present ? s.left.lexeme.present(s.left) : s.left.value;
 
-            const column = R.find(c => c.id === sanitizedColumnId, columns);
+            const column = R.find(c => c.id.toString() === sanitizedColumnId, columns);
             if (!column) {
                 throw new Error(`column ${sanitizedColumnId} not found`);
             }
@@ -45,7 +45,7 @@ export const getSingleColumnMap = (
         } else if (s.lexeme.type === LexemeType.RelationalOperator && s.left && s.right) {
             const sanitizedColumnId = s.left.lexeme.present ? s.left.lexeme.present(s.left) : s.left.value;
 
-            const column = R.find(c => c.id === sanitizedColumnId, columns);
+            const column = R.find(c => c.id.toString() === sanitizedColumnId, columns);
             if (!column) {
                 throw new Error(`column ${sanitizedColumnId} not found`);
             }
