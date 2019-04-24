@@ -1,3 +1,4 @@
+import isNumeric from 'fast-isnumeric';
 import * as R from 'ramda';
 
 import Logger from 'core/Logger';
@@ -49,16 +50,22 @@ const LEXEME_BASE = {
 
 export const contains: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(([op, exp]) =>
-        typeof op === 'string' &&
-        typeof exp === 'string' &&
-        op.indexOf(exp) !== -1
+        !R.isNil(op) &&
+        !R.isNil(exp) &&
+        R.type(op.toString) === 'Function' &&
+        R.type(exp.toString) === 'Function' &&
+        op.toString().indexOf(exp.toString()) !== -1
     ),
     subType: RelationalOperator.Contains,
     regexp: /^(contains)/i
 }, LEXEME_BASE);
 
 export const equal: IUnboundedLexeme = R.merge({
-    evaluate: relationalEvaluator(([op, exp]) => op === exp),
+    evaluate: relationalEvaluator(([op, exp]) => (
+        isNumeric(op) &&
+        isNumeric(exp) &&
+        +op === +exp
+    ) || op === exp),
     subType: RelationalOperator.Equal,
     regexp: /^(=|eq)/i
 }, LEXEME_BASE);
@@ -80,8 +87,8 @@ export const likeDate: IUnboundedLexeme = R.merge({
         const normalizedOp = normalizeDate(op);
         const normalizedExp = normalizeDate(exp);
 
-        return normalizedOp !== null &&
-            normalizedExp !== null &&
+        return !R.isNil(normalizedOp) &&
+            !R.isNil(normalizedExp) &&
             // IE11 does not support `startsWith`
             normalizedOp.indexOf(normalizedExp) === 0;
     }),
