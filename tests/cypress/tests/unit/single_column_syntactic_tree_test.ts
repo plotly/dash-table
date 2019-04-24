@@ -83,7 +83,7 @@ describe('Single Column Syntax Tree', () => {
         expect(tree.evaluate({ a: 1 })).to.equal(true);
         expect(tree.evaluate({ a: 2 })).to.equal(false);
 
-        expect(tree.toQueryString()).to.equal('{a} = 1');
+        expect(tree.toQueryString()).to.equal('{a} contains 1');
     });
 
     it('can be expression with numeric column type', () => {
