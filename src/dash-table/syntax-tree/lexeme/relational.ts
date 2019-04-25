@@ -50,23 +50,22 @@ const LEXEME_BASE = {
 };
 
 export const contains: IUnboundedLexeme = R.merge({
-    evaluate: relationalEvaluator(([op, exp]) => {
-        if (R.type(exp) !== 'String') {
-            return false;
-        }
-
-        return !R.isNil(op) && R.toString(op).indexOf(exp) !== -1;
-    }),
+    evaluate: relationalEvaluator(([op, exp]) =>
+        !R.isNil(exp) &&
+        !R.isNil(op) &&
+        (R.type(exp) === 'String' || R.type(op) === 'String') &&
+        op.toString().indexOf(exp.toString()) !== -1
+    ),
     subType: RelationalOperator.Contains,
     regexp: /^(contains)/i
 }, LEXEME_BASE);
 
 export const equal: IUnboundedLexeme = R.merge({
-    evaluate: relationalEvaluator(([op, exp]) => (
-        isNumeric(op) &&
-        isNumeric(exp) &&
-        +op === +exp
-    ) || op === exp),
+    evaluate: relationalEvaluator(([op, exp]) =>
+        (isNumeric(op) && isNumeric(exp)) ?
+            +op === +exp :
+            op === exp
+    ),
     subType: RelationalOperator.Equal,
     regexp: /^(=|eq)/i
 }, LEXEME_BASE);
