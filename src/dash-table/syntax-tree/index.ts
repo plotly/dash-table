@@ -12,7 +12,7 @@ export const getMultiColumnQueryString = (
     asts: SingleColumnSyntaxTree[]
 ) => R.map(
     ast => ast.toQueryString(),
-    R.filter<SingleColumnSyntaxTree>(ast => ast && ast.isValid, asts)
+    R.filter<SingleColumnSyntaxTree>(ast => ast && ast.isValid && ast.query !== '', asts)
     ).join(' && ');
 
 export const getSingleColumnMap = (

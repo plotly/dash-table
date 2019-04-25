@@ -64,8 +64,8 @@ export default class FilterFactory {
         const globalFilter = getMultiColumnQueryString(asts);
 
         const rawGlobalFilter = R.map(
-            ast => ast.query || '',
-            R.filter<SingleColumnSyntaxTree>(ast => Boolean(ast), asts)
+            ast => ast.query,
+            R.filter<SingleColumnSyntaxTree>(ast => ast && ast.isValid && ast.query !== '', asts)
         ).join(' && ');
 
         setFilter(globalFilter, rawGlobalFilter);
