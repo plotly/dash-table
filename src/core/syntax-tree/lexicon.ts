@@ -24,12 +24,9 @@ export interface IUnboundedLexeme {
     syntaxer?: (lexs: any[], pivot: any, pivotIndex: number) => any;
 }
 
-type If = (string | undefined)[] | ((lexemes: ILexemeResult[], previous: ILexemeResult) => boolean);
-type Terminal = boolean | ((lexemes: ILexemeResult[], previous: ILexemeResult) => boolean);
-
 export interface ILexeme extends IUnboundedLexeme {
-    if: If;
-    terminal: Terminal;
+    terminal: boolean | ((lexemes: ILexemeResult[], previous: ILexemeResult) => boolean);
+    if: (string | undefined)[] | ((lexemes: ILexemeResult[], previous: ILexemeResult) => boolean);
 }
 
 export function boundLexeme(lexeme: IUnboundedLexeme) {
