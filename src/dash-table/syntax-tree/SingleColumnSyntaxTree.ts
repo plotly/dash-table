@@ -5,7 +5,7 @@ import { LexemeType, boundLexeme } from 'core/syntax-tree/lexicon';
 
 import { ColumnType, IVisibleColumn } from 'dash-table/components/Table/props';
 
-import operand from './lexeme/operand';
+import { fieldExpression } from './lexeme/expression';
 import { equal, RelationalOperator } from './lexeme/relational';
 
 import columnLexicon from './lexicon/column';
@@ -43,12 +43,12 @@ export function modifyLex(config: SingleColumnConfig, res: ILexerResult) {
 
     if (isBinary(res.lexemes) || isUnary(res.lexemes)) {
         res.lexemes = [
-            { lexeme: boundLexeme(operand), value: `{${config.id}}` },
+            { lexeme: boundLexeme(fieldExpression), value: `{${config.id}}` },
             ...res.lexemes
         ];
     } else if (isExpression(res.lexemes)) {
         res.lexemes = [
-            { lexeme: boundLexeme(operand), value: `{${config.id}}` },
+            { lexeme: boundLexeme(fieldExpression), value: `{${config.id}}` },
             {
                 lexeme: boundLexeme(equal),
                 value: getDefaultRelationalOperator(config.type)

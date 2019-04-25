@@ -1,5 +1,3 @@
-import * as R from 'ramda';
-
 import {
     fieldExpression,
     stringExpression,
@@ -26,8 +24,12 @@ import {
     isStr
 } from '../lexeme/unary';
 
-import { LexemeType, ILexeme } from 'core/syntax-tree/lexicon';
-import { ILexemeResult } from 'core/syntax-tree/lexer';
+import {
+    ifExpression,
+    ifLeading
+} from '.';
+
+import { ILexeme } from 'core/syntax-tree/lexicon';
 
 const lexicon: ILexeme[] = [
     ...[contains,
@@ -41,7 +43,7 @@ const lexicon: ILexeme[] = [
     ].map(op => ({
         ...op,
         terminal: false,
-        if: (_lexs: ILexemeResult[], previous: ILexemeResult) => !previous
+        if: ifLeading
     })),
     ...[isBool,
         isEven,
@@ -53,7 +55,7 @@ const lexicon: ILexeme[] = [
         isStr
     ].map(op => ({
         ...op,
-        if: (_lexs: ILexemeResult[], previous: ILexemeResult) => !previous,
+        if: ifLeading,
         terminal: true
     })),
     ...[
@@ -62,11 +64,7 @@ const lexicon: ILexeme[] = [
         valueExpression
     ].map(exp => ({
         ...exp,
-        if: (_lexs: ILexemeResult[], previous: ILexemeResult) =>
-            !previous || R.contains(
-                previous.lexeme.type,
-                [LexemeType.RelationalOperator]
-            ),
+        if: ifExpression,
         terminal: true
     }))
 ];

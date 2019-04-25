@@ -1,4 +1,4 @@
-import * as R from 'ramda';
+import { ILexeme } from 'core/syntax-tree/lexicon';
 
 import {
     fieldExpression,
@@ -8,7 +8,6 @@ import {
 import {
     and
 } from '../lexeme/logical';
-import operand from '../lexeme/operand';
 import {
     contains,
     equal,
@@ -30,29 +29,18 @@ import {
     isStr
 } from '../lexeme/unary';
 
-import { ILexeme, LexemeType } from 'core/syntax-tree/lexicon';
-import { ILexemeResult } from 'core/syntax-tree/lexer';
+import {
+    ifExpression,
+    ifLogicalOperator,
+    ifRelationalOperator,
+    ifUnaryOperator,
+    isTerminalExpression
+} from '.';
 
 const lexicon: ILexeme[] = [
     {
         ...and,
-        if: (_: ILexemeResult[], previous: ILexemeResult) =>
-            previous && R.contains(
-                previous.lexeme.type,
-                [
-                    LexemeType.Expression,
-                    LexemeType.UnaryOperator
-                ]
-            ),
-        terminal: false
-    },
-    {
-        ...operand,
-        if: (_: ILexemeResult[], previous: ILexemeResult) =>
-            !previous || R.contains(
-                previous.lexeme.type,
-                [LexemeType.LogicalOperator]
-            ),
+        if: ifLogicalOperator,
         terminal: false
     },
     ...[contains,
@@ -65,11 +53,7 @@ const lexicon: ILexeme[] = [
         notEqual
     ].map(op => ({
         ...op,
-        if: (_: ILexemeResult[], previous: ILexemeResult) =>
-            previous && R.contains(
-                previous.lexeme.type,
-                [LexemeType.Operand]
-            ),
+        if: ifRelationalOperator,
         terminal: false
     })),
     ...[isBool,
@@ -82,11 +66,7 @@ const lexicon: ILexeme[] = [
         isStr
     ].map(op => ({
         ...op,
-        if: (_: ILexemeResult[], previous: ILexemeResult) =>
-            previous && R.contains(
-                previous.lexeme.type,
-                [LexemeType.Operand]
-            ),
+        if: ifUnaryOperator,
         terminal: true
     })),
     ...[
@@ -95,12 +75,8 @@ const lexicon: ILexeme[] = [
         valueExpression
     ].map(exp => ({
         ...exp,
-        if: (_: ILexemeResult[], previous: ILexemeResult) =>
-            previous && R.contains(
-                previous.lexeme.type,
-                [LexemeType.RelationalOperator]
-            ),
-        terminal: true
+        if: ifExpression,
+        terminal: isTerminalExpression
     }))
 ];
 
