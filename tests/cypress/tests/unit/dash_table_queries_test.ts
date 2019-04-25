@@ -27,9 +27,7 @@ export function processCases(getSyntaxer: (query: string) => SyntaxTree, cases: 
 const getQuerySyntaxTree = (query: string): any => new QuerySyntaxTree(query);
 const getMultiColumnSyntaxTree = (query: string): any => new MultiColumnsSyntaxTree(query);
 const getSingleColumnSyntaxTree = (query: string): any => new SingleColumnSyntaxTree(query, {
-    column: {
-        id: 'a'
-    }
+    id: 'a'
 });
 
 describe('Dash Table Queries', () => {

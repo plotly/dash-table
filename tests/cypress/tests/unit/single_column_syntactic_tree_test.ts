@@ -1,33 +1,25 @@
 import { SingleColumnSyntaxTree } from 'dash-table/syntax-tree';
 import { ColumnType } from 'dash-table/components/Table/props';
-import { ISingleColumnConfig } from 'dash-table/syntax-tree/lexicon/column';
+import { SingleColumnConfig } from 'dash-table/syntax-tree/SingleColumnSyntaxTree';
 
-const COLUMN_ANY: ISingleColumnConfig = {
-    column: {
-        id: 'a',
-        type: ColumnType.Any
-    }
+const COLUMN_ANY: SingleColumnConfig = {
+    id: 'a',
+    type: ColumnType.Any
 };
 
-const COLUMN_NUMERIC: ISingleColumnConfig = {
-    column: {
-        id: 'a',
-        type: ColumnType.Numeric
-    }
+const COLUMN_NUMERIC: SingleColumnConfig = {
+    id: 'a',
+    type: ColumnType.Numeric
 };
 
-const COLUMN_TEXT: ISingleColumnConfig = {
-    column: {
-        id: 'a',
-        type: ColumnType.Text
-    }
+const COLUMN_TEXT: SingleColumnConfig = {
+    id: 'a',
+    type: ColumnType.Text
 };
 
-const COLUMN_UNDEFINED: ISingleColumnConfig = {
-    column: {
-        id: 'a',
-        type: undefined
-    }
+const COLUMN_UNDEFINED: SingleColumnConfig = {
+    id: 'a',
+    type: undefined
 };
 
 describe('Single Column Syntax Tree', () => {
