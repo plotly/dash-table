@@ -45,7 +45,7 @@ export default function lexer(lexicon: Lexicon, query: string): ILexerResult {
     const [terminalPrevious, last] = [
         undefined,
         undefined,
-        ...result.slice(-2)
+        ...result
     ].slice(-2);
 
     const terminal: boolean = !last ||
