@@ -16,7 +16,7 @@ function getDefaultRelationalOperator(type: ColumnType = ColumnType.Any): Relati
         case ColumnType.Text:
             return RelationalOperator.Contains;
         case ColumnType.Datetime:
-            return RelationalOperator.LikeDate;
+            return RelationalOperator.DateStartsWith;
         case ColumnType.Numeric:
             return RelationalOperator.Equal;
     }

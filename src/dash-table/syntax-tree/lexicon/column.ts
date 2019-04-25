@@ -5,12 +5,12 @@ import {
 } from '../lexeme/expression';
 import {
     contains,
+    dateStartsWith,
     equal,
     greaterOrEqual,
     greaterThan,
     lessOrEqual,
     lessThan,
-    likeDate,
     notEqual
 } from '../lexeme/relational';
 import {
@@ -33,12 +33,12 @@ import { ILexeme } from 'core/syntax-tree/lexicon';
 
 const lexicon: ILexeme[] = [
     ...[contains,
+        dateStartsWith,
         equal,
         greaterOrEqual,
         greaterThan,
         lessOrEqual,
         lessThan,
-        likeDate,
         notEqual
     ].map(op => ({
         ...op,

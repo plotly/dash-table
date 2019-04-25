@@ -34,12 +34,12 @@ function relationalEvaluator(
 
 export enum RelationalOperator {
     Contains = 'contains',
+    DateStartsWith = 'datestartswith',
     Equal = '=',
     GreaterOrEqual = '>=',
     GreaterThan = '>',
     LessOrEqual = '<=',
     LessThan = '<',
-    LikeDate = 'like',
     NotEqual = '!='
 }
 
@@ -86,7 +86,7 @@ const DATE_OPTIONS: IDateValidation = {
     allow_YY: true
 };
 
-export const likeDate: IUnboundedLexeme = R.merge({
+export const dateStartsWith: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(([op, exp]) => {
         const normalizedOp = normalizeDate(op, DATE_OPTIONS);
         const normalizedExp = normalizeDate(exp, DATE_OPTIONS);
@@ -96,8 +96,8 @@ export const likeDate: IUnboundedLexeme = R.merge({
             // IE11 does not support `startsWith`
             normalizedOp.indexOf(normalizedExp) === 0;
     }),
-    subType: RelationalOperator.LikeDate,
-    regexp: /^(like)/i
+    subType: RelationalOperator.DateStartsWith,
+    regexp: /^(datestartswith)/i
 }, LEXEME_BASE);
 
 export const lessOrEqual: IUnboundedLexeme = R.merge({

@@ -10,12 +10,12 @@ import {
 } from '../lexeme/logical';
 import {
     contains,
+    dateStartsWith,
     equal,
     greaterOrEqual,
     greaterThan,
     lessOrEqual,
     lessThan,
-    likeDate,
     notEqual
 } from '../lexeme/relational';
 import {
@@ -44,12 +44,12 @@ const lexicon: ILexeme[] = [
         terminal: false
     },
     ...[contains,
+        dateStartsWith,
         equal,
         greaterOrEqual,
         greaterThan,
         lessOrEqual,
         lessThan,
-        likeDate,
         notEqual
     ].map(op => ({
         ...op,
