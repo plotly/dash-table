@@ -43,7 +43,7 @@ export default class MultiColumnsSyntaxTree extends SyntaxTree {
         const fields = R.map(
             (item: ILexemeResult) => item.value,
             R.filter(
-                i => i.lexeme.type === LexemeType.Operand,
+                i => i.lexeme.type === LexemeType.Expression,
                 this.lexerResult.lexemes
             )
         );

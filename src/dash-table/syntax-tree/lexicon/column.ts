@@ -42,8 +42,8 @@ const lexicon: ILexeme[] = [
         notEqual
     ].map(op => ({
         ...op,
-        terminal: false,
-        if: ifLeading
+        if: ifLeading,
+        terminal: false
     })),
     ...[isBool,
         isEven,

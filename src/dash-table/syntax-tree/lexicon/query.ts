@@ -49,7 +49,7 @@ import {
     isTerminalExpression
 } from '.';
 
-const ifNotUnaryOperator = (_: ILexemeResult[], previous: ILexemeResult) =>
+const ifNotUnaryOperator = (_: ILexemeResult[], previous: ILexemeResult | undefined) =>
     !previous || R.contains(
         previous.lexeme.type,
         [

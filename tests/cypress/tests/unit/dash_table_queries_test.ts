@@ -68,7 +68,7 @@ describe('Dash Table Queries', () => {
                     ]);
                 });
 
-                describe('in', () => {
+                describe('like', () => {
                     processCases(c.syntaxer, [
                         { name: '0yyy in "0"', query: `${c.hideOperand ? '' : '{a} '}like "0"`, target: { a: '0987' }, valid: true, evaluate: false },
                         { name: '0yyy in "0yyy"', query: `${c.hideOperand ? '' : '{a} '}like "0987"`, target: { a: '0987' }, valid: true, evaluate: true },

@@ -20,21 +20,21 @@ describe('Query Syntax Tree', () => {
         ]);
     });
 
-    describe('operands', () => {
-        it('does not support badly formed operands', () => {
+    describe('expressions', () => {
+        it('does not support badly formed lhs', () => {
             expect(new QuerySyntaxTree(`{myField} eq 0`).isValid).to.equal(true);
             expect(new QuerySyntaxTree(`{'myField'} eq 0`).isValid).to.equal(true);
             expect(new QuerySyntaxTree(`{"myField"} eq 0`).isValid).to.equal(true);
             expect(new QuerySyntaxTree('{`myField`} eq 0').isValid).to.equal(true);
             expect(new QuerySyntaxTree('{\\{myField\\}} eq 0').isValid).to.equal(true);
+            expect(new QuerySyntaxTree(`myField eq 0`).isValid).to.equal(true);
             expect(new QuerySyntaxTree('{{myField}} eq 0').isValid).to.equal(false);
             expect(new QuerySyntaxTree(`{myField eq 0`).isValid).to.equal(false);
             expect(new QuerySyntaxTree(`myField} eq 0`).isValid).to.equal(false);
-            expect(new QuerySyntaxTree(`myField eq 0`).isValid).to.equal(false);
             expect(new QuerySyntaxTree('{\\\\{myField\\\\}} eq 0').isValid).to.equal(false);
         });
 
-        it('does not support badly formed expression', () => {
+        it('does not support badly formed rhs', () => {
             expect(new QuerySyntaxTree(`{myField} eq 'value'`).isValid).to.equal(true);
             expect(new QuerySyntaxTree(`{myField} eq "value"`).isValid).to.equal(true);
             expect(new QuerySyntaxTree('{myField} eq `value`').isValid).to.equal(true);
