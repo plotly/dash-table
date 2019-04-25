@@ -288,7 +288,7 @@ export interface IProps {
     selected_row_ids?: RowId[];
     setProps?: SetProps;
     sorting?: Sorting;
-    sorting_settings?: SortSettings;
+    sort_by?: SortSettings;
     sorting_type?: SortingType;
     sorting_treat_empty_string_as_none?: boolean;
     style_as_list_view?: boolean;
@@ -332,7 +332,7 @@ interface IDefaultProps {
     selected_rows: Indices;
     selected_row_ids: RowId[];
     sorting: Sorting;
-    sorting_settings: SortSettings;
+    sort_by: SortSettings;
     sorting_type: SortingType;
     sorting_treat_empty_string_as_none: boolean;
     style_as_list_view: boolean;

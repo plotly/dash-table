@@ -29,6 +29,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [#397](https://github.com/plotly/dash-table/pull/397)
 - Rename `filtering_settings` to `filter`
 
+[#417](https://github.com/plotly/dash-table/pull/417)
+- Rename `sorting_settings` to `sort_by`
+
 [#412](https://github.com/plotly/dash-table/pull/412)
 - `active_cell` and `selected_cells` items are dicts `{'row', 'column', 'row_id' and 'column_id'}` instead of arrays `[row, column]`
 
