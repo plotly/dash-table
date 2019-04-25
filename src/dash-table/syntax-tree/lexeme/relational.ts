@@ -39,7 +39,7 @@ export enum RelationalOperator {
     GreaterThan = '>',
     LessOrEqual = '<=',
     LessThan = '<',
-    LikeDate = 'in',
+    LikeDate = 'like',
     NotEqual = '!='
 }
 
@@ -98,7 +98,7 @@ export const likeDate: IUnboundedLexeme = R.merge({
             normalizedOp.indexOf(normalizedExp) === 0;
     }),
     subType: RelationalOperator.LikeDate,
-    regexp: /^(in)/i
+    regexp: /^(like)/i
 }, LEXEME_BASE);
 
 export const lessOrEqual: IUnboundedLexeme = R.merge({
