@@ -28,13 +28,6 @@ import {
 
 import { LexemeType, ILexeme } from 'core/syntax-tree/lexicon';
 import { ILexemeResult } from 'core/syntax-tree/lexer';
-import { ColumnId, IVisibleColumn } from 'dash-table/components/Table/props';
-
-export interface ISingleColumnConfig {
-    column: Partial<IVisibleColumn> & {
-        id: ColumnId
-    };
-}
 
 const lexicon: ILexeme[] = [
     ...[contains,

@@ -1,13 +1,14 @@
+import { RequiredPluck, OptionalPluck } from 'core/type';
 import SyntaxTree from 'core/syntax-tree';
 import { ILexemeResult, ILexerResult } from 'core/syntax-tree/lexer';
 import { LexemeType, boundLexeme } from 'core/syntax-tree/lexicon';
 
-import { ColumnType } from 'dash-table/components/Table/props';
+import { ColumnType, IVisibleColumn } from 'dash-table/components/Table/props';
 
 import operand from './lexeme/operand';
 import { equal, RelationalOperator } from './lexeme/relational';
 
-import columnLexicon, { ISingleColumnConfig } from './lexicon/column';
+import columnLexicon from './lexicon/column';
 
 function getDefaultRelationalOperator(type: ColumnType = ColumnType.Any): RelationalOperator {
     switch (type) {
@@ -35,22 +36,22 @@ function isUnary(lexemes: ILexemeResult[]) {
         lexemes[0].lexeme.type === LexemeType.UnaryOperator;
 }
 
-export function modifyLex(config: ISingleColumnConfig, res: ILexerResult) {
+export function modifyLex(config: SingleColumnConfig, res: ILexerResult) {
     if (!res.valid) {
         return res;
     }
 
     if (isBinary(res.lexemes) || isUnary(res.lexemes)) {
         res.lexemes = [
-            { lexeme: boundLexeme(operand), value: `{${config.column.id}}` },
+            { lexeme: boundLexeme(operand), value: `{${config.id}}` },
             ...res.lexemes
         ];
     } else if (isExpression(res.lexemes)) {
         res.lexemes = [
-            { lexeme: boundLexeme(operand), value: `{${config.column.id}}` },
+            { lexeme: boundLexeme(operand), value: `{${config.id}}` },
             {
                 lexeme: boundLexeme(equal),
-                value: getDefaultRelationalOperator(config.column.type)
+                value: getDefaultRelationalOperator(config.type)
             },
             ...res.lexemes
         ];
@@ -59,8 +60,10 @@ export function modifyLex(config: ISingleColumnConfig, res: ILexerResult) {
     return res;
 }
 
+type SingleColumnConfig = RequiredPluck<IVisibleColumn, 'id'> & OptionalPluck<IVisibleColumn, 'type'>;
+
 export default class SingleColumnSyntaxTree extends SyntaxTree {
-    constructor(query: string, config: ISingleColumnConfig) {
+    constructor(query: string, config: SingleColumnConfig) {
         super(
             columnLexicon,
             query,

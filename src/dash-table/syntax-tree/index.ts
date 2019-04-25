@@ -39,9 +39,7 @@ export const getSingleColumnMap = (
                 throw new Error(`column ${sanitizedColumnId} not found`);
             }
 
-            const config = { column };
-
-            map.set(sanitizedColumnId, new SingleColumnSyntaxTree(s.value, config));
+            map.set(sanitizedColumnId, new SingleColumnSyntaxTree(s.value, column));
         } else if (s.lexeme.type === LexemeType.RelationalOperator && s.left && s.right) {
             const sanitizedColumnId = s.left.lexeme.present ? s.left.lexeme.present(s.left) : s.left.value;
 
@@ -50,12 +48,10 @@ export const getSingleColumnMap = (
                 throw new Error(`column ${sanitizedColumnId} not found`);
             }
 
-            const config = { column };
-
             if (s.lexeme.present && s.lexeme.present(s) === RelationalOperator.Equal) {
-                map.set(sanitizedColumnId, new SingleColumnSyntaxTree(`${s.right.value}`, config));
+                map.set(sanitizedColumnId, new SingleColumnSyntaxTree(`${s.right.value}`, column));
             } else {
-                map.set(sanitizedColumnId, new SingleColumnSyntaxTree(`${s.value} ${s.right.value}`, config));
+                map.set(sanitizedColumnId, new SingleColumnSyntaxTree(`${s.value} ${s.right.value}`, column));
             }
         }
     }, statements);
