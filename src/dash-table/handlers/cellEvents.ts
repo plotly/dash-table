@@ -35,7 +35,10 @@ export const handleClick = (propsFn: () => ICellFactoryProps, idx: number, i: nu
      * And when you've selected multiple cells the browser selection is
      * completely wrong.
      */
-    window.getSelection().removeAllRanges();
+    const browserSelection = window.getSelection();
+    if (browserSelection) {
+        browserSelection.removeAllRanges();
+    }
 
     const selected = isSelected(selected_cells, row, col);
 

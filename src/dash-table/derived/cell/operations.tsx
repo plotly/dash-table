@@ -22,7 +22,7 @@ function deleteRow(idx: number, data: Data, selectedRows: number[]) {
     if (R.is(Array, selectedRows) && R.any(i => i >= idx, selectedRows)) {
         newProps.selected_rows = R.map(
             // all rows past idx have now lost one from their index
-            i => i > idx ? i - 1 : i,
+            (i: number) => i > idx ? i - 1 : i,
             R.without([idx], selectedRows)
         );
         newProps.selected_row_ids = R.map(

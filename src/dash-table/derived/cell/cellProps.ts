@@ -33,7 +33,7 @@ export function makeSelection (
 ) {
     const {minRow, maxRow, minCol, maxCol} = bounds;
     return map(
-       rc => makeCell(rc[0], rc[1], columns, viewport),
+       rc => makeCell((rc as number[])[0], (rc as number[])[1], columns, viewport),
        xprod(range(minRow, maxRow + 1), range(minCol, maxCol + 1))
    );
 }
