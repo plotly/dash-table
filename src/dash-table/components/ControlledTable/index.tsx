@@ -335,6 +335,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             // there should always be an active_cell if we got here...
             // but if for some reason there isn't, bail out rather than
             // doing something unexpected
+            Logger.warning('Trying to change cell, but no cell is active.');
             return;
         }
 
