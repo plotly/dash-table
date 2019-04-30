@@ -8,7 +8,7 @@ import {
 } from 'dash-table/components/Table/props';
 
 import { IConvertedStyle } from '../style';
-import { BorderStyle, BORDER_PROPERTIES, Edges, EdgesMatrices, IDefaultBorderStyle } from './type';
+import { BorderStyle, BORDER_PROPERTIES, EdgesMatrices } from './type';
 
 const getWeightedStyle = (
     borderStyles: IConvertedStyle[],
@@ -39,16 +39,15 @@ const getWeightedStyle = (
 
 export default memoizeOneFactory((
     columns: number,
-    data: Data,
     borderStyles: IConvertedStyle[],
-    offset: IViewportOffset,
-    defaultBorderStyle?: IDefaultBorderStyle
-): Edges => {
+    data: Data,
+    offset: IViewportOffset
+) => {
     if (data.length === 0 || columns === 0) {
         return;
     }
 
-    const edges = new EdgesMatrices(data.length, columns, defaultBorderStyle);
+    const edges = new EdgesMatrices(data.length, columns);
 
     R.addIndex(R.forEach)((datum, i) =>
         R.forEach(j => {
@@ -66,5 +65,5 @@ export default memoizeOneFactory((
         data
     );
 
-    return edges.getMatrices();
+    return edges;
 });

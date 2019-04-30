@@ -17,8 +17,8 @@ describe('data edges', () => {
     it('without one data row', () => {
         const res = edgesFn(
             [],
-            [{ id: 1 }],
             [],
+            [{ id: 1 }],
             { columns: 0, rows: 0 }
         );
 
@@ -28,15 +28,14 @@ describe('data edges', () => {
     it('uses `undefined` default style', () => {
         const res = edgesFn(
             [{ id: 'id', name: 'id' }],
-            [{ id: 1 }],
             [],
-            { columns: 0, rows: 0 },
-            { }
+            [{ id: 1 }],
+            { columns: 0, rows: 0 }
         );
 
         expect(res !== undefined).to.equal(true);
         if (res) {
-            const { horizontal, vertical } = res;
+            const { horizontal, vertical } = res.getMatrices();
 
             expect(horizontal.length).to.equal(2);
             expect(horizontal[0].length).to.equal(1);
@@ -54,26 +53,25 @@ describe('data edges', () => {
     it('uses default style', () => {
         const res = edgesFn(
             [{ id: 'id', name: 'id' }],
-            [{ id: 1 }],
             [],
-            { columns: 0, rows: 0 },
-            { horizontal: '1px solid red', vertical: '1px solid blue' }
+            [{ id: 1 }],
+            { columns: 0, rows: 0 }
         );
 
         expect(res !== undefined).to.equal(true);
         if (res) {
-            const { horizontal, vertical } = res;
+            const { horizontal, vertical } = res.getMatrices();
 
             expect(horizontal.length).to.equal(2);
             expect(horizontal[0].length).to.equal(1);
             expect(horizontal[1].length).to.equal(1);
-            expect(horizontal[0][0]).to.equal('1px solid red');
-            expect(horizontal[1][0]).to.equal('1px solid red');
+            expect(horizontal[0][0]).to.equal(undefined);
+            expect(horizontal[1][0]).to.equal(undefined);
 
             expect(vertical.length).to.equal(1);
             expect(vertical[0].length).to.equal(2);
-            expect(vertical[0][0]).to.equal('1px solid blue');
-            expect(vertical[0][1]).to.equal('1px solid blue');
+            expect(vertical[0][0]).to.equal(undefined);
+            expect(vertical[0][1]).to.equal(undefined);
         }
     });
 
@@ -83,27 +81,26 @@ describe('data edges', () => {
                 { id: 'id', name: 'id' },
                 { id: 'name', name: 'name' }
             ],
+            [],
             [
                 { id: 1, name: 'a' },
                 { id: 1, name: 'b' },
                 { id: 2, name: 'a' },
                 { id: 2, name: 'b' }
             ],
-            [],
-            { columns: 0, rows: 0 },
-            { horizontal: '1px solid red', vertical: '1px solid blue' }
+            { columns: 0, rows: 0 }
         );
 
         expect(res !== undefined).to.equal(true);
         if (res) {
-            const { horizontal, vertical } = res;
+            const { horizontal, vertical } = res.getMatrices();
 
             expect(horizontal.length).to.equal(5);
             horizontal.forEach(edges => {
                 expect(edges.length).to.equal(2);
 
                 edges.forEach(edge => {
-                    expect(edge).to.equal('1px solid red');
+                    expect(edge).to.equal(undefined);
                 });
             });
 
@@ -112,7 +109,7 @@ describe('data edges', () => {
                 expect(edges.length).to.equal(3);
 
                 edges.forEach(edge => {
-                    expect(edge).to.equal('1px solid blue');
+                    expect(edge).to.equal(undefined);
                 });
             });
         }
@@ -124,25 +121,24 @@ describe('data edges', () => {
                 { id: 'id', name: 'id' },
                 { id: 'name', name: 'name' }
             ],
-            [
-                { id: 1, name: 'a' },
-                { id: 1, name: 'b' },
-                { id: 2, name: 'a' },
-                { id: 2, name: 'b' }
-            ],
             [{
                 style: { border: '1px solid green' },
                 matchesColumn: () => true,
                 matchesFilter: () => true,
                 matchesRow: () => true
             }],
-            { columns: 0, rows: 0 },
-            { horizontal: '1px solid red', vertical: '1px solid blue' }
+            [
+                { id: 1, name: 'a' },
+                { id: 1, name: 'b' },
+                { id: 2, name: 'a' },
+                { id: 2, name: 'b' }
+            ],
+            { columns: 0, rows: 0 }
         );
 
         expect(res !== undefined).to.equal(true);
         if (res) {
-            const { horizontal, vertical } = res;
+            const { horizontal, vertical } = res.getMatrices();
 
             expect(horizontal.length).to.equal(5);
             horizontal.forEach(edges => {
@@ -170,25 +166,24 @@ describe('data edges', () => {
                 { id: 'id', name: 'id' },
                 { id: 'name', name: 'name' }
             ],
-            [
-                { id: 1, name: 'a' },
-                { id: 1, name: 'b' },
-                { id: 2, name: 'a' },
-                { id: 2, name: 'b' }
-            ],
             [{
                 style: { borderLeft: '1px solid green', borderTop: '1px solid darkgreen' },
                 matchesColumn: () => true,
                 matchesFilter: () => true,
                 matchesRow: () => true
             }],
-            { columns: 0, rows: 0 },
-            { horizontal: '1px solid red', vertical: '1px solid blue' }
+            [
+                { id: 1, name: 'a' },
+                { id: 1, name: 'b' },
+                { id: 2, name: 'a' },
+                { id: 2, name: 'b' }
+            ],
+            { columns: 0, rows: 0 }
         );
 
         expect(res !== undefined).to.equal(true);
         if (res) {
-            const { horizontal, vertical } = res;
+            const { horizontal, vertical } = res.getMatrices();
 
             expect(horizontal.length).to.equal(5);
             horizontal.forEach((edges, rowIndex) => {
@@ -196,7 +191,7 @@ describe('data edges', () => {
 
                 edges.forEach(edge => {
                     expect(edge).to.equal(rowIndex === horizontal.length - 1 ?
-                        '1px solid red' :
+                        undefined :
                         '1px solid darkgreen'
                     );
                 });
@@ -208,7 +203,7 @@ describe('data edges', () => {
 
                 edges.forEach((edge, index) => {
                     expect(edge).to.equal(index === edges.length - 1 ?
-                        '1px solid blue' :
+                        undefined :
                         '1px solid green'
                     );
                 });
@@ -216,14 +211,11 @@ describe('data edges', () => {
         }
     });
 
-    it('applies `borderLeft` overriden by higher precedence `borderRight`', () => {
+    it('applies `borderLeft` overridden by higher precedence `borderRight`', () => {
         const res = edgesFn(
             [
                 { id: 'id', name: 'id' },
                 { id: 'name', name: 'name' }
-            ],
-            [
-                { id: 1, name: 'a' }
             ],
             [{
                 style: { borderLeft: '1px solid green' },
@@ -236,12 +228,15 @@ describe('data edges', () => {
                 matchesFilter: () => true,
                 matchesRow: () => true
             }],
+            [
+                { id: 1, name: 'a' }
+            ],
             { columns: 0, rows: 0 }
         );
 
         expect(res !== undefined).to.equal(true);
         if (res) {
-            const { vertical } = res;
+            const { vertical } = res.getMatrices();
 
             expect(vertical.length).to.equal(1);
             expect(vertical[0].length).to.equal(3);
@@ -251,14 +246,11 @@ describe('data edges', () => {
         }
     });
 
-    it('applies `borderLeft` not overriden by lower precedence `borderRight`', () => {
+    it('applies `borderLeft` not overridden by lower precedence `borderRight`', () => {
         const res = edgesFn(
             [
                 { id: 'id', name: 'id' },
                 { id: 'name', name: 'name' }
-            ],
-            [
-                { id: 1, name: 'a' }
             ],
             [{
                 style: { borderRight: '1px solid darkgreen' },
@@ -271,12 +263,15 @@ describe('data edges', () => {
                 matchesFilter: () => true,
                 matchesRow: () => true
             }],
+            [
+                { id: 1, name: 'a' }
+            ],
             { columns: 0, rows: 0 }
         );
 
         expect(res === undefined).to.equal(false);
         if (res) {
-            const { vertical } = res;
+            const { vertical } = res.getMatrices();
 
             expect(vertical.length).to.equal(1);
             expect(vertical[0].length).to.equal(3);
@@ -286,14 +281,11 @@ describe('data edges', () => {
         }
     });
 
-    it('applies `borderLeft` overriden by higher precedence `border`', () => {
+    it('applies `borderLeft` overridden by higher precedence `border`', () => {
         const res = edgesFn(
             [
                 { id: 'id', name: 'id' },
                 { id: 'name', name: 'name' }
-            ],
-            [
-                { id: 1, name: 'a' }
             ],
             [{
                 style: { borderLeft: '1px solid darkgreen' },
@@ -306,12 +298,15 @@ describe('data edges', () => {
                 matchesFilter: () => true,
                 matchesRow: () => true
             }],
+            [
+                { id: 1, name: 'a' }
+            ],
             { columns: 0, rows: 0 }
         );
 
         expect(res !== undefined).to.equal(true);
         if (res) {
-            const { vertical } = res;
+            const { vertical } = res.getMatrices();
 
             expect(vertical.length).to.equal(1);
             expect(vertical[0].length).to.equal(3);

@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import * as R from 'ramda';
 
+/*#if DEV*/
+import Logger from 'core/Logger';
+/*#endif*/
+
 import { memoizeOne, memoizeOneWithFlag } from 'core/memoizer';
 
 import ControlledTable from 'dash-table/components/ControlledTable';
@@ -27,11 +31,10 @@ import 'react-select/dist/react-select.css';
 import './Table.less';
 import './Dropdown.css';
 import { isEqual } from 'core/comparer';
-/*#if DEV*/
-import Logger from 'core/Logger';
-/*#endif*/
+import { Style } from 'dash-table/derived/style/props';
 
 const DERIVED_REGEX = /^derived_/;
+const DEFAULT_STYLE: Style = { border: '1px solid #d3d3d3' };
 
 export default class Table extends Component<PropsWithDefaultsAndDerived, StandaloneState> {
     constructor(props: PropsWithDefaultsAndDerived) {
@@ -78,6 +81,7 @@ export default class Table extends Component<PropsWithDefaultsAndDerived, Standa
             sorting,
             sort_by,
             sorting_treat_empty_string_as_none,
+            style_cell,
             uiCell,
             uiHeaders,
             uiViewport,
@@ -126,6 +130,7 @@ export default class Table extends Component<PropsWithDefaultsAndDerived, Standa
         );
 
         const visibleColumns = this.visibleColumns(columns);
+        const styleCell = this.styleCell(style_cell);
 
         return R.mergeAll([
             this.props,
@@ -135,6 +140,7 @@ export default class Table extends Component<PropsWithDefaultsAndDerived, Standa
                 paginator,
                 setProps,
                 setState,
+                style_cell: styleCell,
                 viewport,
                 viewport_selected_rows,
                 virtual,
@@ -274,6 +280,9 @@ export default class Table extends Component<PropsWithDefaultsAndDerived, Standa
     private readonly virtualSelectedRows = derivedSelectedRows();
     private readonly virtualized = derivedVirtualizedData();
     private readonly visibleColumns = derivedVisibleColumns();
+    private readonly styleCell = memoizeOne((style: Style) => {
+        return R.merge(DEFAULT_STYLE, style);
+    });
 
     private readonly filterCache = memoizeOneWithFlag(filter => filter);
     private readonly paginationCache = memoizeOneWithFlag(pagination => pagination);

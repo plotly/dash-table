@@ -74,48 +74,36 @@ export const derivedRelevantCellStyles = memoizeOneFactory((
     dataCell: Style,
     cells: Cells,
     dataCells: DataCells
-) => R.concat(
-    R.concat(
-        cell ? [convertElement(cell)] : [],
-        R.map(convertElement, cells || [])
-    ),
-    R.concat(
-        dataCell ? [convertElement(dataCell)] : [],
-        R.map(convertElement, dataCells || [])
-    )
-));
+) => R.unnest([
+    cell ? [convertElement(cell)] : [],
+    R.map(convertElement, cells || []),
+    dataCell ? [convertElement(dataCell)] : [],
+    R.map(convertElement, dataCells || [])
+]));
 
 export const derivedRelevantFilterStyles = memoizeOneFactory((
     cell: Style,
     filter: Style,
     cells: Cells,
     filters: BasicFilters
-) => R.concat(
-    R.concat(
-        cell ? [convertElement(cell)] : [],
-        R.map(convertElement, cells || [])
-    ),
-    R.concat(
-        filter ? [convertElement(filter)] : [],
-        R.map(convertElement, filters || [])
-    )
-));
+) => R.unnest([
+    cell ? [convertElement(cell)] : [],
+    R.map(convertElement, cells || []),
+    filter ? [convertElement(filter)] : [],
+    R.map(convertElement, filters || [])
+]));
 
 export const derivedRelevantHeaderStyles = memoizeOneFactory((
     cell: Style,
     header: Style,
     cells: Cells,
     headers: Headers
-) => R.concat(
-    R.concat(
-        cell ? [convertElement(cell)] : [],
-        R.map(convertElement, cells || [])
-    ),
-    R.concat(
-        header ? [convertElement(header)] : [],
-        R.map(convertElement, headers || [])
-    )
-));
+) => R.unnest([
+    cell ? [convertElement(cell)] : [],
+    R.map(convertElement, cells || []),
+    header ? [convertElement(header)] : [],
+    R.map(convertElement, headers || [])
+]));
 
 export const derivedTableStyle = memoizeOneFactory(
     (defaultTable: Table, table: Table) => [

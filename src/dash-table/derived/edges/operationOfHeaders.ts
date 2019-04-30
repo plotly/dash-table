@@ -3,7 +3,7 @@ import * as R from 'ramda';
 import { memoizeOneFactory } from 'core/memoizer';
 
 import { IConvertedStyle } from '../style';
-import { BorderStyle, BORDER_PROPERTIES, Edges, EdgesMatrices, IDefaultBorderStyle } from './type';
+import { BorderStyle, BORDER_PROPERTIES, EdgesMatrices } from './type';
 
 const getWeightedStyle = (
     borderStyles: IConvertedStyle[],
@@ -31,14 +31,13 @@ const getWeightedStyle = (
 export default memoizeOneFactory((
     columns: number,
     headerRows: number,
-    borderStyles: IConvertedStyle[],
-    defaultBorderStyle?: IDefaultBorderStyle
-): Edges => {
+    borderStyles: IConvertedStyle[]
+) => {
     if (headerRows === 0 || columns === 0) {
         return;
     }
 
-    const edges = new EdgesMatrices(headerRows, columns, defaultBorderStyle);
+    const edges = new EdgesMatrices(headerRows, columns);
 
     R.forEach(i =>
         R.forEach(j => {
@@ -54,5 +53,5 @@ export default memoizeOneFactory((
         R.range(0, headerRows)
     );
 
-    return edges.getMatrices();
+    return edges;
 });
