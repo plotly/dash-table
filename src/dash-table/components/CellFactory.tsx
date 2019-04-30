@@ -13,7 +13,7 @@ import derivedDataEdges from 'dash-table/derived/edges/data';
 import derivedOperationEdges from 'dash-table/derived/edges/operationOfData';
 
 import { matrixMap, matrixMap3 } from 'core/math/matrixZipMap';
-import { arrayMap } from 'core/math/arrayZipMap';
+import { arrayMap2 } from 'core/math/arrayZipMap';
 
 export default class CellFactory {
 
@@ -141,7 +141,7 @@ export default class CellFactory {
             })
         );
 
-        return arrayMap(
+        return arrayMap2(
             ops,
             cells,
             (o, c) => Array.prototype.concat(o, c)

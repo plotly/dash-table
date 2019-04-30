@@ -7,14 +7,12 @@ import py2jsCssProperties from '../style/py2jsCssProperties';
 type Edge = any;
 
 type BorderProp =
-    PropOf<CSSProperties, 'border'> |
     PropOf<CSSProperties, 'borderBottom'> |
     PropOf<CSSProperties, 'borderLeft'> |
     PropOf<CSSProperties, 'borderRight'> |
     PropOf<CSSProperties, 'borderTop'>;
 
 export type BorderStyle =
-    OptionalMap<CSSProperties, 'border', [OptionalProp<CSSProperties, 'border'>, number]> &
     OptionalMap<CSSProperties, 'borderBottom', [OptionalProp<CSSProperties, 'borderBottom'>, number]> &
     OptionalMap<CSSProperties, 'borderLeft', [OptionalProp<CSSProperties, 'borderLeft'>, number]> &
     OptionalMap<CSSProperties, 'borderRight', [OptionalProp<CSSProperties, 'borderRight'>, number]> &

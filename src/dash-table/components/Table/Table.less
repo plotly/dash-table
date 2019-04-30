@@ -156,6 +156,28 @@
             }
         }
 
+        &:not(.dash-no-11) {
+            .row-0 {
+                tr:last-of-type {
+                    td, th {
+                        border-bottom: none !important;
+                    }
+                }
+            }
+        }
+
+        &:not(.dash-no-01) {
+            .cell-0-0,
+            .cell-1-0 {
+                tr {
+                    td:last-of-type,
+                    th:last-of-type {
+                        border-right: none !important;
+                    }
+                }
+            }
+        }
+
         &.dash-freeze-left,
         &.dash-freeze-top,
         &.dash-virtualized {
@@ -170,7 +192,7 @@
             .row-1 {
                 display: flex;
                 flex-direction: row;
-                overflow: scroll;
+                overflow: auto;
             }
 
             .cell-0-0,

@@ -1,7 +1,7 @@
 import * as R from 'ramda';
 import React from 'react';
 
-import { arrayMap } from 'core/math/arrayZipMap';
+import { arrayMap2 } from 'core/math/arrayZipMap';
 import { matrixMap, matrixMap3 } from 'core/math/matrixZipMap';
 
 import { ControlledTableProps } from 'dash-table/components/Table/props';
@@ -40,6 +40,7 @@ export default class HeaderFactory {
 
         const {
             columns,
+            filtering,
             merge_duplicate_headers,
             pagination_mode,
             row_deletable,
@@ -51,7 +52,8 @@ export default class HeaderFactory {
             style_cell,
             style_cell_conditional,
             style_header,
-            style_header_conditional
+            style_header_conditional,
+            virtualized
         } = props;
 
         const headerRows = getHeaderRows(columns);
@@ -74,15 +76,19 @@ export default class HeaderFactory {
             row_deletable
         );
 
+        const isLastRow = !filtering || virtualized.data.length === 0;
+
         const headerBorders = this.headerEdges(
             columns,
             headerRows,
+            isLastRow,
             relevantStyles
         );
 
         const operationBorders = this.headerOperationEdges(
             (row_selectable !== false ? 1 : 0) + (row_deletable ? 1 : 0),
             headerRows,
+            isLastRow,
             relevantStyles
         );
 
@@ -128,6 +134,6 @@ export default class HeaderFactory {
                 ])
             }));
 
-        return arrayMap(ops, headers, (o, h) => Array.prototype.concat(o, h));
+        return arrayMap2(ops, headers, (o, h) => Array.prototype.concat(o, h));
     }
 }

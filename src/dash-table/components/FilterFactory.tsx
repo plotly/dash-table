@@ -2,17 +2,20 @@ import * as R from 'ramda';
 import React from 'react';
 
 import Logger from 'core/Logger';
-import { arrayMap } from 'core/math/arrayZipMap';
+import { arrayMap, arrayMap2 } from 'core/math/arrayZipMap';
 import memoizerCache from 'core/cache/memoizer';
 import { memoizeOne } from 'core/memoizer';
 
 import ColumnFilter from 'dash-table/components/Filter/Column';
-import { ColumnId, Filtering, FilteringType, IVisibleColumn, VisibleColumns, RowSelection } from 'dash-table/components/Table/props';
+import { ColumnId, Filtering, FilteringType, IVisibleColumn, VisibleColumns, RowSelection, IVirtualizedDerivedData } from 'dash-table/components/Table/props';
 import derivedFilterStyles from 'dash-table/derived/filter/wrapperStyles';
 import derivedHeaderOperations from 'dash-table/derived/header/operations';
 import { derivedRelevantFilterStyles } from 'dash-table/derived/style';
 import { BasicFilters, Cells, Style } from 'dash-table/derived/style/props';
 import { MultiColumnsSyntaxTree, SingleColumnSyntaxTree, getMultiColumnQueryString, getSingleColumnMap } from 'dash-table/syntax-tree';
+
+import derivedFilterEdges from 'dash-table/derived/edges/filter';
+import derivedOperationEdges from 'dash-table/derived/edges/operationOfHeaders';
 
 type SetFilter = (filter: string, rawFilter: string) => void;
 
@@ -30,6 +33,7 @@ export interface IFilterOptions {
     style_cell_conditional: Cells;
     style_filter: Style;
     style_filter_conditional: BasicFilters;
+    virtualized: IVirtualizedDerivedData;
 }
 
 export default class FilterFactory {
@@ -37,6 +41,9 @@ export default class FilterFactory {
     private readonly filterStyles = derivedFilterStyles();
     private readonly relevantStyles = derivedRelevantFilterStyles();
     private readonly headerOperations = derivedHeaderOperations();
+
+    private readonly filterEdges = derivedFilterEdges();
+    private readonly filterOperationEdges = derivedOperationEdges();
 
     private ops = new Map<string, SingleColumnSyntaxTree>();
 
@@ -136,7 +143,8 @@ export default class FilterFactory {
             style_cell,
             style_cell_conditional,
             style_filter,
-            style_filter_conditional
+            style_filter_conditional,
+            virtualized
         } = this.props;
 
         if (!filtering) {
@@ -146,16 +154,39 @@ export default class FilterFactory {
         this.updateOps(filter, columns);
 
         if (filtering_type === FilteringType.Basic) {
-            const filterStyles = this.relevantStyles(
+            const relevantStyles = this.relevantStyles(
                 style_cell,
                 style_filter,
                 style_cell_conditional,
                 style_filter_conditional
             );
 
+            const relevantOperationStyles = this.relevantStyles(
+                style_cell,
+                style_filter,
+                [],
+                []
+            );
+
+            const isLastRow = virtualized.data.length === 0;
+
+            const filterEdges = this.filterEdges(
+                columns,
+                true,
+                isLastRow,
+                relevantStyles
+            );
+
+            const operationBorders = this.filterOperationEdges(
+                (row_selectable !== false ? 1 : 0) + (row_deletable ? 1 : 0),
+                1,
+                isLastRow,
+                relevantOperationStyles
+            );
+
             const wrapperStyles = this.filterStyles(
                 columns,
-                filterStyles
+                relevantStyles
             );
 
             const filters = R.addIndex<IVisibleColumn, JSX.Element>(R.map)((column, index) => {
@@ -167,10 +198,16 @@ export default class FilterFactory {
                 );
             }, columns);
 
-            const styledFilters = arrayMap(
+            const styledFilters = arrayMap2(
                 filters,
                 wrapperStyles,
-                    (f, s) => React.cloneElement(f, { style: s }));
+                (f, s, j) => React.cloneElement(f, {
+                    style: R.merge(
+                        s,
+                        filterEdges && filterEdges.getStyle(0, j)
+                    )
+                })
+            );
 
             const operations = this.headerOperations(
                 1,
@@ -178,7 +215,14 @@ export default class FilterFactory {
                 row_deletable
             )[0];
 
-            return [operations.concat(styledFilters)];
+            const ops = arrayMap(
+                operations,
+                (o, j) => React.cloneElement(o, {
+                    style: operationBorders && operationBorders.getStyle(0, j)
+                })
+            );
+
+            return [ops.concat(styledFilters)];
         } else {
             return [[]];
         }

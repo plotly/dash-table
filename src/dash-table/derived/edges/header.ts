@@ -39,6 +39,7 @@ const getWeightedStyle = (
 export default memoizeOneFactory((
     columns: VisibleColumns,
     headerRows: number,
+    isLastRow: boolean,
     borderStyles: IConvertedStyle[]
 ) => {
     if (headerRows === 0 || columns.length === 0) {
@@ -46,6 +47,7 @@ export default memoizeOneFactory((
     }
 
     const edges = new EdgesMatrices(headerRows, columns.length);
+    const iNull = isLastRow ? -1 : headerRows - 1;
 
     R.forEach(i =>
         R.addIndex<IVisibleColumn>(R.forEach)(
@@ -55,6 +57,10 @@ export default memoizeOneFactory((
                     column,
                     i
                 );
+
+                if (i === iNull) {
+                    cellStyle.borderBottom = undefined;
+                }
 
                 edges.setEdges(i, j, cellStyle);
             },
