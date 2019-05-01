@@ -156,6 +156,27 @@
             }
         }
 
+        .dash-filter {
+            input::placeholder {
+                color: inherit;
+                font-size: 0.8em;
+                padding-right: 5px;
+            }
+
+            & + .dash-filter {
+                &:not(:hover):not(:focus-within) {
+                    input::placeholder {
+                        color: transparent;
+                    }
+                }
+            }
+
+            &.invalid {
+                background-color: pink;
+                border: 1px solid red !important;
+            }
+        }
+
         &:not(.dash-empty-11) {
             .row-0 {
                 tr:last-of-type {
@@ -175,6 +196,13 @@
                         border-right: none !important;
                     }
                 }
+            }
+        }
+
+        &.dash-list-view {
+            td, th {
+                border-left: none !important;
+                border-right: none !important;
             }
         }
 
@@ -222,17 +250,6 @@
             table {
                 width: 100%;
             }
-        }
-
-        &.dash-list-view {
-            td, th {
-                border-left: none !important;
-                border-right: none !important;
-            }
-        }
-
-        .dash-filter.invalid {
-            background-color: pink;
         }
 
         .selected-row {
