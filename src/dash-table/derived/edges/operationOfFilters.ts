@@ -7,13 +7,12 @@ import { IConvertedStyle } from '../style';
 import { BorderStyle, BORDER_PROPERTIES, EdgesMatrices } from './type';
 
 const getWeightedStyle = (
-    borderStyles: IConvertedStyle[],
-    index: number
+    borderStyles: IConvertedStyle[]
 ): BorderStyle => {
     const res: BorderStyle = {};
 
     R.addIndex<IConvertedStyle>(R.forEach)((rs, i) => {
-        if (!rs.matchesRow(index)) {
+        if (!rs.matchesColumn(undefined)) {
             return;
         }
 
@@ -42,10 +41,7 @@ export default memoizeOneFactory((
 
     R.forEach(i =>
         R.forEach(j => {
-            const cellStyle = getWeightedStyle(
-                borderStyles,
-                i
-            );
+            const cellStyle = getWeightedStyle(borderStyles);
 
             edges.setEdges(i, j, cellStyle);
         },

@@ -28,8 +28,8 @@ import { QuerySyntaxTree } from 'dash-table/syntax-tree';
 
 export interface IConvertedStyle {
     style: CSSProperties;
-    matchesColumn: (column: IVisibleColumn) => boolean;
-    matchesRow: (index: number) => boolean;
+    matchesColumn: (column: IVisibleColumn | undefined) => boolean;
+    matchesRow: (index: number | undefined) => boolean;
     matchesFilter: (datum: Datum) => boolean;
 }
 
@@ -41,17 +41,18 @@ function convertElement(style: GenericStyle) {
     let ast: QuerySyntaxTree;
 
     return {
-        matchesColumn: (column: IVisibleColumn) =>
+        matchesColumn: (column: IVisibleColumn | undefined) =>
             !style.if || (
+                !R.isNil(column) &&
                 ifColumnId(style.if, column.id) &&
                 ifColumnType(style.if, column.type)
             ),
-        matchesRow: (index: number) =>
+        matchesRow: (index: number | undefined) =>
             indexFilter === undefined ?
                 true :
                 typeof indexFilter === 'number' ?
                     index === indexFilter :
-                    indexFilter === 'odd' ? index % 2 === 1 : index % 2 === 0,
+                    !R.isNil(index) && (indexFilter === 'odd' ? index % 2 === 1 : index % 2 === 0),
         matchesFilter: (datum: Datum) =>
             !style.if ||
             style.if.filter === undefined ||

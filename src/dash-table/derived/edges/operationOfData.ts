@@ -21,6 +21,7 @@ const getWeightedStyle = (
 
     R.addIndex<IConvertedStyle>(R.forEach)((rs, i) => {
         if (!rs.matchesRow(index + offset.rows) ||
+            !rs.matchesColumn(undefined) ||
             !rs.matchesFilter(datum)
         ) {
             return;

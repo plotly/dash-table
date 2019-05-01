@@ -19,11 +19,8 @@ import { ControlledTableProps, VisibleColumns, IViewportOffset, Data } from './T
 
 export default class EdgeFactory {
     private readonly dataStyles = derivedRelevantCellStyles();
-    private readonly dataOpStyles = derivedRelevantCellStyles();
     private readonly filterStyles = derivedRelevantFilterStyles();
-    private readonly filterOpStyles = derivedRelevantFilterStyles();
     private readonly headerStyles = derivedRelevantHeaderStyles();
-    private readonly headerOpStyles = derivedRelevantHeaderStyles();
 
     private readonly getDataEdges = derivedDataEdges();
     private readonly getDataOpEdges = derivedDataOpEdges();
@@ -137,26 +134,37 @@ export default class EdgeFactory {
         data: Data,
         offset: IViewportOffset
     ) => {
+        const dataStyles = this.dataStyles(
+            style_cell,
+            style_data,
+            style_cell_conditional,
+            style_data_conditional
+        );
+
+        const filterStyles = this.filterStyles(
+            style_cell,
+            style_filter,
+            style_cell_conditional,
+            style_filter_conditional
+        );
+
+        const headerStyles = this.headerStyles(
+            style_cell,
+            style_header,
+            style_cell_conditional,
+            style_header_conditional
+        );
+
         let dataEdges = this.getDataEdges(
             columns,
-            this.dataStyles(
-                style_cell,
-                style_data,
-                style_cell_conditional,
-                style_data_conditional
-            ),
+            dataStyles,
             data,
             offset
         );
 
         let dataOpEdges = this.getDataOpEdges(
             operations,
-            this.dataOpStyles(
-                style_cell,
-                style_data,
-                R.filter(s => R.isNil(s.if) || (R.isNil(s.if.column_id) && R.isNil(s.if.column_type)), style_cell_conditional),
-                R.filter(s => R.isNil(s.if) || (R.isNil(s.if.column_id) && R.isNil(s.if.column_type)), style_data_conditional)
-            ),
+            dataStyles,
             data,
             offset
         );
@@ -164,45 +172,25 @@ export default class EdgeFactory {
         let filterEdges = this.getFilterEdges(
             columns,
             filtering,
-            this.filterStyles(
-                style_cell,
-                style_filter,
-                style_cell_conditional,
-                style_filter_conditional
-            )
+            filterStyles
         );
 
         let filterOpEdges = this.getFilterOpEdges(
             operations,
             filtering,
-            this.filterOpStyles(
-                style_cell,
-                style_filter,
-                R.filter(s => R.isNil(s.if) || (R.isNil(s.if.column_id) && R.isNil(s.if.column_type)), style_cell_conditional),
-                R.filter(s => R.isNil(s.if) || (R.isNil(s.if.column_id) && R.isNil(s.if.column_type)), style_filter_conditional)
-            )
+            filterStyles
         );
 
         let headerEdges = this.getHeaderEdges(
             columns,
             getHeaderRows(columns),
-            this.headerStyles(
-                style_cell,
-                style_header,
-                style_cell_conditional,
-                style_header_conditional
-            )
+            headerStyles
         );
 
         let headerOpEdges = this.getHeaderOpEdges(
             operations,
             getHeaderRows(columns),
-            this.headerOpStyles(
-                style_cell,
-                style_header,
-                R.filter(s => R.isNil(s.if) || (R.isNil(s.if.column_id) && R.isNil(s.if.column_type)), style_cell_conditional),
-                R.filter(s => R.isNil(s.if) || (R.isNil(s.if.column_id) && R.isNil(s.if.column_type) && R.isNil(s.if.header_index)), style_header_conditional)
-            )
+            headerStyles
         );
 
         const cutoffWeight = (style_cell ? 1 : 0) + style_cell_conditional.length - 1;
