@@ -43,7 +43,7 @@ const style_data_conditional = [
     { width: 100 }
 ];
 
-let props = {
+export const BORDER_PROPS_DEFAULTS = {
     setProps,
     id: 'table',
     data: data,
@@ -63,18 +63,18 @@ let props2 = {
 
 storiesOf('DashTable/Border (available space not filled)', module)
     .add('with no frozen rows and no frozen columns', () => (<DataTable
-        {...props}
+        {...BORDER_PROPS_DEFAULTS}
     />))
     .add('with frozen rows and no frozen columns', () => (<DataTable
-        {...props}
+        {...BORDER_PROPS_DEFAULTS}
         n_fixed_rows={1}
     />))
     .add('with no frozen rows and frozen columns', () => (<DataTable
-        {...props}
+        {...BORDER_PROPS_DEFAULTS}
         n_fixed_columns={1}
     />))
     .add('with frozen rows and frozen columns', () => (<DataTable
-        {...props}
+        {...BORDER_PROPS_DEFAULTS}
         n_fixed_columns={1}
         n_fixed_rows={1}
     />));
@@ -97,7 +97,7 @@ storiesOf('DashTable/Border (available space filled)', module)
         n_fixed_rows={1}
     />));
 
-let props3 = Object.assign({}, props, {
+let props3 = Object.assign({}, BORDER_PROPS_DEFAULTS, {
     style_as_list_view: true
 });
 
