@@ -184,7 +184,6 @@ export default class FilterFactory {
                 filters,
                 wrapperStyles,
                 (f, s) => React.cloneElement(f, {
-                    classes: f.props.classes + ` dash-filter-row`,
                     style: s
                 })
             );
@@ -198,7 +197,6 @@ export default class FilterFactory {
             const ops = arrayMap(
                 operations,
                 (o, j) => React.cloneElement(o, {
-                    className: o.props.className + ` dash-filter-row`,
                     style: filterOpEdges && filterOpEdges.getStyle(0, j)
                 })
             );

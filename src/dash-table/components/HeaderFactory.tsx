@@ -93,14 +93,9 @@ export default class HeaderFactory {
             props
         );
 
-        const iLastHeaderRow = headerRows - 1;
-
         const ops = matrixMap(
             operations,
             (o, i, j) => React.cloneElement(o, {
-                className: i === iLastHeaderRow ?
-                    o.props.className + ` dash-last-header-row` :
-                    o.props.className,
                 style: headerOpEdges && headerOpEdges.getStyle(i, j)
             })
         );
@@ -111,9 +106,6 @@ export default class HeaderFactory {
             content,
             (w, s, c, i, j) => React.cloneElement(w, {
                 children: [c],
-                className: i === iLastHeaderRow ?
-                    w.props.className + ` dash-last-header-row` :
-                    w.props.className,
                 style: R.mergeAll([
                     s,
                     headerEdges && headerEdges.getStyle(i, j)

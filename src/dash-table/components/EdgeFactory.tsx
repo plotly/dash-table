@@ -114,7 +114,7 @@ export default class EdgeFactory {
         );
     }
 
-    public memoizedCreateEdges = memoizeOne((
+    private memoizedCreateEdges = memoizeOne((
         columns: VisibleColumns,
         operations: number,
         filtering: boolean,
