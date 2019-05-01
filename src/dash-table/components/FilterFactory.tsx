@@ -16,6 +16,7 @@ import { MultiColumnsSyntaxTree, SingleColumnSyntaxTree, getMultiColumnQueryStri
 
 import derivedFilterEdges from 'dash-table/derived/edges/filter';
 import derivedOperationEdges from 'dash-table/derived/edges/operationOfFilters';
+import { EdgesMatrices } from 'dash-table/derived/edges/type';
 
 type SetFilter = (filter: string, rawFilter: string) => void;
 
@@ -39,6 +40,7 @@ export default class FilterFactory {
     private readonly handlers = new Map();
     private readonly filterStyles = derivedFilterStyles();
     private readonly relevantStyles = derivedRelevantFilterStyles();
+    private readonly relevantOperationStyles = derivedRelevantFilterStyles();
     private readonly headerOperations = derivedHeaderOperations();
 
     private readonly filterEdges = derivedFilterEdges();
@@ -130,6 +132,17 @@ export default class FilterFactory {
         />);
     });
 
+    private wrapperStyles = memoizeOne((
+        styles: any[],
+        edges: EdgesMatrices | undefined
+    ) => arrayMap(
+        styles,
+        (s, j) => R.merge(
+            s,
+            edges && edges.getStyle(0, j)
+        )
+    ));
+
     public createFilters() {
         const {
             columns,
@@ -159,7 +172,7 @@ export default class FilterFactory {
                 style_filter_conditional
             );
 
-            const operationRelevantStyles = this.relevantStyles(
+            const relevantOperationStyles = this.relevantOperationStyles(
                 style_cell,
                 style_filter,
                 R.filter(s => R.isNil(s.if) || (R.isNil(s.if.column_id) && R.isNil(s.if.column_type)), style_cell_conditional),
@@ -175,12 +188,12 @@ export default class FilterFactory {
             const operationBorders = this.filterOperationEdges(
                 (row_selectable !== false ? 1 : 0) + (row_deletable ? 1 : 0),
                 1,
-                operationRelevantStyles
+                relevantOperationStyles
             );
 
-            const wrapperStyles = this.filterStyles(
-                columns,
-                relevantStyles
+            const wrapperStyles = this.wrapperStyles(
+                this.filterStyles(columns, relevantStyles),
+                filterEdges
             );
 
             const filters = R.addIndex<IVisibleColumn, JSX.Element>(R.map)((column, index) => {
@@ -195,12 +208,9 @@ export default class FilterFactory {
             const styledFilters = arrayMap2(
                 filters,
                 wrapperStyles,
-                (f, s, j) => React.cloneElement(f, {
+                (f, s) => React.cloneElement(f, {
                     classes: f.props.classes + ` dash-filter-row`,
-                    style: R.merge(
-                        s,
-                        filterEdges && filterEdges.getStyle(0, j)
-                    )
+                    style: s
                 })
             );
 

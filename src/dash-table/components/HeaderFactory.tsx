@@ -23,6 +23,7 @@ export default class HeaderFactory {
     private readonly headerStyles = derivedHeaderStyles();
     private readonly headerWrappers = derivedHeaderWrappers();
     private readonly relevantStyles = derivedRelevantHeaderStyles();
+    private readonly relevantOperationStyles = derivedRelevantHeaderStyles();
 
     private readonly headerEdges = derivedHeaderEdges();
     private readonly headerOperationEdges = derivedOperationEdges();
@@ -68,7 +69,7 @@ export default class HeaderFactory {
             style_header_conditional
         );
 
-        const operationRelevantStyles = this.relevantStyles(
+        const relevantOperationStyles = this.relevantOperationStyles(
             style_cell,
             style_header,
             R.filter(s => R.isNil(s.if) || (R.isNil(s.if.column_id) && R.isNil(s.if.column_type)), style_cell_conditional),
@@ -84,7 +85,7 @@ export default class HeaderFactory {
         const headerBorders = this.headerEdges(
             columns,
             headerRows,
-            operationRelevantStyles
+            relevantOperationStyles
         );
 
         const operationBorders = this.headerOperationEdges(

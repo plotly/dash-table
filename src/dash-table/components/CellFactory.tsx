@@ -29,6 +29,7 @@ export default class CellFactory {
         private readonly cellStyles = derivedCellStyles(),
         private readonly cellWrappers = derivedCellWrappers(propsFn),
         private readonly relevantStyles = derivedRelevantCellStyles(),
+        private readonly relevantOperationStyles = derivedRelevantCellStyles(),
 
         private readonly dataEdges = derivedDataEdges(),
         private readonly dataOperationEdges = derivedOperationEdges()
@@ -63,7 +64,7 @@ export default class CellFactory {
             style_data_conditional
         );
 
-        const operationRelevantStyles = this.relevantStyles(
+        const relevantOperationStyles = this.relevantOperationStyles(
             style_cell,
             style_data,
             R.filter(s => R.isNil(s.if) || (R.isNil(s.if.column_id) && R.isNil(s.if.column_type)), style_cell_conditional),
@@ -89,7 +90,7 @@ export default class CellFactory {
 
         const operationBorders = this.dataOperationEdges(
             (row_selectable !== false ? 1 : 0) + (row_deletable ? 1 : 0),
-            operationRelevantStyles,
+            relevantOperationStyles,
             virtualized.data,
             virtualized.offset
         );
