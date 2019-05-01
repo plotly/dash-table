@@ -15,7 +15,7 @@ import { BasicFilters, Cells, Style } from 'dash-table/derived/style/props';
 import { MultiColumnsSyntaxTree, SingleColumnSyntaxTree, getMultiColumnQueryString, getSingleColumnMap } from 'dash-table/syntax-tree';
 
 import derivedFilterEdges from 'dash-table/derived/edges/filter';
-import derivedOperationEdges from 'dash-table/derived/edges/operationOfHeaders';
+import derivedOperationEdges from 'dash-table/derived/edges/operationOfFilters';
 
 type SetFilter = (filter: string, rawFilter: string) => void;
 
@@ -159,11 +159,11 @@ export default class FilterFactory {
                 style_filter_conditional
             );
 
-            const relevantOperationStyles = this.relevantStyles(
+            const operationRelevantStyles = this.relevantStyles(
                 style_cell,
                 style_filter,
-                [],
-                []
+                R.filter(s => R.isNil(s.if) || (R.isNil(s.if.column_id) && R.isNil(s.if.column_type)), style_cell_conditional),
+                R.filter(s => R.isNil(s.if) || (R.isNil(s.if.column_id) && R.isNil(s.if.column_type)), style_filter_conditional)
             );
 
             const filterEdges = this.filterEdges(
@@ -175,7 +175,7 @@ export default class FilterFactory {
             const operationBorders = this.filterOperationEdges(
                 (row_selectable !== false ? 1 : 0) + (row_deletable ? 1 : 0),
                 1,
-                relevantOperationStyles
+                operationRelevantStyles
             );
 
             const wrapperStyles = this.filterStyles(
@@ -196,7 +196,7 @@ export default class FilterFactory {
                 filters,
                 wrapperStyles,
                 (f, s, j) => React.cloneElement(f, {
-                    className: f.props.className + ` filter-row`,
+                    classes: f.props.classes + ` dash-filter-row`,
                     style: R.merge(
                         s,
                         filterEdges && filterEdges.getStyle(0, j)
@@ -213,7 +213,7 @@ export default class FilterFactory {
             const ops = arrayMap(
                 operations,
                 (o, j) => React.cloneElement(o, {
-                    className: o.props.className + ` filter-row`,
+                    className: o.props.className + ` dash-filter-row`,
                     style: operationBorders && operationBorders.getStyle(0, j)
                 })
             );

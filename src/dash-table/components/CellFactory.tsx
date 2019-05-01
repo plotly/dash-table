@@ -63,6 +63,13 @@ export default class CellFactory {
             style_data_conditional
         );
 
+        const operationRelevantStyles = this.relevantStyles(
+            style_cell,
+            style_data,
+            R.filter(s => R.isNil(s.if) || (R.isNil(s.if.column_id) && R.isNil(s.if.column_type)), style_cell_conditional),
+            R.filter(s => R.isNil(s.if) || (R.isNil(s.if.column_id) && R.isNil(s.if.column_type)), style_data_conditional)
+        );
+
         const operations = this.cellOperations(
             data,
             virtualized.data,
@@ -82,7 +89,7 @@ export default class CellFactory {
 
         const operationBorders = this.dataOperationEdges(
             (row_selectable !== false ? 1 : 0) + (row_deletable ? 1 : 0),
-            relevantStyles,
+            operationRelevantStyles,
             virtualized.data,
             virtualized.offset
         );

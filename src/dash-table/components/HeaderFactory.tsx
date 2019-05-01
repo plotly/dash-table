@@ -68,6 +68,13 @@ export default class HeaderFactory {
             style_header_conditional
         );
 
+        const operationRelevantStyles = this.relevantStyles(
+            style_cell,
+            style_header,
+            R.filter(s => R.isNil(s.if) || (R.isNil(s.if.column_id) && R.isNil(s.if.column_type)), style_cell_conditional),
+            R.filter(s => R.isNil(s.if) || (R.isNil(s.if.column_id) && R.isNil(s.if.column_type) && R.isNil(s.if.header_index)), style_header_conditional)
+        );
+
         const operations = this.headerOperations(
             headerRows,
             row_selectable,
@@ -77,7 +84,7 @@ export default class HeaderFactory {
         const headerBorders = this.headerEdges(
             columns,
             headerRows,
-            relevantStyles
+            operationRelevantStyles
         );
 
         const operationBorders = this.headerOperationEdges(
@@ -115,7 +122,7 @@ export default class HeaderFactory {
             operations,
             (o, i, j) => React.cloneElement(o, {
                 className: i === iLastHeaderRow ?
-                    o.props.className + ` last-header-row` :
+                    o.props.className + ` dash-last-header-row` :
                     o.props.className,
                 style: operationBorders && operationBorders.getStyle(i, j)
             })
@@ -128,7 +135,7 @@ export default class HeaderFactory {
             (w, s, c, i, j) => React.cloneElement(w, {
                 children: [c],
                 className: i === iLastHeaderRow ?
-                    w.props.className + ` last-header-row` :
+                    w.props.className + ` dash-last-header-row` :
                     w.props.className,
                 style: R.mergeAll([
                     s,
