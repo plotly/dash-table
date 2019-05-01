@@ -112,4 +112,18 @@ storiesOf('DashTable/Border, custom styles', module)
         style_header={{
             border: '1px solid hotpink'
         }}
+    />))
+    .add('style as list view', () => (<DataTable
+        {...BORDER_PROPS_DEFAULTS}
+        filtering={true}
+        style_data={{
+            border: '1px solid teal'
+        }}
+        style_filter={{
+            border: '1px solid burlywood'
+        }}
+        style_header={{
+            border: '1px solid hotpink'
+        }}
+        style_as_list_view={true}
     />));

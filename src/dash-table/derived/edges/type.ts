@@ -114,6 +114,8 @@ export class EdgesMatrix implements IEdgesMatrix {
     getWeight = (i: number, j: number) => this.weights[i][j];
 
     isDefault = (i: number, j: number) => !isFinite(this.weights[i][j]);
+
+    clone = () => new EdgesMatrix(this);
 }
 
 export class EdgesMatrices implements IEdgesMatrices {
@@ -152,8 +154,8 @@ export class EdgesMatrices implements IEdgesMatrices {
             this.columns = source.columns;
             this.defaultEdge = source.defaultEdge;
 
-            this.horizontal = new EdgesMatrix(source.horizontal);
-            this.vertical = new EdgesMatrix(source.vertical);
+            this.horizontal = source.horizontal.clone();
+            this.vertical = source.vertical.clone();
         }
 
     }
