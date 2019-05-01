@@ -14,7 +14,7 @@ import derivedHeaderWrappers from 'dash-table/derived/header/wrappers';
 import { derivedRelevantHeaderStyles } from 'dash-table/derived/style';
 import derivedHeaderStyles from 'dash-table/derived/header/wrapperStyles';
 
-import { EdgesMatrices } from 'dash-table/derived/edges/type';
+import { IEdgesMatrices } from 'dash-table/derived/edges/type';
 
 export default class HeaderFactory {
     private readonly headerContent = derivedHeaderContent();
@@ -31,7 +31,7 @@ export default class HeaderFactory {
 
     }
 
-    public createHeaders(headerEdges: EdgesMatrices | undefined, headerOpEdges: EdgesMatrices | undefined) {
+    public createHeaders(headerEdges: IEdgesMatrices | undefined, headerOpEdges: IEdgesMatrices | undefined) {
         const props = this.props;
 
         const {

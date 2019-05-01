@@ -32,24 +32,70 @@ export const BORDER_PROPERTIES_AND_FRAGMENTS: string[] = R.uniq(
     )
 );
 
-export class EdgesMatrix {
+export interface IEdgesMatrix {
+    getEdge(i: number, j: number): Edge;
+    getEdges(): Edge[][];
+    getWeight(i: number, j: number): number;
+    isDefault(i: number, j: number): boolean;
+}
+
+export interface IEdgesMatrices {
+    getEdges(): {
+        horizontal: Edge[][],
+        vertical: Edge[][]
+    };
+    getMatrices(): {
+        horizontal: EdgesMatrix,
+        vertical: EdgesMatrix
+    };
+    getStyle(i: number, j: number): CSSProperties;
+}
+
+export class EdgesMatrix implements IEdgesMatrix {
     private weights: number[][];
     private edges: Edge[][];
 
+    public readonly rows: number;
+    public readonly columns: number;
+    public readonly defaultEdge: Edge | undefined;
+
+    constructor(m: EdgesMatrix);
     constructor(
-        public readonly rows: number,
-        public readonly columns: number,
+        rows: number,
+        columns: number,
+        defaultEdge?: Edge
+    );
+    constructor(
+        rowsOrMatrix: number | EdgesMatrix,
+        columns?: number,
         defaultEdge?: Edge
     ) {
-        this.weights = R.map(
-            () => new Array(columns).fill(-Infinity),
-            R.range(0, rows)
-        );
+        if (typeof rowsOrMatrix === 'number' && typeof columns !== 'undefined') {
+            const rows = rowsOrMatrix;
 
-        this.edges = R.map(
-            () => new Array(columns).fill(defaultEdge),
-            R.range(0, rows)
-        );
+            this.rows = rows;
+            this.columns = columns;
+            this.defaultEdge = defaultEdge;
+
+            this.weights = R.map(
+                () => new Array(columns).fill(-Infinity),
+                R.range(0, rows)
+            );
+
+            this.edges = R.map(
+                () => new Array(columns).fill(defaultEdge),
+                R.range(0, rows)
+            );
+        } else {
+            const source = rowsOrMatrix as EdgesMatrix;
+
+            this.rows = source.rows;
+            this.columns = source.columns;
+            this.defaultEdge = source.defaultEdge;
+
+            this.weights = R.clone(source.weights);
+            this.edges = R.clone(source.edges);
+        }
     }
 
     setEdge(i: number, j: number, edge: Edge, weight: number, force: boolean = false) {
@@ -70,13 +116,46 @@ export class EdgesMatrix {
     isDefault = (i: number, j: number) => !isFinite(this.weights[i][j]);
 }
 
-export class EdgesMatrices {
+export class EdgesMatrices implements IEdgesMatrices {
     private horizontal: EdgesMatrix;
     private vertical: EdgesMatrix;
 
-    constructor(rows: number, columns: number, defaultEdge?: Edge) {
-        this.horizontal = new EdgesMatrix(rows + 1, columns, defaultEdge);
-        this.vertical = new EdgesMatrix(rows, columns + 1, defaultEdge);
+    private readonly rows: number;
+    private readonly columns: number;
+    private readonly defaultEdge: Edge | undefined;
+
+    constructor(m: EdgesMatrices);
+    constructor(
+        rows: number,
+        columns: number,
+        defaultEdge?: Edge
+    );
+    constructor(
+        rowsOrMatrix: number | EdgesMatrices,
+        columns?: number,
+        defaultEdge?: Edge
+
+    ) {
+        if (typeof rowsOrMatrix === 'number' && typeof columns !== 'undefined') {
+            const rows = rowsOrMatrix;
+
+            this.rows = rows;
+            this.columns = columns;
+            this.defaultEdge = defaultEdge;
+
+            this.horizontal = new EdgesMatrix(rows + 1, columns, defaultEdge);
+            this.vertical = new EdgesMatrix(rows, columns + 1, defaultEdge);
+        } else {
+            const source = rowsOrMatrix as EdgesMatrices;
+
+            this.rows = source.rows;
+            this.columns = source.columns;
+            this.defaultEdge = source.defaultEdge;
+
+            this.horizontal = new EdgesMatrix(source.horizontal);
+            this.vertical = new EdgesMatrix(source.vertical);
+        }
+
     }
 
     setEdges(i: number, j: number, style: BorderStyle) {
@@ -113,4 +192,6 @@ export class EdgesMatrices {
         borderLeft: this.vertical.getEdge(i, j) || null,
         borderRight: this.vertical.getEdge(i, j + 1) || null
     })
+
+    clone = () => new EdgesMatrices(this);
 }

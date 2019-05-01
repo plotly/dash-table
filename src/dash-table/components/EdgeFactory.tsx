@@ -8,7 +8,7 @@ import derivedFilterEdges from 'dash-table/derived/edges/filter';
 import derivedFilterOpEdges from 'dash-table/derived/edges/operationOfFilters';
 import derivedHeaderEdges from 'dash-table/derived/edges/header';
 import derivedHeaderOpEdges from 'dash-table/derived/edges/operationOfHeaders';
-import { EdgesMatrices } from 'dash-table/derived/edges/type';
+import { EdgesMatrices, IEdgesMatrices } from 'dash-table/derived/edges/type';
 
 import getHeaderRows from 'dash-table/derived/header/headerRows';
 
@@ -32,10 +32,12 @@ export default class EdgeFactory {
     private readonly getHeaderEdges = derivedHeaderEdges();
     private readonly getHeaderOpEdges = derivedHeaderOpEdges();
 
-    private hReconcile(target: EdgesMatrices | undefined, next: EdgesMatrices | undefined, cutoffWeight: number): void {
+    private hReconcile(target: EdgesMatrices | undefined, next: EdgesMatrices | undefined, cutoffWeight: number): EdgesMatrices | undefined {
         if (!target || !next) {
-            return;
+            return target;
         }
+
+        target = target.clone();
 
         const hNext = next.getMatrices().horizontal;
         const hTarget = target.getMatrices().horizontal;
@@ -50,12 +52,16 @@ export default class EdgeFactory {
             ) && hTarget.setEdge(iTarget, j, undefined, -Infinity, true),
             R.range(0, hTarget.columns)
         );
+
+        return target;
     }
 
-    private vReconcile(target: EdgesMatrices | undefined, next: EdgesMatrices | undefined, cutoffWeight: number): void {
+    private vReconcile(target: EdgesMatrices | undefined, next: EdgesMatrices | undefined, cutoffWeight: number): EdgesMatrices | undefined {
         if (!target || !next) {
-            return;
+            return target;
         }
+
+        target = target.clone();
 
         const vNext = target.getMatrices().vertical;
         const vTarget = target.getMatrices().vertical;
@@ -70,6 +76,8 @@ export default class EdgeFactory {
             ) && vTarget.setEdge(i, jTarget, undefined, -Infinity, true),
             R.range(0, vTarget.rows)
         );
+
+        return target;
     }
 
     private get props() {
@@ -129,7 +137,7 @@ export default class EdgeFactory {
         data: Data,
         offset: IViewportOffset
     ) => {
-        const dataEdges = this.getDataEdges(
+        let dataEdges = this.getDataEdges(
             columns,
             this.dataStyles(
                 style_cell,
@@ -141,7 +149,7 @@ export default class EdgeFactory {
             offset
         );
 
-        const dataOpEdges = this.getDataOpEdges(
+        let dataOpEdges = this.getDataOpEdges(
             operations,
             this.dataOpStyles(
                 style_cell,
@@ -153,7 +161,7 @@ export default class EdgeFactory {
             offset
         );
 
-        const filterEdges = this.getFilterEdges(
+        let filterEdges = this.getFilterEdges(
             columns,
             filtering,
             this.filterStyles(
@@ -164,7 +172,7 @@ export default class EdgeFactory {
             )
         );
 
-        const filterOpEdges = this.getFilterOpEdges(
+        let filterOpEdges = this.getFilterOpEdges(
             operations,
             filtering,
             this.filterOpStyles(
@@ -175,7 +183,7 @@ export default class EdgeFactory {
             )
         );
 
-        const headerEdges = this.getHeaderEdges(
+        let headerEdges = this.getHeaderEdges(
             columns,
             getHeaderRows(columns),
             this.headerStyles(
@@ -186,7 +194,7 @@ export default class EdgeFactory {
             )
         );
 
-        const headerOpEdges = this.getHeaderOpEdges(
+        let headerOpEdges = this.getHeaderOpEdges(
             operations,
             getHeaderRows(columns),
             this.headerOpStyles(
@@ -199,15 +207,22 @@ export default class EdgeFactory {
 
         const cutoffWeight = (style_cell ? 1 : 0) + style_cell_conditional.length - 1;
 
-        this.hReconcile(headerEdges, filterEdges || dataEdges, cutoffWeight);
-        this.hReconcile(headerOpEdges, filterOpEdges || dataOpEdges, cutoffWeight);
-        this.hReconcile(filterEdges, dataEdges, cutoffWeight);
-        this.hReconcile(filterOpEdges, dataOpEdges, cutoffWeight);
+        headerEdges = this.hReconcile(headerEdges, filterEdges || dataEdges, cutoffWeight);
+        headerOpEdges = this.hReconcile(headerOpEdges, filterOpEdges || dataOpEdges, cutoffWeight);
+        filterEdges = this.hReconcile(filterEdges, dataEdges, cutoffWeight);
+        filterOpEdges = this.hReconcile(filterOpEdges, dataOpEdges, cutoffWeight);
 
-        this.vReconcile(headerOpEdges, headerEdges, cutoffWeight);
-        this.vReconcile(filterOpEdges, filterEdges, cutoffWeight);
-        this.vReconcile(dataOpEdges, dataEdges, cutoffWeight);
+        headerOpEdges = this.vReconcile(headerOpEdges, headerEdges, cutoffWeight);
+        filterOpEdges = this.vReconcile(filterOpEdges, filterEdges, cutoffWeight);
+        dataOpEdges = this.vReconcile(dataOpEdges, dataEdges, cutoffWeight);
 
-        return { dataEdges, dataOpEdges, filterEdges, filterOpEdges, headerEdges, headerOpEdges };
+        return {
+            dataEdges: dataEdges as (IEdgesMatrices | undefined),
+            dataOpEdges: dataOpEdges as (IEdgesMatrices | undefined),
+            filterEdges: filterEdges as (IEdgesMatrices | undefined),
+            filterOpEdges: filterOpEdges as (IEdgesMatrices | undefined),
+            headerEdges: headerEdges as (IEdgesMatrices | undefined),
+            headerOpEdges: headerOpEdges as (IEdgesMatrices | undefined)
+        };
     });
 }

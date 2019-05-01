@@ -11,7 +11,7 @@ import derivedCellOperations from 'dash-table/derived/cell/operations';
 import derivedCellStyles from 'dash-table/derived/cell/wrapperStyles';
 import derivedDropdowns from 'dash-table/derived/cell/dropdowns';
 import { derivedRelevantCellStyles } from 'dash-table/derived/style';
-import { EdgesMatrices } from 'dash-table/derived/edges/type';
+import { IEdgesMatrices } from 'dash-table/derived/edges/type';
 
 export default class CellFactory {
 
@@ -29,7 +29,7 @@ export default class CellFactory {
         private readonly relevantStyles = derivedRelevantCellStyles()
     ) { }
 
-    public createCells(dataEdges: EdgesMatrices | undefined, dataOpEdges: EdgesMatrices | undefined) {
+    public createCells(dataEdges: IEdgesMatrices | undefined, dataOpEdges: IEdgesMatrices | undefined) {
         const {
             active_cell,
             columns,

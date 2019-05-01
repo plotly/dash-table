@@ -14,7 +14,7 @@ import { derivedRelevantFilterStyles } from 'dash-table/derived/style';
 import { BasicFilters, Cells, Style } from 'dash-table/derived/style/props';
 import { MultiColumnsSyntaxTree, SingleColumnSyntaxTree, getMultiColumnQueryString, getSingleColumnMap } from 'dash-table/syntax-tree';
 
-import { EdgesMatrices } from 'dash-table/derived/edges/type';
+import { IEdgesMatrices } from 'dash-table/derived/edges/type';
 
 type SetFilter = (filter: string, rawFilter: string) => void;
 
@@ -128,7 +128,7 @@ export default class FilterFactory {
 
     private wrapperStyles = memoizeOne((
         styles: any[],
-        edges: EdgesMatrices | undefined
+        edges: IEdgesMatrices | undefined
     ) => arrayMap(
         styles,
         (s, j) => R.merge(
@@ -137,7 +137,7 @@ export default class FilterFactory {
         )
     ));
 
-    public createFilters(filterEdges: EdgesMatrices | undefined, filterOpEdges: EdgesMatrices | undefined) {
+    public createFilters(filterEdges: IEdgesMatrices | undefined, filterOpEdges: IEdgesMatrices | undefined) {
         const {
             columns,
             filter,
