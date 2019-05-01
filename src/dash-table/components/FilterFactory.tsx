@@ -14,8 +14,6 @@ import { derivedRelevantFilterStyles } from 'dash-table/derived/style';
 import { BasicFilters, Cells, Style } from 'dash-table/derived/style/props';
 import { MultiColumnsSyntaxTree, SingleColumnSyntaxTree, getMultiColumnQueryString, getSingleColumnMap } from 'dash-table/syntax-tree';
 
-import derivedFilterEdges from 'dash-table/derived/edges/filter';
-import derivedOperationEdges from 'dash-table/derived/edges/operationOfFilters';
 import { EdgesMatrices } from 'dash-table/derived/edges/type';
 
 type SetFilter = (filter: string, rawFilter: string) => void;
@@ -40,11 +38,7 @@ export default class FilterFactory {
     private readonly handlers = new Map();
     private readonly filterStyles = derivedFilterStyles();
     private readonly relevantStyles = derivedRelevantFilterStyles();
-    private readonly relevantOperationStyles = derivedRelevantFilterStyles();
     private readonly headerOperations = derivedHeaderOperations();
-
-    private readonly filterEdges = derivedFilterEdges();
-    private readonly filterOperationEdges = derivedOperationEdges();
 
     private ops = new Map<string, SingleColumnSyntaxTree>();
 
@@ -143,7 +137,7 @@ export default class FilterFactory {
         )
     ));
 
-    public createFilters() {
+    public createFilters(filterEdges: EdgesMatrices | undefined, filterOpEdges: EdgesMatrices | undefined) {
         const {
             columns,
             filter,
@@ -170,25 +164,6 @@ export default class FilterFactory {
                 style_filter,
                 style_cell_conditional,
                 style_filter_conditional
-            );
-
-            const relevantOperationStyles = this.relevantOperationStyles(
-                style_cell,
-                style_filter,
-                R.filter(s => R.isNil(s.if) || (R.isNil(s.if.column_id) && R.isNil(s.if.column_type)), style_cell_conditional),
-                R.filter(s => R.isNil(s.if) || (R.isNil(s.if.column_id) && R.isNil(s.if.column_type)), style_filter_conditional)
-            );
-
-            const filterEdges = this.filterEdges(
-                columns,
-                true,
-                relevantStyles
-            );
-
-            const operationBorders = this.filterOperationEdges(
-                (row_selectable !== false ? 1 : 0) + (row_deletable ? 1 : 0),
-                1,
-                relevantOperationStyles
             );
 
             const wrapperStyles = this.wrapperStyles(
@@ -224,7 +199,7 @@ export default class FilterFactory {
                 operations,
                 (o, j) => React.cloneElement(o, {
                     className: o.props.className + ` dash-filter-row`,
-                    style: operationBorders && operationBorders.getStyle(0, j)
+                    style: filterOpEdges && filterOpEdges.getStyle(0, j)
                 })
             );
 

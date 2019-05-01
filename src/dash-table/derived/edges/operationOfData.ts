@@ -1,5 +1,6 @@
 import * as R from 'ramda';
 
+import Environment from 'core/environment';
 import { memoizeOneFactory } from 'core/memoizer';
 
 import {
@@ -47,7 +48,7 @@ export default memoizeOneFactory((
         return;
     }
 
-    const edges = new EdgesMatrices(data.length, columns);
+    const edges = new EdgesMatrices(data.length, columns, Environment.defaultEdge);
 
     R.addIndex(R.forEach)((datum, i) =>
         R.forEach(j => {

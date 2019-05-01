@@ -33,12 +33,70 @@ storiesOf('DashTable/Border, custom styles', module)
             border: '1px solid hotpink'
         }}
     />))
+    .add('with header / cell (data) style - header wins on cell (data)', () => (<DataTable
+        {...BORDER_PROPS_DEFAULTS}
+        style_cell={{
+            border: '1px solid teal'
+        }}
+        style_header={{
+            border: '1px solid hotpink'
+        }}
+    />))
     .add('with header / data style - data wins on header', () => (<DataTable
         {...BORDER_PROPS_DEFAULTS}
         style_data={{
             border: '1px solid teal'
         }}
         style_header={{
+            border: '1px solid hotpink'
+        }}
+    />))
+    .add('with header / filter / cell (data) style - filter wins on header, filter wins on cell (data)', () => (<DataTable
+        {...BORDER_PROPS_DEFAULTS}
+        filtering={true}
+        style_cell={{
+            border: '1px solid teal'
+        }}
+        style_filter={{
+            border: '1px solid burlywood'
+        }}
+        style_header={{
+            border: '1px solid hotpink'
+        }}
+    />))
+    .add('with header / data / cell (filter) style - header wins on cell (filter), data wins on cell (filter)', () => (<DataTable
+        {...BORDER_PROPS_DEFAULTS}
+        filtering={true}
+        style_data={{
+            border: '1px solid teal'
+        }}
+        style_cell={{
+            border: '1px solid burlywood'
+        }}
+        style_header={{
+            border: '1px solid hotpink'
+        }}
+    />))
+    .add('with cell (header) / filter / data style - filter wins on cell (header), data wins on filter', () => (<DataTable
+        {...BORDER_PROPS_DEFAULTS}
+        filtering={true}
+        style_data={{
+            border: '1px solid teal'
+        }}
+        style_filter={{
+            border: '1px solid burlywood'
+        }}
+        style_cell={{
+            border: '1px solid hotpink'
+        }}
+    />))
+    .add('with data / cell (header, filter) style - data wins on filter', () => (<DataTable
+        {...BORDER_PROPS_DEFAULTS}
+        filtering={true}
+        style_data={{
+            border: '1px solid teal'
+        }}
+        style_cell={{
             border: '1px solid hotpink'
         }}
     />))

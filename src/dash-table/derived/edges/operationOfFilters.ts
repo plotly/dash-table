@@ -1,5 +1,6 @@
 import * as R from 'ramda';
 
+import Environment from 'core/environment';
 import { memoizeOneFactory } from 'core/memoizer';
 
 import { IConvertedStyle } from '../style';
@@ -30,14 +31,14 @@ const getWeightedStyle = (
 
 export default memoizeOneFactory((
     columns: number,
-    headerRows: number,
+    filtering: boolean,
     borderStyles: IConvertedStyle[]
 ) => {
-    if (headerRows === 0 || columns === 0) {
+    if (!filtering || columns === 0) {
         return;
     }
 
-    const edges = new EdgesMatrices(headerRows, columns);
+    const edges = new EdgesMatrices(1, columns, Environment.defaultEdge);
 
     R.forEach(i =>
         R.forEach(j => {
@@ -50,7 +51,7 @@ export default memoizeOneFactory((
         },
             R.range(0, columns)
         ),
-        R.range(0, headerRows)
+        R.range(0, 1)
     );
 
     return edges;

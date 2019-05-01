@@ -4,7 +4,7 @@ import { CSSProperties } from 'react';
 import { OptionalMap, OptionalProp, PropOf } from 'core/type';
 import py2jsCssProperties from '../style/py2jsCssProperties';
 
-type Edge = any;
+export type Edge = any;
 
 type BorderProp =
     PropOf<CSSProperties, 'borderBottom'> |
@@ -36,20 +36,24 @@ export class EdgesMatrix {
     private weights: number[][];
     private edges: Edge[][];
 
-    constructor(rows: number, columns: number) {
+    constructor(
+        public readonly rows: number,
+        public readonly columns: number,
+        defaultEdge?: Edge
+    ) {
         this.weights = R.map(
             () => new Array(columns).fill(-Infinity),
             R.range(0, rows)
         );
 
         this.edges = R.map(
-            () => new Array(columns).fill(undefined),
+            () => new Array(columns).fill(defaultEdge),
             R.range(0, rows)
         );
     }
 
-    setEdge(i: number, j: number, edge: Edge, weight: number) {
-        if (R.isNil(edge) || weight <= this.weights[i][j]) {
+    setEdge(i: number, j: number, edge: Edge, weight: number, force: boolean = false) {
+        if (!force && (R.isNil(edge) || weight <= this.weights[i][j])) {
             return;
         }
 
@@ -57,24 +61,22 @@ export class EdgesMatrix {
         this.edges[i][j] = edge;
     }
 
-    getEdge(i: number, j: number) {
-        return this.edges[i][j];
-    }
+    getEdge = (i: number, j: number) => this.edges[i][j];
 
-    /*#if TEST*/
-    getEdges() {
-        return this.edges;
-    }
-    /*#endif*/
+    getEdges = () => this.edges;
+
+    getWeight = (i: number, j: number) => this.weights[i][j];
+
+    isDefault = (i: number, j: number) => !isFinite(this.weights[i][j]);
 }
 
 export class EdgesMatrices {
     private horizontal: EdgesMatrix;
     private vertical: EdgesMatrix;
 
-    constructor(rows: number, columns: number) {
-        this.horizontal = new EdgesMatrix(rows + 1, columns);
-        this.vertical = new EdgesMatrix(rows, columns + 1 );
+    constructor(rows: number, columns: number, defaultEdge?: Edge) {
+        this.horizontal = new EdgesMatrix(rows + 1, columns, defaultEdge);
+        this.vertical = new EdgesMatrix(rows, columns + 1, defaultEdge);
     }
 
     setEdges(i: number, j: number, style: BorderStyle) {
@@ -95,21 +97,20 @@ export class EdgesMatrices {
         }
     }
 
-    getStyle(i: number, j: number): CSSProperties {
-        return {
-            borderBottom: this.horizontal.getEdge(i + 1, j) || null,
-            borderTop: this.horizontal.getEdge(i, j) || null,
-            borderLeft: this.vertical.getEdge(i, j) || null,
-            borderRight: this.vertical.getEdge(i, j + 1) || null
-        };
-    }
+    getEdges = () => ({
+        horizontal: this.horizontal.getEdges(),
+        vertical: this.vertical.getEdges()
+    })
 
-    /*#if TEST*/
-    getMatrices() {
-        return {
-            horizontal: this.horizontal.getEdges(),
-            vertical: this.vertical.getEdges()
-        };
-    }
-    /*#endif*/
+    getMatrices = () => ({
+        horizontal: this.horizontal,
+        vertical: this.vertical
+    })
+
+    getStyle = (i: number, j: number): CSSProperties => ({
+        borderBottom: this.horizontal.getEdge(i + 1, j) || null,
+        borderTop: this.horizontal.getEdge(i, j) || null,
+        borderLeft: this.vertical.getEdge(i, j) || null,
+        borderRight: this.vertical.getEdge(i, j + 1) || null
+    })
 }

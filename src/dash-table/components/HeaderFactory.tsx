@@ -14,8 +14,7 @@ import derivedHeaderWrappers from 'dash-table/derived/header/wrappers';
 import { derivedRelevantHeaderStyles } from 'dash-table/derived/style';
 import derivedHeaderStyles from 'dash-table/derived/header/wrapperStyles';
 
-import derivedHeaderEdges from 'dash-table/derived/edges/header';
-import derivedOperationEdges from 'dash-table/derived/edges/operationOfHeaders';
+import { EdgesMatrices } from 'dash-table/derived/edges/type';
 
 export default class HeaderFactory {
     private readonly headerContent = derivedHeaderContent();
@@ -23,10 +22,6 @@ export default class HeaderFactory {
     private readonly headerStyles = derivedHeaderStyles();
     private readonly headerWrappers = derivedHeaderWrappers();
     private readonly relevantStyles = derivedRelevantHeaderStyles();
-    private readonly relevantOperationStyles = derivedRelevantHeaderStyles();
-
-    private readonly headerEdges = derivedHeaderEdges();
-    private readonly headerOperationEdges = derivedOperationEdges();
 
     private get props() {
         return this.propsFn();
@@ -36,7 +31,7 @@ export default class HeaderFactory {
 
     }
 
-    public createHeaders() {
+    public createHeaders(headerEdges: EdgesMatrices | undefined, headerOpEdges: EdgesMatrices | undefined) {
         const props = this.props;
 
         const {
@@ -69,29 +64,10 @@ export default class HeaderFactory {
             style_header_conditional
         );
 
-        const relevantOperationStyles = this.relevantOperationStyles(
-            style_cell,
-            style_header,
-            R.filter(s => R.isNil(s.if) || (R.isNil(s.if.column_id) && R.isNil(s.if.column_type)), style_cell_conditional),
-            R.filter(s => R.isNil(s.if) || (R.isNil(s.if.column_id) && R.isNil(s.if.column_type) && R.isNil(s.if.header_index)), style_header_conditional)
-        );
-
         const operations = this.headerOperations(
             headerRows,
             row_selectable,
             row_deletable
-        );
-
-        const headerBorders = this.headerEdges(
-            columns,
-            headerRows,
-            relevantOperationStyles
-        );
-
-        const operationBorders = this.headerOperationEdges(
-            (row_selectable !== false ? 1 : 0) + (row_deletable ? 1 : 0),
-            headerRows,
-            relevantStyles
         );
 
         const wrapperStyles = this.headerStyles(
@@ -125,7 +101,7 @@ export default class HeaderFactory {
                 className: i === iLastHeaderRow ?
                     o.props.className + ` dash-last-header-row` :
                     o.props.className,
-                style: operationBorders && operationBorders.getStyle(i, j)
+                style: headerOpEdges && headerOpEdges.getStyle(i, j)
             })
         );
 
@@ -140,7 +116,7 @@ export default class HeaderFactory {
                     w.props.className,
                 style: R.mergeAll([
                     s,
-                    headerBorders && headerBorders.getStyle(i, j)
+                    headerEdges && headerEdges.getStyle(i, j)
                 ])
             }));
 

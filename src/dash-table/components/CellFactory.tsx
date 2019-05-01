@@ -1,6 +1,9 @@
 import * as R from 'ramda';
 import React from 'react';
 
+import { matrixMap, matrixMap3 } from 'core/math/matrixZipMap';
+import { arrayMap2 } from 'core/math/arrayZipMap';
+
 import { ICellFactoryProps } from 'dash-table/components/Table/props';
 import derivedCellWrappers from 'dash-table/derived/cell/wrappers';
 import derivedCellContents from 'dash-table/derived/cell/contents';
@@ -8,12 +11,7 @@ import derivedCellOperations from 'dash-table/derived/cell/operations';
 import derivedCellStyles from 'dash-table/derived/cell/wrapperStyles';
 import derivedDropdowns from 'dash-table/derived/cell/dropdowns';
 import { derivedRelevantCellStyles } from 'dash-table/derived/style';
-
-import derivedDataEdges from 'dash-table/derived/edges/data';
-import derivedOperationEdges from 'dash-table/derived/edges/operationOfData';
-
-import { matrixMap, matrixMap3 } from 'core/math/matrixZipMap';
-import { arrayMap2 } from 'core/math/arrayZipMap';
+import { EdgesMatrices } from 'dash-table/derived/edges/type';
 
 export default class CellFactory {
 
@@ -28,14 +26,10 @@ export default class CellFactory {
         private readonly cellOperations = derivedCellOperations(),
         private readonly cellStyles = derivedCellStyles(),
         private readonly cellWrappers = derivedCellWrappers(propsFn),
-        private readonly relevantStyles = derivedRelevantCellStyles(),
-        private readonly relevantOperationStyles = derivedRelevantCellStyles(),
-
-        private readonly dataEdges = derivedDataEdges(),
-        private readonly dataOperationEdges = derivedOperationEdges()
+        private readonly relevantStyles = derivedRelevantCellStyles()
     ) { }
 
-    public createCells() {
+    public createCells(dataEdges: EdgesMatrices | undefined, dataOpEdges: EdgesMatrices | undefined) {
         const {
             active_cell,
             columns,
@@ -64,13 +58,6 @@ export default class CellFactory {
             style_data_conditional
         );
 
-        const relevantOperationStyles = this.relevantOperationStyles(
-            style_cell,
-            style_data,
-            R.filter(s => R.isNil(s.if) || (R.isNil(s.if.column_id) && R.isNil(s.if.column_type)), style_cell_conditional),
-            R.filter(s => R.isNil(s.if) || (R.isNil(s.if.column_id) && R.isNil(s.if.column_type)), style_data_conditional)
-        );
-
         const operations = this.cellOperations(
             data,
             virtualized.data,
@@ -79,20 +66,6 @@ export default class CellFactory {
             row_deletable,
             selected_rows,
             setProps
-        );
-
-        const cellBorders = this.dataEdges(
-            columns,
-            relevantStyles,
-            virtualized.data,
-            virtualized.offset
-        );
-
-        const operationBorders = this.dataOperationEdges(
-            (row_selectable !== false ? 1 : 0) + (row_deletable ? 1 : 0),
-            relevantOperationStyles,
-            virtualized.data,
-            virtualized.offset
         );
 
         const cellStyles = this.cellStyles(
@@ -132,7 +105,7 @@ export default class CellFactory {
         const ops = matrixMap(
             operations,
             (o, i, j) => React.cloneElement(o, {
-                style: operationBorders && operationBorders.getStyle(i, j)
+                style: dataOpEdges && dataOpEdges.getStyle(i, j)
             })
         );
 
@@ -144,7 +117,7 @@ export default class CellFactory {
                 children: [c],
                 style: R.mergeAll([
                     s,
-                    cellBorders && cellBorders.getStyle(i, j)
+                    dataEdges && dataEdges.getStyle(i, j)
                 ])
             })
         );

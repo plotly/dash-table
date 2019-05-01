@@ -1,5 +1,6 @@
 import * as R from 'ramda';
 
+import Environment from 'core/environment';
 import { memoizeOneFactory } from 'core/memoizer';
 
 import {
@@ -45,7 +46,7 @@ export default memoizeOneFactory((
         return;
     }
 
-    const edges = new EdgesMatrices(headerRows, columns.length);
+    const edges = new EdgesMatrices(headerRows, columns.length, Environment.defaultEdge);
 
     R.forEach(i =>
         R.addIndex<IVisibleColumn>(R.forEach)(

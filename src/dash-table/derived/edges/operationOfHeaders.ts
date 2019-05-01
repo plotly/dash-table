@@ -1,5 +1,6 @@
 import * as R from 'ramda';
 
+import Environment from 'core/environment';
 import { memoizeOneFactory } from 'core/memoizer';
 
 import { IConvertedStyle } from '../style';
@@ -37,7 +38,7 @@ export default memoizeOneFactory((
         return;
     }
 
-    const edges = new EdgesMatrices(headerRows, columns);
+    const edges = new EdgesMatrices(headerRows, columns, Environment.defaultEdge);
 
     R.forEach(i =>
         R.forEach(j => {

@@ -3,6 +3,7 @@ import * as R from 'ramda';
 import { memoizeOne } from 'core/memoizer';
 
 import CellFactory from 'dash-table/components/CellFactory';
+import EdgeFactory from 'dash-table/components/EdgeFactory';
 import FilterFactory from 'dash-table/components/FilterFactory';
 import HeaderFactory from 'dash-table/components/HeaderFactory';
 import { clearSelection } from 'dash-table/utils/actions';
@@ -22,13 +23,16 @@ function filterPropsFn(propsFn: () => ControlledTableProps, setFilter: any) {
 function getter(
     cellFactory: CellFactory,
     filterFactory: FilterFactory,
-    headerFactory: HeaderFactory
+    headerFactory: HeaderFactory,
+    edgeFactory: EdgeFactory
 ): JSX.Element[][] {
     const cells: JSX.Element[][] = [];
 
-    const dataCells = cellFactory.createCells();
-    const filters = filterFactory.createFilters();
-    const headers = headerFactory.createHeaders();
+    const edges = edgeFactory.createEdges();
+
+    const dataCells = cellFactory.createCells(edges.dataEdges, edges.dataOpEdges);
+    const filters = filterFactory.createFilters(edges.filterEdges, edges.filterOpEdges);
+    const headers = headerFactory.createHeaders(edges.headerEdges, edges.headerOpEdges);
 
     cells.push(...headers);
     cells.push(...filters);
@@ -50,6 +54,7 @@ export default (propsFn: () => ControlledTableProps) => {
         return filterPropsFn(propsFn, setFilter(props.setProps, props.setState));
     });
     const headerFactory = new HeaderFactory(propsFn);
+    const edgeFactory = new EdgeFactory(propsFn);
 
-    return getter.bind(undefined, cellFactory, filterFactory, headerFactory);
+    return getter.bind(undefined, cellFactory, filterFactory, headerFactory, edgeFactory);
 };
