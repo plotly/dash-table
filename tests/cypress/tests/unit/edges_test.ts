@@ -35,7 +35,7 @@ describe('data edges', () => {
 
         expect(res !== undefined).to.equal(true);
         if (res) {
-            const { horizontal, vertical } = res.getMatrices();
+            const { horizontal, vertical } = res.getEdges();
 
             expect(horizontal.length).to.equal(2);
             expect(horizontal[0].length).to.equal(1);
@@ -60,7 +60,7 @@ describe('data edges', () => {
 
         expect(res !== undefined).to.equal(true);
         if (res) {
-            const { horizontal, vertical } = res.getMatrices();
+            const { horizontal, vertical } = res.getEdges();
 
             expect(horizontal.length).to.equal(2);
             expect(horizontal[0].length).to.equal(1);
@@ -93,7 +93,7 @@ describe('data edges', () => {
 
         expect(res !== undefined).to.equal(true);
         if (res) {
-            const { horizontal, vertical } = res.getMatrices();
+            const { horizontal, vertical } = res.getEdges();
 
             expect(horizontal.length).to.equal(5);
             horizontal.forEach(edges => {
@@ -138,7 +138,7 @@ describe('data edges', () => {
 
         expect(res !== undefined).to.equal(true);
         if (res) {
-            const { horizontal, vertical } = res.getMatrices();
+            const { horizontal, vertical } = res.getEdges();
 
             expect(horizontal.length).to.equal(5);
             horizontal.forEach(edges => {
@@ -183,7 +183,7 @@ describe('data edges', () => {
 
         expect(res !== undefined).to.equal(true);
         if (res) {
-            const { horizontal, vertical } = res.getMatrices();
+            const { horizontal, vertical } = res.getEdges();
 
             expect(horizontal.length).to.equal(5);
             horizontal.forEach((edges, rowIndex) => {
@@ -236,7 +236,7 @@ describe('data edges', () => {
 
         expect(res !== undefined).to.equal(true);
         if (res) {
-            const { vertical } = res.getMatrices();
+            const { vertical } = res.getEdges();
 
             expect(vertical.length).to.equal(1);
             expect(vertical[0].length).to.equal(3);
@@ -271,7 +271,7 @@ describe('data edges', () => {
 
         expect(res === undefined).to.equal(false);
         if (res) {
-            const { vertical } = res.getMatrices();
+            const { vertical } = res.getEdges();
 
             expect(vertical.length).to.equal(1);
             expect(vertical[0].length).to.equal(3);
@@ -306,7 +306,7 @@ describe('data edges', () => {
 
         expect(res !== undefined).to.equal(true);
         if (res) {
-            const { vertical } = res.getMatrices();
+            const { vertical } = res.getEdges();
 
             expect(vertical.length).to.equal(1);
             expect(vertical[0].length).to.equal(3);
