@@ -1,4 +1,5 @@
 import dataEdges from 'dash-table/derived/edges/data';
+import Environment from 'core/environment';
 
 describe('data edges', () => {
     const edgesFn = dataEdges();
@@ -40,13 +41,13 @@ describe('data edges', () => {
             expect(horizontal.length).to.equal(2);
             expect(horizontal[0].length).to.equal(1);
             expect(horizontal[1].length).to.equal(1);
-            expect(horizontal[0][0] === undefined).to.equal(true);
-            expect(horizontal[1][0] === undefined).to.equal(true);
+            expect(horizontal[0][0]).to.equal(Environment.defaultEdge);
+            expect(horizontal[1][0]).to.equal(Environment.defaultEdge);
 
             expect(vertical.length).to.equal(1);
             expect(vertical[0].length).to.equal(2);
-            expect(vertical[0][0] === undefined).to.equal(true);
-            expect(vertical[0][1] === undefined).to.equal(true);
+            expect(vertical[0][0]).to.equal(Environment.defaultEdge);
+            expect(vertical[0][1]).to.equal(Environment.defaultEdge);
         }
     });
 
@@ -65,13 +66,13 @@ describe('data edges', () => {
             expect(horizontal.length).to.equal(2);
             expect(horizontal[0].length).to.equal(1);
             expect(horizontal[1].length).to.equal(1);
-            expect(horizontal[0][0]).to.equal(undefined);
-            expect(horizontal[1][0]).to.equal(undefined);
+            expect(horizontal[0][0]).to.equal(Environment.defaultEdge);
+            expect(horizontal[1][0]).to.equal(Environment.defaultEdge);
 
             expect(vertical.length).to.equal(1);
             expect(vertical[0].length).to.equal(2);
-            expect(vertical[0][0]).to.equal(undefined);
-            expect(vertical[0][1]).to.equal(undefined);
+            expect(vertical[0][0]).to.equal(Environment.defaultEdge);
+            expect(vertical[0][1]).to.equal(Environment.defaultEdge);
         }
     });
 
@@ -100,7 +101,7 @@ describe('data edges', () => {
                 expect(edges.length).to.equal(2);
 
                 edges.forEach(edge => {
-                    expect(edge).to.equal(undefined);
+                    expect(edge).to.equal(Environment.defaultEdge);
                 });
             });
 
@@ -109,7 +110,7 @@ describe('data edges', () => {
                 expect(edges.length).to.equal(3);
 
                 edges.forEach(edge => {
-                    expect(edge).to.equal(undefined);
+                    expect(edge).to.equal(Environment.defaultEdge);
                 });
             });
         }
@@ -191,7 +192,7 @@ describe('data edges', () => {
 
                 edges.forEach(edge => {
                     expect(edge).to.equal(rowIndex === horizontal.length - 1 ?
-                        undefined :
+                        Environment.defaultEdge :
                         '1px solid darkgreen'
                     );
                 });
@@ -203,7 +204,7 @@ describe('data edges', () => {
 
                 edges.forEach((edge, index) => {
                     expect(edge).to.equal(index === edges.length - 1 ?
-                        undefined :
+                        Environment.defaultEdge :
                         '1px solid green'
                     );
                 });
