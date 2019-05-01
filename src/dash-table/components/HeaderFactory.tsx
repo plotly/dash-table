@@ -40,7 +40,6 @@ export default class HeaderFactory {
 
         const {
             columns,
-            filtering,
             merge_duplicate_headers,
             pagination_mode,
             row_deletable,
@@ -52,8 +51,7 @@ export default class HeaderFactory {
             style_cell,
             style_cell_conditional,
             style_header,
-            style_header_conditional,
-            virtualized
+            style_header_conditional
         } = props;
 
         const headerRows = getHeaderRows(columns);
@@ -76,19 +74,15 @@ export default class HeaderFactory {
             row_deletable
         );
 
-        const isLastRow = !filtering || virtualized.data.length === 0;
-
         const headerBorders = this.headerEdges(
             columns,
             headerRows,
-            isLastRow,
             relevantStyles
         );
 
         const operationBorders = this.headerOperationEdges(
             (row_selectable !== false ? 1 : 0) + (row_deletable ? 1 : 0),
             headerRows,
-            isLastRow,
             relevantStyles
         );
 
@@ -115,9 +109,14 @@ export default class HeaderFactory {
             props
         );
 
+        const iLastHeaderRow = headerRows - 1;
+
         const ops = matrixMap(
             operations,
             (o, i, j) => React.cloneElement(o, {
+                className: i === iLastHeaderRow ?
+                    o.props.className + ` last-header-row` :
+                    o.props.className,
                 style: operationBorders && operationBorders.getStyle(i, j)
             })
         );
@@ -128,6 +127,9 @@ export default class HeaderFactory {
             content,
             (w, s, c, i, j) => React.cloneElement(w, {
                 children: [c],
+                className: i === iLastHeaderRow ?
+                    w.props.className + ` last-header-row` :
+                    w.props.className,
                 style: R.mergeAll([
                     s,
                     headerBorders && headerBorders.getStyle(i, j)

@@ -7,7 +7,7 @@ import memoizerCache from 'core/cache/memoizer';
 import { memoizeOne } from 'core/memoizer';
 
 import ColumnFilter from 'dash-table/components/Filter/Column';
-import { ColumnId, Filtering, FilteringType, IVisibleColumn, VisibleColumns, RowSelection, IVirtualizedDerivedData } from 'dash-table/components/Table/props';
+import { ColumnId, Filtering, FilteringType, IVisibleColumn, VisibleColumns, RowSelection } from 'dash-table/components/Table/props';
 import derivedFilterStyles from 'dash-table/derived/filter/wrapperStyles';
 import derivedHeaderOperations from 'dash-table/derived/header/operations';
 import { derivedRelevantFilterStyles } from 'dash-table/derived/style';
@@ -33,7 +33,6 @@ export interface IFilterOptions {
     style_cell_conditional: Cells;
     style_filter: Style;
     style_filter_conditional: BasicFilters;
-    virtualized: IVirtualizedDerivedData;
 }
 
 export default class FilterFactory {
@@ -143,8 +142,7 @@ export default class FilterFactory {
             style_cell,
             style_cell_conditional,
             style_filter,
-            style_filter_conditional,
-            virtualized
+            style_filter_conditional
         } = this.props;
 
         if (!filtering) {
@@ -168,19 +166,15 @@ export default class FilterFactory {
                 []
             );
 
-            const isLastRow = virtualized.data.length === 0;
-
             const filterEdges = this.filterEdges(
                 columns,
                 true,
-                isLastRow,
                 relevantStyles
             );
 
             const operationBorders = this.filterOperationEdges(
                 (row_selectable !== false ? 1 : 0) + (row_deletable ? 1 : 0),
                 1,
-                isLastRow,
                 relevantOperationStyles
             );
 
@@ -202,6 +196,7 @@ export default class FilterFactory {
                 filters,
                 wrapperStyles,
                 (f, s, j) => React.cloneElement(f, {
+                    className: f.props.className + ` filter-row`,
                     style: R.merge(
                         s,
                         filterEdges && filterEdges.getStyle(0, j)
@@ -218,6 +213,7 @@ export default class FilterFactory {
             const ops = arrayMap(
                 operations,
                 (o, j) => React.cloneElement(o, {
+                    className: o.props.className + ` filter-row`,
                     style: operationBorders && operationBorders.getStyle(0, j)
                 })
             );

@@ -156,7 +156,20 @@
             }
         }
 
-        &:not(.dash-no-11) {
+        &:not(.dash-no-data),
+        &:not(.dash-no-filter) {
+            tr th.last-header-row {
+                border-bottom: none !important;
+            }
+        }
+
+        &:not(.dash-no-data) {
+            tr th.filter-row {
+                border-bottom: none !important;
+            }
+        }
+
+        &:not(.dash-empty-11) {
             .row-0 {
                 tr:last-of-type {
                     td, th {
@@ -166,7 +179,7 @@
             }
         }
 
-        &:not(.dash-no-01) {
+        &:not(.dash-empty-01) {
             .cell-0-0,
             .cell-1-0 {
                 tr {

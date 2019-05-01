@@ -687,6 +687,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             column_conditional_tooltips,
             column_static_tooltip,
             content_style,
+            filtering,
             n_fixed_columns,
             n_fixed_rows,
             scrollbarWidth,
@@ -729,10 +730,11 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             ...(n_fixed_rows ? ['dash-freeze-top'] : []),
             ...(n_fixed_columns ? ['dash-freeze-left'] : []),
             ...(style_as_list_view ? ['dash-list-view'] : []),
-            ...(empty[0][1] ? ['dash-no-01'] : []),
-            ...(empty[1][1] ? ['dash-no-11'] : []),
+            ...(empty[0][1] ? ['dash-empty-01'] : []),
+            ...(empty[1][1] ? ['dash-empty-11'] : []),
             ...(columns.length ? [] : ['dash-no-columns']),
             ...(virtualized.data.length ? [] : ['dash-no-data']),
+            ...(filtering ? [] : ['dash-no-filter']),
             [`dash-${content_style}`]
         ];
 
