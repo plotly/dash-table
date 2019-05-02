@@ -10,7 +10,7 @@ describe('data edges', () => {
             [],
             [],
             { columns: 0, rows: 0 },
-            { column: -1, column_id: '-1', row: -1, row_id: '-1' },
+            undefined,
             false
         );
 
@@ -23,7 +23,7 @@ describe('data edges', () => {
             [],
             [{ id: 1 }],
             { columns: 0, rows: 0 },
-            { column: -1, column_id: '-1', row: -1, row_id: '-1' },
+            undefined,
             false
         );
 
@@ -36,7 +36,7 @@ describe('data edges', () => {
             [],
             [{ id: 1 }],
             { columns: 0, rows: 0 },
-            { column: -1, column_id: '-1', row: -1, row_id: '-1' },
+            undefined,
             false
         );
 
@@ -63,7 +63,7 @@ describe('data edges', () => {
             [],
             [{ id: 1 }],
             { columns: 0, rows: 0 },
-            { column: -1, column_id: '-1', row: -1, row_id: '-1' },
+            undefined,
             false
         );
 
@@ -98,7 +98,7 @@ describe('data edges', () => {
                 { id: 2, name: 'b' }
             ],
             { columns: 0, rows: 0 },
-            { column: -1, column_id: '-1', row: -1, row_id: '-1' },
+            undefined,
             false
         );
 
@@ -145,7 +145,7 @@ describe('data edges', () => {
                 { id: 2, name: 'b' }
             ],
             { columns: 0, rows: 0 },
-            { column: -1, column_id: '-1', row: -1, row_id: '-1' },
+            undefined,
             false
         );
 
@@ -192,7 +192,7 @@ describe('data edges', () => {
                 { id: 2, name: 'b' }
             ],
             { columns: 0, rows: 0 },
-            { column: -1, column_id: '-1', row: -1, row_id: '-1' },
+            undefined,
             false
         );
 
@@ -247,7 +247,7 @@ describe('data edges', () => {
                 { id: 1, name: 'a' }
             ],
             { columns: 0, rows: 0 },
-            { column: -1, column_id: '-1', row: -1, row_id: '-1' },
+            undefined,
             false
         );
 
@@ -284,7 +284,7 @@ describe('data edges', () => {
                 { id: 1, name: 'a' }
             ],
             { columns: 0, rows: 0 },
-            { column: -1, column_id: '-1', row: -1, row_id: '-1' },
+            undefined,
             false
         );
 
@@ -321,7 +321,7 @@ describe('data edges', () => {
                 { id: 1, name: 'a' }
             ],
             { columns: 0, rows: 0 },
-            { column: -1, column_id: '-1', row: -1, row_id: '-1' },
+            undefined,
             false
         );
 
