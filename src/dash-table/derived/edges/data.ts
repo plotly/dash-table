@@ -77,10 +77,10 @@ export default memoizeOneFactory((
 
     if (active_cell) {
         edges.setEdges(active_cell.row, active_cell.column, {
-            borderBottom: ['1px solid red', Infinity],
-            borderLeft: ['1px solid red', Infinity],
-            borderRight: ['1px solid red', Infinity],
-            borderTop: ['1px solid red', Infinity]
+            borderBottom: [Environment.activeEdge, Infinity],
+            borderLeft: [Environment.activeEdge, Infinity],
+            borderRight: [Environment.activeEdge, Infinity],
+            borderTop: [Environment.activeEdge, Infinity]
         });
     }
 
