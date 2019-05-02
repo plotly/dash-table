@@ -166,18 +166,9 @@ export default class EdgeFactory {
             dataStyles,
             data,
             offset,
+            active_cell,
             style_as_list_view
         );
-
-        if (dataEdges && active_cell && !R.isNil(active_cell.column) && !R.isNil(active_cell.row)) {
-            dataEdges = dataEdges.clone();
-            dataEdges.setEdges(active_cell.row, active_cell.column, {
-                borderBottom: ['1px solid red', Infinity],
-                borderLeft: ['1px solid red', Infinity],
-                borderRight: ['1px solid red', Infinity],
-                borderTop: ['1px solid red', Infinity]
-            });
-        }
 
         let dataOpEdges = this.getDataOpEdges(
             operations,
