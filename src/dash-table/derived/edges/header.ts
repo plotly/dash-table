@@ -40,13 +40,14 @@ const getWeightedStyle = (
 export default memoizeOneFactory((
     columns: VisibleColumns,
     headerRows: number,
-    borderStyles: IConvertedStyle[]
+    borderStyles: IConvertedStyle[],
+    listViewStyle: boolean
 ) => {
     if (headerRows === 0 || columns.length === 0) {
         return;
     }
 
-    const edges = new EdgesMatrices(headerRows, columns.length, Environment.defaultEdge);
+    const edges = new EdgesMatrices(headerRows, columns.length, Environment.defaultEdge, true, !listViewStyle);
 
     R.forEach(i =>
         R.addIndex<IVisibleColumn>(R.forEach)(

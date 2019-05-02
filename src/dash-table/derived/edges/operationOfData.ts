@@ -43,13 +43,14 @@ export default memoizeOneFactory((
     columns: number,
     borderStyles: IConvertedStyle[],
     data: Data,
-    offset: IViewportOffset
+    offset: IViewportOffset,
+    listViewStyle: boolean
 ) => {
     if (data.length === 0 || columns === 0) {
         return;
     }
 
-    const edges = new EdgesMatrices(data.length, columns, Environment.defaultEdge);
+    const edges = new EdgesMatrices(data.length, columns, Environment.defaultEdge, true, !listViewStyle);
 
     R.addIndex(R.forEach)((datum, i) =>
         R.forEach(j => {

@@ -91,6 +91,7 @@ export default class EdgeFactory {
             filtering,
             row_deletable,
             row_selectable,
+            style_as_list_view,
             style_cell,
             style_cell_conditional,
             style_data,
@@ -106,6 +107,7 @@ export default class EdgeFactory {
             columns,
             (row_deletable ? 1 : 0) + (row_selectable ? 1 : 0),
             !!filtering,
+            style_as_list_view,
             style_cell,
             style_cell_conditional,
             style_data,
@@ -123,6 +125,7 @@ export default class EdgeFactory {
         columns: VisibleColumns,
         operations: number,
         filtering: boolean,
+        style_as_list_view: boolean,
         style_cell: Style,
         style_cell_conditional: Cells,
         style_data: Style,
@@ -159,38 +162,44 @@ export default class EdgeFactory {
             columns,
             dataStyles,
             data,
-            offset
+            offset,
+            style_as_list_view
         );
 
         let dataOpEdges = this.getDataOpEdges(
             operations,
             dataStyles,
             data,
-            offset
+            offset,
+            style_as_list_view
         );
 
         let filterEdges = this.getFilterEdges(
             columns,
             filtering,
-            filterStyles
+            filterStyles,
+            style_as_list_view
         );
 
         let filterOpEdges = this.getFilterOpEdges(
             operations,
             filtering,
-            filterStyles
+            filterStyles,
+            style_as_list_view
         );
 
         let headerEdges = this.getHeaderEdges(
             columns,
             getHeaderRows(columns),
-            headerStyles
+            headerStyles,
+            style_as_list_view
         );
 
         let headerOpEdges = this.getHeaderOpEdges(
             operations,
             getHeaderRows(columns),
-            headerStyles
+            headerStyles,
+            style_as_list_view
         );
 
         const cutoffWeight = (style_cell ? 1 : 0) + style_cell_conditional.length - 1;

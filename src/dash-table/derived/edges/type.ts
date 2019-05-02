@@ -119,8 +119,11 @@ export class EdgesMatrix implements IEdgesMatrix {
 }
 
 export class EdgesMatrices implements IEdgesMatrices {
-    private horizontal: EdgesMatrix;
-    private vertical: EdgesMatrix;
+    private readonly horizontal: EdgesMatrix;
+    private readonly vertical: EdgesMatrix;
+
+    private readonly horizontalEdges: boolean;
+    private readonly verticalEdges: boolean;
 
     private readonly rows: number;
     private readonly columns: number;
@@ -130,13 +133,16 @@ export class EdgesMatrices implements IEdgesMatrices {
     constructor(
         rows: number,
         columns: number,
-        defaultEdge?: Edge
+        defaultEdge: Edge | undefined,
+        horizontalEdges?: boolean,
+        verticalEdges?: boolean
     );
     constructor(
         rowsOrMatrix: number | EdgesMatrices,
         columns?: number,
-        defaultEdge?: Edge
-
+        defaultEdge?: Edge,
+        horizontalEdges?: boolean,
+        verticalEdges?: boolean
     ) {
         if (typeof rowsOrMatrix === 'number' && typeof columns !== 'undefined') {
             const rows = rowsOrMatrix;
@@ -145,8 +151,11 @@ export class EdgesMatrices implements IEdgesMatrices {
             this.columns = columns;
             this.defaultEdge = defaultEdge;
 
-            this.horizontal = new EdgesMatrix(rows + 1, columns, defaultEdge);
-            this.vertical = new EdgesMatrix(rows, columns + 1, defaultEdge);
+            this.horizontalEdges = R.isNil(horizontalEdges) || horizontalEdges;
+            this.verticalEdges = R.isNil(verticalEdges) || verticalEdges;
+
+            this.horizontal = new EdgesMatrix(rows + 1, columns, this.horizontalEdges ? defaultEdge : undefined);
+            this.vertical = new EdgesMatrix(rows, columns + 1, this.verticalEdges ? defaultEdge : undefined);
         } else {
             const source = rowsOrMatrix as EdgesMatrices;
 
@@ -156,25 +165,31 @@ export class EdgesMatrices implements IEdgesMatrices {
 
             this.horizontal = source.horizontal.clone();
             this.vertical = source.vertical.clone();
-        }
 
+            this.horizontalEdges = source.horizontalEdges;
+            this.verticalEdges = source.verticalEdges;
+        }
     }
 
     setEdges(i: number, j: number, style: BorderStyle) {
-        if (style.borderTop) {
-            this.horizontal.setEdge(i, j, style.borderTop[0], style.borderTop[1]);
+        if (this.horizontalEdges) {
+            if (style.borderTop) {
+                this.horizontal.setEdge(i, j, style.borderTop[0], style.borderTop[1]);
+            }
+
+            if (style.borderBottom) {
+                this.horizontal.setEdge(i + 1, j, style.borderBottom[0], style.borderBottom[1]);
+            }
         }
 
-        if (style.borderBottom) {
-            this.horizontal.setEdge(i + 1, j, style.borderBottom[0], style.borderBottom[1]);
-        }
+        if (this.verticalEdges) {
+            if (style.borderLeft) {
+                this.vertical.setEdge(i, j, style.borderLeft[0], style.borderLeft[1]);
+            }
 
-        if (style.borderLeft) {
-            this.vertical.setEdge(i, j, style.borderLeft[0], style.borderLeft[1]);
-        }
-
-        if (style.borderRight) {
-            this.vertical.setEdge(i, j + 1, style.borderRight[0], style.borderRight[1]);
+            if (style.borderRight) {
+                this.vertical.setEdge(i, j + 1, style.borderRight[0], style.borderRight[1]);
+            }
         }
     }
 
