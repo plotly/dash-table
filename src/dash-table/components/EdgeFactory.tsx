@@ -15,7 +15,7 @@ import getHeaderRows from 'dash-table/derived/header/headerRows';
 import { derivedRelevantCellStyles, derivedRelevantFilterStyles, derivedRelevantHeaderStyles } from 'dash-table/derived/style';
 import { Style, Cells, DataCells, BasicFilters, Headers } from 'dash-table/derived/style/props';
 
-import { ControlledTableProps, VisibleColumns, IViewportOffset, Data } from './Table/props';
+import { ControlledTableProps, VisibleColumns, IViewportOffset, Data, ICellCoordinates } from './Table/props';
 
 export default class EdgeFactory {
     private readonly dataStyles = derivedRelevantCellStyles();
@@ -87,6 +87,7 @@ export default class EdgeFactory {
 
     public createEdges() {
         const {
+            active_cell,
             columns,
             filtering,
             row_deletable,
@@ -104,6 +105,7 @@ export default class EdgeFactory {
         } = this.props;
 
         return this.memoizedCreateEdges(
+            active_cell,
             columns,
             (row_deletable ? 1 : 0) + (row_selectable ? 1 : 0),
             !!filtering,
@@ -122,6 +124,7 @@ export default class EdgeFactory {
     }
 
     private memoizedCreateEdges = memoizeOne((
+        active_cell: ICellCoordinates,
         columns: VisibleColumns,
         operations: number,
         filtering: boolean,
@@ -212,6 +215,15 @@ export default class EdgeFactory {
         headerOpEdges = this.vReconcile(headerOpEdges, headerEdges, cutoffWeight);
         filterOpEdges = this.vReconcile(filterOpEdges, filterEdges, cutoffWeight);
         dataOpEdges = this.vReconcile(dataOpEdges, dataEdges, cutoffWeight);
+
+        if (dataEdges && active_cell && !R.isNil(active_cell.column) && !R.isNil(active_cell.row)) {
+            dataEdges.setEdges(active_cell.row, active_cell.column, {
+                borderBottom: ['1px solid red', Infinity],
+                borderLeft: ['1px solid red', Infinity],
+                borderRight: ['1px solid red', Infinity],
+                borderTop: ['1px solid red', Infinity]
+            });
+        }
 
         return {
             dataEdges: dataEdges as (IEdgesMatrices | undefined),
