@@ -169,6 +169,16 @@ export default class EdgeFactory {
             style_as_list_view
         );
 
+        if (dataEdges && active_cell && !R.isNil(active_cell.column) && !R.isNil(active_cell.row)) {
+            dataEdges = dataEdges.clone();
+            dataEdges.setEdges(active_cell.row, active_cell.column, {
+                borderBottom: ['1px solid red', Infinity],
+                borderLeft: ['1px solid red', Infinity],
+                borderRight: ['1px solid red', Infinity],
+                borderTop: ['1px solid red', Infinity]
+            });
+        }
+
         let dataOpEdges = this.getDataOpEdges(
             operations,
             dataStyles,
@@ -215,15 +225,6 @@ export default class EdgeFactory {
         headerOpEdges = this.vReconcile(headerOpEdges, headerEdges, cutoffWeight);
         filterOpEdges = this.vReconcile(filterOpEdges, filterEdges, cutoffWeight);
         dataOpEdges = this.vReconcile(dataOpEdges, dataEdges, cutoffWeight);
-
-        if (dataEdges && active_cell && !R.isNil(active_cell.column) && !R.isNil(active_cell.row)) {
-            dataEdges.setEdges(active_cell.row, active_cell.column, {
-                borderBottom: ['1px solid red', Infinity],
-                borderLeft: ['1px solid red', Infinity],
-                borderRight: ['1px solid red', Infinity],
-                borderTop: ['1px solid red', Infinity]
-            });
-        }
 
         return {
             dataEdges: dataEdges as (IEdgesMatrices | undefined),

@@ -7,6 +7,24 @@ storiesOf('DashTable/Border, custom styles', module)
     .add('with defaults', () => (<DataTable
         {...BORDER_PROPS_DEFAULTS}
     />))
+    .add('with defaults & active cell (1,1)', () => (<DataTable
+        {...BORDER_PROPS_DEFAULTS}
+        active_cell={{
+            column: 1,
+            column_id: 'b',
+            row: 1,
+            row_id: null
+        }}
+    />))
+    .add('with defaults & active cell (0, 0)', () => (<DataTable
+        {...BORDER_PROPS_DEFAULTS}
+        active_cell={{
+            column: 0,
+            column_id: 'a',
+            row: 0,
+            row_id: null
+        }}
+    />))
     .add('with cell style', () => (<DataTable
         {...BORDER_PROPS_DEFAULTS}
         style_cell={{

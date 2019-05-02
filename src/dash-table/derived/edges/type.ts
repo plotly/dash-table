@@ -113,7 +113,7 @@ export class EdgesMatrix implements IEdgesMatrix {
 
     getWeight = (i: number, j: number) => this.weights[i][j];
 
-    isDefault = (i: number, j: number) => !isFinite(this.weights[i][j]);
+    isDefault = (i: number, j: number) => this.weights[i][j] === -Infinity;
 
     clone = () => new EdgesMatrix(this);
 }
