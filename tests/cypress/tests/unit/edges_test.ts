@@ -325,15 +325,76 @@ describe('data edges', () => {
             false
         );
 
-        expect(res).to.not.equal(undefined);
+        expect(res !== undefined).to.equal(true);
         if (res) {
-            const { vertical } = res.getEdges();
+            const { horizontal, vertical } = res.getEdges();
+
+            expect(horizontal.length).to.equal(2);
+            horizontal.forEach(edges => {
+                expect(edges.length).to.equal(2);
+
+                edges.forEach(edge => {
+                    expect(edge).to.equal('1px solid green');
+                });
+            });
 
             expect(vertical.length).to.equal(1);
-            expect(vertical[0].length).to.equal(3);
-            expect(vertical[0][0]).to.equal('1px solid green');
-            expect(vertical[0][1]).to.equal('1px solid green');
-            expect(vertical[0][2]).to.equal('1px solid green');
+            vertical.forEach(edges => {
+                expect(edges.length).to.equal(3);
+
+                edges.forEach(edge => {
+                    expect(edge).to.equal('1px solid green');
+                });
+            });
+        }
+    });
+
+    it('applies `border` overridden by higher precedence `borderLeft`', () => {
+        const res = edgesFn(
+            [
+                { id: 'id', name: 'id' },
+                { id: 'name', name: 'name' }
+            ],
+            [{
+                style: { border: '1px solid green' },
+                matchesColumn: () => true,
+                matchesFilter: () => true,
+                matchesRow: () => true
+            }, {
+                style: { borderLeft: '1px solid darkgreen' },
+                matchesColumn: () => true,
+                matchesFilter: () => true,
+                matchesRow: () => true
+            }],
+            [
+                { id: 1, name: 'a' }
+            ],
+            { columns: 0, rows: 0 },
+            undefined,
+            false
+        );
+
+        expect(res !== undefined).to.equal(true);
+        if (res) {
+            const { horizontal, vertical } = res.getEdges();
+
+            expect(horizontal.length).to.equal(2);
+            horizontal.forEach(edges => {
+                expect(edges.length).to.equal(2);
+
+                edges.forEach(edge => {
+                    expect(edge).to.equal('1px solid green');
+                });
+            });
+
+            expect(vertical.length).to.equal(1);
+            vertical.forEach(edges => {
+                expect(edges.length).to.equal(3);
+
+                edges.forEach((edge, j) => {
+                    expect(edge).to.equal(j + 1 === edges.length ? '1px solid green' : '1px solid darkgreen');
+                });
+            });
         }
     });
 });
