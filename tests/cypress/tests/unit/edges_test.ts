@@ -40,7 +40,7 @@ describe('data edges', () => {
             false
         );
 
-        expect(res).to.equal(undefined);
+        expect(res).to.not.equal(undefined);
         if (res) {
             const { horizontal, vertical } = res.getEdges();
 
@@ -67,7 +67,7 @@ describe('data edges', () => {
             false
         );
 
-        expect(res).to.equal(undefined);
+        expect(res).to.not.equal(undefined);
         if (res) {
             const { horizontal, vertical } = res.getEdges();
 
@@ -102,7 +102,7 @@ describe('data edges', () => {
             false
         );
 
-        expect(res).to.equal(undefined);
+        expect(res).to.not.equal(undefined);
         if (res) {
             const { horizontal, vertical } = res.getEdges();
 
@@ -149,7 +149,7 @@ describe('data edges', () => {
             false
         );
 
-        expect(res).to.equal(undefined);
+        expect(res).to.not.equal(undefined);
         if (res) {
             const { horizontal, vertical } = res.getEdges();
 
@@ -196,7 +196,7 @@ describe('data edges', () => {
             false
         );
 
-        expect(res).to.equal(undefined);
+        expect(res).to.not.equal(undefined);
         if (res) {
             const { horizontal, vertical } = res.getEdges();
 
@@ -251,7 +251,7 @@ describe('data edges', () => {
             false
         );
 
-        expect(res).to.equal(undefined);
+        expect(res).to.not.equal(undefined);
         if (res) {
             const { vertical } = res.getEdges();
 
@@ -325,7 +325,7 @@ describe('data edges', () => {
             false
         );
 
-        expect(res).to.equal(undefined);
+        expect(res).to.not.equal(undefined);
         if (res) {
             const { vertical } = res.getEdges();
 
