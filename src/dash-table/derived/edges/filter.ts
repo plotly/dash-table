@@ -10,6 +10,7 @@ import {
 
 import { IConvertedStyle } from '../style';
 import { BorderStyle, BORDER_PROPERTIES, EdgesMatrices } from './type';
+import { SingleColumnSyntaxTree } from 'dash-table/syntax-tree';
 
 const getWeightedStyle = (
     borderStyles: IConvertedStyle[],
@@ -37,6 +38,7 @@ const getWeightedStyle = (
 export default memoizeOneFactory((
     columns: VisibleColumns,
     showFilters: boolean,
+    map: Map<string, SingleColumnSyntaxTree>,
     borderStyles: IConvertedStyle[],
     listViewStyle: boolean
 ) => {
@@ -55,6 +57,16 @@ export default memoizeOneFactory((
                 );
 
                 edges.setEdges(i, j, cellStyle);
+
+                const ast = map.get(column.id.toString());
+                if (ast && !ast.isValid) {
+                    edges.setEdges(i, j, {
+                        borderBottom: [Environment.activeEdge, Infinity],
+                        borderLeft: [Environment.activeEdge, Infinity],
+                        borderRight: [Environment.activeEdge, Infinity],
+                        borderTop: [Environment.activeEdge, Infinity]
+                    });
+                }
             },
             columns
         ),

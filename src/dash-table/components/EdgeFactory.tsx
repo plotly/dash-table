@@ -16,6 +16,7 @@ import { derivedRelevantCellStyles, derivedRelevantFilterStyles, derivedRelevant
 import { Style, Cells, DataCells, BasicFilters, Headers } from 'dash-table/derived/style/props';
 
 import { ControlledTableProps, VisibleColumns, IViewportOffset, Data, ICellCoordinates } from './Table/props';
+import { SingleColumnSyntaxTree } from 'dash-table/syntax-tree';
 
 export default class EdgeFactory {
     private readonly dataStyles = derivedRelevantCellStyles();
@@ -44,7 +45,7 @@ export default class EdgeFactory {
 
         R.forEach(j =>
             (
-                hNext.getWeight(iNext, j) > cutoffWeight ||
+                (hNext.getWeight(iNext, j) > cutoffWeight && hTarget.getWeight(iTarget, j) !== Infinity) ||
                 (hNext.getWeight(iNext, j) > hTarget.getWeight(iTarget, j))
             ) && hTarget.setEdge(iTarget, j, undefined, -Infinity, true),
             R.range(0, hTarget.columns)
@@ -68,7 +69,7 @@ export default class EdgeFactory {
 
         R.forEach(i =>
             (
-                vNext.getWeight(i, jNext) > cutoffWeight ||
+                (vNext.getWeight(i, jNext) > cutoffWeight && vTarget.getWeight(i, jTarget) !== Infinity) ||
                 (vNext.getWeight(i, jNext) > vTarget.getWeight(i, jTarget))
             ) && vTarget.setEdge(i, jTarget, undefined, -Infinity, true),
             R.range(0, vTarget.rows)
@@ -90,6 +91,7 @@ export default class EdgeFactory {
             active_cell,
             columns,
             filtering,
+            map,
             row_deletable,
             row_selectable,
             style_as_list_view,
@@ -109,6 +111,7 @@ export default class EdgeFactory {
             columns,
             (row_deletable ? 1 : 0) + (row_selectable ? 1 : 0),
             !!filtering,
+            map,
             style_as_list_view,
             style_cell,
             style_cell_conditional,
@@ -128,6 +131,7 @@ export default class EdgeFactory {
         columns: VisibleColumns,
         operations: number,
         filtering: boolean,
+        filterMap: Map<string, SingleColumnSyntaxTree>,
         style_as_list_view: boolean,
         style_cell: Style,
         style_cell_conditional: Cells,
@@ -181,6 +185,7 @@ export default class EdgeFactory {
         let filterEdges = this.getFilterEdges(
             columns,
             filtering,
+            filterMap,
             filterStyles,
             style_as_list_view
         );

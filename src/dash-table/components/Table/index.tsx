@@ -31,6 +31,7 @@ import 'react-select/dist/react-select.css';
 import './Table.less';
 import './Dropdown.css';
 import { isEqual } from 'core/comparer';
+import { SingleColumnSyntaxTree } from 'dash-table/syntax-tree';
 
 const DERIVED_REGEX = /^derived_/;
 
@@ -40,6 +41,7 @@ export default class Table extends Component<PropsWithDefaultsAndDerived, Standa
 
         this.state = {
             forcedResizeOnly: false,
+            map: new Map <string, SingleColumnSyntaxTree>(),
             rawFilterQuery: '',
             scrollbarWidth: 0
         };

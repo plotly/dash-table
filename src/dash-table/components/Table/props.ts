@@ -12,6 +12,7 @@ import {
     ConditionalTooltip,
     Tooltip
 } from 'dash-table/tooltips/props';
+import { SingleColumnSyntaxTree } from 'dash-table/syntax-tree';
 
 export enum ColumnType {
     Any = 'any',
@@ -238,6 +239,7 @@ export interface IUSerInterfaceTooltip {
 
 export interface IState {
     forcedResizeOnly: boolean;
+    map: Map<string, SingleColumnSyntaxTree>;
     rawFilterQuery: string;
     scrollbarWidth: number;
     tooltip?: IUSerInterfaceTooltip;

@@ -9,9 +9,17 @@ import HeaderFactory from 'dash-table/components/HeaderFactory';
 import { clearSelection } from 'dash-table/utils/actions';
 import { ControlledTableProps, SetProps, SetState } from 'dash-table/components/Table/props';
 
-const handleSetFilter = (setProps: SetProps, setState: SetState, filter: string, rawFilterQuery: string) => {
+import { SingleColumnSyntaxTree } from 'dash-table/syntax-tree';
+
+const handleSetFilter = (
+    setProps: SetProps,
+    setState: SetState,
+    filter: string,
+    rawFilterQuery: string,
+    map: Map<string, SingleColumnSyntaxTree>
+) => {
     setProps({ filter, ...clearSelection });
-    setState({ rawFilterQuery });
+    setState({ map, rawFilterQuery });
 };
 
 function filterPropsFn(propsFn: () => ControlledTableProps, setFilter: any) {
