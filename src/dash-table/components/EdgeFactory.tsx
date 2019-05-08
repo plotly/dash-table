@@ -32,17 +32,18 @@ export default class EdgeFactory {
     private readonly getHeaderEdges = derivedHeaderEdges();
     private readonly getHeaderOpEdges = derivedHeaderOpEdges();
 
+    private static clone(target: EdgesMatricesOp) {
+        return target && target.clone();
+    }
+
     private static hasPrecedence(target: number, other: number, cutoff: number): boolean {
         return (other <= cutoff || target === Infinity) && other <= target;
     }
 
-    private hOverride(previous: EdgesMatricesOp, target: EdgesMatricesOp, cutoffWeight: number): EdgesMatricesOp {
+    private hOverride(previous: EdgesMatricesOp, target: EdgesMatricesOp, cutoffWeight: number) {
         if (!previous || !target) {
-            return target;
+            return;
         }
-
-        previous = previous.clone();
-        target = target.clone();
 
         const hPrevious = previous.getMatrices().horizontal;
         const hTarget = target.getMatrices().horizontal;
@@ -58,17 +59,12 @@ export default class EdgeFactory {
             ) && hTarget.setEdge(iTarget, j, hPrevious.getEdge(iPrevious, j), Infinity, true)
             , R.range(0, hPrevious.columns)
         );
-
-        return target;
     }
 
-    private vOverride(previous: EdgesMatricesOp, target: EdgesMatricesOp, cutoffWeight: number): EdgesMatricesOp {
+    private vOverride(previous: EdgesMatricesOp, target: EdgesMatricesOp, cutoffWeight: number) {
         if (!previous || !target) {
-            return target;
+            return;
         }
-
-        previous = previous.clone();
-        target = target.clone();
 
         const hPrevious = previous.getMatrices().vertical;
         const hTarget = target.getMatrices().vertical;
@@ -84,16 +80,12 @@ export default class EdgeFactory {
             ) && hTarget.setEdge(i, jTarget, hPrevious.getEdge(i, jPrevious), Infinity, true)
             , R.range(0, hPrevious.rows)
         );
-
-        return target;
     }
 
-    private hReconcile(target: EdgesMatrices | undefined, next: EdgesMatrices | undefined, cutoffWeight: number): EdgesMatrices | undefined {
+    private hReconcile(target: EdgesMatrices | undefined, next: EdgesMatrices | undefined, cutoffWeight: number) {
         if (!target || !next) {
-            return target;
+            return;
         }
-
-        target = target.clone();
 
         const hNext = next.getMatrices().horizontal;
         const hTarget = target.getMatrices().horizontal;
@@ -109,16 +101,12 @@ export default class EdgeFactory {
             ) && hTarget.setEdge(iTarget, j, undefined, -Infinity, true),
             R.range(0, hTarget.columns)
         );
-
-        return target;
     }
 
-    private vReconcile(target: EdgesMatrices | undefined, next: EdgesMatrices | undefined, cutoffWeight: number): EdgesMatrices | undefined {
+    private vReconcile(target: EdgesMatrices | undefined, next: EdgesMatrices | undefined, cutoffWeight: number) {
         if (!target || !next) {
-            return target;
+            return;
         }
-
-        target = target.clone();
 
         const vNext = next.getMatrices().vertical;
         const vTarget = target.getMatrices().vertical;
@@ -134,8 +122,6 @@ export default class EdgeFactory {
             ) && vTarget.setEdge(i, jTarget, undefined, -Infinity, true),
             R.range(0, vTarget.rows)
         );
-
-        return target;
     }
 
     private get props() {
@@ -281,32 +267,39 @@ export default class EdgeFactory {
 
         const cutoffWeight = (style_cell ? 1 : 0) + style_cell_conditional.length - 1;
 
-        headerEdges = this.hReconcile(headerEdges, filterEdges || dataEdges, cutoffWeight);
-        headerOpEdges = this.hReconcile(headerOpEdges, filterOpEdges || dataOpEdges, cutoffWeight);
-        filterEdges = this.hReconcile(filterEdges, dataEdges, cutoffWeight);
-        filterOpEdges = this.hReconcile(filterOpEdges, dataOpEdges, cutoffWeight);
+        headerEdges = EdgeFactory.clone(headerEdges);
+        headerOpEdges = EdgeFactory.clone(headerOpEdges);
+        filterEdges = EdgeFactory.clone(filterEdges);
+        filterOpEdges = EdgeFactory.clone(filterOpEdges);
+        dataEdges = EdgeFactory.clone(dataEdges);
+        dataOpEdges = EdgeFactory.clone(dataOpEdges);
 
-        headerOpEdges = this.vReconcile(headerOpEdges, headerEdges, cutoffWeight);
-        filterOpEdges = this.vReconcile(filterOpEdges, filterEdges, cutoffWeight);
-        dataOpEdges = this.vReconcile(dataOpEdges, dataEdges, cutoffWeight);
+        this.hReconcile(headerEdges, filterEdges || dataEdges, cutoffWeight);
+        this.hReconcile(headerOpEdges, filterOpEdges || dataOpEdges, cutoffWeight);
+        this.hReconcile(filterEdges, dataEdges, cutoffWeight);
+        this.hReconcile(filterOpEdges, dataOpEdges, cutoffWeight);
+
+        this.vReconcile(headerOpEdges, headerEdges, cutoffWeight);
+        this.vReconcile(filterOpEdges, filterEdges, cutoffWeight);
+        this.vReconcile(dataOpEdges, dataEdges, cutoffWeight);
 
         if (n_fixed_rows === headerRows) {
             if (filtering) {
-                filterEdges = this.hOverride(headerEdges, filterEdges, cutoffWeight);
-                filterOpEdges = this.hOverride(headerOpEdges, filterOpEdges, cutoffWeight);
+                this.hOverride(headerEdges, filterEdges, cutoffWeight);
+                this.hOverride(headerOpEdges, filterOpEdges, cutoffWeight);
             } else {
-                dataEdges = this.hOverride(headerEdges, dataEdges, cutoffWeight);
-                dataOpEdges = this.hOverride(headerOpEdges, dataOpEdges, cutoffWeight);
+                this.hOverride(headerEdges, dataEdges, cutoffWeight);
+                this.hOverride(headerOpEdges, dataOpEdges, cutoffWeight);
             }
         } else if (filtering && n_fixed_rows === headerRows + 1) {
-            dataEdges = this.hOverride(filterEdges, dataEdges, cutoffWeight);
-            dataOpEdges = this.hOverride(filterOpEdges, dataOpEdges, cutoffWeight);
+            this.hOverride(filterEdges, dataEdges, cutoffWeight);
+            this.hOverride(filterOpEdges, dataOpEdges, cutoffWeight);
         }
 
         if (_n_fixed_columns === operations) {
-            headerEdges = this.vOverride(headerOpEdges, headerEdges, cutoffWeight);
-            filterEdges = this.vOverride(filterOpEdges, filterEdges, cutoffWeight);
-            dataEdges = this.vOverride(dataOpEdges, dataEdges, cutoffWeight);
+            this.vOverride(headerOpEdges, headerEdges, cutoffWeight);
+            this.vOverride(filterOpEdges, filterEdges, cutoffWeight);
+            this.vOverride(dataOpEdges, dataEdges, cutoffWeight);
         }
 
         return {
