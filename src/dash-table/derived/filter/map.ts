@@ -5,18 +5,23 @@ import { memoizeOneFactory } from 'core/memoizer';
 import { VisibleColumns, IVisibleColumn } from 'dash-table/components/Table/props';
 import { SingleColumnSyntaxTree, MultiColumnsSyntaxTree, getSingleColumnMap } from 'dash-table/syntax-tree';
 
+const cloneIf = (
+    current: Map<string, SingleColumnSyntaxTree>,
+    base: Map<string, SingleColumnSyntaxTree>
+) => current === base ? new Map<string, SingleColumnSyntaxTree>(base) : current;
+
 export default memoizeOneFactory((
     map: Map<string, SingleColumnSyntaxTree>,
     query: string,
     columns: VisibleColumns
 ): Map<string, SingleColumnSyntaxTree> => {
     const multiQuery = new MultiColumnsSyntaxTree(query);
-    const reversed = getSingleColumnMap(multiQuery, columns);
+    const reversedMap = getSingleColumnMap(multiQuery, columns);
 
     /*
      * Couldn't process the query, just use the previous value.
      */
-    if (!reversed) {
+    if (!reversedMap) {
         return map;
     }
 
@@ -30,20 +35,25 @@ export default memoizeOneFactory((
      */
     let newMap = map;
 
-    R.forEach(([key, ast]) => {
-        const newAst = reversed.get(key);
+    const keys = R.uniq(
+        R.concat(
+            Array.from(map.keys()),
+            Array.from(reversedMap.keys())
+        )
+    );
 
-        if (newAst && newAst.toQueryString() === ast.toQueryString()) {
-            /*
-             * Only return a new map instance if something changes
-             */
-            newMap = (newMap === map) ?
-                new Map<string, SingleColumnSyntaxTree>(map) :
-                newMap;
+    R.forEach(key => {
+        const ast = map.get(key);
+        const reversedAst = reversedMap.get(key);
 
-            newMap.set(key, ast);
+        if (!R.isNil(reversedAst) && (
+            R.isNil(ast) ||
+            reversedAst.toQueryString() !== ast.toQueryString()
+        )) {
+            newMap = cloneIf(newMap, map);
+            newMap.set(key, reversedAst);
         }
-    }, Array.from(map.entries()));
+    }, keys);
 
     return newMap;
 });
@@ -55,13 +65,13 @@ export const updateMap = (
 ): Map<string, SingleColumnSyntaxTree> => {
     const safeColumnId = column.id.toString();
 
-    map = new Map<string, SingleColumnSyntaxTree>(map);
+    const newMap = new Map<string, SingleColumnSyntaxTree>(map);
 
     if (value && value.length) {
-        map.set(safeColumnId, new SingleColumnSyntaxTree(value, column));
+        newMap.set(safeColumnId, new SingleColumnSyntaxTree(value, column));
     } else {
-        map.delete(safeColumnId);
+        newMap.delete(safeColumnId);
     }
 
-    return map;
+    return newMap;
 };

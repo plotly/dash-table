@@ -32,6 +32,7 @@ import './Table.less';
 import './Dropdown.css';
 import { isEqual } from 'core/comparer';
 import { SingleColumnSyntaxTree } from 'dash-table/syntax-tree';
+import derivedFilterMap from 'dash-table/derived/filter/map';
 
 const DERIVED_REGEX = /^derived_/;
 
@@ -41,10 +42,28 @@ export default class Table extends Component<PropsWithDefaultsAndDerived, Standa
 
         this.state = {
             forcedResizeOnly: false,
-            map: new Map <string, SingleColumnSyntaxTree>(),
+            map: this.filterMap(
+                new Map<string, SingleColumnSyntaxTree>(),
+                props.filter,
+                props.columns
+            ),
             rawFilterQuery: '',
             scrollbarWidth: 0
         };
+    }
+
+    componentWillReceiveProps(nextProps: PropsWithDefaultsAndDerived) {
+        if (nextProps.filter !== this.props.filter) {
+            this.setState(state => {
+                const map = this.filterMap(
+                    state.map,
+                    nextProps.filter,
+                    nextProps.columns
+                );
+
+                return map !== state.map ? { map } : null;
+            });
+        }
     }
 
     shouldComponentUpdate(nextProps: any, nextState: any) {
@@ -270,6 +289,7 @@ export default class Table extends Component<PropsWithDefaultsAndDerived, Standa
 
     private readonly __setState = memoizeOne(() => (state: Partial<IState>) => this.setState(state as IState));
 
+    private readonly filterMap = derivedFilterMap();
     private readonly paginator = derivedPaginator();
     private readonly viewport = derivedViewportData();
     private readonly viewportSelectedRows = derivedSelectedRows();

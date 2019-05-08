@@ -15,7 +15,7 @@ import { BasicFilters, Cells, Style } from 'dash-table/derived/style/props';
 import { SingleColumnSyntaxTree, getMultiColumnQueryString } from 'dash-table/syntax-tree';
 
 import { IEdgesMatrices } from 'dash-table/derived/edges/type';
-import { updateMap } from 'dash-table/derived/filter/asts';
+import { updateMap } from 'dash-table/derived/filter/map';
 
 type SetFilter = (
     filter: string,
@@ -41,7 +41,6 @@ export interface IFilterOptions {
 }
 
 export default class FilterFactory {
-    private readonly handlers = new Map();
     private readonly filterStyles = derivedFilterStyles();
     private readonly relevantStyles = derivedRelevantFilterStyles();
     private readonly headerOperations = derivedHeaderOperations();
@@ -72,28 +71,12 @@ export default class FilterFactory {
         setFilter(globalFilter, rawGlobalFilter, map);
     }
 
-    private getEventHandler = (
-        fn: Function,
-        column: IVisibleColumn,
-        map: Map<string, SingleColumnSyntaxTree>,
-        setFilter: SetFilter
-    ): any => {
-        const fnHandler = (this.handlers.get(fn) || this.handlers.set(fn, new Map()).get(fn));
-        const columnIdHandler = (fnHandler.get(column.id) || fnHandler.set(column.id, new Map()).get(column.id));
-
-        return (
-            columnIdHandler.get(setFilter) ||
-            (columnIdHandler.set(setFilter, fn.bind(this, column, map, setFilter)).get(setFilter))
-        );
-    }
-
     private filter = memoizerCache<[ColumnId, number]>()((
         column: IVisibleColumn,
         index: number,
+        map: Map<string, SingleColumnSyntaxTree>,
         setFilter: SetFilter
     ) => {
-        const { map } = this.props;
-
         const ast = map.get(column.id.toString());
 
         return (<ColumnFilter
@@ -101,7 +84,7 @@ export default class FilterFactory {
             classes={`dash-filter column-${index}`}
             columnId={column.id}
             isValid={!ast || ast.isValid}
-            setFilter={this.getEventHandler(this.onChange, column, map, setFilter)}
+            setFilter={this.onChange.bind(this, column, map, setFilter)}
             value={ast && ast.query}
         />);
     });
@@ -125,6 +108,7 @@ export default class FilterFactory {
             columns,
             filtering,
             filtering_type,
+            map,
             row_deletable,
             row_selectable,
             setFilter,
@@ -155,6 +139,7 @@ export default class FilterFactory {
                 return this.filter.get(column.id, index)(
                     column,
                     index,
+                    map,
                     setFilter
                 );
             }, columns);
