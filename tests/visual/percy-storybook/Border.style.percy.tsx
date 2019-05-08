@@ -60,6 +60,7 @@ const scenarios = [
     }, {
         name: 'with filter style',
         props: {
+            filtering: true,
             style_filter: {
                 border: '1px solid hotpink'
             }
