@@ -18,6 +18,8 @@ import { Style, Cells, DataCells, BasicFilters, Headers } from 'dash-table/deriv
 import { ControlledTableProps, VisibleColumns, IViewportOffset, Data, ICellCoordinates } from './Table/props';
 import { SingleColumnSyntaxTree } from 'dash-table/syntax-tree';
 
+type EdgesMatricesOp = EdgesMatrices | undefined;
+
 export default class EdgeFactory {
     private readonly dataStyles = derivedRelevantCellStyles();
     private readonly filterStyles = derivedRelevantFilterStyles();
@@ -29,6 +31,62 @@ export default class EdgeFactory {
     private readonly getFilterOpEdges = derivedFilterOpEdges();
     private readonly getHeaderEdges = derivedHeaderEdges();
     private readonly getHeaderOpEdges = derivedHeaderOpEdges();
+
+    private static hasPrecedence(target: number, other: number, cutoff: number): boolean {
+        return (other <= cutoff || target === Infinity) && other <= target;
+    }
+
+    private hOverride(previous: EdgesMatricesOp, target: EdgesMatricesOp, cutoffWeight: number): EdgesMatricesOp {
+        if (!previous || !target) {
+            return target;
+        }
+
+        previous = previous.clone();
+        target = target.clone();
+
+        const hPrevious = previous.getMatrices().horizontal;
+        const hTarget = target.getMatrices().horizontal;
+
+        const iPrevious = hPrevious.rows - 1;
+        const iTarget = 0;
+
+        R.forEach(j =>
+            EdgeFactory.hasPrecedence(
+                hPrevious.getWeight(iPrevious, j),
+                hTarget.getWeight(iTarget, j),
+                cutoffWeight
+            ) && hTarget.setEdge(iTarget, j, hPrevious.getEdge(iPrevious, j), Infinity, true)
+            , R.range(0, hPrevious.columns)
+        );
+
+        return target;
+    }
+
+    private vOverride(previous: EdgesMatricesOp, target: EdgesMatricesOp, cutoffWeight: number): EdgesMatricesOp {
+        if (!previous || !target) {
+            return target;
+        }
+
+        previous = previous.clone();
+        target = target.clone();
+
+        const hPrevious = previous.getMatrices().vertical;
+        const hTarget = target.getMatrices().vertical;
+
+        const jPrevious = hPrevious.columns - 1;
+        const jTarget = 0;
+
+        R.forEach(i =>
+            EdgeFactory.hasPrecedence(
+                hPrevious.getWeight(i, jPrevious),
+                hTarget.getWeight(i, jTarget),
+                cutoffWeight
+            ) && hTarget.setEdge(i, jTarget, hPrevious.getEdge(i, jPrevious), Infinity, true)
+            , R.range(0, hPrevious.rows)
+        );
+
+        return target;
+    }
 
     private hReconcile(target: EdgesMatrices | undefined, next: EdgesMatrices | undefined, cutoffWeight: number): EdgesMatrices | undefined {
         if (!target || !next) {
@@ -44,9 +102,10 @@ export default class EdgeFactory {
         const iTarget = hTarget.rows - 1;
 
         R.forEach(j =>
-            (
-                (hNext.getWeight(iNext, j) > cutoffWeight && hTarget.getWeight(iTarget, j) !== Infinity) ||
-                (hNext.getWeight(iNext, j) > hTarget.getWeight(iTarget, j))
+            !EdgeFactory.hasPrecedence(
+                hTarget.getWeight(iTarget, j),
+                hNext.getWeight(iNext, j),
+                cutoffWeight
             ) && hTarget.setEdge(iTarget, j, undefined, -Infinity, true),
             R.range(0, hTarget.columns)
         );
@@ -61,16 +120,17 @@ export default class EdgeFactory {
 
         target = target.clone();
 
-        const vNext = target.getMatrices().vertical;
+        const vNext = next.getMatrices().vertical;
         const vTarget = target.getMatrices().vertical;
 
         const jNext = 0;
         const jTarget = vTarget.columns - 1;
 
         R.forEach(i =>
-            (
-                (vNext.getWeight(i, jNext) > cutoffWeight && vTarget.getWeight(i, jTarget) !== Infinity) ||
-                (vNext.getWeight(i, jNext) > vTarget.getWeight(i, jTarget))
+            !EdgeFactory.hasPrecedence(
+                vTarget.getWeight(i, jTarget),
+                vNext.getWeight(i, jNext),
+                cutoffWeight
             ) && vTarget.setEdge(i, jTarget, undefined, -Infinity, true),
             R.range(0, vTarget.rows)
         );
@@ -92,6 +152,8 @@ export default class EdgeFactory {
             columns,
             filtering,
             map,
+            n_fixed_columns,
+            n_fixed_rows,
             row_deletable,
             row_selectable,
             style_as_list_view,
@@ -112,6 +174,8 @@ export default class EdgeFactory {
             (row_deletable ? 1 : 0) + (row_selectable ? 1 : 0),
             !!filtering,
             map,
+            n_fixed_columns,
+            n_fixed_rows,
             style_as_list_view,
             style_cell,
             style_cell_conditional,
@@ -132,6 +196,8 @@ export default class EdgeFactory {
         operations: number,
         filtering: boolean,
         filterMap: Map<string, SingleColumnSyntaxTree>,
+        _n_fixed_columns: number,
+        n_fixed_rows: number,
         style_as_list_view: boolean,
         style_cell: Style,
         style_cell_conditional: Cells,
@@ -164,6 +230,8 @@ export default class EdgeFactory {
             style_cell_conditional,
             style_header_conditional
         );
+
+        const headerRows = getHeaderRows(columns);
 
         let dataEdges = this.getDataEdges(
             columns,
@@ -199,14 +267,14 @@ export default class EdgeFactory {
 
         let headerEdges = this.getHeaderEdges(
             columns,
-            getHeaderRows(columns),
+            headerRows,
             headerStyles,
             style_as_list_view
         );
 
         let headerOpEdges = this.getHeaderOpEdges(
             operations,
-            getHeaderRows(columns),
+            headerRows,
             headerStyles,
             style_as_list_view
         );
@@ -221,6 +289,25 @@ export default class EdgeFactory {
         headerOpEdges = this.vReconcile(headerOpEdges, headerEdges, cutoffWeight);
         filterOpEdges = this.vReconcile(filterOpEdges, filterEdges, cutoffWeight);
         dataOpEdges = this.vReconcile(dataOpEdges, dataEdges, cutoffWeight);
+
+        if (n_fixed_rows === headerRows) {
+            if (filtering) {
+                filterEdges = this.hOverride(headerEdges, filterEdges, cutoffWeight);
+                filterOpEdges = this.hOverride(headerOpEdges, filterOpEdges, cutoffWeight);
+            } else {
+                dataEdges = this.hOverride(headerEdges, dataEdges, cutoffWeight);
+                dataOpEdges = this.hOverride(headerOpEdges, dataOpEdges, cutoffWeight);
+            }
+        } else if (filtering && n_fixed_rows === headerRows + 1) {
+            dataEdges = this.hOverride(filterEdges, dataEdges, cutoffWeight);
+            dataOpEdges = this.hOverride(filterOpEdges, dataOpEdges, cutoffWeight);
+        }
+
+        if (_n_fixed_columns === operations) {
+            headerEdges = this.vOverride(headerOpEdges, headerEdges, cutoffWeight);
+            filterEdges = this.vOverride(filterOpEdges, filterEdges, cutoffWeight);
+            dataEdges = this.vOverride(dataOpEdges, dataEdges, cutoffWeight);
+        }
 
         return {
             dataEdges: dataEdges as (IEdgesMatrices | undefined),
