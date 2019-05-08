@@ -51,14 +51,16 @@ export default class EdgeFactory {
         const iPrevious = hPrevious.rows - 1;
         const iTarget = 0;
 
-        R.forEach(j =>
-            EdgeFactory.hasPrecedence(
+        R.forEach(j => {
+            if (EdgeFactory.hasPrecedence(
                 hPrevious.getWeight(iPrevious, j),
                 hTarget.getWeight(iTarget, j),
                 cutoffWeight
-            ) && hTarget.setEdge(iTarget, j, hPrevious.getEdge(iPrevious, j), Infinity, true)
-            , R.range(0, hPrevious.columns)
-        );
+            )) {
+                hTarget.setEdge(iTarget, j, hPrevious.getEdge(iPrevious, j), Infinity, true);
+            }
+            hPrevious.setEdge(iPrevious, j, undefined, -Infinity, true);
+        }, R.range(0, hPrevious.columns));
     }
 
     private vOverride(previous: EdgesMatricesOp, target: EdgesMatricesOp, cutoffWeight: number) {
@@ -72,14 +74,16 @@ export default class EdgeFactory {
         const jPrevious = hPrevious.columns - 1;
         const jTarget = 0;
 
-        R.forEach(i =>
-            EdgeFactory.hasPrecedence(
+        R.forEach(i => {
+            if (EdgeFactory.hasPrecedence(
                 hPrevious.getWeight(i, jPrevious),
                 hTarget.getWeight(i, jTarget),
                 cutoffWeight
-            ) && hTarget.setEdge(i, jTarget, hPrevious.getEdge(i, jPrevious), Infinity, true)
-            , R.range(0, hPrevious.rows)
-        );
+            )) {
+                hTarget.setEdge(i, jTarget, hPrevious.getEdge(i, jPrevious), Infinity, true);
+            }
+            hPrevious.setEdge(i, jPrevious, undefined, -Infinity, true);
+        }, R.range(0, hPrevious.rows));
     }
 
     private hReconcile(target: EdgesMatrices | undefined, next: EdgesMatrices | undefined, cutoffWeight: number) {
