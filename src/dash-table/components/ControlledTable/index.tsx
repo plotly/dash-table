@@ -683,12 +683,15 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
     render() {
         const {
             id,
+            columns,
             column_conditional_tooltips,
             column_static_tooltip,
             content_style,
+            filtering,
             n_fixed_columns,
             n_fixed_rows,
             scrollbarWidth,
+            style_as_list_view,
             style_table,
             tooltip,
             tooltip_delay,
@@ -714,7 +717,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         ];
 
         const rawTable = this.tableFn();
-        const grid = derivedTableFragments(
+        const { grid, empty } = derivedTableFragments(
             n_fixed_columns,
             n_fixed_rows,
             rawTable,
@@ -726,6 +729,12 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             ...(virtualization ? ['dash-virtualized'] : []),
             ...(n_fixed_rows ? ['dash-freeze-top'] : []),
             ...(n_fixed_columns ? ['dash-freeze-left'] : []),
+            ...(style_as_list_view ? ['dash-list-view'] : []),
+            ...(empty[0][1] ? ['dash-empty-01'] : []),
+            ...(empty[1][1] ? ['dash-empty-11'] : []),
+            ...(columns.length ? [] : ['dash-no-columns']),
+            ...(virtualized.data.length ? [] : ['dash-no-data']),
+            ...(filtering ? [] : ['dash-no-filter']),
             [`dash-${content_style}`]
         ];
 
