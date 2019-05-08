@@ -46,10 +46,13 @@ export default memoizeOneFactory((
         const ast = map.get(key);
         const reversedAst = reversedMap.get(key);
 
-        if (!R.isNil(reversedAst) && (
+        if (R.isNil(reversedAst)) {
+            newMap = cloneIf(newMap, map);
+            newMap.delete(key);
+        } else if (
             R.isNil(ast) ||
             reversedAst.toQueryString() !== ast.toQueryString()
-        )) {
+        ) {
             newMap = cloneIf(newMap, map);
             newMap.set(key, reversedAst);
         }

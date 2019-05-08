@@ -53,17 +53,19 @@ export default class Table extends Component<PropsWithDefaultsAndDerived, Standa
     }
 
     componentWillReceiveProps(nextProps: PropsWithDefaultsAndDerived) {
-        if (nextProps.filter !== this.props.filter) {
-            this.setState(state => {
-                const map = this.filterMap(
-                    state.map,
-                    nextProps.filter,
-                    nextProps.columns
-                );
-
-                return map !== state.map ? { map } : null;
-            });
+        if (nextProps.filter === this.props.filter) {
+            return;
         }
+
+        this.setState(state => {
+            const map = this.filterMap(
+                state.map,
+                nextProps.filter,
+                nextProps.columns
+            );
+
+            return map !== state.map ? { map } : null;
+        });
     }
 
     shouldComponentUpdate(nextProps: any, nextState: any) {
