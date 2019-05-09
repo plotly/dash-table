@@ -1,14 +1,14 @@
 import * as R from 'ramda';
 import React from 'react';
 
-import { matrixMap, matrixMap3 } from 'core/math/matrixZipMap';
+import { matrixMap2, matrixMap3 } from 'core/math/matrixZipMap';
 import { arrayMap2 } from 'core/math/arrayZipMap';
 
 import { ICellFactoryProps } from 'dash-table/components/Table/props';
 import derivedCellWrappers from 'dash-table/derived/cell/wrappers';
 import derivedCellContents from 'dash-table/derived/cell/contents';
 import derivedCellOperations from 'dash-table/derived/cell/operations';
-import derivedCellStyles from 'dash-table/derived/cell/wrapperStyles';
+import derivedCellStyles, { derivedDataOpStyles } from 'dash-table/derived/cell/wrapperStyles';
 import derivedDropdowns from 'dash-table/derived/cell/dropdowns';
 import { derivedRelevantCellStyles } from 'dash-table/derived/style';
 import { IEdgesMatrices } from 'dash-table/derived/edges/type';
@@ -25,6 +25,7 @@ export default class CellFactory {
         private readonly cellDropdowns = derivedDropdowns(),
         private readonly cellOperations = derivedCellOperations(),
         private readonly cellStyles = derivedCellStyles(),
+        private readonly dataOpStyles = derivedDataOpStyles(),
         private readonly cellWrappers = derivedCellWrappers(propsFn),
         private readonly relevantStyles = derivedRelevantCellStyles()
     ) { }
@@ -58,18 +59,15 @@ export default class CellFactory {
             style_data_conditional
         );
 
-        const operations = this.cellOperations(
-            data,
-            virtualized.data,
-            virtualized.indices,
-            row_selectable,
-            row_deletable,
-            selected_rows,
-            setProps
-        );
-
         const cellStyles = this.cellStyles(
             columns,
+            relevantStyles,
+            virtualized.data,
+            virtualized.offset
+        );
+
+        const dataOpStyles = this.dataOpStyles(
+            (row_selectable ? 1 : 0) + (row_deletable ? 1 : 0),
             relevantStyles,
             virtualized.data,
             virtualized.offset
@@ -82,6 +80,16 @@ export default class CellFactory {
             column_conditional_dropdowns,
             column_static_dropdown,
             dropdown_properties
+        );
+
+        const operations = this.cellOperations(
+            data,
+            virtualized.data,
+            virtualized.indices,
+            row_selectable,
+            row_deletable,
+            selected_rows,
+            setProps
         );
 
         const cellWrappers = this.cellWrappers(
@@ -102,10 +110,15 @@ export default class CellFactory {
             dropdowns
         );
 
-        const ops = matrixMap(
+        const ops = matrixMap2(
             operations,
-            (o, i, j) => React.cloneElement(o, {
-                style: dataOpEdges && dataOpEdges.getStyle(i, j)
+            dataOpStyles,
+            (o, s, i, j) => React.cloneElement(o, {
+                style: R.mergeAll([
+                    dataOpEdges && dataOpEdges.getStyle(i, j),
+                    s,
+                    o.props.style
+                ])
             })
         );
 

@@ -8,7 +8,7 @@ import { memoizeOne } from 'core/memoizer';
 
 import ColumnFilter from 'dash-table/components/Filter/Column';
 import { ColumnId, Filtering, FilteringType, IVisibleColumn, VisibleColumns, RowSelection } from 'dash-table/components/Table/props';
-import derivedFilterStyles from 'dash-table/derived/filter/wrapperStyles';
+import derivedFilterStyles, { derivedFilterOpStyles } from 'dash-table/derived/filter/wrapperStyles';
 import derivedHeaderOperations from 'dash-table/derived/header/operations';
 import { derivedRelevantFilterStyles } from 'dash-table/derived/style';
 import { BasicFilters, Cells, Style } from 'dash-table/derived/style/props';
@@ -42,6 +42,7 @@ export interface IFilterOptions {
 
 export default class FilterFactory {
     private readonly filterStyles = derivedFilterStyles();
+    private readonly filterOpStyles = derivedFilterOpStyles();
     private readonly relevantStyles = derivedRelevantFilterStyles();
     private readonly headerOperations = derivedHeaderOperations();
 
@@ -135,6 +136,12 @@ export default class FilterFactory {
                 filterEdges
             );
 
+            const opStyles = this.filterOpStyles(
+                1,
+                (row_selectable ? 1 : 0) + (row_deletable ? 1 : 0),
+                relevantStyles
+            )[0];
+
             const filters = R.addIndex<IVisibleColumn, JSX.Element>(R.map)((column, index) => {
                 return this.filter.get(column.id, index)(
                     column,
@@ -158,10 +165,15 @@ export default class FilterFactory {
                 row_deletable
             )[0];
 
-            const operators = arrayMap(
+            const operators = arrayMap2(
                 operations,
-                (o, j) => React.cloneElement(o, {
-                    style: filterOpEdges && filterOpEdges.getStyle(0, j)
+                opStyles,
+                (o, s, j) => React.cloneElement(o, {
+                    style: R.mergeAll([
+                        filterOpEdges && filterOpEdges.getStyle(0, j),
+                        s,
+                        o.props.style
+                    ])
                 })
             );
 
