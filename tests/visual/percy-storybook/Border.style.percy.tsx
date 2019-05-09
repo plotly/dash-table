@@ -4,8 +4,7 @@ import { storiesOf } from '@storybook/react';
 import DataTable from 'dash-table/dash/DataTable';
 import { BORDER_PROPS_DEFAULTS } from './Border.defaults.percy';
 
-const variants = [
-    { name: 'base', props: { } },
+const OPS_VARIANTS: ITest[] = [
     { name: 'with ops', props: { row_deletable: true, row_selectable: 'single' } },
     { name: 'fixed columns', props: { n_fixed_columns: 2, row_deletable: true, row_selectable: 'single' } },
     { name: 'fixed rows', props: { n_fixed_rows: 1, row_deletable: true, row_selectable: 'single' } },
@@ -13,7 +12,17 @@ const variants = [
     { name: 'fixed columns & rows inside fragments', props: { n_fixed_columns: 3, n_fixed_rows: 2, row_deletable: true, row_selectable: 'single' } }
 ];
 
-const scenarios = [
+interface ITest {
+    name: string;
+    props: any;
+}
+
+const ALL_VARIANTS: ITest[] = [
+    { name: 'base', props: {} },
+    ...OPS_VARIANTS
+];
+
+const scenarios: ITest[] = [
     {
         name: 'with defaults',
         props: {}
@@ -170,7 +179,115 @@ const scenarios = [
     }
 ];
 
-const tests = R.xprod(scenarios, variants);
+const ops_scenarios: ITest[] = [
+    {
+        name: 'data ops do not get styled on conditional column_id',
+        props: {
+            style_data: {
+                border: '1px solid black'
+            },
+            style_data_conditional: [{
+                if: { column_id: 'a' },
+                border: '1px solid red'
+            }]
+        }
+    }, {
+        name: 'data ops do not get styled on conditional column_type',
+        props: {
+            style_data: {
+                border: '1px solid black'
+            },
+            style_data_conditional: [{
+                if: { column_type: 'any' },
+                border: '1px solid red'
+            }]
+        }
+    }, {
+        name: 'data ops get styled on conditional row_index',
+        props: {
+            style_data: {
+                border: '1px solid black'
+            },
+            style_data_conditional: [{
+                if: { row_index: 1 },
+                border: '1px solid red'
+            }]
+        }
+    }, {
+        name: 'data ops get styled on conditional filter',
+        props: {
+            style_data: {
+                border: '1px solid black'
+            },
+            style_data_conditional: [{
+                if: { filter: '{a} eq 85' },
+                border: '1px solid red'
+            }]
+        }
+    }, {
+        name: 'header ops do not get styled on conditional column_id',
+        props: {
+            style_header: {
+                border: '1px solid black'
+            },
+            style_header_conditional: [{
+                if: { column_id: 'a' },
+                border: '1px solid red'
+            }]
+        }
+    }, {
+        name: 'header ops do not get styled on conditional column_type',
+        props: {
+            style_header: {
+                border: '1px solid black'
+            },
+            style_header_conditional: [{
+                if: { column_type: 'any' },
+                border: '1px solid red'
+            }]
+        }
+    }, {
+        name: 'header ops get styled on conditional header_index',
+        props: {
+            style_header: {
+                border: '1px solid black'
+            },
+            style_header_conditional: [{
+                if: { header_index: 0 },
+                border: '1px solid red'
+            }]
+        }
+    }, {
+        name: 'filter ops do not get styled on conditional column_id',
+        props: {
+            filtering: true,
+            style_filter: {
+                border: '1px solid black'
+            },
+            style_filter_conditional: [{
+                if: { column_id: 'a' },
+                border: '1px solid red'
+            }]
+        }
+    }, {
+        name: 'filter ops do not get styled on conditional column_type',
+        props: {
+            filtering: true,
+            style_filter: {
+                border: '1px solid black'
+            },
+            style_filter_conditional: [{
+                if: { column_type: 'any' },
+                border: '1px solid red'
+            }]
+        }
+    }
+];
+
+const tests = R.concat(
+    R.xprod(scenarios, ALL_VARIANTS),
+    R.xprod(ops_scenarios, OPS_VARIANTS)
+);
 
 R.reduce(
     (chain, [scenario, variant]) => chain.add(`${scenario.name} (${variant.name})`, () => (<DataTable

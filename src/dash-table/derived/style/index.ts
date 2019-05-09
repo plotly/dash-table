@@ -28,6 +28,9 @@ import { QuerySyntaxTree } from 'dash-table/syntax-tree';
 
 export interface IConvertedStyle {
     style: CSSProperties;
+    checksColumn: () => boolean;
+    checksRow: () => boolean;
+    checksFilter: () => boolean;
     matchesColumn: (column: IVisibleColumn | undefined) => boolean;
     matchesRow: (index: number | undefined) => boolean;
     matchesFilter: (datum: Datum) => boolean;
@@ -36,16 +39,23 @@ export interface IConvertedStyle {
 type GenericIf = Partial<IConditionalElement & IIndexedHeaderElement & IIndexedRowElement & INamedElement & ITypedElement>;
 type GenericStyle = Style & Partial<{ if: GenericIf }>;
 
-function convertElement(style: GenericStyle) {
+function convertElement(style: GenericStyle): IConvertedStyle {
     const indexFilter = style.if && (style.if.header_index || style.if.row_index);
     let ast: QuerySyntaxTree;
 
     return {
+        checksColumn: () => !R.isNil(style.if) && (
+            !R.isNil(style.if.column_id) ||
+            !R.isNil(style.if.column_type)
+        ),
+        checksRow: () => !R.isNil(indexFilter),
+        checksFilter: () => !R.isNil(style.if) && !R.isNil(style.if.filter),
+
         matchesColumn: (column: IVisibleColumn | undefined) =>
             !style.if || (
                 !R.isNil(column) &&
-                ifColumnId(style.if, column.id) &&
-                ifColumnType(style.if, column.type)
+                ifColumnId(style.if, column && column.id) &&
+                ifColumnType(style.if, column && column.type)
             ),
         matchesRow: (index: number | undefined) =>
             indexFilter === undefined ?

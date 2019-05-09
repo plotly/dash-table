@@ -13,7 +13,7 @@ const getWeightedStyle = (
     const res: BorderStyle = {};
 
     R.addIndex<IConvertedStyle>(R.forEach)((rs, i) => {
-        if (!rs.matchesColumn(undefined) ||
+        if (rs.checksColumn() ||
             !rs.matchesRow(index)
         ) {
             return;
