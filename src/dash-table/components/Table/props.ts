@@ -239,7 +239,10 @@ export interface IUSerInterfaceTooltip {
 
 export interface IState {
     forcedResizeOnly: boolean;
-    map: Map<string, SingleColumnSyntaxTree>;
+    workFilter: {
+        value: string,
+        map: Map<string, SingleColumnSyntaxTree>
+    };
     rawFilterQuery: string;
     scrollbarWidth: number;
     tooltip?: IUSerInterfaceTooltip;

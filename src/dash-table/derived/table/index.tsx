@@ -19,13 +19,13 @@ const handleSetFilter = (
     map: Map<string, SingleColumnSyntaxTree>
 ) => {
     setProps({ filter, ...clearSelection });
-    setState({ map, rawFilterQuery });
+    setState({ workFilter: { map, value: filter }, rawFilterQuery });
 };
 
 function filterPropsFn(propsFn: () => ControlledTableProps, setFilter: any) {
     const props = propsFn();
 
-    return R.merge(props, { setFilter });
+    return R.merge(props, { map: props.workFilter.map, setFilter });
 }
 
 function getter(

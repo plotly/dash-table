@@ -42,11 +42,14 @@ export default class Table extends Component<PropsWithDefaultsAndDerived, Standa
 
         this.state = {
             forcedResizeOnly: false,
-            map: this.filterMap(
-                new Map<string, SingleColumnSyntaxTree>(),
-                props.filter,
-                props.columns
-            ),
+            workFilter: {
+                value: props.filter,
+                map: this.filterMap(
+                    new Map<string, SingleColumnSyntaxTree>(),
+                    props.filter,
+                    props.columns
+                )
+            },
             rawFilterQuery: '',
             scrollbarWidth: 0
         };
@@ -58,13 +61,19 @@ export default class Table extends Component<PropsWithDefaultsAndDerived, Standa
         }
 
         this.setState(state => {
-            const map = this.filterMap(
-                state.map,
-                nextProps.filter,
-                nextProps.columns
-            );
+            const { workFilter: { map: currentMap, value } } = state;
 
-            return map !== state.map ? { map } : null;
+            if (value !== nextProps.filter) {
+                const map = this.filterMap(
+                    currentMap,
+                    nextProps.filter,
+                    nextProps.columns
+                );
+
+                return map !== currentMap ? { workFilter: { map, value} } : null;
+            } else {
+                return null;
+            }
         });
     }
 
