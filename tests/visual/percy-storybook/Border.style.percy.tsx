@@ -188,6 +188,7 @@ const ops_scenarios: ITest[] = [
             },
             style_data_conditional: [{
                 if: { column_id: 'a' },
+                backgroundColor: 'pink',
                 border: '1px solid red'
             }]
         }
@@ -199,6 +200,7 @@ const ops_scenarios: ITest[] = [
             },
             style_data_conditional: [{
                 if: { column_type: 'any' },
+                backgroundColor: 'pink',
                 border: '1px solid red'
             }]
         }
@@ -210,6 +212,7 @@ const ops_scenarios: ITest[] = [
             },
             style_data_conditional: [{
                 if: { row_index: 1 },
+                backgroundColor: 'pink',
                 border: '1px solid red'
             }]
         }
@@ -221,6 +224,7 @@ const ops_scenarios: ITest[] = [
             },
             style_data_conditional: [{
                 if: { filter: '{a} eq 85' },
+                backgroundColor: 'pink',
                 border: '1px solid red'
             }]
         }
@@ -232,6 +236,7 @@ const ops_scenarios: ITest[] = [
             },
             style_header_conditional: [{
                 if: { column_id: 'a' },
+                backgroundColor: 'pink',
                 border: '1px solid red'
             }]
         }
@@ -243,6 +248,7 @@ const ops_scenarios: ITest[] = [
             },
             style_header_conditional: [{
                 if: { column_type: 'any' },
+                backgroundColor: 'pink',
                 border: '1px solid red'
             }]
         }
@@ -254,6 +260,7 @@ const ops_scenarios: ITest[] = [
             },
             style_header_conditional: [{
                 if: { header_index: 0 },
+                backgroundColor: 'pink',
                 border: '1px solid red'
             }]
         }
@@ -266,6 +273,7 @@ const ops_scenarios: ITest[] = [
             },
             style_filter_conditional: [{
                 if: { column_id: 'a' },
+                backgroundColor: 'pink',
                 border: '1px solid red'
             }]
         }
@@ -278,6 +286,7 @@ const ops_scenarios: ITest[] = [
             },
             style_filter_conditional: [{
                 if: { column_type: 'any' },
+                backgroundColor: 'pink',
                 border: '1px solid red'
             }]
         }
