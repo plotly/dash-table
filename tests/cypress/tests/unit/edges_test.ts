@@ -143,12 +143,7 @@ describe('data edges', () => {
             ],
             [{
                 style: { border: '1px solid green' },
-                checksColumn: () => true,
-                checksFilter: () => true,
-                checksRow: () => true,
-                matchesColumn: () => true,
-                matchesFilter: () => true,
-                matchesRow: () => true
+                ...converter
             }],
             [
                 { id: 1, name: 'a' },
