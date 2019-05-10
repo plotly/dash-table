@@ -644,7 +644,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
                 this.stylesheet.setRule(
                     `.dash-fixed-row:not(.dash-fixed-column) th:nth-of-type(${index + 1})`,
-                    `width: ${width}; min-width: ${width}; max-width: ${width};`
+                    `width: ${width} !important; min-width: ${width} !important; max-width: ${width} !important;`
                 );
             });
         }
@@ -657,7 +657,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
                 this.stylesheet.setRule(
                     `.dash-fixed-column.dash-fixed-row th:nth-of-type(${index + 1})`,
-                    `width: ${width}; min-width: ${width}; max-width: ${width};`
+                    `width: ${width} !important; min-width: ${width} !important; max-width: ${width} !important;`
                 );
             });
         }
