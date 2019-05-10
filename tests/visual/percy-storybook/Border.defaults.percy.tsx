@@ -40,7 +40,12 @@ const style_table = {
 };
 
 const style_data_conditional = [
-    { width: 100 }
+    {
+        if: {},
+        width: 100,
+        minWidth: 100,
+        maxWidth: 100
+    }
 ];
 
 export const BORDER_PROPS_DEFAULTS = {
