@@ -1,9 +1,11 @@
-const config = require('./.config/webpack/base.js')(
-    {
+const options = {
+    preprocessor: {
         definitions: ['TEST', 'TEST_COPY_PASTE']
     },
-    'development'
-);
+    mode: 'development'
+};
+
+const config = require('./.config/webpack/base.js')(options);
 
 config.module.rules.forEach(rule => {
     if (rule.loader) {

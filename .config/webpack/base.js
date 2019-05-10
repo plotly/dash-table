@@ -4,10 +4,15 @@ const packagejson = require('./../../package.json');
 
 const dashLibraryName = packagejson.name.replace(/-/g, '_');
 
-module.exports = (preprocessor = {}, mode = 'development') => {
+module.exports = (options = {}) => {
+    const babel = options.babel || undefined;
+    const preprocessor = options.preprocessor || {};
+    const mode = options.mode || 'development';
+
     console.log('********** Webpack Environment Overrides **********');
     console.log('Preprocessor', JSON.stringify(preprocessor));
     console.log('mode', mode);
+    console.log('babel', JSON.stringify(babel));
 
     return {
         entry: {
@@ -50,13 +55,19 @@ module.exports = (preprocessor = {}, mode = 'development') => {
                 {
                     test: /\.ts(x?)$/,
                     exclude: /node_modules/,
-                    loader: `babel-loader!ts-loader!webpack-preprocessor?${JSON.stringify(preprocessor)}`
+                    use: [
+                        { loader: 'babel-loader', options: babel },
+                        { loader: 'ts-loader' },
+                        { loader: 'webpack-preprocessor', options: JSON.stringify(preprocessor) }
+                    ]
                 },
                 {
                     test: /\.js$/,
                     exclude: /node_modules/,
-                    loader: `babel-loader!webpack-preprocessor?${JSON.stringify(preprocessor)}`
-
+                    use: [
+                        { loader: 'babel-loader', options: babel },
+                        { loader: 'webpack-preprocessor', options: JSON.stringify(preprocessor) }
+                    ]
                 },
                 {
                     test: /\.css$/,
