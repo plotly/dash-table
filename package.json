@@ -83,7 +83,7 @@
     "remarkable": "^1.7.1",
     "sheetclip": "^0.3.0",
     "style-loader": "^0.23.1",
-    "ts-loader": "^6.0.0",
+    "ts-loader": "^5.4.5",
     "tslint": "^5.16.0",
     "typescript": "^3.4.5",
     "wait-on": "^3.2.0",
