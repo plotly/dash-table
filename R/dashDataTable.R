@@ -14,3 +14,4 @@ dashDataTable <- function(active_cell=NULL, columns=NULL, locale_format=NULL, co
 
     structure(component, class = c('dash_component', 'list'))
 }
+
