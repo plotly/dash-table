@@ -205,14 +205,14 @@ jobs:
                     python -m venv venv || virtualenv venv
                     . venv/bin/activate
                     pip install -r requirements.txt --quiet
-                    git clone git@github.com:plotly/dash.git
-                    pip install -e ./dash --quiet
                     npm install
 
             - run:
                 name: Install dependencies (dash)
                 command: |
                     . venv/bin/activate
+                    git clone git@github.com:plotly/dash.git
+                    pip install -e ./dash --quiet
 
             - run:
                 name: Install test requirements
