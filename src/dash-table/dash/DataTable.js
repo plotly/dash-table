@@ -92,7 +92,7 @@ export const propTypes = {
         row: PropTypes.number,
         column: PropTypes.number,
         row_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        column_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        column_id: PropTypes.string
     }),
 
     /**
@@ -125,7 +125,7 @@ export const propTypes = {
          */
         deletable: PropTypes.oneOfType([
             PropTypes.bool,
-            PropTypes.number
+            PropTypes.arrayOf(PropTypes.bool)
         ]),
 
         /**
@@ -144,14 +144,14 @@ export const propTypes = {
         /**
          * If True, then the name of this column is editable.
          * If there are multiple column headers (if `name` is a list of strings),
-         * then `editable_name` can refer to _which_ column header should be
+         * then `renamable` can refer to _which_ column header should be
          * editable by setting it to the column header index.
          * Also, updating the name in a merged column header cell will
          * update the name of each column.
          */
-        editable_name: PropTypes.oneOfType([
+        renamable: PropTypes.oneOfType([
             PropTypes.bool,
-            PropTypes.number
+            PropTypes.arrayOf(PropTypes.bool)
         ]),
 
         /**
@@ -270,24 +270,6 @@ export const propTypes = {
             default: PropTypes.any,
             allow_YY: PropTypes.bool
         }),
-
-        /**
-         * DEPRECATED
-         * Please use `column_static_dropdown` instead.
-         * NOTE - Dropdown behavior will likely change in the future,
-         * subscribe to [https://github.com/plotly/dash-table/issues/168](https://github.com/plotly/dash-table/issues/168)
-         * for more information.
-         */
-        options: PropTypes.arrayOf(PropTypes.shape({
-            label: PropTypes.oneOfType([
-                PropTypes.number,
-                PropTypes.string
-            ]).isRequired,
-            value: PropTypes.oneOfType([
-                PropTypes.number,
-                PropTypes.string
-            ]).isRequired
-        })),
 
         /**
          * The data-type of the column's data.
@@ -432,7 +414,7 @@ export const propTypes = {
         row: PropTypes.number,
         column: PropTypes.number,
         row_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        column_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        column_id: PropTypes.string
     }),
 
     /**
@@ -513,7 +495,7 @@ export const propTypes = {
         row: PropTypes.number,
         column: PropTypes.number,
         row_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        column_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        column_id: PropTypes.string
     })),
 
     /**
@@ -545,7 +527,7 @@ export const propTypes = {
         row: PropTypes.number,
         column: PropTypes.number,
         row_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        column_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        column_id: PropTypes.string
     }),
 
     /**
@@ -894,7 +876,7 @@ export const propTypes = {
     sort_by: PropTypes.arrayOf(
         // .exact
         PropTypes.shape({
-            column_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+            column_id: PropTypes.string.isRequired,
             direction: PropTypes.oneOf(['asc', 'desc']).isRequired
         })),
 
@@ -952,7 +934,7 @@ export const propTypes = {
     style_cell_conditional: PropTypes.arrayOf(PropTypes.shape({
         // .exact
         if: PropTypes.shape({
-            column_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+            column_id: PropTypes.string,
             column_type: PropTypes.oneOf(['any', 'numeric', 'text', 'datetime'])
         })
     })),
@@ -965,7 +947,7 @@ export const propTypes = {
     style_data_conditional: PropTypes.arrayOf(PropTypes.shape({
         // .exact
         if: PropTypes.shape({
-            column_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+            column_id: PropTypes.string,
             column_type: PropTypes.oneOf(['any', 'numeric', 'text', 'datetime']),
             filter: PropTypes.string,
             row_index: PropTypes.oneOfType([
@@ -983,7 +965,7 @@ export const propTypes = {
     style_filter_conditional: PropTypes.arrayOf(PropTypes.shape({
         // .exact
         if: PropTypes.shape({
-            column_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+            column_id: PropTypes.string,
             column_type: PropTypes.oneOf(['any', 'numeric', 'text', 'datetime'])
         })
     })),
@@ -996,7 +978,7 @@ export const propTypes = {
     style_header_conditional: PropTypes.arrayOf(PropTypes.shape({
         // .exact
         if: PropTypes.shape({
-            column_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+            column_id: PropTypes.string,
             column_type: PropTypes.oneOf(['any', 'numeric', 'text', 'datetime']),
             header_index: PropTypes.oneOfType([
                 PropTypes.number,
@@ -1121,14 +1103,7 @@ export const propTypes = {
      */
     derived_virtual_selected_row_ids: PropTypes.arrayOf(
         PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-    ),
-
-    /**
-     * DEPRECATED
-     * Subscribe to [https://github.com/plotly/dash-table/issues/168](https://github.com/plotly/dash-table/issues/168)
-     * for updates on the dropdown API.
-     */
-     dropdown_properties: PropTypes.any
+    )
 };
 
 DataTable.defaultProps = defaultProps;

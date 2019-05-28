@@ -60,23 +60,20 @@ class Dropdowns {
         columnStaticDropdown: any,
         dropdown_properties: any
     ): [any, any] => {
-        let legacyDropdown = (
+        const legacyDropdown =
+            dropdown_properties &&
+            dropdown_properties[column.id] &&
             (
-                dropdown_properties &&
-                dropdown_properties[column.id] &&
-                (
-                    dropdown_properties[column.id].length > realIndex ?
-                        dropdown_properties[column.id][realIndex] :
-                        null
-                )
-            ) || column
-        ).options;
+                dropdown_properties[column.id].length > realIndex ?
+                    dropdown_properties[column.id][realIndex] :
+                    null
+            );
 
         const conditional = columnConditionalDropdown.find((cs: any) => cs.id === column.id);
         const base = columnStaticDropdown.find((ss: any) => ss.id === column.id);
 
         return [
-            legacyDropdown || (base && base.dropdown),
+            (legacyDropdown && legacyDropdown.options) || (base && base.dropdown),
             (conditional && conditional.dropdowns) || []
         ];
     });

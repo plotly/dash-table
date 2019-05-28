@@ -60,7 +60,7 @@ export interface ICellCoordinates {
     column_id: ColumnId;
 }
 
-export type ColumnId = string | number;
+export type ColumnId = string;
 export type Columns = IColumn[];
 export type Data = Datum[];
 export type Datum =  IDatumObject | any;
@@ -156,12 +156,11 @@ export interface IDatetimeColumn extends ITypeColumn {
 
 export interface IBaseVisibleColumn {
     clearable?: boolean;
-    deletable?: boolean | number;
+    deletable?: boolean | boolean[];
     editable?: boolean;
-    editable_name?: boolean | number;
+    renamable?: boolean | boolean[];
     id: ColumnId;
     name: string | string[];
-    options?: IDropdownValue[]; // legacy
 }
 
 export type IColumnType = INumberColumn | ITextColumn | IDatetimeColumn | IAnyColumn;
@@ -187,7 +186,7 @@ interface IConditionalDropdown {
     dropdown: IDropdownValue[];
 }
 
-export  interface IColumnDropdown {
+export interface IColumnDropdown {
     id: string;
     dropdown: IDropdownValue[];
 }
