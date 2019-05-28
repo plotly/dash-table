@@ -2,7 +2,7 @@ import * as R from 'ramda';
 import { CSSProperties } from 'react';
 
 import { memoizeOneFactory } from 'core/memoizer';
-import { Data, VisibleColumns, IViewportOffset } from 'dash-table/components/Table/props';
+import { Data, VisibleColumns, IViewportOffset, SelectedCells } from 'dash-table/components/Table/props';
 import { IConvertedStyle } from '../style';
 import { BORDER_PROPERTIES_AND_FRAGMENTS } from '../edges/type';
 
@@ -12,7 +12,8 @@ function getter(
     columns: VisibleColumns,
     columnStyles: IConvertedStyle[],
     data: Data,
-    offset: IViewportOffset
+    offset: IViewportOffset,
+    selectedCells: SelectedCells
 ): Style[][] {
     return R.addIndex<any, Style[]>(R.map)((datum, index) => R.map(column => {
         const relevantStyles = R.map(
@@ -25,7 +26,10 @@ function getter(
                 columnStyles
             )
         );
-
+        let isSelectedCell: boolean = selectedCells.some(cell => cell.row === index && cell.column_id === column.id);
+        if (isSelectedCell === true) {
+            relevantStyles.push({backgroundColor:  'var(--selected-background)'});
+        }
         return relevantStyles.length ?
             R.omit(
                 BORDER_PROPERTIES_AND_FRAGMENTS,
