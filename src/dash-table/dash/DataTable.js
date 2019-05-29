@@ -36,7 +36,6 @@ export const defaultProps = {
         current_page: 0,
         page_size: 250
     },
-    navigation: 'page',
 
     content_style: 'grow',
     css: [],
@@ -564,11 +563,6 @@ export const propTypes = {
         current_page: PropTypes.number.isRequired,
         page_size: PropTypes.number.isRequired
     }),
-
-    /**
-     * DEPRECATED
-     */
-    navigation: PropTypes.string,
 
     /**
      * `column_conditional_dropdowns` specifies the available options

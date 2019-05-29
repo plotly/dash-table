@@ -67,7 +67,6 @@ export type Datum =  IDatumObject | any;
 export type Filtering = 'fe' | 'be' | boolean;
 export type Indices = number[];
 export type RowId = string | number;
-export type Navigation = 'page';
 export type PaginationMode = 'fe' | 'be' | boolean;
 export type RowSelection = 'single' | 'multi' | false;
 export type SelectedCells = ICellCoordinates[];
@@ -289,7 +288,6 @@ export interface IProps {
     filtering_types?: FilteringType[];
     locale_format: INumberLocale;
     merge_duplicate_headers?: boolean;
-    navigation?: Navigation;
     n_fixed_columns?: number;
     n_fixed_rows?: number;
     row_deletable?: boolean;
@@ -332,7 +330,6 @@ interface IDefaultProps {
     filtering_type: FilteringType;
     filtering_types: FilteringType[];
     merge_duplicate_headers: boolean;
-    navigation: Navigation;
     n_fixed_columns: number;
     n_fixed_rows: number;
     row_deletable: boolean;
