@@ -4,23 +4,20 @@ import { memoizeOne } from 'core/memoizer';
 import memoizerCache from 'core/cache/memoizer';
 
 import {
-    IConditionalDropdown
-} from 'dash-table/components/CellDropdown/types';
-
-import {
     Data,
     Datum,
     VisibleColumns,
     ColumnId,
     Indices,
-    IBaseVisibleColumn,
     IVisibleColumn,
     IDataDropdowns,
-    IColumnDropdowns,
-    IConditionalColumnDropdown,
-    IDropdown
+    IStaticDropdowns,
+    ConditionalDropdowns,
+    IDropdown,
+    IConditionalDropdown
 } from 'dash-table/components/Table/props';
 import { QuerySyntaxTree } from 'dash-table/syntax-tree';
+import { ifColumnId } from 'dash-table/conditional';
 
 const mapData = R.addIndex<Datum, (IDropdown | undefined)[]>(R.map);
 
@@ -34,82 +31,56 @@ class Dropdowns {
         columns: VisibleColumns,
         data: Data,
         indices: Indices,
-        columnConditionalDropdown: IConditionalColumnDropdown[],
-        columnStaticDropdown: IColumnDropdowns,
-        dropdown_data: IDataDropdowns
+        conditionalDropdowns: ConditionalDropdowns,
+        staticDropdowns: IStaticDropdowns,
+        dataDropdowns: IDataDropdowns
     ) => mapData((datum, rowIndex) => R.map(column => {
-        const applicable = this.applicable.get(column.id, rowIndex)(
-            column,
-            indices[rowIndex],
-            columnConditionalDropdown,
-            columnStaticDropdown,
-            dropdown_data
-        );
+        const realIndex = indices[rowIndex];
+
+        const appliedStaticDropdown = (
+            dataDropdowns &&
+            dataDropdowns[column.id] &&
+            dataDropdowns[column.id].length > realIndex &&
+            dataDropdowns[column.id][realIndex] &&
+            dataDropdowns[column.id][realIndex]
+        ) || staticDropdowns[column.id] || null;
 
         return this.dropdown.get(column.id, rowIndex)(
-            applicable,
+            appliedStaticDropdown,
+            conditionalDropdowns,
             column,
             datum
         );
     }, columns), data));
 
     /**
-     * Returns the list of applicable dropdowns for a cell.
-     */
-    private readonly applicable = memoizerCache<[ColumnId, number]>()((
-        column: IBaseVisibleColumn,
-        realIndex: number,
-        columnConditionalDropdown: IConditionalColumnDropdown[],
-        columnStaticDropdown: IColumnDropdowns,
-        dropdown_data: IDataDropdowns
-    ): [IDropdown | null, IConditionalDropdown[]] => {
-        const legacyDropdown =
-            dropdown_data &&
-            dropdown_data[column.id] &&
-            dropdown_data[column.id].length > realIndex &&
-            dropdown_data[column.id][realIndex] &&
-            dropdown_data[column.id][realIndex];
-
-        const conditional = columnConditionalDropdown.find((cs: any) => cs.id === column.id);
-        const base = columnStaticDropdown[column.id];
-
-        return [
-            legacyDropdown || base || null,
-            (conditional && conditional.dropdowns) || []
-        ];
-    });
-
-    /**
      * Returns the highest priority dropdown from the
      * applicable dropdowns.
      */
     private readonly dropdown = memoizerCache<[ColumnId, number]>()((
-        applicableDropdowns: [IDropdown | null, IConditionalDropdown[]],
+        base: IDropdown | null,
+        conditionals: ConditionalDropdowns,
         column: IVisibleColumn,
         datum: Datum
     ) => {
-        const [staticDropdown, conditionalDropdowns] = applicableDropdowns;
-
-        const matches: IDropdown[] = [];
-
-        if (staticDropdown) {
-            matches.push(staticDropdown);
-        }
-
-        matches.push(...R.map(
-            ([cd]) => cd,
-            R.filter<[IConditionalDropdown, number]>(
-                ([cd, i]) => this.evaluation.get(column.id, i)(
-                    this.ast.get(column.id, i)(cd.condition),
-                    datum
+        const conditional = R.findLast(
+            ([cd, i]) =>
+                ifColumnId(cd.if, column.id) &&
+                (
+                    R.isNil(cd.if) ||
+                    R.isNil(cd.if.filter) ||
+                    this.evaluation.get(column.id, i)(
+                        this.ast.get(column.id, i)(cd.if.filter),
+                        datum
+                    )
                 ),
-                R.addIndex<IConditionalDropdown, [IConditionalDropdown, number]>(R.map)(
-                    (cd, i) => [cd, i],
-                    conditionalDropdowns
-                ))
-        ));
+            R.addIndex<IConditionalDropdown, [IConditionalDropdown, number]>(R.map)(
+                (cd, i) => [cd, i],
+                conditionals
+            )
+        );
 
-        return matches.length ? matches.slice(-1)[0] : undefined;
+        return (conditional && conditional[0]) || base || undefined;
     });
 
     /**

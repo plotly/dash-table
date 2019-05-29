@@ -13,6 +13,7 @@ import {
     Tooltip
 } from 'dash-table/tooltips/props';
 import { SingleColumnSyntaxTree } from 'dash-table/syntax-tree';
+import { IConditionalElement, INamedElement } from 'dash-table/conditional';
 
 export enum ColumnType {
     Any = 'any',
@@ -184,25 +185,18 @@ export interface IDropdown {
     dropdown: DropdownValues;
 }
 
-interface IConditionalDropdown extends IDropdown {
-    condition: string;
+export interface IConditionalDropdown extends IDropdown {
+    if: Partial<IConditionalElement & INamedElement>;
 }
+
+export type ConditionalDropdowns = IConditionalDropdown[];
 
 export interface IDataDropdowns {
     [key: string]: (IDropdown | undefined)[];
 }
 
-export interface IColumnDropdowns {
+export interface IStaticDropdowns {
     [key: string]: IDropdown;
-}
-
-export interface IConditionalColumnDropdown {
-    id: string;
-    dropdowns: IConditionalDropdown[];
-}
-
-export interface IDropdownProperties {
-    [key: string]: { options: DropdownValues }[];
 }
 
 export interface ITableTooltips {
@@ -274,8 +268,8 @@ export interface IProps {
 
     active_cell?: ICellCoordinates;
     columns?: Columns;
-    dropdown?: IColumnDropdowns;
-    dropdown_conditional?: IConditionalColumnDropdown[];
+    dropdown?: IStaticDropdowns;
+    dropdown_conditional?: ConditionalDropdowns;
     dropdown_data: IDataDropdowns;
     content_style: ContentStyle;
     css?: IStylesheetRule[];
@@ -319,8 +313,8 @@ export interface IProps {
 interface IDefaultProps {
     active_cell: ICellCoordinates;
     columns: Columns;
-    dropdown: IColumnDropdowns;
-    dropdown_conditional: IConditionalColumnDropdown[];
+    dropdown: IStaticDropdowns;
+    dropdown_conditional: ConditionalDropdowns;
     dropdown_data: IDataDropdowns;
     css: IStylesheetRule[];
     data: Data;
@@ -396,8 +390,8 @@ export type ControlledTableProps = PropsWithDefaults & IState & {
 export interface ICellFactoryProps {
     active_cell: ICellCoordinates;
     columns: VisibleColumns;
-    dropdown: IColumnDropdowns;
-    dropdown_conditional: IConditionalColumnDropdown[];
+    dropdown: IStaticDropdowns;
+    dropdown_conditional: ConditionalDropdowns;
     dropdown_data: IDataDropdowns;
     column_static_tooltip: ITableStaticTooltips;
     data: Data;

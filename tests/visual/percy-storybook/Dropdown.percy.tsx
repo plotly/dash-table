@@ -58,26 +58,33 @@ storiesOf('DashTable/Dropdown', module)
         columns={columns2}
         editable={true}
         dropdown_conditional={[{
-            id: 'Neighborhood',
-            dropdowns: [{
-                condition: '{City} eq "NYC"',
-                dropdown: R.map(
-                    i => ({ label: i, value: i }),
-                    ['Brooklyn', 'Queens', 'Staten Island']
-                )
-            }, {
-                condition: '{City} eq "Montreal"',
-                dropdown: R.map(
-                    i => ({ label: i, value: i }),
-                    ['Mile End', 'Plateau', 'Hochelaga']
-                )
-            }, {
-                condition: '{City} eq "Los Angeles"',
-                dropdown: R.map(
-                    i => ({ label: i, value: i }),
-                    ['Venice', 'Hollywood', 'Los Feliz']
-                )
-            }]
+            if: {
+                column_id: 'Neighborhood',
+                filter: '{City} eq "NYC"'
+            },
+            dropdown: R.map(
+                i => ({ label: i, value: i }),
+                ['Brooklyn', 'Queens', 'Staten Island']
+            )
+        }, {
+            if: {
+                column_id: 'Neighborhood',
+                filter: '{City} eq "Montreal"'
+            },
+            dropdown: R.map(
+                i => ({ label: i, value: i }),
+                ['Mile End', 'Plateau', 'Hochelaga']
+            )
+        },
+        {
+            if: {
+                column_id: 'Neighborhood',
+                filter: '{City} eq "Los Angeles"'
+            },
+            dropdown: R.map(
+                i => ({ label: i, value: i }),
+                ['Venice', 'Hollywood', 'Los Feliz']
+            )
         }]}
     />)).add('dropdown by cell (deprecated)', () => (<DataTable
         setProps={setProps}

@@ -576,10 +576,9 @@ export const propTypes = {
      * in the future.
      * Tune in to [https://github.com/plotly/dash-table/issues/168](https://github.com/plotly/dash-table/issues/168)
      */
-    dropdown: PropTypes.objectOf(PropTypes.shape({
+    dropdown: PropTypes.objectOf(PropTypes.exact({
         clearable: PropTypes.bool,
-        // .exact
-        dropdown: PropTypes.arrayOf(PropTypes.shape({
+        dropdown: PropTypes.arrayOf(PropTypes.exact({
             label: PropTypes.string.isRequired,
             value: PropTypes.oneOfType([
                 PropTypes.number,
@@ -600,20 +599,18 @@ export const propTypes = {
      * in the future.
      * Tune in to [https://github.com/plotly/dash-table/issues/168](https://github.com/plotly/dash-table/issues/168)
      */
-    dropdown_conditional: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        // .exact
-        dropdowns: PropTypes.arrayOf(PropTypes.shape({
-            clearable: PropTypes.bool,
-            condition: PropTypes.string.isRequired,
-            // .exact
-            dropdown: PropTypes.arrayOf(PropTypes.shape({
-                label: PropTypes.string.isRequired,
-                value: PropTypes.oneOfType([
-                    PropTypes.number,
-                    PropTypes.string
-                ]).isRequired
-            })).isRequired
+    dropdown_conditional: PropTypes.arrayOf(PropTypes.exact({
+        clearable: PropTypes.bool,
+        if: PropTypes.exact({
+            column_id: PropTypes.string,
+            filter: PropTypes.string,
+        }),
+        dropdown: PropTypes.arrayOf(PropTypes.exact({
+            label: PropTypes.string.isRequired,
+            value: PropTypes.oneOfType([
+                PropTypes.number,
+                PropTypes.string
+            ]).isRequired
         })).isRequired
     })),
 
@@ -622,10 +619,9 @@ export const propTypes = {
      */
     dropdown_data: PropTypes.objectOf(
         PropTypes.arrayOf(
-            PropTypes.shape({
+            PropTypes.exact({
                 clearable: PropTypes.bool,
-                // .exact
-                dropdown: PropTypes.arrayOf(PropTypes.shape({
+                dropdown: PropTypes.arrayOf(PropTypes.exact({
                     label: PropTypes.string.isRequired,
                     value: PropTypes.oneOfType([
                         PropTypes.number,
@@ -879,8 +875,7 @@ export const propTypes = {
      * clicked.
      */
     sort_by: PropTypes.arrayOf(
-        // .exact
-        PropTypes.shape({
+        PropTypes.exact({
             column_id: PropTypes.string.isRequired,
             direction: PropTypes.oneOf(['asc', 'desc']).isRequired
         })),
@@ -937,8 +932,7 @@ export const propTypes = {
      * This can be used to apply styles to cells on a per-column basis.
      */
     style_cell_conditional: PropTypes.arrayOf(PropTypes.shape({
-        // .exact
-        if: PropTypes.shape({
+        if: PropTypes.exact({
             column_id: PropTypes.string,
             column_type: PropTypes.oneOf(['any', 'numeric', 'text', 'datetime'])
         })
@@ -950,8 +944,7 @@ export const propTypes = {
      * This can be used to apply styles to data cells on a per-column basis.
      */
     style_data_conditional: PropTypes.arrayOf(PropTypes.shape({
-        // .exact
-        if: PropTypes.shape({
+        if: PropTypes.exact({
             column_id: PropTypes.string,
             column_type: PropTypes.oneOf(['any', 'numeric', 'text', 'datetime']),
             filter: PropTypes.string,
@@ -968,8 +961,7 @@ export const propTypes = {
      * This can be used to apply styles to filter cells on a per-column basis.
      */
     style_filter_conditional: PropTypes.arrayOf(PropTypes.shape({
-        // .exact
-        if: PropTypes.shape({
+        if: PropTypes.exact({
             column_id: PropTypes.string,
             column_type: PropTypes.oneOf(['any', 'numeric', 'text', 'datetime'])
         })
@@ -981,8 +973,7 @@ export const propTypes = {
      * This can be used to apply styles to header cells on a per-column basis.
      */
     style_header_conditional: PropTypes.arrayOf(PropTypes.shape({
-        // .exact
-        if: PropTypes.shape({
+        if: PropTypes.exact({
             column_id: PropTypes.string,
             column_type: PropTypes.oneOf(['any', 'numeric', 'text', 'datetime']),
             header_index: PropTypes.oneOfType([
