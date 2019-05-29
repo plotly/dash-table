@@ -15,7 +15,7 @@ function getter(
     offset: IViewportOffset,
     selectedCells: SelectedCells
 ): Style[][] {
-    return R.addIndex<any, Style[]>(R.map)((datum, index) => R.map(column => {
+    return R.addIndex<any, Style[]>(R.map)((datum, index) => R.addIndex<any, Style>(R.map)((column, columnIndex) => {
         const relevantStyles = R.map(
             s => s.style,
             R.filter<IConvertedStyle>(
@@ -26,7 +26,7 @@ function getter(
                 columnStyles
             )
         );
-        let isSelectedCell: boolean = selectedCells.some(cell => cell.row === index && cell.column_id === column.id);
+        let isSelectedCell: boolean = selectedCells.some(cell => cell.row === index && cell.column === columnIndex);
         if (isSelectedCell === true) {
             relevantStyles.push({backgroundColor:  'var(--selected-background)'});
         }
