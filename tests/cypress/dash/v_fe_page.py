@@ -41,7 +41,6 @@ app.layout = html.Div(
                 "current_page": 0,
                 "page_size": 250,
             },
-            navigation="page",
             columns=[
                 {"id": 0, "name": "Complaint ID"},
                 {"id": 1, "name": "Product"},

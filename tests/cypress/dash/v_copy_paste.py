@@ -29,7 +29,6 @@ app.layout = html.Div(
         dash_table.DataTable(
             id="table",
             data=df[0:250],
-            navigation="page",
             columns=[
                 {"id": 0, "name": "Complaint ID"},
                 {"id": 1, "name": "Product"},
