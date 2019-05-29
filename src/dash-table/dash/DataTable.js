@@ -1103,7 +1103,14 @@ export const propTypes = {
      */
     derived_virtual_selected_row_ids: PropTypes.arrayOf(
         PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-    )
+    ),
+
+    /**
+     * DEPRECATED
+     * Subscribe to [https://github.com/plotly/dash-table/issues/168](https://github.com/plotly/dash-table/issues/168)
+     * for updates on the dropdown API.
+     */
+    dropdown_properties: PropTypes.any
 };
 
 DataTable.defaultProps = defaultProps;
