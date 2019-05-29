@@ -49,15 +49,15 @@ function getBaseTableProps(mock: IDataMock) {
             renamable: true,
             deletable: true
         })),
-        column_static_dropdown: [
-            {
-                id: 'bbb',
+        dropdown: {
+            bbb: {
+                clearable: true,
                 dropdown: ['Humid', 'Wet', 'Snowy', 'Tropical Beaches'].map(i => ({
                     label: i,
                     value: i
                 }))
             }
-        ],
+        },
         pagination_mode: false,
         style_table: {
             max_height: '800px',
