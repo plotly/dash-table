@@ -603,7 +603,7 @@ export const propTypes = {
         clearable: PropTypes.bool,
         if: PropTypes.exact({
             column_id: PropTypes.string,
-            filter: PropTypes.string,
+            filter: PropTypes.string
         }),
         dropdown: PropTypes.arrayOf(PropTypes.exact({
             label: PropTypes.string.isRequired,
