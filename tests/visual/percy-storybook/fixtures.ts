@@ -548,7 +548,7 @@ export default [
                     name: ['City', 'NYC'],
                     id: 'city-nyc',
                     deletable: true,
-                    editable_name: true
+                    renamable: true
                 },
                 {
                     name: ['City', 'SF'],
@@ -558,7 +558,7 @@ export default [
                 {
                     name: ['Weather', 'Rainy'],
                     id: 'weather-rainy',
-                    editable_name: true
+                    renamable: true
                 },
                 {
                     name: ['Weather', 'Sunny'],
@@ -568,7 +568,7 @@ export default [
                     name: ['Village', 'NYC'],
                     id: 'village-nyc',
                     deletable: true,
-                    editable_name: 0
+                    renamable: [true, false]
                 },
                 {
                     name: ['Village', 'SF'],
@@ -578,7 +578,7 @@ export default [
                 {
                     name: ['Climate', 'Rainy'],
                     id: 'climate-rainy',
-                    editable_name: 1
+                    renamable: [false, true]
                 },
                 {
                     name: ['Climate', 'Sunny'],

@@ -46,7 +46,7 @@ function getBaseTableProps(mock: IDataMock) {
             on_change: {
                 action: ChangeAction.None
             },
-            editable_name: true,
+            renamable: true,
             deletable: true
         })),
         column_static_dropdown: [
