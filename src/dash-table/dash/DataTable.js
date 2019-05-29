@@ -59,8 +59,9 @@ export const defaultProps = {
     derived_virtual_selected_rows: [],
     derived_virtual_selected_row_ids: [],
 
-    column_conditional_dropdowns: [],
-    column_static_dropdown: [],
+    column_dropdown: {},
+    column_dropdown_conditional: [],
+    column_dropdown_data: {},
 
     column_static_tooltip: {},
     column_conditional_tooltips: [],
@@ -565,7 +566,30 @@ export const propTypes = {
     }),
 
     /**
-     * `column_conditional_dropdowns` specifies the available options
+     * `column_dropdown` represents the available dropdown
+     * options for different columns.
+     * The `id` property refers to the column ID.
+     * The `dropdown` property refers to the `options` of the
+     * dropdown.
+     *
+     * NOTE: The naming and the behavior of this option may change
+     * in the future.
+     * Tune in to [https://github.com/plotly/dash-table/issues/168](https://github.com/plotly/dash-table/issues/168)
+     */
+    column_dropdown: PropTypes.objectOf(PropTypes.shape({
+        clearable: PropTypes.bool,
+        // .exact
+        dropdown: PropTypes.arrayOf(PropTypes.shape({
+            label: PropTypes.string.isRequired,
+            value: PropTypes.oneOfType([
+                PropTypes.number,
+                PropTypes.string
+            ]).isRequired
+        })).isRequired
+    })),
+
+    /**
+     * `column_dropdown_conditional` specifies the available options
      * for dropdowns in various columns and cells.
      * This property allows you to specify different dropdowns
      * depending on certain conditions. For example, you may
@@ -576,7 +600,7 @@ export const propTypes = {
      * in the future.
      * Tune in to [https://github.com/plotly/dash-table/issues/168](https://github.com/plotly/dash-table/issues/168)
      */
-    column_conditional_dropdowns: PropTypes.arrayOf(PropTypes.shape({
+    column_dropdown_conditional: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.string.isRequired,
         // .exact
         dropdowns: PropTypes.arrayOf(PropTypes.shape({
@@ -592,29 +616,25 @@ export const propTypes = {
             })).isRequired
         })).isRequired
     })),
+
     /**
-     * `column_static_dropdown` represents the available dropdown
-     * options for different columns.
-     * The `id` property refers to the column ID.
-     * The `dropdown` property refers to the `options` of the
-     * dropdown.
      *
-     * NOTE: The naming and the behavior of this option may change
-     * in the future.
-     * Tune in to [https://github.com/plotly/dash-table/issues/168](https://github.com/plotly/dash-table/issues/168)
      */
-    column_static_dropdown: PropTypes.arrayOf(PropTypes.shape({
-        clearable: PropTypes.bool,
-        id: PropTypes.string.isRequired,
-        // .exact
-        dropdown: PropTypes.arrayOf(PropTypes.shape({
-            label: PropTypes.string.isRequired,
-            value: PropTypes.oneOfType([
-                PropTypes.number,
-                PropTypes.string
-            ]).isRequired
-        })).isRequired
-    })),
+    column_dropdown_data: PropTypes.objectOf(
+        PropTypes.arrayOf(
+            PropTypes.shape({
+                clearable: PropTypes.bool,
+                // .exact
+                dropdown: PropTypes.arrayOf(PropTypes.shape({
+                    label: PropTypes.string.isRequired,
+                    value: PropTypes.oneOfType([
+                        PropTypes.number,
+                        PropTypes.string
+                    ]).isRequired
+                })).isRequired
+            })
+        )
+    ),
 
     /**
      * `column_static_tooltip` represents the tooltip shown
@@ -1088,25 +1108,6 @@ export const propTypes = {
      */
     derived_virtual_selected_row_ids: PropTypes.arrayOf(
         PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-    ),
-
-    /**
-     *
-     */
-    dropdown_properties: PropTypes.objectOf(
-        PropTypes.arrayOf(
-            PropTypes.shape({
-                clearable: PropTypes.bool,
-                // .exact
-                dropdown: PropTypes.arrayOf(PropTypes.shape({
-                    label: PropTypes.string.isRequired,
-                    value: PropTypes.oneOfType([
-                        PropTypes.number,
-                        PropTypes.string
-                    ]).isRequired
-                })).isRequired
-            })
-        )
     )
 };
 

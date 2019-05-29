@@ -13,7 +13,7 @@ export default [
                     presentation: Presentation.Dropdown
                 }
             ],
-            column_static_dropdown: [{
+            column_dropdown: [{
                 id: 'column-1',
                 dropdown: [
                     {
@@ -142,7 +142,7 @@ export default [
                     presentation: Presentation.Dropdown
                 }
             ],
-            column_static_dropdown: [{
+            column_dropdown: [{
                 id: 'column-1',
                 dropdown: [
                     {
@@ -194,7 +194,7 @@ export default [
                     presentation: Presentation.Dropdown
                 }
             ],
-            column_static_dropdown: [{
+            column_dropdown: [{
                 id: 'column-1',
                 dropdown: [
                     {
@@ -272,7 +272,7 @@ export default [
                     presentation: Presentation.Dropdown
                 }
             ],
-            column_static_dropdown: [{
+            column_dropdown: [{
                 id: 'region',
                 dropdown: [
                     {

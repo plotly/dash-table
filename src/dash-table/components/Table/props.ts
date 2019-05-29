@@ -188,13 +188,12 @@ interface IConditionalDropdown extends IDropdown {
     condition: string;
 }
 
-export interface IColumnDropdown extends IDropdown {
-    clearable?: boolean;
-    dropdown: DropdownValues;
-}
-
 export interface IDataDropdowns {
     [key: string]: (IDropdown | undefined)[];
+}
+
+export interface IColumnDropdowns {
+    [key: string]: IDropdown;
 }
 
 export interface IConditionalColumnDropdown {
@@ -275,12 +274,12 @@ export interface IProps {
 
     active_cell?: ICellCoordinates;
     columns?: Columns;
-    column_conditional_dropdowns?: IConditionalColumnDropdown[];
-    column_static_dropdown?: IColumnDropdown[];
+    column_dropdown?: IColumnDropdowns;
+    column_dropdown_conditional?: IConditionalColumnDropdown[];
+    column_dropdown_data: IDataDropdowns;
     content_style: ContentStyle;
     css?: IStylesheetRule[];
     data?: Data;
-    dropdown_properties: IDataDropdowns;
     editable?: boolean;
     filter?: string;
     filtering?: Filtering;
@@ -320,8 +319,9 @@ export interface IProps {
 interface IDefaultProps {
     active_cell: ICellCoordinates;
     columns: Columns;
-    column_conditional_dropdowns: IConditionalColumnDropdown[];
-    column_static_dropdown: IColumnDropdown[];
+    column_dropdown: IColumnDropdowns;
+    column_dropdown_conditional: IConditionalColumnDropdown[];
+    column_dropdown_data: IDataDropdowns;
     css: IStylesheetRule[];
     data: Data;
     editable: boolean;
@@ -396,12 +396,11 @@ export type ControlledTableProps = PropsWithDefaults & IState & {
 export interface ICellFactoryProps {
     active_cell: ICellCoordinates;
     columns: VisibleColumns;
-    column_conditional_dropdowns: IConditionalColumnDropdown[];
-    column_conditional_tooltips: ConditionalTooltip[];
-    column_static_dropdown: IColumnDropdown[];
+    column_dropdown: IColumnDropdowns;
+    column_dropdown_conditional: IConditionalColumnDropdown[];
+    column_dropdown_data: IDataDropdowns;
     column_static_tooltip: ITableStaticTooltips;
     data: Data;
-    dropdown_properties: IDataDropdowns;
     editable: boolean;
     id: string;
     is_focused?: boolean;

@@ -36,19 +36,20 @@ storiesOf('DashTable/Dropdown', module)
         data={data}
         columns={columns}
         editable={true}
-        column_static_dropdown={[{
-            id: 'climate',
-            dropdown: R.map(
-                i => ({ label: i, value: i }),
-                ['Sunny', 'Snowy', 'Rainy']
-            )
-        }, {
-            id: 'city',
-            dropdown: R.map(
-                i => ({ label: i, value: i }),
-                ['NYC', 'Montreal', 'Miami']
-            )
-        }]}
+        column_dropdown={{
+            climate: {
+                dropdown: R.map(
+                    i => ({ label: i, value: i }),
+                    ['Sunny', 'Snowy', 'Rainy']
+                )
+            },
+            city: {
+                dropdown: R.map(
+                    i => ({ label: i, value: i }),
+                    ['NYC', 'Montreal', 'Miami']
+                )
+            }
+        }}
     />))
     .add('dropdown by filtering', () => (<DataTable
         setProps={setProps}
@@ -56,7 +57,7 @@ storiesOf('DashTable/Dropdown', module)
         data={data2}
         columns={columns2}
         editable={true}
-        column_conditional_dropdowns={[{
+        column_dropdown_conditional={[{
             id: 'Neighborhood',
             dropdowns: [{
                 condition: '{City} eq "NYC"',
@@ -84,7 +85,7 @@ storiesOf('DashTable/Dropdown', module)
         data={data2}
         columns={columns2}
         editable={true}
-        dropdown_properties={{
+        column_dropdown_data={{
             Neighborhood: [{
                 dropdown: R.map(
                     i => ({ label: i, value: i }),

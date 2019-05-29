@@ -16,7 +16,7 @@ import {
     IBaseVisibleColumn,
     IVisibleColumn,
     IDataDropdowns,
-    IColumnDropdown,
+    IColumnDropdowns,
     IConditionalColumnDropdown,
     IDropdown
 } from 'dash-table/components/Table/props';
@@ -35,15 +35,15 @@ class Dropdowns {
         data: Data,
         indices: Indices,
         columnConditionalDropdown: IConditionalColumnDropdown[],
-        columnStaticDropdown: IColumnDropdown[],
-        dropdown_properties: IDataDropdowns
+        columnStaticDropdown: IColumnDropdowns,
+        column_dropdown_data: IDataDropdowns
     ) => mapData((datum, rowIndex) => R.map(column => {
         const applicable = this.applicable.get(column.id, rowIndex)(
             column,
             indices[rowIndex],
             columnConditionalDropdown,
             columnStaticDropdown,
-            dropdown_properties
+            column_dropdown_data
         );
 
         return this.dropdown.get(column.id, rowIndex)(
@@ -60,18 +60,18 @@ class Dropdowns {
         column: IBaseVisibleColumn,
         realIndex: number,
         columnConditionalDropdown: IConditionalColumnDropdown[],
-        columnStaticDropdown: IColumnDropdown[],
-        dropdown_properties: IDataDropdowns
+        columnStaticDropdown: IColumnDropdowns,
+        column_dropdown_data: IDataDropdowns
     ): [IDropdown | null, IConditionalDropdown[]] => {
         const legacyDropdown =
-            dropdown_properties &&
-            dropdown_properties[column.id] &&
-            dropdown_properties[column.id].length > realIndex &&
-            dropdown_properties[column.id][realIndex] &&
-            dropdown_properties[column.id][realIndex];
+            column_dropdown_data &&
+            column_dropdown_data[column.id] &&
+            column_dropdown_data[column.id].length > realIndex &&
+            column_dropdown_data[column.id][realIndex] &&
+            column_dropdown_data[column.id][realIndex];
 
         const conditional = columnConditionalDropdown.find((cs: any) => cs.id === column.id);
-        const base = columnStaticDropdown.find((ss: any) => ss.id === column.id);
+        const base = columnStaticDropdown[column.id];
 
         return [
             legacyDropdown || base || null,
