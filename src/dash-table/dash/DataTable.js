@@ -59,9 +59,9 @@ export const defaultProps = {
     derived_virtual_selected_rows: [],
     derived_virtual_selected_row_ids: [],
 
-    column_dropdown: {},
-    column_dropdown_conditional: [],
-    column_dropdown_data: {},
+    dropdown: {},
+    dropdown_conditional: [],
+    dropdown_data: {},
 
     column_static_tooltip: {},
     column_conditional_tooltips: [],
@@ -566,7 +566,7 @@ export const propTypes = {
     }),
 
     /**
-     * `column_dropdown` represents the available dropdown
+     * `dropdown` represents the available dropdown
      * options for different columns.
      * The `id` property refers to the column ID.
      * The `dropdown` property refers to the `options` of the
@@ -576,7 +576,7 @@ export const propTypes = {
      * in the future.
      * Tune in to [https://github.com/plotly/dash-table/issues/168](https://github.com/plotly/dash-table/issues/168)
      */
-    column_dropdown: PropTypes.objectOf(PropTypes.shape({
+    dropdown: PropTypes.objectOf(PropTypes.shape({
         clearable: PropTypes.bool,
         // .exact
         dropdown: PropTypes.arrayOf(PropTypes.shape({
@@ -589,7 +589,7 @@ export const propTypes = {
     })),
 
     /**
-     * `column_dropdown_conditional` specifies the available options
+     * `dropdown_conditional` specifies the available options
      * for dropdowns in various columns and cells.
      * This property allows you to specify different dropdowns
      * depending on certain conditions. For example, you may
@@ -600,7 +600,7 @@ export const propTypes = {
      * in the future.
      * Tune in to [https://github.com/plotly/dash-table/issues/168](https://github.com/plotly/dash-table/issues/168)
      */
-    column_dropdown_conditional: PropTypes.arrayOf(PropTypes.shape({
+    dropdown_conditional: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.string.isRequired,
         // .exact
         dropdowns: PropTypes.arrayOf(PropTypes.shape({
@@ -620,7 +620,7 @@ export const propTypes = {
     /**
      *
      */
-    column_dropdown_data: PropTypes.objectOf(
+    dropdown_data: PropTypes.objectOf(
         PropTypes.arrayOf(
             PropTypes.shape({
                 clearable: PropTypes.bool,

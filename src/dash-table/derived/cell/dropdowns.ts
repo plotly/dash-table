@@ -36,14 +36,14 @@ class Dropdowns {
         indices: Indices,
         columnConditionalDropdown: IConditionalColumnDropdown[],
         columnStaticDropdown: IColumnDropdowns,
-        column_dropdown_data: IDataDropdowns
+        dropdown_data: IDataDropdowns
     ) => mapData((datum, rowIndex) => R.map(column => {
         const applicable = this.applicable.get(column.id, rowIndex)(
             column,
             indices[rowIndex],
             columnConditionalDropdown,
             columnStaticDropdown,
-            column_dropdown_data
+            dropdown_data
         );
 
         return this.dropdown.get(column.id, rowIndex)(
@@ -61,14 +61,14 @@ class Dropdowns {
         realIndex: number,
         columnConditionalDropdown: IConditionalColumnDropdown[],
         columnStaticDropdown: IColumnDropdowns,
-        column_dropdown_data: IDataDropdowns
+        dropdown_data: IDataDropdowns
     ): [IDropdown | null, IConditionalDropdown[]] => {
         const legacyDropdown =
-            column_dropdown_data &&
-            column_dropdown_data[column.id] &&
-            column_dropdown_data[column.id].length > realIndex &&
-            column_dropdown_data[column.id][realIndex] &&
-            column_dropdown_data[column.id][realIndex];
+            dropdown_data &&
+            dropdown_data[column.id] &&
+            dropdown_data[column.id].length > realIndex &&
+            dropdown_data[column.id][realIndex] &&
+            dropdown_data[column.id][realIndex];
 
         const conditional = columnConditionalDropdown.find((cs: any) => cs.id === column.id);
         const base = columnStaticDropdown[column.id];

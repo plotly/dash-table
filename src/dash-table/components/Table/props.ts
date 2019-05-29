@@ -274,9 +274,9 @@ export interface IProps {
 
     active_cell?: ICellCoordinates;
     columns?: Columns;
-    column_dropdown?: IColumnDropdowns;
-    column_dropdown_conditional?: IConditionalColumnDropdown[];
-    column_dropdown_data: IDataDropdowns;
+    dropdown?: IColumnDropdowns;
+    dropdown_conditional?: IConditionalColumnDropdown[];
+    dropdown_data: IDataDropdowns;
     content_style: ContentStyle;
     css?: IStylesheetRule[];
     data?: Data;
@@ -319,9 +319,9 @@ export interface IProps {
 interface IDefaultProps {
     active_cell: ICellCoordinates;
     columns: Columns;
-    column_dropdown: IColumnDropdowns;
-    column_dropdown_conditional: IConditionalColumnDropdown[];
-    column_dropdown_data: IDataDropdowns;
+    dropdown: IColumnDropdowns;
+    dropdown_conditional: IConditionalColumnDropdown[];
+    dropdown_data: IDataDropdowns;
     css: IStylesheetRule[];
     data: Data;
     editable: boolean;
@@ -396,9 +396,9 @@ export type ControlledTableProps = PropsWithDefaults & IState & {
 export interface ICellFactoryProps {
     active_cell: ICellCoordinates;
     columns: VisibleColumns;
-    column_dropdown: IColumnDropdowns;
-    column_dropdown_conditional: IConditionalColumnDropdown[];
-    column_dropdown_data: IDataDropdowns;
+    dropdown: IColumnDropdowns;
+    dropdown_conditional: IConditionalColumnDropdown[];
+    dropdown_data: IDataDropdowns;
     column_static_tooltip: ITableStaticTooltips;
     data: Data;
     editable: boolean;
