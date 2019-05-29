@@ -155,7 +155,6 @@ export interface IDatetimeColumn extends ITypeColumn {
 }
 
 export interface IBaseVisibleColumn {
-    clearable?: boolean;
     deletable?: boolean | boolean[];
     editable?: boolean;
     renamable?: boolean | boolean[];
@@ -181,14 +180,22 @@ export interface IDropdownValue {
 
 export type DropdownValues = IDropdownValue[];
 
-interface IConditionalDropdown {
-    condition: string;
-    dropdown: IDropdownValue[];
+export interface IDropdown {
+    clearable?: boolean;
+    dropdown: DropdownValues;
 }
 
-export interface IColumnDropdown {
-    id: string;
-    dropdown: IDropdownValue[];
+interface IConditionalDropdown extends IDropdown {
+    condition: string;
+}
+
+export interface IColumnDropdown extends IDropdown {
+    clearable?: boolean;
+    dropdown: DropdownValues;
+}
+
+export interface IDataDropdowns {
+    [key: string]: (IDropdown | undefined)[];
 }
 
 export interface IConditionalColumnDropdown {
@@ -197,7 +204,7 @@ export interface IConditionalColumnDropdown {
 }
 
 export interface IDropdownProperties {
-    [key: string]: { options: IDropdownValue[] }[];
+    [key: string]: { options: DropdownValues }[];
 }
 
 export interface ITableTooltips {
@@ -274,7 +281,7 @@ export interface IProps {
     content_style: ContentStyle;
     css?: IStylesheetRule[];
     data?: Data;
-    dropdown_properties: any; // legacy
+    dropdown_properties: IDataDropdowns;
     editable?: boolean;
     filter?: string;
     filtering?: Filtering;
@@ -397,7 +404,7 @@ export interface ICellFactoryProps {
     column_static_dropdown: IColumnDropdown[];
     column_static_tooltip: ITableStaticTooltips;
     data: Data;
-    dropdown_properties: any; // legacy
+    dropdown_properties: IDataDropdowns;
     editable: boolean;
     id: string;
     is_focused?: boolean;

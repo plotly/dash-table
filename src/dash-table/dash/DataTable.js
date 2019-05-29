@@ -102,17 +102,6 @@ export const propTypes = {
     columns: PropTypes.arrayOf(PropTypes.shape({
 
         /**
-         * If the column is rendered as dropdowns, then the
-         * `clearable` property determines whether or not
-         * the dropdown value can be cleared or not.
-         *
-         * NOTE - The name of this property may change in the future,
-         * subscribe to [https://github.com/plotly/dash-table/issues/168](https://github.com/plotly/dash-table/issues/168)
-         * for more information.
-         */
-        clearable: PropTypes.bool,
-
-        /**
          * If True, the user can delete the column by clicking on a little `x`
          * button on the column.
          * If there are merged, multi-header columns then you can choose
@@ -597,6 +586,7 @@ export const propTypes = {
         id: PropTypes.string.isRequired,
         // .exact
         dropdowns: PropTypes.arrayOf(PropTypes.shape({
+            clearable: PropTypes.bool,
             condition: PropTypes.string.isRequired,
             // .exact
             dropdown: PropTypes.arrayOf(PropTypes.shape({
@@ -620,6 +610,7 @@ export const propTypes = {
      * Tune in to [https://github.com/plotly/dash-table/issues/168](https://github.com/plotly/dash-table/issues/168)
      */
     column_static_dropdown: PropTypes.arrayOf(PropTypes.shape({
+        clearable: PropTypes.bool,
         id: PropTypes.string.isRequired,
         // .exact
         dropdown: PropTypes.arrayOf(PropTypes.shape({
@@ -1106,11 +1097,23 @@ export const propTypes = {
     ),
 
     /**
-     * DEPRECATED
-     * Subscribe to [https://github.com/plotly/dash-table/issues/168](https://github.com/plotly/dash-table/issues/168)
-     * for updates on the dropdown API.
+     *
      */
-    dropdown_properties: PropTypes.any
+    dropdown_properties: PropTypes.objectOf(
+        PropTypes.arrayOf(
+            PropTypes.shape({
+                clearable: PropTypes.bool,
+                // .exact
+                dropdown: PropTypes.arrayOf(PropTypes.shape({
+                    label: PropTypes.string.isRequired,
+                    value: PropTypes.oneOfType([
+                        PropTypes.number,
+                        PropTypes.string
+                    ]).isRequired
+                })).isRequired
+            })
+        )
+    )
 };
 
 DataTable.defaultProps = defaultProps;

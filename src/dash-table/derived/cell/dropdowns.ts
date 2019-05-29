@@ -13,13 +13,16 @@ import {
     VisibleColumns,
     ColumnId,
     Indices,
-    DropdownValues,
     IBaseVisibleColumn,
-    IVisibleColumn
+    IVisibleColumn,
+    IDataDropdowns,
+    IColumnDropdown,
+    IConditionalColumnDropdown,
+    IDropdown
 } from 'dash-table/components/Table/props';
 import { QuerySyntaxTree } from 'dash-table/syntax-tree';
 
-const mapData = R.addIndex<Datum, (DropdownValues | undefined)[]>(R.map);
+const mapData = R.addIndex<Datum, (IDropdown | undefined)[]>(R.map);
 
 export default () => new Dropdowns().get;
 
@@ -31,9 +34,9 @@ class Dropdowns {
         columns: VisibleColumns,
         data: Data,
         indices: Indices,
-        columnConditionalDropdown: any,
-        columnStaticDropdown: any,
-        dropdown_properties: any
+        columnConditionalDropdown: IConditionalColumnDropdown[],
+        columnStaticDropdown: IColumnDropdown[],
+        dropdown_properties: IDataDropdowns
     ) => mapData((datum, rowIndex) => R.map(column => {
         const applicable = this.applicable.get(column.id, rowIndex)(
             column,
@@ -56,24 +59,22 @@ class Dropdowns {
     private readonly applicable = memoizerCache<[ColumnId, number]>()((
         column: IBaseVisibleColumn,
         realIndex: number,
-        columnConditionalDropdown: any,
-        columnStaticDropdown: any,
-        dropdown_properties: any
-    ): [any, any] => {
+        columnConditionalDropdown: IConditionalColumnDropdown[],
+        columnStaticDropdown: IColumnDropdown[],
+        dropdown_properties: IDataDropdowns
+    ): [IDropdown | null, IConditionalDropdown[]] => {
         const legacyDropdown =
             dropdown_properties &&
             dropdown_properties[column.id] &&
-            (
-                dropdown_properties[column.id].length > realIndex ?
-                    dropdown_properties[column.id][realIndex] :
-                    null
-            );
+            dropdown_properties[column.id].length > realIndex &&
+            dropdown_properties[column.id][realIndex] &&
+            dropdown_properties[column.id][realIndex];
 
         const conditional = columnConditionalDropdown.find((cs: any) => cs.id === column.id);
         const base = columnStaticDropdown.find((ss: any) => ss.id === column.id);
 
         return [
-            (legacyDropdown && legacyDropdown.options) || (base && base.dropdown),
+            legacyDropdown || base || null,
             (conditional && conditional.dropdowns) || []
         ];
     });
@@ -83,27 +84,30 @@ class Dropdowns {
      * applicable dropdowns.
      */
     private readonly dropdown = memoizerCache<[ColumnId, number]>()((
-        applicableDropdowns: [any, any],
+        applicableDropdowns: [IDropdown | null, IConditionalDropdown[]],
         column: IVisibleColumn,
         datum: Datum
     ) => {
         const [staticDropdown, conditionalDropdowns] = applicableDropdowns;
 
-        const matches = [
-            ...(staticDropdown ? [staticDropdown] : []),
-            ...R.map(
-                ([cd]) => cd.dropdown,
-                R.filter<[IConditionalDropdown, number]>(
-                    ([cd, i]) => this.evaluation.get(column.id, i)(
-                        this.ast.get(column.id, i)(cd.condition),
-                        datum
-                    ),
-                    R.addIndex<IConditionalDropdown, [IConditionalDropdown, number]>(R.map)(
-                        (cd, i) => [cd, i],
-                        conditionalDropdowns
-                    ))
-            )
-        ];
+        const matches: IDropdown[] = [];
+
+        if (staticDropdown) {
+            matches.push(staticDropdown);
+        }
+
+        matches.push(...R.map(
+            ([cd]) => cd,
+            R.filter<[IConditionalDropdown, number]>(
+                ([cd, i]) => this.evaluation.get(column.id, i)(
+                    this.ast.get(column.id, i)(cd.condition),
+                    datum
+                ),
+                R.addIndex<IConditionalDropdown, [IConditionalDropdown, number]>(R.map)(
+                    (cd, i) => [cd, i],
+                    conditionalDropdowns
+                ))
+        ));
 
         return matches.length ? matches.slice(-1)[0] : undefined;
     });

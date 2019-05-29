@@ -37,7 +37,7 @@ export default class CellFactory {
             column_conditional_dropdowns,
             column_static_dropdown,
             data,
-            dropdown_properties, // legacy
+            dropdown_properties,
             editable,
             is_focused,
             row_deletable,
