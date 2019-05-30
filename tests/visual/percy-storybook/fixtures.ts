@@ -14,10 +14,12 @@ export default [
                 }
             ],
             dropdown: {
-                'column-1': [
-                    { label: 'Montréal', value: 'mtl' },
-                    { label: 'San Francisco', value: 'sf' }
-                ]
+                'column-1': {
+                    dropdown: [
+                        { label: 'Montréal', value: 'mtl' },
+                        { label: 'San Francisco', value: 'sf' }
+                    ]
+                }
             },
             data: [
                 {'column-1': 'mtl'},
@@ -136,10 +138,12 @@ export default [
                 }
             ],
             dropdown: {
-                'column-1': [
-                    { label: 'Montréal', value: 'mtl' },
-                    { label: 'San Francisco', value: 'sf' }
-                ]
+                'column-1': {
+                    dropdown: [
+                        { label: 'Montréal', value: 'mtl' },
+                        { label: 'San Francisco', value: 'sf' }
+                    ]
+                }
             },
             data: [
                 {'column-1': 'mtl'},
@@ -181,18 +185,24 @@ export default [
                 }
             ],
             dropdown: {
-                'column-1': [
-                    { label: 'Montréal', value: 'mtl' },
-                    { label: 'San Francisco', value: 'sf' }
-                ],
-                'column-2': [
-                    { label: 'Montréal', value: 'mtl' },
-                    { label: 'San Francisco', value: 'sf' }
-                ],
-                'column-3': [
-                    { label: 'Montréal', value: 'mtl' },
-                    { label: 'San Francisco', value: 'sf' }
-                ]
+                'column-1': {
+                    dropdown: [
+                        { label: 'Montréal', value: 'mtl' },
+                        { label: 'San Francisco', value: 'sf' }
+                    ]
+                },
+                'column-2': {
+                    dropdown: [
+                        { label: 'Montréal', value: 'mtl' },
+                        { label: 'San Francisco', value: 'sf' }
+                    ]
+                },
+                'column-3': {
+                    dropdown: [
+                        { label: 'Montréal', value: 'mtl' },
+                        { label: 'San Francisco', value: 'sf' }
+                    ]
+                }
             },
             data: [
                 {'column-1': 'mtl', 'column-2': 'mtl', 'column-3': 'mtl'},
@@ -236,10 +246,12 @@ export default [
                 }
             ],
             dropdown: {
-                region: [
-                    { label: 'Hawaii', value: 'hawaii' },
-                    { label: 'Costa Rica', value: 'costa-rica' }
-                ]
+                region: {
+                    dropdown: [
+                        { label: 'Hawaii', value: 'hawaii' },
+                        { label: 'Costa Rica', value: 'costa-rica' }
+                    ]
+                }
             },
             merge_duplicate_headers: true,
             data: [
