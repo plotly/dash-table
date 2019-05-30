@@ -66,6 +66,7 @@ export default class CellFactory {
             virtualized.offset,
             selected_cells
         );
+
         const dataOpStyles = this.dataOpStyles(
             (row_selectable ? 1 : 0) + (row_deletable ? 1 : 0),
             relevantStyles,
