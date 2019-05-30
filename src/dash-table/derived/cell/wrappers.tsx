@@ -25,7 +25,7 @@ class Wrappers {
         activeCell: ICellCoordinates | undefined,
         columns: VisibleColumns,
         data: Data,
-        offset: IViewportOffset,
+        offset: IViewportOffset
     ) => R.addIndex<Datum, JSX.Element[]>(R.map)(
         (_, rowIndex) => R.addIndex<IVisibleColumn, JSX.Element>(R.map)(
             (column, columnIndex) => {
