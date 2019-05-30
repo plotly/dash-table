@@ -656,7 +656,7 @@ export const propTypes = {
      */
     tooltip: PropTypes.objectOf(
         PropTypes.oneOfType([
-            PropTypes.shape({
+            PropTypes.exact({
                 delay: PropTypes.number,
                 duration: PropTypes.number,
                 type: PropTypes.oneOf([
@@ -708,8 +708,11 @@ export const propTypes = {
      * This overrides the table's `tooltip_duration` property.
      * If set to `null`, the tooltip will not disappear.
      */
-    tooltip_conditional: PropTypes.arrayOf(PropTypes.shape({
-        if: PropTypes.shape({
+    tooltip_conditional: PropTypes.arrayOf(PropTypes.exact({
+        delay: PropTypes.number,
+        duration: PropTypes.number,
+        if: PropTypes.exact({
+            column_id: PropTypes.string,
             filter: PropTypes.string,
             row_index: PropTypes.oneOfType([
                 PropTypes.number,
@@ -717,11 +720,8 @@ export const propTypes = {
                     'odd',
                     'even'
                 ])
-            ]),
-            column_id: PropTypes.string
+            ])
         }).isRequired,
-        delay: PropTypes.number,
-        duration: PropTypes.number,
         type: PropTypes.oneOf([
             'text',
             'markdown'
@@ -757,7 +757,7 @@ export const propTypes = {
     tooltip_data: PropTypes.objectOf(PropTypes.arrayOf(
         PropTypes.oneOfType([
             PropTypes.string,
-            PropTypes.shape({
+            PropTypes.exact({
                 delay: PropTypes.number,
                 duration: PropTypes.number,
                 type: PropTypes.oneOf([
