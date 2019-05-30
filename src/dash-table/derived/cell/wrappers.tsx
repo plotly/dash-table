@@ -26,12 +26,8 @@ class Wrappers {
         activeCell: ICellCoordinates | undefined,
         columns: VisibleColumns,
         data: Data,
-<<<<<<< HEAD
         offset: IViewportOffset
-=======
-        offset: IViewportOffset,
         selectedCells: SelectedCells
->>>>>>> parent of 8989ee0... clean up selected cell css
     ) => R.addIndex<Datum, JSX.Element[]>(R.map)(
         (_, rowIndex) => R.addIndex<IVisibleColumn, JSX.Element>(R.map)(
             (column, columnIndex) => {
