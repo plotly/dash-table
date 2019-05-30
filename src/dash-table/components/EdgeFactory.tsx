@@ -186,7 +186,7 @@ export default class EdgeFactory {
         operations: number,
         filtering: boolean,
         filterMap: Map<string, SingleColumnSyntaxTree>,
-        _fixed_columns: number,
+        fixed_columns: number,
         fixed_rows: number,
         style_as_list_view: boolean,
         style_cell: Style,
@@ -300,7 +300,7 @@ export default class EdgeFactory {
             this.hOverride(filterOpEdges, dataOpEdges, cutoffWeight);
         }
 
-        if (_fixed_columns === operations) {
+        if (fixed_columns === operations) {
             this.vOverride(headerOpEdges, headerEdges, cutoffWeight);
             this.vOverride(filterOpEdges, filterEdges, cutoffWeight);
             this.vOverride(dataOpEdges, dataEdges, cutoffWeight);

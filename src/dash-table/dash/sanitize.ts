@@ -42,25 +42,23 @@ const applyDefaultsToColumns = memoizeOne(
     }, columns)
 );
 
+const data2number = (data?: any) => +data || 0;
+
 const getFixedColumns = (
     fixed: Fixed,
     row_deletable: boolean,
     row_selectable: RowSelection
-) => (fixed.headers === false && 0) || (
-    (row_deletable ? 1 : 0) +
-    (row_selectable ? 1 : 0) +
-    (typeof fixed.data === 'number' ? fixed.data : 0)
-);
+) => !fixed.headers ?
+        0 :
+        (row_deletable ? 1 : 0) + (row_selectable ? 1 : 0) + data2number(fixed.data);
 
 const getFixedRows = (
     fixed: Fixed,
     columns: IColumn[],
     filter: Filtering
-) => (fixed.headers === false && 0) || (
-    headerRows(columns) +
-    (filter ? 1 : 0) +
-    (typeof fixed.data === 'number' ? fixed.data : 0)
-);
+) => !fixed.headers ?
+        0 :
+        headerRows(columns) + (filter ? 1 : 0) + data2number(fixed.data);
 
 export default (props: PropsWithDefaults): SanitizedProps => {
     const locale_format = applyDefaultToLocale(props.locale_format);
