@@ -94,7 +94,7 @@ storiesOf('DashTable/Border (available space filled)', module)
     />))
     .add('with no frozen rows and frozen columns', () => (<DataTable
         {...props2}DataTable
-        fixed_columns={{ headers: true., data: 1 }}
+        fixed_columns={{ headers: true, data: 1 }}
     />))
     .add('with frozen rows and frozen columns', () => (<DataTable
         {...props2}
