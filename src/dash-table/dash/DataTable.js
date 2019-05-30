@@ -41,8 +41,6 @@ export const defaultProps = {
     css: [],
     filter: '',
     filtering: false,
-    filtering_type: 'basic',
-    filtering_types: ['basic'],
     sorting: false,
     sorting_type: 'single',
     sort_by: [],
@@ -813,29 +811,6 @@ export const propTypes = {
      * Tune in to [https://github.com/plotly/dash-table/issues/167](https://github.com/plotly/dash-table/issues/167)
      */
     filtering: PropTypes.oneOf(['fe', 'be', true, false]),
-
-    /**
-     * UNSTABLE
-     * In the future, there may be several modes of the
-     * filtering UI like `basic`, `advanced`, etc.
-     * Currently, we only `basic`.
-     * NOTE - This will likely change in the future,
-     * subscribe to changes here:
-     * [https://github.com/plotly/dash-table/issues/169](https://github.com/plotly/dash-table/issues/169)
-     */
-    filtering_type: PropTypes.oneOf(['basic']),
-
-    /**
-     * UNSTABLE
-     * In the future, there may be several modes of the
-     * filtering UI like `basic`, `advanced`, etc
-     * NOTE - This will likely change in the future,
-     * subscribe to changes here:
-     * [https://github.com/plotly/dash-table/issues/169](https://github.com/plotly/dash-table/issues/169)
-     */
-    filtering_types: PropTypes.arrayOf(PropTypes.oneOf([
-        'basic'
-    ])),
 
     /**
      * The `sorting` property enables data to be

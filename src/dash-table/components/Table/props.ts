@@ -22,11 +22,6 @@ export enum ColumnType {
     Datetime = 'datetime'
 }
 
-export enum FilteringType {
-    Advanced = 'advanced',
-    Basic = 'basic'
-}
-
 export interface IDerivedData {
     data: Data;
     indices: Indices;
@@ -277,8 +272,6 @@ export interface IProps {
     editable?: boolean;
     filter?: string;
     filtering?: Filtering;
-    filtering_type?: FilteringType;
-    filtering_types?: FilteringType[];
     locale_format: INumberLocale;
     merge_duplicate_headers?: boolean;
     n_fixed_columns?: number;
@@ -321,8 +314,6 @@ interface IDefaultProps {
     editable: boolean;
     filter: string;
     filtering: Filtering;
-    filtering_type: FilteringType;
-    filtering_types: FilteringType[];
     merge_duplicate_headers: boolean;
     n_fixed_columns: number;
     n_fixed_rows: number;
