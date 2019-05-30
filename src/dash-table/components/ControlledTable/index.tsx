@@ -602,8 +602,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
     applyStyle = () => {
         const {
-            n_fixed_columns,
-            n_fixed_rows,
+            fixed_columns,
+            fixed_rows,
             row_deletable,
             row_selectable
         } = this.props;
@@ -635,7 +635,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         }
 
         // Adjust the width of the fixed row header
-        if (n_fixed_rows) {
+        if (fixed_rows) {
             Array.from(r1c1.querySelectorAll('tr:first-of-type td, tr:first-of-type th')).forEach((td, index) => {
                 const style = getComputedStyle(td);
                 const width = style.width;
@@ -648,7 +648,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         }
 
         // Adjust the width of the fixed row / fixed columns header
-        if (n_fixed_columns && n_fixed_rows) {
+        if (fixed_columns && fixed_rows) {
             Array.from(r1c0.querySelectorAll('tr:first-of-type td, tr:first-of-type th')).forEach((td, index) => {
                 const style = getComputedStyle(td);
                 const width = style.width;
@@ -687,8 +687,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             content_style,
             currentTooltip,
             filtering,
-            n_fixed_columns,
-            n_fixed_rows,
+            fixed_columns,
+            fixed_rows,
             scrollbarWidth,
             style_as_list_view,
             style_table,
@@ -705,19 +705,19 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
         const fragmentClasses = [
             [
-                n_fixed_rows && n_fixed_columns ? 'dash-fixed-row dash-fixed-column' : '',
-                n_fixed_rows ? 'dash-fixed-row' : ''
+                fixed_rows && fixed_columns ? 'dash-fixed-row dash-fixed-column' : '',
+                fixed_rows ? 'dash-fixed-row' : ''
             ],
             [
-                n_fixed_columns ? 'dash-fixed-column' : '',
+                fixed_columns ? 'dash-fixed-column' : '',
                 'dash-fixed-content'
             ]
         ];
 
         const rawTable = this.tableFn();
         const { grid, empty } = derivedTableFragments(
-            n_fixed_columns,
-            n_fixed_rows,
+            fixed_columns,
+            fixed_rows,
             rawTable,
             virtualized.offset.rows
         );
@@ -725,8 +725,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         const classes = [
             'dash-spreadsheet',
             ...(virtualization ? ['dash-virtualized'] : []),
-            ...(n_fixed_rows ? ['dash-freeze-top'] : []),
-            ...(n_fixed_columns ? ['dash-freeze-left'] : []),
+            ...(fixed_rows ? ['dash-freeze-top'] : []),
+            ...(fixed_columns ? ['dash-freeze-left'] : []),
             ...(style_as_list_view ? ['dash-list-view'] : []),
             ...(empty[0][1] ? ['dash-empty-01'] : []),
             ...(empty[1][1] ? ['dash-empty-11'] : []),

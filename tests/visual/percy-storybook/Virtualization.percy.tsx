@@ -21,7 +21,7 @@ storiesOf('DashTable/Virtualization', module)
         pagination_mode={false}
         virtualization={true}
         editable={true}
-        n_fixed_rows={1}
+        fixed_rows={{ headers: true }}
         style_table={{
             height: 800,
             max_height: 800,

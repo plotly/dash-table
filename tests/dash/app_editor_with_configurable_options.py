@@ -58,9 +58,9 @@ CONTROLS = [
         value="fe",
     ),
     html.Label("Number of Fixed Rows"),
-    html.Div(dcc.Input(id="n_fixed_rows", type="number", value="0")),
+    html.Div(dcc.Input(id="fixed_rows", type="number", value="0")),
     html.Label("Number of Fixed Columns"),
-    html.Div(dcc.Input(id="n_fixed_columns", type="number", value="0")),
+    html.Div(dcc.Input(id="fixed_columns", type="number", value="0")),
 ]
 
 
@@ -101,8 +101,8 @@ def layout():
             "sorting_treat_empty_string_as_none",  # 3
             "row_selectable",  # 4
             "pagination_mode",  # 5
-            "n_fixed_rows",  # 6
-            "n_fixed_columns",  # 7
+            "fixed_rows",  # 6
+            "fixed_columns",  # 7
             "dataset",
         ]
     ],
@@ -122,8 +122,8 @@ def update_table(*args):
         sorting_treat_empty_string_as_none=args[3],
         row_selectable=args[4],
         pagination_mode=args[5],
-        n_fixed_rows=args[6],
-        n_fixed_columns=args[7],
+        fixed_rows=args[6],
+        fixed_columns=args[7],
     )
 
 

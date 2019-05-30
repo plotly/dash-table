@@ -157,6 +157,7 @@ export interface IBaseVisibleColumn {
     name: string | string[];
 }
 
+export type Fixed = { headers: false, data?: 0 } | { headers: true, data?: number };
 export type IColumnType = INumberColumn | ITextColumn | IDatetimeColumn | IAnyColumn;
 export type IVisibleColumn = IBaseVisibleColumn & IColumnType;
 
@@ -244,7 +245,7 @@ export interface IState {
     };
 }
 
-export type StandaloneState = IState & Partial<PropsWithDefaultsAndDerived>;
+export type StandaloneState = IState & Partial<SanitizedAndDerivedProps>;
 
 export interface IProps {
     data_previous?: any[];
@@ -274,8 +275,8 @@ export interface IProps {
     filtering?: Filtering;
     locale_format: INumberLocale;
     merge_duplicate_headers?: boolean;
-    n_fixed_columns?: number;
-    n_fixed_rows?: number;
+    fixed_columns?: Fixed;
+    fixed_rows?: Fixed;
     row_deletable?: boolean;
     row_selectable?: RowSelection;
     selected_cells?: SelectedCells;
@@ -315,8 +316,8 @@ interface IDefaultProps {
     filter: string;
     filtering: Filtering;
     merge_duplicate_headers: boolean;
-    n_fixed_columns: number;
-    n_fixed_rows: number;
+    fixed_columns: Fixed;
+    fixed_rows: Fixed;
     row_deletable: boolean;
     row_selectable: RowSelection;
     selected_cells: SelectedCells;
@@ -362,9 +363,15 @@ interface IDerivedProps {
 }
 
 export type PropsWithDefaults = IProps & IDefaultProps;
-export type PropsWithDefaultsAndDerived = PropsWithDefaults & IDerivedProps;
 
-export type ControlledTableProps = PropsWithDefaults & IState & {
+export type SanitizedProps = PropsWithDefaults & {
+    fixed_columns: number;
+    fixed_rows: number;
+};
+
+export type SanitizedAndDerivedProps = SanitizedProps & IDerivedProps;
+
+export type ControlledTableProps = SanitizedProps & IState & {
     setProps: SetProps;
     setState: SetState;
 
@@ -390,8 +397,8 @@ export interface ICellFactoryProps {
     editable: boolean;
     id: string;
     is_focused?: boolean;
-    n_fixed_columns: number;
-    n_fixed_rows: number;
+    fixed_columns: number;
+    fixed_rows: number;
     paginator: IPaginator;
     row_deletable: boolean;
     row_selectable: RowSelection;

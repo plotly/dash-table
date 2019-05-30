@@ -6,10 +6,10 @@ import { BORDER_PROPS_DEFAULTS } from './Border.defaults.percy';
 
 const OPS_VARIANTS: ITest[] = [
     { name: 'with ops', props: { row_deletable: true, row_selectable: 'single' } },
-    { name: 'fixed columns', props: { n_fixed_columns: 2, row_deletable: true, row_selectable: 'single' } },
-    { name: 'fixed rows', props: { n_fixed_rows: 1, row_deletable: true, row_selectable: 'single' } },
-    { name: 'fixed columns & rows', props: { n_fixed_columns: 2, n_fixed_rows: 1, row_deletable: true, row_selectable: 'single' } },
-    { name: 'fixed columns & rows inside fragments', props: { n_fixed_columns: 3, n_fixed_rows: 2, row_deletable: true, row_selectable: 'single' } }
+    { name: 'fixed columns', props: { fixed_columns: { headers: true }, row_deletable: true, row_selectable: 'single' } },
+    { name: 'fixed rows', props: { fixed_rows: { headers: true }, row_deletable: true, row_selectable: 'single' } },
+    { name: 'fixed columns & rows', props: { fixed_columns: { headers: true }, fixed_rows: { headers: true }, row_deletable: true, row_selectable: 'single' } },
+    { name: 'fixed columns & rows inside fragments', props: { fixed_columns: { headers: true, data: 1 }, fixed_rows: { headers: true , data: 1}, row_deletable: true, row_selectable: 'single' } }
 ];
 
 interface ITest {

@@ -142,8 +142,8 @@ export default class EdgeFactory {
             columns,
             filtering,
             workFilter,
-            n_fixed_columns,
-            n_fixed_rows,
+            fixed_columns,
+            fixed_rows,
             row_deletable,
             row_selectable,
             style_as_list_view,
@@ -164,8 +164,8 @@ export default class EdgeFactory {
             (row_deletable ? 1 : 0) + (row_selectable ? 1 : 0),
             !!filtering,
             workFilter.map,
-            n_fixed_columns,
-            n_fixed_rows,
+            fixed_columns,
+            fixed_rows,
             style_as_list_view,
             style_cell,
             style_cell_conditional,
@@ -186,8 +186,8 @@ export default class EdgeFactory {
         operations: number,
         filtering: boolean,
         filterMap: Map<string, SingleColumnSyntaxTree>,
-        _n_fixed_columns: number,
-        n_fixed_rows: number,
+        _fixed_columns: number,
+        fixed_rows: number,
         style_as_list_view: boolean,
         style_cell: Style,
         style_cell_conditional: Cells,
@@ -287,7 +287,7 @@ export default class EdgeFactory {
         this.vReconcile(filterOpEdges, filterEdges, cutoffWeight);
         this.vReconcile(dataOpEdges, dataEdges, cutoffWeight);
 
-        if (n_fixed_rows === headerRows) {
+        if (fixed_rows === headerRows) {
             if (filtering) {
                 this.hOverride(headerEdges, filterEdges, cutoffWeight);
                 this.hOverride(headerOpEdges, filterOpEdges, cutoffWeight);
@@ -295,12 +295,12 @@ export default class EdgeFactory {
                 this.hOverride(headerEdges, dataEdges, cutoffWeight);
                 this.hOverride(headerOpEdges, dataOpEdges, cutoffWeight);
             }
-        } else if (filtering && n_fixed_rows === headerRows + 1) {
+        } else if (filtering && fixed_rows === headerRows + 1) {
             this.hOverride(filterEdges, dataEdges, cutoffWeight);
             this.hOverride(filterOpEdges, dataOpEdges, cutoffWeight);
         }
 
-        if (_n_fixed_columns === operations) {
+        if (_fixed_columns === operations) {
             this.vOverride(headerOpEdges, headerEdges, cutoffWeight);
             this.vOverride(filterOpEdges, filterEdges, cutoffWeight);
             this.vOverride(dataOpEdges, dataEdges, cutoffWeight);

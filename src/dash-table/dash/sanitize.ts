@@ -2,7 +2,8 @@
 import * as R from 'ramda';
 
 import { memoizeOne } from 'core/memoizer';
-import { Columns, ColumnType, INumberLocale } from 'dash-table/components/Table/props';
+import { Columns, ColumnType, INumberLocale, IColumn, PropsWithDefaults, Filtering, RowSelection, SanitizedProps, Fixed } from 'dash-table/components/Table/props';
+import headerRows from 'dash-table/derived/header/headerRows';
 
 const D3_DEFAULT_LOCALE: INumberLocale = {
     symbol: ['$', ''],
@@ -31,16 +32,38 @@ const applyDefaultsToColumns = memoizeOne(
     }, columns)
 );
 
-export default (props: any) => {
+const getFixedColumns = (
+    fixed: Fixed,
+    row_deletable: boolean,
+    row_selectable: RowSelection
+) => (fixed.headers === false && 0) || (
+    (row_deletable ? 1 : 0) +
+    (row_selectable ? 1 : 0) +
+        (typeof fixed.data === 'number' ? fixed.data : 0)
+);
+
+const getFixedRows = (
+    fixed: Fixed,
+    columns: IColumn[],
+    filter: Filtering
+) => (fixed.headers === false && 0) || (
+    headerRows(columns) +
+    (filter ? 1 : 0) +
+        (typeof fixed.data === 'number' ? fixed.data : 0)
+);
+
+export default (props: PropsWithDefaults): SanitizedProps => {
     const locale_format = applyDefaultToLocale(props.locale_format);
 
     return R.mergeAll([
         props,
         {
             columns: applyDefaultsToColumns(locale_format, props.columns),
+            fixed_columns: getFixedColumns(props.fixed_columns, props.row_deletable, props.row_selectable),
+            fixed_rows: getFixedRows(props.fixed_rows, props.columns, props.filtering),
             locale_format
         }
-    ]);
+    ]) as any;
 };
 
 export const getLocale = (...locales: Partial<INumberLocale>[]): INumberLocale =>

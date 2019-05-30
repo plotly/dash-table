@@ -136,8 +136,8 @@ storiesOf('DashTable/Fixed Rows & Columns', module)
         id='table'
         data={dataA2J}
         columns={columnsA2J}
-        n_fixed_columns={2}
-        n_fixed_rows={1}
+        fixed_columns={{ headers: true }}
+        fixed_rows={{ headers: true }}
         row_deletable={true}
         row_selectable={true}
         style_data_conditional={style_data_conditional}
@@ -147,7 +147,7 @@ storiesOf('DashTable/Fixed Rows & Columns', module)
         id='table'
         data={dataA2J}
         columns={columnsA2J}
-        n_fixed_rows={1}
+        fixed_rows={{ headers: true }}
         row_deletable={true}
         row_selectable={true}
         style_data_conditional={style_data_conditional}
@@ -157,7 +157,7 @@ storiesOf('DashTable/Fixed Rows & Columns', module)
         id='table'
         data={dataA2J}
         columns={columnsA2J}
-        n_fixed_columns={2}
+        fixed_columns={{ headers: true }}
         row_deletable={true}
         row_selectable={true}
         style_data_conditional={style_data_conditional}
@@ -168,8 +168,8 @@ storiesOf('DashTable/Fixed Rows & Columns', module)
         data={dataA2J}
         columns={mergedColumns}
         merge_duplicate_headers={true}
-        n_fixed_columns={4}
-        n_fixed_rows={2}
+        fixed_columns={{ headers: true, data: 4 }}
+        fixed_rows={{ headers: true, data: 1 }}
         style_data_conditional={style_data_conditional}
     />))
     .add('with 2 fixed rows, 3 fixed columns, hidden columns and merged cells', () => {
@@ -182,8 +182,8 @@ storiesOf('DashTable/Fixed Rows & Columns', module)
             data={dataA2J}
             columns={mergedColumns}
             merge_duplicate_headers={true}
-            n_fixed_columns={3}
-            n_fixed_rows={2}
+            fixed_columns={{ headers: true, data: 3 }}
+            fixed_rows={{ headers: true, data: 1 }}
             style_data_conditional={style_data_conditional}
         />);
     });
@@ -277,8 +277,8 @@ storiesOf('DashTable/Without id', module)
         setProps={setProps}
         data={dataA2J}
         columns={columnsA2J}
-        n_fixed_columns={2}
-        n_fixed_rows={1}
+        fixed_columns={{ headers: true }}
+        fixed_rows={{ headers: true }}
         row_deletable={true}
         row_selectable={true}
         style_data_conditional={style_data_conditional}
@@ -287,8 +287,8 @@ storiesOf('DashTable/Without id', module)
         setProps={setProps}
         data={dataA2J}
         columns={columnsA2J}
-        n_fixed_columns={2}
-        n_fixed_rows={1}
+        fixed_columns={{ headers: true }}
+        fixed_rows={{ headers: true }}
         row_deletable={true}
         row_selectable={true}
         style_table={{height: 500, width: 200}}
@@ -298,8 +298,8 @@ storiesOf('DashTable/Without id', module)
         setProps={setProps}
         data={dataA2J}
         columns={columnsA2J}
-        n_fixed_columns={2}
-        n_fixed_rows={1}
+        fixed_columns={{ headers: true }}
+        fixed_rows={{ headers: true }}
         row_deletable={true}
         row_selectable={true}
         style_table={{height: 500, width: 200}}
@@ -313,8 +313,8 @@ storiesOf('DashTable/Without id', module)
             setProps={setProps}
             data={dataA2J}
             columns={columnsA2J}
-            n_fixed_columns={2}
-            n_fixed_rows={1}
+            fixed_columns={{ headers: true }}
+            fixed_rows={{ headers: true }}
             row_deletable={true}
             row_selectable={true}
             style_table={{height: 500, width: 400}}
@@ -327,8 +327,8 @@ storiesOf('DashTable/Without id', module)
             setProps={setProps}
             data={dataA2J}
             columns={columnsA2J}
-            n_fixed_columns={2}
-            n_fixed_rows={1}
+            fixed_columns={{ headers: true }}
+            fixed_rows={{ headers: true }}
             row_deletable={true}
             row_selectable={true}
             style_table={{height: 500, width: 400}}

@@ -61,6 +61,15 @@ export const defaultProps = {
     dropdown_conditional: [],
     dropdown_data: {},
 
+    fixed_columns: {
+        headers: false,
+        data: 0
+    },
+    fixed_rows: {
+        headers: false,
+        data: 0
+    },
+
     tooltip: {},
     tooltip_conditional: [],
     tooltip_delay: 350,
@@ -423,10 +432,10 @@ export const propTypes = {
     merge_duplicate_headers: PropTypes.bool,
 
     /**
-     * `n_fixed_columns` will "fix" the set of columns so that
+     * `fixed_columns` will "fix" the set of columns so that
      * they remain visible when scrolling horizontally across
-     * the unfixed columns. `n_fixed_columns` fixes columns
-     * from left-to-right, so `n_fixed_columns=3` will fix
+     * the unfixed columns. `fixed_columns` fixes columns
+     * from left-to-right, so `fixed_columns=3` will fix
      * the first 3 columns.
      *
      * Note that fixing columns introduces some changes to the
@@ -434,15 +443,24 @@ export const propTypes = {
      * way that your columns are rendered or sized.
      * View the documentation examples to learn more.
      */
-    n_fixed_columns: PropTypes.number,
+    fixed_columns: PropTypes.oneOfType([
+        PropTypes.exact({
+            headers: PropTypes.oneOf([false]),
+            data: PropTypes.oneOf([0])
+        }),
+        PropTypes.exact({
+            headers: PropTypes.oneOf([true]),
+            data: PropTypes.number
+        })
+    ]),
 
     /**
-     * `n_fixed_rows` will "fix" the set of rows so that
+     * `fixed_rows` will "fix" the set of rows so that
      * they remain visible when scrolling vertically down
-     * the table. `n_fixed_rows` fixes rows
+     * the table. `fixed_rows` fixes rows
      * from top-to-bottom, starting from the headers,
-     * so `n_fixed_rows=1` will fix the header row,
-     * `n_fixed_rows=2` will fix the header row and the first row,
+     * so `fixed_rows=1` will fix the header row,
+     * `fixed_rows=2` will fix the header row and the first row,
      * or the first two header rows (if there are multiple headers).
      *
      * Note that fixing rows introduces some changes to the
@@ -450,7 +468,16 @@ export const propTypes = {
      * way that your columns are rendered or sized.
      * View the documentation examples to learn more.
      */
-    n_fixed_rows: PropTypes.number,
+    fixed_rows: PropTypes.oneOfType([
+        PropTypes.exact({
+            headers: PropTypes.oneOf([false]),
+            data: PropTypes.oneOf([0])
+        }),
+        PropTypes.exact({
+            headers: PropTypes.oneOf([true]),
+            data: PropTypes.number
+        })
+    ]),
 
     /**
      * If True, then a `x` will appear next to each `row`

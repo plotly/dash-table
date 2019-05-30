@@ -20,11 +20,11 @@ import QuerySyntaxTree from 'dash-table/syntax-tree/QuerySyntaxTree';
 
 import {
     ControlledTableProps,
-    PropsWithDefaultsAndDerived,
     SetProps,
     IState,
     StandaloneState,
-    PropsWithDefaults
+    PropsWithDefaults,
+    SanitizedAndDerivedProps
 } from './props';
 
 import 'react-select/dist/react-select.css';
@@ -36,8 +36,8 @@ import derivedFilterMap from 'dash-table/derived/filter/map';
 
 const DERIVED_REGEX = /^derived_/;
 
-export default class Table extends Component<PropsWithDefaultsAndDerived, StandaloneState> {
-    constructor(props: PropsWithDefaultsAndDerived) {
+export default class Table extends Component<SanitizedAndDerivedProps, StandaloneState> {
+    constructor(props: SanitizedAndDerivedProps) {
         super(props);
 
         this.state = {
@@ -55,7 +55,7 @@ export default class Table extends Component<PropsWithDefaultsAndDerived, Standa
         };
     }
 
-    componentWillReceiveProps(nextProps: PropsWithDefaultsAndDerived) {
+    componentWillReceiveProps(nextProps: SanitizedAndDerivedProps) {
         if (nextProps.filter === this.props.filter) {
             return;
         }
@@ -209,7 +209,7 @@ export default class Table extends Component<PropsWithDefaultsAndDerived, Standa
             (!invalidatedSort.cached && !invalidatedSort.first && sorting === 'be');
 
         const { controlledSetProps } = this;
-        let newProps: Partial<PropsWithDefaultsAndDerived> = {};
+        let newProps: Partial<SanitizedAndDerivedProps> = {};
 
         if (!derivedStructureCache.cached) {
             newProps.derived_filter_structure = derivedStructureCache.result;
@@ -285,7 +285,7 @@ export default class Table extends Component<PropsWithDefaultsAndDerived, Standa
             }
 
             setProps(newProps);
-        } : (newProps: Partial<PropsWithDefaultsAndDerived>) => {
+        } : (newProps: Partial<SanitizedAndDerivedProps>) => {
             /*#if DEV*/
             const props: any = this.state;
             R.forEach(

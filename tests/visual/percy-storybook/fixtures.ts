@@ -27,7 +27,7 @@ export default [
                 {'column-1': 'mtl'},
                 {'column-1': 'boston'}
             ],
-            n_fixed_rows: 1,
+            fixed_rows: { headers: true },
             editable: true,
             css: [{
                 selector: '.dash-spreadsheet.dash-freeze-top',

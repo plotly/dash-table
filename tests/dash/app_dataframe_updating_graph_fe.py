@@ -30,7 +30,7 @@ def layout():
                     row_selectable="multi",
                     row_deletable=True,
                     selected_rows=[],
-                    n_fixed_rows=1,
+                    fixed_rows={ 'headers': True },
                 ),
                 style={"height": 300, "overflowY": "scroll"},
             ),

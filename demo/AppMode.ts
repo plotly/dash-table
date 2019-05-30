@@ -88,8 +88,8 @@ function getDefaultState(
             data: mock.data,
             editable: true,
             sorting: true,
-            n_fixed_rows: 3,
-            n_fixed_columns: 2,
+            fixed_rows: { headers: true },
+            fixed_columns: { headers: true },
             merge_duplicate_headers: false,
             row_deletable: true,
             row_selectable: 'single',
@@ -121,8 +121,8 @@ function getSpaceInColumn() {
 function getFixedTooltipsState() {
     const state = getTooltipsState();
 
-    state.tableProps.n_fixed_columns = 3;
-    state.tableProps.n_fixed_rows = 4;
+    state.tableProps.fixed_columns = { headers: true, data: 1 };
+    state.tableProps.fixed_rows = { headers: true, data: 1 };
 
     return state;
 }
@@ -250,8 +250,8 @@ function getFixedVirtualizedState() {
             data: mock.data,
             editable: true,
             sorting: true,
-            n_fixed_rows: 3,
-            n_fixed_columns: 2,
+            fixed_rows: { headers: true },
+            fixed_columns: { headers: true },
             merge_duplicate_headers: false,
             row_deletable: true,
             row_selectable: 'single',
