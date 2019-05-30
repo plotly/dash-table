@@ -39,7 +39,7 @@ const getFixedColumns = (
 ) => (fixed.headers === false && 0) || (
     (row_deletable ? 1 : 0) +
     (row_selectable ? 1 : 0) +
-        (typeof fixed.data === 'number' ? fixed.data : 0)
+    (typeof fixed.data === 'number' ? fixed.data : 0)
 );
 
 const getFixedRows = (
@@ -49,7 +49,7 @@ const getFixedRows = (
 ) => (fixed.headers === false && 0) || (
     headerRows(columns) +
     (filter ? 1 : 0) +
-        (typeof fixed.data === 'number' ? fixed.data : 0)
+    (typeof fixed.data === 'number' ? fixed.data : 0)
 );
 
 export default (props: PropsWithDefaults): SanitizedProps => {
