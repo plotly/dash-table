@@ -26,16 +26,14 @@ class Wrappers {
         activeCell: ICellCoordinates | undefined,
         columns: VisibleColumns,
         data: Data,
-        offset: IViewportOffset
+        offset: IViewportOffset,
         selectedCells: SelectedCells
     ) => R.addIndex<Datum, JSX.Element[]>(R.map)(
         (_, rowIndex) => R.addIndex<IVisibleColumn, JSX.Element>(R.map)(
             (column, columnIndex) => {
                 const active = isActiveCell(activeCell, rowIndex + offset.rows, columnIndex + offset.columns);
                 const selected = isSelectedCell(selectedCells, rowIndex + offset.rows, columnIndex + offset.columns);
-
                 const isDropdown = column.presentation === Presentation.Dropdown;
-
                 const classes =
                     'dash-cell' +
                     ` column-${columnIndex}` +
