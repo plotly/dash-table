@@ -2,7 +2,17 @@
 import * as R from 'ramda';
 
 import { memoizeOne } from 'core/memoizer';
-import { Columns, ColumnType, INumberLocale, IColumn, PropsWithDefaults, Filtering, RowSelection, SanitizedProps, Fixed } from 'dash-table/components/Table/props';
+import {
+    Columns,
+    ColumnType,
+    Filtering,
+    Fixed,
+    IColumn,
+    INumberLocale,
+    PropsWithDefaults,
+    RowSelection,
+    SanitizedProps
+} from 'dash-table/components/Table/props';
 import headerRows from 'dash-table/derived/header/headerRows';
 
 const D3_DEFAULT_LOCALE: INumberLocale = {
@@ -55,15 +65,12 @@ const getFixedRows = (
 export default (props: PropsWithDefaults): SanitizedProps => {
     const locale_format = applyDefaultToLocale(props.locale_format);
 
-    return R.mergeAll([
-        props,
-        {
-            columns: applyDefaultsToColumns(locale_format, props.columns),
-            fixed_columns: getFixedColumns(props.fixed_columns, props.row_deletable, props.row_selectable),
-            fixed_rows: getFixedRows(props.fixed_rows, props.columns, props.filtering),
-            locale_format
-        }
-    ]) as any;
+    return R.merge(props, {
+        columns: applyDefaultsToColumns(locale_format, props.columns),
+        fixed_columns: getFixedColumns(props.fixed_columns, props.row_deletable, props.row_selectable),
+        fixed_rows: getFixedRows(props.fixed_rows, props.columns, props.filtering),
+        locale_format
+    });
 };
 
 export const getLocale = (...locales: Partial<INumberLocale>[]): INumberLocale =>

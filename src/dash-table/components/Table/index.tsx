@@ -23,7 +23,6 @@ import {
     SetProps,
     IState,
     StandaloneState,
-    PropsWithDefaults,
     SanitizedAndDerivedProps
 } from './props';
 
@@ -115,7 +114,7 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
             uiHeaders,
             uiViewport,
             virtualization
-        } = R.merge(this.props, this.state) as (PropsWithDefaults & StandaloneState);
+        } = R.merge(this.props, this.state) as (SanitizedAndDerivedProps & StandaloneState);
 
         const virtual = this.virtual(
             data,

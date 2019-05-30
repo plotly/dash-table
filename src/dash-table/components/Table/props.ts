@@ -14,6 +14,7 @@ import {
 } from 'dash-table/tooltips/props';
 import { SingleColumnSyntaxTree } from 'dash-table/syntax-tree';
 import { IConditionalElement, INamedElement } from 'dash-table/conditional';
+import { Merge } from 'core/type';
 
 export enum ColumnType {
     Any = 'any',
@@ -364,10 +365,10 @@ interface IDerivedProps {
 
 export type PropsWithDefaults = IProps & IDefaultProps;
 
-export type SanitizedProps = PropsWithDefaults & {
+export type SanitizedProps = Merge<PropsWithDefaults, {
     fixed_columns: number;
     fixed_rows: number;
-};
+}>;
 
 export type SanitizedAndDerivedProps = SanitizedProps & IDerivedProps;
 
