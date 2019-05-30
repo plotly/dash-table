@@ -682,19 +682,19 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         const {
             id,
             columns,
-            column_conditional_tooltips,
-            column_static_tooltip,
+            tooltip_conditional,
+            tooltip,
             content_style,
+            currentTooltip,
             filtering,
             n_fixed_columns,
             n_fixed_rows,
             scrollbarWidth,
             style_as_list_view,
             style_table,
-            tooltip,
             tooltip_delay,
             tooltip_duration,
-            tooltips,
+            tooltip_data,
             uiCell,
             uiHeaders,
             uiViewport,
@@ -752,10 +752,10 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
     /* Tooltip */
         let tableTooltip = derivedTooltips(
+            currentTooltip,
+            tooltip_data,
+            tooltip_conditional,
             tooltip,
-            tooltips,
-            column_conditional_tooltips,
-            column_static_tooltip,
             virtualized,
             tooltip_delay,
             tooltip_duration
@@ -807,14 +807,14 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
     }
 
     private adjustTooltipPosition() {
-        const { tooltip, virtualized } = this.props;
+        const { currentTooltip, virtualized } = this.props;
 
-        if (!tooltip) {
+        if (!currentTooltip) {
             return;
         }
 
-        const id = tooltip.id;
-        const row = tooltip.row - virtualized.offset.rows;
+        const id = currentTooltip.id;
+        const row = currentTooltip.row - virtualized.offset.rows;
 
         const { table, tooltip: t } = this.refs as { [key: string]: any };
 

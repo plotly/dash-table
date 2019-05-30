@@ -9,31 +9,31 @@ import { memoizeOne } from 'core/memoizer';
 export const MAX_32BITS = 2147483647;
 
 function getSelectedTooltip(
-    tooltip: IUSerInterfaceTooltip,
-    tooltips: ITableTooltips | undefined,
-    column_conditional_tooltips: ConditionalTooltip[],
-    column_static_tooltip: ITableStaticTooltips,
+    currentTooltip: IUSerInterfaceTooltip,
+    tooltip_data: ITableTooltips | undefined,
+    tooltip_conditional: ConditionalTooltip[],
+    tooltip_static: ITableStaticTooltips,
     virtualized: IVirtualizedDerivedData
 ) {
-    if (!tooltip) {
+    if (!currentTooltip) {
         return undefined;
     }
 
-    const { id, row } = tooltip;
+    const { id, row } = currentTooltip;
 
     if (id === undefined || row === undefined) {
         return undefined;
     }
 
-    const legacyTooltip = tooltips &&
-        tooltips[id] &&
+    const legacyTooltip = tooltip_data &&
+        tooltip_data[id] &&
         (
-            tooltips[id].length > row ?
-                tooltips[id][row] :
+            tooltip_data[id].length > row ?
+                tooltip_data[id][row] :
                 null
         );
 
-    const staticTooltip = column_static_tooltip[id];
+    const staticTooltip = tooltip_static[id];
 
     const conditionalTooltips = R.filter(tt => {
         return !tt.if ||
@@ -42,7 +42,7 @@ function getSelectedTooltip(
                 ifRowIndex(tt.if, row) &&
                 ifFilter(tt.if, virtualized.data[row - virtualized.offset.rows])
             );
-    }, column_conditional_tooltips);
+    }, tooltip_conditional);
 
     return conditionalTooltips.length ?
         conditionalTooltips.slice(-1)[0] :
@@ -74,19 +74,19 @@ function getDuration(duration: number | null | undefined, defaultTo: number) {
 }
 
 export default memoizeOne((
-    tooltip: IUSerInterfaceTooltip,
-    tooltips: ITableTooltips | undefined,
-    column_conditional_tooltips: ConditionalTooltip[],
-    column_static_tooltip: ITableStaticTooltips,
+    currentTooltip: IUSerInterfaceTooltip,
+    tooltip_data: ITableTooltips | undefined,
+    tooltip_conditional: ConditionalTooltip[],
+    tooltip_static: ITableStaticTooltips,
     virtualized: IVirtualizedDerivedData,
     defaultDelay: number | null,
     defaultDuration: number | null
 ) => {
     const selectedTooltip = getSelectedTooltip(
-        tooltip,
-        tooltips,
-        column_conditional_tooltips,
-        column_static_tooltip,
+        currentTooltip,
+        tooltip_data,
+        tooltip_conditional,
+        tooltip_static,
         virtualized
     );
 

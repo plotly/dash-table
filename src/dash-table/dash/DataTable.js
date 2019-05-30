@@ -63,8 +63,8 @@ export const defaultProps = {
     dropdown_conditional: [],
     dropdown_data: {},
 
-    column_static_tooltip: {},
-    column_conditional_tooltips: [],
+    tooltip: {},
+    tooltip_conditional: [],
     tooltip_delay: 350,
     tooltip_duration: 2000,
 
@@ -633,7 +633,7 @@ export const propTypes = {
     ),
 
     /**
-     * `column_static_tooltip` represents the tooltip shown
+     * `tooltip` represents the tooltip shown
      * for different columns.
      * The `property` name refers to the column ID.
      * The `type` refers to the type of tooltip syntax used
@@ -654,7 +654,7 @@ export const propTypes = {
      * a plain string. The `text` syntax will be used in
      * that case.
      */
-    column_static_tooltip: PropTypes.objectOf(
+    tooltip: PropTypes.objectOf(
         PropTypes.oneOfType([
             PropTypes.shape({
                 delay: PropTypes.number,
@@ -670,7 +670,7 @@ export const propTypes = {
     ),
 
     /**
-     * `column_conditional_tooltips` represents the tooltip shown
+     * `tooltip_conditional` represents the tooltip shown
      * for different columns and cells.
      *
      * This property allows you to specify different tooltips for
@@ -708,7 +708,7 @@ export const propTypes = {
      * This overrides the table's `tooltip_duration` property.
      * If set to `null`, the tooltip will not disappear.
      */
-    column_conditional_tooltips: PropTypes.arrayOf(PropTypes.shape({
+    tooltip_conditional: PropTypes.arrayOf(PropTypes.shape({
         if: PropTypes.shape({
             filter: PropTypes.string,
             row_index: PropTypes.oneOfType([
@@ -730,7 +730,7 @@ export const propTypes = {
     })),
 
     /**
-     * `tooltips` represents the tooltip shown
+     * `tooltip_data` represents the tooltip shown
      * for different columns and cells.
      * The `property` name refers to the column ID. Each property
      * contains a list of tooltips mapped to the source `data`
@@ -754,7 +754,7 @@ export const propTypes = {
      * a plain string. The `text` syntax will be used in
      * that case.
      */
-    tooltips: PropTypes.objectOf(PropTypes.arrayOf(
+    tooltip_data: PropTypes.objectOf(PropTypes.arrayOf(
         PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.shape({

@@ -236,17 +236,17 @@ export interface IUSerInterfaceTooltip {
 }
 
 export interface IState {
+    currentTooltip?: IUSerInterfaceTooltip;
     forcedResizeOnly: boolean;
+    rawFilterQuery: string;
+    scrollbarWidth: number;
+    uiCell?: IUserInterfaceCell;
+    uiHeaders?: IUserInterfaceCell[];
+    uiViewport?: IUserInterfaceViewport;
     workFilter: {
         value: string,
         map: Map<string, SingleColumnSyntaxTree>
     };
-    rawFilterQuery: string;
-    scrollbarWidth: number;
-    tooltip?: IUSerInterfaceTooltip;
-    uiViewport?: IUserInterfaceViewport;
-    uiCell?: IUserInterfaceCell;
-    uiHeaders?: IUserInterfaceCell[];
 }
 
 export type StandaloneState = IState & Partial<PropsWithDefaultsAndDerived>;
@@ -260,11 +260,11 @@ export interface IProps {
 
     id: string;
 
-    tooltips?: ITableTooltips;
+    tooltip_data?: ITableTooltips;
     tooltip_delay: number | null;
     tooltip_duration: number | null;
-    column_static_tooltip: ITableStaticTooltips;
-    column_conditional_tooltips: ConditionalTooltip[];
+    tooltip: ITableStaticTooltips;
+    tooltip_conditional: ConditionalTooltip[];
 
     active_cell?: ICellCoordinates;
     columns?: Columns;
@@ -378,8 +378,8 @@ export type ControlledTableProps = PropsWithDefaults & IState & {
     setState: SetState;
 
     columns: VisibleColumns;
+    currentTooltip: IUSerInterfaceTooltip;
     paginator: IPaginator;
-    tooltip: IUSerInterfaceTooltip;
     viewport: IDerivedData;
     viewport_selected_rows: Indices;
     virtual: IDerivedData;
@@ -393,7 +393,8 @@ export interface ICellFactoryProps {
     dropdown: IStaticDropdowns;
     dropdown_conditional: ConditionalDropdowns;
     dropdown_data: IDataDropdowns;
-    column_static_tooltip: ITableStaticTooltips;
+    tooltip: ITableStaticTooltips;
+    currentTooltip: IUSerInterfaceTooltip;
     data: Data;
     editable: boolean;
     id: string;
@@ -418,8 +419,7 @@ export interface ICellFactoryProps {
     style_filter_conditional: BasicFilters;
     style_header_conditional: Headers;
     style_table: Table;
-    tooltip: IUSerInterfaceTooltip;
-    tooltips?: ITableTooltips;
+    tooltip_data?: ITableTooltips;
     uiCell?: IUserInterfaceCell;
     uiViewport?: IUserInterfaceViewport;
     viewport: IDerivedData;

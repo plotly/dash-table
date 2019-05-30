@@ -132,7 +132,7 @@ function getTooltipsState() {
 
     state.tableProps.tooltip_delay = 250;
     state.tableProps.tooltip_duration = 1000;
-    state.tableProps.tooltips = {
+    state.tableProps.tooltip_data = {
         ccc: [
             { type: TooltipSyntax.Markdown, value: `### Go Proverb\nThe enemy's key point is yours` },
             { type: TooltipSyntax.Markdown, value: `### Go Proverb\nPlay on the point of symmetry` },
@@ -142,12 +142,12 @@ function getTooltipsState() {
             `People in glass houses shouldn't throw stones`
         ]
     };
-    state.tableProps.column_static_tooltip = {
+    state.tableProps.tooltip = {
         ccc: { type: TooltipSyntax.Text, value: `There is death in the hane` },
         ddd: { type: TooltipSyntax.Markdown, value: `Hane, Cut, Placement` },
         rows: `Learn the eyestealing tesuji`
     };
-    state.tableProps.column_conditional_tooltips = [{
+    state.tableProps.tooltip_conditional = [{
         if: {
             column_id: 'aaa-readonly',
             filter: `{aaa} is prime`
