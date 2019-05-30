@@ -251,7 +251,10 @@
         td {
             background-color: inherit;
 
-
+            &.cell--selected {
+                background-color: var(--selected-background);
+            }
+            
             &.focused {
                 margin: -1px;
                 z-index: 200;
@@ -392,8 +395,8 @@
         overflow-x: visible;
     }
 
-    .dash-spreadsheet-inner tr:hover,
-    tr:hover  {
+    .dash-spreadsheet-inner :not(.cell--selected) tr:hover,
+    tr:hover input :not(.cell--selected) {
         background-color: var(--hover);
     }
 

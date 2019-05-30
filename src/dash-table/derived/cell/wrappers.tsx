@@ -3,10 +3,11 @@ import React, { MouseEvent } from 'react';
 
 import { memoizeOne } from 'core/memoizer';
 import memoizerCache from 'core/cache/memoizer';
-import { Data, IVisibleColumn, VisibleColumns, ICellCoordinates, Datum, ColumnId, IViewportOffset, Presentation, ICellFactoryProps } from 'dash-table/components/Table/props';
+import { Data, IVisibleColumn, VisibleColumns, ICellCoordinates, SelectedCells, Datum, ColumnId, IViewportOffset, Presentation, ICellFactoryProps } from 'dash-table/components/Table/props';
 import Cell from 'dash-table/components/Cell';
 import derivedCellEventHandlerProps, { Handler } from 'dash-table/derived/cell/eventHandlerProps';
 import isActiveCell from 'dash-table/derived/cell/isActive';
+import isSelectedCell from 'dash-table/derived/cell/isSelected';
 
 export default (propsFn: () => ICellFactoryProps) => new Wrappers(propsFn).get;
 
@@ -25,16 +26,25 @@ class Wrappers {
         activeCell: ICellCoordinates | undefined,
         columns: VisibleColumns,
         data: Data,
+<<<<<<< HEAD
         offset: IViewportOffset
+=======
+        offset: IViewportOffset,
+        selectedCells: SelectedCells
+>>>>>>> parent of 8989ee0... clean up selected cell css
     ) => R.addIndex<Datum, JSX.Element[]>(R.map)(
         (_, rowIndex) => R.addIndex<IVisibleColumn, JSX.Element>(R.map)(
             (column, columnIndex) => {
                 const active = isActiveCell(activeCell, rowIndex + offset.rows, columnIndex + offset.columns);
+                const selected = isSelectedCell(selectedCells, rowIndex + offset.rows, columnIndex + offset.columns);
+
                 const isDropdown = column.presentation === Presentation.Dropdown;
+
                 const classes =
                     'dash-cell' +
                     ` column-${columnIndex}` +
                     (active ? ' focused' : '') +
+                    (selected ? ' cell--selected' : '') +
                     (isDropdown ? ' dropdown' : '');
 
                 return this.wrapper.get(rowIndex, columnIndex)(

@@ -96,7 +96,8 @@ export default class CellFactory {
             active_cell,
             columns,
             virtualized.data,
-            virtualized.offset
+            virtualized.offset,
+            selected_cells
         );
 
         const cellContents = this.cellContents(
