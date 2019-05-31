@@ -34,8 +34,9 @@ const applyDefaultsToColumns = memoizeOne(
     (defaultLocale: INumberLocale, defaultSort: SortAsNone, columns: Columns) => R.map(column => {
         const c = R.clone(column);
 
+        c.sort_as_none = c.sort_as_none || defaultSort;
+
         if (c.type === ColumnType.Numeric && c.format) {
-            c.sort_as_none = c.sort_as_none || defaultSort;
             c.format.locale = getLocale(defaultLocale, c.format.locale);
             c.format.nully = getNully(c.format.nully);
             c.format.specifier = getSpecifier(c.format.specifier);
