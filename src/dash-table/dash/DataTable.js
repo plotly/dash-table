@@ -105,7 +105,7 @@ export const propTypes = {
      * Columns describes various aspects about each individual column.
      * `name` and `id` are the only required parameters.
      */
-    columns: PropTypes.arrayOf(PropTypes.shape({
+    columns: PropTypes.arrayOf(PropTypes.exact({
 
         /**
          * If True, the user can delete the column by clicking on a little `x`
@@ -178,8 +178,8 @@ export const propTypes = {
          * dash_table.FormatTemplate contains helper functions to rapidly use certain
          * typical number formats.
          */
-        format: PropTypes.shape({
-            locale: PropTypes.shape({
+        format: PropTypes.exact({
+            locale: PropTypes.exact({
                 symbol: PropTypes.arrayOf(PropTypes.string),
                 decimal: PropTypes.string,
                 group: PropTypes.string,
@@ -238,7 +238,7 @@ export const propTypes = {
          *  default: replace the provided value with `validation.default`
          *  reject: do not modify the existing value
          */
-        on_change: PropTypes.shape({
+        on_change: PropTypes.exact({
             action: PropTypes.oneOf([
                 'coerce',
                 'none',
@@ -260,7 +260,7 @@ export const propTypes = {
          *   this is 1949 to 2048 but in 2020 it will be different. If used with
          *   `action: 'coerce'`, will convert user input to a 4-digit year.
          */
-        validation: PropTypes.shape({
+        validation: PropTypes.exact({
             allow_null: PropTypes.bool,
             default: PropTypes.any,
             allow_YY: PropTypes.bool
@@ -312,7 +312,7 @@ export const propTypes = {
      *   'percent': (default: '%') the string used for the percentage symbol
      *   'separate_4digits': (default: True) separate integers with 4-digits or less
      */
-    locale_format: PropTypes.shape({
+    locale_format: PropTypes.exact({
         symbol: PropTypes.arrayOf(PropTypes.string),
         decimal: PropTypes.string,
         group: PropTypes.string,
@@ -334,7 +334,7 @@ export const propTypes = {
      * ]
      *
      */
-    css: PropTypes.arrayOf(PropTypes.shape({
+    css: PropTypes.arrayOf(PropTypes.exact({
         selector: PropTypes.string.isRequired,
         rule: PropTypes.string.isRequired
     })),
@@ -573,7 +573,7 @@ export const propTypes = {
      * Use this property to index through data in your callbacks with
      * backend paging.
      */
-    pagination_settings: PropTypes.shape({
+    pagination_settings: PropTypes.exact({
         current_page: PropTypes.number.isRequired,
         page_size: PropTypes.number.isRequired
     }),

@@ -359,10 +359,10 @@ interface IDerivedProps {
 
 export type PropsWithDefaults = IProps & IDefaultProps;
 
-export type SanitizedProps = Merge<PropsWithDefaults, {
+export type SanitizedProps = Omit<Merge<PropsWithDefaults, {
     fixed_columns: number;
     fixed_rows: number;
-}>;
+}>, 'locale_format'>;
 
 export type SanitizedAndDerivedProps = SanitizedProps & IDerivedProps;
 
