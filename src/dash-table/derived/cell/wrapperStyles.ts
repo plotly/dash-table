@@ -2,7 +2,7 @@ import * as R from 'ramda';
 import { CSSProperties } from 'react';
 
 import { memoizeOneFactory } from 'core/memoizer';
-import { Data, VisibleColumns, IViewportOffset, SelectedCells } from 'dash-table/components/Table/props';
+import { Data, VisibleColumns, IViewportOffset, SelectedCells, ICellCoordinates } from 'dash-table/components/Table/props';
 import { IConvertedStyle } from '../style';
 import { BORDER_PROPERTIES_AND_FRAGMENTS } from '../edges/type';
 
@@ -26,8 +26,9 @@ function getter(
                 columnStyles
             )
         );
-        let isSelectedCell: boolean = selectedCells.some(cell => cell.row === index && cell.column === columnIndex);
-        if (isSelectedCell === true) {
+        const matchCell = (cell: ICellCoordinates) => cell.row === index && cell.column === columnIndex;
+        const isSelectedCell: boolean = R.any(matchCell)(selectedCells);
+        if (isSelectedCell) {
             relevantStyles.push({backgroundColor:  'var(--selected-background)'});
         }
         return relevantStyles.length ?
