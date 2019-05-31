@@ -119,7 +119,7 @@ def update_table(*args):
         editable=args[0],
         sorting=args[1],
         sorting_type=args[2],
-        sorting_treat_empty_string_as_none=args[3],
+        sorting_treat_empty_string_as_none=[''] if args[3] else [],
         row_selectable=args[4],
         pagination_mode=args[5],
         fixed_rows=args[6],
