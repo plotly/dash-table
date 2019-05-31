@@ -259,7 +259,7 @@ storiesOf('DashTable/Sorting', module)
         columns={mergedColumns}
         sorting={true}
         sort_by={[{ column_id: 'a', direction: 'asc' }]}
-        sorting_treat_empty_string_as_none={true}
+        sort_as_none={['']}
         style_data_conditional={style_data_conditional}
     />))
     .add('"a" descending -- empty string override', () => (<DataTable
@@ -269,7 +269,7 @@ storiesOf('DashTable/Sorting', module)
         columns={mergedColumns}
         sorting={true}
         sort_by={[{ column_id: 'a', direction: 'desc' }]}
-        sorting_treat_empty_string_as_none={true}
+        sort_as_none={['']}
         style_data_conditional={style_data_conditional}
     />));
 storiesOf('DashTable/Without id', module)

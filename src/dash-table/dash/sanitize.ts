@@ -30,10 +30,11 @@ const DEFAULT_SPECIFIER = '';
 const applyDefaultToLocale = memoizeOne((locale: INumberLocale) => getLocale(locale));
 
 const applyDefaultsToColumns = memoizeOne(
-    (defaultLocale: INumberLocale, columns: Columns) => R.map(column => {
+    (defaultLocale: INumberLocale, defaultSort: (string | number | boolean)[], columns: Columns) => R.map(column => {
         const c = R.clone(column);
 
         if (c.type === ColumnType.Numeric && c.format) {
+            c.sort_as_none = c.sort_as_none || defaultSort;
             c.format.locale = getLocale(defaultLocale, c.format.locale);
             c.format.nully = getNully(c.format.nully);
             c.format.specifier = getSpecifier(c.format.specifier);
@@ -64,7 +65,7 @@ export default (props: PropsWithDefaults): SanitizedProps => {
     const locale_format = applyDefaultToLocale(props.locale_format);
 
     return R.merge(props, {
-        columns: applyDefaultsToColumns(locale_format, props.columns),
+        columns: applyDefaultsToColumns(locale_format, props.sort_as_none, props.columns),
         fixed_columns: getFixedColumns(props.fixed_columns, props.row_deletable, props.row_selectable),
         fixed_rows: getFixedRows(props.fixed_rows, props.columns, props.filtering),
         locale_format

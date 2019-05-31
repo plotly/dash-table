@@ -40,6 +40,7 @@ export const defaultProps = {
     css: [],
     filter: '',
     filtering: false,
+    sort_as_none: [],
     sorting: false,
     sorting_type: 'single',
     sort_by: [],
@@ -250,6 +251,12 @@ export const propTypes = {
                 'reject'
             ])
         }),
+
+        sort_as_none: PropTypes.arrayOf(PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number,
+            PropTypes.bool
+        ])),
 
         /**
          * The `validation` options.
@@ -870,13 +877,11 @@ export const propTypes = {
             direction: PropTypes.oneOf(['asc', 'desc']).isRequired
         })),
 
-    /**
-     * If False, then empty strings (`''`) are considered
-     * valid values (they will appear first when sorting ascending).
-     * If True, empty strings will be ignored, causing these cells to always
-     * appear last.
-     */
-    sorting_treat_empty_string_as_none: PropTypes.bool,
+    sort_as_none: PropTypes.arrayOf(PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+        PropTypes.bool
+    ])),
 
     /**
      * CSS styles to be applied to the outer `table` container.

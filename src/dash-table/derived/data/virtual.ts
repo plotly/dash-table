@@ -1,23 +1,26 @@
 import * as R from 'ramda';
 
 import { memoizeOneFactory } from 'core/memoizer';
-import sort, { defaultIsNully, SortSettings } from 'core/sorting';
+import sort, { SortSettings } from 'core/sorting';
 import {
+    ColumnId,
     Data,
     Datum,
     Filtering,
     IDerivedData,
-    Sorting
+    SortAsNone,
+    Sorting,
+    VisibleColumns
 } from 'dash-table/components/Table/props';
 import { QuerySyntaxTree } from 'dash-table/syntax-tree';
 
 const getter = (
+    columns: VisibleColumns,
     data: Data,
     filtering: Filtering,
     filter: string,
     sorting: Sorting,
-    sort_by: SortSettings = [],
-    sorting_treat_empty_string_as_none: boolean
+    sort_by: SortSettings = []
 ): IDerivedData => {
     const map = new Map<Datum, number>();
     R.addIndex(R.forEach)((datum, index) => {
@@ -32,9 +35,18 @@ const getter = (
             data;
     }
 
-    const isNully = sorting_treat_empty_string_as_none ?
-        (value: any) => value === '' || defaultIsNully(value) :
-        undefined;
+    const getNullyCases = (
+        columnId: ColumnId
+    ): SortAsNone => {
+        const column = R.find(c => c.id === columnId, columns);
+
+        return (column && column.sort_as_none) || [];
+    };
+
+    const isNully = (
+        value: any,
+        columnId: ColumnId
+    ) => R.isNil(value) || R.contains(value, getNullyCases(columnId));
 
     if (sorting === 'fe' || sorting === true) {
         data = sort(data, sort_by, isNully);

@@ -14,9 +14,8 @@ export enum SortDirection {
 }
 
 export type SortSettings = ISortSetting[];
-type IsNullyFn = (value: any) => boolean;
-export const defaultIsNully: IsNullyFn = (value: any) => value === undefined || value === null;
-export default (data: any[], settings: SortSettings, isNully: IsNullyFn = defaultIsNully): any[] => {
+type IsNullyFn = (value: any, id: string) => boolean;
+export default (data: any[], settings: SortSettings, isNully: IsNullyFn): any[] => {
     if (!settings.length) {
         return data;
     }
@@ -30,9 +29,9 @@ export default (data: any[], settings: SortSettings, isNully: IsNullyFn = defaul
                     const prop1 = d1[id];
                     const prop2 = d2[id];
 
-                    if (isNully(prop1)) {
+                    if (isNully(prop1, setting.column_id)) {
                         return false;
-                    } else if (isNully(prop2)) {
+                    } else if (isNully(prop2, setting.column_id)) {
                         return true;
                     }
 
@@ -44,9 +43,9 @@ export default (data: any[], settings: SortSettings, isNully: IsNullyFn = defaul
                     const prop1 = d1[id];
                     const prop2 = d2[id];
 
-                    if (isNully(prop1)) {
+                    if (isNully(prop1, setting.column_id)) {
                         return false;
-                    } else if (isNully(prop2)) {
+                    } else if (isNully(prop2, setting.column_id)) {
                         return true;
                     }
 
