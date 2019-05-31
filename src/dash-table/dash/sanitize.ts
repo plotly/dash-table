@@ -11,7 +11,8 @@ import {
     INumberLocale,
     PropsWithDefaults,
     RowSelection,
-    SanitizedProps
+    SanitizedProps,
+    SortAsNone
 } from 'dash-table/components/Table/props';
 import headerRows from 'dash-table/derived/header/headerRows';
 
@@ -30,7 +31,7 @@ const DEFAULT_SPECIFIER = '';
 const applyDefaultToLocale = memoizeOne((locale: INumberLocale) => getLocale(locale));
 
 const applyDefaultsToColumns = memoizeOne(
-    (defaultLocale: INumberLocale, defaultSort: (string | number | boolean)[], columns: Columns) => R.map(column => {
+    (defaultLocale: INumberLocale, defaultSort: SortAsNone, columns: Columns) => R.map(column => {
         const c = R.clone(column);
 
         if (c.type === ColumnType.Numeric && c.format) {
