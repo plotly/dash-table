@@ -15,7 +15,8 @@ export enum SortDirection {
 
 export type SortSettings = ISortSetting[];
 type IsNullyFn = (value: any, id: string) => boolean;
-export default (data: any[], settings: SortSettings, isNully: IsNullyFn): any[] => {
+export const defaultIsNully: IsNullyFn = (value: any, _: string) => R.isNil(value);
+export default (data: any[], settings: SortSettings, isNully: IsNullyFn = defaultIsNully): any[] => {
     if (!settings.length) {
         return data;
     }
