@@ -21,12 +21,10 @@ const data = (() => {
 const baseProps = {
     setProps,
     id: 'table',
-    content_style: 'grow',
     data
 };
 
 const props = Object.assign({}, baseProps, {
-    content_style: 'grow',
     columns: columns.map((id => ({ id: id, name: id.toUpperCase() }))),
     style_cell: {
         width: '33%'
