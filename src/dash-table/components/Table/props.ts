@@ -45,11 +45,6 @@ export interface IVirtualizedDerivedData extends IDerivedData {
     };
 }
 
-export enum ContentStyle {
-    Fit = 'fit',
-    Grow = 'grow'
-}
-
 export interface ICellCoordinates {
     row: number;
     column: number;
@@ -268,7 +263,6 @@ export interface IProps {
     dropdown?: IStaticDropdowns;
     dropdown_conditional?: ConditionalDropdowns;
     dropdown_data: IDataDropdowns;
-    content_style: ContentStyle;
     css?: IStylesheetRule[];
     data?: Data;
     editable?: boolean;

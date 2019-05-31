@@ -37,7 +37,6 @@ export const defaultProps = {
         page_size: 250
     },
 
-    content_style: 'grow',
     css: [],
     filter: '',
     filtering: false,
@@ -323,17 +322,6 @@ export const propTypes = {
         separate_4digits: PropTypes.bool
     }),
 
-    /**
-     * `content_style` toggles between a set of CSS styles for
-     * two common behaviors:
-     * - `fit`: The table container's width be equal to the width of its content.
-     * - `grow`: The table container's width will grow to be the size of the container.
-     *
-     * NOTE - This property will likely change in the future,
-     * subscribe to [https://github.com/plotly/dash-table/issues/176](https://github.com/plotly/dash-table/issues/176)
-     * for more details.
-     */
-    content_style: PropTypes.oneOf(['fit', 'grow']),
     /**
      * The `css` property is a way to embed CSS selectors and rules
      * onto the page.

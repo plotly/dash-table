@@ -23,7 +23,6 @@ const data = (() => {
 const baseProps = {
     setProps,
     id: 'table',
-    content_style: 'fit',
     data,
     filtering: 'fe',
     style_cell: { width: 100, max_width: 100, min_width: 100 }

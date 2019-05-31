@@ -70,7 +70,6 @@ storiesOf('DashTable/Style type condition', module)
             i => ({ name: i, id: i }),
             R.keysIn(data[0]))
         }
-        content_style='grow'
         style_table={{
             width: '100%'
         }}
@@ -102,7 +101,6 @@ storiesOf('DashTable/Style type condition', module)
             i => ({ name: i, id: i }),
             R.keysIn(data[0]))
         }
-        content_style='grow'
         style_table={{
             width: '100%'
         }}
@@ -123,7 +121,6 @@ storiesOf('DashTable/Style type condition', module)
             i => ({ name: i, id: i }),
             R.keysIn(data[0]))
         }
-        content_style='grow'
         style_table={{
             width: '100%'
         }}

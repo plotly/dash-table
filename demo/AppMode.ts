@@ -4,7 +4,6 @@ import Environment from 'core/environment';
 
 import { generateMockData, IDataMock, generateSpaceMockData } from './data';
 import {
-    ContentStyle,
     PropsWithDefaults,
     ChangeAction,
     ChangeFailure,
@@ -93,7 +92,6 @@ function getDefaultState(
             merge_duplicate_headers: false,
             row_deletable: true,
             row_selectable: 'single',
-            content_style: ContentStyle.Fit,
             pagination_mode: 'fe'
         }) as Partial<PropsWithDefaults>
     };
@@ -235,7 +233,6 @@ function getVirtualizedState() {
             merge_duplicate_headers: false,
             row_deletable: true,
             row_selectable: 'single',
-            content_style: 'fit',
             virtualization: true
         })
     };
@@ -255,7 +252,6 @@ function getFixedVirtualizedState() {
             merge_duplicate_headers: false,
             row_deletable: true,
             row_selectable: 'single',
-            content_style: 'fit',
             virtualization: true
         })
     };
