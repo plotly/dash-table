@@ -262,6 +262,16 @@ storiesOf('DashTable/Sorting', module)
         sort_as_none={['']}
         style_data_conditional={style_data_conditional}
     />))
+    .add('"a" descending -- empty string override', () => (<DataTable
+        setProps={setProps}
+        id='table'
+        data={sparseData}
+        columns={mergedColumns}
+        sorting={true}
+        sort_by={[{ column_id: 'a', direction: 'desc' }]}
+        sort_as_none={['']}
+        style_data_conditional={style_data_conditional}
+    />))
     .add(`"a" descending -- '' & 426 override`, () => (<DataTable
         setProps={setProps}
         id='table'
@@ -280,16 +290,6 @@ storiesOf('DashTable/Sorting', module)
         sorting={true}
         sort_by={[{ column_id: 'a', direction: 'asc' }]}
         sort_as_none={['', 426]}
-        style_data_conditional={style_data_conditional}
-    />))
-    .add('"a" descending -- empty string override', () => (<DataTable
-        setProps={setProps}
-        id='table'
-        data={sparseData}
-        columns={mergedColumns}
-        sorting={true}
-        sort_by={[{ column_id: 'a', direction: 'desc' }]}
-        sort_as_none={['']}
         style_data_conditional={style_data_conditional}
     />));
 storiesOf('DashTable/Without id', module)
