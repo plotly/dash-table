@@ -117,7 +117,7 @@ export default class FilterFactory {
             style_filter_conditional
         } = this.props;
 
-        if (!filtering) {
+        if (filtering === TableAction.None) {
             return [];
         }
 
