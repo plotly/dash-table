@@ -1,3 +1,5 @@
+import * as R from 'ramda';
+
 import sort, { SortDirection, SortSettings } from 'core/sorting';
 import multiUpdateSettings from 'core/sorting/multi';
 import singleUpdateSettings from 'core/sorting/single';
@@ -83,6 +85,35 @@ describe('sort', () => {
         expect(sorted[4].a).to.equal(null);
         expect(sorted[5].a).to.equal(null);
         expect(sorted[6].a).to.equal(null);
+    });
+
+    it('sorts nully (undefined, null, 0, 1) after when descending', () => {
+        const data = [1, 0, 3, undefined, 4, 2, null].map(v => ({ a: v }));
+        console.log(data);
+        const sorted = sort(
+            data,
+            [{ column_id: 'a', direction: SortDirection.Ascending }],
+            value => R.isNil(value) || value === 0 || value === 1
+        );
+
+        expect(sorted.length).to.equal(data.length);
+        expect(sorted[0].a).to.equal(2);
+        expect(sorted[1].a).to.equal(3);
+        expect(sorted[2].a).to.equal(4);
+    });
+
+    it('sorts nully (undefined, null, 0, 1) after when ascending', () => {
+        const data = [1, 0, 3, undefined, 4, 2, null].map(v => ({ a: v }));
+        const sorted = sort(
+            data,
+            [{ column_id: 'a', direction: SortDirection.Descending }],
+            value => R.isNil(value) || value === 0 || value === 1
+        );
+
+        expect(sorted.length).to.equal(data.length);
+        expect(sorted[0].a).to.equal(4);
+        expect(sorted[1].a).to.equal(3);
+        expect(sorted[2].a).to.equal(2);
     });
 
     it('respects sort order - 1', () => {
