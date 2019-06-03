@@ -3,6 +3,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import DataTable from 'dash-table/dash/DataTable';
 import { BORDER_PROPS_DEFAULTS } from './Border.defaults.percy';
+import { TableAction } from 'dash-table/components/Table/props';
 
 const OPS_VARIANTS: ITest[] = [
     { name: 'with ops', props: { row_deletable: true, row_selectable: 'single' } },
@@ -69,7 +70,7 @@ const scenarios: ITest[] = [
     }, {
         name: 'with filter style',
         props: {
-            filtering: true,
+            filtering: TableAction.Default,
             style_filter: {
                 border: '1px solid hotpink'
             }
@@ -97,7 +98,7 @@ const scenarios: ITest[] = [
     }, {
         name: 'with header / filter / cell (data) style - filter wins on header, filter wins on cell (data)',
         props: {
-            filtering: true,
+            filtering: TableAction.Default,
             style_cell: {
                 border: '1px solid teal'
             },
@@ -111,7 +112,7 @@ const scenarios: ITest[] = [
     }, {
         name: 'with header / data / cell (filter) style - header wins on cell (filter), data wins on cell (filter)',
         props: {
-            filtering: true,
+            filtering: TableAction.Default,
             style_data: {
                 border: '1px solid teal'
             },
@@ -125,7 +126,7 @@ const scenarios: ITest[] = [
     }, {
         name: 'with cell (header) / filter / data style - filter wins on cell (header), data wins on filter',
         props: {
-            filtering: true,
+            filtering: TableAction.Default,
             style_data: {
                 border: '1px solid teal'
             },
@@ -139,7 +140,7 @@ const scenarios: ITest[] = [
     }, {
         name: 'with data / cell (header, filter) style - data wins on filter',
         props: {
-            filtering: true,
+            filtering: TableAction.Default,
             style_data: {
                 border: '1px solid teal'
             },
@@ -150,7 +151,7 @@ const scenarios: ITest[] = [
     }, {
         name: 'with header / filter / data style - data wins on filter, filter wins on header',
         props: {
-            filtering: true,
+            filtering: TableAction.Default,
             style_data: {
                 border: '1px solid teal'
             },
@@ -164,7 +165,7 @@ const scenarios: ITest[] = [
     }, {
         name: 'style as list view',
         props: {
-            filtering: true,
+            filtering: TableAction.Default,
             style_data: {
                 border: '1px solid teal'
             },
@@ -177,7 +178,7 @@ const scenarios: ITest[] = [
             style_as_list_view: true
         }
     }, {
-        name: 'hoizontal border between header and first row should be blue',
+        name: 'horizontal border between header and first row should be blue',
         props: {
             css: [{selector: 'th', rule: 'border: 1px solid pink'}],
             style_data: {border: '1px solid blue'}
@@ -185,7 +186,7 @@ const scenarios: ITest[] = [
     }, {
         name: 'horizontal border between header and filter should be purple',
         props: {
-            filtering: true,
+            filtering: TableAction.Default,
             css: [{selector: 'th', rule: 'border: 1px solid pink'}],
             style_filter: {border: '1px solid purple'}
         }
@@ -291,7 +292,7 @@ const ops_scenarios: ITest[] = [
     }, {
         name: 'filter ops do not get styled on conditional column_id',
         props: {
-            filtering: true,
+            filtering: TableAction.Default,
             style_filter: {
                 border: '1px solid black'
             },
@@ -304,7 +305,7 @@ const ops_scenarios: ITest[] = [
     }, {
         name: 'filter ops do not get styled on conditional column_type',
         props: {
-            filtering: true,
+            filtering: TableAction.Default,
             style_filter: {
                 border: '1px solid black'
             },

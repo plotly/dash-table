@@ -4,6 +4,7 @@ import { storiesOf } from '@storybook/react';
 
 import random from 'core/math/random';
 import DataTable from 'dash-table/dash/DataTable';
+import { TableAction } from 'dash-table/components/Table/props';
 
 const setProps = () => { };
 
@@ -24,7 +25,7 @@ const baseProps = {
     setProps,
     id: 'table',
     data,
-    filtering: 'fe',
+    filtering: TableAction.Default,
     style_cell: { width: 100, max_width: 100, min_width: 100 }
 };
 

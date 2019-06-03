@@ -229,7 +229,7 @@ function getVirtualizedState() {
         tableProps: R.merge(getBaseTableProps(mock), {
             data: mock.data,
             editable: true,
-            sorting: true,
+            sorting: TableAction.Default,
             merge_duplicate_headers: false,
             row_deletable: true,
             row_selectable: 'single',
@@ -246,7 +246,7 @@ function getFixedVirtualizedState() {
         tableProps: R.merge(getBaseTableProps(mock), {
             data: mock.data,
             editable: true,
-            sorting: true,
+            sorting: TableAction.Default,
             fixed_rows: { headers: true },
             fixed_columns: { headers: true },
             merge_duplicate_headers: false,
