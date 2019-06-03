@@ -10,7 +10,7 @@ describe('derived viewport', () => {
         describe('with no pagination', () => {
             it('returns entire data', () => {
                 const result = viewportData(
-                    false,
+                    TableAction.None,
                     { current_page: 0, page_size: 250 },
                     R.map(() => { }, R.range(0, 5)),
                     R.range(0, 5)
@@ -24,7 +24,7 @@ describe('derived viewport', () => {
         describe('with fe pagination', () => {
             it('returns entire data', () => {
                 const result = viewportData(
-                    'fe',
+                    TableAction.Default,
                     { current_page: 0, page_size: 250 },
                     R.map(() => { }, R.range(0, 5)),
                     R.range(0, 5)
@@ -54,7 +54,7 @@ describe('derived viewport', () => {
         describe('with fe pagination', () => {
             it('returns slice of data', () => {
                 const result = viewportData(
-                    'fe',
+                    TableAction.Default,
                     { current_page: 0, page_size: 250 },
                     R.map(idx => ({ idx }), R.range(0, 500)),
                     R.range(0, 500)
