@@ -70,7 +70,7 @@ const scenarios: ITest[] = [
     }, {
         name: 'with filter style',
         props: {
-            filtering: TableAction.Default,
+            filtering: TableAction.Native,
             style_filter: {
                 border: '1px solid hotpink'
             }
@@ -98,7 +98,7 @@ const scenarios: ITest[] = [
     }, {
         name: 'with header / filter / cell (data) style - filter wins on header, filter wins on cell (data)',
         props: {
-            filtering: TableAction.Default,
+            filtering: TableAction.Native,
             style_cell: {
                 border: '1px solid teal'
             },
@@ -112,7 +112,7 @@ const scenarios: ITest[] = [
     }, {
         name: 'with header / data / cell (filter) style - header wins on cell (filter), data wins on cell (filter)',
         props: {
-            filtering: TableAction.Default,
+            filtering: TableAction.Native,
             style_data: {
                 border: '1px solid teal'
             },
@@ -126,7 +126,7 @@ const scenarios: ITest[] = [
     }, {
         name: 'with cell (header) / filter / data style - filter wins on cell (header), data wins on filter',
         props: {
-            filtering: TableAction.Default,
+            filtering: TableAction.Native,
             style_data: {
                 border: '1px solid teal'
             },
@@ -140,7 +140,7 @@ const scenarios: ITest[] = [
     }, {
         name: 'with data / cell (header, filter) style - data wins on filter',
         props: {
-            filtering: TableAction.Default,
+            filtering: TableAction.Native,
             style_data: {
                 border: '1px solid teal'
             },
@@ -151,7 +151,7 @@ const scenarios: ITest[] = [
     }, {
         name: 'with header / filter / data style - data wins on filter, filter wins on header',
         props: {
-            filtering: TableAction.Default,
+            filtering: TableAction.Native,
             style_data: {
                 border: '1px solid teal'
             },
@@ -165,7 +165,7 @@ const scenarios: ITest[] = [
     }, {
         name: 'style as list view',
         props: {
-            filtering: TableAction.Default,
+            filtering: TableAction.Native,
             style_data: {
                 border: '1px solid teal'
             },
@@ -186,7 +186,7 @@ const scenarios: ITest[] = [
     }, {
         name: 'horizontal border between header and filter should be purple',
         props: {
-            filtering: TableAction.Default,
+            filtering: TableAction.Native,
             css: [{selector: 'th', rule: 'border: 1px solid pink'}],
             style_filter: {border: '1px solid purple'}
         }
@@ -292,7 +292,7 @@ const ops_scenarios: ITest[] = [
     }, {
         name: 'filter ops do not get styled on conditional column_id',
         props: {
-            filtering: TableAction.Default,
+            filtering: TableAction.Native,
             style_filter: {
                 border: '1px solid black'
             },
@@ -305,7 +305,7 @@ const ops_scenarios: ITest[] = [
     }, {
         name: 'filter ops do not get styled on conditional column_type',
         props: {
-            filtering: TableAction.Default,
+            filtering: TableAction.Native,
             style_filter: {
                 border: '1px solid black'
             },

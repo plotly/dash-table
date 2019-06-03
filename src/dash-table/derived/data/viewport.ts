@@ -41,7 +41,7 @@ const getter = (
     switch (pagination_mode) {
         case TableAction.None:
             return getNoPagination(data, indices);
-        case TableAction.Default:
+        case TableAction.Native:
             return getFrontEndPagination(pagination_settings, data, indices);
         case TableAction.Custom:
             return getBackEndPagination(data, indices);

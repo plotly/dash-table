@@ -60,8 +60,8 @@ app.layout = html.Div(
             fixed_rows={ 'headers': True },
             row_selectable=True,
             row_deletable=True,
-            sorting='default',
-            filtering='default',
+            sorting='native',
+            filtering='native',
             editable=True,
         ),
         html.Div(id="props_container")

@@ -26,7 +26,7 @@ const getter = (
         map.set(datum, index);
     }, data);
 
-    if (filtering === TableAction.Default) {
+    if (filtering === TableAction.Native) {
         const tree = new QuerySyntaxTree(filter);
 
         data = tree.isValid ?
@@ -47,7 +47,7 @@ const getter = (
         columnId: ColumnId
     ) => R.isNil(value) || R.contains(value, getNullyCases(columnId));
 
-    if (sorting === TableAction.Default) {
+    if (sorting === TableAction.Native) {
         data = sort(data, sort_by, isNully);
     }
 

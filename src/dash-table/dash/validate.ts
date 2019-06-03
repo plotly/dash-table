@@ -31,7 +31,7 @@ function validFSP(props: any) {
     } = props;
 
     return pagination_mode !== TableAction.Custom ||
-        (filtering !== TableAction.Default && sorting !== TableAction.Default);
+        (filtering !== TableAction.Native && sorting !== TableAction.Native);
 }
 
 export default (props: any): boolean => {

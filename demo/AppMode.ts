@@ -87,7 +87,7 @@ function getDefaultState(
         tableProps: R.merge(getBaseTableProps(mock), {
             data: mock.data,
             editable: true,
-            sorting: TableAction.Default,
+            sorting: TableAction.Native,
             fixed_rows: { headers: true },
             fixed_columns: { headers: true },
             merge_duplicate_headers: false,
@@ -111,7 +111,7 @@ function getReadonlyState() {
 
 function getSpaceInColumn() {
     const state = getDefaultState(generateSpaceMockData);
-    state.tableProps.filtering = TableAction.Default;
+    state.tableProps.filtering = TableAction.Native;
 
     return state;
 }
@@ -216,7 +216,7 @@ function getDateState() {
 
 function getFilteringState() {
     const state = getDefaultState();
-    state.tableProps.filtering = TableAction.Default;
+    state.tableProps.filtering = TableAction.Native;
 
     return state;
 }
@@ -229,7 +229,7 @@ function getVirtualizedState() {
         tableProps: R.merge(getBaseTableProps(mock), {
             data: mock.data,
             editable: true,
-            sorting: TableAction.Default,
+            sorting: TableAction.Native,
             merge_duplicate_headers: false,
             row_deletable: true,
             row_selectable: 'single',
@@ -246,7 +246,7 @@ function getFixedVirtualizedState() {
         tableProps: R.merge(getBaseTableProps(mock), {
             data: mock.data,
             editable: true,
-            sorting: TableAction.Default,
+            sorting: TableAction.Native,
             fixed_rows: { headers: true },
             fixed_columns: { headers: true },
             merge_duplicate_headers: false,

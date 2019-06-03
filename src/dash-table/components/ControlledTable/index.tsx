@@ -583,7 +583,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         } = this.props;
 
         return (
-            pagination_mode === TableAction.Default &&
+            pagination_mode === TableAction.Native &&
             pagination_settings.page_size < data.length
         ) || pagination_mode === TableAction.Custom;
     }

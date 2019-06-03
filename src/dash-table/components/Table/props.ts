@@ -25,7 +25,7 @@ export enum ColumnType {
 
 export enum TableAction {
     Custom = 'custom',
-    Default = 'default',
+    Native = 'native',
     None = 'none'
 }
 
