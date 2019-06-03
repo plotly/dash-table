@@ -64,6 +64,7 @@ export type RowSelection = 'single' | 'multi' | false;
 export type SelectedCells = ICellCoordinates[];
 export type SetProps = (...args: any[]) => void;
 export type SetState = (state: Partial<IState>) => void;
+export type SortAsNone = (string | number | boolean)[];
 export type Sorting = 'fe' | 'be' | boolean;
 export type SortingType = 'multi' | 'single';
 export type VisibleColumns = IVisibleColumn[];
@@ -149,6 +150,7 @@ export interface IBaseVisibleColumn {
     deletable?: boolean | boolean[];
     editable?: boolean;
     renamable?: boolean | boolean[];
+    sort_as_none: SortAsNone;
     id: ColumnId;
     name: string | string[];
 }
@@ -281,7 +283,7 @@ export interface IProps {
     sorting?: Sorting;
     sort_by?: SortSettings;
     sorting_type?: SortingType;
-    sorting_treat_empty_string_as_none?: boolean;
+    sort_as_none?: SortAsNone;
     style_as_list_view?: boolean;
     pagination_mode?: PaginationMode;
     pagination_settings?: IPaginationSettings;
@@ -323,7 +325,7 @@ interface IDefaultProps {
     sorting: Sorting;
     sort_by: SortSettings;
     sorting_type: SortingType;
-    sorting_treat_empty_string_as_none: boolean;
+    sort_as_none: SortAsNone;
     style_as_list_view: boolean;
 
     pagination_mode: PaginationMode;
@@ -359,10 +361,13 @@ interface IDerivedProps {
 
 export type PropsWithDefaults = IProps & IDefaultProps;
 
-export type SanitizedProps = Merge<PropsWithDefaults, {
-    fixed_columns: number;
-    fixed_rows: number;
-}>;
+export type SanitizedProps = Omit<
+    Omit<
+        Merge<PropsWithDefaults, { fixed_columns: number; fixed_rows: number; }>,
+        'locale_format'
+    >,
+    'sort_as_none'
+>;
 
 export type SanitizedAndDerivedProps = SanitizedProps & IDerivedProps;
 

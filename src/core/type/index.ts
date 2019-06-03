@@ -10,4 +10,3 @@ export type OptionalProp<T, R extends keyof T> = T[R] | undefined;
 export type PropOf<T, R extends keyof T> = R;
 
 export type Merge<M, N> = Omit<M, Extract<keyof M, keyof N>> & N;
-export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;

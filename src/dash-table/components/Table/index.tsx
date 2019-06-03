@@ -109,7 +109,6 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
             selected_rows,
             sorting,
             sort_by,
-            sorting_treat_empty_string_as_none,
             uiCell,
             uiHeaders,
             uiViewport,
@@ -117,12 +116,12 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
         } = R.merge(this.props, this.state) as (SanitizedAndDerivedProps & StandaloneState);
 
         const virtual = this.virtual(
+            columns,
             data,
             filtering,
             filter,
             sorting,
-            sort_by,
-            sorting_treat_empty_string_as_none
+            sort_by
         );
 
         const viewport = this.viewport(
