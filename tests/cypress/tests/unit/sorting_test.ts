@@ -89,7 +89,6 @@ describe('sort', () => {
 
     it('sorts nully (undefined, null, 0, 1) after when descending', () => {
         const data = [1, 0, 3, undefined, 4, 2, null].map(v => ({ a: v }));
-        console.log(data);
         const sorted = sort(
             data,
             [{ column_id: 'a', direction: SortDirection.Ascending }],
