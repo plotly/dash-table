@@ -39,9 +39,9 @@ export const defaultProps = {
 
     css: [],
     filter: '',
-    filtering: 'default',
+    filtering: 'none',
     sort_as_none: [],
-    sorting: 'default',
+    sorting: 'none',
     sorting_type: 'single',
     sort_by: [],
     style_as_list_view: false,
