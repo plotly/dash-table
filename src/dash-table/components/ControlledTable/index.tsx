@@ -731,7 +731,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             ...(empty[1][1] ? ['dash-empty-11'] : []),
             ...(columns.length ? [] : ['dash-no-columns']),
             ...(virtualized.data.length ? [] : ['dash-no-data']),
-            ...(filtering ? [] : ['dash-no-filter'])
+            ...(filtering !== TableAction.None ? [] : ['dash-no-filter'])
         ];
 
         const containerClasses = ['dash-spreadsheet-container', ...classes];
