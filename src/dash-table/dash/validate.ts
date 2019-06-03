@@ -1,14 +1,7 @@
 import * as R from 'ramda';
 
 import Logger from 'core/Logger';
-
-function isFrontEnd(value: any) {
-    return ['fe', true, false].indexOf(value) !== -1;
-}
-
-function isBackEnd(value: any) {
-    return ['be', false].indexOf(value) !== -1;
-}
+import { TableAction } from 'dash-table/components/Table/props';
 
 function validColumns(props: any) {
     const {
@@ -37,8 +30,8 @@ function validFSP(props: any) {
         pagination_mode
     } = props;
 
-    return isFrontEnd(pagination_mode) ||
-        (isBackEnd(filtering) && isBackEnd(sorting));
+    return pagination_mode !== TableAction.Custom ||
+        (filtering !== TableAction.Default && sorting !== TableAction.Default);
 }
 
 export default (props: any): boolean => {

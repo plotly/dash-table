@@ -23,6 +23,12 @@ export enum ColumnType {
     Datetime = 'datetime'
 }
 
+export enum TableAction {
+    Custom = 'custom',
+    Default = 'default',
+    None = 'none'
+}
+
 export interface IDerivedData {
     data: Data;
     indices: Indices;
@@ -56,16 +62,13 @@ export type ColumnId = string;
 export type Columns = IColumn[];
 export type Data = Datum[];
 export type Datum =  IDatumObject | any;
-export type Filtering = 'fe' | 'be' | boolean;
 export type Indices = number[];
 export type RowId = string | number;
-export type PaginationMode = 'fe' | 'be' | boolean;
 export type RowSelection = 'single' | 'multi' | false;
 export type SelectedCells = ICellCoordinates[];
 export type SetProps = (...args: any[]) => void;
 export type SetState = (state: Partial<IState>) => void;
 export type SortAsNone = (string | number | boolean)[];
-export type Sorting = 'fe' | 'be' | boolean;
 export type SortingType = 'multi' | 'single';
 export type VisibleColumns = IVisibleColumn[];
 
@@ -269,7 +272,7 @@ export interface IProps {
     data?: Data;
     editable?: boolean;
     filter?: string;
-    filtering?: Filtering;
+    filtering: TableAction;
     locale_format: INumberLocale;
     merge_duplicate_headers?: boolean;
     fixed_columns?: Fixed;
@@ -280,12 +283,12 @@ export interface IProps {
     selected_rows?: Indices;
     selected_row_ids?: RowId[];
     setProps?: SetProps;
-    sorting?: Sorting;
+    sorting: TableAction;
     sort_by?: SortSettings;
     sorting_type?: SortingType;
     sort_as_none?: SortAsNone;
     style_as_list_view?: boolean;
-    pagination_mode?: PaginationMode;
+    pagination_mode: TableAction;
     pagination_settings?: IPaginationSettings;
 
     style_data?: Style;
@@ -311,7 +314,7 @@ interface IDefaultProps {
     data: Data;
     editable: boolean;
     filter: string;
-    filtering: Filtering;
+    filtering: TableAction;
     merge_duplicate_headers: boolean;
     fixed_columns: Fixed;
     fixed_rows: Fixed;
@@ -322,13 +325,13 @@ interface IDefaultProps {
     end_cell: ICellCoordinates;
     selected_rows: Indices;
     selected_row_ids: RowId[];
-    sorting: Sorting;
+    sorting: TableAction;
     sort_by: SortSettings;
     sorting_type: SortingType;
     sort_as_none: SortAsNone;
     style_as_list_view: boolean;
 
-    pagination_mode: PaginationMode;
+    pagination_mode: TableAction;
     pagination_settings: IPaginationSettings;
 
     style_data: Style;

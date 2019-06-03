@@ -18,7 +18,7 @@ import { memoizeOne } from 'core/memoizer';
 import lexer from 'core/syntax-tree/lexer';
 
 import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
-import { ControlledTableProps, ICellFactoryProps } from 'dash-table/components/Table/props';
+import { ControlledTableProps, ICellFactoryProps, TableAction } from 'dash-table/components/Table/props';
 import dropdownHelper from 'dash-table/components/dropdownHelper';
 
 import derivedTable from 'dash-table/derived/table';
@@ -583,9 +583,9 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         } = this.props;
 
         return (
-            pagination_mode === 'fe' &&
+            pagination_mode === TableAction.Default &&
             pagination_settings.page_size < data.length
-        ) || pagination_mode === 'be';
+        ) || pagination_mode === TableAction.Custom;
     }
 
     loadNext = () => {

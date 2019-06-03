@@ -2,18 +2,17 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 
 import DataTable from 'dash-table/dash/DataTable';
+import { TableAction } from 'dash-table/components/Table/props';
 
-const filteringValues = ['fe', 'be'];
-const sortingValues = ['fe', 'be'];
-const paginationValues = ['fe', 'be'];
+const actions = [TableAction.Default, TableAction.Custom];
 
 const setProps = () => { };
 
 let stories = storiesOf('DashTable/Props Validation', module);
 
-filteringValues.forEach(filter => {
-    sortingValues.forEach(sort => {
-        paginationValues.forEach(page => {
+actions.forEach(filter => {
+    actions.forEach(sort => {
+        actions.forEach(page => {
             stories = stories.add(`filter=${filter}, sorting=${sort}, pagination=${page}`, () => (<DataTable
                 filtering={filter}
                 sorting={sort}

@@ -5,14 +5,14 @@ import { memoizeOne } from 'core/memoizer';
 import {
     Columns,
     ColumnType,
-    Filtering,
     Fixed,
     IColumn,
     INumberLocale,
     PropsWithDefaults,
     RowSelection,
     SanitizedProps,
-    SortAsNone
+    SortAsNone,
+    TableAction
 } from 'dash-table/components/Table/props';
 import headerRows from 'dash-table/derived/header/headerRows';
 
@@ -58,7 +58,7 @@ const getFixedColumns = (
 const getFixedRows = (
     fixed: Fixed,
     columns: IColumn[],
-    filter: Filtering
+    filter: TableAction
 ) => !fixed.headers ?
         0 :
         headerRows(columns) + (filter ? 1 : 0) + data2number(fixed.data);

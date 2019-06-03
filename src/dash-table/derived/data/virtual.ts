@@ -6,20 +6,19 @@ import {
     ColumnId,
     Data,
     Datum,
-    Filtering,
     IDerivedData,
     SortAsNone,
-    Sorting,
-    VisibleColumns
+    VisibleColumns,
+    TableAction
 } from 'dash-table/components/Table/props';
 import { QuerySyntaxTree } from 'dash-table/syntax-tree';
 
 const getter = (
     columns: VisibleColumns,
     data: Data,
-    filtering: Filtering,
+    filtering: TableAction,
     filter: string,
-    sorting: Sorting,
+    sorting: TableAction,
     sort_by: SortSettings = []
 ): IDerivedData => {
     const map = new Map<Datum, number>();
@@ -27,7 +26,7 @@ const getter = (
         map.set(datum, index);
     }, data);
 
-    if (filtering === 'fe' || filtering === true) {
+    if (filtering === TableAction.Default) {
         const tree = new QuerySyntaxTree(filter);
 
         data = tree.isValid ?
@@ -48,7 +47,7 @@ const getter = (
         columnId: ColumnId
     ) => R.isNil(value) || R.contains(value, getNullyCases(columnId));
 
-    if (sorting === 'fe' || sorting === true) {
+    if (sorting === TableAction.Default) {
         data = sort(data, sort_by, isNully);
     }
 

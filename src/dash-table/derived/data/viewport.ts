@@ -5,8 +5,8 @@ import {
     Data,
     Indices,
     IPaginationSettings,
-    PaginationMode,
-    IDerivedData
+    IDerivedData,
+    TableAction
 } from 'dash-table/components/Table/props';
 
 function getNoPagination(data: Data, indices: Indices): IDerivedData {
@@ -33,18 +33,17 @@ function getBackEndPagination(data: Data, indices: Indices): IDerivedData {
 }
 
 const getter = (
-    pagination_mode: PaginationMode,
+    pagination_mode: TableAction,
     pagination_settings: IPaginationSettings,
     data: Data,
     indices: Indices
 ): IDerivedData => {
     switch (pagination_mode) {
-        case false:
+        case TableAction.None:
             return getNoPagination(data, indices);
-        case true:
-        case 'fe':
+        case TableAction.Default:
             return getFrontEndPagination(pagination_settings, data, indices);
-        case 'be':
+        case TableAction.Custom:
             return getBackEndPagination(data, indices);
         default:
             throw new Error(`Unknown pagination mode: '${pagination_mode}'`);

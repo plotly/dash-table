@@ -1,6 +1,7 @@
 import * as R from 'ramda';
 
 import derivedViewportData from 'dash-table/derived/data/viewport';
+import { TableAction } from 'dash-table/components/Table/props';
 
 describe('derived viewport', () => {
     const viewportData = derivedViewportData();
@@ -37,7 +38,7 @@ describe('derived viewport', () => {
         describe('with be pagination', () => {
             it('returns entire data', () => {
                 const result = viewportData(
-                    'be',
+                    TableAction.Custom,
                     { current_page: 0, page_size: 250 },
                     R.map(() => { }, R.range(0, 5)),
                     R.range(0, 5)

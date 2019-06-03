@@ -8,7 +8,8 @@ import {
     ChangeAction,
     ChangeFailure,
     IVisibleColumn,
-    ColumnType
+    ColumnType,
+    TableAction
 } from 'dash-table/components/Table/props';
 import { TooltipSyntax } from 'dash-table/tooltips/props';
 
@@ -57,7 +58,7 @@ function getBaseTableProps(mock: IDataMock) {
                 }))
             }
         },
-        pagination_mode: false,
+        pagination_mode: TableAction.None,
         style_table: {
             max_height: '800px',
             height: '800px',
@@ -86,13 +87,12 @@ function getDefaultState(
         tableProps: R.merge(getBaseTableProps(mock), {
             data: mock.data,
             editable: true,
-            sorting: true,
+            sorting: TableAction.Default,
             fixed_rows: { headers: true },
             fixed_columns: { headers: true },
             merge_duplicate_headers: false,
             row_deletable: true,
-            row_selectable: 'single',
-            pagination_mode: 'fe'
+            row_selectable: 'single'
         }) as Partial<PropsWithDefaults>
     };
 }
@@ -111,7 +111,7 @@ function getReadonlyState() {
 
 function getSpaceInColumn() {
     const state = getDefaultState(generateSpaceMockData);
-    state.tableProps.filtering = true;
+    state.tableProps.filtering = TableAction.Default;
 
     return state;
 }
@@ -216,7 +216,7 @@ function getDateState() {
 
 function getFilteringState() {
     const state = getDefaultState();
-    state.tableProps.filtering = true;
+    state.tableProps.filtering = TableAction.Default;
 
     return state;
 }

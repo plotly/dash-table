@@ -23,7 +23,8 @@ import {
     SetProps,
     IState,
     StandaloneState,
-    SanitizedAndDerivedProps
+    SanitizedAndDerivedProps,
+    TableAction
 } from './props';
 
 import 'react-select/dist/react-select.css';
@@ -202,9 +203,9 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
         const invalidatedSort = this.sortCache(sort_by);
 
         const invalidateSelection =
-            (!invalidatedFilter.cached && !invalidatedFilter.first && filtering === 'be') ||
-            (!invalidatedPagination.cached && !invalidatedPagination.first && pagination_mode === 'be') ||
-            (!invalidatedSort.cached && !invalidatedSort.first && sorting === 'be');
+            (!invalidatedFilter.cached && !invalidatedFilter.first && filtering === TableAction.Custom) ||
+            (!invalidatedPagination.cached && !invalidatedPagination.first && pagination_mode === TableAction.Custom) ||
+            (!invalidatedSort.cached && !invalidatedSort.first && sorting === TableAction.Custom);
 
         const { controlledSetProps } = this;
         let newProps: Partial<SanitizedAndDerivedProps> = {};
