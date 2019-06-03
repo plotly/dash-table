@@ -252,6 +252,10 @@ export const propTypes = {
             ])
         }),
 
+        /**
+         * An array of string, number and boolean values that are treated as `None`
+         * when sorting is applied to the column.
+         */
         sort_as_none: PropTypes.arrayOf(PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.number,
@@ -877,6 +881,12 @@ export const propTypes = {
             direction: PropTypes.oneOf(['asc', 'desc']).isRequired
         })),
 
+    /**
+     * An array of string, number and boolean values that are treated as `None`
+     * when sorting. This value will be used by columns without `sort_as_none`.
+     *
+     * Defaults to `[]`.
+     */
     sort_as_none: PropTypes.arrayOf(PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.number,
