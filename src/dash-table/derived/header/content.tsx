@@ -108,7 +108,7 @@ function getter(
                     );
 
                     return (<div>
-                        {sorting && isLastRow ?
+                        {sorting !== TableAction.None && isLastRow ?
                             (<span
                                 className='sort'
                                 onClick={doSort(column.id, sortSettings, sortType, setProps)}
