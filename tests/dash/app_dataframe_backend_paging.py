@@ -49,7 +49,7 @@ def layout():
 
             dcc.Markdown(dedent('''
             With backend paging, we can have front-end sorting and filtering
-            but it will only filter_query and sort the data that exists on the page.
+            but it will only filter and sort the data that exists on the page.
 
             This should be avoided. Your users will expect
             that sorting and filtering is happening on the entire dataset and,
