@@ -11,7 +11,8 @@ describe('derived viewport', () => {
             it('returns entire data', () => {
                 const result = viewportData(
                     TableAction.None,
-                    { current_page: 0, page_size: 250 },
+                    0,
+                    250,
                     R.map(() => { }, R.range(0, 5)),
                     R.range(0, 5)
                 );
@@ -25,7 +26,8 @@ describe('derived viewport', () => {
             it('returns entire data', () => {
                 const result = viewportData(
                     TableAction.Native,
-                    { current_page: 0, page_size: 250 },
+                    0,
+                    250,
                     R.map(() => { }, R.range(0, 5)),
                     R.range(0, 5)
                 );
@@ -39,7 +41,8 @@ describe('derived viewport', () => {
             it('returns entire data', () => {
                 const result = viewportData(
                     TableAction.Custom,
-                    { current_page: 0, page_size: 250 },
+                    0,
+                    250,
                     R.map(() => { }, R.range(0, 5)),
                     R.range(0, 5)
                 );
@@ -55,7 +58,8 @@ describe('derived viewport', () => {
             it('returns slice of data', () => {
                 const result = viewportData(
                     TableAction.Native,
-                    { current_page: 0, page_size: 250 },
+                    0,
+                    250,
                     R.map(idx => ({ idx }), R.range(0, 500)),
                     R.range(0, 500)
                 );
