@@ -106,7 +106,8 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
             filter,
             filtering,
             page_action,
-            pagination_settings,
+            page_current,
+            page_size,
             selected_rows,
             sorting,
             sort_by,
@@ -127,7 +128,8 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
 
         const viewport = this.viewport(
             page_action,
-            pagination_settings,
+            page_current,
+            page_size,
             virtual.data,
             virtual.indices
         );
@@ -152,7 +154,8 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
 
         const paginator = this.paginator(
             page_action,
-            pagination_settings,
+            page_current,
+            page_size,
             setProps,
             virtual.data
         );
@@ -181,7 +184,8 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
             filter,
             filtering,
             page_action,
-            pagination_settings,
+            page_current,
+            page_size,
             sorting,
             sort_by,
             viewport,
@@ -199,7 +203,7 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
         const virtualSelectedRowsCached = this.virtualSelectedRowsCache(virtual_selected_rows).cached;
 
         const invalidatedFilter = this.filterCache(filter);
-        const invalidatedPagination = this.paginationCache(pagination_settings);
+        const invalidatedPagination = this.paginationCache(page_current, page_size);
         const invalidatedSort = this.sortCache(sort_by);
 
         const invalidateSelection =
@@ -309,7 +313,7 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
     private readonly visibleColumns = derivedVisibleColumns();
 
     private readonly filterCache = memoizeOneWithFlag(filter => filter);
-    private readonly paginationCache = memoizeOneWithFlag(pagination => pagination);
+    private readonly paginationCache = memoizeOneWithFlag((page_current, page_size) => [page_current, page_size]);
     private readonly sortCache = memoizeOneWithFlag(sort => sort);
     private readonly viewportCache = memoizeOneWithFlag(viewport => viewport);
     private readonly viewportSelectedRowsCache = memoizeOneWithFlag(viewport => viewport);

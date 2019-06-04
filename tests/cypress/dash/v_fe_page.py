@@ -37,10 +37,8 @@ app.layout = html.Div(
             id="table",
             data=data,
             page_action="native",
-            pagination_settings={
-                "current_page": 0,
-                "page_size": 250,
-            },
+            page_current=0,
+            page_size=250,
             columns=[
                 {"id": 0, "name": "Complaint ID"},
                 {"id": 1, "name": "Product"},

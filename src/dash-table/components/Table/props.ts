@@ -209,11 +209,6 @@ interface IStylesheetRule {
     rule: string;
 }
 
-export interface IPaginationSettings {
-    current_page: number;
-    page_size: number;
-}
-
 export interface IUserInterfaceCell {
     height: number;
 }
@@ -289,7 +284,8 @@ export interface IProps {
     sort_as_none?: SortAsNone;
     style_as_list_view?: boolean;
     page_action?: TableAction;
-    pagination_settings?: IPaginationSettings;
+    page_current?: number;
+    page_size: number;
 
     style_data?: Style;
     style_cell?: Style;
@@ -332,7 +328,8 @@ interface IDefaultProps {
     style_as_list_view: boolean;
 
     page_action: TableAction;
-    pagination_settings: IPaginationSettings;
+    page_current: number;
+    page_size: number;
 
     style_data: Style;
     style_cell: Style;

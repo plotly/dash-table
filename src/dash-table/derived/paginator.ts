@@ -1,5 +1,3 @@
-import { merge } from 'ramda';
-
 import { memoizeOneFactory } from 'core/memoizer';
 
 import { clearSelection } from 'dash-table/utils/actions';
@@ -7,7 +5,6 @@ import { clearSelection } from 'dash-table/utils/actions';
 import {
     Data,
     SetProps,
-    IPaginationSettings,
     TableAction
 } from 'dash-table/components/Table/props';
 
@@ -16,59 +13,54 @@ export interface IPaginator {
     loadPrevious(): void;
 }
 
-export function lastPage(data: Data, settings: IPaginationSettings) {
-    return Math.max(Math.ceil(data.length / settings.page_size) - 1, 0);
+export function lastPage(data: Data, page_size: number) {
+    return Math.max(Math.ceil(data.length / page_size) - 1, 0);
 }
 
 function getBackEndPagination(
-    pagination_settings: IPaginationSettings,
+    page_current: number,
     setProps: SetProps
 ): IPaginator {
     return {
         loadNext: () => {
-            pagination_settings.current_page++;
-            setProps({ pagination_settings, ...clearSelection });
+            page_current++;
+            setProps({ page_current, ...clearSelection });
         },
         loadPrevious: () => {
-            if (pagination_settings.current_page <= 0) {
+            if (page_current <= 0) {
                 return;
             }
 
-            pagination_settings.current_page--;
-            setProps({ pagination_settings, ...clearSelection });
+            page_current--;
+            setProps({ page_current, ...clearSelection });
         }
     };
 }
 
 function getFrontEndPagination(
-    pagination_settings: IPaginationSettings,
+    page_current: number,
+    page_size: number,
     setProps: SetProps,
     data: Data
 ) {
     return {
         loadNext: () => {
-            const maxPageIndex = lastPage(data, pagination_settings);
+            const maxPageIndex = lastPage(data, page_size);
 
-            if (pagination_settings.current_page >= maxPageIndex) {
+            if (page_current >= maxPageIndex) {
                 return;
             }
 
-            pagination_settings = merge(pagination_settings, {
-                current_page: pagination_settings.current_page + 1
-            });
-
-            setProps({ pagination_settings, ...clearSelection });
+            page_current++;
+            setProps({ page_current, ...clearSelection });
         },
         loadPrevious: () => {
-            if (pagination_settings.current_page <= 0) {
+            if (page_current <= 0) {
                 return;
             }
 
-            pagination_settings = merge(pagination_settings, {
-                current_page: pagination_settings.current_page - 1
-            });
-
-            setProps({ pagination_settings, ...clearSelection });
+            page_current--;
+            setProps({ page_current, ...clearSelection });
         }
     };
 }
@@ -82,7 +74,8 @@ function getNoPagination() {
 
 const getter = (
     page_action: TableAction,
-    pagination_settings: IPaginationSettings,
+    page_current: number,
+    page_size: number,
     setProps: SetProps,
     data: Data
 ): IPaginator => {
@@ -90,9 +83,9 @@ const getter = (
         case TableAction.None:
             return getNoPagination();
         case TableAction.Native:
-            return getFrontEndPagination(pagination_settings, setProps, data);
+            return getFrontEndPagination(page_current, page_size, setProps, data);
         case TableAction.Custom:
-            return getBackEndPagination(pagination_settings, setProps);
+            return getBackEndPagination(page_current, setProps);
         default:
             throw new Error(`Unknown pagination mode: '${page_action}'`);
     }

@@ -29,10 +29,8 @@ app.layout = html.Div(
             id="table",
             data=[],
             page_action="custom",
-            pagination_settings={
-                "current_page": 0,
-                "page_size": 250,
-            },
+            page_current=0,
+            page_size=250,
             columns=[
                 {"id": 0, "name": "Complaint ID"},
                 {"id": 1, "name": "Product"},
@@ -62,15 +60,11 @@ app.layout = html.Div(
 
 
 @app.callback(Output("table", "data"), [
-    Input("table", "pagination_settings"),
+    Input("table", "page_current"),
+    Input("table", "page_size"),
     Input("table", "sort_by")
 ])
-def updateData(pagination_settings, sort_by):
-    print(pagination_settings)
-
-    current_page = pagination_settings["current_page"]
-    page_size = pagination_settings["page_size"]
-
+def updateData(current_page, page_size, sort_by):
     start_index = current_page * page_size
     end_index = start_index + page_size
     print(str(start_index) + "," + str(end_index))

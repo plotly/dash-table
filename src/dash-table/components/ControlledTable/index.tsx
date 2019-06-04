@@ -579,12 +579,12 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         const {
             data,
             page_action,
-            pagination_settings
+            page_size
         } = this.props;
 
         return (
             page_action === TableAction.Native &&
-            pagination_settings.page_size < data.length
+            page_size < data.length
         ) || page_action === TableAction.Custom;
     }
 

@@ -32,10 +32,8 @@ export default class DataTable extends Component {
 
 export const defaultProps = {
     page_action: 'native',
-    pagination_settings: {
-        current_page: 0,
-        page_size: 250
-    },
+    page_current: 0,
+    page_size: 250,
 
     css: [],
     filter: '',
@@ -576,18 +574,17 @@ export const propTypes = {
     page_action: PropTypes.oneOf(['custom', 'native', 'none']),
 
     /**
-     * `pagination_settings` controls the pagination settings
-     * _and_ represents the current state of the pagination UI.
-     * - `page_size` represents the number of rows that will be
-     * displayed on a particular page.
-     * - `current_page` represents which page the user is on.
+     * `page_current` represents which page the user is on.
      * Use this property to index through data in your callbacks with
      * backend paging.
      */
-    pagination_settings: PropTypes.exact({
-        current_page: PropTypes.number.isRequired,
-        page_size: PropTypes.number.isRequired
-    }),
+    page_current: PropTypes.number,
+
+    /**
+     * `page_size` represents the number of rows that will be
+     * displayed on a particular page.
+     */
+    page_size: PropTypes.number,
 
     /**
      * `dropdown` represents the available dropdown
