@@ -24,8 +24,8 @@ def layout():
                     ],
                     data=df.to_dict("rows"),
                     editable=True,
-                    filtering=True,
-                    sorting=True,
+                    filtering='native',
+                    sorting='native',
                     sorting_type="multi",
                     row_selectable="multi",
                     row_deletable=True,
@@ -43,8 +43,8 @@ def layout():
             `Table` includes several features for modifying and transforming the
             view of the data. These include:
 
-            - Sorting by column (`sorting=True`)
-            - Filtering by column (`filtering=True`)
+            - Sorting by column (`sorting='native'`)
+            - Filtering by column (`filtering='native'`)
             - Editing the cells (`editable=True`)
             - Deleting rows (`row_deletable=True`)
             - Deleting columns (`columns[i].deletable=True`)

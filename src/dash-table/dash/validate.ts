@@ -1,13 +1,14 @@
 import * as R from 'ramda';
 
 import Logger from 'core/Logger';
+import { TableAction } from 'dash-table/components/Table/props';
 
-function isFrontEnd(value: any) {
-    return ['fe', true, false].indexOf(value) !== -1;
+function isFrontEnd(value: TableAction) {
+    return value !== TableAction.Custom;
 }
 
-function isBackEnd(value: any) {
-    return ['be', false].indexOf(value) !== -1;
+function isBackEnd(value: TableAction) {
+    return value !== TableAction.Native;
 }
 
 function validColumns(props: any) {

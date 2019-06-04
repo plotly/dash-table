@@ -8,13 +8,12 @@ import singleUpdateSettings from 'core/sorting/single';
 
 import {
     ColumnId,
-    PaginationMode,
     SortingType,
     VisibleColumns,
     IVisibleColumn,
     SetProps,
     ControlledTableProps,
-    Sorting
+    TableAction
 } from 'dash-table/components/Table/props';
 import * as actions from 'dash-table/utils/actions';
 
@@ -83,10 +82,10 @@ function getSortingIcon(columnId: ColumnId, sortSettings: SortSettings) {
 function getter(
     columns: VisibleColumns,
     labelsAndIndices: R.KeyValuePair<any[], number[]>[],
-    sorting: Sorting,
+    sorting: TableAction,
     sortType: SortingType,
     sortSettings: SortSettings,
-    paginationMode: PaginationMode,
+    paginationMode: TableAction,
     setProps: SetProps,
     options: ControlledTableProps
 ): JSX.Element[][] {
@@ -102,14 +101,14 @@ function getter(
                         column.renamable :
                         !!column.renamable && column.renamable[headerRowIndex];
 
-                    const deletable = paginationMode !== 'be' && (
+                    const deletable = paginationMode !== TableAction.Custom && (
                         typeof column.deletable === 'boolean' ?
                             column.deletable :
                             !!column.deletable && column.deletable[headerRowIndex]
                     );
 
                     return (<div>
-                        {sorting && isLastRow ?
+                        {sorting !== TableAction.None && isLastRow ?
                             (<span
                                 className='sort'
                                 onClick={doSort(column.id, sortSettings, sortType, setProps)}

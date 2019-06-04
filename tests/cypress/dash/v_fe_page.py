@@ -36,7 +36,7 @@ app.layout = html.Div(
         dash_table.DataTable(
             id="table",
             data=data,
-            pagination_mode="fe",
+            pagination_mode="native",
             pagination_settings={
                 "current_page": 0,
                 "page_size": 250,
@@ -61,8 +61,8 @@ app.layout = html.Div(
             fixed_rows={ 'headers': True },
             row_selectable=True,
             row_deletable=True,
-            sorting="fe",
-            filtering=True,
+            sorting="native",
+            filtering='native',
             editable=True,
         ),
         html.Div(id="props_container")

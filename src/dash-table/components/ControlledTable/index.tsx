@@ -18,7 +18,7 @@ import { memoizeOne } from 'core/memoizer';
 import lexer from 'core/syntax-tree/lexer';
 
 import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
-import { ControlledTableProps, ICellFactoryProps } from 'dash-table/components/Table/props';
+import { ControlledTableProps, ICellFactoryProps, TableAction } from 'dash-table/components/Table/props';
 import dropdownHelper from 'dash-table/components/dropdownHelper';
 
 import derivedTable from 'dash-table/derived/table';
@@ -583,9 +583,9 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         } = this.props;
 
         return (
-            pagination_mode === 'fe' &&
+            pagination_mode === TableAction.Native &&
             pagination_settings.page_size < data.length
-        ) || pagination_mode === 'be';
+        ) || pagination_mode === TableAction.Custom;
     }
 
     loadNext = () => {
@@ -731,7 +731,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             ...(empty[1][1] ? ['dash-empty-11'] : []),
             ...(columns.length ? [] : ['dash-no-columns']),
             ...(virtualized.data.length ? [] : ['dash-no-data']),
-            ...(filtering ? [] : ['dash-no-filter'])
+            ...(filtering !== TableAction.None ? [] : ['dash-no-filter'])
         ];
 
         const containerClasses = ['dash-spreadsheet-container', ...classes];

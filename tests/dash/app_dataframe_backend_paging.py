@@ -44,7 +44,7 @@ def layout():
                     'current_page': 0,
                     'page_size': PAGE_SIZE
                 },
-                pagination_mode='be'
+                pagination_mode='custom'
             ),
 
             html.Hr(),
@@ -73,9 +73,9 @@ def layout():
                     'current_page': 0,
                     'page_size': PAGE_SIZE
                 },
-                pagination_mode='be',
+                pagination_mode='custom',
 
-                sorting='be',
+                sorting='custom',
                 sorting_type='single',
                 sort_by=[]
             ),
@@ -100,9 +100,9 @@ def layout():
                     'current_page': 0,
                     'page_size': PAGE_SIZE
                 },
-                pagination_mode='be',
+                pagination_mode='custom',
 
-                sorting='be',
+                sorting='custom',
                 sorting_type='multi',
                 sort_by=[]
             ),
@@ -138,9 +138,9 @@ def layout():
                     'current_page': 0,
                     'page_size': PAGE_SIZE
                 },
-                pagination_mode='be',
+                pagination_mode='custom',
 
-                filtering='be',
+                filtering='custom',
                 filter=''
             ),
 
@@ -155,12 +155,12 @@ def layout():
                     'current_page': 0,
                     'page_size': PAGE_SIZE
                 },
-                pagination_mode='be',
+                pagination_mode='custom',
 
-                filtering='be',
+                filtering='custom',
                 filter='',
 
-                sorting='be',
+                sorting='custom',
                 sorting_type='multi',
                 sort_by=[]
             ),
@@ -185,12 +185,12 @@ def layout():
                                 'current_page': 0,
                                 'page_size': 20
                             },
-                            pagination_mode='be',
+                            pagination_mode='custom',
 
-                            filtering='be',
+                            filtering='custom',
                             filter='',
 
-                            sorting='be',
+                            sorting='custom',
                             sorting_type='multi',
                             sort_by=[]
                         ),

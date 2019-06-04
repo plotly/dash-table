@@ -31,7 +31,7 @@ export default class DataTable extends Component {
 }
 
 export const defaultProps = {
-    pagination_mode: 'fe',
+    pagination_mode: 'native',
     pagination_settings: {
         current_page: 0,
         page_size: 250
@@ -39,9 +39,9 @@ export const defaultProps = {
 
     css: [],
     filter: '',
-    filtering: false,
+    filtering: 'none',
     sort_as_none: [],
-    sorting: false,
+    sorting: 'none',
     sorting_type: 'single',
     sort_by: [],
     style_as_list_view: false,
@@ -573,7 +573,7 @@ export const propTypes = {
      * NOTE: The `fe` and `be` names may change in the future.
      * Tune in to [https://github.com/plotly/dash-table/issues/167](https://github.com/plotly/dash-table/issues/167) for more.
      */
-    pagination_mode: PropTypes.oneOf(['fe', 'be', true, false]),
+    pagination_mode: PropTypes.oneOf(['custom', 'native', 'none']),
 
     /**
      * `pagination_settings` controls the pagination settings
@@ -836,7 +836,7 @@ export const propTypes = {
      * including the naming of this property.
      * Tune in to [https://github.com/plotly/dash-table/issues/167](https://github.com/plotly/dash-table/issues/167)
      */
-    filtering: PropTypes.oneOf(['fe', 'be', true, false]),
+    filtering: PropTypes.oneOf(['custom', 'native', 'none']),
 
     /**
      * The `sorting` property enables data to be
@@ -850,7 +850,7 @@ export const propTypes = {
      * Clicking on the sort arrows will update the
      * `sort_by` property.
      */
-    sorting: PropTypes.oneOf(['fe', 'be', true, false]),
+    sorting: PropTypes.oneOf(['custom', 'native', 'none']),
 
     /**
      * Sorting can be performed across multiple columns

@@ -8,7 +8,8 @@ import {
     ChangeAction,
     ChangeFailure,
     IVisibleColumn,
-    ColumnType
+    ColumnType,
+    TableAction
 } from 'dash-table/components/Table/props';
 import { TooltipSyntax } from 'dash-table/tooltips/props';
 
@@ -57,7 +58,7 @@ function getBaseTableProps(mock: IDataMock) {
                 }))
             }
         },
-        pagination_mode: false,
+        pagination_mode: TableAction.None,
         style_table: {
             max_height: '800px',
             height: '800px',
@@ -86,13 +87,13 @@ function getDefaultState(
         tableProps: R.merge(getBaseTableProps(mock), {
             data: mock.data,
             editable: true,
-            sorting: true,
+            sorting: TableAction.Native,
             fixed_rows: { headers: true },
             fixed_columns: { headers: true },
             merge_duplicate_headers: false,
             row_deletable: true,
             row_selectable: 'single',
-            pagination_mode: 'fe'
+            pagination_mode: TableAction.Native
         }) as Partial<PropsWithDefaults>
     };
 }
@@ -111,7 +112,7 @@ function getReadonlyState() {
 
 function getSpaceInColumn() {
     const state = getDefaultState(generateSpaceMockData);
-    state.tableProps.filtering = true;
+    state.tableProps.filtering = TableAction.Native;
 
     return state;
 }
@@ -137,7 +138,7 @@ function getTooltipsState() {
             { type: TooltipSyntax.Markdown, value: `### Go Proverb\nSente gains nothing` },
             { type: TooltipSyntax.Text, value: `Beware of going back to patch up` },
             { type: TooltipSyntax.Text, value: `When in doubt, Tenuki` },
-            `People in glass houses shouldn't throw stones`
+            `People in glass houses should not throw stones`
         ]
     };
     state.tableProps.tooltip = {
@@ -216,7 +217,7 @@ function getDateState() {
 
 function getFilteringState() {
     const state = getDefaultState();
-    state.tableProps.filtering = true;
+    state.tableProps.filtering = TableAction.Native;
 
     return state;
 }
@@ -229,7 +230,7 @@ function getVirtualizedState() {
         tableProps: R.merge(getBaseTableProps(mock), {
             data: mock.data,
             editable: true,
-            sorting: true,
+            sorting: TableAction.Native,
             merge_duplicate_headers: false,
             row_deletable: true,
             row_selectable: 'single',
@@ -246,7 +247,7 @@ function getFixedVirtualizedState() {
         tableProps: R.merge(getBaseTableProps(mock), {
             data: mock.data,
             editable: true,
-            sorting: true,
+            sorting: TableAction.Native,
             fixed_rows: { headers: true },
             fixed_columns: { headers: true },
             merge_duplicate_headers: false,

@@ -5,6 +5,7 @@
     ],
     "linterOptions": {
         "exclude": [
+            ".config/**",
             "node_modules/**",
             "cypress/**",
             "@Types/**"

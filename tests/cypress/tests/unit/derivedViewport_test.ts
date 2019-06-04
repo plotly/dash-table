@@ -1,6 +1,7 @@
 import * as R from 'ramda';
 
 import derivedViewportData from 'dash-table/derived/data/viewport';
+import { TableAction } from 'dash-table/components/Table/props';
 
 describe('derived viewport', () => {
     const viewportData = derivedViewportData();
@@ -9,7 +10,7 @@ describe('derived viewport', () => {
         describe('with no pagination', () => {
             it('returns entire data', () => {
                 const result = viewportData(
-                    false,
+                    TableAction.None,
                     { current_page: 0, page_size: 250 },
                     R.map(() => { }, R.range(0, 5)),
                     R.range(0, 5)
@@ -23,7 +24,7 @@ describe('derived viewport', () => {
         describe('with fe pagination', () => {
             it('returns entire data', () => {
                 const result = viewportData(
-                    'fe',
+                    TableAction.Native,
                     { current_page: 0, page_size: 250 },
                     R.map(() => { }, R.range(0, 5)),
                     R.range(0, 5)
@@ -37,7 +38,7 @@ describe('derived viewport', () => {
         describe('with be pagination', () => {
             it('returns entire data', () => {
                 const result = viewportData(
-                    'be',
+                    TableAction.Custom,
                     { current_page: 0, page_size: 250 },
                     R.map(() => { }, R.range(0, 5)),
                     R.range(0, 5)
@@ -53,7 +54,7 @@ describe('derived viewport', () => {
         describe('with fe pagination', () => {
             it('returns slice of data', () => {
                 const result = viewportData(
-                    'fe',
+                    TableAction.Native,
                     { current_page: 0, page_size: 250 },
                     R.map(idx => ({ idx }), R.range(0, 500)),
                     R.range(0, 500)

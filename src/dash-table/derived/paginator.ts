@@ -6,9 +6,9 @@ import { clearSelection } from 'dash-table/utils/actions';
 
 import {
     Data,
-    PaginationMode,
     SetProps,
-    IPaginationSettings
+    IPaginationSettings,
+    TableAction
 } from 'dash-table/components/Table/props';
 
 export interface IPaginator {
@@ -81,18 +81,17 @@ function getNoPagination() {
 }
 
 const getter = (
-    pagination_mode: PaginationMode,
+    pagination_mode: TableAction,
     pagination_settings: IPaginationSettings,
     setProps: SetProps,
     data: Data
 ): IPaginator => {
     switch (pagination_mode) {
-        case false:
+        case TableAction.None:
             return getNoPagination();
-        case true:
-        case 'fe':
+        case TableAction.Native:
             return getFrontEndPagination(pagination_settings, setProps, data);
-        case 'be':
+        case TableAction.Custom:
             return getBackEndPagination(pagination_settings, setProps);
         default:
             throw new Error(`Unknown pagination mode: '${pagination_mode}'`);

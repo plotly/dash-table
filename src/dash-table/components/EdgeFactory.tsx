@@ -15,7 +15,7 @@ import getHeaderRows from 'dash-table/derived/header/headerRows';
 import { derivedRelevantCellStyles, derivedRelevantFilterStyles, derivedRelevantHeaderStyles } from 'dash-table/derived/style';
 import { Style, Cells, DataCells, BasicFilters, Headers } from 'dash-table/derived/style/props';
 
-import { ControlledTableProps, VisibleColumns, IViewportOffset, Data, ICellCoordinates } from './Table/props';
+import { ControlledTableProps, VisibleColumns, IViewportOffset, Data, ICellCoordinates, TableAction } from './Table/props';
 import { SingleColumnSyntaxTree } from 'dash-table/syntax-tree';
 
 type EdgesMatricesOp = EdgesMatrices | undefined;
@@ -162,7 +162,7 @@ export default class EdgeFactory {
             active_cell,
             columns,
             (row_deletable ? 1 : 0) + (row_selectable ? 1 : 0),
-            !!filtering,
+            filtering !== TableAction.None,
             workFilter.map,
             fixed_columns,
             fixed_rows,
