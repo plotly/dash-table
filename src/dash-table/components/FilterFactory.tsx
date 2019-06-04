@@ -18,14 +18,14 @@ import { IEdgesMatrices } from 'dash-table/derived/edges/type';
 import { updateMap } from 'dash-table/derived/filter/map';
 
 type SetFilter = (
-    filter: string,
+    filter_query: string,
     rawFilter: string,
     map: Map<string, SingleColumnSyntaxTree>
 ) => void;
 
 export interface IFilterOptions {
     columns: VisibleColumns;
-    filter: string;
+    filter_query: string;
     filter_action: TableAction;
     id: string;
     map: Map<string, SingleColumnSyntaxTree>;

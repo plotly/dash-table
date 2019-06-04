@@ -54,9 +54,9 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
     getLexerResult = memoizeOne(lexer.bind(undefined, queryLexicon));
 
     get lexerResult() {
-        const { filter } = this.props;
+        const { filter_query } = this.props;
 
-        return this.getLexerResult(filter);
+        return this.getLexerResult(filter_query);
     }
 
     private updateStylesheet() {
@@ -550,7 +550,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             columns,
             data,
             editable,
-            filter,
+            filter_query,
             setProps,
             sort_by,
             viewport
@@ -567,7 +567,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             columns,
             data,
             true,
-            !sort_by.length || !filter.length
+            !sort_by.length || !filter_query.length
         );
 
         if (result) {

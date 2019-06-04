@@ -49,7 +49,7 @@ def layout():
 
             dcc.Markdown(dedent('''
             With backend paging, we can have front-end sorting and filtering
-            but it will only filter and sort the data that exists on the page.
+            but it will only filter_query and sort the data that exists on the page.
 
             This should be avoided. Your users will expect
             that sorting and filtering is happening on the entire dataset and,
@@ -133,7 +133,7 @@ def layout():
                 page_action='custom',
 
                 filter_action='custom',
-                filter=''
+                filter_query=''
             ),
 
             section_title('Backend Paging with Filtering and Multi-Column Sorting'),
@@ -148,7 +148,7 @@ def layout():
                 page_action='custom',
 
                 filter_action='custom',
-                filter='',
+                filter_query='',
 
                 sorting='custom',
                 sorting_type='multi',
@@ -176,7 +176,7 @@ def layout():
                             page_action='custom',
 
                             filter_action='custom',
-                            filter='',
+                            filter_query='',
 
                             sorting='custom',
                             sorting_type='multi',
@@ -260,23 +260,23 @@ def update_graph(page_current, page_size, sort_by):
     Output(IDS["table-filtering"], "data"),
     [Input(IDS["table-filtering"], "page_current"),
      Input(IDS["table-filtering"], "page_size"),
-     Input(IDS["table-filtering"], "filter")])
-def update_graph(page_current, page_size, filter):
-    print(filter)
-    filtering_expressions = filter.split(' && ')
+     Input(IDS["table-filtering"], "filter_query")])
+def update_graph(page_current, page_size, filter_query):
+    print(filter_query)
+    filtering_expressions = filter_query.split(' && ')
     dff = df
-    for filter in filtering_expressions:
-        if ' eq ' in filter:
-            col_name = filter.split(' eq ')[0]
-            filter_value = filter.split(' eq ')[1]
+    for filter_query in filtering_expressions:
+        if ' eq ' in filter_query:
+            col_name = filter_query.split(' eq ')[0]
+            filter_value = filter_query.split(' eq ')[1]
             dff = dff.loc[dff[col_name] == filter_value]
-        if ' > ' in filter:
-            col_name = filter.split(' > ')[0]
-            filter_value = float(filter.split(' > ')[1])
+        if ' > ' in filter_query:
+            col_name = filter_query.split(' > ')[0]
+            filter_value = float(filter_query.split(' > ')[1])
             dff = dff.loc[dff[col_name] > filter_value]
-        if ' < ' in filter:
-            col_name = filter.split(' < ')[0]
-            filter_value = float(filter.split(' < ')[1])
+        if ' < ' in filter_query:
+            col_name = filter_query.split(' < ')[0]
+            filter_value = float(filter_query.split(' < ')[1])
             dff = dff.loc[dff[col_name] < filter_value]
 
     return dff.iloc[
@@ -290,22 +290,22 @@ def update_graph(page_current, page_size, filter):
     [Input(IDS["table-sorting-filtering"], "page_current"),
      Input(IDS["table-sorting-filtering"], "page_size"),
      Input(IDS["table-sorting-filtering"], "sort_by"),
-     Input(IDS["table-sorting-filtering"], "filter")])
-def update_graph(page_current, page_size, sort_by, filter):
-    filtering_expressions = filter.split(' && ')
+     Input(IDS["table-sorting-filtering"], "filter_query")])
+def update_graph(page_current, page_size, sort_by, filter_query):
+    filtering_expressions = filter_query.split(' && ')
     dff = df
-    for filter in filtering_expressions:
-        if ' eq ' in filter:
-            col_name = filter.split(' eq ')[0]
-            filter_value = filter.split(' eq ')[1]
+    for filter_query in filtering_expressions:
+        if ' eq ' in filter_query:
+            col_name = filter_query.split(' eq ')[0]
+            filter_value = filter_query.split(' eq ')[1]
             dff = dff.loc[dff[col_name] == filter_value]
-        if ' > ' in filter:
-            col_name = filter.split(' > ')[0]
-            filter_value = float(filter.split(' > ')[1])
+        if ' > ' in filter_query:
+            col_name = filter_query.split(' > ')[0]
+            filter_value = float(filter_query.split(' > ')[1])
             dff = dff.loc[dff[col_name] > filter_value]
-        if ' < ' in filter:
-            col_name = filter.split(' < ')[0]
-            filter_value = float(filter.split(' < ')[1])
+        if ' < ' in filter_query:
+            col_name = filter_query.split(' < ')[0]
+            filter_value = float(filter_query.split(' < ')[1])
             dff = dff.loc[dff[col_name] < filter_value]
 
     if len(sort_by):
@@ -329,22 +329,22 @@ def update_graph(page_current, page_size, sort_by, filter):
     [Input(IDS["table-paging-with-graph"], "page_current"),
      Input(IDS["table-paging-with-graph"], "page_size"),
      Input(IDS["table-paging-with-graph"], "sort_by"),
-     Input(IDS["table-paging-with-graph"], "filter")])
-def update_table(page_current, page_size, sort_by, filter):
-    filtering_expressions = filter.split(' && ')
+     Input(IDS["table-paging-with-graph"], "filter_query")])
+def update_table(page_current, page_size, sort_by, filter_query):
+    filtering_expressions = filter_query.split(' && ')
     dff = df
-    for filter in filtering_expressions:
-        if ' eq ' in filter:
-            col_name = filter.split(' eq ')[0]
-            filter_value = filter.split(' eq ')[1]
+    for filter_query in filtering_expressions:
+        if ' eq ' in filter_query:
+            col_name = filter_query.split(' eq ')[0]
+            filter_value = filter_query.split(' eq ')[1]
             dff = dff.loc[dff[col_name] == filter_value]
-        if ' > ' in filter:
-            col_name = filter.split(' > ')[0]
-            filter_value = float(filter.split(' > ')[1])
+        if ' > ' in filter_query:
+            col_name = filter_query.split(' > ')[0]
+            filter_value = float(filter_query.split(' > ')[1])
             dff = dff.loc[dff[col_name] > filter_value]
-        if ' < ' in filter:
-            col_name = filter.split(' < ')[0]
-            filter_value = float(filter.split(' < ')[1])
+        if ' < ' in filter_query:
+            col_name = filter_query.split(' < ')[0]
+            filter_value = float(filter_query.split(' < ')[1])
             dff = dff.loc[dff[col_name] < filter_value]
 
     if len(sort_by):

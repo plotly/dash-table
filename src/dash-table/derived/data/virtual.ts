@@ -17,7 +17,7 @@ const getter = (
     columns: VisibleColumns,
     data: Data,
     filter_action: TableAction,
-    filter: string,
+    filter_query: string,
     sorting: TableAction,
     sort_by: SortSettings = []
 ): IDerivedData => {
@@ -27,7 +27,7 @@ const getter = (
     }, data);
 
     if (filter_action === TableAction.Native) {
-        const tree = new QuerySyntaxTree(filter);
+        const tree = new QuerySyntaxTree(filter_query);
 
         data = tree.isValid ?
             tree.filter(data) :

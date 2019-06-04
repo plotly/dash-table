@@ -60,7 +60,7 @@ storiesOf('DashTable/Dropdown', module)
         dropdown_conditional={[{
             if: {
                 column_id: 'Neighborhood',
-                filter: '{City} eq "NYC"'
+                filter_query: '{City} eq "NYC"'
             },
             dropdown: R.map(
                 i => ({ label: i, value: i }),
@@ -69,7 +69,7 @@ storiesOf('DashTable/Dropdown', module)
         }, {
             if: {
                 column_id: 'Neighborhood',
-                filter: '{City} eq "Montreal"'
+                filter_query: '{City} eq "Montreal"'
             },
             dropdown: R.map(
                 i => ({ label: i, value: i }),
@@ -79,7 +79,7 @@ storiesOf('DashTable/Dropdown', module)
         {
             if: {
                 column_id: 'Neighborhood',
-                filter: '{City} eq "Los Angeles"'
+                filter_query: '{City} eq "Los Angeles"'
             },
             dropdown: R.map(
                 i => ({ label: i, value: i }),

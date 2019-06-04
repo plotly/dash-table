@@ -77,13 +77,13 @@ function getBaseTableProps(mock: IDataMock) {
 function getDefaultState(
     generateData: Function = generateMockData
 ): {
-    filter: string,
+    filter_query: string,
     tableProps: Partial<PropsWithDefaults>
 } {
     const mock = generateData(5000);
 
     return {
-        filter: '',
+        filter_query: '',
         tableProps: R.merge(getBaseTableProps(mock), {
             data: mock.data,
             editable: true,
@@ -149,7 +149,7 @@ function getTooltipsState() {
     state.tableProps.tooltip_conditional = [{
         if: {
             column_id: 'aaa-readonly',
-            filter: `{aaa} is prime`
+            filter_query: `{aaa} is prime`
         },
         type: TooltipSyntax.Markdown,
         value: `### Go Proverbs\nCapture three to get an eye`
@@ -226,7 +226,7 @@ function getVirtualizedState() {
     const mock = generateMockData(5000);
 
     return {
-        filter: '',
+        filter_query: '',
         tableProps: R.merge(getBaseTableProps(mock), {
             data: mock.data,
             editable: true,
@@ -243,7 +243,7 @@ function getFixedVirtualizedState() {
     const mock = generateMockData(5000);
 
     return {
-        filter: '',
+        filter_query: '',
         tableProps: R.merge(getBaseTableProps(mock), {
             data: mock.data,
             editable: true,

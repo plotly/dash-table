@@ -43,10 +43,10 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
         this.state = {
             forcedResizeOnly: false,
             workFilter: {
-                value: props.filter,
+                value: props.filter_query,
                 map: this.filterMap(
                     new Map<string, SingleColumnSyntaxTree>(),
-                    props.filter,
+                    props.filter_query,
                     props.columns
                 )
             },
@@ -56,17 +56,17 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
     }
 
     componentWillReceiveProps(nextProps: SanitizedAndDerivedProps) {
-        if (nextProps.filter === this.props.filter) {
+        if (nextProps.filter_query === this.props.filter_query) {
             return;
         }
 
         this.setState(state => {
             const { workFilter: { map: currentMap, value } } = state;
 
-            if (value !== nextProps.filter) {
+            if (value !== nextProps.filter_query) {
                 const map = this.filterMap(
                     currentMap,
-                    nextProps.filter,
+                    nextProps.filter_query,
                     nextProps.columns
                 );
 
@@ -103,7 +103,7 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
         const {
             columns,
             data,
-            filter,
+            filter_query,
             filter_action,
             page_action,
             page_current,
@@ -121,7 +121,7 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
             columns,
             data,
             filter_action,
-            filter,
+            filter_query,
             sorting,
             sort_by
         );
@@ -181,7 +181,7 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
 
     private updateDerivedProps(controlled: ControlledTableProps) {
         const {
-            filter,
+            filter_query,
             filter_action,
             page_action,
             page_current,
@@ -194,7 +194,7 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
             virtual_selected_rows
         } = controlled;
 
-        const derivedStructureCache = this.structuredQueryCache(filter);
+        const derivedStructureCache = this.structuredQueryCache(filter_query);
 
         const viewportCached = this.viewportCache(viewport).cached;
         const virtualCached = this.virtualCache(virtual).cached;
@@ -202,7 +202,7 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
         const viewportSelectedRowsCached = this.viewportSelectedRowsCache(viewport_selected_rows).cached;
         const virtualSelectedRowsCached = this.virtualSelectedRowsCache(virtual_selected_rows).cached;
 
-        const invalidatedFilter = this.filterCache(filter);
+        const invalidatedFilter = this.filterCache(filter_query);
         const invalidatedPagination = this.paginationCache(page_current, page_size);
         const invalidatedSort = this.sortCache(sort_by);
 
@@ -312,7 +312,7 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
     private readonly virtualized = derivedVirtualizedData();
     private readonly visibleColumns = derivedVisibleColumns();
 
-    private readonly filterCache = memoizeOneWithFlag(filter => filter);
+    private readonly filterCache = memoizeOneWithFlag(filter_query => filter_query);
     private readonly paginationCache = memoizeOneWithFlag((page_current, page_size) => [page_current, page_size]);
     private readonly sortCache = memoizeOneWithFlag(sort => sort);
     private readonly viewportCache = memoizeOneWithFlag(viewport => viewport);

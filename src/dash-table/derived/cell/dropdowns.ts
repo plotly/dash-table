@@ -68,9 +68,9 @@ class Dropdowns {
                 ifColumnId(cd.if, column.id) &&
                 (
                     R.isNil(cd.if) ||
-                    R.isNil(cd.if.filter) ||
+                    R.isNil(cd.if.filter_query) ||
                     this.evaluation.get(column.id, i)(
-                        this.ast.get(column.id, i)(cd.if.filter),
+                        this.ast.get(column.id, i)(cd.if.filter_query),
                         datum
                     )
                 ),

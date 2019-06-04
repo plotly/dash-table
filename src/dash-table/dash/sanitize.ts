@@ -58,10 +58,10 @@ const getFixedColumns = (
 const getFixedRows = (
     fixed: Fixed,
     columns: IColumn[],
-    filter: TableAction
+    filter_action: TableAction
 ) => !fixed.headers ?
         0 :
-        headerRows(columns) + (filter !== TableAction.None ? 1 : 0) + data2number(fixed.data);
+        headerRows(columns) + (filter_action !== TableAction.None ? 1 : 0) + data2number(fixed.data);
 
 export default (props: PropsWithDefaults): SanitizedProps => {
     const locale_format = applyDefaultToLocale(props.locale_format);

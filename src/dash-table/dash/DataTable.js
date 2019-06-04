@@ -36,7 +36,7 @@ export const defaultProps = {
     page_size: 250,
 
     css: [],
-    filter: '',
+    filter_query: '',
     filter_action: 'none',
     sort_as_none: [],
     sorting: 'none',
@@ -624,7 +624,7 @@ export const propTypes = {
         clearable: PropTypes.bool,
         if: PropTypes.exact({
             column_id: PropTypes.string,
-            filter: PropTypes.string
+            filter_query: PropTypes.string
         }),
         dropdown: PropTypes.arrayOf(PropTypes.exact({
             label: PropTypes.string.isRequired,
@@ -712,7 +712,7 @@ export const propTypes = {
      * ID that must be matched.
      * The `if` nested property `row_index` refers to the index
      * of the row in the source `data`.
-     * The `if` nested property `filter` refers to the query that
+     * The `if` nested property `filter_query` refers to the query that
      * must evaluate to True.
      *
      * The `type` refers to the type of tooltip syntax used
@@ -734,7 +734,7 @@ export const propTypes = {
         duration: PropTypes.number,
         if: PropTypes.exact({
             column_id: PropTypes.string,
-            filter: PropTypes.string,
+            filter_query: PropTypes.string,
             row_index: PropTypes.oneOfType([
                 PropTypes.number,
                 PropTypes.oneOf([
@@ -810,13 +810,13 @@ export const propTypes = {
 
     /**
      * If `filter_action` is enabled, then the current filtering
-     * string is represented in this `filter`
+     * string is represented in this `filter_query`
      * property.
      * NOTE: The shape and structure of this property will
      * likely change in the future.
      * Stay tuned in [https://github.com/plotly/dash-table/issues/169](https://github.com/plotly/dash-table/issues/169)
      */
-    filter: PropTypes.string,
+    filter_query: PropTypes.string,
 
     /**
      * The `filter_action` property controls the behavior of the `filtering` UI.
@@ -826,7 +826,7 @@ export const propTypes = {
      * that exists in the `data` property.
      * If `be`, then the filtering UI is displayed but it is the
      * responsibility of the developer to program the filtering
-     * through a callback (where `filter` would be the input
+     * through a callback (where `filter_query` would be the input
      * and `data` would be the output).
      *
      * NOTE - Several aspects of filtering may change in the future,
@@ -949,7 +949,7 @@ export const propTypes = {
         if: PropTypes.exact({
             column_id: PropTypes.string,
             column_type: PropTypes.oneOf(['any', 'numeric', 'text', 'datetime']),
-            filter: PropTypes.string,
+            filter_query: PropTypes.string,
             row_index: PropTypes.oneOfType([
                 PropTypes.number,
                 PropTypes.oneOf(['odd', 'even'])
@@ -997,7 +997,7 @@ export const propTypes = {
 
     /**
      * This property represents the current structure of
-     * `filter` as a tree structure. Each node of the
+     * `filter_query` as a tree structure. Each node of the
      * query structure have:
      * - type (string; required)
      *   - 'open-block'
@@ -1019,10 +1019,10 @@ export const propTypes = {
      * - left (nested query structure; optional)
      * - right (nested query structure; optional)
      *
-     * If the query is invalid or empty, the `derived_filter_structure` will
+     * If the query is invalid or empty, the `derived_filter_query_structure` will
      * be null.
      */
-    derived_filter_structure: PropTypes.object,
+    derived_filter_query_structure: PropTypes.object,
 
     /**
      * This property represents the current state of `data`

@@ -248,7 +248,7 @@ const ops_scenarios: ITest[] = [
                 border: '1px solid black'
             },
             style_data_conditional: [{
-                if: { filter: '{a} eq 85' },
+                if: { filter_query: '{a} eq 85' },
                 backgroundColor: 'pink',
                 border: '1px solid red'
             }]

@@ -39,21 +39,21 @@ storiesOf('DashTable/Empty', module)
     />))
     .add('with column filters -- invalid query', () => (<DataTable
         {...R.merge(props, {
-            filter: '{a} !'
+            filter_query: '{a} !'
         })}
     />))
     .add('with column filters -- single query', () => (<DataTable
         {...R.merge(props, {
-            filter: '{a} ge 0'
+            filter_query: '{a} ge 0'
         })}
     />))
     .add('with column filters -- multi query', () => (<DataTable
         {...R.merge(props, {
-            filter: '{a} ge 0 && {b} ge 0'
+            filter_query: '{a} ge 0 && {b} ge 0'
         })}
     />))
     .add('with column filters -- multi query, no data', () => (<DataTable
         {...R.merge(props, {
-            filter: '{a} gt 1000 && {b} gt 1000'
+            filter_query: '{a} gt 1000 && {b} gt 1000'
         })}
     />));
