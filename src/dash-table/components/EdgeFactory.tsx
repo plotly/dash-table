@@ -15,7 +15,7 @@ import getHeaderRows from 'dash-table/derived/header/headerRows';
 import { derivedRelevantCellStyles, derivedRelevantFilterStyles, derivedRelevantHeaderStyles } from 'dash-table/derived/style';
 import { Style, Cells, DataCells, BasicFilters, Headers } from 'dash-table/derived/style/props';
 
-import { ControlledTableProps, VisibleColumns, IViewportOffset, Data, ICellCoordinates } from './Table/props';
+import { ControlledTableProps, VisibleColumns, IViewportOffset, Data, ICellCoordinates, TableAction } from './Table/props';
 import { SingleColumnSyntaxTree } from 'dash-table/syntax-tree';
 
 type EdgesMatricesOp = EdgesMatrices | undefined;
@@ -140,7 +140,7 @@ export default class EdgeFactory {
         const {
             active_cell,
             columns,
-            filtering,
+            filter_action,
             workFilter,
             fixed_columns,
             fixed_rows,
@@ -162,7 +162,7 @@ export default class EdgeFactory {
             active_cell,
             columns,
             (row_deletable ? 1 : 0) + (row_selectable ? 1 : 0),
-            !!filtering,
+            filter_action !== TableAction.None,
             workFilter.map,
             fixed_columns,
             fixed_rows,
@@ -184,7 +184,7 @@ export default class EdgeFactory {
         active_cell: ICellCoordinates,
         columns: VisibleColumns,
         operations: number,
-        filtering: boolean,
+        filter_action: boolean,
         filterMap: Map<string, SingleColumnSyntaxTree>,
         fixed_columns: number,
         fixed_rows: number,
@@ -242,7 +242,7 @@ export default class EdgeFactory {
 
         let filterEdges = this.getFilterEdges(
             columns,
-            filtering,
+            filter_action,
             filterMap,
             filterStyles,
             style_as_list_view
@@ -250,7 +250,7 @@ export default class EdgeFactory {
 
         let filterOpEdges = this.getFilterOpEdges(
             operations,
-            filtering,
+            filter_action,
             filterStyles,
             style_as_list_view
         );
@@ -288,14 +288,14 @@ export default class EdgeFactory {
         this.vReconcile(dataOpEdges, dataEdges, cutoffWeight);
 
         if (fixed_rows === headerRows) {
-            if (filtering) {
+            if (filter_action) {
                 this.hOverride(headerEdges, filterEdges, cutoffWeight);
                 this.hOverride(headerOpEdges, filterOpEdges, cutoffWeight);
             } else {
                 this.hOverride(headerEdges, dataEdges, cutoffWeight);
                 this.hOverride(headerOpEdges, dataOpEdges, cutoffWeight);
             }
-        } else if (filtering && fixed_rows === headerRows + 1) {
+        } else if (filter_action && fixed_rows === headerRows + 1) {
             this.hOverride(filterEdges, dataEdges, cutoffWeight);
             this.hOverride(filterOpEdges, dataOpEdges, cutoffWeight);
         }

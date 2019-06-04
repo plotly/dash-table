@@ -1,4 +1,4 @@
-import { SortSettings } from 'core/sorting';
+import { SortBy } from 'core/sorting';
 import { IPaginator } from 'dash-table/derived/paginator';
 import {
     Table,
@@ -21,6 +21,17 @@ export enum ColumnType {
     Numeric = 'numeric',
     Text = 'text',
     Datetime = 'datetime'
+}
+
+export enum SortMode {
+    Single = 'single',
+    Multi = 'multi'
+}
+
+export enum TableAction {
+    Custom = 'custom',
+    Native = 'native',
+    None = 'none'
 }
 
 export interface IDerivedData {
@@ -56,17 +67,13 @@ export type ColumnId = string;
 export type Columns = IColumn[];
 export type Data = Datum[];
 export type Datum =  IDatumObject | any;
-export type Filtering = 'fe' | 'be' | boolean;
 export type Indices = number[];
 export type RowId = string | number;
-export type PaginationMode = 'fe' | 'be' | boolean;
 export type RowSelection = 'single' | 'multi' | false;
 export type SelectedCells = ICellCoordinates[];
 export type SetProps = (...args: any[]) => void;
 export type SetState = (state: Partial<IState>) => void;
 export type SortAsNone = (string | number | boolean)[];
-export type Sorting = 'fe' | 'be' | boolean;
-export type SortingType = 'multi' | 'single';
 export type VisibleColumns = IVisibleColumn[];
 
 export enum ChangeAction {
@@ -206,11 +213,6 @@ interface IStylesheetRule {
     rule: string;
 }
 
-export interface IPaginationSettings {
-    current_page: number;
-    page_size: number;
-}
-
 export interface IUserInterfaceCell {
     height: number;
 }
@@ -268,8 +270,8 @@ export interface IProps {
     css?: IStylesheetRule[];
     data?: Data;
     editable?: boolean;
-    filter?: string;
-    filtering?: Filtering;
+    filter_query?: string;
+    filter_action?: TableAction;
     locale_format: INumberLocale;
     merge_duplicate_headers?: boolean;
     fixed_columns?: Fixed;
@@ -280,13 +282,14 @@ export interface IProps {
     selected_rows?: Indices;
     selected_row_ids?: RowId[];
     setProps?: SetProps;
-    sorting?: Sorting;
-    sort_by?: SortSettings;
-    sorting_type?: SortingType;
+    sort_action?: TableAction;
+    sort_by?: SortBy;
+    sort_mode?: SortMode;
     sort_as_none?: SortAsNone;
     style_as_list_view?: boolean;
-    pagination_mode?: PaginationMode;
-    pagination_settings?: IPaginationSettings;
+    page_action?: TableAction;
+    page_current?: number;
+    page_size: number;
 
     style_data?: Style;
     style_cell?: Style;
@@ -310,8 +313,8 @@ interface IDefaultProps {
     css: IStylesheetRule[];
     data: Data;
     editable: boolean;
-    filter: string;
-    filtering: Filtering;
+    filter_query: string;
+    filter_action: TableAction;
     merge_duplicate_headers: boolean;
     fixed_columns: Fixed;
     fixed_rows: Fixed;
@@ -322,14 +325,15 @@ interface IDefaultProps {
     end_cell: ICellCoordinates;
     selected_rows: Indices;
     selected_row_ids: RowId[];
-    sorting: Sorting;
-    sort_by: SortSettings;
-    sorting_type: SortingType;
+    sort_action: TableAction;
+    sort_by: SortBy;
+    sort_mode: SortMode;
     sort_as_none: SortAsNone;
     style_as_list_view: boolean;
 
-    pagination_mode: PaginationMode;
-    pagination_settings: IPaginationSettings;
+    page_action: TableAction;
+    page_current: number;
+    page_size: number;
 
     style_data: Style;
     style_cell: Style;

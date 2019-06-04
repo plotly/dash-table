@@ -5,14 +5,14 @@ import { memoizeOne } from 'core/memoizer';
 import {
     Columns,
     ColumnType,
-    Filtering,
     Fixed,
     IColumn,
     INumberLocale,
     PropsWithDefaults,
     RowSelection,
     SanitizedProps,
-    SortAsNone
+    SortAsNone,
+    TableAction
 } from 'dash-table/components/Table/props';
 import headerRows from 'dash-table/derived/header/headerRows';
 
@@ -58,10 +58,10 @@ const getFixedColumns = (
 const getFixedRows = (
     fixed: Fixed,
     columns: IColumn[],
-    filter: Filtering
+    filter_action: TableAction
 ) => !fixed.headers ?
         0 :
-        headerRows(columns) + (filter ? 1 : 0) + data2number(fixed.data);
+        headerRows(columns) + (filter_action !== TableAction.None ? 1 : 0) + data2number(fixed.data);
 
 export default (props: PropsWithDefaults): SanitizedProps => {
     const locale_format = applyDefaultToLocale(props.locale_format);
@@ -69,7 +69,7 @@ export default (props: PropsWithDefaults): SanitizedProps => {
     return R.merge(props, {
         columns: applyDefaultsToColumns(locale_format, props.sort_as_none, props.columns),
         fixed_columns: getFixedColumns(props.fixed_columns, props.row_deletable, props.row_selectable),
-        fixed_rows: getFixedRows(props.fixed_rows, props.columns, props.filtering),
+        fixed_rows: getFixedRows(props.fixed_rows, props.columns, props.filter_action),
         locale_format
     });
 };

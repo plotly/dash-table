@@ -1,8 +1,8 @@
 import * as R from 'ramda';
 
-import sort, { SortDirection, SortSettings } from 'core/sorting';
-import multiUpdateSettings from 'core/sorting/multi';
-import singleUpdateSettings from 'core/sorting/single';
+import sort, { SortDirection, SortBy } from 'core/sorting';
+import multiUpdate from 'core/sorting/multi';
+import singleUpdate from 'core/sorting/single';
 
 describe('sort', () => {
     it('sorts', () => {
@@ -179,7 +179,7 @@ describe('sort', () => {
 describe('sorting settings', () => {
     describe('single column sorting', () => {
         it('new descending', () => {
-            const settings = singleUpdateSettings([], { column_id: 'a', direction: SortDirection.Descending });
+            const settings = singleUpdate([], { column_id: 'a', direction: SortDirection.Descending });
 
             expect(settings.length).to.equal(1);
             expect(settings[0].column_id).to.equal('a');
@@ -187,7 +187,7 @@ describe('sorting settings', () => {
         });
 
         it('update to descending', () => {
-            const settings = singleUpdateSettings(
+            const settings = singleUpdate(
                 [{ column_id: 'a', direction: SortDirection.Ascending }],
                 { column_id: 'a', direction: SortDirection.Descending }
             );
@@ -198,7 +198,7 @@ describe('sorting settings', () => {
         });
 
         it('remove by setting to None', () => {
-            const settings = singleUpdateSettings(
+            const settings = singleUpdate(
                 [{ column_id: 'a', direction: SortDirection.Ascending }],
                 { column_id: 'a', direction: SortDirection.None }
             );
@@ -207,7 +207,7 @@ describe('sorting settings', () => {
         });
 
         it('replace with other', () => {
-            const settings = singleUpdateSettings(
+            const settings = singleUpdate(
                 [{ column_id: 'a', direction: SortDirection.Ascending }],
                 { column_id: 'b', direction: SortDirection.Ascending }
             );
@@ -218,7 +218,7 @@ describe('sorting settings', () => {
         });
 
         it('replace with None', () => {
-            const settings = singleUpdateSettings(
+            const settings = singleUpdate(
                 [{ column_id: 'a', direction: SortDirection.Ascending }],
                 { column_id: 'b', direction: SortDirection.None }
             );
@@ -229,7 +229,7 @@ describe('sorting settings', () => {
 
     describe('multi columns sorting', () => {
         it('new descending', () => {
-            const settings = multiUpdateSettings([], { column_id: 'a', direction: SortDirection.Descending });
+            const settings = multiUpdate([], { column_id: 'a', direction: SortDirection.Descending });
 
             expect(settings.length).to.equal(1);
             expect(settings[0].column_id).to.equal('a');
@@ -237,7 +237,7 @@ describe('sorting settings', () => {
         });
 
         it('update to descending', () => {
-            const settings = multiUpdateSettings(
+            const settings = multiUpdate(
                 [{ column_id: 'a', direction: SortDirection.Ascending }],
                 { column_id: 'a', direction: SortDirection.Descending }
             );
@@ -248,7 +248,7 @@ describe('sorting settings', () => {
         });
 
         it('remove by setting to None', () => {
-            const settings = multiUpdateSettings(
+            const settings = multiUpdate(
                 [{ column_id: 'a', direction: SortDirection.Ascending }],
                 { column_id: 'a', direction: SortDirection.None }
             );
@@ -257,7 +257,7 @@ describe('sorting settings', () => {
         });
 
         it('respects order', () => {
-            const settings = multiUpdateSettings(
+            const settings = multiUpdate(
                 [{ column_id: 'a', direction: SortDirection.Ascending }],
                 { column_id: 'b', direction: SortDirection.Ascending }
             );
@@ -268,19 +268,19 @@ describe('sorting settings', () => {
         });
 
         it('respects order when removed and added back', () => {
-            let settings: SortSettings = [{ column_id: 'a', direction: SortDirection.Ascending }];
+            let settings: SortBy = [{ column_id: 'a', direction: SortDirection.Ascending }];
 
-            settings = multiUpdateSettings(
+            settings = multiUpdate(
                 settings,
                 { column_id: 'b', direction: SortDirection.Ascending }
             );
 
-            settings = multiUpdateSettings(
+            settings = multiUpdate(
                 settings,
                 { column_id: 'a', direction: SortDirection.None }
             );
 
-            settings = multiUpdateSettings(
+            settings = multiUpdate(
                 settings,
                 { column_id: 'a', direction: SortDirection.Ascending }
             );

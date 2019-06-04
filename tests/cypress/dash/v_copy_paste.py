@@ -46,7 +46,7 @@ app.layout = html.Div(
                 {"id": 13, "name": "Consumer disputed?"},
             ],
             editable=True,
-            sorting=True,
+            sort_action='native',
         ),
     ]
 )

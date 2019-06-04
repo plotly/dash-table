@@ -2,7 +2,7 @@ import * as R from 'ramda';
 
 import { ColumnId } from 'dash-table/components/Table/props';
 
-export interface ISortSetting {
+export interface ISortBy {
     column_id: ColumnId;
     direction: SortDirection;
 }
@@ -13,11 +13,11 @@ export enum SortDirection {
     None = 'none'
 }
 
-export type SortSettings = ISortSetting[];
+export type SortBy = ISortBy[];
 type IsNullyFn = (value: any, id: string) => boolean;
 export const defaultIsNully: IsNullyFn = (value: any, _: string) => R.isNil(value);
-export default (data: any[], settings: SortSettings, isNully: IsNullyFn = defaultIsNully): any[] => {
-    if (!settings.length) {
+export default (data: any[], sortBy: SortBy, isNully: IsNullyFn = defaultIsNully): any[] => {
+    if (!sortBy.length) {
         return data;
     }
 
@@ -52,7 +52,7 @@ export default (data: any[], settings: SortSettings, isNully: IsNullyFn = defaul
 
                     return prop1 < prop2;
                 });
-        }, settings),
+        }, sortBy),
         data
     );
 };

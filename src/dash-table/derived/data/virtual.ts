@@ -1,34 +1,33 @@
 import * as R from 'ramda';
 
 import { memoizeOneFactory } from 'core/memoizer';
-import sort, { SortSettings } from 'core/sorting';
+import sort, { SortBy } from 'core/sorting';
 import {
     ColumnId,
     Data,
     Datum,
-    Filtering,
     IDerivedData,
     SortAsNone,
-    Sorting,
-    VisibleColumns
+    VisibleColumns,
+    TableAction
 } from 'dash-table/components/Table/props';
 import { QuerySyntaxTree } from 'dash-table/syntax-tree';
 
 const getter = (
     columns: VisibleColumns,
     data: Data,
-    filtering: Filtering,
-    filter: string,
-    sorting: Sorting,
-    sort_by: SortSettings = []
+    filter_action: TableAction,
+    filter_query: string,
+    sort_action: TableAction,
+    sort_by: SortBy = []
 ): IDerivedData => {
     const map = new Map<Datum, number>();
     R.addIndex(R.forEach)((datum, index) => {
         map.set(datum, index);
     }, data);
 
-    if (filtering === 'fe' || filtering === true) {
-        const tree = new QuerySyntaxTree(filter);
+    if (filter_action === TableAction.Native) {
+        const tree = new QuerySyntaxTree(filter_query);
 
         data = tree.isValid ?
             tree.filter(data) :
@@ -48,7 +47,7 @@ const getter = (
         columnId: ColumnId
     ) => R.isNil(value) || R.contains(value, getNullyCases(columnId));
 
-    if (sorting === 'fe' || sorting === true) {
+    if (sort_action === TableAction.Native) {
         data = sort(data, sort_by, isNully);
     }
 

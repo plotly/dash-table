@@ -31,18 +31,16 @@ export default class DataTable extends Component {
 }
 
 export const defaultProps = {
-    pagination_mode: 'fe',
-    pagination_settings: {
-        current_page: 0,
-        page_size: 250
-    },
+    page_action: 'native',
+    page_current: 0,
+    page_size: 250,
 
     css: [],
-    filter: '',
-    filtering: false,
+    filter_query: '',
+    filter_action: 'none',
     sort_as_none: [],
-    sorting: false,
-    sorting_type: 'single',
+    sort_action: 'none',
+    sort_mode: 'single',
     sort_by: [],
     style_as_list_view: false,
 
@@ -564,7 +562,7 @@ export const propTypes = {
      * in the table (e.g. page through `10,000` rows in `data` `100` rows at a time)
      * or we can update the data on-the-fly with callbacks
      * when the user clicks on the "Previous" or "Next" buttons.
-     * These modes can be toggled with this `pagination_mode` parameter:
+     * These modes can be toggled with this `page_action` parameter:
      * - `'fe'` refers to "front-end" paging: passing large data up-front
      * - `'be'` refers to "back-end" paging: updating the data on the fly via callbacks
      * - `False` will disable paging, attempting to render all of the data at once
@@ -573,21 +571,20 @@ export const propTypes = {
      * NOTE: The `fe` and `be` names may change in the future.
      * Tune in to [https://github.com/plotly/dash-table/issues/167](https://github.com/plotly/dash-table/issues/167) for more.
      */
-    pagination_mode: PropTypes.oneOf(['fe', 'be', true, false]),
+    page_action: PropTypes.oneOf(['custom', 'native', 'none']),
 
     /**
-     * `pagination_settings` controls the pagination settings
-     * _and_ represents the current state of the pagination UI.
-     * - `page_size` represents the number of rows that will be
-     * displayed on a particular page.
-     * - `current_page` represents which page the user is on.
+     * `page_current` represents which page the user is on.
      * Use this property to index through data in your callbacks with
      * backend paging.
      */
-    pagination_settings: PropTypes.exact({
-        current_page: PropTypes.number.isRequired,
-        page_size: PropTypes.number.isRequired
-    }),
+    page_current: PropTypes.number,
+
+    /**
+     * `page_size` represents the number of rows that will be
+     * displayed on a particular page.
+     */
+    page_size: PropTypes.number,
 
     /**
      * `dropdown` represents the available dropdown
@@ -627,7 +624,7 @@ export const propTypes = {
         clearable: PropTypes.bool,
         if: PropTypes.exact({
             column_id: PropTypes.string,
-            filter: PropTypes.string
+            filter_query: PropTypes.string
         }),
         dropdown: PropTypes.arrayOf(PropTypes.exact({
             label: PropTypes.string.isRequired,
@@ -715,7 +712,7 @@ export const propTypes = {
      * ID that must be matched.
      * The `if` nested property `row_index` refers to the index
      * of the row in the source `data`.
-     * The `if` nested property `filter` refers to the query that
+     * The `if` nested property `filter_query` refers to the query that
      * must evaluate to True.
      *
      * The `type` refers to the type of tooltip syntax used
@@ -737,7 +734,7 @@ export const propTypes = {
         duration: PropTypes.number,
         if: PropTypes.exact({
             column_id: PropTypes.string,
-            filter: PropTypes.string,
+            filter_query: PropTypes.string,
             row_index: PropTypes.oneOfType([
                 PropTypes.number,
                 PropTypes.oneOf([
@@ -812,36 +809,36 @@ export const propTypes = {
     tooltip_duration: PropTypes.number,
 
     /**
-     * If `filtering` is enabled, then the current filtering
-     * string is represented in this `filter`
+     * If `filter_action` is enabled, then the current filtering
+     * string is represented in this `filter_query`
      * property.
      * NOTE: The shape and structure of this property will
      * likely change in the future.
      * Stay tuned in [https://github.com/plotly/dash-table/issues/169](https://github.com/plotly/dash-table/issues/169)
      */
-    filter: PropTypes.string,
+    filter_query: PropTypes.string,
 
     /**
-     * The `filtering` property controls the behavior of the `filtering` UI.
+     * The `filter_action` property controls the behavior of the `filtering` UI.
      * If `False`, then the filtering UI is not displayed
      * If `fe` or True, then the filtering UI is displayed and the filtering
      * happens in the "front-end". That is, it is performed on the data
      * that exists in the `data` property.
      * If `be`, then the filtering UI is displayed but it is the
      * responsibility of the developer to program the filtering
-     * through a callback (where `filter` would be the input
+     * through a callback (where `filter_query` would be the input
      * and `data` would be the output).
      *
      * NOTE - Several aspects of filtering may change in the future,
      * including the naming of this property.
      * Tune in to [https://github.com/plotly/dash-table/issues/167](https://github.com/plotly/dash-table/issues/167)
      */
-    filtering: PropTypes.oneOf(['fe', 'be', true, false]),
+    filter_action: PropTypes.oneOf(['custom', 'native', 'none']),
 
     /**
-     * The `sorting` property enables data to be
+     * The `sort_action` property enables data to be
      * sorted on a per-column basis.
-     * Enabling `sorting` will display a UI element
+     * Enabling `sort_action` will display a UI element
      * on each of the columns (up and down arrows).
      *
      * Sorting can be performed in the "front-end"
@@ -850,7 +847,7 @@ export const propTypes = {
      * Clicking on the sort arrows will update the
      * `sort_by` property.
      */
-    sorting: PropTypes.oneOf(['fe', 'be', true, false]),
+    sort_action: PropTypes.oneOf(['custom', 'native', 'none']),
 
     /**
      * Sorting can be performed across multiple columns
@@ -862,7 +859,7 @@ export const propTypes = {
      * the columns were sorted through the UI.
      * See [https://github.com/plotly/dash-table/issues/170](https://github.com/plotly/dash-table/issues/170)
      */
-    sorting_type: PropTypes.oneOf(['single', 'multi']),
+    sort_mode: PropTypes.oneOf(['single', 'multi']),
 
     /**
      * `sort_by` describes the current state
@@ -952,7 +949,7 @@ export const propTypes = {
         if: PropTypes.exact({
             column_id: PropTypes.string,
             column_type: PropTypes.oneOf(['any', 'numeric', 'text', 'datetime']),
-            filter: PropTypes.string,
+            filter_query: PropTypes.string,
             row_index: PropTypes.oneOfType([
                 PropTypes.number,
                 PropTypes.oneOf(['odd', 'even'])
@@ -1000,7 +997,7 @@ export const propTypes = {
 
     /**
      * This property represents the current structure of
-     * `filter` as a tree structure. Each node of the
+     * `filter_query` as a tree structure. Each node of the
      * query structure have:
      * - type (string; required)
      *   - 'open-block'
@@ -1022,10 +1019,10 @@ export const propTypes = {
      * - left (nested query structure; optional)
      * - right (nested query structure; optional)
      *
-     * If the query is invalid or empty, the `derived_filter_structure` will
+     * If the query is invalid or empty, the `derived_filter_query_structure` will
      * be null.
      */
-    derived_filter_structure: PropTypes.object,
+    derived_filter_query_structure: PropTypes.object,
 
     /**
      * This property represents the current state of `data`

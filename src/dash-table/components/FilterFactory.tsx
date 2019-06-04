@@ -7,7 +7,7 @@ import memoizerCache from 'core/cache/memoizer';
 import { memoizeOne } from 'core/memoizer';
 
 import ColumnFilter from 'dash-table/components/Filter/Column';
-import { ColumnId, Filtering, IVisibleColumn, VisibleColumns, RowSelection } from 'dash-table/components/Table/props';
+import { ColumnId, IVisibleColumn, VisibleColumns, RowSelection, TableAction } from 'dash-table/components/Table/props';
 import derivedFilterStyles, { derivedFilterOpStyles } from 'dash-table/derived/filter/wrapperStyles';
 import derivedHeaderOperations from 'dash-table/derived/header/operations';
 import { derivedRelevantFilterStyles } from 'dash-table/derived/style';
@@ -18,15 +18,15 @@ import { IEdgesMatrices } from 'dash-table/derived/edges/type';
 import { updateMap } from 'dash-table/derived/filter/map';
 
 type SetFilter = (
-    filter: string,
+    filter_query: string,
     rawFilter: string,
     map: Map<string, SingleColumnSyntaxTree>
 ) => void;
 
 export interface IFilterOptions {
     columns: VisibleColumns;
-    filter: string;
-    filtering: Filtering;
+    filter_query: string;
+    filter_action: TableAction;
     id: string;
     map: Map<string, SingleColumnSyntaxTree>;
     rawFilterQuery: string;
@@ -106,7 +106,7 @@ export default class FilterFactory {
     ) {
         const {
             columns,
-            filtering,
+            filter_action,
             map,
             row_deletable,
             row_selectable,
@@ -117,7 +117,7 @@ export default class FilterFactory {
             style_filter_conditional
         } = this.props;
 
-        if (!filtering) {
+        if (filter_action === TableAction.None) {
             return [];
         }
 

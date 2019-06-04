@@ -8,7 +8,8 @@ import {
     ChangeAction,
     ChangeFailure,
     IVisibleColumn,
-    ColumnType
+    ColumnType,
+    TableAction
 } from 'dash-table/components/Table/props';
 import { TooltipSyntax } from 'dash-table/tooltips/props';
 
@@ -57,7 +58,7 @@ function getBaseTableProps(mock: IDataMock) {
                 }))
             }
         },
-        pagination_mode: false,
+        page_action: TableAction.None,
         style_table: {
             max_height: '800px',
             height: '800px',
@@ -76,23 +77,23 @@ function getBaseTableProps(mock: IDataMock) {
 function getDefaultState(
     generateData: Function = generateMockData
 ): {
-    filter: string,
+    filter_query: string,
     tableProps: Partial<PropsWithDefaults>
 } {
     const mock = generateData(5000);
 
     return {
-        filter: '',
+        filter_query: '',
         tableProps: R.merge(getBaseTableProps(mock), {
             data: mock.data,
             editable: true,
-            sorting: true,
+            sort_action: TableAction.Native,
             fixed_rows: { headers: true },
             fixed_columns: { headers: true },
             merge_duplicate_headers: false,
             row_deletable: true,
             row_selectable: 'single',
-            pagination_mode: 'fe'
+            page_action: TableAction.Native
         }) as Partial<PropsWithDefaults>
     };
 }
@@ -111,7 +112,7 @@ function getReadonlyState() {
 
 function getSpaceInColumn() {
     const state = getDefaultState(generateSpaceMockData);
-    state.tableProps.filtering = true;
+    state.tableProps.filter_action = TableAction.Native;
 
     return state;
 }
@@ -137,7 +138,7 @@ function getTooltipsState() {
             { type: TooltipSyntax.Markdown, value: `### Go Proverb\nSente gains nothing` },
             { type: TooltipSyntax.Text, value: `Beware of going back to patch up` },
             { type: TooltipSyntax.Text, value: `When in doubt, Tenuki` },
-            `People in glass houses shouldn't throw stones`
+            `People in glass houses should not throw stones`
         ]
     };
     state.tableProps.tooltip = {
@@ -148,7 +149,7 @@ function getTooltipsState() {
     state.tableProps.tooltip_conditional = [{
         if: {
             column_id: 'aaa-readonly',
-            filter: `{aaa} is prime`
+            filter_query: `{aaa} is prime`
         },
         type: TooltipSyntax.Markdown,
         value: `### Go Proverbs\nCapture three to get an eye`
@@ -216,7 +217,7 @@ function getDateState() {
 
 function getFilteringState() {
     const state = getDefaultState();
-    state.tableProps.filtering = true;
+    state.tableProps.filter_action = TableAction.Native;
 
     return state;
 }
@@ -225,11 +226,11 @@ function getVirtualizedState() {
     const mock = generateMockData(5000);
 
     return {
-        filter: '',
+        filter_query: '',
         tableProps: R.merge(getBaseTableProps(mock), {
             data: mock.data,
             editable: true,
-            sorting: true,
+            sort_action: TableAction.Native,
             merge_duplicate_headers: false,
             row_deletable: true,
             row_selectable: 'single',
@@ -242,11 +243,11 @@ function getFixedVirtualizedState() {
     const mock = generateMockData(5000);
 
     return {
-        filter: '',
+        filter_query: '',
         tableProps: R.merge(getBaseTableProps(mock), {
             data: mock.data,
             editable: true,
-            sorting: true,
+            sort_action: TableAction.Native,
             fixed_rows: { headers: true },
             fixed_columns: { headers: true },
             merge_duplicate_headers: false,
