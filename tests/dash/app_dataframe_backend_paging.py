@@ -63,7 +63,7 @@ def layout():
             section_title('Backend Paging with Sorting'),
 
             dash_table.DataTable(
-                id=IDS["table-sort"],
+                id=IDS["table-sorting"],
                 columns=[
                     {"name": i, "id": i, "deletable": True} for i in sorted(df.columns)
                 ],
