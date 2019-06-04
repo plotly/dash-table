@@ -105,7 +105,7 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
             data,
             filter,
             filtering,
-            pagination_mode,
+            page_action,
             pagination_settings,
             selected_rows,
             sorting,
@@ -126,7 +126,7 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
         );
 
         const viewport = this.viewport(
-            pagination_mode,
+            page_action,
             pagination_settings,
             virtual.data,
             virtual.indices
@@ -151,7 +151,7 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
         );
 
         const paginator = this.paginator(
-            pagination_mode,
+            page_action,
             pagination_settings,
             setProps,
             virtual.data
@@ -180,7 +180,7 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
         const {
             filter,
             filtering,
-            pagination_mode,
+            page_action,
             pagination_settings,
             sorting,
             sort_by,
@@ -204,7 +204,7 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
 
         const invalidateSelection =
             (!invalidatedFilter.cached && !invalidatedFilter.first && filtering === TableAction.Custom) ||
-            (!invalidatedPagination.cached && !invalidatedPagination.first && pagination_mode === TableAction.Custom) ||
+            (!invalidatedPagination.cached && !invalidatedPagination.first && page_action === TableAction.Custom) ||
             (!invalidatedSort.cached && !invalidatedSort.first && sorting === TableAction.Custom);
 
         const { controlledSetProps } = this;

@@ -58,7 +58,7 @@ function getBaseTableProps(mock: IDataMock) {
                 }))
             }
         },
-        pagination_mode: TableAction.None,
+        page_action: TableAction.None,
         style_table: {
             max_height: '800px',
             height: '800px',
@@ -93,7 +93,7 @@ function getDefaultState(
             merge_duplicate_headers: false,
             row_deletable: true,
             row_selectable: 'single',
-            pagination_mode: TableAction.Native
+            page_action: TableAction.Native
         }) as Partial<PropsWithDefaults>
     };
 }

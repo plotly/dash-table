@@ -35,10 +35,10 @@ function validFSP(props: any) {
     const {
         filtering,
         sorting,
-        pagination_mode
+        page_action
     } = props;
 
-    return isFrontEnd(pagination_mode) ||
+    return isFrontEnd(page_action) ||
         (isBackEnd(filtering) && isBackEnd(sorting));
 }
 

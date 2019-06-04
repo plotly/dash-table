@@ -33,12 +33,12 @@ function getBackEndPagination(data: Data, indices: Indices): IDerivedData {
 }
 
 const getter = (
-    pagination_mode: TableAction,
+    page_action: TableAction,
     pagination_settings: IPaginationSettings,
     data: Data,
     indices: Indices
 ): IDerivedData => {
-    switch (pagination_mode) {
+    switch (page_action) {
         case TableAction.None:
             return getNoPagination(data, indices);
         case TableAction.Native:
@@ -46,7 +46,7 @@ const getter = (
         case TableAction.Custom:
             return getBackEndPagination(data, indices);
         default:
-            throw new Error(`Unknown pagination mode: '${pagination_mode}'`);
+            throw new Error(`Unknown pagination mode: '${page_action}'`);
     }
 };
 

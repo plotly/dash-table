@@ -19,7 +19,7 @@ storiesOf('DashTable/Virtualization', module)
         id='table'
         data={data}
         columns={columns}
-        pagination_mode={TableAction.None}
+        page_action={TableAction.None}
         virtualization={true}
         editable={true}
         fixed_rows={{ headers: true }}

@@ -28,7 +28,7 @@ app.layout = html.Div(
         dash_table.DataTable(
             id="table",
             data=[],
-            pagination_mode="custom",
+            page_action="custom",
             pagination_settings={
                 "current_page": 0,
                 "page_size": 250,

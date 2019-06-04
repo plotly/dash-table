@@ -44,7 +44,7 @@ def layout():
                     'current_page': 0,
                     'page_size': PAGE_SIZE
                 },
-                pagination_mode='custom'
+                page_action='custom'
             ),
 
             html.Hr(),
@@ -73,7 +73,7 @@ def layout():
                     'current_page': 0,
                     'page_size': PAGE_SIZE
                 },
-                pagination_mode='custom',
+                page_action='custom',
 
                 sorting='custom',
                 sorting_type='single',
@@ -100,7 +100,7 @@ def layout():
                     'current_page': 0,
                     'page_size': PAGE_SIZE
                 },
-                pagination_mode='custom',
+                page_action='custom',
 
                 sorting='custom',
                 sorting_type='multi',
@@ -138,7 +138,7 @@ def layout():
                     'current_page': 0,
                     'page_size': PAGE_SIZE
                 },
-                pagination_mode='custom',
+                page_action='custom',
 
                 filtering='custom',
                 filter=''
@@ -155,7 +155,7 @@ def layout():
                     'current_page': 0,
                     'page_size': PAGE_SIZE
                 },
-                pagination_mode='custom',
+                page_action='custom',
 
                 filtering='custom',
                 filter='',
@@ -185,7 +185,7 @@ def layout():
                                 'current_page': 0,
                                 'page_size': 20
                             },
-                            pagination_mode='custom',
+                            page_action='custom',
 
                             filtering='custom',
                             filter='',

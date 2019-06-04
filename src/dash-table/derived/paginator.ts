@@ -81,12 +81,12 @@ function getNoPagination() {
 }
 
 const getter = (
-    pagination_mode: TableAction,
+    page_action: TableAction,
     pagination_settings: IPaginationSettings,
     setProps: SetProps,
     data: Data
 ): IPaginator => {
-    switch (pagination_mode) {
+    switch (page_action) {
         case TableAction.None:
             return getNoPagination();
         case TableAction.Native:
@@ -94,7 +94,7 @@ const getter = (
         case TableAction.Custom:
             return getBackEndPagination(pagination_settings, setProps);
         default:
-            throw new Error(`Unknown pagination mode: '${pagination_mode}'`);
+            throw new Error(`Unknown pagination mode: '${page_action}'`);
     }
 };
 

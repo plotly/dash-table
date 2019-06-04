@@ -38,7 +38,7 @@ export default class HeaderFactory {
         const {
             columns,
             merge_duplicate_headers,
-            pagination_mode,
+            page_action,
             row_deletable,
             row_selectable,
             setProps,
@@ -95,7 +95,7 @@ export default class HeaderFactory {
             sorting,
             sorting_type,
             sort_by,
-            pagination_mode,
+            page_action,
             setProps,
             props
         );

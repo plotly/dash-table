@@ -31,7 +31,7 @@ export default class DataTable extends Component {
 }
 
 export const defaultProps = {
-    pagination_mode: 'native',
+    page_action: 'native',
     pagination_settings: {
         current_page: 0,
         page_size: 250
@@ -564,7 +564,7 @@ export const propTypes = {
      * in the table (e.g. page through `10,000` rows in `data` `100` rows at a time)
      * or we can update the data on-the-fly with callbacks
      * when the user clicks on the "Previous" or "Next" buttons.
-     * These modes can be toggled with this `pagination_mode` parameter:
+     * These modes can be toggled with this `page_action` parameter:
      * - `'fe'` refers to "front-end" paging: passing large data up-front
      * - `'be'` refers to "back-end" paging: updating the data on the fly via callbacks
      * - `False` will disable paging, attempting to render all of the data at once
@@ -573,7 +573,7 @@ export const propTypes = {
      * NOTE: The `fe` and `be` names may change in the future.
      * Tune in to [https://github.com/plotly/dash-table/issues/167](https://github.com/plotly/dash-table/issues/167) for more.
      */
-    pagination_mode: PropTypes.oneOf(['custom', 'native', 'none']),
+    page_action: PropTypes.oneOf(['custom', 'native', 'none']),
 
     /**
      * `pagination_settings` controls the pagination settings

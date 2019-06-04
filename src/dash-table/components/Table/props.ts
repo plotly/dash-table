@@ -288,7 +288,7 @@ export interface IProps {
     sorting_type?: SortingType;
     sort_as_none?: SortAsNone;
     style_as_list_view?: boolean;
-    pagination_mode?: TableAction;
+    page_action?: TableAction;
     pagination_settings?: IPaginationSettings;
 
     style_data?: Style;
@@ -331,7 +331,7 @@ interface IDefaultProps {
     sort_as_none: SortAsNone;
     style_as_list_view: boolean;
 
-    pagination_mode: TableAction;
+    page_action: TableAction;
     pagination_settings: IPaginationSettings;
 
     style_data: Style;
