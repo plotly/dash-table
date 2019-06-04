@@ -971,7 +971,8 @@ export const propTypes = {
             row_index: PropTypes.oneOfType([
                 PropTypes.number,
                 PropTypes.oneOf(['odd', 'even'])
-            ])
+            ]),
+            column_editable: PropTypes.bool
         })
     })),
 

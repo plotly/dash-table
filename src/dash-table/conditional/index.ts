@@ -21,8 +21,12 @@ export interface ITypedElement {
     column_type?: ColumnType;
 }
 
+export interface IActiveElement {
+    column_editable?: boolean;
+}
+
 export type ConditionalBasicFilter = INamedElement & ITypedElement;
-export type ConditionalDataCell = IConditionalElement & IIndexedRowElement & INamedElement & ITypedElement;
+export type ConditionalDataCell = IConditionalElement & IIndexedRowElement & INamedElement & ITypedElement & IActiveElement;
 export type ConditionalCell = INamedElement & ITypedElement;
 export type ConditionalHeader = IIndexedHeaderElement & INamedElement & ITypedElement;
 
@@ -70,4 +74,13 @@ export function ifFilter(condition: IConditionalElement | undefined, datum: Datu
     return !condition ||
         condition.filter === undefined ||
         ifAstFilter(new QuerySyntaxTree(condition.filter), datum);
+}
+
+export function ifEditable(condition: IActiveElement | undefined, isEditable: boolean | undefined)  {
+    if  (!condition ||
+        condition.column_editable === undefined) {
+            return true;
+    }
+    return isEditable === condition.column_editable;
+
 }
