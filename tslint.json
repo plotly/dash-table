@@ -6,9 +6,10 @@
     "linterOptions": {
         "exclude": [
             ".config/**",
-            "node_modules/**",
             "cypress/**",
-            "@Types/**"
+            "node_modules/**",
+            "@Types/**",
+            "venv/**"
         ]
     },
     "jsRules": {
