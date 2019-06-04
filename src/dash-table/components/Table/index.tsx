@@ -109,7 +109,7 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
             page_current,
             page_size,
             selected_rows,
-            sorting,
+            sort_action,
             sort_by,
             uiCell,
             uiHeaders,
@@ -122,7 +122,7 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
             data,
             filter_action,
             filter_query,
-            sorting,
+            sort_action,
             sort_by
         );
 
@@ -186,7 +186,7 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
             page_action,
             page_current,
             page_size,
-            sorting,
+            sort_action,
             sort_by,
             viewport,
             viewport_selected_rows,
@@ -209,7 +209,7 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
         const invalidateSelection =
             (!invalidatedFilter.cached && !invalidatedFilter.first && filter_action === TableAction.Custom) ||
             (!invalidatedPagination.cached && !invalidatedPagination.first && page_action === TableAction.Custom) ||
-            (!invalidatedSort.cached && !invalidatedSort.first && sorting === TableAction.Custom);
+            (!invalidatedSort.cached && !invalidatedSort.first && sort_action === TableAction.Custom);
 
         const { controlledSetProps } = this;
         let newProps: Partial<SanitizedAndDerivedProps> = {};

@@ -63,7 +63,7 @@ def layout():
             section_title('Backend Paging with Sorting'),
 
             dash_table.DataTable(
-                id=IDS["table-sorting"],
+                id=IDS["table-sort_action"],
                 columns=[
                     {"name": i, "id": i, "deletable": True} for i in sorted(df.columns)
                 ],
@@ -71,8 +71,8 @@ def layout():
                 page_size=PAGE_SIZE,
                 page_action='custom',
 
-                sorting='custom',
-                sorting_type='single',
+                sort_action='custom',
+                sort_mode='single',
                 sort_by=[]
             ),
 
@@ -96,8 +96,8 @@ def layout():
                 page_size=PAGE_SIZE,
                 page_action='custom',
 
-                sorting='custom',
-                sorting_type='multi',
+                sort_action='custom',
+                sort_mode='multi',
                 sort_by=[]
             ),
 
@@ -150,8 +150,8 @@ def layout():
                 filter_action='custom',
                 filter_query='',
 
-                sorting='custom',
-                sorting_type='multi',
+                sort_action='custom',
+                sort_mode='multi',
                 sort_by=[]
             ),
 
@@ -178,8 +178,8 @@ def layout():
                             filter_action='custom',
                             filter_query='',
 
-                            sorting='custom',
-                            sorting_type='multi',
+                            sort_action='custom',
+                            sort_mode='multi',
                             sort_by=[]
                         ),
                         style={'height': 750, 'overflowY': 'scroll'},

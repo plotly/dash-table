@@ -2,13 +2,13 @@ import * as R from 'ramda';
 import React from 'react';
 
 import { memoizeOneFactory } from 'core/memoizer';
-import { SortDirection, SortSettings } from 'core/sorting';
-import multiUpdateSettings from 'core/sorting/multi';
-import singleUpdateSettings from 'core/sorting/single';
+import { SortDirection, SortBy } from 'core/sorting';
+import multiUpdate from 'core/sorting/multi';
+import singleUpdate from 'core/sorting/single';
 
 import {
     ColumnId,
-    SortingType,
+    SortMode,
     VisibleColumns,
     IVisibleColumn,
     SetProps,
@@ -23,10 +23,10 @@ function deleteColumn(column: IVisibleColumn, columns: VisibleColumns, columnRow
     };
 }
 
-function doSort(columnId: ColumnId, sortSettings: SortSettings, sortType: SortingType, setProps: SetProps) {
+function doSort(columnId: ColumnId, sortBy: SortBy, mode: SortMode, setProps: SetProps) {
     return () => {
         let direction: SortDirection;
-        switch (getSorting(columnId, sortSettings)) {
+        switch (getSorting(columnId, sortBy)) {
             case SortDirection.Descending:
                 direction = SortDirection.None;
                 break;
@@ -41,13 +41,13 @@ function doSort(columnId: ColumnId, sortSettings: SortSettings, sortType: Sortin
                 break;
         }
 
-        const sortingStrategy = sortType === 'single' ?
-            singleUpdateSettings :
-            multiUpdateSettings;
+        const sortingStrategy = mode === SortMode.Single ?
+            singleUpdate :
+            multiUpdate;
 
         setProps({
             sort_by: sortingStrategy(
-                sortSettings,
+                sortBy,
                 { column_id: columnId, direction }
             ),
             ...actions.clearSelection
@@ -61,14 +61,14 @@ function editColumnName(column: IVisibleColumn, columns: VisibleColumns, columnR
     };
 }
 
-function getSorting(columnId: ColumnId, settings: SortSettings): SortDirection {
-    const setting = R.find(s => s.column_id === columnId, settings);
+function getSorting(columnId: ColumnId, sortBy: SortBy): SortDirection {
+    const setting = R.find(s => s.column_id === columnId, sortBy);
 
     return setting ? setting.direction : SortDirection.None;
 }
 
-function getSortingIcon(columnId: ColumnId, sortSettings: SortSettings) {
-    switch (getSorting(columnId, sortSettings)) {
+function getSortingIcon(columnId: ColumnId, sortBy: SortBy) {
+    switch (getSorting(columnId, sortBy)) {
         case SortDirection.Descending:
             return '↓';
         case SortDirection.Ascending:
@@ -82,9 +82,9 @@ function getSortingIcon(columnId: ColumnId, sortSettings: SortSettings) {
 function getter(
     columns: VisibleColumns,
     labelsAndIndices: R.KeyValuePair<any[], number[]>[],
-    sorting: TableAction,
-    sortType: SortingType,
-    sortSettings: SortSettings,
+    sort_action: TableAction,
+    mode: SortMode,
+    sortBy: SortBy,
     paginationMode: TableAction,
     setProps: SetProps,
     options: ControlledTableProps
@@ -108,12 +108,12 @@ function getter(
                     );
 
                     return (<div>
-                        {sorting !== TableAction.None && isLastRow ?
+                        {sort_action !== TableAction.None && isLastRow ?
                             (<span
                                 className='sort'
-                                onClick={doSort(column.id, sortSettings, sortType, setProps)}
+                                onClick={doSort(column.id, sortBy, mode, setProps)}
                             >
-                                {getSortingIcon(column.id, sortSettings)}
+                                {getSortingIcon(column.id, sortBy)}
                             </span>) :
                             ''
                         }

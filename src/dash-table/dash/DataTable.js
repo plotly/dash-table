@@ -39,8 +39,8 @@ export const defaultProps = {
     filter_query: '',
     filter_action: 'none',
     sort_as_none: [],
-    sorting: 'none',
-    sorting_type: 'single',
+    sort_action: 'none',
+    sort_mode: 'single',
     sort_by: [],
     style_as_list_view: false,
 
@@ -836,9 +836,9 @@ export const propTypes = {
     filter_action: PropTypes.oneOf(['custom', 'native', 'none']),
 
     /**
-     * The `sorting` property enables data to be
+     * The `sort_action` property enables data to be
      * sorted on a per-column basis.
-     * Enabling `sorting` will display a UI element
+     * Enabling `sort_action` will display a UI element
      * on each of the columns (up and down arrows).
      *
      * Sorting can be performed in the "front-end"
@@ -847,7 +847,7 @@ export const propTypes = {
      * Clicking on the sort arrows will update the
      * `sort_by` property.
      */
-    sorting: PropTypes.oneOf(['custom', 'native', 'none']),
+    sort_action: PropTypes.oneOf(['custom', 'native', 'none']),
 
     /**
      * Sorting can be performed across multiple columns
@@ -859,7 +859,7 @@ export const propTypes = {
      * the columns were sorted through the UI.
      * See [https://github.com/plotly/dash-table/issues/170](https://github.com/plotly/dash-table/issues/170)
      */
-    sorting_type: PropTypes.oneOf(['single', 'multi']),
+    sort_mode: PropTypes.oneOf(['single', 'multi']),
 
     /**
      * `sort_by` describes the current state

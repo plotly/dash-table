@@ -1,7 +1,7 @@
 import * as R from 'ramda';
 
 import { memoizeOneFactory } from 'core/memoizer';
-import sort, { SortSettings } from 'core/sorting';
+import sort, { SortBy } from 'core/sorting';
 import {
     ColumnId,
     Data,
@@ -18,8 +18,8 @@ const getter = (
     data: Data,
     filter_action: TableAction,
     filter_query: string,
-    sorting: TableAction,
-    sort_by: SortSettings = []
+    sort_action: TableAction,
+    sort_by: SortBy = []
 ): IDerivedData => {
     const map = new Map<Datum, number>();
     R.addIndex(R.forEach)((datum, index) => {
@@ -47,7 +47,7 @@ const getter = (
         columnId: ColumnId
     ) => R.isNil(value) || R.contains(value, getNullyCases(columnId));
 
-    if (sorting === TableAction.Native) {
+    if (sort_action === TableAction.Native) {
         data = sort(data, sort_by, isNully);
     }
 

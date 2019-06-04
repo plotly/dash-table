@@ -3,14 +3,14 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import DataTable from 'dash-table/dash/DataTable';
 import { BORDER_PROPS_DEFAULTS } from './Border.defaults.percy';
-import { TableAction } from 'dash-table/components/Table/props';
+import { TableAction, SortMode } from 'dash-table/components/Table/props';
 
 const OPS_VARIANTS: ITest[] = [
-    { name: 'with ops', props: { row_deletable: true, row_selectable: 'single' } },
-    { name: 'fixed columns', props: { fixed_columns: { headers: true }, row_deletable: true, row_selectable: 'single' } },
-    { name: 'fixed rows', props: { fixed_rows: { headers: true }, row_deletable: true, row_selectable: 'single' } },
-    { name: 'fixed columns & rows', props: { fixed_columns: { headers: true }, fixed_rows: { headers: true }, row_deletable: true, row_selectable: 'single' } },
-    { name: 'fixed columns & rows inside fragments', props: { fixed_columns: { headers: true, data: 1 }, fixed_rows: { headers: true , data: 1}, row_deletable: true, row_selectable: 'single' } }
+    { name: 'with ops', props: { row_deletable: true, row_selectable: SortMode.Single } },
+    { name: 'fixed columns', props: { fixed_columns: { headers: true }, row_deletable: true, row_selectable: SortMode.Single } },
+    { name: 'fixed rows', props: { fixed_rows: { headers: true }, row_deletable: true, row_selectable: SortMode.Single } },
+    { name: 'fixed columns & rows', props: { fixed_columns: { headers: true }, fixed_rows: { headers: true }, row_deletable: true, row_selectable: SortMode.Single } },
+    { name: 'fixed columns & rows inside fragments', props: { fixed_columns: { headers: true, data: 1 }, fixed_rows: { headers: true, data: 1 }, row_deletable: true, row_selectable: SortMode.Single } }
 ];
 
 interface ITest {

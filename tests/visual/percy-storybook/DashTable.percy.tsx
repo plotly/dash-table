@@ -54,7 +54,7 @@ storiesOf('DashTable/Without Data', module)
         id='table'
         data={[]}
         columns={[{ id: 'a', name: 'A' }]}
-        sorting={TableAction.None}
+        sort_action={TableAction.None}
         editable={false}
         row_deletable={false}
         row_selectable={false}
@@ -87,7 +87,7 @@ storiesOf('DashTable/With Data', module)
             { id: 'c', name: 'C' }
         ]}
         editable={false}
-        sorting={TableAction.None}
+        sort_action={TableAction.None}
         row_deletable={false}
         row_selectable={false}
         style_data_conditional={[
@@ -241,7 +241,7 @@ storiesOf('DashTable/Sorting', module)
         id='table'
         data={sparseData}
         columns={mergedColumns}
-        sorting={TableAction.Native}
+        sort_action={TableAction.Native}
         sort_by={[{ column_id: 'a', direction: 'asc' }]}
         style_data_conditional={style_data_conditional}
     />))
@@ -250,7 +250,7 @@ storiesOf('DashTable/Sorting', module)
         id='table'
         data={sparseData}
         columns={mergedColumns}
-        sorting={TableAction.Native}
+        sort_action={TableAction.Native}
         sort_by={[{ column_id: 'a', direction: 'desc' }]}
         style_data_conditional={style_data_conditional}
     />))
@@ -259,7 +259,7 @@ storiesOf('DashTable/Sorting', module)
         id='table'
         data={sparseData}
         columns={mergedColumns}
-        sorting={TableAction.Native}
+        sort_action={TableAction.Native}
         sort_by={[{ column_id: 'a', direction: 'asc' }]}
         sort_as_none={['']}
         style_data_conditional={style_data_conditional}
@@ -269,7 +269,7 @@ storiesOf('DashTable/Sorting', module)
         id='table'
         data={sparseData}
         columns={mergedColumns}
-        sorting={TableAction.Native}
+        sort_action={TableAction.Native}
         sort_by={[{ column_id: 'a', direction: 'desc' }]}
         sort_as_none={['']}
         style_data_conditional={style_data_conditional}
@@ -279,7 +279,7 @@ storiesOf('DashTable/Sorting', module)
         id='table'
         data={sparseData}
         columns={mergedColumns}
-        sorting={TableAction.Native}
+        sort_action={TableAction.Native}
         sort_by={[{ column_id: 'a', direction: 'desc' }]}
         sort_as_none={['', 426]}
         style_data_conditional={style_data_conditional}
@@ -289,7 +289,7 @@ storiesOf('DashTable/Sorting', module)
         id='table'
         data={sparseData}
         columns={mergedColumns}
-        sorting={TableAction.Native}
+        sort_action={TableAction.Native}
         sort_by={[{ column_id: 'a', direction: 'asc' }]}
         sort_as_none={['', 426]}
         style_data_conditional={style_data_conditional}

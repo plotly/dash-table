@@ -59,7 +59,7 @@ app.layout = html.Div(
             fixed_rows={ 'headers': True },
             row_selectable=True,
             row_deletable=True,
-            sorting="native",
+            sort_action="native",
            filter_action='native',
             editable=True,
         ),

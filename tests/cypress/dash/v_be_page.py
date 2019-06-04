@@ -51,7 +51,7 @@ app.layout = html.Div(
             fixed_rows={ 'headers': True, 'data': -1 },
             row_selectable=True,
             row_deletable=True,
-            sorting="custom",
+            sort_action="custom",
            filter_action='none',
             editable=True,
         ),

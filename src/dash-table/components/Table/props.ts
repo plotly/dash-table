@@ -1,4 +1,4 @@
-import { SortSettings } from 'core/sorting';
+import { SortBy } from 'core/sorting';
 import { IPaginator } from 'dash-table/derived/paginator';
 import {
     Table,
@@ -21,6 +21,11 @@ export enum ColumnType {
     Numeric = 'numeric',
     Text = 'text',
     Datetime = 'datetime'
+}
+
+export enum SortMode {
+    Single = 'single',
+    Multi = 'multi'
 }
 
 export enum TableAction {
@@ -69,7 +74,6 @@ export type SelectedCells = ICellCoordinates[];
 export type SetProps = (...args: any[]) => void;
 export type SetState = (state: Partial<IState>) => void;
 export type SortAsNone = (string | number | boolean)[];
-export type SortingType = 'multi' | 'single';
 export type VisibleColumns = IVisibleColumn[];
 
 export enum ChangeAction {
@@ -278,9 +282,9 @@ export interface IProps {
     selected_rows?: Indices;
     selected_row_ids?: RowId[];
     setProps?: SetProps;
-    sorting?: TableAction;
-    sort_by?: SortSettings;
-    sorting_type?: SortingType;
+    sort_action?: TableAction;
+    sort_by?: SortBy;
+    sort_mode?: SortMode;
     sort_as_none?: SortAsNone;
     style_as_list_view?: boolean;
     page_action?: TableAction;
@@ -321,9 +325,9 @@ interface IDefaultProps {
     end_cell: ICellCoordinates;
     selected_rows: Indices;
     selected_row_ids: RowId[];
-    sorting: TableAction;
-    sort_by: SortSettings;
-    sorting_type: SortingType;
+    sort_action: TableAction;
+    sort_by: SortBy;
+    sort_mode: SortMode;
     sort_as_none: SortAsNone;
     style_as_list_view: boolean;
 
