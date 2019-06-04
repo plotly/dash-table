@@ -24,7 +24,7 @@ def layout():
                     ],
                     data=df.to_dict("rows"),
                     editable=True,
-                    filtering='native',
+                    filter_action='native',
                     sorting='native',
                     sorting_type="multi",
                     row_selectable="multi",

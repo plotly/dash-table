@@ -267,7 +267,7 @@ export interface IProps {
     data?: Data;
     editable?: boolean;
     filter?: string;
-    filtering?: TableAction;
+    filter_action?: TableAction;
     locale_format: INumberLocale;
     merge_duplicate_headers?: boolean;
     fixed_columns?: Fixed;
@@ -310,7 +310,7 @@ interface IDefaultProps {
     data: Data;
     editable: boolean;
     filter: string;
-    filtering: TableAction;
+    filter_action: TableAction;
     merge_duplicate_headers: boolean;
     fixed_columns: Fixed;
     fixed_rows: Fixed;

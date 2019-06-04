@@ -132,7 +132,7 @@ def layout():
                 page_size=PAGE_SIZE,
                 page_action='custom',
 
-                filtering='custom',
+                filter_action='custom',
                 filter=''
             ),
 
@@ -147,7 +147,7 @@ def layout():
                 page_size=PAGE_SIZE,
                 page_action='custom',
 
-                filtering='custom',
+                filter_action='custom',
                 filter='',
 
                 sorting='custom',
@@ -175,7 +175,7 @@ def layout():
                             page_size=20,
                             page_action='custom',
 
-                            filtering='custom',
+                            filter_action='custom',
                             filter='',
 
                             sorting='custom',

@@ -52,7 +52,7 @@ app.layout = html.Div(
             row_selectable=True,
             row_deletable=True,
             sorting="custom",
-            filtering='none',
+           filter_action='none',
             editable=True,
         ),
     ]

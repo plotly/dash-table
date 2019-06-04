@@ -69,7 +69,7 @@ export default (props: PropsWithDefaults): SanitizedProps => {
     return R.merge(props, {
         columns: applyDefaultsToColumns(locale_format, props.sort_as_none, props.columns),
         fixed_columns: getFixedColumns(props.fixed_columns, props.row_deletable, props.row_selectable),
-        fixed_rows: getFixedRows(props.fixed_rows, props.columns, props.filtering),
+        fixed_rows: getFixedRows(props.fixed_rows, props.columns, props.filter_action),
         locale_format
     });
 };

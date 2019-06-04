@@ -112,7 +112,7 @@ function getReadonlyState() {
 
 function getSpaceInColumn() {
     const state = getDefaultState(generateSpaceMockData);
-    state.tableProps.filtering = TableAction.Native;
+    state.tableProps.filter_action = TableAction.Native;
 
     return state;
 }
@@ -217,7 +217,7 @@ function getDateState() {
 
 function getFilteringState() {
     const state = getDefaultState();
-    state.tableProps.filtering = TableAction.Native;
+    state.tableProps.filter_action = TableAction.Native;
 
     return state;
 }

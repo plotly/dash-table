@@ -104,7 +104,7 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
             columns,
             data,
             filter,
-            filtering,
+            filter_action,
             page_action,
             page_current,
             page_size,
@@ -120,7 +120,7 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
         const virtual = this.virtual(
             columns,
             data,
-            filtering,
+            filter_action,
             filter,
             sorting,
             sort_by
@@ -182,7 +182,7 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
     private updateDerivedProps(controlled: ControlledTableProps) {
         const {
             filter,
-            filtering,
+            filter_action,
             page_action,
             page_current,
             page_size,
@@ -207,7 +207,7 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
         const invalidatedSort = this.sortCache(sort_by);
 
         const invalidateSelection =
-            (!invalidatedFilter.cached && !invalidatedFilter.first && filtering === TableAction.Custom) ||
+            (!invalidatedFilter.cached && !invalidatedFilter.first && filter_action === TableAction.Custom) ||
             (!invalidatedPagination.cached && !invalidatedPagination.first && page_action === TableAction.Custom) ||
             (!invalidatedSort.cached && !invalidatedSort.first && sorting === TableAction.Custom);
 

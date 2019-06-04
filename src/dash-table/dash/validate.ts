@@ -33,18 +33,18 @@ function validColumns(props: any) {
 
 function validFSP(props: any) {
     const {
-        filtering,
+        filter_action,
         sorting,
         page_action
     } = props;
 
     return isFrontEnd(page_action) ||
-        (isBackEnd(filtering) && isBackEnd(sorting));
+        (isBackEnd(filter_action) && isBackEnd(sorting));
 }
 
 export default (props: any): boolean => {
     if (!validFSP(props)) {
-        Logger.error(`Invalid combination of filtering / sorting / pagination`);
+        Logger.error(`Invalid combination of filter_action / sorting / pagination`);
         return false;
     }
 

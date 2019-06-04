@@ -14,7 +14,7 @@ actions.forEach(filter => {
     actions.forEach(sort => {
         actions.forEach(page => {
             stories = stories.add(`filter=${filter}, sorting=${sort}, pagination=${page}`, () => (<DataTable
-                filtering={filter}
+                filter_action={filter}
                 sorting={sort}
                 page_action={page}
                 setProps={setProps}

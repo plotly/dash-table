@@ -60,7 +60,7 @@ app.layout = html.Div(
             row_selectable=True,
             row_deletable=True,
             sorting="native",
-            filtering='native',
+           filter_action='native',
             editable=True,
         ),
         html.Div(id="props_container")

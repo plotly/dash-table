@@ -26,7 +26,7 @@ type SetFilter = (
 export interface IFilterOptions {
     columns: VisibleColumns;
     filter: string;
-    filtering: TableAction;
+    filter_action: TableAction;
     id: string;
     map: Map<string, SingleColumnSyntaxTree>;
     rawFilterQuery: string;
@@ -106,7 +106,7 @@ export default class FilterFactory {
     ) {
         const {
             columns,
-            filtering,
+            filter_action,
             map,
             row_deletable,
             row_selectable,
@@ -117,7 +117,7 @@ export default class FilterFactory {
             style_filter_conditional
         } = this.props;
 
-        if (filtering === TableAction.None) {
+        if (filter_action === TableAction.None) {
             return [];
         }
 

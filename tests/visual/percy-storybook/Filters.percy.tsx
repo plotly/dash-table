@@ -22,7 +22,7 @@ let props = {
     setProps,
     id: 'table',
     data: data,
-    filtering: TableAction.Native,
+    filter_action: TableAction.Native,
     style_cell: {
         width: 100,
         min_width: 100,

@@ -25,7 +25,7 @@ const baseProps = {
     setProps,
     id: 'table',
     data,
-    filtering: TableAction.Native,
+    filter_action: TableAction.Native,
     style_cell: { width: 100, max_width: 100, min_width: 100 }
 };
 

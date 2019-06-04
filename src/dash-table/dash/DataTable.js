@@ -37,7 +37,7 @@ export const defaultProps = {
 
     css: [],
     filter: '',
-    filtering: 'none',
+    filter_action: 'none',
     sort_as_none: [],
     sorting: 'none',
     sorting_type: 'single',
@@ -809,7 +809,7 @@ export const propTypes = {
     tooltip_duration: PropTypes.number,
 
     /**
-     * If `filtering` is enabled, then the current filtering
+     * If `filter_action` is enabled, then the current filtering
      * string is represented in this `filter`
      * property.
      * NOTE: The shape and structure of this property will
@@ -819,7 +819,7 @@ export const propTypes = {
     filter: PropTypes.string,
 
     /**
-     * The `filtering` property controls the behavior of the `filtering` UI.
+     * The `filter_action` property controls the behavior of the `filtering` UI.
      * If `False`, then the filtering UI is not displayed
      * If `fe` or True, then the filtering UI is displayed and the filtering
      * happens in the "front-end". That is, it is performed on the data
@@ -833,7 +833,7 @@ export const propTypes = {
      * including the naming of this property.
      * Tune in to [https://github.com/plotly/dash-table/issues/167](https://github.com/plotly/dash-table/issues/167)
      */
-    filtering: PropTypes.oneOf(['custom', 'native', 'none']),
+    filter_action: PropTypes.oneOf(['custom', 'native', 'none']),
 
     /**
      * The `sorting` property enables data to be

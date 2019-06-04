@@ -16,7 +16,7 @@ import { QuerySyntaxTree } from 'dash-table/syntax-tree';
 const getter = (
     columns: VisibleColumns,
     data: Data,
-    filtering: TableAction,
+    filter_action: TableAction,
     filter: string,
     sorting: TableAction,
     sort_by: SortSettings = []
@@ -26,7 +26,7 @@ const getter = (
         map.set(datum, index);
     }, data);
 
-    if (filtering === TableAction.Native) {
+    if (filter_action === TableAction.Native) {
         const tree = new QuerySyntaxTree(filter);
 
         data = tree.isValid ?
