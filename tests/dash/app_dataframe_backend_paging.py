@@ -56,14 +56,14 @@ def layout():
             with large pages, might not be aware that this is only occuring
             on the current page.
 
-            Instead, we recommend implmenting sorting and filtering on the
+            Instead, we recommend implementing sorting and filtering on the
             backend as well. That is, on the entire underlying dataset.
             ''')),
 
             section_title('Backend Paging with Sorting'),
 
             dash_table.DataTable(
-                id=IDS["table-sort_action"],
+                id=IDS["table-sort"],
                 columns=[
                     {"name": i, "id": i, "deletable": True} for i in sorted(df.columns)
                 ],
