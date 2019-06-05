@@ -600,7 +600,7 @@ export const propTypes = {
      */
     dropdown: PropTypes.objectOf(PropTypes.exact({
         clearable: PropTypes.bool,
-        dropdown: PropTypes.arrayOf(PropTypes.exact({
+        options: PropTypes.arrayOf(PropTypes.exact({
             label: PropTypes.string.isRequired,
             value: PropTypes.oneOfType([
                 PropTypes.number,
@@ -627,7 +627,7 @@ export const propTypes = {
             column_id: PropTypes.string,
             filter_query: PropTypes.string
         }),
-        dropdown: PropTypes.arrayOf(PropTypes.exact({
+        options: PropTypes.arrayOf(PropTypes.exact({
             label: PropTypes.string.isRequired,
             value: PropTypes.oneOfType([
                 PropTypes.number,
@@ -643,7 +643,7 @@ export const propTypes = {
         PropTypes.objectOf(
             PropTypes.exact({
                 clearable: PropTypes.bool,
-                dropdown: PropTypes.arrayOf(PropTypes.exact({
+                options: PropTypes.arrayOf(PropTypes.exact({
                     label: PropTypes.string.isRequired,
                     value: PropTypes.oneOfType([
                         PropTypes.number,

@@ -186,7 +186,7 @@ export interface IDropdownValue {
 
 export interface IDropdown {
     clearable?: boolean;
-    dropdown: IDropdownValue[];
+    options: IDropdownValue[];
 }
 
 export interface IConditionalDropdown extends IDropdown {

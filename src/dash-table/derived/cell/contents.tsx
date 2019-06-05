@@ -83,13 +83,13 @@ class Contents {
                         'dash-cell-value'
                     ].join(' ');
 
-                    switch (getCellType(active, isEditable, dropdown && dropdown.dropdown, column.presentation)) {
+                    switch (getCellType(active, isEditable, dropdown && dropdown.options, column.presentation)) {
                         case CellType.Dropdown:
                             return (<CellDropdown
                                 key={`column-${columnIndex}`}
                                 active={active}
                                 clearable={dropdown && dropdown.clearable}
-                                dropdown={dropdown && dropdown.dropdown}
+                                dropdown={dropdown && dropdown.options}
                                 onChange={this.handlers(Handler.Change, rowIndex, columnIndex)}
                                 value={datum[column.id]}
                             />);
