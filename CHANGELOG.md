@@ -3,16 +3,84 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changed
+[#446](https://github.com/plotly/dash-table/pull/446)
+- Table API rework
+#### NEW
+    - `column.sort_as_none`: Allows sorting behavior customization.
+        Accepts an array of string, number or booleans.
+    - `sort_as_none`: Allows sorting behavior customization.
+        Accepts an array of string, number or booleans.
+
+#### REMOVED
+    - `column.clearable`: Allows clearing the value of a dropdown cell.
+        Removed in favor of `dropdown_**` `clearable` nested property
+    - `column.options`
+        Removed. Redundant with `dropdown`.
+    - `pagination_settings`
+        Replaced by two props `page_current` and `page_size`.
+
+#### RENAMED
+    - `column_static_tooltip`
+        Renamed `tooltip`.
+    - `column_conditional_tooltips`
+        Renamed `tooltip_conditional`.
+    - `filter`
+        Renamed `filter_query`.
+    - `sort_type`
+        Renamed `sort_mode`.
+    - `derived_filter_structure`
+        Renamed to `derived_filter_query_structure`.
+
+#### MODIFIED
+    - `column.deletable`: Allows column deletion.
+        Now accepts a boolean or an array of booleans (for multi-line headers)
+    - `column.editable_name`: Allows column renaming.
+        Renamed to `column.renamable`
+        Now accepts a boolean or an array of booleans (for multi-line headers)
+    - `column.id`
+        Now accepts `string` only -- `number` column ids can be casted to string
+    - `n_fixed_columns`: Will fix columns to the left.
+        Renamed to `fixed_columns`
+        Now accepts an object { headers: boolean, data: number } instead of a number.
+        { headers: true } determines the number of columns to fix automatically.
+    - `n_fixed_rows`: Will fix rows to the top.
+        Renamed to `fixed_rows`
+        Now accepts an object { headers: boolean, data: number } instead of a number.
+        { headers: true } determines the number of rows to fix automatically.
+    -  `pagination_mode`
+        Renamed to `page_action`.
+    -  `column_static_dropdown`
+        Renamed `dropdown`.
+        Now an object with each entry refering to a Column ID. Each nested prop expects
+        `clearable` and `options`.
+    - `column_conditional_dropdowns`
+        Renamed to `dropdown_conditional`.
+        `condition` changed to the same `if` nested prop used by styles.
+        `dropdown` renamed to `options`.
+    - `dropdown_properties`
+        Renamed to `dropdown_data`.
+        Matches the `data` structure.
+    - `tooltips`
+        Renamed `tooltip_data`.
+        Matches the `data` structure.
+    - `filtering`
+        Renamed `filter_action`.
+    - `sorting`
+        Renamed `sort_action`.
+    - `style_**_conditional`
+        Renamed `filter` to `filter_query`.
+
 ### Added
 [#456](https://github.com/plotly/dash-table/issues/456)
 - Support for dash-table is now available for R users of Dash.
 
 ### Fixed
 [#434](https://github.com/plotly/dash-table/issues/434)
-- Fix CSS borders propeties overwrite style_* borders properties. 
+- Fix CSS borders properties overwrite style_* borders properties.
 
 [#435](https://github.com/plotly/dash-table/issues/435)
-- selected_cells background color is set through styling pipeline / derivations. 
+- selected_cells background color is set through styling pipeline / derivations.
 
 ## [3.7.0] - 2019-05-15
 ### Added
@@ -315,8 +383,8 @@ The remote URL path for the bundle was incorrect.
     }
 
     A+B = {
-        background_color: 'floralwhite', // from A, not overriden
-        color: 'black', // from B, A overriden
+        background_color: 'floralwhite', // from A, not overridden
+        color: 'black', // from B, A overridden
         font_size: 22, // from B
         font_type: 'monospace', // from A
         width: 100 // from A
@@ -352,7 +420,7 @@ The remote URL path for the bundle was incorrect.
             if: { column_id: string | number, header_index: number | 'odd' | 'even' },
             ...CSSProperties
         }]
-    - All CSSProperties are supported in kebab-cass, camelCase and snake_case
+    - All CSSProperties are supported in kebab-case, camelCase and snake_case
 
 ### Changed
 - Renaming 'dataframe' props to 'data'
@@ -637,7 +705,7 @@ Freeze Top Rows (Limitations)
 Freeze Left Columns (Limitations)
 - performance is highly impacted if the table is in a scrollable container as the frozen columns position has to be recalculated on each scroll event; impact is minimal up to 50-100 items and makes the table difficult to use with 250-500 items
 - can't freeze rows and columns at the same time
-- when using merged headers, make sure that the number of fixed columns respects the merged headers, otherwise there will be some unresolved visual bugs/artefacts
+- when using merged headers, make sure that the number of fixed columns respects the merged headers, otherwise there will be some unresolved visual bugs/artifacts
 - rows are assumed to all have the same height
 
 Deletable Columns (Limitations)
