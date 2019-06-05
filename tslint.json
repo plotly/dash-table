@@ -7,6 +7,7 @@
         "exclude": [
             ".config/**",
             "cypress/**",
+            "inst/**",
             "node_modules/**",
             "@Types/**",
             "venv/**"
