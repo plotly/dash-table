@@ -15,7 +15,7 @@ export default [
             ],
             dropdown: {
                 'column-1': {
-                    dropdown: [
+                    options: [
                         { label: 'Montréal', value: 'mtl' },
                         { label: 'San Francisco', value: 'sf' }
                     ]
@@ -139,7 +139,7 @@ export default [
             ],
             dropdown: {
                 'column-1': {
-                    dropdown: [
+                    options: [
                         { label: 'Montréal', value: 'mtl' },
                         { label: 'San Francisco', value: 'sf' }
                     ]
@@ -185,19 +185,19 @@ export default [
             ],
             dropdown: {
                 'column-1': {
-                    dropdown: [
+                    options: [
                         { label: 'Montréal', value: 'mtl' },
                         { label: 'San Francisco', value: 'sf' }
                     ]
                 },
                 'column-2': {
-                    dropdown: [
+                    options: [
                         { label: 'Montréal', value: 'mtl' },
                         { label: 'San Francisco', value: 'sf' }
                     ]
                 },
                 'column-3': {
-                    dropdown: [
+                    options: [
                         { label: 'Montréal', value: 'mtl' },
                         { label: 'San Francisco', value: 'sf' }
                     ]
@@ -246,7 +246,7 @@ export default [
             ],
             dropdown: {
                 region: {
-                    dropdown: [
+                    options: [
                         { label: 'Hawaii', value: 'hawaii' },
                         { label: 'Costa Rica', value: 'costa-rica' }
                     ]

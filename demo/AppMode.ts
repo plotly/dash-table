@@ -52,7 +52,7 @@ function getBaseTableProps(mock: IDataMock) {
         dropdown: {
             bbb: {
                 clearable: true,
-                dropdown: ['Humid', 'Wet', 'Snowy', 'Tropical Beaches'].map(i => ({
+                options: ['Humid', 'Wet', 'Snowy', 'Tropical Beaches'].map(i => ({
                     label: i,
                     value: i
                 }))

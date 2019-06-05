@@ -38,13 +38,13 @@ storiesOf('DashTable/Dropdown', module)
         editable={true}
         dropdown={{
             climate: {
-                dropdown: R.map(
+                options: R.map(
                     i => ({ label: i, value: i }),
                     ['Sunny', 'Snowy', 'Rainy']
                 )
             },
             city: {
-                dropdown: R.map(
+                options: R.map(
                     i => ({ label: i, value: i }),
                     ['NYC', 'Montreal', 'Miami']
                 )
@@ -62,7 +62,7 @@ storiesOf('DashTable/Dropdown', module)
                 column_id: 'Neighborhood',
                 filter_query: '{City} eq "NYC"'
             },
-            dropdown: R.map(
+            options: R.map(
                 i => ({ label: i, value: i }),
                 ['Brooklyn', 'Queens', 'Staten Island']
             )
@@ -71,7 +71,7 @@ storiesOf('DashTable/Dropdown', module)
                 column_id: 'Neighborhood',
                 filter_query: '{City} eq "Montreal"'
             },
-            dropdown: R.map(
+            options: R.map(
                 i => ({ label: i, value: i }),
                 ['Mile End', 'Plateau', 'Hochelaga']
             )
@@ -81,7 +81,7 @@ storiesOf('DashTable/Dropdown', module)
                 column_id: 'Neighborhood',
                 filter_query: '{City} eq "Los Angeles"'
             },
-            dropdown: R.map(
+            options: R.map(
                 i => ({ label: i, value: i }),
                 ['Venice', 'Hollywood', 'Los Feliz']
             )
@@ -95,7 +95,7 @@ storiesOf('DashTable/Dropdown', module)
         dropdown_data={[
             {
                 Neighborhood: {
-                    dropdown: R.map(
+                    options: R.map(
                         i => ({ label: i, value: i }),
                         ['Brooklyn', 'Queens', 'Staten Island']
                     )
@@ -103,7 +103,7 @@ storiesOf('DashTable/Dropdown', module)
             },
             {
                 Neighborhood: {
-                    dropdown: R.map(
+                    options: R.map(
                         i => ({ label: i, value: i }),
                         ['Mile End', 'Plateau', 'Hochelaga']
                     )
@@ -111,7 +111,7 @@ storiesOf('DashTable/Dropdown', module)
             },
             {
                 Neighborhood: {
-                    dropdown: R.map(
+                    options: R.map(
                         i => ({ label: i, value: i }),
                         ['Venice', 'Hollywood', 'Los Feliz']
                     )
