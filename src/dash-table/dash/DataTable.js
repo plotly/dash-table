@@ -112,9 +112,9 @@ export const propTypes = {
          * button on the column.
          * If there are merged, multi-header columns then you can choose
          * which column header row to display the "x" in by
-         * supplying a column row index.
-         * For example, `0` will display the "x" on the first row,
-         * `1` on the second row.
+         * supplying an array of booleans.
+         * For example, `[true, false]` will display the "x" on the first row,
+         * but not the second row.
          * If the "x" appears on a merged column, then clicking on that button
          * will delete *all* of the merged columns associated with it.
          */
@@ -140,7 +140,9 @@ export const propTypes = {
          * If True, then the name of this column is editable.
          * If there are multiple column headers (if `name` is a list of strings),
          * then `renamable` can refer to _which_ column header should be
-         * editable by setting it to the column header index.
+         * editable by defining an array of booleans.
+         * For example, `[true, false]` will make the first row's name editable,
+         * but not the second row.
          * Also, updating the name in a merged column header cell will
          * update the name of each column.
          */
@@ -252,6 +254,16 @@ export const propTypes = {
         }),
 
         /**
+         * There are two `sort_as_none` flags in the table.
+         * This is the  column-level editable flag and there is
+         * also the table-level `sort_as_none` flag.
+         *
+         * These flags determine how the content of the table is
+         * sorted.
+         *
+         * If the column-level `sort_as_none` flag is set it overrides
+         * the table-level `sort_as_none` flag for that column.
+         *
          * An array of string, number and boolean values that are treated as `None`
          * when sorting is applied to the column.
          */
@@ -433,8 +445,14 @@ export const propTypes = {
      * `fixed_columns` will "fix" the set of columns so that
      * they remain visible when scrolling horizontally across
      * the unfixed columns. `fixed_columns` fixes columns
-     * from left-to-right, so `fixed_columns=3` will fix
-     * the first 3 columns.
+     * from left-to-right.
+     *
+     * If `headers` is False, no columns are fixed.
+     * If `headers` is True, all operation columns (see `row_deletable` and `row_selectable`)
+     * are fixed. Additional data columns can be fixed by
+     * assigning a number to `data`.
+     *
+     * Defaults to `{ headers: False }`.
      *
      * Note that fixing columns introduces some changes to the
      * underlying markup of the table and may impact the
@@ -456,10 +474,14 @@ export const propTypes = {
      * `fixed_rows` will "fix" the set of rows so that
      * they remain visible when scrolling vertically down
      * the table. `fixed_rows` fixes rows
-     * from top-to-bottom, starting from the headers,
-     * so `fixed_rows=1` will fix the header row,
-     * `fixed_rows=2` will fix the header row and the first row,
-     * or the first two header rows (if there are multiple headers).
+     * from top-to-bottom, starting from the headers.
+     *
+     * If `headers` is False, no rows are fixed.
+     * If `headers` is True, all header and filter rows (see `filter_action`) are
+     * fixed. Additional data rows can be fixed by assigning
+     * a number to `data`.
+     *
+     * Defaults to `{ headers: False }`.
      *
      * Note that fixing rows introduces some changes to the
      * underlying markup of the table and may impact the
@@ -549,7 +571,7 @@ export const propTypes = {
     style_as_list_view: PropTypes.bool,
 
     /**
-     * "pagination" refers to a mode of the table where
+     * `page_action` refers to a mode of the table where
      * not all of the rows are displayed at once: only a subset
      * are displayed (a "page") and the next subset of rows
      * can viewed by clicking "Next" or "Previous" buttons
@@ -564,13 +586,11 @@ export const propTypes = {
      * or we can update the data on-the-fly with callbacks
      * when the user clicks on the "Previous" or "Next" buttons.
      * These modes can be toggled with this `page_action` parameter:
-     * - `'fe'` refers to "front-end" paging: passing large data up-front
-     * - `'be'` refers to "back-end" paging: updating the data on the fly via callbacks
-     * - `False` will disable paging, attempting to render all of the data at once
-     * - `True` is the same as `fe`
-     *
-     * NOTE: The `fe` and `be` names may change in the future.
-     * Tune in to [https://github.com/plotly/dash-table/issues/167](https://github.com/plotly/dash-table/issues/167) for more.
+     * - `'native'`: all data is passed to the table up-front, paging logic is
+     * handled by the table
+     * - `'custom'`: data is passed to the table one page at a time, paging logic
+     * is handled via callbacks
+     * - `none`: disables paging, render all of the data at once
      */
     page_action: PropTypes.oneOf(['custom', 'native', 'none']),
 
@@ -588,15 +608,11 @@ export const propTypes = {
     page_size: PropTypes.number,
 
     /**
-     * `dropdown` represents the available dropdown
-     * options for different columns.
-     * The `id` property refers to the column ID.
-     * The `dropdown` property refers to the `options` of the
-     * dropdown.
+     * `dropdown` specifies dropdown options for different columns.
      *
-     * NOTE: The naming and the behavior of this option may change
-     * in the future.
-     * Tune in to [https://github.com/plotly/dash-table/issues/168](https://github.com/plotly/dash-table/issues/168)
+     * Each entry refers to the column ID.
+     * The `clearable` property defines whether the value can be deleted.
+     * The `options` property refers to the `options` of the dropdown.
      */
     dropdown: PropTypes.objectOf(PropTypes.exact({
         clearable: PropTypes.bool,
@@ -610,16 +626,12 @@ export const propTypes = {
     })),
 
     /**
-     * `dropdown_conditional` specifies the available options
-     * for dropdowns in various columns and cells.
+     * `dropdown_conditional` specifies dropdown options in various columns and cells.
+     *
      * This property allows you to specify different dropdowns
      * depending on certain conditions. For example, you may
      * render different "city" dropdowns in a row depending on the
      * current value in the "state" column.
-     *
-     * NOTE: The naming and the behavior of this option may change
-     * in the future.
-     * Tune in to [https://github.com/plotly/dash-table/issues/168](https://github.com/plotly/dash-table/issues/168)
      */
     dropdown_conditional: PropTypes.arrayOf(PropTypes.exact({
         clearable: PropTypes.bool,
@@ -637,7 +649,10 @@ export const propTypes = {
     })),
 
     /**
+     * `dropdown_data` specifies dropdown options on a row-by-row, column-by-column basis.
      *
+     * Each item in the array corresponds to the corresponding dropdowns for the `data` item
+     * at the same index. Each entry in the item refers to the Column ID.
      */
     dropdown_data: PropTypes.arrayOf(
         PropTypes.objectOf(
@@ -813,38 +828,36 @@ export const propTypes = {
      * If `filter_action` is enabled, then the current filtering
      * string is represented in this `filter_query`
      * property.
-     * NOTE: The shape and structure of this property will
-     * likely change in the future.
-     * Stay tuned in [https://github.com/plotly/dash-table/issues/169](https://github.com/plotly/dash-table/issues/169)
      */
     filter_query: PropTypes.string,
 
     /**
      * The `filter_action` property controls the behavior of the `filtering` UI.
-     * If `False`, then the filtering UI is not displayed
-     * If `fe` or True, then the filtering UI is displayed and the filtering
-     * happens in the "front-end". That is, it is performed on the data
-     * that exists in the `data` property.
-     * If `be`, then the filtering UI is displayed but it is the
-     * responsibility of the developer to program the filtering
-     * through a callback (where `filter_query` would be the input
-     * and `data` would be the output).
      *
-     * NOTE - Several aspects of filtering may change in the future,
-     * including the naming of this property.
-     * Tune in to [https://github.com/plotly/dash-table/issues/167](https://github.com/plotly/dash-table/issues/167)
+     * If `'none'`, then the filtering UI is not displayed
+     * If `'native'`, then the filtering UI is displayed and the filtering
+     * logic is handled by the table. That is, it is performed on the data
+     * that exists in the `data` property.
+     * If `'custom'`, then the filtering UI is displayed but it is the
+     * responsibility of the developer to program the filtering
+     * through a callback (where `filter_query` or `derived_filter_query_structure` would be the input
+     * and `data` would be the output).
      */
     filter_action: PropTypes.oneOf(['custom', 'native', 'none']),
 
     /**
      * The `sort_action` property enables data to be
      * sorted on a per-column basis.
-     * Enabling `sort_action` will display a UI element
-     * on each of the columns (up and down arrows).
      *
-     * Sorting can be performed in the "front-end"
-     * with the `fe` (or True) setting or via a callback in your
-     * python "back-end" with the `be` setting.
+     * If `'none'`, then the sorting UI is not displayed.
+     * If `'native'`, then the sorting UI is displayed and the sorting
+     * logic is hanled by the table. That is, it is performed on the data
+     * that exists in the `data` property.
+     * If `'custom'`, the the sorting UI is displayed but it is the
+     * responsibility of the developer to program the sorting
+     * through a callback (where `sort_by` would be the input and `data`
+     * would be the output).
+     *
      * Clicking on the sort arrows will update the
      * `sort_by` property.
      */
