@@ -5,13 +5,13 @@ import {
     ICellCoordinates,
     Data,
     Datum,
-    DropdownValues,
     ICellFactoryProps,
+    IDropdown,
+    IDropdownValue,
     IViewportOffset,
     IVisibleColumn,
     Presentation,
-    VisibleColumns,
-    IDropdown
+    VisibleColumns
 } from 'dash-table/components/Table/props';
 import CellInput from 'dash-table/components/CellInput';
 import derivedCellEventHandlerProps, { Handler } from 'dash-table/derived/cell/eventHandlerProps';
@@ -34,7 +34,7 @@ enum CellType {
 function getCellType(
     active: boolean,
     editable: boolean,
-    dropdown: DropdownValues | undefined,
+    dropdown: IDropdownValue[] | undefined,
     presentation: Presentation | undefined
 ): CellType {
     switch (presentation) {

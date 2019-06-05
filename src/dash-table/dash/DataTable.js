@@ -70,6 +70,7 @@ export const defaultProps = {
 
     tooltip: {},
     tooltip_conditional: [],
+    tooltip_data: [],
     tooltip_delay: 350,
     tooltip_duration: 2000,
 
@@ -638,8 +639,8 @@ export const propTypes = {
     /**
      *
      */
-    dropdown_data: PropTypes.objectOf(
-        PropTypes.arrayOf(
+    dropdown_data: PropTypes.arrayOf(
+        PropTypes.objectOf(
             PropTypes.exact({
                 clearable: PropTypes.bool,
                 dropdown: PropTypes.arrayOf(PropTypes.exact({
@@ -775,7 +776,7 @@ export const propTypes = {
      * a plain string. The `text` syntax will be used in
      * that case.
      */
-    tooltip_data: PropTypes.objectOf(PropTypes.arrayOf(
+    tooltip_data: PropTypes.arrayOf(PropTypes.objectOf(
         PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.exact({

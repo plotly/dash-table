@@ -4,17 +4,17 @@ import { memoizeOne } from 'core/memoizer';
 import memoizerCache from 'core/cache/memoizer';
 
 import {
-    Data,
-    Datum,
-    VisibleColumns,
     ColumnId,
+    ConditionalDropdowns,
+    Data,
+    DataDropdowns,
+    Datum,
+    IConditionalDropdown,
+    IDropdown,
     Indices,
     IVisibleColumn,
-    IDataDropdowns,
-    IStaticDropdowns,
-    ConditionalDropdowns,
-    IDropdown,
-    IConditionalDropdown
+    StaticDropdowns,
+    VisibleColumns
 } from 'dash-table/components/Table/props';
 import { QuerySyntaxTree } from 'dash-table/syntax-tree';
 import { ifColumnId } from 'dash-table/conditional';
@@ -32,18 +32,17 @@ class Dropdowns {
         data: Data,
         indices: Indices,
         conditionalDropdowns: ConditionalDropdowns,
-        staticDropdowns: IStaticDropdowns,
-        dataDropdowns: IDataDropdowns
+        staticDropdowns: StaticDropdowns,
+        dataDropdowns: DataDropdowns
     ) => mapData((datum, rowIndex) => R.map(column => {
         const realIndex = indices[rowIndex];
 
         const appliedStaticDropdown = (
             dataDropdowns &&
-            dataDropdowns[column.id] &&
-            dataDropdowns[column.id].length > realIndex &&
-            dataDropdowns[column.id][realIndex] &&
-            dataDropdowns[column.id][realIndex]
-        ) || staticDropdowns[column.id] || null;
+            dataDropdowns.length > realIndex &&
+            dataDropdowns[realIndex] &&
+            dataDropdowns[realIndex][column.id]
+        ) || staticDropdowns[column.id];
 
         return this.dropdown.get(column.id, rowIndex)(
             appliedStaticDropdown,
@@ -58,7 +57,7 @@ class Dropdowns {
      * applicable dropdowns.
      */
     private readonly dropdown = memoizerCache<[ColumnId, number]>()((
-        base: IDropdown | null,
+        base: IDropdown | undefined,
         conditionals: ConditionalDropdowns,
         column: IVisibleColumn,
         datum: Datum

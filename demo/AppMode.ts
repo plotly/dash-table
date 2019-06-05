@@ -131,16 +131,14 @@ function getTooltipsState() {
 
     state.tableProps.tooltip_delay = 250;
     state.tableProps.tooltip_duration = 1000;
-    state.tableProps.tooltip_data = {
-        ccc: [
-            { type: TooltipSyntax.Markdown, value: `### Go Proverb\nThe enemy's key point is yours` },
-            { type: TooltipSyntax.Markdown, value: `### Go Proverb\nPlay on the point of symmetry` },
-            { type: TooltipSyntax.Markdown, value: `### Go Proverb\nSente gains nothing` },
-            { type: TooltipSyntax.Text, value: `Beware of going back to patch up` },
-            { type: TooltipSyntax.Text, value: `When in doubt, Tenuki` },
-            `People in glass houses should not throw stones`
-        ]
-    };
+    state.tableProps.tooltip_data = [
+        { ccc: { type: TooltipSyntax.Markdown, value: `### Go Proverb\nThe enemy's key point is yours` } },
+        { ccc: { type: TooltipSyntax.Markdown, value: `### Go Proverb\nPlay on the point of symmetry` } },
+        { ccc: { type: TooltipSyntax.Markdown, value: `### Go Proverb\nSente gains nothing` } },
+        { ccc: { type: TooltipSyntax.Text, value: `Beware of going back to patch up` } },
+        { ccc: { type: TooltipSyntax.Text, value: `When in doubt, Tenuki` } },
+        { ccc: `People in glass houses should not throw stones` }
+    ];
     state.tableProps.tooltip = {
         ccc: { type: TooltipSyntax.Text, value: `There is death in the hane` },
         ddd: { type: TooltipSyntax.Markdown, value: `Hane, Cut, Placement` },

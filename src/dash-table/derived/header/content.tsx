@@ -62,9 +62,9 @@ function editColumnName(column: IVisibleColumn, columns: VisibleColumns, columnR
 }
 
 function getSorting(columnId: ColumnId, sortBy: SortBy): SortDirection {
-    const setting = R.find(s => s.column_id === columnId, sortBy);
+    const sort = R.find(s => s.column_id === columnId, sortBy);
 
-    return setting ? setting.direction : SortDirection.None;
+    return sort ? sort.direction : SortDirection.None;
 }
 
 function getSortingIcon(columnId: ColumnId, sortBy: SortBy) {

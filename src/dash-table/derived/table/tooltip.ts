@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 
-import { IUSerInterfaceTooltip, ITableTooltips, ITableStaticTooltips, IVirtualizedDerivedData } from 'dash-table/components/Table/props';
+import { IUSerInterfaceTooltip, ITableStaticTooltips, IVirtualizedDerivedData, DataTooltips } from 'dash-table/components/Table/props';
 import { ifColumnId, ifRowIndex, ifFilter } from 'dash-table/conditional';
 import { ConditionalTooltip, TooltipSyntax } from 'dash-table/tooltips/props';
 import { memoizeOne } from 'core/memoizer';
@@ -10,7 +10,7 @@ export const MAX_32BITS = 2147483647;
 
 function getSelectedTooltip(
     currentTooltip: IUSerInterfaceTooltip,
-    tooltip_data: ITableTooltips | undefined,
+    tooltip_data: DataTooltips,
     tooltip_conditional: ConditionalTooltip[],
     tooltip_static: ITableStaticTooltips,
     virtualized: IVirtualizedDerivedData
@@ -25,15 +25,12 @@ function getSelectedTooltip(
         return undefined;
     }
 
-    const legacyTooltip = tooltip_data &&
-        tooltip_data[id] &&
-        (
-            tooltip_data[id].length > row ?
-                tooltip_data[id][row] :
-                null
-        );
-
-    const staticTooltip = tooltip_static[id];
+    const appliedStaticTooltip = (
+        tooltip_data &&
+        tooltip_data.length > row &&
+        tooltip_data[row] &&
+        tooltip_data[row][id]
+    ) || tooltip_static[id];
 
     const conditionalTooltips = R.filter(tt => {
         return !tt.if ||
@@ -46,7 +43,7 @@ function getSelectedTooltip(
 
     return conditionalTooltips.length ?
         conditionalTooltips.slice(-1)[0] :
-        legacyTooltip || staticTooltip;
+        appliedStaticTooltip;
 }
 
 function convertDelay(delay: number | null) {
@@ -75,7 +72,7 @@ function getDuration(duration: number | null | undefined, defaultTo: number) {
 
 export default memoizeOne((
     currentTooltip: IUSerInterfaceTooltip,
-    tooltip_data: ITableTooltips | undefined,
+    tooltip_data: DataTooltips,
     tooltip_conditional: ConditionalTooltip[],
     tooltip_static: ITableStaticTooltips,
     virtualized: IVirtualizedDerivedData,

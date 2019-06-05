@@ -162,6 +162,11 @@ export interface IBaseVisibleColumn {
     name: string | string[];
 }
 
+export type ConditionalDropdowns = IConditionalDropdown[];
+export type DataDropdowns = Partial<IDataDropdowns>[];
+export type DataTooltips = Partial<ITableTooltips>[];
+export type StaticDropdowns = Partial<IStaticDropdowns>;
+
 export type Fixed = { headers: false, data?: 0 } | { headers: true, data?: number };
 export type IColumnType = INumberColumn | ITextColumn | IDatetimeColumn | IAnyColumn;
 export type IVisibleColumn = IBaseVisibleColumn & IColumnType;
@@ -179,21 +184,17 @@ export interface IDropdownValue {
     value: string | number;
 }
 
-export type DropdownValues = IDropdownValue[];
-
 export interface IDropdown {
     clearable?: boolean;
-    dropdown: DropdownValues;
+    dropdown: IDropdownValue[];
 }
 
 export interface IConditionalDropdown extends IDropdown {
     if: Partial<IConditionalElement & INamedElement>;
 }
 
-export type ConditionalDropdowns = IConditionalDropdown[];
-
 export interface IDataDropdowns {
-    [key: string]: (IDropdown | undefined)[];
+    [key: string]: IDropdown;
 }
 
 export interface IStaticDropdowns {
@@ -201,7 +202,7 @@ export interface IStaticDropdowns {
 }
 
 export interface ITableTooltips {
-    [key: string]: Tooltip[];
+    [key: string]: Tooltip;
 }
 
 export interface ITableStaticTooltips {
@@ -256,7 +257,7 @@ export interface IProps {
 
     id: string;
 
-    tooltip_data?: ITableTooltips;
+    tooltip_data?: DataTooltips;
     tooltip_delay: number | null;
     tooltip_duration: number | null;
     tooltip: ITableStaticTooltips;
@@ -264,9 +265,9 @@ export interface IProps {
 
     active_cell?: ICellCoordinates;
     columns?: Columns;
-    dropdown?: IStaticDropdowns;
+    dropdown?: StaticDropdowns;
     dropdown_conditional?: ConditionalDropdowns;
-    dropdown_data: IDataDropdowns;
+    dropdown_data: DataDropdowns;
     css?: IStylesheetRule[];
     data?: Data;
     editable?: boolean;
@@ -307,9 +308,9 @@ export interface IProps {
 interface IDefaultProps {
     active_cell: ICellCoordinates;
     columns: Columns;
-    dropdown: IStaticDropdowns;
+    dropdown: StaticDropdowns;
     dropdown_conditional: ConditionalDropdowns;
-    dropdown_data: IDataDropdowns;
+    dropdown_data: DataDropdowns;
     css: IStylesheetRule[];
     data: Data;
     editable: boolean;
@@ -330,6 +331,7 @@ interface IDefaultProps {
     sort_mode: SortMode;
     sort_as_none: SortAsNone;
     style_as_list_view: boolean;
+    tooltip_data: DataTooltips;
 
     page_action: TableAction;
     page_current: number;
@@ -392,9 +394,9 @@ export type ControlledTableProps = SanitizedProps & IState & {
 export interface ICellFactoryProps {
     active_cell: ICellCoordinates;
     columns: VisibleColumns;
-    dropdown: IStaticDropdowns;
+    dropdown: StaticDropdowns;
     dropdown_conditional: ConditionalDropdowns;
-    dropdown_data: IDataDropdowns;
+    dropdown_data: DataDropdowns;
     tooltip: ITableStaticTooltips;
     currentTooltip: IUSerInterfaceTooltip;
     data: Data;
@@ -421,7 +423,7 @@ export interface ICellFactoryProps {
     style_filter_conditional: BasicFilters;
     style_header_conditional: Headers;
     style_table: Table;
-    tooltip_data?: ITableTooltips;
+    tooltip_data: DataTooltips;
     uiCell?: IUserInterfaceCell;
     uiViewport?: IUserInterfaceViewport;
     viewport: IDerivedData;
