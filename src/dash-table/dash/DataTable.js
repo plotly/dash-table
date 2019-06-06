@@ -13,7 +13,6 @@ import sanitizeProps from './sanitize';
 export default class DataTable extends Component {
     constructor(props) {
         super(props);
-
         let id;
         this.getId = () => (id = id || genRandomId('table-'));
     }
@@ -985,7 +984,8 @@ export const propTypes = {
         // .exact
         if: PropTypes.shape({
             column_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-            column_type: PropTypes.oneOf(['any', 'numeric', 'text', 'datetime'])
+            column_type: PropTypes.oneOf(['any', 'numeric', 'text', 'datetime']),
+            column_editable: PropTypes.bool
         })
     })),
 
@@ -1002,7 +1002,8 @@ export const propTypes = {
             header_index: PropTypes.oneOfType([
                 PropTypes.number,
                 PropTypes.oneOf(['odd', 'even'])
-            ])
+            ]),
+            column_editable: PropTypes.bool
         })
     })),
 
