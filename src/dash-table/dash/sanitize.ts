@@ -3,6 +3,8 @@ import * as R from 'ramda';
 
 import { memoizeOne } from 'core/memoizer';
 import { Columns, ColumnType, INumberLocale } from 'dash-table/components/Table/props';
+import isEditable from 'dash-table/derived/cell/isEditable';
+
 
 const D3_DEFAULT_LOCALE: INumberLocale = {
     symbol: ['$', ''],
@@ -19,9 +21,9 @@ const DEFAULT_SPECIFIER = '';
 const applyDefaultToLocale = memoizeOne((locale: INumberLocale) => getLocale(locale));
 
 const applyDefaultsToColumns = memoizeOne(
-    (defaultLocale: INumberLocale, columns: Columns) => R.map(column => {
+    (defaultLocale: INumberLocale, columns: Columns, editable: boolean) => R.map(column => {
         const c = R.clone(column);
-
+        c.editable = isEditable(editable, column.editable);
         if (c.type === ColumnType.Numeric && c.format) {
             c.format.locale = getLocale(defaultLocale, c.format.locale);
             c.format.nully = getNully(c.format.nully);
@@ -37,7 +39,7 @@ export default (props: any) => {
     return R.mergeAll([
         props,
         {
-            columns: applyDefaultsToColumns(locale_format, props.columns),
+            columns: applyDefaultsToColumns(locale_format, props.columns, props.editable),
             locale_format
         }
     ]);

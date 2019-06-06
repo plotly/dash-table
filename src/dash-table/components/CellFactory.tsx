@@ -38,7 +38,6 @@ export default class CellFactory {
             column_static_dropdown,
             data,
             dropdown_properties, // legacy
-            editable,
             is_focused,
             row_deletable,
             row_selectable,
@@ -51,7 +50,6 @@ export default class CellFactory {
             style_data_conditional,
             virtualized
         } = this.props;
-
         const relevantStyles = this.relevantStyles(
             style_cell,
             style_data,
@@ -106,11 +104,9 @@ export default class CellFactory {
             columns,
             virtualized.data,
             virtualized.offset,
-            editable,
             !!is_focused,
             dropdowns
         );
-
         const ops = matrixMap2(
             operations,
             dataOpStyles,

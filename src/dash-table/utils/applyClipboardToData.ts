@@ -4,7 +4,6 @@ import Logger from 'core/Logger';
 
 import { ICellCoordinates, Columns, Data, ColumnType } from 'dash-table/components/Table/props';
 import reconcile from 'dash-table/type/reconcile';
-import isEditable from 'dash-table/derived/cell/isEditable';
 
 export default (
     values: any[][],
@@ -37,7 +36,7 @@ export default (
                 id: `Column ${i + 1}`,
                 name: `Column ${i + 1}`,
                 type: ColumnType.Any
-            });
+            } as any);
             newData.forEach(row => (row[`Column ${i}`] = ''));
         }
     }
@@ -74,7 +73,7 @@ export default (
 
             const jOffset = (activeCell as any).column + j;
             const col = newColumns[jOffset];
-            if (!col || !isEditable(true, col.editable)) {
+            if (!col || col.editable) {
                 continue;
             }
 

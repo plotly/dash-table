@@ -15,7 +15,6 @@ import {
 import CellInput from 'dash-table/components/CellInput';
 import derivedCellEventHandlerProps, { Handler } from 'dash-table/derived/cell/eventHandlerProps';
 import isActiveCell from 'dash-table/derived/cell/isActive';
-import isCellEditable from './isEditable';
 import CellLabel from 'dash-table/components/CellLabel';
 import CellDropdown from 'dash-table/components/CellDropdown';
 import { memoizeOne } from 'core/memoizer';
@@ -61,7 +60,6 @@ class Contents {
         columns: VisibleColumns,
         data: Data,
         offset: IViewportOffset,
-        editable: boolean,
         isFocused: boolean,
         dropdowns: (DropdownValues | undefined)[][]
     ): JSX.Element[][] => {
@@ -74,15 +72,12 @@ class Contents {
 
                     const dropdown = dropdowns[rowIndex][columnIndex];
 
-                    const isEditable = isCellEditable(editable, column.editable);
-
                     const className = [
                         ...(active ? ['input-active'] : []),
                         isFocused ? 'focused' : 'unfocused',
                         'dash-cell-value'
                     ].join(' ');
-
-                    switch (getCellType(active, isEditable, dropdown, column.presentation)) {
+                    switch (getCellType(active, column.editable, dropdown, column.presentation)) {
                         case CellType.Dropdown:
                             return (<CellDropdown
                                 key={`column-${columnIndex}`}
