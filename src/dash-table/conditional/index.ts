@@ -76,11 +76,10 @@ export function ifFilter(condition: IConditionalElement | undefined, datum: Datu
         ifAstFilter(new QuerySyntaxTree(condition.filter), datum);
 }
 
-export function ifEditable(condition: IActiveElement | undefined, isEditable: boolean | undefined)  {
+export function ifEditable(condition: IActiveElement | undefined, isEditable: boolean)  {
     if  (!condition ||
         condition.column_editable === undefined) {
             return true;
     }
     return isEditable === condition.column_editable;
-
 }
