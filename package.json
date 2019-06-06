@@ -2,6 +2,14 @@
   "name": "dash-table",
   "version": "3.7.0",
   "description": "Dash table",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:plotly/dash-table.git"
+  },
+  "bugs": {
+    "url": "https://github.com/plotly/dash-table/issues"
+  },
+  "homepage": "https://github.com/plotly/dash-table",
   "main": "dash_table/bundle.js",
   "scripts": {
     "preprivate::opentests": "run-s private::wait*",
@@ -39,7 +47,7 @@
     "test.visual-local": "build-storybook",
     "test.watch": "run-p --race \"private::build:js-test-watch\" --race private::host* private::opentests"
   },
-  "author": "Chris P <chris@plot.ly",
+  "author": "Chris P <chris@plot.ly>",
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
@@ -70,7 +78,7 @@
     "less-loader": "^5.0.0",
     "npm": "^6.9.0",
     "npm-run-all": "^4.1.5",
-    "papaparse": "^4.6.3",
+    "papaparse": "^5.0.0",
     "ramda": "^0.26.1",
     "raw-loader": "^2.0.0",
     "react": "16.8.6",
@@ -80,13 +88,13 @@
     "remarkable": "^1.7.1",
     "sheetclip": "^0.3.0",
     "style-loader": "^0.23.1",
-    "ts-loader": "^6.0.1",
-    "tslint": "^5.16.0",
+    "ts-loader": "^6.0.2",
+    "tslint": "^5.17.0",
     "typescript": "^3.5.1",
     "wait-on": "^3.2.0",
     "webpack": "^4.32.2",
     "webpack-cli": "^3.3.2",
-    "webpack-dev-server": "^3.4.1",
+    "webpack-dev-server": "^3.5.1",
     "webpack-preprocessor": "^0.1.12"
   },
   "files": [
