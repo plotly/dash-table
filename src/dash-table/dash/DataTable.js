@@ -57,7 +57,7 @@ export const defaultProps = {
 
     dropdown: {},
     dropdown_conditional: [],
-    dropdown_data: {},
+    dropdown_data: [],
 
     fixed_columns: {
         headers: false,
