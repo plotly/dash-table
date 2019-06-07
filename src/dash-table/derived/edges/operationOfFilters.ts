@@ -6,6 +6,7 @@ import { memoizeOneFactory } from 'core/memoizer';
 import { IConvertedStyle } from '../style';
 import { EdgesMatrices } from './type';
 import { getFilterOpCellEdges } from '.';
+import { traverse2 } from 'core/math/matrixZipMap';
 
 export default memoizeOneFactory((
     columns: number,
@@ -19,10 +20,11 @@ export default memoizeOneFactory((
 
     const edges = new EdgesMatrices(1, columns, Environment.defaultEdge, true, !listViewStyle);
 
-    R.forEach(i => R.forEach(
-        j => edges.setEdges(i, j, getFilterOpCellEdges()(styles)),
-        R.range(0, columns)
-    ), R.range(0, 1));
+    traverse2(
+        R.range(0, 1),
+        R.range(0, columns),
+        (i, j) => edges.setEdges(i, j, getFilterOpCellEdges()(styles))
+    );
 
     return edges;
 });

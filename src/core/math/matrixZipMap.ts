@@ -2,6 +2,24 @@ import * as R from 'ramda';
 
 type Matrix<T> = T[][];
 
+export const traverse2 = <T1, T2, TR>(
+    a1: T1[],
+    a2: T2[],
+    fn: (d1: T1, d2: T2, i1: number, i2: number) => TR
+) => R.addIndex<T1>(R.forEach)((d1, i1) =>
+    R.addIndex<T2>(R.forEach)((d2, i2) =>
+        fn(d1, d2, i1, i2), a2), a1);
+
+export const traverse3 = <T1, T2, T3, TR>(
+    a1: T1[],
+    a2: T2[],
+    a3: T3[],
+    fn: (d1: T1, d2: T2, d3: T3, i1: number, i2: number, i3: number) => TR
+) => R.addIndex<T1>(R.forEach)((d1, i1) =>
+    R.addIndex<T2>(R.forEach)((d2, i2) =>
+        R.addIndex<T3>(R.forEach)((d3, i3) =>
+        fn(d1, d2, d3, i1, i2, i3), a3), a2), a1);
+
 export function matrixMap<T1, TR>(
     m1: Matrix<T1>,
     cb: (d1: T1, i: number, j: number) => TR

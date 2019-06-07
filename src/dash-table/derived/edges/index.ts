@@ -3,58 +3,61 @@ import * as R from 'ramda';
 import { BorderStyle, BORDER_PROPERTIES, BorderProp } from './type';
 import { IConvertedStyle } from '../style';
 import { Datum, IVisibleColumn } from 'dash-table/components/Table/props';
+import { traverse2 } from 'core/math/matrixZipMap';
 
-const indexedMap = <T>(a: T[]) => R.addIndex<T, [T, number]>(R.map)((e: T, i: number) => [e, i], a);
+type Filter<T> = (s: T[]) => T[];
 
-export const matchesDataCell = (datum: Datum, i: number, column: IVisibleColumn) => R.filter<IConvertedStyle>((style =>
+export const matchesDataCell = (datum: Datum, i: number, column: IVisibleColumn): Filter<IConvertedStyle> => R.filter<IConvertedStyle>((style =>
     style.matchesRow(i) &&
     style.matchesColumn(column) &&
     style.matchesFilter(datum)
 ));
 
-export const matchesFilterCell = (column: IVisibleColumn) => R.filter<IConvertedStyle>((style =>
+export const matchesFilterCell = (column: IVisibleColumn): Filter<IConvertedStyle> => R.filter<IConvertedStyle>((style =>
     style.matchesColumn(column)
 ));
 
-export const matchesHeaderCell = (i: number, column: IVisibleColumn) => R.filter<IConvertedStyle>((style =>
+export const matchesHeaderCell = (i: number, column: IVisibleColumn): Filter<IConvertedStyle> => R.filter<IConvertedStyle>((style =>
     style.matchesRow(i) &&
     style.matchesColumn(column)
 ));
 
-export const matchesDataOpCell = (datum: Datum, i: number) => R.filter<IConvertedStyle>((style =>
+export const matchesDataOpCell = (datum: Datum, i: number): Filter<IConvertedStyle> => R.filter<IConvertedStyle>((style =>
     !style.checksColumn() &&
     style.matchesRow(i) &&
     style.matchesFilter(datum)
 ));
 
-const getFilterOpStyles = R.filter<IConvertedStyle>((style =>
+const getFilterOpStyles: Filter<IConvertedStyle> = R.filter<IConvertedStyle>((style =>
     !style.checksColumn()
 ));
 
-const getHeaderOpStyles = (i: number) => R.filter<IConvertedStyle>((style =>
+const getHeaderOpStyles = (i: number): Filter<IConvertedStyle> => R.filter<IConvertedStyle>((style =>
     style.matchesRow(i) &&
     !style.checksColumn()
 ));
 
-const getBorderStyle = (styles: IConvertedStyle[]): BorderStyle => R.reduce(
-    (res: BorderStyle, [style, i]) => R.reduce(
-        (acc: BorderStyle, p: BorderProp): BorderStyle =>
-            R.ifElse(
-                R.compose(R.not, R.isNil),
-                s => (acc[p] = [s, i]) && acc,
-                () => acc
-            )(style.style[p] || style.style.border),
-        res,
-        BORDER_PROPERTIES
-    ), {}, indexedMap(styles));
+const applyStyle = R.curry((
+    base: BorderStyle,
+    style: IConvertedStyle,
+    p: BorderProp,
+    i: number
+) => R.ifElse(
+    R.compose(R.not, R.isNil),
+    s => (base[p] = [s, i]) && base,
+    () => base)(style.style[p] || style.style.border));
 
-const getEdge = (filter: R.FilterOnceApplied<IConvertedStyle>) =>
-    (styles: IConvertedStyle[]) =>
-        getBorderStyle(filter(styles));
+const applyStyles = (styles: IConvertedStyle[]): BorderStyle => {
+    const res = {};
 
-export const getDataCellEdges = (datum: Datum, i: number, column: IVisibleColumn) => getEdge(matchesDataCell(datum, i, column));
-export const getDataOpCellEdges = (datum: Datum, i: number) => getEdge(matchesDataOpCell(datum, i));
-export const getFilterCellEdges = (column: IVisibleColumn) => getEdge(matchesFilterCell(column));
-export const getFilterOpCellEdges = () => getEdge(getFilterOpStyles);
-export const getHeaderCellEdges = (i: number, column: IVisibleColumn) => getEdge(matchesHeaderCell(i, column));
-export const getHeaderOpCellEdges = (i: number) => getEdge(getHeaderOpStyles(i));
+    traverse2(styles, BORDER_PROPERTIES, applyStyle(res));
+
+    return res;
+};
+
+export const getDataCellEdges = (datum: Datum, i: number, column: IVisibleColumn) => R.compose(applyStyles, matchesDataCell(datum, i, column));
+export const getDataOpCellEdges = (datum: Datum, i: number) => R.compose(applyStyles, matchesDataOpCell(datum, i));
+export const getFilterCellEdges = (column: IVisibleColumn) => R.compose(applyStyles, matchesFilterCell(column));
+export const getFilterOpCellEdges = () => R.compose(applyStyles, getFilterOpStyles);
+export const getHeaderCellEdges = (i: number, column: IVisibleColumn) => R.compose(applyStyles, matchesHeaderCell(i, column));
+export const getHeaderOpCellEdges = (i: number) => R.compose(applyStyles, getHeaderOpStyles(i));

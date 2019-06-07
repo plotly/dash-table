@@ -4,7 +4,6 @@ import Environment from 'core/environment';
 import { memoizeOneFactory } from 'core/memoizer';
 
 import {
-    IVisibleColumn,
     VisibleColumns
 } from 'dash-table/components/Table/props';
 
@@ -12,6 +11,7 @@ import { IConvertedStyle } from '../style';
 import { EdgesMatrices } from './type';
 import { SingleColumnSyntaxTree } from 'dash-table/syntax-tree';
 import { getFilterCellEdges } from '.';
+import { traverse2 } from 'core/math/matrixZipMap';
 
 export default memoizeOneFactory((
     columns: VisibleColumns,
@@ -26,8 +26,10 @@ export default memoizeOneFactory((
 
     const edges = new EdgesMatrices(1, columns.length, Environment.defaultEdge, true, !listViewStyle);
 
-    R.forEach(i => R.addIndex<IVisibleColumn>(R.forEach)(
-        (column, j) => {
+    traverse2(
+        R.range(0, 1),
+        columns,
+        (_, column, i, j) => {
             edges.setEdges(i, j, getFilterCellEdges(column)(styles));
 
             const ast = map.get(column.id.toString());
@@ -39,8 +41,8 @@ export default memoizeOneFactory((
                     borderTop: [Environment.activeEdge, Infinity]
                 });
             }
-        }, columns
-    ), R.range(0, 1));
+        }
+    );
 
     return edges;
 });
