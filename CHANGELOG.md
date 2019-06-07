@@ -41,7 +41,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
     - `n_fixed_columns`: Will fix columns to the left.
         Renamed to `fixed_columns`
         Now accepts an object { headers: boolean, data: number } instead of a number.
-        { headers: true } determines the number of columns to fix automatically.
+        { headers: true } determines the number of columns to fix automatically. For example, if the rows are selectable or deletable, { headers: true } would fix those columns automatically. If { headers: true, data: 2 }, it would fix the first two data columns in addition to the selectable and deletable if visible. 
     - `n_fixed_rows`: Will fix rows to the top.
         Renamed to `fixed_rows`
         Now accepts an object { headers: boolean, data: number } instead of a number.
