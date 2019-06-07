@@ -37,7 +37,7 @@ export default (
                 id: `Column ${i + 1}`,
                 name: `Column ${i + 1}`,
                 type: ColumnType.Any,
-                sort_as_none: []
+                sort_as_null: []
             });
             newData.forEach(row => (row[`Column ${i}`] = ''));
         }

@@ -7,7 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [#446](https://github.com/plotly/dash-table/pull/446)
 - Table API rework
 #### NEW
-    - `column.sort_as_none`: Allows sorting behavior customization.
+    - `column.sort_as_null`: Allows sorting behavior customization.
         Accepts an array of string, number or booleans.
 
 #### REMOVED
@@ -67,9 +67,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
     - `sorting`
         Renamed `sort_action`.
     - `sorting_treat_empty_string_as_none`
-        Renamed `sort_as_none`.
+        Renamed `sort_as_null`.
         Now accepts an array of string, number or booleans.
-        Table-level prop for the `column.sort_as_none` column nested prop.
+        Table-level prop for the `column.sort_as_null` column nested prop.
     - `style_**_conditional`
         Renamed `filter` to `filter_query`.
 
