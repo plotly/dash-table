@@ -71,7 +71,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
         Renamed to `sort_as_null`.
         Now accepts an array of string, number or booleans that can be ignored during sort.
         Table-level prop for the `column.sort_as_null` column nested prop.
-    - `style_**_conditional`
+    - `style_data_conditional`
         Renamed `filter` to `filter_query`.
 
 ### Added
