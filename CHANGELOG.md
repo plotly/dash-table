@@ -45,7 +45,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
     - `n_fixed_rows`: Will fix rows to the top.
         Renamed to `fixed_rows`
         Now accepts an object { headers: boolean, data: number } instead of a number.
-        { headers: true } determines the number of rows to fix automatically.
+        { headers: true } determines the number of rows to fix automatically (i.e. if there are multiple headers, it will fix all of them as well as the filter row).
+        { headers: true, data: 2} would fix all of the header rows as well as the first 2 data rows.
     -  `pagination_mode`
         Renamed to `page_action`.
     -  `column_static_dropdown`
