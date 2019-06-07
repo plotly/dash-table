@@ -12,7 +12,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 #### REMOVED
     - `column.clearable`: Allows clearing the value of a dropdown cell.
-        Removed in favor of `dropdown_**` `clearable` nested property
+        Removed in favor of `dropdown_**` `clearable` nested property.
     - `column.options`
         Removed. Redundant with `dropdown`.
     - `pagination_settings`
@@ -20,24 +20,24 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 #### RENAMED
     - `column_static_tooltip`
-        Renamed `tooltip`.
+        Renamed to `tooltip`.
     - `column_conditional_tooltips`
-        Renamed `tooltip_conditional`.
+        Renamed to `tooltip_conditional`.
     - `filter`
-        Renamed `filter_query`.
+        Renamed to `filter_query`.
     - `sort_type`
-        Renamed `sort_mode`.
+        Renamed to `sort_mode`.
     - `derived_filter_structure`
         Renamed to `derived_filter_query_structure`.
 
 #### MODIFIED
     - `column.deletable`: Allows column deletion.
-        Now accepts a boolean or an array of booleans (for multi-line headers)
+        Now accepts a boolean or an array of booleans (for multi-line headers).
     - `column.editable_name`: Allows column renaming.
         Renamed to `column.renamable`
-        Now accepts a boolean or an array of booleans (for multi-line headers)
+        Now accepts a boolean or an array of booleans (for multi-line headers).
     - `column.id`
-        Now accepts `string` only -- `number` column ids can be casted to string
+        Now accepts `string` only -- `number` column ids can be casted to string.
     - `n_fixed_columns`: Will fix columns to the left.
         Renamed to `fixed_columns`
         Now accepts an object { headers: boolean, data: number } instead of a number.
@@ -49,8 +49,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
     -  `pagination_mode`
         Renamed to `page_action`.
     -  `column_static_dropdown`
-        Renamed `dropdown`.
-        Now an object with each entry refering to a Column ID. Each nested prop expects
+        Renamed to `dropdown`.
+        Now an object with each entry refering to a Column ID. Each nested prop expects.
         `clearable` and `options`.
     - `column_conditional_dropdowns`
         Renamed to `dropdown_conditional`.
@@ -60,14 +60,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
         Renamed to `dropdown_data`.
         Matches the `data` structure.
     - `tooltips`
-        Renamed `tooltip_data`.
+        Renamed to `tooltip_data`.
         Matches the `data` structure.
     - `filtering`
-        Renamed `filter_action`.
+        Renamed to `filter_action`.
     - `sorting`
-        Renamed `sort_action`.
+        Renamed to `sort_action`.
     - `sorting_treat_empty_string_as_none`
-        Renamed `sort_as_null`.
+        Renamed to `sort_as_null`.
         Now accepts an array of string, number or booleans.
         Table-level prop for the `column.sort_as_null` column nested prop.
     - `style_**_conditional`

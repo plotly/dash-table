@@ -494,7 +494,7 @@ export const propTypes = {
             data: PropTypes.oneOf([0])
         }),
         PropTypes.exact({
-            headers: PropTypes.oneOf([true]),
+            headers: PropTypes.oneOf([true]).isRequired,
             data: PropTypes.number
         })
     ]),
