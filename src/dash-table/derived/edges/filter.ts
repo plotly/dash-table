@@ -26,28 +26,27 @@ export default memoizeOneFactory((
 
     const edges = new EdgesMatrices(1, columns.length, Environment.defaultEdge, true, !listViewStyle);
 
-    R.forEach(i => {
-        return R.addIndex<IVisibleColumn>(R.forEach)(
-            (column, j) => {
-                const matcher = matchesFilterCell(column);
+    R.forEach(i => R.addIndex<IVisibleColumn>(R.forEach)(
+        (column, j) => {
+            const matcher = matchesFilterCell(column);
 
-                const cellStyle = getBorderStyle(
-                    matcher(borderStyles)
-                );
+            const cellStyle = getBorderStyle(
+                matcher(borderStyles)
+            );
 
-                edges.setEdges(i, j, cellStyle);
+            edges.setEdges(i, j, cellStyle);
 
-                const ast = map.get(column.id.toString());
-                if (ast && !ast.isValid) {
-                    edges.setEdges(i, j, {
-                        borderBottom: [Environment.activeEdge, Infinity],
-                        borderLeft: [Environment.activeEdge, Infinity],
-                        borderRight: [Environment.activeEdge, Infinity],
-                        borderTop: [Environment.activeEdge, Infinity]
-                    });
-                }
-            }, columns);
-    }, R.range(0, 1));
+            const ast = map.get(column.id.toString());
+            if (ast && !ast.isValid) {
+                edges.setEdges(i, j, {
+                    borderBottom: [Environment.activeEdge, Infinity],
+                    borderLeft: [Environment.activeEdge, Infinity],
+                    borderRight: [Environment.activeEdge, Infinity],
+                    borderTop: [Environment.activeEdge, Infinity]
+                });
+            }
+        }, columns
+    ), R.range(0, 1));
 
     return edges;
 });
