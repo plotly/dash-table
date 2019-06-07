@@ -2,16 +2,6 @@ import * as R from 'ramda';
 
 type Matrix<T> = T[][];
 
-export const toMatrix = <T1, T2, TR>(
-    a1: T1[],
-    a2: T2[],
-    fn: (a1: T1, a2: T2, i: number, j: number) => TR
-): TR[][] => R.addIndex<T1, TR[]>(R.map)(
-    (d1, i) => R.addIndex<T2, TR>(R.map)(
-        (d2, j) => fn(d1, d2, i, j),
-        a2),
-    a1);
-
 export function matrixMap<T1, TR>(
     m1: Matrix<T1>,
     cb: (d1: T1, i: number, j: number) => TR
