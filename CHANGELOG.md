@@ -51,6 +51,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
         { headers: true, data: 2} would fix all of the header rows as well as the first 2 data rows.
     -  `pagination_mode`
         Renamed to `page_action`.
+        `'fe'` is now `'native'`, `'be'` is now `'custom'`, and `false` is now '`none'`
     -  `column_static_dropdown`
         Renamed to `dropdown`.
         Now an object with each entry refering to a Column ID. Each nested prop expects.
