@@ -43,21 +43,64 @@ export const matchesIndex = R.curry((i: number, style: IConvertedStyle) => style
 export const matchesFilter = R.curry((datum: Datum, style: IConvertedStyle) => style.matchesFilter(datum));
 export const matchesColumn = R.curry((column: IVisibleColumn, style: IConvertedStyle) => style.matchesColumn(column));
 
-export const matchesRow = (datum: Datum, i: number) => {
+export const matchesDataCell = (datum: Datum, i: number) => {
     const _matchesIndex = matchesIndex(i);
     const _matchesFilter = matchesFilter(datum);
-
-    return (style: IConvertedStyle) => _matchesIndex(style) && _matchesFilter(style);
-};
-
-export const matchesCell = (datum: Datum, i: number) => {
-    const _matchesRow = matchesRow(datum, i);
 
     return (column: IVisibleColumn) => {
         const _matchesColumn = matchesColumn(column);
 
-        return R.filter((style: IConvertedStyle) => _matchesRow(style) && _matchesColumn(style));
+        return R.filter((style: IConvertedStyle) =>
+            _matchesIndex(style) &&
+            _matchesColumn(style) &&
+            _matchesFilter(style)
+        );
     };
+};
+
+export const matchesFilterCell = (column: IVisibleColumn) => {
+    const _matchesColumn = matchesColumn(column);
+
+    return R.filter((style: IConvertedStyle) =>
+        _matchesColumn(style)
+    );
+};
+
+export const matchesHeaderCell = (i: number) => {
+    const _matchesIndex = matchesIndex(i);
+
+    return (column: IVisibleColumn) => {
+        const _matchesColumn = matchesColumn(column);
+
+        return R.filter((style: IConvertedStyle) =>
+            _matchesIndex(style) &&
+            _matchesColumn(style)
+        );
+    };
+};
+
+export const matchesDataOpCell = (datum: Datum, i: number) => {
+    const _matchesIndex = matchesIndex(i);
+    const _matchesFilter = matchesFilter(datum);
+
+    return R.filter((style: IConvertedStyle) =>
+        !style.checksColumn() &&
+        _matchesIndex(style) &&
+        _matchesFilter(style)
+    );
+};
+
+export const matchesFilterOpCell = R.filter(
+    (style: IConvertedStyle) => !style.checksColumn()
+);
+
+export const matchesHeaderOpCell = (i: number) => {
+    const _matchesIndex = matchesIndex(i);
+
+    return R.filter((style: IConvertedStyle) =>
+        !style.checksColumn() &&
+        _matchesIndex(style)
+    );
 };
 
 function convertElement(style: GenericStyle): IConvertedStyle {

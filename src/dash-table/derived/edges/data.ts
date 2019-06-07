@@ -11,22 +11,9 @@ import {
     ICellCoordinates
 } from 'dash-table/components/Table/props';
 
-import { IConvertedStyle, matchesCell } from '../style';
-import { BorderStyle, BORDER_PROPERTIES, EdgesMatrices, BorderProp } from './type';
-
-const indexedMap = <T>(a: T[]) => R.addIndex<T, [T, number]>(R.map)((e: T, i: number) => [e, i], a);
-
-const getBorderStyle = (styles: IConvertedStyle[]): BorderStyle => R.reduce(
-    (res: BorderStyle, [style, i]) => R.reduce(
-        (acc: BorderStyle, p: BorderProp): BorderStyle =>
-            R.ifElse(
-                R.compose(R.not, R.isNil),
-                s => (acc[p] = [s, i]) && acc,
-                () => acc
-            )(style.style[p] || style.style.border),
-        res,
-        BORDER_PROPERTIES
-    ), {}, indexedMap(styles));
+import { IConvertedStyle, matchesDataCell } from '../style';
+import { EdgesMatrices } from './type';
+import { getBorderStyle } from '.';
 
 export default memoizeOneFactory((
     columns: VisibleColumns,
@@ -43,23 +30,18 @@ export default memoizeOneFactory((
     const edges = new EdgesMatrices(data.length, columns.length, Environment.defaultEdge, true, !listViewStyle);
 
     R.addIndex(R.forEach)((datum, i) => {
-        const partialCellMatcher = matchesCell(datum, i + offset.rows);
+        const partial = matchesDataCell(datum, i + offset.rows);
 
-        return R.addIndex<IVisibleColumn>(R.forEach)(
-            (column, j) => {
-                const cellMatcher = partialCellMatcher(column);
+        return R.addIndex<IVisibleColumn>(R.forEach)((column, j) => {
+            const matcher = partial(column);
 
-                const cellStyle = getBorderStyle(
-                    cellMatcher(borderStyles)
-                );
+            const cellStyle = getBorderStyle(
+                matcher(borderStyles)
+            );
 
-                edges.setEdges(i, j, cellStyle);
-            },
-            columns
-        );
-    },
-        data
-    );
+            edges.setEdges(i, j, cellStyle);
+        }, columns);
+    }, data);
 
     if (active_cell) {
         edges.setEdges(active_cell.row, active_cell.column, {

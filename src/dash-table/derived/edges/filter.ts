@@ -8,32 +8,10 @@ import {
     VisibleColumns
 } from 'dash-table/components/Table/props';
 
-import { IConvertedStyle } from '../style';
-import { BorderStyle, BORDER_PROPERTIES, EdgesMatrices } from './type';
+import { IConvertedStyle, matchesFilterCell } from '../style';
+import { EdgesMatrices } from './type';
 import { SingleColumnSyntaxTree } from 'dash-table/syntax-tree';
-
-const getWeightedStyle = (
-    borderStyles: IConvertedStyle[],
-    column: IVisibleColumn
-): BorderStyle => {
-    const res: BorderStyle = {};
-
-    R.addIndex<IConvertedStyle>(R.forEach)((rs, i) => {
-        if (!rs.matchesColumn(column)) {
-            return;
-        }
-
-        R.forEach(p => {
-            const s = rs.style[p] || rs.style.border;
-
-            if (!R.isNil(s)) {
-                res[p] = [s, i];
-            }
-        }, BORDER_PROPERTIES);
-    }, borderStyles);
-
-    return res;
-};
+import { getBorderStyle } from '.';
 
 export default memoizeOneFactory((
     columns: VisibleColumns,
@@ -48,12 +26,13 @@ export default memoizeOneFactory((
 
     const edges = new EdgesMatrices(1, columns.length, Environment.defaultEdge, true, !listViewStyle);
 
-    R.forEach(i =>
-        R.addIndex<IVisibleColumn>(R.forEach)(
+    R.forEach(i => {
+        return R.addIndex<IVisibleColumn>(R.forEach)(
             (column, j) => {
-                const cellStyle = getWeightedStyle(
-                    borderStyles,
-                    column
+                const matcher = matchesFilterCell(column);
+
+                const cellStyle = getBorderStyle(
+                    matcher(borderStyles)
                 );
 
                 edges.setEdges(i, j, cellStyle);
@@ -67,11 +46,8 @@ export default memoizeOneFactory((
                         borderTop: [Environment.activeEdge, Infinity]
                     });
                 }
-            },
-            columns
-        ),
-        R.range(0, 1)
-    );
+            }, columns);
+    }, R.range(0, 1));
 
     return edges;
 });
