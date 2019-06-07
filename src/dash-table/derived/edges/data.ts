@@ -13,7 +13,6 @@ import {
 
 import { IConvertedStyle, matchesCell } from '../style';
 import { BorderStyle, BORDER_PROPERTIES, EdgesMatrices, BorderProp } from './type';
-import { toMatrix } from 'core/math/matrixZipMap';
 
 const indexedMap = <T>(a: T[]) => R.addIndex<T, [T, number]>(R.map)((e: T, i: number) => [e, i], a);
 
@@ -43,10 +42,23 @@ export default memoizeOneFactory((
 
     const edges = new EdgesMatrices(data.length, columns.length, Environment.defaultEdge, true, !listViewStyle);
 
-    toMatrix(
-        R.addIndex(R.forEach)((datum, i) => matchesCell(datum, i + offset.rows), data),
-        columns,
-        (rowMatcher: any, column: IVisibleColumn, i: number, j: number) => edges.setEdges(i, j, getBorderStyle(rowMatcher(column)(borderStyles)))
+    R.addIndex(R.forEach)((datum, i) => {
+        const partialCellMatcher = matchesCell(datum, i + offset.rows);
+
+        return R.addIndex<IVisibleColumn>(R.forEach)(
+            (column, j) => {
+                const cellMatcher = partialCellMatcher(column);
+
+                const cellStyle = getBorderStyle(
+                    cellMatcher(borderStyles)
+                );
+
+                edges.setEdges(i, j, cellStyle);
+            },
+            columns
+        );
+    },
+        data
     );
 
     if (active_cell) {
