@@ -11,37 +11,23 @@ import {
     ICellCoordinates
 } from 'dash-table/components/Table/props';
 
-import { IConvertedStyle } from '../style';
-import { BorderStyle, BORDER_PROPERTIES, EdgesMatrices } from './type';
+import { IConvertedStyle, matchesCell } from '../style';
+import { BorderStyle, BORDER_PROPERTIES, EdgesMatrices, BorderProp } from './type';
+import { toMatrix } from 'core/math/matrixZipMap';
 
-const getWeightedStyle = (
-    borderStyles: IConvertedStyle[],
-    column: IVisibleColumn,
-    index: number,
-    offset: IViewportOffset,
-    datum: any
-): BorderStyle => {
-    const res: BorderStyle = {};
+const indexedMap = <T>(a: T[]) => R.addIndex<T, [T, number]>(R.map)((e: T, i: number) => [e, i], a);
 
-    R.addIndex<IConvertedStyle>(R.forEach)((rs, i) => {
-        if (!rs.matchesColumn(column) ||
-            !rs.matchesRow(index + offset.rows) ||
-            !rs.matchesFilter(datum)
-        ) {
-            return;
-        }
-
-        R.forEach(p => {
-            const s = rs.style[p] || rs.style.border;
-
-            if (!R.isNil(s)) {
-                res[p] = [s, i];
-            }
-        }, BORDER_PROPERTIES);
-    }, borderStyles);
-
-    return res;
-};
+const getBorderStyle = (styles: IConvertedStyle[]): BorderStyle => R.reduce(
+    (res: BorderStyle, [style, i]) => R.reduce(
+        (acc: BorderStyle, p: BorderProp): BorderStyle =>
+            R.ifElse(
+                R.compose(R.not, R.isNil),
+                s => (acc[p] = [s, i]) && acc,
+                () => acc
+            )(style.style[p] || style.style.border),
+        res,
+        BORDER_PROPERTIES
+    ), {}, indexedMap(styles));
 
 export default memoizeOneFactory((
     columns: VisibleColumns,
@@ -57,22 +43,10 @@ export default memoizeOneFactory((
 
     const edges = new EdgesMatrices(data.length, columns.length, Environment.defaultEdge, true, !listViewStyle);
 
-    R.addIndex(R.forEach)((datum, i) =>
-        R.addIndex<IVisibleColumn>(R.forEach)(
-            (column, j) => {
-                const cellStyle = getWeightedStyle(
-                    borderStyles,
-                    column,
-                    i,
-                    offset,
-                    datum
-                );
-
-                edges.setEdges(i, j, cellStyle);
-            },
-            columns
-        ),
-        data
+    toMatrix(
+        R.addIndex(R.forEach)((datum, i) => matchesCell(datum, i + offset.rows), data),
+        columns,
+        (rowMatcher: any, column: IVisibleColumn, i: number, j: number) => edges.setEdges(i, j, getBorderStyle(rowMatcher(column)(borderStyles)))
     );
 
     if (active_cell) {

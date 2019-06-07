@@ -39,6 +39,27 @@ export interface IConvertedStyle {
 type GenericIf = Partial<IConditionalElement & IIndexedHeaderElement & IIndexedRowElement & INamedElement & ITypedElement>;
 type GenericStyle = Style & Partial<{ if: GenericIf }>;
 
+export const matchesIndex = R.curry((i: number, style: IConvertedStyle) => style.matchesRow(i));
+export const matchesFilter = R.curry((datum: Datum, style: IConvertedStyle) => style.matchesFilter(datum));
+export const matchesColumn = R.curry((column: IVisibleColumn, style: IConvertedStyle) => style.matchesColumn(column));
+
+export const matchesRow = (datum: Datum, i: number) => {
+    const _matchesIndex = matchesIndex(i);
+    const _matchesFilter = matchesFilter(datum);
+
+    return (style: IConvertedStyle) => _matchesIndex(style) && _matchesFilter(style);
+};
+
+export const matchesCell = (datum: Datum, i: number) => {
+    const _matchesRow = matchesRow(datum, i);
+
+    return (column: IVisibleColumn) => {
+        const _matchesColumn = matchesColumn(column);
+
+        return R.filter((style: IConvertedStyle) => _matchesRow(style) && _matchesColumn(style));
+    };
+};
+
 function convertElement(style: GenericStyle): IConvertedStyle {
     const indexFilter = style.if && (style.if.header_index || style.if.row_index);
     let ast: QuerySyntaxTree;

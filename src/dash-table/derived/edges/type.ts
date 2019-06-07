@@ -6,7 +6,7 @@ import py2jsCssProperties from '../style/py2jsCssProperties';
 
 export type Edge = any;
 
-type BorderProp =
+export type BorderProp =
     PropOf<CSSProperties, 'borderBottom'> |
     PropOf<CSSProperties, 'borderLeft'> |
     PropOf<CSSProperties, 'borderRight'> |
