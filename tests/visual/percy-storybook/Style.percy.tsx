@@ -172,4 +172,166 @@ storiesOf('DashTable/Style type condition', module)
             color: 'white',
             font_family: 'arial'
         }]}
+    />))
+    .add('yellow if table is editable', () => (<DataTable
+        id='styling-13'
+        data={[
+            { a: 1, b: 2, c: '3', d: '4' },
+            { a: 11, b: 22, c: '33', d: '44' },
+            { a: 111, b: 222, c: '333', d: '444' }
+        ]}
+        editable={true}
+        row_deletable={true}
+        row_selectable={true}
+        columns={[
+            { id: 'a', name: 'A', type: ColumnType.Any },
+            { id: 'b', name: 'B', type: ColumnType.Text },
+            { id: 'c', name: 'C', type: ColumnType.Numeric },
+            { id: 'd', name: 'D' }
+        ]}
+        style_data_conditional={[{
+            if: { column_editable: true }, background_color: 'yellow'
+        }]}
+    />))
+    .add('green if table is not editable', () => (<DataTable
+        id='styling-14'
+        data={[
+            { a: 1, b: 2, c: '3', d: '4' },
+            { a: 11, b: 22, c: '33', d: '44' },
+            { a: 111, b: 222, c: '333', d: '444' }
+        ]}
+        row_deletable={true}
+        row_selectable={true}
+        columns={[
+            { id: 'a', name: 'A', type: ColumnType.Any },
+            { id: 'b', name: 'B', type: ColumnType.Text },
+            { id: 'c', name: 'C', type: ColumnType.Numeric },
+            { id: 'd', name: 'D' }
+        ]}
+        style_data_conditional={[{
+            if: { column_editable: false }, background_color: 'green'
+        }]}
+    />))
+    .add('first column is editable and blue', () => (<DataTable
+        id='styling-15'
+        data={[
+            { a: 1, b: 2, c: '3', d: '4' },
+            { a: 11, b: 22, c: '33', d: '44' },
+            { a: 111, b: 222, c: '333', d: '444' }
+        ]}
+        row_deletable={true}
+        row_selectable={true}
+        columns={[
+            { id: 'a', name: 'A', type: ColumnType.Any, editable: true },
+            { id: 'b', name: 'B', type: ColumnType.Text },
+            { id: 'c', name: 'C', type: ColumnType.Numeric },
+            { id: 'd', name: 'D' }
+        ]}
+        style_data_conditional={[{
+            if: { column_editable: true }, background_color: 'blue'
+        }]}
+    />))
+    .add('first column is editable and not blue', () => (<DataTable
+        id='styling-16'
+        data={[
+            { a: 1, b: 2, c: '3', d: '4' },
+            { a: 11, b: 22, c: '33', d: '44' },
+            { a: 111, b: 222, c: '333', d: '444' }
+        ]}
+        row_deletable={true}
+        row_selectable={true}
+        columns={[
+            { id: 'a', name: 'A', type: ColumnType.Any, editable: true },
+            { id: 'b', name: 'B', type: ColumnType.Text },
+            { id: 'c', name: 'C', type: ColumnType.Numeric },
+            { id: 'd', name: 'D' }
+        ]}
+        style_data_conditional={[{
+            if: { column_editable: false }, background_color: 'DeepSkyBlue'
+        }]}
+    />))
+    .add('style header and column based on edibility', () => (<DataTable
+        id='styling-17'
+        data={[
+            { a: 1, b: 2, c: '3', d: '4' },
+            { a: 11, b: 22, c: '33', d: '44' },
+            { a: 111, b: 222, c: '333', d: '444' }
+        ]}
+        row_deletable={true}
+        row_selectable={true}
+        columns={[
+            { id: 'a', name: 'A', type: ColumnType.Any, editable: true },
+            { id: 'b', name: 'B', type: ColumnType.Text },
+            { id: 'c', name: 'C', type: ColumnType.Numeric, editable: true },
+            { id: 'd', name: 'D' }
+        ]}
+        style_data_conditional={[{
+            if: { column_editable: true }, background_color: 'Violet'
+        }]}
+        style_header_conditional={[{
+            if: { column_editable: false }, background_color: 'Lavender'
+        }]}
+    />))
+    .add('header, filter, column colors depend on editbility', () => (<DataTable
+        id='styling-17'
+        data={[
+            { a: 1, b: 2, c: '3', d: '4' },
+            { a: 11, b: 22, c: '33', d: '44' },
+            { a: 111, b: 222, c: '333', d: '444' }
+        ]}
+        row_deletable={true}
+        row_selectable={true}
+        filtering={true}
+        columns={[
+            { id: 'a', name: 'A', type: ColumnType.Any, editable: true },
+            { id: 'b', name: 'B', type: ColumnType.Text },
+            { id: 'c', name: 'C', type: ColumnType.Numeric },
+            { id: 'd', name: 'D' }
+        ]}
+        style_data_conditional={[{
+            if: { column_editable: true }, background_color: 'PaleVioletRed'
+        },
+        {
+            if: { column_editable: false }, background_color: 'DarkTurquoise'
+        }]}
+        style_header_conditional={[{
+            if: { column_editable: true }, background_color: 'MediumPurple'
+        },
+        {
+            if: { column_editable: false }, background_color: 'DeepSkyBlue'
+        }
+        ]}
+        style_filter_conditional={[{
+            if: { column_editable: true }, background_color: 'Violet'
+        },
+        {
+            if: { column_editable: false }, background_color: 'Aquamarine'
+        }]}
+    />))
+    .add('column wins over table edibility', () => (<DataTable
+        id='styling-18'
+        data={[
+            { a: 1, b: 2, c: '3', d: '4' },
+            { a: 11, b: 22, c: '33', d: '44' },
+            { a: 111, b: 222, c: '333', d: '444' }
+        ]}
+        editable={true}
+        row_deletable={true}
+        row_selectable={true}
+        filtering={true}
+        columns={[
+            { id: 'a', name: 'A', type: ColumnType.Any, editable: false },
+            { id: 'b', name: 'B', type: ColumnType.Text },
+            { id: 'c', name: 'C', type: ColumnType.Numeric },
+            { id: 'd', name: 'D' }
+        ]}
+        style_data_conditional={[{
+            if: { column_editable: false }, background_color: 'MediumPurple'
+        }]}
+        style_header_conditional={[{
+            if: { column_editable: false }, background_color: 'MediumPurple'
+        }]}
+        style_filter_conditional={[{
+            if: { column_editable: false }, background_color: 'MediumPurple'
+        }]}
     />));
