@@ -11,7 +11,7 @@ import {
     PropsWithDefaults,
     RowSelection,
     SanitizedProps,
-    SortAsNone,
+    SortAsNull,
     TableAction
 } from 'dash-table/components/Table/props';
 import headerRows from 'dash-table/derived/header/headerRows';
@@ -31,10 +31,10 @@ const DEFAULT_SPECIFIER = '';
 const applyDefaultToLocale = memoizeOne((locale: INumberLocale) => getLocale(locale));
 
 const applyDefaultsToColumns = memoizeOne(
-    (defaultLocale: INumberLocale, defaultSort: SortAsNone, columns: Columns) => R.map(column => {
+    (defaultLocale: INumberLocale, defaultSort: SortAsNull, columns: Columns) => R.map(column => {
         const c = R.clone(column);
 
-        c.sort_as_none = c.sort_as_none || defaultSort;
+        c.sort_as_null = c.sort_as_null || defaultSort;
 
         if (c.type === ColumnType.Numeric && c.format) {
             c.format.locale = getLocale(defaultLocale, c.format.locale);
@@ -67,7 +67,7 @@ export default (props: PropsWithDefaults): SanitizedProps => {
     const locale_format = applyDefaultToLocale(props.locale_format);
 
     return R.merge(props, {
-        columns: applyDefaultsToColumns(locale_format, props.sort_as_none, props.columns),
+        columns: applyDefaultsToColumns(locale_format, props.sort_as_null, props.columns),
         fixed_columns: getFixedColumns(props.fixed_columns, props.row_deletable, props.row_selectable),
         fixed_rows: getFixedRows(props.fixed_rows, props.columns, props.filter_action),
         locale_format

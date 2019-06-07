@@ -73,7 +73,7 @@ export type RowSelection = 'single' | 'multi' | false;
 export type SelectedCells = ICellCoordinates[];
 export type SetProps = (...args: any[]) => void;
 export type SetState = (state: Partial<IState>) => void;
-export type SortAsNone = (string | number | boolean)[];
+export type SortAsNull = (string | number | boolean)[];
 export type VisibleColumns = IVisibleColumn[];
 
 export enum ChangeAction {
@@ -157,7 +157,7 @@ export interface IBaseVisibleColumn {
     deletable?: boolean | boolean[];
     editable?: boolean;
     renamable?: boolean | boolean[];
-    sort_as_none: SortAsNone;
+    sort_as_null: SortAsNull;
     id: ColumnId;
     name: string | string[];
 }
@@ -286,7 +286,7 @@ export interface IProps {
     sort_action?: TableAction;
     sort_by?: SortBy;
     sort_mode?: SortMode;
-    sort_as_none?: SortAsNone;
+    sort_as_null?: SortAsNull;
     style_as_list_view?: boolean;
     page_action?: TableAction;
     page_current?: number;
@@ -329,7 +329,7 @@ interface IDefaultProps {
     sort_action: TableAction;
     sort_by: SortBy;
     sort_mode: SortMode;
-    sort_as_none: SortAsNone;
+    sort_as_null: SortAsNull;
     style_as_list_view: boolean;
     tooltip_data: DataTooltips;
 
@@ -372,7 +372,7 @@ export type SanitizedProps = Omit<
         Merge<PropsWithDefaults, { fixed_columns: number; fixed_rows: number; }>,
         'locale_format'
     >,
-    'sort_as_none'
+    'sort_as_null'
 >;
 
 export type SanitizedAndDerivedProps = SanitizedProps & IDerivedProps;

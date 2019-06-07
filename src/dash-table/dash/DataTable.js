@@ -38,7 +38,7 @@ export const defaultProps = {
     css: [],
     filter_query: '',
     filter_action: 'none',
-    sort_as_none: [],
+    sort_as_null: [],
     sort_action: 'none',
     sort_mode: 'single',
     sort_by: [],
@@ -254,20 +254,11 @@ export const propTypes = {
         }),
 
         /**
-         * There are two `sort_as_none` flags in the table.
-         * This is the  column-level editable flag and there is
-         * also the table-level `sort_as_none` flag.
-         *
-         * These flags determine how the content of the table is
-         * sorted.
-         *
-         * If the column-level `sort_as_none` flag is set it overrides
-         * the table-level `sort_as_none` flag for that column.
-         *
-         * An array of string, number and boolean values that are treated as `None`
-         * when sorting is applied to the column.
+         * An array of string, number and boolean values that are treated as `null`
+         * (i.e. ignored and always displayed last) when sorting.
+         * This value overrides the table-level `sort_as_null`.
          */
-        sort_as_none: PropTypes.arrayOf(PropTypes.oneOfType([
+        sort_as_null: PropTypes.arrayOf(PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.number,
             PropTypes.bool
@@ -465,7 +456,7 @@ export const propTypes = {
             data: PropTypes.oneOf([0])
         }),
         PropTypes.exact({
-            headers: PropTypes.oneOf([true]),
+            headers: PropTypes.oneOf([true]).isRequired,
             data: PropTypes.number
         })
     ]),
@@ -494,7 +485,7 @@ export const propTypes = {
             data: PropTypes.oneOf([0])
         }),
         PropTypes.exact({
-            headers: PropTypes.oneOf([true]),
+            headers: PropTypes.oneOf([true]).isRequired,
             data: PropTypes.number
         })
     ]),
@@ -603,7 +594,7 @@ export const propTypes = {
 
     /**
      * `page_size` represents the number of rows that will be
-     * displayed on a particular page.
+     * displayed on a particular page when `page_action` is `'custom'` or `'native'`
      */
     page_size: PropTypes.number,
 
@@ -893,12 +884,13 @@ export const propTypes = {
         })),
 
     /**
-     * An array of string, number and boolean values that are treated as `None`
-     * when sorting. This value will be used by columns without `sort_as_none`.
+     * An array of string, number and boolean values that are treated as `null`
+     * (i.e. ignored and always displayed last) when sorting.
+     * This value will be used by columns without `sort_as_null`.
      *
      * Defaults to `[]`.
      */
-    sort_as_none: PropTypes.arrayOf(PropTypes.oneOfType([
+    sort_as_null: PropTypes.arrayOf(PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.number,
         PropTypes.bool

@@ -7,7 +7,7 @@ import {
     Data,
     Datum,
     IDerivedData,
-    SortAsNone,
+    SortAsNull,
     VisibleColumns,
     TableAction
 } from 'dash-table/components/Table/props';
@@ -36,10 +36,10 @@ const getter = (
 
     const getNullyCases = (
         columnId: ColumnId
-    ): SortAsNone => {
+    ): SortAsNull => {
         const column = R.find(c => c.id === columnId, columns);
 
-        return (column && column.sort_as_none) || [];
+        return (column && column.sort_as_null) || [];
     };
 
     const isNully = (
