@@ -4,15 +4,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-### Changed 
-- Sanitize editiable props for columns (https://github.com/plotly/dash-table/pull/462)
-
 ### Added
+[#320](https://github.com/plotly/dash-table/issues/320)
+- Ability to conditionally format columns if editing is disabled.
+
 [#456](https://github.com/plotly/dash-table/issues/456)
 - Support for dash-table is now available for R users of Dash.
-
-[#320](https://github.com/plotly/dash-table/issues/320)
-- Ability to conditionally format columns depends on the columns editibility. 
 
 ### Fixed
 [#434](https://github.com/plotly/dash-table/issues/434)
