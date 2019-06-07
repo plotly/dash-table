@@ -4,68 +4,44 @@ import { CSSProperties } from 'react';
 import { memoizeOneFactory } from 'core/memoizer';
 import { Data, VisibleColumns, IViewportOffset, SelectedCells, ICellCoordinates } from 'dash-table/components/Table/props';
 import { IConvertedStyle } from '../style';
-import { BORDER_PROPERTIES_AND_FRAGMENTS } from '../edges/type';
+import { getDataCellStyle, getDataOpCellStyle } from '../edges';
+import { traverse2 } from 'core/math/matrixZipMap';
 
 type Style = CSSProperties | undefined;
 
-function getter(
+const isSelected = (
+    i: number,
+    j: number,
+    cells: ICellCoordinates[]
+) => R.any(cell => cell.row === i && cell.column === j, cells);
+
+const SELECTED_CELL_STYLE = { backgroundColor: 'var(--selected-background)' };
+
+const getter = (
     columns: VisibleColumns,
-    columnStyles: IConvertedStyle[],
+    styles: IConvertedStyle[],
     data: Data,
     offset: IViewportOffset,
     selectedCells: SelectedCells
-): Style[][] {
-    return R.addIndex<any, Style[]>(R.map)((datum, index) => R.addIndex<any, Style>(R.map)((column, columnIndex) => {
-        const relevantStyles = R.map(
-            s => s.style,
-            R.filter<IConvertedStyle>(
-                style =>
-                    style.matchesColumn(column) &&
-                    style.matchesRow(index + offset.rows) &&
-                    style.matchesFilter(datum),
-                columnStyles
-            )
-        );
-        const matchCell = (cell: ICellCoordinates) => cell.row === index && cell.column === columnIndex;
-        const isSelectedCell: boolean = R.any(matchCell)(selectedCells);
-        if (isSelectedCell) {
-            relevantStyles.push({backgroundColor:  'var(--selected-background)'});
-        }
-        return relevantStyles.length ?
-            R.omit(
-                BORDER_PROPERTIES_AND_FRAGMENTS,
-                R.mergeAll(relevantStyles)
-            ) :
-            undefined;
-    }, columns), data);
-}
+): Style[][] => traverse2(
+    data,
+    columns,
+    (datum, column, i, j) => R.merge(
+        getDataCellStyle(datum, i + offset.rows, column)(styles),
+        isSelected(i, j, selectedCells) ? SELECTED_CELL_STYLE : {}
+    )
+);
 
-function opGetter(
+const opGetter = (
     columns: number,
-    columnStyles: IConvertedStyle[],
+    styles: IConvertedStyle[],
     data: Data,
     offset: IViewportOffset
-) {
-    return R.addIndex<any, Style[]>(R.map)((datum, index) => R.map(_ => {
-        const relevantStyles = R.map(
-            s => s.style,
-            R.filter<IConvertedStyle>(
-                style =>
-                    !style.checksColumn() &&
-                    style.matchesRow(index + offset.rows) &&
-                    style.matchesFilter(datum),
-                columnStyles
-            )
-        );
-
-        return relevantStyles.length ?
-            R.omit(
-                BORDER_PROPERTIES_AND_FRAGMENTS,
-                R.mergeAll(relevantStyles)
-            ) :
-            undefined;
-    }, R.range(0, columns)), data);
-}
+): Style[][] => traverse2(
+    data,
+    R.range(0, columns),
+    (datum, _, i) => getDataOpCellStyle(datum, i + offset.rows)(styles)
+);
 
 export default memoizeOneFactory(getter);
 export const derivedDataOpStyles = memoizeOneFactory(opGetter);
