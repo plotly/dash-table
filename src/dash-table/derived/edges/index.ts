@@ -3,7 +3,7 @@ import * as R from 'ramda';
 import { BorderStyle, BORDER_PROPERTIES, BorderProp } from './type';
 import { IConvertedStyle } from '../style';
 import { Datum, IVisibleColumn } from 'dash-table/components/Table/props';
-import { traverse2 } from 'core/math/matrixZipMap';
+import { traverseReduce2 } from 'core/math/matrixZipMap';
 
 type Filter<T> = (s: T[]) => T[];
 
@@ -37,7 +37,7 @@ const getHeaderOpStyles = (i: number): Filter<IConvertedStyle> => R.filter<IConv
     !style.checksColumn()
 ));
 
-const applyStyle = R.curry((
+const applyStyle = (
     base: BorderStyle,
     style: IConvertedStyle,
     p: BorderProp,
@@ -45,14 +45,15 @@ const applyStyle = R.curry((
 ) => R.ifElse(
     R.compose(R.not, R.isNil),
     s => (base[p] = [s, i]) && base,
-    () => base)(style.style[p] || style.style.border));
+    () => base)(style.style[p] || style.style.border);
 
 const applyStyles = (styles: IConvertedStyle[]): BorderStyle => {
-    const res = {};
-
-    traverse2(styles, BORDER_PROPERTIES, applyStyle(res));
-
-    return res;
+    return traverseReduce2(
+        styles,
+        BORDER_PROPERTIES,
+        applyStyle,
+        {}
+    );
 };
 
 export const getDataCellEdges = (datum: Datum, i: number, column: IVisibleColumn) => R.compose(applyStyles, matchesDataCell(datum, i, column));
