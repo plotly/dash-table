@@ -254,15 +254,15 @@ export const propTypes = {
         }),
 
         /**
-         * There are two `sort_as_null` flags in the table.
-         * This is the  column-level editable flag and there is
-         * also the table-level `sort_as_null` flag.
+         * There are two `sort_as_null` props in the table.
+         * This is the  column-level prop and there is
+         * also the table-level `sort_as_null` prop.
          *
-         * These flags determine how the content of the table is
+         * These props determine how the content of the table is
          * sorted.
          *
-         * If the column-level `sort_as_null` flag is set it overrides
-         * the table-level `sort_as_null` flag for that column.
+         * If the column-level `sort_as_null` is set it overrides
+         * the table-level `sort_as_null` for that column.
          *
          * An array of string, number and boolean values that are treated as `None`
          * when sorting is applied to the column.
