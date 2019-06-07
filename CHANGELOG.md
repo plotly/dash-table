@@ -33,9 +33,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 #### MODIFIED
     - `column.deletable`: Allows column deletion.
         Now accepts a boolean or an array of booleans (for multi-line headers).
+        For example, if there are multiple headers and you want the second header row to be deletable, this would be `[False, True]`.
     - `column.editable_name`: Allows column renaming.
         Renamed to `column.renamable`
         Now accepts a boolean or an array of booleans (for multi-line headers).
+        For example, if there are multiple headers and you want the second row's header's name to be editable, this would be `[False, True]`.
     - `column.id`
         Now accepts `string` only -- `number` column ids can be casted to string.
     - `n_fixed_columns`: Will fix columns to the left.
