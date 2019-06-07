@@ -3,14 +3,14 @@ import * as R from 'ramda';
 import Environment from 'core/environment';
 import { memoizeOneFactory } from 'core/memoizer';
 
-import { IConvertedStyle, matchesHeaderOpCell } from '../style';
+import { IConvertedStyle } from '../style';
 import { EdgesMatrices } from './type';
-import { getBorderStyle } from '.';
+import { getHeaderOpCellEdges } from '.';
 
 export default memoizeOneFactory((
     columns: number,
     headerRows: number,
-    borderStyles: IConvertedStyle[],
+    styles: IConvertedStyle[],
     listViewStyle: boolean
 ) => {
     if (headerRows === 0 || columns === 0) {
@@ -19,18 +19,10 @@ export default memoizeOneFactory((
 
     const edges = new EdgesMatrices(headerRows, columns, Environment.defaultEdge, true, !listViewStyle);
 
-    R.forEach(i => {
-        const matcher = matchesHeaderOpCell(i);
-
-        const cellStyle = getBorderStyle(
-            matcher(borderStyles)
-        );
-
-        R.forEach(
-            j => edges.setEdges(i, j, cellStyle),
-            R.range(0, columns)
-        );
-    }, R.range(0, headerRows));
+    R.forEach(i => R.forEach(
+        j => edges.setEdges(i, j, getHeaderOpCellEdges(i)(styles)),
+        R.range(0, columns)
+    ), R.range(0, headerRows));
 
     return edges;
 });

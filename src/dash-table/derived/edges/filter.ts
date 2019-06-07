@@ -8,16 +8,16 @@ import {
     VisibleColumns
 } from 'dash-table/components/Table/props';
 
-import { IConvertedStyle, matchesFilterCell } from '../style';
+import { IConvertedStyle } from '../style';
 import { EdgesMatrices } from './type';
 import { SingleColumnSyntaxTree } from 'dash-table/syntax-tree';
-import { getBorderStyle } from '.';
+import { getFilterCellEdges } from '.';
 
 export default memoizeOneFactory((
     columns: VisibleColumns,
     showFilters: boolean,
     map: Map<string, SingleColumnSyntaxTree>,
-    borderStyles: IConvertedStyle[],
+    styles: IConvertedStyle[],
     listViewStyle: boolean
 ) => {
     if (!showFilters || columns.length === 0) {
@@ -28,13 +28,7 @@ export default memoizeOneFactory((
 
     R.forEach(i => R.addIndex<IVisibleColumn>(R.forEach)(
         (column, j) => {
-            const matcher = matchesFilterCell(column);
-
-            const cellStyle = getBorderStyle(
-                matcher(borderStyles)
-            );
-
-            edges.setEdges(i, j, cellStyle);
+            edges.setEdges(i, j, getFilterCellEdges(column)(styles));
 
             const ast = map.get(column.id.toString());
             if (ast && !ast.isValid) {

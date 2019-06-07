@@ -8,13 +8,13 @@ import {
     IViewportOffset
 } from 'dash-table/components/Table/props';
 
-import { IConvertedStyle, matchesDataOpCell } from '../style';
+import { IConvertedStyle } from '../style';
 import { EdgesMatrices } from './type';
-import { getBorderStyle } from '.';
+import { getDataOpCellEdges } from '.';
 
 export default memoizeOneFactory((
     columns: number,
-    borderStyles: IConvertedStyle[],
+    styles: IConvertedStyle[],
     data: Data,
     offset: IViewportOffset,
     listViewStyle: boolean
@@ -25,18 +25,10 @@ export default memoizeOneFactory((
 
     const edges = new EdgesMatrices(data.length, columns, Environment.defaultEdge, true, !listViewStyle);
 
-    R.addIndex(R.forEach)((datum, i) => {
-        const matcher = matchesDataOpCell(datum, i + offset.rows);
-
-        const cellStyle = getBorderStyle(
-            matcher(borderStyles)
-        );
-
-        R.forEach(
-            j => edges.setEdges(i, j, cellStyle),
-            R.range(0, columns)
-        );
-    }, data);
+    R.addIndex(R.forEach)((datum, i) => R.forEach(j =>
+        edges.setEdges(i, j, getDataOpCellEdges(datum, i + offset.rows)(styles)),
+        R.range(0, columns)
+    ), data);
 
     return edges;
 });
