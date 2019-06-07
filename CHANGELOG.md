@@ -9,8 +9,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 #### NEW
     - `column.sort_as_none`: Allows sorting behavior customization.
         Accepts an array of string, number or booleans.
-    - `sort_as_none`: Allows sorting behavior customization.
-        Accepts an array of string, number or booleans.
 
 #### REMOVED
     - `column.clearable`: Allows clearing the value of a dropdown cell.
@@ -68,6 +66,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
         Renamed `filter_action`.
     - `sorting`
         Renamed `sort_action`.
+    - `sorting_treat_empty_string_as_none`
+        Renamed `sort_as_none`.
+        Now accepts an array of string, number or booleans.
+        Table-level prop for the `column.sort_as_none` column nested prop.
     - `style_**_conditional`
         Renamed `filter` to `filter_query`.
 
