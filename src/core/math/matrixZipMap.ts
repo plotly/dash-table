@@ -12,6 +12,16 @@ export const traverse2 = <T1, T2, TR>(
         a2),
     a1);
 
+export const traverseMap2 = <T1, T2, TR>(
+    a1: T1[],
+    a2: T2[],
+    fn: (d1: T1, d2: T2, i1: number, i2: number) => TR
+) => R.addIndex<T1>(R.map)((d1, i1) =>
+    R.addIndex<T2>(R.map)((d2, i2) =>
+        fn(d1, d2, i1, i2),
+        a2),
+    a1);
+
 export const traverseReduce2 = <T1, T2, TR>(
     a1: T1[],
     a2: T2[],

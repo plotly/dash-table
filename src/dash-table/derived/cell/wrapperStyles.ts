@@ -1,13 +1,10 @@
 import * as R from 'ramda';
-import { CSSProperties } from 'react';
 
 import { memoizeOneFactory } from 'core/memoizer';
 import { Data, VisibleColumns, IViewportOffset, SelectedCells, ICellCoordinates } from 'dash-table/components/Table/props';
 import { IConvertedStyle } from '../style';
 import { getDataCellStyle, getDataOpCellStyle } from '../edges';
-import { traverse2 } from 'core/math/matrixZipMap';
-
-type Style = CSSProperties | undefined;
+import { traverseMap2 } from 'core/math/matrixZipMap';
 
 const isSelected = (
     i: number,
@@ -23,7 +20,7 @@ const getter = (
     data: Data,
     offset: IViewportOffset,
     selectedCells: SelectedCells
-): Style[][] => traverse2(
+) => traverseMap2(
     data,
     columns,
     (datum, column, i, j) => R.merge(
@@ -37,7 +34,7 @@ const opGetter = (
     styles: IConvertedStyle[],
     data: Data,
     offset: IViewportOffset
-): Style[][] => traverse2(
+) => traverseMap2(
     data,
     R.range(0, columns),
     (datum, _, i) => getDataOpCellStyle(datum, i + offset.rows)(styles)

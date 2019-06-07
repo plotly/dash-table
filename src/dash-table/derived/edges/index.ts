@@ -68,6 +68,10 @@ export const resolveStyle = (filter: Filter<IConvertedStyle>) => R.compose(
 
 export const getDataCellStyle = (datum: Datum, i: number, column: IVisibleColumn) => resolveStyle(matchesDataCell(datum, i, column));
 export const getDataOpCellStyle = (datum: Datum, i: number) => resolveStyle(matchesDataOpCell(datum, i));
+export const getFilterCellStyle = (column: IVisibleColumn) => resolveStyle(matchesFilterCell(column));
+export const getFilterOpCellStyle = () => resolveStyle(getFilterOpStyles);
+export const getHeaderCellStyle = (i: number, column: IVisibleColumn) => resolveStyle(matchesHeaderCell(i, column));
+export const getHeaderOpCellStyle = (i: number) => resolveStyle(getHeaderOpStyles(i));
 
 export const getDataCellEdges = (datum: Datum, i: number, column: IVisibleColumn) => R.compose(applyEdges, matchesDataCell(datum, i, column));
 export const getDataOpCellEdges = (datum: Datum, i: number) => R.compose(applyEdges, matchesDataOpCell(datum, i));
