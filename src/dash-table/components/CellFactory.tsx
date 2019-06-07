@@ -50,6 +50,7 @@ export default class CellFactory {
             style_data_conditional,
             virtualized
         } = this.props;
+
         const relevantStyles = this.relevantStyles(
             style_cell,
             style_data,
@@ -107,6 +108,7 @@ export default class CellFactory {
             !!is_focused,
             dropdowns
         );
+
         const ops = matrixMap2(
             operations,
             dataOpStyles,

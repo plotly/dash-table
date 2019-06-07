@@ -5,7 +5,6 @@ import { memoizeOne } from 'core/memoizer';
 import { Columns, ColumnType, INumberLocale } from 'dash-table/components/Table/props';
 import isEditable from 'dash-table/derived/cell/isEditable';
 
-
 const D3_DEFAULT_LOCALE: INumberLocale = {
     symbol: ['$', ''],
     decimal: '.',
