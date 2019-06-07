@@ -3,6 +3,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import DataTable from 'dash-table/dash/DataTable';
 import { ColumnType } from 'dash-table/components/Table/props';
+import { generateMockData } from '../../../demo/data';
 
 const setProps = () => { };
 
@@ -11,7 +12,7 @@ const region = ['Montreal', 'Vermont', 'New York City'];
 const temperature = [1, -20, 3.512];
 const humidity = [10, 20, 30];
 const pressure = [2, 10924, 3912];
-
+const mock = generateMockData(50);
 const data: any[] = [];
 for (let i = 0; i < 6; ++i) {
     data.push({
@@ -334,4 +335,22 @@ storiesOf('DashTable/Style type condition', module)
         style_filter_conditional={[{
             if: { column_editable: false }, background_color: 'MediumPurple'
         }]}
+    />))
+    .add('paging', () => (<DataTable
+        id='styling-19'
+        data= {mock.data}
+        columns={ mock.columns.map((col: any) => R.merge(col, {
+            name: col.name,
+            deletable: true
+        }))}
+        row_deletable={true}
+        row_selectable={true}
+        pagination_mode= {'fe'}
+        style_data_conditional={[{
+            if: { column_editable: true }, background_color: 'MediumPurple'
+        }]}
+        pagination_settings={{
+            current_page: 0,
+            page_size: 10
+        }}
     />));
