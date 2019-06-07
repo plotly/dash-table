@@ -603,7 +603,7 @@ export const propTypes = {
 
     /**
      * `page_size` represents the number of rows that will be
-     * displayed on a particular page.
+     * displayed on a particular page when `page_action` is `'custom'` or `'native'`
      */
     page_size: PropTypes.number,
 
@@ -894,7 +894,8 @@ export const propTypes = {
 
     /**
      * An array of string, number and boolean values that are treated as `None`
-     * when sorting. This value will be used by columns without `sort_as_null`.
+     * (i.e. ignored and always displayed last) when sorting. 
+     * This value will be used by columns without `sort_as_null`.
      *
      * Defaults to `[]`.
      */
