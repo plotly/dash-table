@@ -178,15 +178,18 @@ storiesOf('DashTable/Style type condition', module)
             { a: 11, b: 22, c: '33', d: '44' },
             { a: 111, b: 222, c: '333', d: '444' }
         ]}
-        editable={true}
-        row_deletable={true}
-        row_selectable={true}
         columns={[
             { id: 'a', name: 'A', type: ColumnType.Any },
             { id: 'b', name: 'B', type: ColumnType.Text },
             { id: 'c', name: 'C', type: ColumnType.Numeric },
             { id: 'd', name: 'D' }
         ]}
+        editable={true}
+        row_deletable={true}
+        row_selectable={true}
+        style_table={{
+            width: '100%'
+        }}
         style_data_conditional={[{
             if: { column_editable: true }, background_color: 'yellow'
         }]}
@@ -198,6 +201,9 @@ storiesOf('DashTable/Style type condition', module)
             { a: 11, b: 22, c: '33', d: '44' },
             { a: 111, b: 222, c: '333', d: '444' }
         ]}
+        style_table={{
+            width: '100%'
+        }}
         row_deletable={true}
         row_selectable={true}
         columns={[
@@ -217,6 +223,9 @@ storiesOf('DashTable/Style type condition', module)
             { a: 11, b: 22, c: '33', d: '44' },
             { a: 111, b: 222, c: '333', d: '444' }
         ]}
+        style_table={{
+            width: '100%'
+        }}
         row_deletable={true}
         row_selectable={true}
         columns={[
@@ -236,6 +245,9 @@ storiesOf('DashTable/Style type condition', module)
             { a: 11, b: 22, c: '33', d: '44' },
             { a: 111, b: 222, c: '333', d: '444' }
         ]}
+        style_table={{
+            width: '100%'
+        }}
         row_deletable={true}
         row_selectable={true}
         columns={[
@@ -257,6 +269,9 @@ storiesOf('DashTable/Style type condition', module)
         ]}
         row_deletable={true}
         row_selectable={true}
+        style_table={{
+            width: '100%'
+        }}
         columns={[
             { id: 'a', name: 'A', type: ColumnType.Any, editable: true },
             { id: 'b', name: 'B', type: ColumnType.Text },
@@ -271,12 +286,15 @@ storiesOf('DashTable/Style type condition', module)
         }]}
     />))
     .add('header, filter, column colors depend on editbility', () => (<DataTable
-        id='styling-17'
+        id='styling-18'
         data={[
             { a: 1, b: 2, c: '3', d: '4' },
             { a: 11, b: 22, c: '33', d: '44' },
             { a: 111, b: 222, c: '333', d: '444' }
         ]}
+        style_table={{
+            width: '100%'
+        }}
         row_deletable={true}
         row_selectable={true}
         filtering={true}
@@ -307,12 +325,15 @@ storiesOf('DashTable/Style type condition', module)
         }]}
     />))
     .add('column wins over table edibility', () => (<DataTable
-        id='styling-18'
+        id='styling-19'
         data={[
             { a: 1, b: 2, c: '3', d: '4' },
             { a: 11, b: 22, c: '33', d: '44' },
             { a: 111, b: 222, c: '333', d: '444' }
         ]}
+        style_table={{
+            width: '100%'
+        }}
         editable={true}
         row_deletable={true}
         row_selectable={true}
@@ -334,12 +355,15 @@ storiesOf('DashTable/Style type condition', module)
         }]}
     />))
     .add('paging', () => (<DataTable
-        id='styling-19'
+        id='styling-20'
         data= {mock.data}
         columns={ mock.columns.map((col: any) => R.merge(col, {
             name: col.name,
             deletable: true
         }))}
+        style_table={{
+            width: '100%'
+        }}
         row_deletable={true}
         row_selectable={true}
         pagination_mode= {'fe'}
