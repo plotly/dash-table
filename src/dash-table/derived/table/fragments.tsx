@@ -47,16 +47,18 @@ export default memoizeOneFactory((
             cells) :
         null;
 
+    cells = R.map(row => row.slice(fixedColumns), cells);
+
     // slice out fixed rows
     const fixedRowCells = fixedRows ?
         cells.slice(0, fixedRows) :
         null;
 
+    cells = cells.slice(fixedRows);
+
     const fixedRowAndColumnCells = fixedRows && fixedColumnCells ?
         fixedColumnCells.slice(0, fixedRows) :
         null;
-
-    cells = R.map(row => row.slice(fixedColumns), cells.slice(fixedRows));
 
     fixedColumnCells = fixedColumnCells && fixedColumnCells.slice(fixedRows);
 
