@@ -21,7 +21,7 @@ import {
     IIndexedRowElement,
     INamedElement,
     ITypedElement,
-    IActiveElement,
+    IEditableElement,
     ifColumnId,
     ifColumnType,
     ifEditable
@@ -38,7 +38,7 @@ export interface IConvertedStyle {
     matchesFilter: (datum: Datum) => boolean;
 }
 
-type GenericIf = Partial<IConditionalElement & IIndexedHeaderElement & IIndexedRowElement & INamedElement & ITypedElement & IActiveElement>;
+type GenericIf = Partial<IConditionalElement & IIndexedHeaderElement & IIndexedRowElement & INamedElement & ITypedElement & IEditableElement>;
 type GenericStyle = Style & Partial<{ if: GenericIf }>;
 
 function convertElement(style: GenericStyle): IConvertedStyle {
