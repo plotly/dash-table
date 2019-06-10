@@ -39,6 +39,7 @@ const DEFAULT_STYLE = {
 export default class ControlledTable extends PureComponent<ControlledTableProps> {
     private readonly stylesheet: Stylesheet = new Stylesheet(`#${this.props.id}`);
     private readonly tableFn = derivedTable(() => this.props);
+    private readonly tableFragments = derivedTableFragments();
     private readonly tableStyle = derivedTableStyle();
 
     private calculateTableStyle = memoizeOne((style: Partial<IStyle>) => R.mergeAll(
@@ -714,7 +715,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         ];
 
         const rawTable = this.tableFn();
-        const { grid, empty } = derivedTableFragments(
+        const { grid, empty } = this.tableFragments(
             fixed_columns,
             fixed_rows,
             rawTable,

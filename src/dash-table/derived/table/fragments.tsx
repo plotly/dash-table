@@ -1,5 +1,6 @@
 import * as R from 'ramda';
 import React from 'react';
+import { memoizeOneFactory } from 'core/memoizer';
 
 interface IAccumulator {
     cells: number;
@@ -23,16 +24,16 @@ const isEmpty = (cells: JSX.Element[][] | null) =>
     cells.length === 0 ||
     cells[0].length === 0;
 
-export default (
+export default memoizeOneFactory((
     fixedColumns: number,
     fixedRows: number,
     cells: JSX.Element[][],
     offset: number
 ): { grid: (JSX.Element | null)[][], empty: boolean[][] } => {
     // slice out fixed columns
-    const fixedColumnCells = fixedColumns ?
+    let fixedColumnCells = fixedColumns ?
         R.map(row =>
-            row.splice(0, R.reduceWhile<JSX.Element, IAccumulator>(
+            row.slice(0, R.reduceWhile<JSX.Element, IAccumulator>(
                 acc => acc.count < fixedColumns,
                 (acc, cell) => {
                     acc.cells++;
@@ -48,12 +49,15 @@ export default (
 
     // slice out fixed rows
     const fixedRowCells = fixedRows ?
-        cells.splice(0, fixedRows) :
+        cells.slice(0, fixedRows) :
         null;
 
     const fixedRowAndColumnCells = fixedRows && fixedColumnCells ?
-        fixedColumnCells.splice(0, fixedRows) :
+        fixedColumnCells.slice(0, fixedRows) :
         null;
+
+    cells = cells.slice(fixedRows);
+    fixedColumnCells = fixedColumnCells && fixedColumnCells.slice(fixedRows);
 
     return {
         grid: [
@@ -65,4 +69,4 @@ export default (
             [isEmpty(fixedColumnCells), isEmpty(cells)]
         ]
     };
-};
+});
