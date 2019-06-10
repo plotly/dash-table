@@ -5,8 +5,9 @@ import {
     ICellCoordinates,
     Data,
     Datum,
-    DropdownValues,
     ICellFactoryProps,
+    IDropdown,
+    IDropdownValue,
     IViewportOffset,
     IVisibleColumn,
     Presentation,
@@ -32,7 +33,7 @@ enum CellType {
 function getCellType(
     active: boolean,
     editable: boolean,
-    dropdown: DropdownValues | undefined,
+    dropdown: IDropdownValue[] | undefined,
     presentation: Presentation | undefined
 ): CellType {
     switch (presentation) {
@@ -61,7 +62,7 @@ class Contents {
         data: Data,
         offset: IViewportOffset,
         isFocused: boolean,
-        dropdowns: (DropdownValues | undefined)[][]
+        dropdowns: (IDropdown | undefined)[][]
     ): JSX.Element[][] => {
         const formatters = R.map(getFormatter, columns);
 
@@ -77,13 +78,14 @@ class Contents {
                         isFocused ? 'focused' : 'unfocused',
                         'dash-cell-value'
                     ].join(' ');
-                    switch (getCellType(active, column.editable, dropdown, column.presentation)) {
+
+                    switch (getCellType(active, column.editable, dropdown && dropdown.options, column.presentation)) {
                         case CellType.Dropdown:
                             return (<CellDropdown
                                 key={`column-${columnIndex}`}
                                 active={active}
-                                clearable={column.clearable}
-                                dropdown={dropdown}
+                                clearable={dropdown && dropdown.clearable}
+                                dropdown={dropdown && dropdown.options}
                                 onChange={this.handlers(Handler.Change, rowIndex, columnIndex)}
                                 value={datum[column.id]}
                             />);

@@ -52,7 +52,7 @@ function convertElement(style: GenericStyle): IConvertedStyle {
             !R.isNil(style.if.column_editable)
         ),
         checksRow: () => !R.isNil(indexFilter),
-        checksFilter: () => !R.isNil(style.if) && !R.isNil(style.if.filter),
+        checksFilter: () => !R.isNil(style.if) && !R.isNil(style.if.filter_query),
 
         matchesColumn: (column: IVisibleColumn | undefined) =>
             !style.if || (
@@ -69,8 +69,8 @@ function convertElement(style: GenericStyle): IConvertedStyle {
                     !R.isNil(index) && (indexFilter === 'odd' ? index % 2 === 1 : index % 2 === 0),
         matchesFilter: (datum: Datum) =>
             !style.if ||
-            style.if.filter === undefined ||
-            (ast = ast || new QuerySyntaxTree(style.if.filter)).evaluate(datum),
+            style.if.filter_query === undefined ||
+            (ast = ast || new QuerySyntaxTree(style.if.filter_query)).evaluate(datum),
         style: convertStyle(style)
     };
 }

@@ -18,7 +18,7 @@ import { memoizeOne } from 'core/memoizer';
 import lexer from 'core/syntax-tree/lexer';
 
 import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
-import { ControlledTableProps, ICellFactoryProps } from 'dash-table/components/Table/props';
+import { ControlledTableProps, ICellFactoryProps, TableAction } from 'dash-table/components/Table/props';
 import dropdownHelper from 'dash-table/components/dropdownHelper';
 
 import derivedTable from 'dash-table/derived/table';
@@ -53,9 +53,9 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
     getLexerResult = memoizeOne(lexer.bind(undefined, queryLexicon));
 
     get lexerResult() {
-        const { filter } = this.props;
+        const { filter_query } = this.props;
 
-        return this.getLexerResult(filter);
+        return this.getLexerResult(filter_query);
     }
 
     private updateStylesheet() {
@@ -548,7 +548,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             columns,
             data,
             editable,
-            filter,
+            filter_query,
             setProps,
             sort_by,
             viewport
@@ -565,7 +565,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             columns,
             data,
             true,
-            !sort_by.length || !filter.length
+            !sort_by.length || !filter_query.length
         );
 
         if (result) {
@@ -576,16 +576,14 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
     get displayPagination() {
         const {
             data,
-            navigation,
-            pagination_mode,
-            pagination_settings
+            page_action,
+            page_size
         } = this.props;
 
-        return navigation === 'page' &&
-            (
-                (pagination_mode === 'fe' && pagination_settings.page_size < data.length) ||
-                pagination_mode === 'be'
-            );
+        return (
+            page_action === TableAction.Native &&
+            page_size < data.length
+        ) || page_action === TableAction.Custom;
     }
 
     loadNext = () => {
@@ -602,8 +600,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
     applyStyle = () => {
         const {
-            n_fixed_columns,
-            n_fixed_rows,
+            fixed_columns,
+            fixed_rows,
             row_deletable,
             row_selectable
         } = this.props;
@@ -635,7 +633,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         }
 
         // Adjust the width of the fixed row header
-        if (n_fixed_rows) {
+        if (fixed_rows) {
             Array.from(r1c1.querySelectorAll('tr:first-of-type td, tr:first-of-type th')).forEach((td, index) => {
                 const style = getComputedStyle(td);
                 const width = style.width;
@@ -648,7 +646,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         }
 
         // Adjust the width of the fixed row / fixed columns header
-        if (n_fixed_columns && n_fixed_rows) {
+        if (fixed_columns && fixed_rows) {
             Array.from(r1c0.querySelectorAll('tr:first-of-type td, tr:first-of-type th')).forEach((td, index) => {
                 const style = getComputedStyle(td);
                 const width = style.width;
@@ -682,19 +680,18 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         const {
             id,
             columns,
-            column_conditional_tooltips,
-            column_static_tooltip,
-            content_style,
-            filtering,
-            n_fixed_columns,
-            n_fixed_rows,
+            tooltip_conditional,
+            tooltip,
+            currentTooltip,
+            filter_action,
+            fixed_columns,
+            fixed_rows,
             scrollbarWidth,
             style_as_list_view,
             style_table,
-            tooltip,
             tooltip_delay,
             tooltip_duration,
-            tooltips,
+            tooltip_data,
             uiCell,
             uiHeaders,
             uiViewport,
@@ -705,19 +702,19 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
         const fragmentClasses = [
             [
-                n_fixed_rows && n_fixed_columns ? 'dash-fixed-row dash-fixed-column' : '',
-                n_fixed_rows ? 'dash-fixed-row' : ''
+                fixed_rows && fixed_columns ? 'dash-fixed-row dash-fixed-column' : '',
+                fixed_rows ? 'dash-fixed-row' : ''
             ],
             [
-                n_fixed_columns ? 'dash-fixed-column' : '',
+                fixed_columns ? 'dash-fixed-column' : '',
                 'dash-fixed-content'
             ]
         ];
 
         const rawTable = this.tableFn();
         const { grid, empty } = derivedTableFragments(
-            n_fixed_columns,
-            n_fixed_rows,
+            fixed_columns,
+            fixed_rows,
             rawTable,
             virtualized.offset.rows
         );
@@ -725,15 +722,14 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         const classes = [
             'dash-spreadsheet',
             ...(virtualization ? ['dash-virtualized'] : []),
-            ...(n_fixed_rows ? ['dash-freeze-top'] : []),
-            ...(n_fixed_columns ? ['dash-freeze-left'] : []),
+            ...(fixed_rows ? ['dash-freeze-top'] : []),
+            ...(fixed_columns ? ['dash-freeze-left'] : []),
             ...(style_as_list_view ? ['dash-list-view'] : []),
             ...(empty[0][1] ? ['dash-empty-01'] : []),
             ...(empty[1][1] ? ['dash-empty-11'] : []),
             ...(columns.length ? [] : ['dash-no-columns']),
             ...(virtualized.data.length ? [] : ['dash-no-data']),
-            ...(filtering ? [] : ['dash-no-filter']),
-            [`dash-${content_style}`]
+            ...(filter_action !== TableAction.None ? [] : ['dash-no-filter'])
         ];
 
         const containerClasses = ['dash-spreadsheet-container', ...classes];
@@ -752,10 +748,10 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
     /* Tooltip */
         let tableTooltip = derivedTooltips(
+            currentTooltip,
+            tooltip_data,
+            tooltip_conditional,
             tooltip,
-            tooltips,
-            column_conditional_tooltips,
-            column_static_tooltip,
             virtualized,
             tooltip_delay,
             tooltip_duration
@@ -807,14 +803,14 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
     }
 
     private adjustTooltipPosition() {
-        const { tooltip, virtualized } = this.props;
+        const { currentTooltip, virtualized } = this.props;
 
-        if (!tooltip) {
+        if (!currentTooltip) {
             return;
         }
 
-        const id = tooltip.id;
-        const row = tooltip.row - virtualized.offset.rows;
+        const id = currentTooltip.id;
+        const row = currentTooltip.row - virtualized.offset.rows;
 
         const { table, tooltip: t } = this.refs as { [key: string]: any };
 
