@@ -168,7 +168,7 @@ export default class FilterFactory {
             filterOpEdges
         );
 
-        return [operators.concat(styledFilters)];
+        return this.getCells(operators, styledFilters);
     }
 
     getCells = memoizeOne((

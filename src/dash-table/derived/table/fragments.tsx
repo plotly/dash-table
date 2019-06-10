@@ -47,7 +47,9 @@ export default memoizeOneFactory((
             cells) :
         null;
 
-    cells = R.map(row => row.slice(fixedColumns), cells);
+    cells = R.addIndex<JSX.Element[]>(R.map)((row, i) => row.slice(
+        (fixedColumnCells && fixedColumnCells[i].length) || 0
+    ), cells);
 
     // slice out fixed rows
     const fixedRowCells = fixedRows ?
