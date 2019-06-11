@@ -4,7 +4,6 @@ import Logger from 'core/Logger';
 
 import { ICellCoordinates, Columns, Data, ColumnType } from 'dash-table/components/Table/props';
 import reconcile from 'dash-table/type/reconcile';
-import isEditable from 'dash-table/derived/cell/isEditable';
 
 export default (
     values: any[][],
