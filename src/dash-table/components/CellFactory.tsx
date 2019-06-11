@@ -137,7 +137,7 @@ export default class CellFactory {
     ) => arrayMap2(
         opCells,
         dataCells,
-        (o, c) => [...o, ...c]
+        (o, c) => o.length ? o.concat(c) : c
     ));
 
     getDataOpCells = memoizeOne((
