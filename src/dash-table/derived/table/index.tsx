@@ -43,7 +43,7 @@ export default (propsFn: () => ControlledTableProps) => {
     const headerFactory = new HeaderFactory(propsFn);
     const edgeFactory = new EdgeFactory(propsFn);
 
-    const merge = memoizeOne((data: any, filters: any, headers: any) => {
+    const merge = memoizeOne((data: JSX.Element[][], filters: JSX.Element[][], headers: JSX.Element[][]) => {
         const cells: JSX.Element[][] = [];
 
         cells.push(...headers);

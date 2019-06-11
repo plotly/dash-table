@@ -39,7 +39,7 @@ export interface IFilterOptions {
     style_filter_conditional: BasicFilters;
 }
 
-const NO_FILTERS: JSX.Element[] = [];
+const NO_FILTERS: JSX.Element[][] = [];
 
 export default class FilterFactory {
     private readonly filterStyles = derivedFilterStyles();
