@@ -75,7 +75,7 @@ export default (
 
             const jOffset = (activeCell as any).column + j;
             const col = newColumns[jOffset];
-            if (!col || !isEditable(true, col.editable)) {
+            if (!col || !col.editable) {
                 continue;
             }
 
