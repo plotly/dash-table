@@ -1,9 +1,8 @@
 import * as R from 'ramda';
 
-import { BorderStyle, BORDER_PROPERTIES, BORDER_PROPERTIES_AND_FRAGMENTS } from './type';
+import { BorderStyle, BORDER_PROPERTIES } from './type';
 import { IConvertedStyle } from '../style';
 import { Datum, IVisibleColumn } from 'dash-table/components/Table/props';
-import { CSSProperties } from 'react';
 
 export type Filter<T> = (s: T[]) => T[];
 
@@ -28,11 +27,11 @@ export const matchesDataOpCell = (datum: Datum, i: number): Filter<IConvertedSty
     style.matchesFilter(datum)
 ));
 
-const getFilterOpStyles: Filter<IConvertedStyle> = R.filter<IConvertedStyle>((style =>
+export const getFilterOpStyles: Filter<IConvertedStyle> = R.filter<IConvertedStyle>((style =>
     !style.checksColumn()
 ));
 
-const getHeaderOpStyles = (i: number): Filter<IConvertedStyle> => R.filter<IConvertedStyle>((style =>
+export const getHeaderOpStyles = (i: number): Filter<IConvertedStyle> => R.filter<IConvertedStyle>((style =>
     style.matchesRow(i) &&
     !style.checksColumn()
 ));
@@ -50,22 +49,6 @@ function resolveEdges(styles: IConvertedStyle[]): BorderStyle {
 
     return res;
 }
-
-export function resolveStyle(styles: IConvertedStyle[]): CSSProperties {
-    return R.mergeAll(
-        R.map<IConvertedStyle, CSSProperties>(
-            s => R.omit(BORDER_PROPERTIES_AND_FRAGMENTS, s.style),
-            styles
-        )
-    );
-}
-
-export const getDataCellStyle = (datum: Datum, i: number, column: IVisibleColumn) => R.compose(resolveStyle, matchesDataCell(datum, i, column));
-export const getDataOpCellStyle = (datum: Datum, i: number) => R.compose(resolveStyle, matchesDataOpCell(datum, i));
-export const getFilterCellStyle = (column: IVisibleColumn) => R.compose(resolveStyle, matchesFilterCell(column));
-export const getFilterOpCellStyle = () => R.compose(resolveStyle, getFilterOpStyles);
-export const getHeaderCellStyle = (i: number, column: IVisibleColumn) => R.compose(resolveStyle, matchesHeaderCell(i, column));
-export const getHeaderOpCellStyle = (i: number) => R.compose(resolveStyle, getHeaderOpStyles(i));
 
 export const getDataCellEdges = (datum: Datum, i: number, column: IVisibleColumn) => R.compose(resolveEdges, matchesDataCell(datum, i, column));
 export const getDataOpCellEdges = (datum: Datum, i: number) => R.compose(resolveEdges, matchesDataOpCell(datum, i));

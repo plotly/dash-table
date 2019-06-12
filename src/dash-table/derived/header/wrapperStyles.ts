@@ -4,9 +4,8 @@ import { memoizeOneFactory } from 'core/memoizer';
 
 import { VisibleColumns } from 'dash-table/components/Table/props';
 
-import { IConvertedStyle } from '../style';
+import { IConvertedStyle, getHeaderCellStyle, getHeaderOpCellStyle } from '../style';
 import { traverseMap2 } from 'core/math/matrixZipMap';
-import { getHeaderCellStyle, getHeaderOpCellStyle } from '../edges';
 
 const getter = (
     columns: VisibleColumns,

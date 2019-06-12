@@ -3,8 +3,7 @@ import { CSSProperties } from 'react';
 
 import { memoizeOneFactory } from 'core/memoizer';
 import { Data, VisibleColumns, IViewportOffset, SelectedCells } from 'dash-table/components/Table/props';
-import { IConvertedStyle } from '../style';
-import { getDataCellStyle, getDataOpCellStyle } from '../edges';
+import { IConvertedStyle, getDataCellStyle, getDataOpCellStyle } from '../style';
 import { traverseMap2, shallowClone } from 'core/math/matrixZipMap';
 
 const SELECTED_CELL_STYLE = { backgroundColor: 'var(--selected-background)' };
