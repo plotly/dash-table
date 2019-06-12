@@ -2,6 +2,10 @@ import * as R from 'ramda';
 
 type Matrix<T> = T[][];
 
+export const shallowClone: <T>(
+    m: Matrix<T>
+) => Matrix<T> = R.map(row => row.slice(0));
+
 export const traverse2 = <T1, T2, TR>(
     a1: T1[],
     a2: T2[],

@@ -1,33 +1,37 @@
 import * as R from 'ramda';
+import { CSSProperties } from 'react';
 
 import { memoizeOneFactory } from 'core/memoizer';
-import { Data, VisibleColumns, IViewportOffset, SelectedCells, ICellCoordinates } from 'dash-table/components/Table/props';
+import { Data, VisibleColumns, IViewportOffset, SelectedCells } from 'dash-table/components/Table/props';
 import { IConvertedStyle } from '../style';
 import { getDataCellStyle, getDataOpCellStyle } from '../edges';
-import { traverseMap2 } from 'core/math/matrixZipMap';
-
-const isSelected = (
-    i: number,
-    j: number,
-    cells: ICellCoordinates[]
-) => R.any(cell => cell.row === i && cell.column === j, cells);
+import { traverseMap2, shallowClone } from 'core/math/matrixZipMap';
 
 const SELECTED_CELL_STYLE = { backgroundColor: 'var(--selected-background)' };
 
-const getter = (
+const partialGetter = (
     columns: VisibleColumns,
     styles: IConvertedStyle[],
     data: Data,
-    offset: IViewportOffset,
-    selectedCells: SelectedCells
+    offset: IViewportOffset
 ) => traverseMap2(
     data,
     columns,
-    (datum, column, i, j) => R.merge(
-        getDataCellStyle(datum, i + offset.rows, column)(styles),
-        isSelected(i, j, selectedCells) ? SELECTED_CELL_STYLE : {}
-    )
+    (datum, column, i) => getDataCellStyle(datum, i + offset.rows, column)(styles)
 );
+
+const getter = (
+    styles: CSSProperties[][],
+    selectedCells: SelectedCells
+) => {
+    styles = shallowClone(styles);
+
+    R.forEach(({ row: i, column: j }) => {
+        styles[i][j] = R.merge(styles[i][j], SELECTED_CELL_STYLE);
+    }, selectedCells);
+
+    return styles;
+};
 
 const opGetter = (
     columns: number,
@@ -40,5 +44,6 @@ const opGetter = (
     (datum, _, i) => getDataOpCellStyle(datum, i + offset.rows)(styles)
 );
 
-export default memoizeOneFactory(getter);
+export const derivedPartialDataStyles = memoizeOneFactory(partialGetter);
+export const derivedDataStyles = memoizeOneFactory(getter);
 export const derivedDataOpStyles = memoizeOneFactory(opGetter);

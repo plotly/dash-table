@@ -8,7 +8,7 @@ import { ICellFactoryProps } from 'dash-table/components/Table/props';
 import derivedCellWrappers from 'dash-table/derived/cell/wrappers';
 import derivedCellContents from 'dash-table/derived/cell/contents';
 import derivedCellOperations from 'dash-table/derived/cell/operations';
-import derivedCellStyles, { derivedDataOpStyles } from 'dash-table/derived/cell/wrapperStyles';
+import { derivedDataOpStyles, derivedDataStyles, derivedPartialDataStyles } from 'dash-table/derived/cell/wrapperStyles';
 import derivedDropdowns from 'dash-table/derived/cell/dropdowns';
 import { derivedRelevantCellStyles } from 'dash-table/derived/style';
 import { IEdgesMatrices } from 'dash-table/derived/edges/type';
@@ -25,7 +25,8 @@ export default class CellFactory {
         private readonly cellContents = derivedCellContents(propsFn),
         private readonly cellDropdowns = derivedDropdowns(),
         private readonly cellOperations = derivedCellOperations(),
-        private readonly cellStyles = derivedCellStyles(),
+        private readonly dataPartialStyles = derivedPartialDataStyles(),
+        private readonly dataStyles = derivedDataStyles(),
         private readonly dataOpStyles = derivedDataOpStyles(),
         private readonly cellWrappers = derivedCellWrappers(propsFn),
         private readonly relevantStyles = derivedRelevantCellStyles()
@@ -59,11 +60,15 @@ export default class CellFactory {
             style_data_conditional
         );
 
-        const cellStyles = this.cellStyles(
+        const partialCellStyles = this.dataPartialStyles(
             columns,
             relevantStyles,
             virtualized.data,
-            virtualized.offset,
+            virtualized.offset
+        );
+
+        const cellStyles = this.dataStyles(
+            partialCellStyles,
             selected_cells
         );
 
@@ -93,15 +98,26 @@ export default class CellFactory {
             setProps
         );
 
-        const cellWrappers = this.cellWrappers(
-            active_cell,
+        const partialCellWrappers = this.cellWrappers.partialGet(
             columns,
-            virtualized.data,
+            virtualized.data
+        );
+
+        const cellWrappers = this.cellWrappers.get(
+            partialCellWrappers,
             virtualized.offset,
+            active_cell,
             selected_cells
         );
 
-        const cellContents = this.cellContents(
+        const partialCellContents = this.cellContents.partialGet(
+            columns,
+            virtualized.data,
+            dropdowns
+        );
+
+        const cellContents = this.cellContents.get(
+            partialCellContents,
             active_cell,
             columns,
             virtualized.data,
