@@ -39,7 +39,6 @@ export default class CellFactory {
             dropdown,
             data,
             dropdown_data,
-            editable,
             is_focused,
             row_deletable,
             row_selectable,
@@ -107,7 +106,6 @@ export default class CellFactory {
             columns,
             virtualized.data,
             virtualized.offset,
-            editable,
             !!is_focused,
             dropdowns
         );
