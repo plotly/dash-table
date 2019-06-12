@@ -22,11 +22,19 @@ const partialGetter = (
 
 const getter = (
     styles: CSSProperties[][],
+    offset: IViewportOffset,
     selectedCells: SelectedCells
 ) => {
     styles = shallowClone(styles);
 
     R.forEach(({ row: i, column: j }) => {
+        i -= offset.rows;
+        j -= offset.columns;
+
+        if (i < 0 || j < 0 || styles.length <= i || styles[i].length <= j) {
+            return;
+        }
+
         styles[i][j] = R.merge(styles[i][j], SELECTED_CELL_STYLE);
     }, selectedCells);
 

@@ -21,7 +21,8 @@ class Wrappers {
 
     partialGet = memoizeOne((
         columns: VisibleColumns,
-        data: Data
+        data: Data,
+        _offset: IViewportOffset
     ) => R.addIndex<Datum, JSX.Element[]>(R.map)(
         (_, rowIndex) => R.addIndex<IVisibleColumn, JSX.Element>(R.map)(
             (column, columnIndex) => this.getWrapper(
@@ -44,6 +45,13 @@ class Wrappers {
         wrappers = shallowClone(wrappers);
 
         R.forEach(({ row: i, column: j }) => {
+            i -= offset.rows;
+            j -= offset.columns;
+
+            if (i < 0 || j < 0 || wrappers.length <= i || wrappers[i].length <= j) {
+                return;
+            }
+
             const w = wrappers[i][j];
             const active = isActiveCell(activeCell, i + offset.rows, j + offset.columns);
 

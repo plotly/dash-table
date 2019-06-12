@@ -60,6 +60,7 @@ class Contents {
     partialGet = memoizeOne((
         columns: VisibleColumns,
         data: Data,
+        _offset: IViewportOffset,
         isFocused: boolean,
         dropdowns: (IDropdown | undefined)[][]
     ): JSX.Element[][] => {

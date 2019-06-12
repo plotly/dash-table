@@ -70,6 +70,7 @@ export default class CellFactory {
 
         const cellStyles = this.dataStyles(
             partialCellStyles,
+            virtualized.offset,
             selected_cells
         );
 
@@ -101,7 +102,8 @@ export default class CellFactory {
 
         const partialCellWrappers = this.cellWrappers.partialGet(
             columns,
-            virtualized.data
+            virtualized.data,
+            virtualized.offset
         );
 
         const cellWrappers = this.cellWrappers.get(
@@ -114,6 +116,7 @@ export default class CellFactory {
         const partialCellContents = this.cellContents.partialGet(
             columns,
             virtualized.data,
+            virtualized.offset,
             !!is_focused,
             dropdowns
         );

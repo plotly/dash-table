@@ -34,7 +34,7 @@ export default memoizeOneFactory((
     );
 
     if (active_cell) {
-        edges.setEdges(active_cell.row, active_cell.column, {
+        edges.setEdges(active_cell.row - offset.rows, active_cell.column - offset.columns, {
             borderBottom: [Environment.activeEdge, Infinity],
             borderLeft: [Environment.activeEdge, Infinity],
             borderRight: [Environment.activeEdge, Infinity],

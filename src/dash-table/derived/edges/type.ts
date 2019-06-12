@@ -100,6 +100,10 @@ export class EdgesMatrix implements IEdgesMatrix {
     }
 
     setEdge(i: number, j: number, edge: Edge, weight: number, force: boolean = false) {
+        if (i < 0 || j < 0 || i >= this.rows || j >= this.columns) {
+            return;
+        }
+
         if (!force && (R.isNil(edge) || weight <= this.weights[i][j])) {
             return;
         }
