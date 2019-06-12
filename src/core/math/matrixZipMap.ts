@@ -20,7 +20,7 @@ export const traverseMap2 = <T1, T2, TR>(
     a1: T1[],
     a2: T2[],
     fn: (d1: T1, d2: T2, i1: number, i2: number) => TR
-): TR[][] => R.addIndex<T1, TR[]>(R.map)((d1, i1) =>
+): Matrix<TR> => R.addIndex<T1, TR[]>(R.map)((d1, i1) =>
     R.addIndex<T2, TR>(R.map)((d2, i2) =>
         fn(d1, d2, i1, i2),
         a2),
