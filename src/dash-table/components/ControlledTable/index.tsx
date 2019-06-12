@@ -25,7 +25,6 @@ import derivedTable from 'dash-table/derived/table';
 import derivedTableFragments from 'dash-table/derived/table/fragments';
 import derivedTableFragmentStyles from 'dash-table/derived/table/fragmentStyles';
 import derivedTooltips from 'dash-table/derived/table/tooltip';
-import isEditable from 'dash-table/derived/cell/isEditable';
 import { derivedTableStyle } from 'dash-table/derived/style';
 import { IStyle } from 'dash-table/derived/style/props';
 import TableTooltip from './fragments/TableTooltip';
@@ -39,6 +38,7 @@ const DEFAULT_STYLE = {
 export default class ControlledTable extends PureComponent<ControlledTableProps> {
     private readonly stylesheet: Stylesheet = new Stylesheet(`#${this.props.id}`);
     private readonly tableFn = derivedTable(() => this.props);
+    private readonly tableFragments = derivedTableFragments();
     private readonly tableStyle = derivedTableStyle();
 
     private calculateTableStyle = memoizeOne((style: Partial<IStyle>) => R.mergeAll(
@@ -460,7 +460,6 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         const {
             columns,
             data,
-            editable,
             selected_cells,
             setProps,
             viewport
@@ -476,7 +475,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         );
 
         realCells.forEach(cell => {
-            if (isEditable(editable, columns[cell[1]].editable)) {
+            if (columns[cell[1]].editable) {
                 newData = R.set(
                     R.lensPath([cell[0], columns[cell[1]].id]),
                     '',
@@ -714,7 +713,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         ];
 
         const rawTable = this.tableFn();
-        const { grid, empty } = derivedTableFragments(
+        const { grid, empty } = this.tableFragments(
             fixed_columns,
             fixed_rows,
             rawTable,
