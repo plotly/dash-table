@@ -15,7 +15,6 @@ import {
 } from 'dash-table/components/Table/props';
 import CellInput from 'dash-table/components/CellInput';
 import derivedCellEventHandlerProps, { Handler } from 'dash-table/derived/cell/eventHandlerProps';
-import isActiveCell from 'dash-table/derived/cell/isActive';
 import CellLabel from 'dash-table/components/CellLabel';
 import CellDropdown from 'dash-table/components/CellDropdown';
 import { memoizeOne } from 'core/memoizer';
@@ -89,25 +88,28 @@ class Contents {
         isFocused: boolean,
         dropdowns: (IDropdown | undefined)[][]
     ): JSX.Element[][] => {
+        if (!activeCell) {
+            return contents;
+        }
+
         const formatters = R.map(getFormatter, columns);
 
         contents = shallowClone(contents);
 
-        R.addIndex<Datum>(R.forEach)((datum, i) =>
-            R.addIndex<IVisibleColumn>(R.forEach)((column, j) => {
-                if (isActiveCell(activeCell, i + offset.rows, j + offset.columns)) {
-                    contents[i][j] = this.getContent(
-                        true,
-                        isFocused,
-                        column,
-                        dropdowns[i][j],
-                        j,
-                        i,
-                        datum,
-                        formatters
-                    );
-                }
-            }, columns), data);
+        let { row: iActive, column: jActive } = activeCell;
+        iActive -= offset.rows;
+        jActive -= offset.columns;
+
+        contents[iActive][jActive] = this.getContent(
+            true,
+            isFocused,
+            columns[jActive],
+            dropdowns[iActive][jActive],
+            jActive,
+            iActive,
+            data[iActive],
+            formatters
+        );
 
         return contents;
     });
