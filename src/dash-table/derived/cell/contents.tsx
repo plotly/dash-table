@@ -71,7 +71,7 @@ class Contents {
                     false,
                     isFocused,
                     column,
-                    dropdowns[rowIndex][columnIndex],
+                    dropdowns && dropdowns[rowIndex][columnIndex],
                     columnIndex,
                     rowIndex,
                     datum,
@@ -92,22 +92,25 @@ class Contents {
             return contents;
         }
 
+        const { row: iActive, column: jActive } = activeCell;
+        const i = iActive - offset.rows;
+        const j = jActive - offset.columns;
+
+        if (i < 0 || j < 0 || data.length <= i || columns.length <= j) {
+            return contents;
+        }
+
         const formatters = R.map(getFormatter, columns);
 
         contents = shallowClone(contents);
-
-        let { row: iActive, column: jActive } = activeCell;
-        iActive -= offset.rows;
-        jActive -= offset.columns;
-
-        contents[iActive][jActive] = this.getContent(
+        contents[i][j] = this.getContent(
             true,
             isFocused,
-            columns[jActive],
-            dropdowns[iActive][jActive],
+            columns[j],
+            dropdowns && dropdowns[i][j],
             jActive,
             iActive,
-            data[iActive],
+            data[i],
             formatters
         );
 
