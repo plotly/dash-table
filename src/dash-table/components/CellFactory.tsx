@@ -114,6 +114,7 @@ export default class CellFactory {
         const partialCellContents = this.cellContents.partialGet(
             columns,
             virtualized.data,
+            !!is_focused,
             dropdowns
         );
 

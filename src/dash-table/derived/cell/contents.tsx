@@ -60,6 +60,7 @@ class Contents {
     partialGet = memoizeOne((
         columns: VisibleColumns,
         data: Data,
+        isFocused: boolean,
         dropdowns: (IDropdown | undefined)[][]
     ): JSX.Element[][] => {
         const formatters = R.map(getFormatter, columns);
@@ -68,7 +69,7 @@ class Contents {
             (datum, rowIndex) => mapRow(
                 (column, columnIndex) => this.getContent(
                     false,
-                    false,
+                    isFocused,
                     column,
                     dropdowns[rowIndex][columnIndex],
                     columnIndex,
@@ -93,7 +94,7 @@ class Contents {
 
         R.addIndex<Datum>(R.forEach)((datum, i) =>
             R.addIndex<IVisibleColumn>(R.forEach)((column, j) => {
-                if (isActiveCell(activeCell, i + offset.rows, j + offset.columns) || isFocused) {
+                if (isActiveCell(activeCell, i + offset.rows, j + offset.columns)) {
                     contents[i][j] = this.getContent(
                         true,
                         isFocused,

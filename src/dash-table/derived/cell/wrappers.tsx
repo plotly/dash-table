@@ -48,8 +48,9 @@ class Wrappers {
             const active = isActiveCell(activeCell, i + offset.rows, j + offset.columns);
 
             wrappers[i][j] = React.cloneElement(w, {
-                className: w.props.className + ' cell--selected' + (active ? ' focused' : '')
+                classes: w.props.classes + ' cell--selected' + (active ? ' focused' : '')
             });
+
         }, selectedCells);
 
         return wrappers;
