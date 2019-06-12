@@ -28,7 +28,7 @@ import {
  } from 'dash-table/conditional';
 import { QuerySyntaxTree } from 'dash-table/syntax-tree';
 import { BORDER_PROPERTIES_AND_FRAGMENTS } from '../edges/type';
-import { matchesDataCell, matchesDataOpCell, matchesFilterCell, matchesHeaderCell, getFilterOpStyles, getHeaderOpStyles } from '../edges';
+import { matchesDataCell, matchesDataOpCell, matchesFilterCell, getFilterOpStyles, matchesHeaderCell, getHeaderOpStyles } from 'dash-table/conditional';
 
 export interface IConvertedStyle {
     style: CSSProperties;
