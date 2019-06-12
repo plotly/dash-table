@@ -22,17 +22,6 @@ export const traverseMap2 = <T1, T2, TR>(
         a2),
     a1);
 
-export const traverseReduce2 = <T1, T2, TR>(
-    a1: T1[],
-    a2: T2[],
-    fn: (acc: TR, d1: T1, d2: T2, i1: number, i2: number) => TR,
-    acc: TR
-): TR => R.addIndex<T1>(R.forEach)((d1, i1) =>
-    R.addIndex<T2>(R.forEach)((d2, i2) =>
-        acc = fn(acc, d1, d2, i1, i2),
-        a2),
-    a1) && acc;
-
 export function matrixMap<T1, TR>(
     m1: Matrix<T1>,
     cb: (d1: T1, i: number, j: number) => TR
