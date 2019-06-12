@@ -54,7 +54,7 @@ function resolveEdges(styles: IConvertedStyle[]): BorderStyle {
 export function resolveStyle(styles: IConvertedStyle[]): CSSProperties {
     return R.mergeAll(
         R.map<IConvertedStyle, CSSProperties>(
-            R.omit(BORDER_PROPERTIES_AND_FRAGMENTS),
+            s => R.omit(BORDER_PROPERTIES_AND_FRAGMENTS, s.style),
             styles
         )
     );
