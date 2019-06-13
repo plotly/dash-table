@@ -2,14 +2,14 @@ type Array<T> = T[];
 
 export function arrayMap<T1, TR>(
     a1: Array<T1>,
-    cb: (d1: T1, i: number) => TR
+    fn: (d1: T1, i: number) => TR
 ): Array<TR> {
     const _a1_ = a1.length;
 
     const res: Array<TR> = [];
 
     for (let i = 0; i < _a1_; ++i) {
-        res.push(cb(a1[i], i));
+        res.push(fn(a1[i], i));
     }
 
     return res;
@@ -18,14 +18,14 @@ export function arrayMap<T1, TR>(
 export function arrayMap2<T1, T2, TR>(
     a1: Array<T1>,
     a2: Array<T2>,
-    cb: (d1: T1, d2: T2, i: number) => TR
+    fn: (d1: T1, d2: T2, i: number) => TR
 ): Array<TR> {
     const _a1_ = a1.length;
 
     const res: Array<TR> = [];
 
     for (let i = 0; i < _a1_; ++i) {
-        res.push(cb(a1[i], a2[i], i));
+        res.push(fn(a1[i], a2[i], i));
     }
 
     return res;
@@ -35,21 +35,21 @@ export function arrayMap3<T1, T2, T3, TR>(
     a1: Array<T1>,
     a2: Array<T2>,
     a3: Array<T3>,
-    cb: (d1: T1, d2: T2, d3: T3, i: number) => TR
+    fn: (d1: T1, d2: T2, d3: T3, i: number) => TR
 ): Array<TR> {
     const _a1_ = a1.length;
 
     const res: Array<TR> = [];
 
     for (let i = 0; i < _a1_; ++i) {
-        res.push(cb(a1[i], a2[i], a3[i], i));
+        res.push(fn(a1[i], a2[i], a3[i], i));
     }
 
     return res;
 }
 
 export function arrayMapN<TR>(
-    cb: (i: number, ...args: any[]) => TR,
+    fn: (i: number, ...args: any[]) => TR,
     ...arrays: (any[])[]
 ) {
     const a1 = arrays.slice(0, 1);
@@ -60,7 +60,7 @@ export function arrayMapN<TR>(
     const res: Array<TR> = [];
 
     for (let i = 0; i < _a1_; ++i) {
-        res.push(cb(i, a1[i], ...as.map(a => a[i])));
+        res.push(fn(i, a1[i], ...as.map(a => a[i])));
     }
 
     return res;
