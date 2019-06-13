@@ -53,9 +53,11 @@ export function matrixMap<T1, TR>(
     m1: Matrix<T1>,
     cb: (d1: T1, i: number, j: number) => TR
 ) {
+    const _m1_ = m1.length;
+
     const res: Matrix<TR> = [];
 
-    for (let i = 0; i < m1.length; ++i) {
+    for (let i = 0; i < _m1_; ++i) {
         let row = [];
         for (let j = 0; j < m1[i].length; ++j) {
             row.push(cb(
@@ -76,9 +78,11 @@ export function matrixMap2<T1, T2, TR>(
     m2: Matrix<T2> | undefined,
     cb: (d1: T1, d2: T2 | undefined, i: number, j: number) => TR
 ): Matrix<TR> {
+    const _m1_ = m1.length;
+
     const res: Matrix<TR> = [];
 
-    for (let i = 0; i < m1.length; ++i) {
+    for (let i = 0; i < _m1_; ++i) {
         let row = [];
         for (let j = 0; j < m1[i].length; ++j) {
             row.push(cb(
@@ -101,9 +105,11 @@ export function matrixMap3<T1, T2, T3, TR>(
     m3: Matrix<T3> | undefined,
     cb: (d1: T1, d2: T2 | undefined, d3: T3 | undefined, i: number, j: number) => TR
 ): Matrix<TR> {
+    const _m1_ = m1.length;
+
     const res: Matrix<TR> = [];
 
-    for (let i = 0; i < m1.length; ++i) {
+    for (let i = 0; i < _m1_; ++i) {
         let row = [];
         for (let j = 0; j < m1[i].length; ++j) {
             row.push(cb(
@@ -128,9 +134,11 @@ export function matrixMap4<T1, T2, T3, T4, TR>(
     m4: Matrix<T4> | undefined,
     cb: (d1: T1, d2: T2 | undefined, d3: T3 | undefined, d4: T4 | undefined, i: number, j: number) => TR
 ): Matrix<TR> {
+    const _m1_ = m1.length;
+
     const res: Matrix<TR> = [];
 
-    for (let i = 0; i < m1.length; ++i) {
+    for (let i = 0; i < _m1_; ++i) {
         let row = [];
         for (let j = 0; j < m1[i].length; ++j) {
             row.push(cb(
@@ -154,9 +162,11 @@ export function matrixMapN<TR>(
     m1: Matrix<any>,
     ...matrices: (any[][] | undefined)[]
 ) {
+    const _m1_ = m1.length;
+
     const res: Matrix<TR> = [];
 
-    for (let i = 0; i < m1.length; ++i) {
+    for (let i = 0; i < _m1_; ++i) {
         let row = [];
         for (let j = 0; j < m1[i].length; ++j) {
             row.push(cb(
