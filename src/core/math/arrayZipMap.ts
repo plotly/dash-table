@@ -6,10 +6,10 @@ export function arrayMap<T1, TR>(
 ): Array<TR> {
     const _a1_ = a1.length;
 
-    const res: Array<TR> = [];
+    const res: Array<TR> = new Array<TR>(_a1_);
 
     for (let i = 0; i < _a1_; ++i) {
-        res.push(fn(a1[i], i));
+        res[i] = fn(a1[i], i);
     }
 
     return res;
@@ -22,10 +22,10 @@ export function arrayMap2<T1, T2, TR>(
 ): Array<TR> {
     const _a1_ = a1.length;
 
-    const res: Array<TR> = [];
+    const res: Array<TR> = new Array<TR>(_a1_);
 
     for (let i = 0; i < _a1_; ++i) {
-        res.push(fn(a1[i], a2[i], i));
+        res[i] = fn(a1[i], a2[i], i);
     }
 
     return res;
@@ -39,10 +39,10 @@ export function arrayMap3<T1, T2, T3, TR>(
 ): Array<TR> {
     const _a1_ = a1.length;
 
-    const res: Array<TR> = [];
+    const res: Array<TR> = new Array<TR>(_a1_);
 
     for (let i = 0; i < _a1_; ++i) {
-        res.push(fn(a1[i], a2[i], a3[i], i));
+        res[i] = fn(a1[i], a2[i], a3[i], i);
     }
 
     return res;
@@ -57,10 +57,10 @@ export function arrayMapN<TR>(
 
     const _a1_ = a1.length;
 
-    const res: Array<TR> = [];
+    const res: Array<TR> = new Array<TR>(_a1_);
 
     for (let i = 0; i < _a1_; ++i) {
-        res.push(fn(i, a1[i], ...as.map(a => a[i])));
+        res[i] = fn(i, a1[i], ...as.map(a => a[i]));
     }
 
     return res;

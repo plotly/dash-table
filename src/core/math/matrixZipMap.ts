@@ -5,10 +5,10 @@ export function shallowClone<T>(
 ): Matrix<T> {
     const _m_ = m.length;
 
-    const res = [];
+    const res: Matrix<T> = new Array<T[]>(_m_);
 
     for (let i = 0; i < _m_; ++i) {
-        res.push(m[i].slice(0));
+        res[i] = m[i].slice(0);
     }
 
     return res;
@@ -37,15 +37,16 @@ export function traverseMap2<T1, T2, TR>(
     const _a1_ = a1.length;
     const _a2_ = a2.length;
 
-    const res: Matrix<TR> = [];
+    const res: Matrix<TR> = new Array<TR[]>(_a1_);
 
     for (let i1 = 0; i1 < _a1_; ++i1) {
-        const row = [];
+        const row = new Array<TR>(_a2_);
+
         for (let i2 = 0; i2 < _a2_; ++i2) {
-            row.push(fn(a1[i1], a2[i2], i1, i2));
+            row[i2] = fn(a1[i1], a2[i2], i1, i2);
         }
 
-        res.push(row);
+        res[i1] = row;
     }
 
     return res;
@@ -57,19 +58,21 @@ export function matrixMap<T1, TR>(
 ) {
     const _m1_ = m1.length;
 
-    const res: Matrix<TR> = [];
+    const res: Matrix<TR> = new Array<TR[]>(_m1_);
 
     for (let i = 0; i < _m1_; ++i) {
-        let row = [];
-        for (let j = 0; j < m1[i].length; ++j) {
-            row.push(fn(
+        const _row_ = m1[i].length;
+        let row = new Array<TR>(_row_);
+
+        for (let j = 0; j < _row_; ++j) {
+            row[j] = fn(
                 m1[i][j],
                 i,
                 j
-            ));
+            );
         }
 
-        res.push(row);
+        res[i] = row;
     }
 
     return res;
@@ -82,20 +85,22 @@ export function matrixMap2<T1, T2, TR>(
 ): Matrix<TR> {
     const _m1_ = m1.length;
 
-    const res: Matrix<TR> = [];
+    const res: Matrix<TR> = new Array<TR[]>(_m1_);
 
     for (let i = 0; i < _m1_; ++i) {
-        let row = [];
-        for (let j = 0; j < m1[i].length; ++j) {
-            row.push(fn(
+        const _row_ = m1[i].length;
+        let row = new Array<TR>(_row_);
+
+        for (let j = 0; j < _row_; ++j) {
+            row[j] = fn(
                 m1[i][j],
                 m2 ? m2[i][j] : undefined,
                 i,
                 j
-            ));
+            );
         }
 
-        res.push(row);
+        res[i] = row;
     }
 
     return res;
@@ -109,21 +114,23 @@ export function matrixMap3<T1, T2, T3, TR>(
 ): Matrix<TR> {
     const _m1_ = m1.length;
 
-    const res: Matrix<TR> = [];
+    const res: Matrix<TR> = new Array<TR[]>(_m1_);
 
     for (let i = 0; i < _m1_; ++i) {
-        let row = [];
-        for (let j = 0; j < m1[i].length; ++j) {
-            row.push(fn(
+        const _row_ = m1[i].length;
+        let row = new Array<TR>(_row_);
+
+        for (let j = 0; j < _row_; ++j) {
+            row[j] = fn(
                 m1[i][j],
                 m2 ? m2[i][j] : undefined,
                 m3 ? m3[i][j] : undefined,
                 i,
                 j
-            ));
+            );
         }
 
-        res.push(row);
+        res[i] = row;
     }
 
     return res;
@@ -138,22 +145,24 @@ export function matrixMap4<T1, T2, T3, T4, TR>(
 ): Matrix<TR> {
     const _m1_ = m1.length;
 
-    const res: Matrix<TR> = [];
+    const res: Matrix<TR> = new Array<TR[]>(_m1_);
 
     for (let i = 0; i < _m1_; ++i) {
-        let row = [];
-        for (let j = 0; j < m1[i].length; ++j) {
-            row.push(fn(
+        const _row_ = m1[i].length;
+        let row = new Array<TR>(_row_);
+
+        for (let j = 0; j < _row_; ++j) {
+            row[j] = fn(
                 m1[i][j],
                 m2 ? m2[i][j] : undefined,
                 m3 ? m3[i][j] : undefined,
                 m4 ? m4[i][j] : undefined,
                 i,
                 j
-            ));
+            );
         }
 
-        res.push(row);
+        res[i] = row;
     }
 
     return res;
@@ -166,20 +175,22 @@ export function matrixMapN<TR>(
 ) {
     const _m1_ = m1.length;
 
-    const res: Matrix<TR> = [];
+    const res: Matrix<TR> = new Array<TR[]>(_m1_);
 
     for (let i = 0; i < _m1_; ++i) {
-        let row = [];
-        for (let j = 0; j < m1[i].length; ++j) {
-            row.push(fn(
+        const _row_ = m1[i].length;
+        let row = new Array<TR>(_row_);
+
+        for (let j = 0; j < _row_; ++j) {
+            row[j] = fn(
                 m1[i][j],
                 i,
                 j,
                 ...matrices.map(m => m ? m[i][j] : undefined)
-            ));
+            );
         }
 
-        res.push(row);
+        res[i] = row;
     }
 
     return res;
