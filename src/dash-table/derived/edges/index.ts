@@ -11,7 +11,7 @@ function resolveEdges(styles: IConvertedStyle[]): BorderStyle {
         styles,
         BORDER_PROPERTIES,
         (s, p, i) => {
-            const border = s.style[p];
+            const border = s.style[p] || s.style.border;
 
             if (border) {
                 res[p] = [border, i];
