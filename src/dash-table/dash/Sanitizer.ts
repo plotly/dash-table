@@ -64,19 +64,19 @@ const applyDefaultToLocale = (locale: INumberLocale) => getLocale(locale);
 
 export default class Sanitizer {
     sanitize(props: PropsWithDefaults): SanitizedProps {
-        const locale_format = Sanitizer.applyDefaultToLocale(props.locale_format);
+        const locale_format = this.applyDefaultToLocale(props.locale_format);
 
         return R.merge(props, {
-            columns: Sanitizer.applyDefaultsToColumns(locale_format, props.sort_as_null, props.columns, props.editable),
+            columns: this.applyDefaultsToColumns(locale_format, props.sort_as_null, props.columns, props.editable),
             fixed_columns: getFixedColumns(props.fixed_columns, props.row_deletable, props.row_selectable),
             fixed_rows: getFixedRows(props.fixed_rows, props.columns, props.filter_action),
             locale_format
         });
     }
 
-    private static readonly applyDefaultToLocale = memoizeOne(applyDefaultToLocale);
+    private readonly applyDefaultToLocale = memoizeOne(applyDefaultToLocale);
 
-    private static readonly applyDefaultsToColumns = memoizeOne(applyDefaultsToColumns);
+    private readonly applyDefaultsToColumns = memoizeOne(applyDefaultsToColumns);
 }
 
 export const getLocale = (...locales: Partial<INumberLocale>[]): INumberLocale =>
