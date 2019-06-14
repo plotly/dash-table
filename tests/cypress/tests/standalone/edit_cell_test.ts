@@ -4,6 +4,34 @@ import Key from 'cypress/Key';
 
 import { AppMode, ReadWriteModes } from 'demo/AppMode';
 
+Object.values([
+    ...ReadWriteModes,
+    AppMode.TaleOfTwoTables
+]).forEach(mode => {
+    describe(`edit, mode=${mode}`, () => {
+        beforeEach(() => {
+            cy.visit(`http://localhost:8080?mode=${mode}`);
+            DashTable.toggleScroll(false);
+        });
+
+        // https://github.com/plotly/dash-table/issues/50
+        it('can edit on "enter"', () => {
+            DashTable.getCell(0, 1).click();
+            cy.wait(1000);
+            DOM.focused.type(`abc${Key.Enter}`);
+            DashTable.getCell(0, 1).within(() => cy.get('.dash-cell-value').should('have.html', `abc`));
+        });
+
+        it('can edit when clicking outside of cell', () => {
+            DashTable.getCell(0, 1).click();
+            DOM.focused.type(`abc`);
+            cy.wait(1000);
+            DashTable.getCell(0, 0).click();
+            DashTable.getCell(0, 1).within(() => cy.get('.dash-cell-value').should('have.html', `abc`));
+        });
+    });
+});
+
 Object.values(ReadWriteModes).forEach(mode => {
     describe(`edit, mode=${mode}`, () => {
         beforeEach(() => {
@@ -105,20 +133,6 @@ Object.values(ReadWriteModes).forEach(mode => {
             DashTable.getCell(0, 6).within(() => {
                 cy.get('.Select-value-label').should('have.html', expectedValue);
             });
-        });
-
-        // https://github.com/plotly/dash-table/issues/50
-        it('can edit on "enter"', () => {
-            DashTable.getCell(0, 1).click();
-            DOM.focused.type(`abc${Key.Enter}`);
-            DashTable.getCell(0, 1).within(() => cy.get('.dash-cell-value').should('have.html', `abc`));
-        });
-
-        it('can edit when clicking outside of cell', () => {
-            DashTable.getCell(0, 1).click();
-            DOM.focused.type(`abc`);
-            DashTable.getCell(0, 0).click();
-            DashTable.getCell(0, 1).within(() => cy.get('.dash-cell-value').should('have.html', `abc`));
         });
     });
 });
