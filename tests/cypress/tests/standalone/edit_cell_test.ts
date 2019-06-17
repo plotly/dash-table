@@ -14,9 +14,14 @@ Object.values([
             DashTable.toggleScroll(false);
         });
 
-        // https://github.com/plotly/dash-table/issues/50
+        // Case: "Pressing enter to confirm change does not work on the last row"
+        // Issue: https://github.com/plotly/dash-table/issues/50
         it('can edit on "enter"', () => {
             DashTable.getCell(0, 1).click();
+            // Case: 2+ tables results in infinite rendering loop b/c of shared cache
+            // Issue: https://github.com/plotly/dash-table/pull/468
+            //
+            // Artificial delay added to make sure re-rendering has time to occur.
             cy.wait(1000);
             DOM.focused.type(`abc${Key.Enter}`);
             DashTable.getCell(0, 1).within(() => cy.get('.dash-cell-value').should('have.html', `abc`));
@@ -25,6 +30,10 @@ Object.values([
         it('can edit when clicking outside of cell', () => {
             DashTable.getCell(0, 1).click();
             DOM.focused.type(`abc`);
+            // Case: 2+ tables results in infinite rendering loop b/c of shared cache
+            // Issue: https://github.com/plotly/dash-table/pull/468
+            //
+            // Artificial delay added to make sure re-rendering has time to occur.
             cy.wait(1000);
             DashTable.getCell(0, 0).click();
             DashTable.getCell(0, 1).within(() => cy.get('.dash-cell-value').should('have.html', `abc`));
