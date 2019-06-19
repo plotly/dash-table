@@ -30,6 +30,7 @@ module.exports = (options = {}) => {
         },
         devtool: 'source-map',
         externals: {
+            'prop-types': 'PropTypes',
             react: {
                 commonjs: 'react',
                 commonjs2: 'react',
