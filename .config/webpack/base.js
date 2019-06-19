@@ -7,7 +7,7 @@ const dashLibraryName = packagejson.name.replace(/-/g, '_');
 module.exports = (options = {}) => {
     const babel = options.babel || undefined;
     const preprocessor = options.preprocessor || {};
-    const mode = options.mode || 'production';
+    const mode = options.mode || 'development';
     const ts = options.ts || {};
 
     console.log('********** Webpack Environment Overrides **********');
