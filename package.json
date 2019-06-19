@@ -18,7 +18,7 @@
     "pretest.standalone": "run-s private::build:js-test",
     "private::build": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack --display-reasons --bail",
     "private::build:js": "run-s \"private::build -- --mode production\"",
-    "private::build:js-dev": "run-s \"private::build --  --config webpack.dev.config.js\"",
+    "private::build:js-dev": "run-s \"private::build -- --config webpack.dev.config.js\"",
     "private::build:js-test": "run-s \"private::build -- --config webpack.test.config.js\"",
     "private::build:js-test-watch": "run-s \"private::build -- --config webpack.test.config.js --watch\"",
     "private::build:py": "dash-generate-components src/dash-table/dash/DataTable.js dash_table -p package-info.json",
