@@ -23,6 +23,7 @@ class Tests(IntegrationTests):
             )
             time.sleep(10)
             self.snapshot(href)
+            time.sleep(1000)
             self.driver.back()
 
         for link in links:
