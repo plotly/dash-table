@@ -5,7 +5,4 @@ const options = {
     mode: 'development'
 };
 
-let config = require('./.config/webpack/base.js')(options);
-delete config.externals['prop-types'];
-
-module.exports = config;
+module.exports = require('./.config/webpack/base.js')(options);
