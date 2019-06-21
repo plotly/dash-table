@@ -2,3 +2,4 @@
 
 export(dashDataTable)
 export(df_to_list)
+export(FUN)

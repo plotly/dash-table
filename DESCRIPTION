@@ -1,7 +1,7 @@
 Package: dashTable
 Title: Dash table
-Version: 3.7.0
-Authors @R: as.person(c(Chris P <chris@plot.ly>))
+Version: 4.0.0
+Authors @R: as.person(c(Chris Parmer <chris@plot.ly>))
 Description: Dash table
 Depends: R (>= 3.0.2)
 Imports: dash
@@ -11,5 +11,5 @@ URL: https://github.com/plotly/dash-table
 BugReports: https://github.com/plotly/dash-table/issues
 Encoding: UTF-8
 LazyData: true
-Author: Chris P [aut]
-Maintainer: Chris P <chris@plot.ly>
+Author: Chris Parmer [aut]
+Maintainer: Chris Parmer <chris@plot.ly>
