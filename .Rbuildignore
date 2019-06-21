@@ -3,8 +3,6 @@ node_modules/
 coverage/
 src/
 lib/
-generator/
-datasets/
 .babelrc
 .builderrc
 .eslintrc
@@ -19,10 +17,13 @@ demo/.*\.css
 
 # ignore python files/folders
 setup.py
+usage.py
+setup.py
 requirements.txt
 MANIFEST.in
 CHANGELOG.md
-tests/
-.pylintrc
+test/
+# CRAN has weird LICENSE requirements
+LICENSE.txt
 ^.*\.Rproj$
 ^\.Rproj\.user$
