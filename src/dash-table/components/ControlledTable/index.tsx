@@ -796,8 +796,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             </div>
             {!this.displayPagination ? null : (
                 <div>
-                    <button className='previous-page' onClick={this.loadPrevious}>Previous</button>
-                    <button className='next-page' onClick={this.loadNext}>Next</button>
+                    <button className='previous-page' onClick={this.loadPrevious}>&lt;</button>
+                    <button className='next-page' onClick={this.loadNext}>&gt;</button>
                 </div>
             )}
         </div>);

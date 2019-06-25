@@ -557,7 +557,7 @@ export const propTypes = {
      * `page_action` refers to a mode of the table where
      * not all of the rows are displayed at once: only a subset
      * are displayed (a "page") and the next subset of rows
-     * can viewed by clicking "Next" or "Previous" buttons
+     * can viewed by clicking "<" (previous) or ">" (next) buttons
      * at the bottom of the page.
      *
      * Pagination is used to improve performance: instead of
@@ -567,7 +567,7 @@ export const propTypes = {
      * With pagination, we can either page through data that exists
      * in the table (e.g. page through `10,000` rows in `data` `100` rows at a time)
      * or we can update the data on-the-fly with callbacks
-     * when the user clicks on the "Previous" or "Next" buttons.
+     * when the user clicks on the "<" (previous) or ">" (next) buttons.
      * These modes can be toggled with this `page_action` parameter:
      * - `'native'`: all data is passed to the table up-front, paging logic is
      * handled by the table

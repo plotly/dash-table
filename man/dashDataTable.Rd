@@ -361,7 +361,7 @@ and not have borders between the columns.}
 \item{pagination_mode}{A value equal to: 'fe', 'be', true, false. "pagination" refers to a mode of the table where
 not all of the rows are displayed at once: only a subset
 are displayed (a "page") and the next subset of rows
-can viewed by clicking "Next" or "Previous" buttons
+can viewed by clicking "<" (previous) or ">" (next) buttons
 at the bottom of the page.
 
 Pagination is used to improve performance: instead of
@@ -371,7 +371,7 @@ we only display a subset of them.
 With pagination, we can either page through data that exists
 in the table (e.g. page through `10,000` rows in `data` `100` rows at a time)
 or we can update the data on-the-fly with callbacks
-when the user clicks on the "Previous" or "Next" buttons.
+when the user clicks on the "<" (previous) or ">" (next) buttons.
 These modes can be toggled with this `pagination_mode` parameter:
 - `'fe'` refers to "front-end" paging: passing large data up-front
 - `'be'` refers to "back-end" paging: updating the data on the fly via callbacks
@@ -759,4 +759,3 @@ across all pages.}
 Subscribe to [https://github.com/plotly/dash-table/issues/168](https://github.com/plotly/dash-table/issues/168)
 for updates on the dropdown API.}
 }
-
