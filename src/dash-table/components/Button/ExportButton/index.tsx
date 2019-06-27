@@ -9,80 +9,109 @@ import keys from 'ramda/es/keys';
 import trim from 'ramda/es/trim';
 import value from 'core/cache/value';
 import { filter } from 'minimatch';
+import merge from 'ramda/es/merge';
 
 interface IExportButtonProps {
     export_format: string;
     virtual_data: IDerivedData;
-    columns: IColumn[] & IVisibleColumn[]
+    columns: IColumn[] & IVisibleColumn[];
+    merge_duplicate_headers: boolean;
+}
+
+interface IMergeObject {
+    s: {r: number, c: number};
+    e: {r: number, c: number};
 }
 export default class ExportButton extends Component<IExportButtonProps, any> {
-    handleExport = () => {
-        const columnID = this.props.columns.map(column=> column.id);
-        const columnHeaders = this.props.columns.map(column => column.name)
+
+    findMaxLength = (array: any[]) => {
         let maxLength = 0;
-        columnHeaders.forEach(row => { if (row instanceof Array && row.length > maxLength) {
+        array.forEach(row => { if (row instanceof Array && row.length > maxLength) {
             maxLength = row.length;
         }});
-        const newArray = columnHeaders.map(row=> {
+        return maxLength;
+    }
+
+    transformMultDimArray = (array: (string | string[])[], maxLength: number) => {
+        const newArray = array.map(row=> {
             if (row instanceof Array && row.length < maxLength) {
-                return row.concat(Array(maxLength -row.length).fill(""));
+                return row.concat(Array(maxLength - row.length).fill(""));
             }
-            if (row instanceof String || typeof(row) === 'string' ){
-                let returnArray = Array(maxLength).fill(row);
-                returnArray[0] = row;
-                return returnArray;
+            if (row instanceof String || typeof(row) === 'string' ) {
+                return Array(maxLength).fill(row);
             }
             return row;
         });
-        const Heading = R.transpose(newArray);
-        const dict: any = {};
-        Heading.forEach((row, rIndex)=> row.forEach((cell, cIndex) => {
-            const trimmedValue= cell.trim();
-            if (!dict[trimmedValue]) {
-                dict[trimmedValue] = {s:{r: rIndex, c: cIndex},e:{r: rIndex, c: cIndex}};
-            } else {
-                if (dict[trimmedValue] instanceof Array){
-                    const valueArray = dict[trimmedValue];
-                    let indexValue = -1
-                    valueArray.forEach(
-                    (mergeValue: { e: { r: number; c: number; }; s: { r: number; c: number; };}, index: number) => {
-                        if (mergeValue.e.c + 1 === cIndex){
-                            indexValue = index;
-                        }});
-                    if (indexValue === -1) {
-                        valueArray.push({e: { r: rIndex, c: cIndex }, s: { r: rIndex, c: cIndex }});
-                    } else if ( indexValue !== -1) {
-                        valueArray[indexValue].e = {r: rIndex, c: cIndex};
-                    }
-                } else if(cIndex === (dict[trimmedValue].e.c + 1)) {
-                    dict[trimmedValue].e = {r: rIndex, c: cIndex};
+        return newArray;
+    }
+
+    getHeadings = (array: string[][]) => {
+        let apiMergeArray: IMergeObject[] = [];
+ 
+        array.forEach((row, rIndex) => {
+            let dict: any = {};
+            row.forEach((cell, cIndex) => {
+                const trimmedValue= cell.trim();
+                if (!dict[trimmedValue]) {
+                    dict[trimmedValue] = {s: {r: rIndex, c: cIndex}, e: {r: rIndex, c: cIndex }};
                 } else {
-                    const valueArray = [dict[trimmedValue]];
-                    valueArray.push({e: { r: rIndex, c: cIndex }, s: { r: rIndex, c: cIndex }})
-                    dict[trimmedValue] = valueArray;
+                    if (cIndex === (dict[trimmedValue].e.c + 1)) {
+                        dict[trimmedValue].e = {r: rIndex, c: cIndex};
+                    } else {
+                        apiMergeArray.push(dict[trimmedValue]);
+                        dict[trimmedValue] = {s: {r: rIndex, c: cIndex}, e: {r: rIndex, c: cIndex }};
+                    }
                 }
-            }
-        }));
-        const apiArray : any = Object.values(dict).flat();
-        const abc = apiArray.filter((item: { s: { c: number; r: number; }; e: { c: number; r: number; }; }) => item.s.c !== item.e.c || item.s.r !== item.e.r);
+            });
+            apiMergeArray = apiMergeArray.concat(Object.values(dict));
+        });
+
+        apiMergeArray = apiMergeArray.filter((item: IMergeObject) => item.s.c !== item.e.c || item.s.r !== item.e.r);
+        return apiMergeArray;
+    }
+
+    handleExport = () => {
+
+
+        const { columns, export_format, virtual_data, merge_duplicate_headers } = this.props;
+
+        const columnID = columns.map(column => column.id);
+        const columnHeaders = columns.map(column => column.name)
+
+        const maxLength = this.findMaxLength(columnHeaders);
+        const transformedArray = this.transformMultDimArray(columnHeaders, maxLength);
+
+        const Heading = R.transpose(transformedArray);
+
         const ws = XLSX.utils.aoa_to_sheet(Heading);
-        XLSX.utils.sheet_add_json(ws, this.props.virtual_data.data, {
-            header: columnID,
-            skipHeader: true,
-            origin: Heading.length
-           });
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "SheetJS");
-        if (this.props.export_format === 'xlsx') {
-            wb.Sheets.SheetJS["!merges"] = abc;
+
+        if (export_format === 'xlsx') {
+            if (merge_duplicate_headers){
+                const apiHeadings = this.getHeadings(Heading);
+                XLSX.utils.sheet_add_json(ws, virtual_data.data, {
+                    skipHeader: true,
+                    origin: Heading.length
+                   });
+                wb.Sheets.SheetJS["!merges"] = apiHeadings;
+            } else {
+                XLSX.utils.sheet_add_json(ws, virtual_data.data, {
+                    skipHeader: true,
+                    origin: Heading.length
+                });
+            }
             XLSX.writeFile(wb, 'Data.xlsx', {bookType: 'xlsx', type: 'buffer'});
-        } else if (this.props.export_format === 'csv') {
+        } else if (export_format === 'csv') {
+            XLSX.utils.sheet_add_json(ws, virtual_data.data, { header: columnID });
             XLSX.writeFile(wb, 'Data.csv', {bookType: 'csv', type: 'buffer'});
         }
     }
 
     render() {
-        const isFormatSupported = this.props.export_format === 'csv' || this.props.export_format === 'xlsx';
+        const { export_format } = this.props;
+        const isFormatSupported = export_format === 'csv' || export_format === 'xlsx';
+
         return (
             <div>
                 { !isFormatSupported ? null : (
