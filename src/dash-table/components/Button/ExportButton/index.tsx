@@ -6,6 +6,9 @@ import React, {
 import { IDerivedData, IColumn, IVisibleColumn } from 'dash-table/components/Table/props';
 import { ifRowIndex } from 'dash-table/conditional';
 import keys from 'ramda/es/keys';
+import trim from 'ramda/es/trim';
+import value from 'core/cache/value';
+import { filter } from 'minimatch';
 
 interface IExportButtonProps {
     export_format: string;
@@ -34,16 +37,34 @@ export default class ExportButton extends Component<IExportButtonProps, any> {
         const Heading = R.transpose(newArray);
         const dict: any = {};
         Heading.forEach((row, rIndex)=> row.forEach((cell, cIndex) => {
-            if(cell === ""){
-                return;
-            }
-            if (!dict[cell]) {
-                dict[cell] = {s:{r:rIndex,c:cIndex},e:{r:rIndex,c:cIndex}};
-            } else if (rIndex === (dict[cell].e.r +1) || cIndex === (dict[cell].e.c + 1)){
-                dict[cell].e = {r:rIndex,c:cIndex};
+            const trimmedValue= cell.trim();
+            if (!dict[trimmedValue]) {
+                dict[trimmedValue] = {s:{r: rIndex, c: cIndex},e:{r: rIndex, c: cIndex}};
+            } else {
+                if (dict[trimmedValue] instanceof Array){
+                    const valueArray = dict[trimmedValue];
+                    let indexValue = -1
+                    valueArray.forEach(
+                    (mergeValue: { e: { r: number; c: number; }; s: { r: number; c: number; };}, index: number) => {
+                        if (mergeValue.e.c + 1 === cIndex){
+                            indexValue = index;
+                        }});
+                    if (indexValue === -1) {
+                        valueArray.push({e: { r: rIndex, c: cIndex }, s: { r: rIndex, c: cIndex }});
+                    } else if ( indexValue !== -1) {
+                        valueArray[indexValue].e = {r: rIndex, c: cIndex};
+                    }
+                } else if(cIndex === (dict[trimmedValue].e.c + 1)) {
+                    dict[trimmedValue].e = {r: rIndex, c: cIndex};
+                } else {
+                    const valueArray = [dict[trimmedValue]];
+                    valueArray.push({e: { r: rIndex, c: cIndex }, s: { r: rIndex, c: cIndex }})
+                    dict[trimmedValue] = valueArray;
+                }
             }
         }));
-        const abc : any = Object.values(dict);
+        const apiArray : any = Object.values(dict).flat();
+        const abc = apiArray.filter((item: { s: { c: number; r: number; }; e: { c: number; r: number; }; }) => item.s.c !== item.e.c || item.s.r !== item.e.r);
         const ws = XLSX.utils.aoa_to_sheet(Heading);
         XLSX.utils.sheet_add_json(ws, this.props.virtual_data.data, {
             header: columnID,
@@ -58,7 +79,6 @@ export default class ExportButton extends Component<IExportButtonProps, any> {
         } else if (this.props.export_format === 'csv') {
             XLSX.writeFile(wb, 'Data.csv', {bookType: 'csv', type: 'buffer'});
         }
-
     }
 
     render() {
