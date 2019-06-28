@@ -10,7 +10,6 @@ import trim from 'ramda/es/trim';
 import value from 'core/cache/value';
 import { filter } from 'minimatch';
 import merge from 'ramda/es/merge';
-
 interface IExportButtonProps {
     export_format: string;
     virtual_data: IDerivedData;
@@ -22,6 +21,7 @@ interface IMergeObject {
     s: {r: number, c: number};
     e: {r: number, c: number};
 }
+
 export default class ExportButton extends Component<IExportButtonProps, any> {
 
     findMaxLength = (array: any[]) => {
@@ -37,7 +37,10 @@ export default class ExportButton extends Component<IExportButtonProps, any> {
             if (row instanceof Array && row.length < maxLength) {
                 return row.concat(Array(maxLength - row.length).fill(""));
             }
-            if (row instanceof String || typeof(row) === 'string' ) {
+            if (maxLength ===0) {
+                return [row];
+            }
+            if (row instanceof String || typeof(row) === 'string') {
                 return Array(maxLength).fill(row);
             }
             return row;
@@ -47,7 +50,6 @@ export default class ExportButton extends Component<IExportButtonProps, any> {
 
     getHeadings = (array: string[][]) => {
         let apiMergeArray: IMergeObject[] = [];
- 
         array.forEach((row, rIndex) => {
             let dict: any = {};
             row.forEach((cell, cIndex) => {
@@ -63,15 +65,14 @@ export default class ExportButton extends Component<IExportButtonProps, any> {
                     }
                 }
             });
-            apiMergeArray = apiMergeArray.concat(Object.values(dict));
+            const objectsToMerge : IMergeObject[] = Object.values(dict);
+            apiMergeArray = R.concat(apiMergeArray, objectsToMerge );
         });
 
-        apiMergeArray = apiMergeArray.filter((item: IMergeObject) => item.s.c !== item.e.c || item.s.r !== item.e.r);
-        return apiMergeArray;
+        return R.filter((item: IMergeObject) => item.s.c !== item.e.c || item.s.r !== item.e.r, apiMergeArray);
     }
 
     handleExport = () => {
-
 
         const { columns, export_format, virtual_data, merge_duplicate_headers } = this.props;
 
@@ -80,7 +81,6 @@ export default class ExportButton extends Component<IExportButtonProps, any> {
 
         const maxLength = this.findMaxLength(columnHeaders);
         const transformedArray = this.transformMultDimArray(columnHeaders, maxLength);
-
         const Heading = R.transpose(transformedArray);
 
         const ws = XLSX.utils.aoa_to_sheet(Heading);
@@ -88,19 +88,16 @@ export default class ExportButton extends Component<IExportButtonProps, any> {
         XLSX.utils.book_append_sheet(wb, ws, "SheetJS");
 
         if (export_format === 'xlsx') {
+
+            XLSX.utils.sheet_add_json(ws, virtual_data.data, {
+                skipHeader: true,
+                origin: Heading.length
+            });
+
             if (merge_duplicate_headers){
-                const apiHeadings = this.getHeadings(Heading);
-                XLSX.utils.sheet_add_json(ws, virtual_data.data, {
-                    skipHeader: true,
-                    origin: Heading.length
-                   });
-                wb.Sheets.SheetJS["!merges"] = apiHeadings;
-            } else {
-                XLSX.utils.sheet_add_json(ws, virtual_data.data, {
-                    skipHeader: true,
-                    origin: Heading.length
-                });
-            }
+                wb.Sheets.SheetJS["!merges"] = this.getHeadings(Heading);;
+            };
+
             XLSX.writeFile(wb, 'Data.xlsx', {bookType: 'xlsx', type: 'buffer'});
         } else if (export_format === 'csv') {
             XLSX.utils.sheet_add_json(ws, virtual_data.data, { header: columnID });
