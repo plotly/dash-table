@@ -79,6 +79,7 @@
     "npm": "^6.9.2",
     "npm-run-all": "^4.1.5",
     "papaparse": "^5.0.0",
+    "prop-types": "^15.7.2",
     "ramda": "^0.26.1",
     "raw-loader": "^3.0.0",
     "react": "16.8.6",
@@ -101,6 +102,7 @@
     "/dash_table/bundle*{.js,.map}"
   ],
   "peerDependencies": {
+    "prop-types": "^15.7.2",
     "react": ">=0.14",
     "react-dom": ">=0.14"
   },

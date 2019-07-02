@@ -25,7 +25,6 @@ module.exports = (options = {}) => {
         output: {
             path: path.resolve(__dirname, `./../../${dashLibraryName}`),
             filename: '[name].js',
-            library: dashLibraryName,
             libraryTarget: 'umd'
         },
         devtool: 'source-map',
