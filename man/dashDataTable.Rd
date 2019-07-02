@@ -735,3 +735,31 @@ while `derived_virtual_row_ids` contains IDs across all pages.}
 `selected_rows` as they appear after filtering and sorting,
 across all pages.}
 }
+
+\examples{
+\dontrun{
+library(dashHtmlComponents)
+library(dashTable)
+library(dash)
+
+df <- read.csv(url(
+  'https://raw.githubusercontent.com/plotly/datasets/master/solar.csv'
+  ),  
+  check.names=FALSE,
+  stringsAsFactors=FALSE
+)
+
+app <- Dash$new()
+
+app$layout(dashDataTable(
+  id = 'table',
+  columns = lapply(colnames(df), function(x) {
+    list(name = x, id = x)
+  }), 
+  data = df_to_list(df) 
+)
+)
+
+app$run_server()
+}
+}
