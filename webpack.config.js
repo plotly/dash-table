@@ -1,9 +1,4 @@
 let config = require('./.config/webpack/base.js')();
-config.externals['prop-types'] = {
-    root: 'PropTypes',
-    commonjs2: 'prop-types',
-    commonjs: 'prop-types',
-    amd: 'prop-types'
-};
+config.externals['prop-types'] = 'PropTypes';
 
 module.exports = config;
