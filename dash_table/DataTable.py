@@ -5,7 +5,13 @@ from dash.development.base_component import Component, _explicitize_args
 
 class DataTable(Component):
     """A DataTable component.
-
+Dash DataTable is an interactive table component designed for 
+designed for viewing, editing, and exploring large datasets.
+DataTable is rendered with standard, semantic HTML <table/> markup,
+which makes it accessible, responsive, and easy to style. This
+component was written from scratch in React.js specifically for the 
+Dash community. Its API was designed to be ergonomic and its behavior
+is completely customizable through its properties.
 
 Keyword arguments:
 - active_cell (dict; optional): The row and column indices and IDs of the currently active cell. active_cell has the following type: dict containing keys 'row', 'column', 'row_id', 'column_id'.
