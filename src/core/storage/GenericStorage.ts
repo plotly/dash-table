@@ -2,7 +2,7 @@ import * as R from 'ramda';
 
 import IStorage from './IStorage';
 import ShimStorage from './ShimStorage';
-import { DashStorageEvents, DashStorageType } from 'dash-table/dash/LocalStorage';
+import DashStorageEvents, { DashStorageType } from 'dash-table/dash/DashStorageEvents';
 
 export default class GenericStorage implements IStorage {
     constructor(

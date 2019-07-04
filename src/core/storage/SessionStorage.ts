@@ -1,5 +1,5 @@
 import GenericStorage from './GenericStorage';
-import { DashStorageType } from 'dash-table/dash/LocalStorage';
+import { DashStorageType } from 'dash-table/dash/DashStorageEvents';
 
 export default class SessionStorage extends GenericStorage {
     constructor(id: string) {
