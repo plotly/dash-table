@@ -12,11 +12,11 @@ import Sanitizer from './Sanitizer';
 import MenuBar from 'dash-table/components/MenuBar';
 
 /**
- * Dash DataTable is an interactive table component designed for 
+ * Dash DataTable is an interactive table component designed for
  * designed for viewing, editing, and exploring large datasets.
  * DataTable is rendered with standard, semantic HTML <table/> markup,
  * which makes it accessible, responsive, and easy to style. This
- * component was written from scratch in React.js specifically for the 
+ * component was written from scratch in React.js specifically for the
  * Dash community. Its API was designed to be ergonomic and its behavior
  * is completely customizable through its properties.
  */
