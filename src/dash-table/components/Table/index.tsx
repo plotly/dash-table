@@ -166,6 +166,6 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
     private readonly filterMap = derivedFilterMap();
 
     private readonly controlledPropsHelper = controlledPropsHelper();
-    private readonly updatePersistedProps = persistedPropsHelper();
+    private readonly updatePersistedProps = persistedPropsHelper(this.props.id);
     private readonly updateDerivedProps = derivedPropsHelper();
 }
