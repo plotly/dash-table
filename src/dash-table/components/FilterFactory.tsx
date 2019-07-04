@@ -7,7 +7,7 @@ import memoizerCache from 'core/cache/memoizer';
 import { memoizeOne } from 'core/memoizer';
 
 import ColumnFilter from 'dash-table/components/Filter/Column';
-import { ColumnId, IVisibleColumn, VisibleColumns, RowSelection, TableAction } from 'dash-table/components/Table/props';
+import { ColumnId, IColumn, Columns, RowSelection, TableAction } from 'dash-table/components/Table/props';
 import derivedFilterStyles, { derivedFilterOpStyles } from 'dash-table/derived/filter/wrapperStyles';
 import derivedHeaderOperations from 'dash-table/derived/header/operations';
 import { derivedRelevantFilterStyles } from 'dash-table/derived/style';
@@ -24,7 +24,6 @@ type SetFilter = (
 ) => void;
 
 export interface IFilterOptions {
-    columns: VisibleColumns;
     filter_query: string;
     filter_action: TableAction;
     id: string;
@@ -37,6 +36,7 @@ export interface IFilterOptions {
     style_cell_conditional: Cells;
     style_filter: Style;
     style_filter_conditional: BasicFilters;
+    visibleColumns: Columns;
 }
 
 const NO_FILTERS: JSX.Element[][] = [];
@@ -55,7 +55,7 @@ export default class FilterFactory {
 
     }
 
-    private onChange = (column: IVisibleColumn, map: Map<string, SingleColumnSyntaxTree>, setFilter: SetFilter, ev: any) => {
+    private onChange = (column: IColumn, map: Map<string, SingleColumnSyntaxTree>, setFilter: SetFilter, ev: any) => {
         Logger.debug('Filter -- onChange', column.id, ev.target.value && ev.target.value.trim());
 
         const value = ev.target.value.trim();
@@ -74,7 +74,7 @@ export default class FilterFactory {
     }
 
     private filter = memoizerCache<[ColumnId, number]>()((
-        column: IVisibleColumn,
+        column: IColumn,
         index: number,
         map: Map<string, SingleColumnSyntaxTree>,
         setFilter: SetFilter
@@ -107,7 +107,6 @@ export default class FilterFactory {
         filterOpEdges: IEdgesMatrices | undefined
     ) {
         const {
-            columns,
             filter_action,
             map,
             row_deletable,
@@ -116,7 +115,8 @@ export default class FilterFactory {
             style_cell,
             style_cell_conditional,
             style_filter,
-            style_filter_conditional
+            style_filter_conditional,
+            visibleColumns
         } = this.props;
 
         if (filter_action === TableAction.None) {
@@ -131,7 +131,7 @@ export default class FilterFactory {
         );
 
         const wrapperStyles = this.wrapperStyles(
-            this.filterStyles(columns, relevantStyles),
+            this.filterStyles(visibleColumns, relevantStyles),
             filterEdges
         );
 
@@ -141,14 +141,14 @@ export default class FilterFactory {
             relevantStyles
         )[0];
 
-        const filters = R.addIndex<IVisibleColumn, JSX.Element>(R.map)((column, index) => {
+        const filters = R.addIndex<IColumn, JSX.Element>(R.map)((column, index) => {
             return this.filter.get(column.id, index)(
                 column,
                 index,
                 map,
                 setFilter
             );
-        }, columns);
+        }, visibleColumns);
 
         const styledFilters = this.getFilterCells(
             filters,

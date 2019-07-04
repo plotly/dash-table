@@ -317,12 +317,12 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         const e = event;
         const {
             active_cell,
-            columns,
             selected_cells,
             start_cell,
             end_cell,
             setProps,
-            viewport
+            viewport,
+            visibleColumns
         } = this.props;
 
         // This is mostly to prevent TABing also triggering native HTML tab
@@ -414,7 +414,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             if (active_cell.column > minCol) {
                 minCol++;
                 endCol = minCol;
-            } else if (maxCol < columns.length - 1) {
+            } else if (maxCol < visibleColumns.length - 1) {
                 maxCol++;
                 endCol = maxCol;
             }
@@ -432,12 +432,12 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
         const finalSelected = makeSelection(
             {minRow, maxRow, minCol, maxCol},
-            columns, viewport
+            visibleColumns, viewport
         );
 
         const newProps: Partial<ICellFactoryProps> = {
             is_focused: false,
-            end_cell: makeCell(endRow, endCol, columns, viewport),
+            end_cell: makeCell(endRow, endCol, visibleColumns, viewport),
             selected_cells: finalSelected
         };
 
@@ -448,7 +448,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             newProps.start_cell = makeCell(
                 newStartRow,
                 newStartCol,
-                columns,
+                visibleColumns,
                 viewport
             );
         }
@@ -458,11 +458,11 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
     deleteCell = (event: any) => {
         const {
-            columns,
             data,
             selected_cells,
             setProps,
-            viewport
+            viewport,
+            visibleColumns
         } = this.props;
 
         event.preventDefault();
@@ -475,9 +475,9 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         );
 
         realCells.forEach(cell => {
-            if (columns[cell[1]].editable) {
+            if (visibleColumns[cell[1]].editable) {
                 newData = R.set(
-                    R.lensPath([cell[0], columns[cell[1]].id]),
+                    R.lensPath([cell[0], visibleColumns[cell[1]].id]),
                     '',
                     newData
                 );
@@ -490,7 +490,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
     }
 
     getNextCell = (event: any, { restrictToSelection, currentCell }: any) => {
-        const { columns, selected_cells, viewport } = this.props;
+        const { selected_cells, viewport, visibleColumns } = this.props;
 
         const e = event;
 
@@ -508,7 +508,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             case KEY_CODES.TAB:
                 nextCoords = restrictToSelection
                     ? selectionCycle([row, column + 1], selected_cells)
-                    : [row, R.min(columns.length - 1, column + 1)];
+                    : [row, R.min(visibleColumns.length - 1, column + 1)];
                 break;
 
             case KEY_CODES.ARROW_UP:
@@ -529,30 +529,30 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                     `Table.getNextCell: unknown navigation keycode ${e.keyCode}`
                 );
         }
-        return makeCell(nextCoords[0], nextCoords[1], columns, viewport);
+        return makeCell(nextCoords[0], nextCoords[1], visibleColumns, viewport);
     }
 
     onCopy = (e: any) => {
         const {
-            columns,
             selected_cells,
-            viewport
+            viewport,
+            visibleColumns
         } = this.props;
 
-        TableClipboardHelper.toClipboard(e, selected_cells, columns, viewport.data);
+        TableClipboardHelper.toClipboard(e, selected_cells, visibleColumns, viewport.data);
         this.$el.focus();
     }
 
     onPaste = (e: any) => {
         const {
             active_cell,
-            columns,
             data,
             editable,
             filter_query,
             setProps,
             sort_by,
-            viewport
+            viewport,
+            visibleColumns
         } = this.props;
 
         if (!editable || !active_cell) {
@@ -563,7 +563,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             e,
             active_cell,
             viewport.indices,
-            columns,
+            visibleColumns,
             data,
             true,
             !sort_by.length || !filter_query.length
@@ -680,7 +680,6 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
     render() {
         const {
             id,
-            columns,
             tooltip_conditional,
             tooltip,
             currentTooltip,
@@ -698,7 +697,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             uiViewport,
             viewport,
             virtualized,
-            virtualization
+            virtualization,
+            visibleColumns
         } = this.props;
 
         const fragmentClasses = [
@@ -728,7 +728,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             ...(style_as_list_view ? ['dash-list-view'] : []),
             ...(empty[0][1] ? ['dash-empty-01'] : []),
             ...(empty[1][1] ? ['dash-empty-11'] : []),
-            ...(columns.length ? [] : ['dash-no-columns']),
+            ...(visibleColumns.length ? [] : ['dash-no-columns']),
             ...(virtualized.data.length ? [] : ['dash-no-data']),
             ...(filter_action !== TableAction.None ? [] : ['dash-no-filter'])
         ];

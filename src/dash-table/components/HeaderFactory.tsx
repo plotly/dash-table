@@ -4,7 +4,7 @@ import React, { CSSProperties } from 'react';
 import { arrayMap2 } from 'core/math/arrayZipMap';
 import { matrixMap2, matrixMap3 } from 'core/math/matrixZipMap';
 
-import { ControlledTableProps, VisibleColumns } from 'dash-table/components/Table/props';
+import { ControlledTableProps, Columns } from 'dash-table/components/Table/props';
 import derivedHeaderContent from 'dash-table/derived/header/content';
 import getHeaderRows from 'dash-table/derived/header/headerRows';
 import getIndices from 'dash-table/derived/header/indices';
@@ -37,7 +37,6 @@ export default class HeaderFactory {
         const props = this.props;
 
         const {
-            columns,
             data,
             merge_duplicate_headers,
             page_action,
@@ -50,12 +49,13 @@ export default class HeaderFactory {
             style_cell,
             style_cell_conditional,
             style_header,
-            style_header_conditional
+            style_header_conditional,
+            visibleColumns
         } = props;
 
-        const headerRows = getHeaderRows(columns);
+        const headerRows = getHeaderRows(visibleColumns);
 
-        const labelsAndIndices = this.getLabelsAndIndices(columns, headerRows, merge_duplicate_headers);
+        const labelsAndIndices = this.getLabelsAndIndices(visibleColumns, headerRows, merge_duplicate_headers);
 
         const relevantStyles = this.relevantStyles(
             style_cell,
@@ -71,7 +71,7 @@ export default class HeaderFactory {
         );
 
         const wrapperStyles = this.headerStyles(
-            columns,
+            visibleColumns,
             headerRows,
             relevantStyles
         );
@@ -83,13 +83,13 @@ export default class HeaderFactory {
         );
 
         const wrappers = this.headerWrappers(
-            columns,
+            visibleColumns,
             labelsAndIndices,
             merge_duplicate_headers
         );
 
         const contents = this.headerContent(
-            columns,
+            visibleColumns,
             data,
             labelsAndIndices,
             sort_action,
@@ -116,7 +116,7 @@ export default class HeaderFactory {
     }
 
     getLabelsAndIndices = memoizeOne((
-        columns: VisibleColumns,
+        columns: Columns,
         headerRows: number,
         merge_duplicate_headers: boolean
     ) => {

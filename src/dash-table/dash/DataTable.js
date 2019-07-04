@@ -9,6 +9,7 @@ import Logger from 'core/Logger';
 import genRandomId from 'dash-table/utils/generate';
 import isValidProps from './validate';
 import Sanitizer from './Sanitizer';
+import MenuBar from 'dash-table/components/MenuBar';
 
 export default class DataTable extends Component {
     constructor(props) {
@@ -405,6 +406,8 @@ export const propTypes = {
         row_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         column_id: PropTypes.string
     }),
+
+    hidden_columns: PropTypes.arrayOf(PropTypes.string),
 
     /**
      * The ID of the table.

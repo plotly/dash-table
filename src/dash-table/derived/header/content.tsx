@@ -10,14 +10,14 @@ import {
     ColumnId,
     Data,
     SortMode,
-    VisibleColumns,
-    IVisibleColumn,
+    Columns,
+    IColumn,
     SetProps,
     TableAction
 } from 'dash-table/components/Table/props';
 import * as actions from 'dash-table/utils/actions';
 
-function deleteColumn(column: IVisibleColumn, columns: VisibleColumns, columnRowIndex: any, setProps: SetProps, data: Data) {
+function deleteColumn(column: IColumn, columns: Columns, columnRowIndex: any, setProps: SetProps, data: Data) {
     return () => {
         setProps(actions.deleteColumn(column, columns, columnRowIndex, data));
     };
@@ -55,7 +55,7 @@ function doSort(columnId: ColumnId, sortBy: SortBy, mode: SortMode, setProps: Se
     };
 }
 
-function editColumnName(column: IVisibleColumn, columns: VisibleColumns, columnRowIndex: any, setProps: SetProps) {
+function editColumnName(column: IColumn, columns: Columns, columnRowIndex: any, setProps: SetProps) {
     return () => {
         setProps(actions.editColumnName(column, columns, columnRowIndex));
     };
@@ -80,7 +80,7 @@ function getSortingIcon(columnId: ColumnId, sortBy: SortBy) {
 }
 
 function getter(
-    columns: VisibleColumns,
+    columns: Columns,
     data: Data,
     labelsAndIndices: R.KeyValuePair<any[], number[]>[],
     sort_action: TableAction,

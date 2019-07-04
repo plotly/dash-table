@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import * as R from 'ramda';
 
 /*#if DEV*/
@@ -14,7 +14,6 @@ import derivedSelectedRows from 'dash-table/derived/selectedRows';
 import derivedViewportData from 'dash-table/derived/data/viewport';
 import derivedVirtualData from 'dash-table/derived/data/virtual';
 import derivedVirtualizedData from 'dash-table/derived/data/virtualized';
-import derivedVisibleColumns from 'dash-table/derived/column/visible';
 
 import QuerySyntaxTree from 'dash-table/syntax-tree/QuerySyntaxTree';
 
@@ -24,7 +23,8 @@ import {
     IState,
     StandaloneState,
     SanitizedAndDerivedProps,
-    TableAction
+    TableAction,
+    IColumn
 } from './props';
 
 import 'react-select/dist/react-select.css';
@@ -33,6 +33,7 @@ import './Dropdown.css';
 import { isEqual } from 'core/comparer';
 import { SingleColumnSyntaxTree } from 'dash-table/syntax-tree';
 import derivedFilterMap from 'dash-table/derived/filter/map';
+import MenuBar from '../MenuBar';
 
 const DERIVED_REGEX = /^derived_/;
 
@@ -47,7 +48,7 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
                 map: this.filterMap(
                     new Map<string, SingleColumnSyntaxTree>(),
                     props.filter_query,
-                    props.columns
+                    props.visibleColumns
                 )
             },
             rawFilterQuery: '',
@@ -67,7 +68,7 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
                 const map = this.filterMap(
                     currentMap,
                     nextProps.filter_query,
-                    nextProps.columns
+                    nextProps.visibleColumns
                 );
 
                 return map !== currentMap ? { workFilter: { map, value} } : null;
@@ -91,7 +92,33 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
         let controlled = this.getControlledProps();
         this.updateDerivedProps(controlled);
 
-        return (<ControlledTable {...controlled} />);
+        const {
+            allColumns,
+            hidden_columns,
+            setProps
+        } = controlled;
+
+        return (<Fragment>
+            <MenuBar
+                columns={allColumns}
+                hiddenColumns={hidden_columns}
+                toggleColumn={(c: IColumn) => {
+                    const hidden = hidden_columns ? hidden_columns.slice(0) : [];
+
+                    const cIndex = hidden.indexOf(c.id);
+                    if (cIndex >= 0) {
+                        hidden.splice(cIndex, 1);
+                    } else {
+                        hidden.push(c.id);
+                    }
+
+                    setProps({ hidden_columns: hidden });
+                }}
+                toggleColumnOps={() => { }}
+                toggleRowOps={() => { }}
+            />
+            <ControlledTable {...controlled} />)
+        </Fragment>);
     }
 
     private getControlledProps(): ControlledTableProps {
@@ -101,7 +128,6 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
         } = this;
 
         const {
-            columns,
             data,
             filter_query,
             filter_action,
@@ -114,11 +140,12 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
             uiCell,
             uiHeaders,
             uiViewport,
-            virtualization
+            virtualization,
+            visibleColumns
         } = R.merge(this.props, this.state) as (SanitizedAndDerivedProps & StandaloneState);
 
         const virtual = this.virtual(
-            columns,
+            visibleColumns,
             data,
             filter_action,
             filter_query,
@@ -159,8 +186,6 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
             setProps,
             virtual.data
         );
-
-        const visibleColumns = this.visibleColumns(columns);
 
         return R.mergeAll([
             this.props,
@@ -310,7 +335,6 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
     private readonly virtual = derivedVirtualData();
     private readonly virtualSelectedRows = derivedSelectedRows();
     private readonly virtualized = derivedVirtualizedData();
-    private readonly visibleColumns = derivedVisibleColumns();
 
     private readonly filterCache = memoizeOneWithFlag(filter_query => filter_query);
     private readonly paginationCache = memoizeOneWithFlag((page_current, page_size) => [page_current, page_size]);

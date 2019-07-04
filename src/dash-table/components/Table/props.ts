@@ -74,7 +74,6 @@ export type SelectedCells = ICellCoordinates[];
 export type SetProps = (...args: any[]) => void;
 export type SetState = (state: Partial<IState>) => void;
 export type SortAsNull = (string | number | boolean)[];
-export type VisibleColumns = IVisibleColumn[];
 
 export enum ChangeAction {
     Coerce = 'coerce',
@@ -153,7 +152,7 @@ export interface IDatetimeColumn extends ITypeColumn {
     validation?: IDateValidation;
 }
 
-export interface IBaseVisibleColumn {
+export interface IBaseColumn {
     deletable?: boolean | boolean[];
     editable: boolean;
     renamable?: boolean | boolean[];
@@ -169,11 +168,7 @@ export type StaticDropdowns = Partial<IStaticDropdowns>;
 
 export type Fixed = { headers: false, data?: 0 } | { headers: true, data?: number };
 export type IColumnType = INumberColumn | ITextColumn | IDatetimeColumn | IAnyColumn;
-export type IVisibleColumn = IBaseVisibleColumn & IColumnType;
-
-export type IColumn = IVisibleColumn & {
-    hidden?: boolean;
-};
+export type IColumn = IBaseColumn & IColumnType;
 
 interface IDatumObject {
     [key: string]: any;
@@ -273,6 +268,7 @@ export interface IProps {
     editable?: boolean;
     filter_query?: string;
     filter_action?: TableAction;
+    hidden_columns?: string[];
     locale_format: INumberLocale;
     merge_duplicate_headers?: boolean;
     fixed_columns?: Fixed;
@@ -367,13 +363,16 @@ interface IDerivedProps {
 
 export type PropsWithDefaults = IProps & IDefaultProps;
 
-export type SanitizedProps = Omit<
-    Omit<
-        Merge<PropsWithDefaults, { fixed_columns: number; fixed_rows: number; }>,
-        'locale_format'
-    >,
-    'sort_as_null'
->;
+export type SanitizedProps = Omit<Omit<Omit<
+    Merge<PropsWithDefaults, {
+        fixed_columns: number;
+        fixed_rows: number;
+        visibleColumns: Columns;
+        allColumns: Columns;
+    }>,
+    'columns'>,
+    'locale_format'>,
+    'sort_as_null'>;
 
 export type SanitizedAndDerivedProps = SanitizedProps & IDerivedProps;
 
@@ -381,7 +380,6 @@ export type ControlledTableProps = SanitizedProps & IState & {
     setProps: SetProps;
     setState: SetState;
 
-    columns: VisibleColumns;
     currentTooltip: IUSerInterfaceTooltip;
     paginator: IPaginator;
     viewport: IDerivedData;
@@ -393,7 +391,6 @@ export type ControlledTableProps = SanitizedProps & IState & {
 
 export interface ICellFactoryProps {
     active_cell: ICellCoordinates;
-    columns: VisibleColumns;
     dropdown: StaticDropdowns;
     dropdown_conditional: ConditionalDropdowns;
     dropdown_data: DataDropdowns;
@@ -401,19 +398,19 @@ export interface ICellFactoryProps {
     currentTooltip: IUSerInterfaceTooltip;
     data: Data;
     editable: boolean;
-    id: string;
-    is_focused?: boolean;
+    end_cell: ICellCoordinates;
     fixed_columns: number;
     fixed_rows: number;
+    id: string;
+    is_focused?: boolean;
     paginator: IPaginator;
     row_deletable: boolean;
     row_selectable: RowSelection;
     selected_cells: SelectedCells;
-    start_cell: ICellCoordinates;
-    end_cell: ICellCoordinates;
     selected_rows: Indices;
     setProps: SetProps;
     setState: SetState;
+    start_cell: ICellCoordinates;
     style_cell: Style;
     style_data: Style;
     style_filter: Style;
@@ -429,4 +426,5 @@ export interface ICellFactoryProps {
     viewport: IDerivedData;
     virtualization: boolean;
     virtualized: IVirtualizedDerivedData;
+    visibleColumns: Columns;
 }

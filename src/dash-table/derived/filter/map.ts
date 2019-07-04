@@ -2,7 +2,7 @@ import * as R from 'ramda';
 
 import { memoizeOneFactory } from 'core/memoizer';
 
-import { VisibleColumns, IVisibleColumn } from 'dash-table/components/Table/props';
+import { Columns, IColumn } from 'dash-table/components/Table/props';
 import { SingleColumnSyntaxTree, MultiColumnsSyntaxTree, getSingleColumnMap } from 'dash-table/syntax-tree';
 
 const cloneIf = (
@@ -13,7 +13,7 @@ const cloneIf = (
 export default memoizeOneFactory((
     map: Map<string, SingleColumnSyntaxTree>,
     query: string,
-    columns: VisibleColumns
+    columns: Columns
 ): Map<string, SingleColumnSyntaxTree> => {
     const multiQuery = new MultiColumnsSyntaxTree(query);
     const reversedMap = getSingleColumnMap(multiQuery, columns);
@@ -63,7 +63,7 @@ export default memoizeOneFactory((
 
 export const updateMap = (
     map: Map<string, SingleColumnSyntaxTree>,
-    column: IVisibleColumn,
+    column: IColumn,
     value: any
 ): Map<string, SingleColumnSyntaxTree> => {
     const safeColumnId = column.id.toString();

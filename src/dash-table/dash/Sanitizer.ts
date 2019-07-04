@@ -62,21 +62,31 @@ const applyDefaultsToColumns = (defaultLocale: INumberLocale, defaultSort: SortA
 
 const applyDefaultToLocale = (locale: INumberLocale) => getLocale(locale);
 
+const getVisibleColumns = (
+    columns: Columns,
+    hiddenColumns: string[] | undefined
+) => R.filter(column => !hiddenColumns || hiddenColumns.indexOf(column.id) < 0, columns);
+
 export default class Sanitizer {
     sanitize(props: PropsWithDefaults): SanitizedProps {
         const locale_format = this.applyDefaultToLocale(props.locale_format);
+        const allColumns = this.applyDefaultsToColumns(locale_format, props.sort_as_null, props.columns, props.editable);
+        const visibleColumns = this.getVisibleColumns(allColumns, props.hidden_columns);
 
         return R.merge(props, {
-            columns: this.applyDefaultsToColumns(locale_format, props.sort_as_null, props.columns, props.editable),
+            allColumns,
             fixed_columns: getFixedColumns(props.fixed_columns, props.row_deletable, props.row_selectable),
             fixed_rows: getFixedRows(props.fixed_rows, props.columns, props.filter_action),
-            locale_format
+            locale_format,
+            visibleColumns
         });
     }
 
     private readonly applyDefaultToLocale = memoizeOne(applyDefaultToLocale);
 
     private readonly applyDefaultsToColumns = memoizeOne(applyDefaultsToColumns);
+
+    private readonly getVisibleColumns = memoizeOne(getVisibleColumns);
 }
 
 export const getLocale = (...locales: Partial<INumberLocale>[]): INumberLocale =>
