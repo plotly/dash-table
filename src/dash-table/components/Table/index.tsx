@@ -34,10 +34,13 @@ import { isEqual } from 'core/comparer';
 import { SingleColumnSyntaxTree } from 'dash-table/syntax-tree';
 import derivedFilterMap from 'dash-table/derived/filter/map';
 import MenuBar from '../MenuBar';
+import LocalStorage from 'core/storage/LocalStorage';
 
 const DERIVED_REGEX = /^derived_/;
 
 export default class Table extends Component<SanitizedAndDerivedProps, StandaloneState> {
+    private readonly storage = new LocalStorage();
+
     constructor(props: SanitizedAndDerivedProps) {
         super(props);
 
@@ -91,6 +94,7 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
     render() {
         let controlled = this.getControlledProps();
         this.updateDerivedProps(controlled);
+        this.updatePersistedProps(controlled);
 
         const {
             allColumns,
@@ -112,6 +116,7 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
                         hidden.push(c.id);
                     }
 
+                    console.log(this.storage);
                     setProps({ hidden_columns: hidden });
                 }}
                 toggleColumnOps={() => { }}
@@ -191,7 +196,6 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
             this.props,
             this.state,
             {
-                columns: visibleColumns,
                 paginator,
                 setProps,
                 setState,
@@ -203,6 +207,32 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
             }
         ]) as ControlledTableProps;
     }
+
+    private updatePersistedProps(controlled: ControlledTableProps) {
+        const {
+            hidden_columns,
+            setProps
+        } = controlled;
+
+        const isFirst = this.hiddenColumnsFlag(hidden_columns).first;
+        this.persistHiddenColumns(isFirst, setProps, hidden_columns);
+    }
+
+    private readonly hiddenColumnsFlag = memoizeOneWithFlag(hidden_columns => hidden_columns);
+    private readonly persistHiddenColumns = memoizeOne((isFirst: boolean, setProps: SetProps, hiddenColumns?: string[]) => {
+        if (hiddenColumns) {
+            // persist to storage
+            this.storage.setItem(`${this.props.id}::hidden_columns`, JSON.stringify(hiddenColumns));
+        } else if (isFirst && R.isNil(hiddenColumns)) {
+            // retrieve from storage
+            const stored = this.storage.getItem(`${this.props.id}::hidden_columns`);
+            const storedHiddenColumns = stored ?
+                JSON.parse(stored) :
+                [];
+
+            setTimeout(() => setProps({ hidden_columns: storedHiddenColumns }));
+        }
+    });
 
     private updateDerivedProps(controlled: ControlledTableProps) {
         const {
