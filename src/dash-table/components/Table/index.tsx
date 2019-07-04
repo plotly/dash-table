@@ -116,7 +116,6 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
                         hidden.push(c.id);
                     }
 
-                    console.log(this.storage);
                     setProps({ hidden_columns: hidden });
                 }}
                 toggleColumnOps={() => { }}
