@@ -1,52 +1,5 @@
 import { Component } from 'react';
-
-export enum DashStorageType {
-    Local = 'local',
-    Session = 'session'
-}
-
-type Unregister = () => void;
-interface IHandler {
-    fn: (store: any) => void;
-}
-
-export class DashStorageEvents {
-    private static readonly map = new Map<string, IHandler[]>();
-
-    static register(type: DashStorageType, id: string, fn: any): Unregister {
-        const event = `${type}::${id}`;
-        const handler = { fn };
-
-        ((
-            this.map.get(event) ||
-            this.map.set(event, []).get(event)
-        ) as IHandler[]).push(handler);
-
-        return () => {
-            const handlers = this.map.get(event);
-
-            if (handlers) {
-                handlers.splice(handlers.indexOf(handler), 1);
-            }
-        };
-    }
-
-    static hasListeners(type: DashStorageType, id: string) {
-        const event = `${type}::${id}`;
-        const handlers = this.map.get(event);
-
-        return handlers && handlers.length;
-    }
-
-    static dispatch(type: DashStorageType, id: string, store: any) {
-        const event = `${type}::${id}`;
-
-        const handlers = this.map.get(event) || [];
-        handlers.forEach(handler => {
-            handler.fn(store);
-        });
-    }
-}
+import DashStorageEvents, { DashStorageType, Unregister } from './DashStorageEvents';
 
 interface IProps {
     id: string;
@@ -74,8 +27,8 @@ export default class LocalStorage extends Component<IProps> {
             type
         } = this.props as PropsWithDefaults;
 
-        this.unregister = DashStorageEvents.register(type, id, (store: any) => {
-            console.log('Storage event', store);
+        this.unregister = DashStorageEvents.register(type, id, (_store: any) => {
+
         });
     }
 
