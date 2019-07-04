@@ -24,9 +24,6 @@
         "member-ordering": false,
         "no-conditional-assignment": false,
         "no-empty": false,
-        "no-trailing-whitespace": [true,
-            "ignore-comments"
-        ],
         "no-unused-expression": [true, "allow-new"],
         "object-literal-key-quotes": [true, "as-needed"],
         "object-literal-sort-keys": false,
