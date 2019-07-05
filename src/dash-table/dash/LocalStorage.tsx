@@ -15,8 +15,7 @@ export default class LocalStorage extends Component<IProps> {
             id
         } = this.props;
 
-        this.unregister = EventManager.register(Source.Event, id, (store: any) => {
-
+        this.unregister = EventManager.register(Source.Event, id, (_store: any) => {
         });
     }
 
