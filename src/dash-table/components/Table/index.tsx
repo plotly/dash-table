@@ -94,14 +94,14 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
         this.updatePersistedProps(controlled);
 
         const {
-            allColumns,
+            columns,
             hidden_columns,
             setProps
         } = controlled;
 
         return (<Fragment>
             <MenuBar
-                columns={allColumns}
+                columns={columns}
                 hiddenColumns={hidden_columns}
                 toggleColumn={(c: IColumn) => {
                     const hidden = hidden_columns ? hidden_columns.slice(0) : [];

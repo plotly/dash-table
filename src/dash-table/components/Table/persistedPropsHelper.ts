@@ -1,15 +1,16 @@
 import * as R from 'ramda';
 
 import { memoizeOne, memoizeOneWithFlag } from 'core/memoizer';
-import LocalStorage from 'core/storage/LocalStorage';
+import Storage from 'core/storage';
 
 import {
     ControlledTableProps,
     SetProps
 } from './props';
+import { LocalStorage } from 'core/storage/Storage';
 
 export default (id: string) => {
-    const storage = new LocalStorage(id);
+    const storage = new Storage(id, LocalStorage);
 
     const hiddenColumnsFlag = memoizeOneWithFlag(hidden_columns => hidden_columns);
     const persistHiddenColumns = memoizeOne((isFirst: boolean, setProps: SetProps, hiddenColumns?: string[]) => {

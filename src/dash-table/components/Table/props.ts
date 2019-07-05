@@ -363,14 +363,12 @@ interface IDerivedProps {
 
 export type PropsWithDefaults = IProps & IDefaultProps;
 
-export type SanitizedProps = Omit<Omit<Omit<
+export type SanitizedProps = Omit<Omit<
     Merge<PropsWithDefaults, {
         fixed_columns: number;
         fixed_rows: number;
         visibleColumns: Columns;
-        allColumns: Columns;
     }>,
-    'columns'>,
     'locale_format'>,
     'sort_as_null'>;
 

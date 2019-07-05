@@ -1,34 +1,22 @@
 import { Component } from 'react';
-import DashStorageEvents, { DashStorageType, Unregister } from './DashStorageEvents';
+import EventManager, { Unregister, Source } from '../../core/storage/EventManager';
 
 interface IProps {
     id: string;
-    type?: DashStorageType;
 }
-
-interface IDefaults {
-    type: DashStorageType;
-}
-
-type PropsWithDefaults = IProps & IDefaults;
 
 export default class LocalStorage extends Component<IProps> {
-    public static defaultProps = {
-        type: DashStorageType.Local
-    };
-
-    constructor(props: PropsWithDefaults) {
+    constructor(props: IProps) {
         super(props);
     }
 
     componentWillMount() {
         const {
-            id,
-            type
-        } = this.props as PropsWithDefaults;
+            id
+        } = this.props;
 
-        this.unregister = DashStorageEvents.register(type, id, (_store: any) => {
-
+        this.unregister = EventManager.register(Source.Event, id, (store: any) => {
+            console.log('store updated', store);
         });
     }
 
