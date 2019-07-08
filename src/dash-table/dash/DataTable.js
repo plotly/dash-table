@@ -10,6 +10,15 @@ import genRandomId from 'dash-table/utils/generate';
 import isValidProps from './validate';
 import Sanitizer from './Sanitizer';
 
+/**
+ * Dash DataTable is an interactive table component designed for
+ * designed for viewing, editing, and exploring large datasets.
+ * DataTable is rendered with standard, semantic HTML <table/> markup,
+ * which makes it accessible, responsive, and easy to style. This
+ * component was written from scratch in React.js specifically for the
+ * Dash community. Its API was designed to be ergonomic and its behavior
+ * is completely customizable through its properties.
+ */
 export default class DataTable extends Component {
     constructor(props) {
         super(props);
@@ -200,14 +209,6 @@ export const propTypes = {
             prefix: PropTypes.number,
             specifier: PropTypes.string
         }),
-
-        /**
-         * If True, then the column and its data is hidden.
-         * This can be useful if you want to transport extra
-         * meta data (like a data index) to and from callbacks
-         * but you don't necessarily want to display that data.
-         */
-        hidden: PropTypes.bool,
 
         /**
          * The `id` of the column.

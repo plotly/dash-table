@@ -4,6 +4,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Changed
+[#488](https://github.com/plotly/dash-table/pull/488)
+- Update table build for use as a library and make consistent with other Dash repos
+
+## [4.0.0] - 2019-06-20
+### Changed
 [#446](https://github.com/plotly/dash-table/pull/446)
 - Table API rework
 #### NEW
@@ -13,8 +18,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 #### REMOVED
     - `column.clearable`: Allows clearing the value of a dropdown cell.
         Removed in favor of `dropdown_**` `clearable` nested property.
+    - `column.hidden`: Allows hiding column
+        Removed. Stay tuned by following https://github.com/plotly/dash-table/issues/314.
     - `column.options`
         Removed. Redundant with `dropdown`.
+    - `content_style`
+        Removed. Deemed unnecessary
     - `pagination_settings`
         Replaced by two props `page_current` and `page_size`.
 
@@ -43,7 +52,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
     - `n_fixed_columns`: Will fix columns to the left.
         Renamed to `fixed_columns`
         Now accepts an object { headers: boolean, data: number } instead of a number.
-        { headers: true } determines the number of columns to fix automatically. For example, if the rows are selectable or deletable, { headers: true } would fix those columns automatically. If { headers: true, data: 2 }, it would fix the first two data columns in addition to the selectable and deletable if visible. 
+        { headers: true } determines the number of columns to fix automatically. For example, if the rows are selectable or deletable, { headers: true } would fix those columns automatically. If { headers: true, data: 2 }, it would fix the first two data columns in addition to the selectable and deletable if visible.
     - `n_fixed_rows`: Will fix rows to the top.
         Renamed to `fixed_rows`
         Now accepts an object { headers: boolean, data: number } instead of a number.
