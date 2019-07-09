@@ -6,12 +6,12 @@ import os
 from selenium.webdriver.chrome.options import Options
 #from selenium.webdriver.firefox.options import Options
 
-#os.makedirs('/Users/hayleeluu/Downloads/tableDownload')
+os.makedirs('/Users/hayleeluu/Downloads/tableDownload')
 
 #For chrome
 options = Options()
 options.add_experimental_option("prefs", {
-  "download.default_directory": "/Users/hayleeluu/Desktop",
+  "download.default_directory": "/",
   "download.prompt_for_download": False,
   "download.directory_upgrade": True,
   "safebrowsing.enabled": True
@@ -32,28 +32,36 @@ driver = webdriver.Chrome(options=options, executable_path=chrome_path)
 df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/solar.csv')
 
 def test_(dash_duo):
+
     app = dash.Dash(__name__)
     app.layout = dash_table.DataTable(
-    id='table',
-    columns=[{"name": i, "id": i} for i in df.columns],
-    data=df.to_dict('records'),
-    export_format='xlsx'
-)
+        id='table',
+        columns=[{"name": i, "id": i} for i in df.columns],
+        data=df.to_dict('records'),
+        export_format='xlsx'
+    )
+
     dash_duo.start_server(app)
     dash_duo.find_element(".export").click()
 
     path = '/Users/hayleeluu/Downloads/tableDownload'
     list = os.listdir(path)
-    assert len(list) == 1
 
-    for file in os.listdir(path):
-        file_path = os.path.join(path, file)
-        try:
-            if os.path.isfile(file_path):
-                os.unlink(file_path)
-        except Exception as e:
-            print(e)
-    
-    os.rmdir('/Users/hayleeluu/Downloads/tableDownload')
+    try:
+        assert len(list) == 1
+    except AssertionError:
+        #os.rmdir('/Users/hayleeluu/Downloads/tableDownload')
+        print('File was not downloaded')
+ 
+    if (len(list) > 0):
+        for file in os.listdir(path):
+            file_path = os.path.join(path, file)
+            try:
+                if os.path.isfile(file_path):
+                    os.unlink(file_path)
+            except Exception as e:
+                print(e)
+        #os.rmdir('/Users/hayleeluu/Downloads/tableDownload')
+   
     driver.close()
 
