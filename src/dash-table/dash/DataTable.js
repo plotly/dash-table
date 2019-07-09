@@ -146,11 +146,6 @@ export const propTypes = {
          */
         editable: PropTypes.bool,
 
-        /** *
-         * If True, a button will be displayed for the user to download excel or csv file
-         */
-        export_format: PropTypes.oneOf(['csv', 'xlsx', 'none']),
-
         /**
          * If True, then the name of this column is editable.
          * If there are multiple column headers (if `name` is a list of strings),
@@ -420,6 +415,11 @@ export const propTypes = {
         row_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         column_id: PropTypes.string
     }),
+
+    /**
+     * If True, a button will be displayed for the user to download excel or csv file
+     */
+    export_format: PropTypes.oneOf(['csv', 'xlsx', 'none']),
 
     /**
      * The ID of the table.
