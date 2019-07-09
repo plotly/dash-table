@@ -86,6 +86,7 @@ export const defaultProps = {
     data: [],
     columns: [],
     editable: false,
+    export_format: 'none',
     selected_cells: [],
     selected_rows: [],
     selected_row_ids: [],
@@ -414,6 +415,11 @@ export const propTypes = {
         row_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         column_id: PropTypes.string
     }),
+
+    /**
+     * If True, a button will be displayed for the user to download excel or csv file
+     */
+    export_format: PropTypes.oneOf(['csv', 'xlsx', 'none']),
 
     /**
      * The ID of the table.

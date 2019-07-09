@@ -314,6 +314,7 @@ interface IDefaultProps {
     css: IStylesheetRule[];
     data: Data;
     editable: boolean;
+    export_format: string;
     filter_query: string;
     filter_action: TableAction;
     merge_duplicate_headers: boolean;

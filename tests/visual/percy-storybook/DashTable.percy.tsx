@@ -359,4 +359,117 @@ storiesOf('DashTable/Without id', module)
                 rule: 'border: 4px solid cyan'
             }]}
         />
-    </div>));
+    </div>)
+    );
+
+storiesOf('DashTable/Hidden Columns', module)
+    .add('hides', () => (<DataTable
+        setProps={setProps}
+        id='table'
+        data={dataA2J}
+        columns={hiddenColumns}
+        style_data_conditional={style_data_conditional}
+    />))
+    .add('active cell', () => (<DataTable
+        setProps={setProps}
+        id='table'
+        data={dataA2J}
+        columns={hiddenColumns}
+        active_cell={makeCell(1, 1, dataA2J, hiddenColumns)}
+        style_data_conditional={style_data_conditional}
+    />))
+    .add('selected cells', () => (<DataTable
+        setProps={setProps}
+        id='table'
+        data={dataA2J}
+        columns={hiddenColumns}
+        active_cell={makeCell(1, 1, dataA2J, hiddenColumns)}
+        selected_cells={makeSelection([[1, 1], [1, 2], [2, 1], [2, 2]], dataA2J, hiddenColumns)}
+        style_data_conditional={style_data_conditional}
+    />));
+
+storiesOf('DashTable/Sorting', module)
+    .add('"a" ascending', () => (<DataTable
+        setProps={setProps}
+        id='table'
+        data={sparseData}
+        columns={mergedColumns}
+        sort_action={TableAction.Native}
+        sort_by={[{ column_id: 'a', direction: 'asc' }]}
+        style_data_conditional={style_data_conditional}
+    />))
+    .add('"a" descending', () => (<DataTable
+        setProps={setProps}
+        id='table'
+        data={sparseData}
+        columns={mergedColumns}
+        sort_action={TableAction.Native}
+        sort_by={[{ column_id: 'a', direction: 'desc' }]}
+        style_data_conditional={style_data_conditional}
+    />))
+    .add('"a" ascending -- empty string override', () => (<DataTable
+        setProps={setProps}
+        id='table'
+        data={sparseData}
+        columns={mergedColumns}
+        sort_action={TableAction.Native}
+        sort_by={[{ column_id: 'a', direction: 'asc' }]}
+        sort_as_null={['']}
+        style_data_conditional={style_data_conditional}
+    />))
+    .add('"a" descending -- empty string override', () => (<DataTable
+        setProps={setProps}
+        id='table'
+        data={sparseData}
+        columns={mergedColumns}
+        sort_action={TableAction.Native}
+        sort_by={[{ column_id: 'a', direction: 'desc' }]}
+        sort_as_null={['']}
+        style_data_conditional={style_data_conditional}
+    />))
+    .add(`"a" descending -- '' & 426 override`, () => (<DataTable
+        setProps={setProps}
+        id='table'
+        data={sparseData}
+        columns={mergedColumns}
+        sort_action={TableAction.Native}
+        sort_by={[{ column_id: 'a', direction: 'desc' }]}
+        sort_as_null={['', 426]}
+        style_data_conditional={style_data_conditional}
+    />))
+    .add(`"a" ascending -- '' and 426 override`, () => (<DataTable
+        setProps={setProps}
+        id='table'
+        data={sparseData}
+        columns={mergedColumns}
+        sort_action={TableAction.Native}
+        sort_by={[{ column_id: 'a', direction: 'asc' }]}
+        sort_as_null={['', 426]}
+        style_data_conditional={style_data_conditional}
+    />));
+
+storiesOf('DashTable/Export', module)
+        .add('Export Button for xlsx file', () => (<DataTable
+            setProps={setProps}
+            data={dataA2J}
+            columns={columnsA2J}
+            export_format= {'xlsx'}
+        />))
+        .add('Export Button for csv file', () => (<DataTable
+            setProps={setProps}
+            data={dataA2J}
+            columns={columnsA2J}
+            export_format= {'xlsx'}
+        />))
+        .add('No export Button for file formatted not supported', () => (<DataTable
+            setProps={setProps}
+            data={dataA2J}
+            columns={columnsA2J}
+            export_format= {'json'}
+        />))
+        .add('No export Button', () => (<DataTable
+            setProps={setProps}
+            data={dataA2J}
+            columns={columnsA2J}
+            export_format= {'none'}
+        />));
