@@ -6,7 +6,7 @@ import os
 from selenium.webdriver.chrome.options import Options
 #from selenium.webdriver.firefox.options import Options
 
-os.makedirs('/Users/hayleeluu/Downloads/tableDownload')
+#os.makedirs('/Users/hayleeluu/Downloads/tableDownload')
 
 #For chrome
 options = Options()
@@ -45,6 +45,15 @@ def test_(dash_duo):
     path = '/Users/hayleeluu/Downloads/tableDownload'
     list = os.listdir(path)
     assert len(list) == 1
-    os.remove('/Users/hayleeluu/Downloads/tableDownload')
+
+    for file in os.listdir(path):
+        file_path = os.path.join(path, file)
+        try:
+            if os.path.isfile(file_path):
+                os.unlink(file_path)
+        except Exception as e:
+            print(e)
+    
+    os.rmdir('/Users/hayleeluu/Downloads/tableDownload')
     driver.close()
 
