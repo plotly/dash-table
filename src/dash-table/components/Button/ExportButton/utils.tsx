@@ -32,10 +32,11 @@ export function transformMultDimArray(array: (string | string[])[], maxLength: n
 
 export function getMergeRanges(array: string[][]) {
     let apiMergeArray: IMergeObject[] = [];
-    const iForEach = R.addIndex(R.forEach);
-    iForEach((row: any, rIndex: number) => {
+    const iForEachOuter = R.addIndex<(string[]), void>(R.forEach);
+    const iForEachInner = R.addIndex<(string), void>(R.forEach);
+    iForEachOuter((row: string[], rIndex: number) => {
         let dict: any = {};
-        iForEach((cell: any, cIndex: number) => {
+        iForEachInner((cell: string, cIndex: number) => {
             if (!dict[cell]) {
                 dict[cell] = {s: {r: rIndex, c: cIndex}, e: {r: rIndex, c: cIndex }};
             } else {
