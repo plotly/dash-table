@@ -44,7 +44,7 @@ def test_(dash_duo):
 
     path = '/Users/hayleeluu/Downloads/tableDownload'
     list = os.listdir(path)
-    assert list.length == 1
+    assert len(list) == 1
     os.remove('/Users/hayleeluu/Downloads/tableDownload')
     driver.close()
 
