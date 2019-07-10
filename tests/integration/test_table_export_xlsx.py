@@ -16,6 +16,7 @@ def test_tbex001_table_export(dash_duo):
         data=df.to_dict("records"),
         export_format="xlsx",
     )
+    print(df)
     dash_duo.start_server(app)
     dash_duo.find_element(".export").click()
 
@@ -23,4 +24,4 @@ def test_tbex001_table_export(dash_duo):
     wait.until(lambda: os.path.exists(download), timeout=2)
 
     df_bis = pd.read_excel(download)
-    assert set(df_bis.columns) == set(df.columns)
+    assert set(df_bis) == set(df)
