@@ -24,4 +24,4 @@ def test_tbex001_table_export(dash_duo):
     wait.until(lambda: os.path.exists(download), timeout=2)
 
     df_bis = pd.read_excel(download)
-    assert set(df_bis) == set(df)
+    assert df_bis.equals(df)
