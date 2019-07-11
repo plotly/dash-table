@@ -13,15 +13,49 @@ import {
     VisibleColumns,
     IVisibleColumn,
     SetProps,
-    TableAction
+    TableAction,
+    SetFilter
 } from 'dash-table/components/Table/props';
 import * as actions from 'dash-table/utils/actions';
+import { SingleColumnSyntaxTree, getMultiColumnQueryString } from 'dash-table/syntax-tree';
+import { updateMap } from '../filter/map';
 
-function deleteColumn(column: IVisibleColumn, columns: VisibleColumns, columnRowIndex: any, setProps: SetProps, data: Data) {
-    return () => {
-        setProps(actions.deleteColumn(column, columns, columnRowIndex, data));
-    };
-}
+const doAction = (
+    action: (
+        column: IVisibleColumn,
+        columns: VisibleColumns,
+        columnRowIndex: any,
+        data: Data
+    ) => any,
+    column: IVisibleColumn,
+    columns: VisibleColumns,
+    columnRowIndex: any,
+    setFilter: SetFilter,
+    setProps: SetProps,
+    map: Map<string, SingleColumnSyntaxTree>,
+    data: Data
+) => () => {
+    setProps(action(column, columns, columnRowIndex, data));
+
+    const affectedColumnIds: string[] = actions.getAffectedColumns(column, columns, columnRowIndex);
+
+    R.forEach(id => {
+        const affectedColumn = columns.find(c => c.id === id);
+        if (affectedColumn) {
+            map = updateMap(map, affectedColumn, '');
+        }
+    }, affectedColumnIds);
+
+    const asts = Array.from(map.values());
+    const globalFilter = getMultiColumnQueryString(asts);
+
+    const rawGlobalFilter = R.map(
+        ast => ast.query || '',
+        R.filter<SingleColumnSyntaxTree>(ast => Boolean(ast), asts)
+    ).join(' && ');
+
+    setFilter(globalFilter, rawGlobalFilter, map);
+};
 
 function doSort(columnId: ColumnId, sortBy: SortBy, mode: SortMode, setProps: SetProps) {
     return () => {
@@ -79,14 +113,22 @@ function getSortingIcon(columnId: ColumnId, sortBy: SortBy) {
     }
 }
 
+function getColumnFlag(i: number, flag?: boolean | boolean[]): boolean {
+    return typeof flag === 'boolean' ?
+        flag :
+        !!flag && flag[i];
+}
+
 function getter(
     columns: VisibleColumns,
     data: Data,
     labelsAndIndices: R.KeyValuePair<any[], number[]>[],
+    map: Map<string, SingleColumnSyntaxTree>,
     sort_action: TableAction,
     mode: SortMode,
     sortBy: SortBy,
     paginationMode: TableAction,
+    setFilter: SetFilter,
     setProps: SetProps
 ): JSX.Element[][] {
     return R.addIndex<R.KeyValuePair<any[], number[]>, JSX.Element[]>(R.map)(
@@ -97,15 +139,9 @@ function getter(
                 columnIndex => {
                     const column = columns[columnIndex];
 
-                    const renamable: boolean = typeof column.renamable === 'boolean' ?
-                        column.renamable :
-                        !!column.renamable && column.renamable[headerRowIndex];
-
-                    const deletable = paginationMode !== TableAction.Custom && (
-                        typeof column.deletable === 'boolean' ?
-                            column.deletable :
-                            !!column.deletable && column.deletable[headerRowIndex]
-                    );
+                    const renamable = getColumnFlag(headerRowIndex, column.renamable);
+                    const clearable = paginationMode !== TableAction.Custom && getColumnFlag(headerRowIndex, column.clearable);
+                    const deletable = paginationMode !== TableAction.Custom && getColumnFlag(headerRowIndex, column.deletable);
 
                     return (<div>
                         {sort_action !== TableAction.None && isLastRow ?
@@ -128,10 +164,20 @@ function getter(
                             ''
                         }
 
+                        {clearable ?
+                            (<span
+                                className='column-header--clear'
+                                onClick={doAction(actions.clearColumn, column, columns, headerRowIndex, setFilter, setProps, map, data)}
+                            >
+                                {'Ø'}
+                            </span>) :
+                            ''
+                        }
+
                         {deletable ?
                             (<span
                                 className='column-header--delete'
-                                onClick={deleteColumn(column, columns, headerRowIndex, setProps, data)}
+                                onClick={doAction(actions.deleteColumn, column, columns, headerRowIndex, setFilter, setProps, map, data)}
                             >
                                 {'×'}
                             </span>) :

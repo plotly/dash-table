@@ -321,8 +321,9 @@
         }
 
         th {
-            .column-header--edit,
+            .column-header--clear,
             .column-header--delete,
+            .column-header--edit,
             .sort {
                 .not-selectable();
                 cursor: pointer;
@@ -472,29 +473,24 @@
         color: var(--accent);
     }
 
-    .dash-spreadsheet-inner .column-header--edit {
-        float: left;
-        opacity: 0.1;
-        padding-left: 2px;
-        padding-right: 2px;
-        cursor: pointer;
-    }
+    .dash-spreadsheet-inner {
+        .column-header--clear,
+        .column-header--delete,
+        .column-header--edit {
+            float: left;
+            opacity: 0.1;
+            padding-left: 2px;
+            padding-right: 2px;
+            cursor: pointer;
+        }
 
-    .dash-spreadsheet-inner th:hover .column-header--edit {
-        color: var(--accent);
-        opacity: 1;
-    }
-
-    .dash-spreadsheet-inner .column-header--delete {
-        float: left;
-        opacity: 0.1;
-        padding-left: 2px;
-        padding-right: 2px;
-        cursor: pointer;
-    }
-
-    .dash-spreadsheet-inner th:hover .column-header--delete {
-        color: var(--accent);
-        opacity: 1;
+        th:hover {
+            .column-header--clear,
+            .column-header--delete,
+            .column-header--edit {
+                color: var(--accent);
+                opacity: 1;
+            }
+        }
     }
 }

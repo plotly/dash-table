@@ -22,22 +22,38 @@ function getGroupedColumnIndices(column, columns, headerRowIndex) {
     return { groupIndexFirst: columnIndex, groupIndexLast: lastColumnIndex };
 }
 
-export function deleteColumn(column, columns, headerRowIndex, data) {
-    const {groupIndexFirst, groupIndexLast} = getGroupedColumnIndices(
+export function getAffectedColumns(column, columns, headerRowIndex) {
+    const { groupIndexFirst, groupIndexLast } = getGroupedColumnIndices(
         column, columns, headerRowIndex
     );
-    const rejectedColumnIds = R.slice(
+
+    return R.slice(
         groupIndexFirst,
         groupIndexLast + 1,
         R.pluck('id', columns)
     );
+}
+
+export function clearColumn(column, columns, headerRowIndex, data) {
+    const rejectedColumnIds = getAffectedColumns(column, columns, headerRowIndex);
+
+    return {
+        data: R.map(R.omit(rejectedColumnIds), data)
+    };
+}
+
+export function deleteColumn(column, columns, headerRowIndex, data) {
+    const {groupIndexFirst, groupIndexLast} = getGroupedColumnIndices(
+        column, columns, headerRowIndex
+    );
+
     return {
         columns: R.remove(
             groupIndexFirst,
             1 + groupIndexLast - groupIndexFirst,
             columns
         ),
-        data: R.map(R.omit(rejectedColumnIds), data),
+        ...clearColumn(column, columns, headerRowIndex, data),
         // NOTE - We're just clearing these so that there aren't any
         // inconsistencies. In an ideal world, we would probably only
         // update them if they contained one of the columns that we're
