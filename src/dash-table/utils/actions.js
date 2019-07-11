@@ -10,7 +10,7 @@ function findMaxLength(array) {
 }
 
 function getGroupedColumnIndices(column, columns, headerRowIndex, mergeDuplicateHeaders) {
-    const columnIndex = columns.indexOf(column);
+    const columnIndex = columns.findIndex(col => col.id === column.id);
 
     if (!column.name || (Array.isArray(column.name) && column.name.length < headerRowIndex) || !mergeDuplicateHeaders) {
         return { groupIndexFirst: columnIndex, groupIndexLast: columnIndex };
@@ -61,16 +61,16 @@ export const clearSelection = {
     selected_cells: []
 };
 
-export function editColumnName(column, columns, headerRowIndex, mergeDuplicateHeaders) {
+export function changeColumnHeader(column, columns, headerRowIndex, mergeDuplicateHeaders, newColumnName){
     let cloneColumn = Object.assign({}, column);
     if ((typeof column.name === 'string') || (column.name instanceof String)) {
             const columnHeaders = columns.map(col => col.name);
             const maxLength = findMaxLength(columnHeaders);
             const newColumnNames = Array(maxLength).fill(column.name);
-            cloneColumn = Object.assign(column, {name: newColumnNames});
+            cloneColumn = Object.assign({}, column, {name: newColumnNames});
     }
     const transformedColumn = columns.map(col => {
-        if (col.name === column.name){
+        if (((typeof column.name === 'string') || (column.name instanceof String)) && col.id === column.id) {
             return cloneColumn;
         } else {
             return col;
@@ -79,19 +79,18 @@ export function editColumnName(column, columns, headerRowIndex, mergeDuplicateHe
     const { groupIndexFirst, groupIndexLast } = getGroupedColumnIndices(
         column, columns, headerRowIndex, mergeDuplicateHeaders
     );
-    /* eslint no-alert: 0 */
-    const newColumnName = window.prompt('Enter a new column name');
     let newColumns = R.clone(transformedColumn);
     R.range(groupIndexFirst, groupIndexLast + 1).map(i => {
         let namePath;
         if (R.type(transformedColumn[i].name) === 'Array') {
             namePath = [i, 'name', headerRowIndex];
-        } else {
-            namePath = [i, 'name'];
         }
         newColumns = R.set(R.lensPath(namePath), newColumnName, newColumns);
     });
-    return {
-        columns: newColumns
-    };
+    return { columns: newColumns} ;
+}
+
+export function editColumnName(column, columns, headerRowIndex, mergeDuplicateHeaders) {
+    const newColumnName = window.prompt('Enter a new column name');
+    return changeColumnHeader(column, columns, headerRowIndex, mergeDuplicateHeaders, newColumnName);
 }
