@@ -1,12 +1,20 @@
 import * as R from 'ramda';
+import merge from 'ramda/es/merge';
 
-function getGroupedColumnIndices(column, columns, headerRowIndex) {
+function findMaxLength(array) {
+    let maxLength = 0;
+    R.forEach(row => { if (row instanceof Array && row.length > maxLength) {
+        maxLength = row.length;
+    }}, array);
+    return maxLength;
+}
+
+function getGroupedColumnIndices(column, columns, headerRowIndex, mergeDuplicateHeaders) {
     const columnIndex = columns.indexOf(column);
 
-    if (!column.name || (Array.isArray(column.name) && column.name.length < headerRowIndex)) {
+    if (!column.name || (Array.isArray(column.name) && column.name.length < headerRowIndex) || !mergeDuplicateHeaders) {
         return { groupIndexFirst: columnIndex, groupIndexLast: columnIndex };
     }
-
     let lastColumnIndex = columnIndex;
 
     for (let i = columnIndex; i < columns.length; ++i) {
@@ -53,16 +61,30 @@ export const clearSelection = {
     selected_cells: []
 };
 
-export function editColumnName(column, columns, headerRowIndex) {
+export function editColumnName(column, columns, headerRowIndex, mergeDuplicateHeaders) {
+    let cloneColumn = Object.assign({}, column);
+    if ((typeof column.name === 'string') || (column.name instanceof String)) {
+            const columnHeaders = columns.map(col => col.name);
+            const maxLength = findMaxLength(columnHeaders);
+            const newColumnNames = Array(maxLength).fill(column.name);
+            cloneColumn = Object.assign(column, {name: newColumnNames});
+    }
+    const transformedColumn = columns.map(col => {
+        if (col.name === column.name){
+            return cloneColumn;
+        } else {
+            return col;
+        }
+    })
     const { groupIndexFirst, groupIndexLast } = getGroupedColumnIndices(
-        column, columns, headerRowIndex
+        column, columns, headerRowIndex, mergeDuplicateHeaders
     );
     /* eslint no-alert: 0 */
     const newColumnName = window.prompt('Enter a new column name');
-    let newColumns = R.clone(columns);
+    let newColumns = R.clone(transformedColumn);
     R.range(groupIndexFirst, groupIndexLast + 1).map(i => {
         let namePath;
-        if (R.type(columns[i].name) === 'Array') {
+        if (R.type(transformedColumn[i].name) === 'Array') {
             namePath = [i, 'name', headerRowIndex];
         } else {
             namePath = [i, 'name'];

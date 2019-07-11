@@ -50,7 +50,7 @@ export default class HeaderFactory {
             style_cell,
             style_cell_conditional,
             style_header,
-            style_header_conditional
+            style_header_conditional,
         } = props;
 
         const headerRows = getHeaderRows(columns);
@@ -96,7 +96,8 @@ export default class HeaderFactory {
             sort_mode,
             sort_by,
             page_action,
-            setProps
+            setProps,
+            merge_duplicate_headers
         );
 
         const ops = this.getHeaderOpCells(
