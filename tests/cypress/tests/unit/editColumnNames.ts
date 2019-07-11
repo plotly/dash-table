@@ -14,7 +14,7 @@ describe('changeColumnHeader', () => {
         it('change a header name with column names as array, name[1] of column[1] should be AAA', () => {
             const column = {id: 'aaaa', type: 'numeric', name: ['City', 'Canada', 'Toronto'], renamable: true};
             const returnColumn =  changeColumnHeader(column, columns, 1, merge_duplicate_headers, 'AAA');
-            const expectedColumn = {columns :[
+            const expectedColumn = {columns : [
                 {id: 'rows', type: 'numeric', name: 'rows', renamable: true},
                 {id: 'aaaa', type: 'numeric', name: ['City', 'AAA', 'Toronto'], renamable: true},
                 {id: 'bbbb', type: 'numeric', name: ['City', 'Canada', 'Montreal'], renamable: true},
@@ -26,7 +26,7 @@ describe('changeColumnHeader', () => {
         it('change a header name with column names as string, column[0] name should be array and name[0] should be BBB', () => {
             const column = {id: 'rows', type: 'numeric', name: 'rows', renamable: true};
             const returnColumn =  changeColumnHeader(column, columns, 0, merge_duplicate_headers, 'BBB');
-            const expectedColumn = {columns :[
+            const expectedColumn = {columns : [
                 {id: 'rows', type: 'numeric', name: ['BBB', 'rows', 'rows'], renamable: true},
                 {id: 'aaaa', type: 'numeric', name: ['City', 'Canada', 'Toronto'], renamable: true},
                 {id: 'bbbb', type: 'numeric', name: ['City', 'Canada', 'Montreal'], renamable: true},
@@ -38,7 +38,7 @@ describe('changeColumnHeader', () => {
         it('change a header name with column names as string, column[3] name should be array and name[2] should be CCC', () => {
             const column =  {id: 'cccc', type: 'numeric', name: ['City', 'America', 'Boston'], renamable: true};
             const returnColumn =  changeColumnHeader(column, columns, 2, merge_duplicate_headers, 'CCC');
-            const expectedColumn = {columns :[
+            const expectedColumn = {columns : [
                 {id: 'rows', type: 'numeric', name: 'rows', renamable: true},
                 {id: 'aaaa', type: 'numeric', name: ['City', 'Canada', 'Toronto'], renamable: true},
                 {id: 'bbbb', type: 'numeric', name: ['City', 'Canada', 'Montreal'], renamable: true},
@@ -55,7 +55,7 @@ describe('changeColumnHeader', () => {
         it('change a header name with column names as array, all City should change to Ville', () => {
             const column = {id: 'aaaa', type: 'numeric', name: ['City', 'Canada', 'Toronto'], renamable: true};
             const returnColumn =  changeColumnHeader(column, columns, 0, merge_duplicate_headers, 'Ville');
-            const expectedColumn = {columns :[
+            const expectedColumn = {columns : [
                 {id: 'rows', type: 'numeric', name: 'rows', renamable: true},
                 {id: 'aaaa', type: 'numeric', name: ['Ville', 'Canada', 'Toronto'], renamable: true},
                 {id: 'bbbb', type: 'numeric', name: ['Ville', 'Canada', 'Montreal'], renamable: true},
@@ -67,7 +67,7 @@ describe('changeColumnHeader', () => {
         it('change a header name with column names as array, all Canada should change to Kanada', () => {
             const column = {id: 'aaaa', type: 'numeric', name: ['City', 'Canada', 'Toronto'], renamable: true};
             const returnColumn =  changeColumnHeader(column, columns, 1, merge_duplicate_headers, 'Kanada');
-            const expectedColumn = {columns :[
+            const expectedColumn = {columns : [
                 {id: 'rows', type: 'numeric', name: 'rows', renamable: true},
                 {id: 'aaaa', type: 'numeric', name: ['City', 'Kanada', 'Toronto'], renamable: true},
                 {id: 'bbbb', type: 'numeric', name: ['City', 'Kanada', 'Montreal'], renamable: true},
@@ -79,7 +79,7 @@ describe('changeColumnHeader', () => {
         it('change a header name with column names as array, New York should change to Maui', () => {
             const column = {id: 'dddd', type: 'numeric', name: ['', 'America', 'New York'], renamable: true};
             const returnColumn =  changeColumnHeader(column, columns, 2, merge_duplicate_headers, 'Maui');
-            const expectedColumn = {columns :[
+            const expectedColumn = {columns : [
                 {id: 'rows', type: 'numeric', name: 'rows', renamable: true},
                 {id: 'aaaa', type: 'numeric', name: ['City', 'Canada', 'Toronto'], renamable: true},
                 {id: 'bbbb', type: 'numeric', name: ['City', 'Canada', 'Montreal'], renamable: true},
@@ -91,7 +91,7 @@ describe('changeColumnHeader', () => {
         it('change a header name with column names as string, column[0] name should be [City, rows, rows ]', () => {
             const column = {id: 'rows', type: 'numeric', name: 'rows', renamable: true};
             const returnColumn =  changeColumnHeader(column, columns, 0, merge_duplicate_headers, 'City');
-            const expectedColumn = {columns :[
+            const expectedColumn = {columns : [
                 {id: 'rows', type: 'numeric', name: ['City', 'rows', 'rows'], renamable: true},
                 {id: 'aaaa', type: 'numeric', name: ['City', 'Canada', 'Toronto'], renamable: true},
                 {id: 'bbbb', type: 'numeric', name: ['City', 'Canada', 'Montreal'], renamable: true},
@@ -103,7 +103,7 @@ describe('changeColumnHeader', () => {
         it('change a header name with column names as string, column[0] name should be [rows, ABC, rows ]', () => {
             const column = {id: 'rows', type: 'numeric', name: 'rows', renamable: true};
             const returnColumn =  changeColumnHeader(column, columns, 1, merge_duplicate_headers, 'ABC');
-            const expectedColumn = {columns :[
+            const expectedColumn = {columns : [
                 {id: 'rows', type: 'numeric', name: ['rows', 'ABC', 'rows'], renamable: true},
                 {id: 'aaaa', type: 'numeric', name: ['City', 'Canada', 'Toronto'], renamable: true},
                 {id: 'bbbb', type: 'numeric', name: ['City', 'Canada', 'Montreal'], renamable: true},
@@ -114,4 +114,3 @@ describe('changeColumnHeader', () => {
         });
     });
 });
-
