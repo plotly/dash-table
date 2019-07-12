@@ -69,7 +69,7 @@ export function changeColumnHeader(column, columns, headerRowIndex, mergeDuplica
             const newColumnNames = Array(maxLength).fill(column.name);
             cloneColumn = Object.assign({}, column, {name: newColumnNames});
     }
-    const transformedColumn = columns.map(col => {
+    const transformedColumns = columns.map(col => {
         if (((typeof column.name === 'string') || (column.name instanceof String)) && col.id === column.id) {
             return cloneColumn;
         } else {
@@ -79,10 +79,10 @@ export function changeColumnHeader(column, columns, headerRowIndex, mergeDuplica
     const { groupIndexFirst, groupIndexLast } = getGroupedColumnIndices(
         column, columns, headerRowIndex, mergeDuplicateHeaders
     );
-    let newColumns = R.clone(transformedColumn);
+    let newColumns = R.clone(transformedColumns);
     R.range(groupIndexFirst, groupIndexLast + 1).map(i => {
         let namePath;
-        if (R.type(transformedColumn[i].name) === 'Array') {
+        if (R.type(transformedColumns[i].name) === 'Array') {
             namePath = [i, 'name', headerRowIndex];
         }
         newColumns = R.set(R.lensPath(namePath), newColumnName, newColumns);
