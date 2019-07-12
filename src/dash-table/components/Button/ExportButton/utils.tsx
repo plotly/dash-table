@@ -83,4 +83,3 @@ export function createHeadings(columnHeaders: (string | string[])[]) {
     return R.transpose(transformedArray);
 }
 
-
