@@ -54,26 +54,26 @@ export function getMergeRanges(array: string[][]) {
     return R.filter((item: IMergeObject) => item.s.c !== item.e.c || item.s.r !== item.e.r, apiMergeArray);
 }
 
-export function createWorkbook(ws: XLSX.WorkSheet, Heading: string[][], merge_duplicate_headers: boolean) {
+export function createWorkbook(ws: XLSX.WorkSheet, Heading: string[][], exportHeader: string) {
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'SheetJS');
 
-    if (merge_duplicate_headers){
+    if (exportHeader === 'display'){
         wb.Sheets.SheetJS['!merges'] = getMergeRanges(Heading);
     }
     return wb;
 }
 
-export function createWorksheet(Heading: string[][], export_format: string, data: any[], columnID: string[] ) {
+export function createWorksheet(Heading: string[][], data: any[], columnID: string[], exportHeader: string ) {
     const ws = XLSX.utils.aoa_to_sheet(Heading);
-    if (export_format === 'xlsx') {
+    if (exportHeader === 'display' || exportHeader === 'name' || exportHeader === 'none') {
         XLSX.utils.sheet_add_json(ws, data, {
             skipHeader: true,
             origin: Heading.length
         });
-    } else if (export_format === 'csv') {
+    } else if (exportHeader === 'ids') {
         XLSX.utils.sheet_add_json(ws, data, { header: columnID });
-    }
+    } 
     return ws;
 }
 

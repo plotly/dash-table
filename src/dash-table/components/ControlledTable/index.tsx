@@ -759,7 +759,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             tooltip_duration
         );
 
-        const { export_format, virtual, merge_duplicate_headers } = this.props;
+        const { export_format, export_header, virtual } = this.props;
+        const buttonProps = { export_format, virtual_data: virtual, columns, export_header };
 
         return (<div
             id={id}
@@ -803,9 +804,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                     <button className='next-page' onClick={this.loadNext}>Next</button>
                 </div>
             )}
-            <ExportButton export_format={export_format} virtual_data={virtual} columns={columns}
-            merge_duplicate_headers={merge_duplicate_headers}
-            />
+            <ExportButton {...buttonProps} />
         </div>);
     }
 
