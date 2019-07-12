@@ -87,6 +87,7 @@ export const defaultProps = {
     columns: [],
     editable: false,
     export_format: 'none',
+    export_header: 'none',
     selected_cells: [],
     selected_rows: [],
     selected_row_ids: [],
@@ -417,9 +418,19 @@ export const propTypes = {
     }),
 
     /**
-     * If True, a button will be displayed for the user to download excel or csv file
+     * Denotes the type of the export data file,
+     * Defaults to `'none'`
      */
     export_format: PropTypes.oneOf(['csv', 'xlsx', 'none']),
+
+    /**
+     * Denotes the format of the headers in the export data file.
+     * If `'none'`, there will be no header. If `'display'`, then the header
+     * of the data file will be be how it is currently displayed. If `'ids'` or
+     * `'names'`, then the headers of data file will be the column id or the column
+     * names, respectively
+     */
+    export_header: PropTypes.oneOf(['none', 'ids', 'names', 'display']),
 
     /**
      * The ID of the table.

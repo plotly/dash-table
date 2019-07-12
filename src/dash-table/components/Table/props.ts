@@ -315,6 +315,7 @@ interface IDefaultProps {
     data: Data;
     editable: boolean;
     export_format: string;
+    export_header: string;
     filter_query: string;
     filter_action: TableAction;
     merge_duplicate_headers: boolean;
