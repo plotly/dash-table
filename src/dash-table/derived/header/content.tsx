@@ -175,7 +175,7 @@ function getter(
                             ''
                         }
 
-                        <span>{labels[columnIndex]}</span>
+                        <span className='column-header-name'>{labels[columnIndex]}</span>
                     </div>);
                 },
                 indices

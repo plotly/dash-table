@@ -14,6 +14,7 @@ import {
 import { TooltipSyntax } from 'dash-table/tooltips/props';
 
 export enum AppMode {
+    Clearable = 'clearable',
     Date = 'date',
     Default = 'default',
     Filtering = 'filtering',
@@ -48,6 +49,7 @@ function getBaseTableProps(mock: IDataMock) {
                 action: ChangeAction.None
             },
             renamable: true,
+            clearable: true,
             deletable: true
         })),
         dropdown: {
@@ -59,6 +61,8 @@ function getBaseTableProps(mock: IDataMock) {
                 }))
             }
         },
+        merge_duplicate_headers: true,
+        filter_action: 'native',
         page_action: TableAction.None,
         style_table: {
             max_height: '800px',
@@ -91,7 +95,7 @@ function getDefaultState(
             sort_action: TableAction.Native,
             fixed_rows: { headers: true },
             fixed_columns: { headers: true },
-            merge_duplicate_headers: false,
+            // merge_duplicate_headers: false,
             row_deletable: true,
             row_selectable: 'single',
             page_action: TableAction.Native
@@ -179,6 +183,19 @@ function getTypedState() {
             failure: ChangeFailure.Reject
         };
     }, state.tableProps.columns || []);
+
+    return state;
+}
+
+function getClearableState() {
+    const state = getDefaultState();
+
+    R.forEach(c => {
+        c.clearable = true;
+    }, state.tableProps.columns || []);
+
+    state.tableProps.merge_duplicate_headers = true;
+    state.tableProps.filter_action = TableAction.Native;
 
     return state;
 }
@@ -316,6 +333,8 @@ function getState() {
     const mode = Environment.searchParams.get('mode');
 
     switch (mode) {
+        case AppMode.Clearable:
+            return getClearableState();
         case AppMode.Date:
             return getDateState();
         case AppMode.Filtering:
