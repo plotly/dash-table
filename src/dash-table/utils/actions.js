@@ -61,7 +61,7 @@ export const clearSelection = {
     selected_cells: []
 };
 
-export function changeColumnHeader(column, columns, headerRowIndex, mergeDuplicateHeaders, newColumnName){
+export function changeColumnHeader(column, columns, headerRowIndex, mergeDuplicateHeaders, newColumnName) {
     let cloneColumn = Object.assign({}, column);
     if ((typeof column.name === 'string') || (column.name instanceof String)) {
             const columnHeaders = columns.map(col => col.name);
@@ -75,7 +75,7 @@ export function changeColumnHeader(column, columns, headerRowIndex, mergeDuplica
         } else {
             return col;
         }
-    })
+    });
     const { groupIndexFirst, groupIndexLast } = getGroupedColumnIndices(
         column, columns, headerRowIndex, mergeDuplicateHeaders
     );
