@@ -50,7 +50,6 @@ function getBaseTableProps(mock: IDataMock) {
                 action: ChangeAction.None
             },
             renamable: true,
-            clearable: true,
             deletable: true
         })),
         dropdown: {
@@ -62,8 +61,6 @@ function getBaseTableProps(mock: IDataMock) {
                 }))
             }
         },
-        merge_duplicate_headers: true,
-        filter_action: 'native',
         page_action: TableAction.None,
         style_table: {
             max_height: '800px',
