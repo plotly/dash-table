@@ -414,6 +414,11 @@ export interface IFilterFactoryProps {
     style_filter_conditional: BasicFilters;
 }
 
+export type HeaderFactoryProps = ControlledTableProps & {
+    map: Map<string, SingleColumnSyntaxTree>;
+    setFilter: SetFilter;
+};
+
 export interface ICellFactoryProps {
     active_cell: ICellCoordinates;
     columns: VisibleColumns;

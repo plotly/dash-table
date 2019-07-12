@@ -106,4 +106,4 @@ export const clearColumnsFilter = (
     }, columns);
 
     updateState(map, setFilter);
-}
+};
