@@ -12,12 +12,12 @@ export function findMaxLength(array: (string | string[])[]): number {
         maxLength = row.length;
     }}, array);
     return maxLength;
-};
+}
 
 export function transformMultDimArray(array: (string | string[])[], maxLength: number): string[][] {
     const newArray: string[][] = array.map(row => {
         if (row instanceof Array && row.length < maxLength) {
-            return row.concat(Array(maxLength - row.length).fill(""));
+            return row.concat(Array(maxLength - row.length).fill(''));
         }
         if (maxLength === 0) {
             return [row];
@@ -57,8 +57,7 @@ export function getMergeRanges(array: string[][]) {
 export function createWorkbook(ws: XLSX.WorkSheet, Heading: string[][], exportHeader: string) {
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'SheetJS');
-
-    if (exportHeader === 'display'){
+    if (exportHeader === 'display') {
         wb.Sheets.SheetJS['!merges'] = getMergeRanges(Heading);
     }
     return wb;
@@ -73,7 +72,7 @@ export function createWorksheet(Heading: string[][], data: any[], columnID: stri
         });
     } else if (exportHeader === 'ids') {
         XLSX.utils.sheet_add_json(ws, data, { header: columnID });
-    } 
+    }
     return ws;
 }
 
@@ -82,4 +81,3 @@ export function createHeadings(columnHeaders: (string | string[])[]) {
     const transformedArray = transformMultDimArray(columnHeaders, maxLength);
     return R.transpose(transformedArray);
 }
-
