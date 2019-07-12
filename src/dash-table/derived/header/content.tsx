@@ -17,8 +17,8 @@ import {
     SetFilter
 } from 'dash-table/components/Table/props';
 import * as actions from 'dash-table/utils/actions';
-import { SingleColumnSyntaxTree, getMultiColumnQueryString } from 'dash-table/syntax-tree';
-import { updateMap } from '../filter/map';
+import { SingleColumnSyntaxTree } from 'dash-table/syntax-tree';
+import { clearColumnsFilter } from '../filter/map';
 
 const doAction = (
     action: (
@@ -37,24 +37,15 @@ const doAction = (
 ) => () => {
     setProps(action(column, columns, columnRowIndex, data));
 
-    const affectedColumnIds: string[] = actions.getAffectedColumns(column, columns, columnRowIndex);
-
+    const affectedColumns: VisibleColumns = [];
     R.forEach(id => {
         const affectedColumn = columns.find(c => c.id === id);
         if (affectedColumn) {
-            map = updateMap(map, affectedColumn, '');
+            affectedColumns.push(affectedColumn);
         }
-    }, affectedColumnIds);
+    }, actions.getAffectedColumns(column, columns, columnRowIndex));
 
-    const asts = Array.from(map.values());
-    const globalFilter = getMultiColumnQueryString(asts);
-
-    const rawGlobalFilter = R.map(
-        ast => ast.query || '',
-        R.filter<SingleColumnSyntaxTree>(ast => Boolean(ast), asts)
-    ).join(' && ');
-
-    setFilter(globalFilter, rawGlobalFilter, map);
+    clearColumnsFilter(map, affectedColumns, setFilter);
 };
 
 function doSort(columnId: ColumnId, sortBy: SortBy, mode: SortMode, setProps: SetProps) {

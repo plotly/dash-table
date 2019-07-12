@@ -11,10 +11,10 @@ import { ColumnId, IVisibleColumn, TableAction, IFilterFactoryProps, SetFilter }
 import derivedFilterStyles, { derivedFilterOpStyles } from 'dash-table/derived/filter/wrapperStyles';
 import derivedHeaderOperations from 'dash-table/derived/header/operations';
 import { derivedRelevantFilterStyles } from 'dash-table/derived/style';
-import { SingleColumnSyntaxTree, getMultiColumnQueryString } from 'dash-table/syntax-tree';
+import { SingleColumnSyntaxTree } from 'dash-table/syntax-tree';
 
 import { IEdgesMatrices } from 'dash-table/derived/edges/type';
-import { updateMap } from 'dash-table/derived/filter/map';
+import { updateColumnFilter } from 'dash-table/derived/filter/map';
 
 const NO_FILTERS: JSX.Element[][] = [];
 
@@ -37,17 +37,7 @@ export default class FilterFactory {
 
         const value = ev.target.value.trim();
 
-        map = updateMap(map, column, value);
-
-        const asts = Array.from(map.values());
-        const globalFilter = getMultiColumnQueryString(asts);
-
-        const rawGlobalFilter = R.map(
-            ast => ast.query || '',
-            R.filter<SingleColumnSyntaxTree>(ast => Boolean(ast), asts)
-        ).join(' && ');
-
-        setFilter(globalFilter, rawGlobalFilter, map);
+        updateColumnFilter(map, column, value, setFilter);
     }
 
     private filter = memoizerCache<[ColumnId, number]>()((
