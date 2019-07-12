@@ -71,9 +71,7 @@ function getBaseTableProps(mock: IDataMock) {
             { if: { column_id: 'rows' }, max_width: 60, min_width: 60, width: 60 },
             { if: { column_id: 'bbb' }, max_width: 200, min_width: 200, width: 200 },
             { if: { column_id: 'bbb-readonly' }, max_width: 200, min_width: 200, width: 200 }
-        ],
-        export_format: 'csv',
-        export_header: 'name'
+        ]
     };
 }
 
@@ -93,7 +91,7 @@ function getDefaultState(
             sort_action: TableAction.Native,
             fixed_rows: { headers: true },
             fixed_columns: { headers: true },
-            merge_duplicate_headers: true,
+            merge_duplicate_headers: false,
             row_deletable: true,
             row_selectable: 'single',
             page_action: TableAction.Native
