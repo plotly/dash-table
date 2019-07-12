@@ -319,7 +319,6 @@ function getMergeDuplicateHeadersState() {
     return state;
 }
 
-
 function getState() {
     const mode = Environment.searchParams.get('mode');
 
