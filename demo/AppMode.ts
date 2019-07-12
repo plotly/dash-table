@@ -15,6 +15,7 @@ import { TooltipSyntax } from 'dash-table/tooltips/props';
 
 export enum AppMode {
     Clearable = 'clearable',
+    ClearableMerged = 'clearableMerged',
     Date = 'date',
     Default = 'default',
     Filtering = 'filtering',
@@ -95,7 +96,7 @@ function getDefaultState(
             sort_action: TableAction.Native,
             fixed_rows: { headers: true },
             fixed_columns: { headers: true },
-            // merge_duplicate_headers: false,
+            merge_duplicate_headers: false,
             row_deletable: true,
             row_selectable: 'single',
             page_action: TableAction.Native
@@ -189,13 +190,18 @@ function getTypedState() {
 
 function getClearableState() {
     const state = getDefaultState();
+    state.tableProps.filter_action = TableAction.Native;
 
     R.forEach(c => {
         c.clearable = true;
     }, state.tableProps.columns || []);
 
+    return state;
+}
+
+function getClearableMergedState() {
+    const state = getClearableState();
     state.tableProps.merge_duplicate_headers = true;
-    state.tableProps.filter_action = TableAction.Native;
 
     return state;
 }
@@ -335,6 +341,8 @@ function getState() {
     switch (mode) {
         case AppMode.Clearable:
             return getClearableState();
+        case AppMode.ClearableMerged:
+            return getClearableMergedState();
         case AppMode.Date:
             return getDateState();
         case AppMode.Filtering:

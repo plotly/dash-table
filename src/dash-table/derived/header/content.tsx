@@ -25,17 +25,19 @@ const doAction = (
         column: IVisibleColumn,
         columns: VisibleColumns,
         columnRowIndex: any,
+        mergeDuplicateHeaders: boolean,
         data: Data
     ) => any,
     column: IVisibleColumn,
     columns: VisibleColumns,
     columnRowIndex: any,
+    mergeDuplicateHeaders: boolean,
     setFilter: SetFilter,
     setProps: SetProps,
     map: Map<string, SingleColumnSyntaxTree>,
     data: Data
 ) => () => {
-    setProps(action(column, columns, columnRowIndex, data));
+    setProps(action(column, columns, columnRowIndex, mergeDuplicateHeaders, data));
 
     const affectedColumns: VisibleColumns = [];
     R.forEach(id => {
@@ -43,7 +45,7 @@ const doAction = (
         if (affectedColumn) {
             affectedColumns.push(affectedColumn);
         }
-    }, actions.getAffectedColumns(column, columns, columnRowIndex));
+    }, actions.getAffectedColumns(column, columns, columnRowIndex, mergeDuplicateHeaders));
 
     clearColumnsFilter(map, affectedColumns, setFilter);
 };
@@ -112,6 +114,7 @@ function getColumnFlag(i: number, flag?: boolean | boolean[]): boolean {
 
 function getter(
     columns: VisibleColumns,
+    mergeDuplicateHeaders: boolean,
     data: Data,
     labelsAndIndices: R.KeyValuePair<any[], number[]>[],
     map: Map<string, SingleColumnSyntaxTree>,
@@ -158,7 +161,7 @@ function getter(
                         {clearable ?
                             (<span
                                 className='column-header--clear'
-                                onClick={doAction(actions.clearColumn, column, columns, headerRowIndex, setFilter, setProps, map, data)}
+                                onClick={doAction(actions.clearColumn, column, columns, headerRowIndex, mergeDuplicateHeaders, setFilter, setProps, map, data)}
                             >
                                 {'Ø'}
                             </span>) :
@@ -168,7 +171,7 @@ function getter(
                         {deletable ?
                             (<span
                                 className='column-header--delete'
-                                onClick={doAction(actions.deleteColumn, column, columns, headerRowIndex, setFilter, setProps, map, data)}
+                                onClick={doAction(actions.deleteColumn, column, columns, headerRowIndex, mergeDuplicateHeaders, setFilter, setProps, map, data)}
                             >
                                 {'×'}
                             </span>) :

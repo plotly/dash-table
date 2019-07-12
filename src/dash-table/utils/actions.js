@@ -1,9 +1,9 @@
 import * as R from 'ramda';
 
-function getGroupedColumnIndices(column, columns, headerRowIndex) {
+function getGroupedColumnIndices(column, columns, headerRowIndex, mergeDuplicateHeaders) {
     const columnIndex = columns.indexOf(column);
 
-    if (!column.name || (Array.isArray(column.name) && column.name.length < headerRowIndex)) {
+    if (!column.name || (Array.isArray(column.name) && column.name.length < headerRowIndex) || !mergeDuplicateHeaders) {
         return { groupIndexFirst: columnIndex, groupIndexLast: columnIndex };
     }
 
@@ -22,9 +22,9 @@ function getGroupedColumnIndices(column, columns, headerRowIndex) {
     return { groupIndexFirst: columnIndex, groupIndexLast: lastColumnIndex };
 }
 
-export function getAffectedColumns(column, columns, headerRowIndex) {
+export function getAffectedColumns(column, columns, headerRowIndex, mergeDuplicateHeaders) {
     const { groupIndexFirst, groupIndexLast } = getGroupedColumnIndices(
-        column, columns, headerRowIndex
+        column, columns, headerRowIndex, mergeDuplicateHeaders
     );
 
     return R.slice(
@@ -34,17 +34,17 @@ export function getAffectedColumns(column, columns, headerRowIndex) {
     );
 }
 
-export function clearColumn(column, columns, headerRowIndex, data) {
-    const rejectedColumnIds = getAffectedColumns(column, columns, headerRowIndex);
+export function clearColumn(column, columns, headerRowIndex, mergeDuplicateHeaders, data) {
+    const rejectedColumnIds = getAffectedColumns(column, columns, headerRowIndex, mergeDuplicateHeaders);
 
     return {
         data: R.map(R.omit(rejectedColumnIds), data)
     };
 }
 
-export function deleteColumn(column, columns, headerRowIndex, data) {
+export function deleteColumn(column, columns, headerRowIndex, mergeDuplicateHeaders, data) {
     const {groupIndexFirst, groupIndexLast} = getGroupedColumnIndices(
-        column, columns, headerRowIndex
+        column, columns, headerRowIndex, mergeDuplicateHeaders
     );
 
     return {
@@ -53,7 +53,7 @@ export function deleteColumn(column, columns, headerRowIndex, data) {
             1 + groupIndexLast - groupIndexFirst,
             columns
         ),
-        ...clearColumn(column, columns, headerRowIndex, data),
+        ...clearColumn(column, columns, headerRowIndex, mergeDuplicateHeaders, data),
         // NOTE - We're just clearing these so that there aren't any
         // inconsistencies. In an ideal world, we would probably only
         // update them if they contained one of the columns that we're

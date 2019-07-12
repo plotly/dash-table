@@ -92,6 +92,7 @@ export default class HeaderFactory {
 
         const contents = this.headerContent(
             columns,
+            merge_duplicate_headers,
             data,
             labelsAndIndices,
             map,
