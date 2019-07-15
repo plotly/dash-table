@@ -61,12 +61,12 @@ export const clearSelection = {
 };
 
 export function changeColumnHeader(column, columns, headerRowIndex, mergeDuplicateHeaders, newColumnName) {
-    let cloneColumn = Object.assign({}, column);
+    let cloneColumn = R.merge({}, column);
     if ((typeof column.name === 'string') || (column.name instanceof String)) {
             const columnHeaders = columns.map(col => col.name);
             const maxLength = findMaxLength(columnHeaders);
             const newColumnNames = Array(maxLength).fill(column.name);
-            cloneColumn = Object.assign({}, column, {name: newColumnNames});
+            cloneColumn = R.merge(column, {name: newColumnNames});
     }
     const transformedColumns = columns.map(col => {
         if (((typeof column.name === 'string') || (column.name instanceof String)) && col.id === column.id) {
