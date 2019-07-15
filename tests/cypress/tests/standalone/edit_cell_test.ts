@@ -206,7 +206,6 @@ describe(`edit, mode=${AppMode.Typed}`, () => {
                 );
             });
         });
-
     });
 });
 
