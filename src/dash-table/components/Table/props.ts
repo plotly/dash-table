@@ -272,6 +272,7 @@ export interface IProps {
     css?: IStylesheetRule[];
     data?: Data;
     editable?: boolean;
+    fill_width?: boolean;
     filter_query?: string;
     filter_action?: TableAction;
     locale_format: INumberLocale;
@@ -315,6 +316,7 @@ interface IDefaultProps {
     css: IStylesheetRule[];
     data: Data;
     editable: boolean;
+    fill_width: boolean;
     filter_query: string;
     filter_action: TableAction;
     merge_duplicate_headers: boolean;
