@@ -1,12 +1,5 @@
 import * as R from 'ramda';
-
-function findMaxLength(array) {
-    let maxLength = 0;
-    R.forEach(row => { if (row instanceof Array && row.length > maxLength) {
-        maxLength = row.length;
-    }}, array);
-    return maxLength;
-}
+import getHeaderRows from 'dash-table/derived/header/headerRows';
 
 function getGroupedColumnIndices(column, columns, headerRowIndex, mergeDuplicateHeaders) {
     const columnIndex = columns.findIndex(col => col.id === column.id);
@@ -63,8 +56,7 @@ export const clearSelection = {
 export function changeColumnHeader(column, columns, headerRowIndex, mergeDuplicateHeaders, newColumnName) {
     let cloneColumn = R.merge({}, column);
     if (typeof column.name === 'string') {
-            const columnHeaders = columns.map(col => col.name);
-            const maxLength = findMaxLength(columnHeaders);
+            const maxLength = getHeaderRows(columns);
             const newColumnNames = Array(maxLength).fill(column.name);
             cloneColumn = R.merge(column, {name: newColumnNames});
     }
