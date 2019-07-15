@@ -61,7 +61,7 @@ export function changeColumnHeader(column, columns, headerRowIndex, mergeDuplica
             cloneColumn = R.merge(column, {name: newColumnNames});
     }
     const transformedColumns = columns.map(col => {
-        if (((typeof column.name === 'string') || (column.name instanceof String)) && col.id === column.id) {
+        if ((typeof column.name === 'string') && col.id === column.id) {
             return cloneColumn;
         } else {
             return col;
