@@ -1,5 +1,4 @@
 import * as R from 'ramda';
-import merge from 'ramda/es/merge';
 
 function findMaxLength(array) {
     let maxLength = 0;
