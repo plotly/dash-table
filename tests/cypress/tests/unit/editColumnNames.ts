@@ -6,7 +6,7 @@ describe('changeColumnHeader', () => {
         {id: 'aaaa', type: 'numeric', name: ['City', 'Canada', 'Toronto'], renamable: true},
         {id: 'bbbb', type: 'numeric', name: ['City', 'Canada', 'Montreal'], renamable: true},
         {id: 'cccc', type: 'numeric', name: ['City', 'America', 'Boston'], renamable: true},
-        {id: 'dddd', type: 'text', name: ['', 'America', 'New York'], renamable: true}
+        {id: 'dddd', type: 'numeric', name: ['', 'America', 'New York'], renamable: true}
     ];
     describe('merge_duplicate_headers = false', () => {
         const merge_duplicate_headers = false;
@@ -19,7 +19,7 @@ describe('changeColumnHeader', () => {
                 {id: 'aaaa', type: 'numeric', name: ['City', 'AAA', 'Toronto'], renamable: true},
                 {id: 'bbbb', type: 'numeric', name: ['City', 'Canada', 'Montreal'], renamable: true},
                 {id: 'cccc', type: 'numeric', name: ['City', 'America', 'Boston'], renamable: true},
-                {id: 'dddd', type: 'text', name: ['', 'America', 'New York'], renamable: true}
+                {id: 'dddd', type: 'numeric', name: ['', 'America', 'New York'], renamable: true}
             ]};
             expect(expectedColumn).to.deep.equal(returnColumn);
         });
@@ -31,7 +31,7 @@ describe('changeColumnHeader', () => {
                 {id: 'aaaa', type: 'numeric', name: ['City', 'Canada', 'Toronto'], renamable: true},
                 {id: 'bbbb', type: 'numeric', name: ['City', 'Canada', 'Montreal'], renamable: true},
                 {id: 'cccc', type: 'numeric', name: ['City', 'America', 'Boston'], renamable: true},
-                {id: 'dddd', type: 'text', name: ['', 'America', 'New York'], renamable: true}
+                {id: 'dddd', type: 'numeric', name: ['', 'America', 'New York'], renamable: true}
             ]};
             expect(expectedColumn).to.deep.equal(returnColumn);
         });
@@ -43,7 +43,7 @@ describe('changeColumnHeader', () => {
                 {id: 'aaaa', type: 'numeric', name: ['City', 'Canada', 'Toronto'], renamable: true},
                 {id: 'bbbb', type: 'numeric', name: ['City', 'Canada', 'Montreal'], renamable: true},
                 {id: 'cccc', type: 'numeric', name: ['City', 'America', 'CCC'], renamable: true},
-                {id: 'dddd', type: 'text', name: ['', 'America', 'New York'], renamable: true}
+                {id: 'dddd', type: 'numeric', name: ['', 'America', 'New York'], renamable: true}
             ]};
             expect(expectedColumn).to.deep.equal(returnColumn);
         });
@@ -60,7 +60,7 @@ describe('changeColumnHeader', () => {
                 {id: 'aaaa', type: 'numeric', name: ['Ville', 'Canada', 'Toronto'], renamable: true},
                 {id: 'bbbb', type: 'numeric', name: ['Ville', 'Canada', 'Montreal'], renamable: true},
                 {id: 'cccc', type: 'numeric', name: ['Ville', 'America', 'Boston'], renamable: true},
-                {id: 'dddd', type: 'text', name: ['', 'America', 'New York'], renamable: true}
+                {id: 'dddd', type: 'numeric', name: ['', 'America', 'New York'], renamable: true}
             ]};
             expect(expectedColumn).to.deep.equal(returnColumn);
         });
@@ -72,7 +72,7 @@ describe('changeColumnHeader', () => {
                 {id: 'aaaa', type: 'numeric', name: ['City', 'Kanada', 'Toronto'], renamable: true},
                 {id: 'bbbb', type: 'numeric', name: ['City', 'Kanada', 'Montreal'], renamable: true},
                 {id: 'cccc', type: 'numeric', name: ['City', 'America', 'Boston'], renamable: true},
-                {id: 'dddd', type: 'text', name: ['', 'America', 'New York'], renamable: true}
+                {id: 'dddd', type: 'numeric', name: ['', 'America', 'New York'], renamable: true}
             ]};
             expect(expectedColumn).to.deep.equal(returnColumn);
         });
@@ -84,7 +84,7 @@ describe('changeColumnHeader', () => {
                 {id: 'aaaa', type: 'numeric', name: ['City', 'Canada', 'Toronto'], renamable: true},
                 {id: 'bbbb', type: 'numeric', name: ['City', 'Canada', 'Montreal'], renamable: true},
                 {id: 'cccc', type: 'numeric', name: ['City', 'America', 'Boston'], renamable: true},
-                {id: 'dddd', type: 'text', name: ['', 'America', 'Maui'], renamable: true}
+                {id: 'dddd', type: 'numeric', name: ['', 'America', 'Maui'], renamable: true}
             ]};
             expect(expectedColumn).to.deep.equal(returnColumn);
         });
@@ -96,7 +96,7 @@ describe('changeColumnHeader', () => {
                 {id: 'aaaa', type: 'numeric', name: ['City', 'Canada', 'Toronto'], renamable: true},
                 {id: 'bbbb', type: 'numeric', name: ['City', 'Canada', 'Montreal'], renamable: true},
                 {id: 'cccc', type: 'numeric', name: ['City', 'America', 'Boston'], renamable: true},
-                {id: 'dddd', type: 'text', name: ['', 'America', 'New York'], renamable: true}
+                {id: 'dddd', type: 'numeric', name: ['', 'America', 'New York'], renamable: true}
             ]};
             expect(expectedColumn).to.deep.equal(returnColumn);
         });
@@ -108,7 +108,7 @@ describe('changeColumnHeader', () => {
                 {id: 'aaaa', type: 'numeric', name: ['City', 'Canada', 'Toronto'], renamable: true},
                 {id: 'bbbb', type: 'numeric', name: ['City', 'Canada', 'Montreal'], renamable: true},
                 {id: 'cccc', type: 'numeric', name: ['City', 'America', 'Boston'], renamable: true},
-                {id: 'dddd', type: 'text', name: ['', 'America', 'New York'], renamable: true}
+                {id: 'dddd', type: 'numeric', name: ['', 'America', 'New York'], renamable: true}
             ]};
             expect(expectedColumn).to.deep.equal(returnColumn);
         });
