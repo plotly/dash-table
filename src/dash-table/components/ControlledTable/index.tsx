@@ -732,7 +732,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             ...(columns.length ? [] : ['dash-no-columns']),
             ...(virtualized.data.length ? [] : ['dash-no-data']),
             ...(filter_action !== TableAction.None ? [] : ['dash-no-filter']),
-            ...(fill_width ? ['dash-grow'] : ['dash-fit'])
+            ...(fill_width ? ['dash-fill-width'] : [])
         ];
 
         const containerClasses = ['dash-spreadsheet-container', ...classes];
