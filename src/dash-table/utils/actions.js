@@ -62,7 +62,7 @@ export const clearSelection = {
 
 export function changeColumnHeader(column, columns, headerRowIndex, mergeDuplicateHeaders, newColumnName) {
     let cloneColumn = R.merge({}, column);
-    if ((typeof column.name === 'string') || (column.name instanceof String)) {
+    if (typeof column.name === 'string') {
             const columnHeaders = columns.map(col => col.name);
             const maxLength = findMaxLength(columnHeaders);
             const newColumnNames = Array(maxLength).fill(column.name);
