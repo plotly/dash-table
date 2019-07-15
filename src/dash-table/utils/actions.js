@@ -61,7 +61,8 @@ export function changeColumnHeader(column, columns, headerRowIndex, mergeDuplica
             cloneColumn = R.mergeRight(column, {name: newColumnNames});
     }
     const transformedColumns =  columns.slice(0);
-    transformedColumns[transformedColumns.indexOf(column)] = cloneColumn;
+    const columnIndex = columns.findIndex(col => col.id === column.id);
+    transformedColumns[columnIndex] = cloneColumn;
     const { groupIndexFirst, groupIndexLast } = getGroupedColumnIndices(
         column, columns, headerRowIndex, mergeDuplicateHeaders
     );
