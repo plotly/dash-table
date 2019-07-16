@@ -1,9 +1,7 @@
 import * as R from 'ramda';
 import getHeaderRows from 'dash-table/derived/header/headerRows';
 
-function getGroupedColumnIndices(column, columns, headerRowIndex, mergeDuplicateHeaders) {
-    const columnIndex = columns.findIndex(col => col.id === column.id);
-
+function getGroupedColumnIndices(column, columns, headerRowIndex, mergeDuplicateHeaders, columnIndex) {
     if (!column.name || (Array.isArray(column.name) && column.name.length < headerRowIndex) || !mergeDuplicateHeaders) {
         return { groupIndexFirst: columnIndex, groupIndexLast: columnIndex };
     }
@@ -18,7 +16,6 @@ function getGroupedColumnIndices(column, columns, headerRowIndex, mergeDuplicate
             break;
         }
     }
-
     return { groupIndexFirst: columnIndex, groupIndexLast: lastColumnIndex };
 }
 
@@ -54,22 +51,22 @@ export const clearSelection = {
 };
 
 export function changeColumnHeader(column, columns, headerRowIndex, mergeDuplicateHeaders, newColumnName) {
-    let cloneColumn = R.mergeRight({}, column);
     const maxLength = getHeaderRows(columns);
+    const columnIndex = columns.findIndex(col => col.id === column.id);
+    let newColumns = columns;
     if (typeof column.name === 'string' && maxLength > 1) {
             const newColumnNames = Array(maxLength).fill(column.name);
-            cloneColumn = R.mergeRight(column, {name: newColumnNames});
+            const cloneColumn = R.mergeRight(column, {name: newColumnNames});
+            newColumns =  columns.slice(0);
+            newColumns[columnIndex] = cloneColumn;
     }
-    const transformedColumns =  columns.slice(0);
-    const columnIndex = columns.findIndex(col => col.id === column.id);
-    transformedColumns[columnIndex] = cloneColumn;
+
     const { groupIndexFirst, groupIndexLast } = getGroupedColumnIndices(
-        column, columns, headerRowIndex, mergeDuplicateHeaders
+        column, columns, headerRowIndex, mergeDuplicateHeaders, columnIndex
     );
-    let newColumns = R.clone(transformedColumns);
     R.range(groupIndexFirst, groupIndexLast + 1).map(i => {
         let namePath;
-        if (R.type(transformedColumns[i].name) === 'Array') {
+        if (R.type(newColumns[i].name) === 'Array') {
             namePath = [i, 'name', headerRowIndex];
         }
         newColumns = R.set(R.lensPath(namePath), newColumnName, newColumns);
