@@ -18,6 +18,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Like for clearing above, deleting through the `x` action will also
 reset the filter for the affected column(s)
 
+### Fixed
+[#491](https://github.com/plotly/dash-table/issues/491)
+- Fixed unconsistent behaviors when editing cell headers
+
 ## [4.0.2] - 2019-07-15
 ### Fixed
 [#489](https://github.com/plotly/dash-table/issues/489)
@@ -44,7 +48,7 @@ reset the filter for the affected column(s)
     - `column.options`
         Removed. Redundant with `dropdown`.
     - `content_style`
-        Removed. Deemed unnecessary
+        Removed. Deemed unnecessary. NOTE - This was added back in 4.0.2 under the name the "fill_width" property name.
     - `pagination_settings`
         Replaced by two props `page_current` and `page_size`.
 

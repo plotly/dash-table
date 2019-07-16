@@ -82,9 +82,9 @@ function doSort(columnId: ColumnId, sortBy: SortBy, mode: SortMode, setProps: Se
     };
 }
 
-function editColumnName(column: IVisibleColumn, columns: VisibleColumns, columnRowIndex: any, setProps: SetProps) {
+function editColumnName(column: IVisibleColumn, columns: VisibleColumns, columnRowIndex: any, setProps: SetProps, mergeDuplicateHeaders: boolean) {
     return () => {
-        setProps(actions.editColumnName(column, columns, columnRowIndex));
+        setProps(actions.editColumnName(column, columns, columnRowIndex, mergeDuplicateHeaders));
     };
 }
 
@@ -123,7 +123,8 @@ function getter(
     sortBy: SortBy,
     paginationMode: TableAction,
     setFilter: SetFilter,
-    setProps: SetProps
+    setProps: SetProps,
+    merge_duplicate_headers: boolean
 ): JSX.Element[][] {
     return R.addIndex<R.KeyValuePair<any[], number[]>, JSX.Element[]>(R.map)(
         ([labels, indices], headerRowIndex) => {
@@ -151,7 +152,7 @@ function getter(
                         {renamable ?
                             (<span
                                 className='column-header--edit'
-                                onClick={editColumnName(column, columns, headerRowIndex, setProps)}
+                                onClick={editColumnName(column, columns, headerRowIndex, setProps, merge_duplicate_headers)}
                             >
                                 {`✎`}
                             </span>) :
