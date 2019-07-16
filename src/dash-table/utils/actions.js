@@ -1,8 +1,7 @@
 import * as R from 'ramda';
+import getHeaderRows from 'dash-table/derived/header/headerRows';
 
-function getGroupedColumnIndices(column, columns, headerRowIndex, mergeDuplicateHeaders) {
-    const columnIndex = columns.indexOf(column);
-
+function getGroupedColumnIndices(column, columns, headerRowIndex, mergeDuplicateHeaders, columnIndex) {
     if (!column.name || (Array.isArray(column.name) && column.name.length < headerRowIndex) || !mergeDuplicateHeaders) {
         return { groupIndexFirst: columnIndex, groupIndexLast: columnIndex };
     }
@@ -24,7 +23,7 @@ function getGroupedColumnIndices(column, columns, headerRowIndex, mergeDuplicate
 
 export function getAffectedColumns(column, columns, headerRowIndex, mergeDuplicateHeaders) {
     const { groupIndexFirst, groupIndexLast } = getGroupedColumnIndices(
-        column, columns, headerRowIndex, mergeDuplicateHeaders
+        column, columns, headerRowIndex, mergeDuplicateHeaders, columns.indexOf(column)
     );
 
     return R.slice(
@@ -44,7 +43,7 @@ export function clearColumn(column, columns, headerRowIndex, mergeDuplicateHeade
 
 export function deleteColumn(column, columns, headerRowIndex, mergeDuplicateHeaders, data) {
     const {groupIndexFirst, groupIndexLast} = getGroupedColumnIndices(
-        column, columns, headerRowIndex, mergeDuplicateHeaders
+        column, columns, headerRowIndex, mergeDuplicateHeaders, columns.indexOf(column)
     );
 
     return {
@@ -82,7 +81,7 @@ export function changeColumnHeader(column, columns, headerRowIndex, mergeDuplica
     }
 
     const { groupIndexFirst, groupIndexLast } = getGroupedColumnIndices(
-        column, newColumns, headerRowIndex, mergeDuplicateHeaders
+        column, newColumns, headerRowIndex, mergeDuplicateHeaders, columnIndex
     );
 
     R.range(groupIndexFirst, groupIndexLast + 1).map(i => {
