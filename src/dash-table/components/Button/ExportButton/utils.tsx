@@ -13,7 +13,7 @@ export function transformMultDimArray(array: (string | string[])[], maxLength: n
         if (row instanceof Array && row.length < maxLength) {
             return row.concat(Array(maxLength - row.length).fill(''));
         }
-        if (maxLength === 0) {
+        if (maxLength === 1) {
             return [row];
         }
         if (row instanceof String || typeof(row) === 'string') {
