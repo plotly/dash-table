@@ -27,7 +27,6 @@ import MenuBar from '../MenuBar';
 
 import controlledPropsHelper from './controlledPropsHelper';
 import derivedPropsHelper from './derivedPropsHelper';
-import persistedPropsHelper from './persistedPropsHelper';
 
 const DERIVED_REGEX = /^derived_/;
 
@@ -91,7 +90,6 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
         );
 
         this.updateDerivedProps(controlled, this.controlledSetProps);
-        this.updatePersistedProps(controlled);
 
         const {
             columns,
@@ -166,6 +164,5 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
     private readonly filterMap = derivedFilterMap();
 
     private readonly controlledPropsHelper = controlledPropsHelper();
-    private readonly updatePersistedProps = persistedPropsHelper(this.props.id);
     private readonly updateDerivedProps = derivedPropsHelper();
 }
