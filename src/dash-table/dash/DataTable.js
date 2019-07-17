@@ -457,7 +457,7 @@ export const propTypes = {
      * - True: The table container's width will grow to fill the available space
      * - False: The table container's width will equal the width of its content
      */
-   fill_width: PropTypes.bool,
+    fill_width: PropTypes.bool,
 
     /**
      * The ID of the table.
