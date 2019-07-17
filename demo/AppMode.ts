@@ -20,6 +20,7 @@ export enum AppMode {
     FixedTooltips = 'fixed,tooltips',
     FixedVirtualized = 'fixed,virtualized',
     Formatting = 'formatting',
+    MergeDuplicateHeaders = 'mergeDuplicateHeaders',
     ReadOnly = 'readonly',
     ColumnsInSpace = 'columnsInSpace',
     TaleOfTwoTables = 'taleOfTwoTables',
@@ -89,6 +90,7 @@ function getDefaultState(
             data: mock.data,
             editable: true,
             sort_action: TableAction.Native,
+            fill_width: false,
             fixed_rows: { headers: true },
             fixed_columns: { headers: true },
             merge_duplicate_headers: false,
@@ -229,6 +231,7 @@ function getVirtualizedState() {
         tableProps: R.merge(getBaseTableProps(mock), {
             data: mock.data,
             editable: true,
+            fill_width: false,
             sort_action: TableAction.Native,
             merge_duplicate_headers: false,
             row_deletable: true,
@@ -312,6 +315,12 @@ function getFormattingState() {
     return state;
 }
 
+function getMergeDuplicateHeadersState() {
+    const state = getDefaultState();
+    state.tableProps.merge_duplicate_headers = true;
+    return state;
+}
+
 function getState() {
     const mode = Environment.searchParams.get('mode');
 
@@ -330,6 +339,8 @@ function getState() {
             return getReadonlyState();
         case AppMode.ColumnsInSpace:
             return getSpaceInColumn();
+        case AppMode.MergeDuplicateHeaders:
+            return getMergeDuplicateHeadersState();
         case AppMode.Tooltips:
             return getTooltipsState();
         case AppMode.Virtualized:

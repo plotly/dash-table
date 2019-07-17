@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+#[Unreleased]
+### Fixed
+[#491](https://github.com/plotly/dash-table/issues/491)
+- Fixed unconsistent behaviors when editing cell headers
+
+## [4.0.2] - 2019-07-15
+### Fixed
+[#489](https://github.com/plotly/dash-table/issues/489)
+- Add `fill_width` prop to replace `content_style` prop removed in the [4.0 API rework](https://github.com/plotly/dash-table/pull/446)
+
 ## [4.0.1] - 2019-07-09
 ### Changed
 [#488](https://github.com/plotly/dash-table/pull/488)
@@ -23,7 +33,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
     - `column.options`
         Removed. Redundant with `dropdown`.
     - `content_style`
-        Removed. Deemed unnecessary
+        Removed. Deemed unnecessary. NOTE - This was added back in 4.0.2 under the name the "fill_width" property name.
     - `pagination_settings`
         Replaced by two props `page_current` and `page_size`.
 
