@@ -153,9 +153,7 @@ function getter(
                             (<span
                                 className='column-header--edit'
                                 onClick={editColumnName(column, columns, headerRowIndex, setProps, merge_duplicate_headers)}
-                            >
-                                {`✎`}
-                            </span>) :
+                            />) :
                             ''
                         }
 
@@ -163,9 +161,7 @@ function getter(
                             (<span
                                 className='column-header--clear'
                                 onClick={doAction(actions.clearColumn, column, columns, headerRowIndex, mergeDuplicateHeaders, setFilter, setProps, map, data)}
-                            >
-                                {'Ø'}
-                            </span>) :
+                            />) :
                             ''
                         }
 
@@ -173,9 +169,7 @@ function getter(
                             (<span
                                 className='column-header--delete'
                                 onClick={doAction(actions.deleteColumn, column, columns, headerRowIndex, mergeDuplicateHeaders, setFilter, setProps, map, data)}
-                            >
-                                {'×'}
-                            </span>) :
+                            />) :
                             ''
                         }
 

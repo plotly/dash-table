@@ -485,6 +485,18 @@
     }
 
     .dash-spreadsheet-inner {
+        .column-header--clear::before {
+            content: 'ø';
+        }
+
+        .column-header--delete::before {
+            content: 'x'
+        }
+
+        .column-header--edit::before {
+            content: '✎';
+        }
+
         .column-header--clear,
         .column-header--delete,
         .column-header--edit {
