@@ -15,7 +15,7 @@ import getHeaderRows from 'dash-table/derived/header/headerRows';
 import { derivedRelevantCellStyles, derivedRelevantFilterStyles, derivedRelevantHeaderStyles } from 'dash-table/derived/style';
 import { Style, Cells, DataCells, BasicFilters, Headers } from 'dash-table/derived/style/props';
 
-import { ControlledTableProps, VisibleColumns, IViewportOffset, Data, ICellCoordinates, TableAction } from './Table/props';
+import { ControlledTableProps, Columns, IViewportOffset, Data, ICellCoordinates, TableAction } from './Table/props';
 import { SingleColumnSyntaxTree } from 'dash-table/syntax-tree';
 
 type EdgesMatricesOp = EdgesMatrices | undefined;
@@ -139,7 +139,6 @@ export default class EdgeFactory {
     public createEdges() {
         const {
             active_cell,
-            columns,
             filter_action,
             workFilter,
             fixed_columns,
@@ -155,12 +154,13 @@ export default class EdgeFactory {
             style_filter_conditional,
             style_header,
             style_header_conditional,
-            virtualized
+            virtualized,
+            visibleColumns
         } = this.props;
 
         return this.memoizedCreateEdges(
             active_cell,
-            columns,
+            visibleColumns,
             (row_deletable ? 1 : 0) + (row_selectable ? 1 : 0),
             filter_action !== TableAction.None,
             workFilter.map,
@@ -182,7 +182,7 @@ export default class EdgeFactory {
 
     private memoizedCreateEdges = memoizeOne((
         active_cell: ICellCoordinates,
-        columns: VisibleColumns,
+        columns: Columns,
         operations: number,
         filter_action: boolean,
         filterMap: Map<string, SingleColumnSyntaxTree>,

@@ -423,6 +423,8 @@ export const propTypes = {
      */
     fill_width: PropTypes.bool,
 
+    hidden_columns: PropTypes.arrayOf(PropTypes.string),
+
     /**
      * The ID of the table.
      */

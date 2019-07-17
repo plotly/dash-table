@@ -7,7 +7,6 @@ import {
     PropsWithDefaults,
     ChangeAction,
     ChangeFailure,
-    IVisibleColumn,
     ColumnType,
     TableAction
 } from 'dash-table/components/Table/props';
@@ -176,7 +175,7 @@ function getTypedState() {
     const state = getDefaultState();
 
     R.forEach(column => {
-        (column as IVisibleColumn).on_change = {
+        column.on_change = {
             action: ChangeAction.Coerce,
             failure: ChangeFailure.Reject
         };

@@ -5,6 +5,7 @@ function getGroupedColumnIndices(column, columns, headerRowIndex, mergeDuplicate
     if (!column.name || (Array.isArray(column.name) && column.name.length < headerRowIndex) || !mergeDuplicateHeaders) {
         return { groupIndexFirst: columnIndex, groupIndexLast: columnIndex };
     }
+
     let lastColumnIndex = columnIndex;
 
     for (let i = columnIndex; i < columns.length; ++i) {
@@ -16,6 +17,7 @@ function getGroupedColumnIndices(column, columns, headerRowIndex, mergeDuplicate
             break;
         }
     }
+
     return { groupIndexFirst: columnIndex, groupIndexLast: lastColumnIndex };
 }
 
@@ -57,7 +59,7 @@ export function changeColumnHeader(column, columns, headerRowIndex, mergeDuplica
 
     if (typeof column.name === 'string' && maxLength > 1) {
         const newColumnNames = Array(maxLength).fill(column.name);
-        const cloneColumn = R.mergeRight(column, {name: newColumnNames});
+        const cloneColumn = R.mergeRight(column, { name: newColumnNames });
         newColumns = newColumns.slice(0);
         newColumns[columnIndex] = cloneColumn;
     }
@@ -74,7 +76,7 @@ export function changeColumnHeader(column, columns, headerRowIndex, mergeDuplica
         newColumns = R.set(R.lensPath(namePath), newColumnName, newColumns);
     });
 
-    return { columns: newColumns} ;
+    return { columns: newColumns };
 }
 
 export function editColumnName(column, columns, headerRowIndex, mergeDuplicateHeaders) {
