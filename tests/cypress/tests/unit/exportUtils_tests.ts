@@ -1,39 +1,7 @@
-import { findMaxLength, transformMultDimArray, getMergeRanges, createHeadings, createWorksheet, createWorkbook  } from 'dash-table/components/Button/ExportButton/utils';
+import { transformMultDimArray, getMergeRanges, createHeadings, createWorksheet, createWorkbook  } from 'dash-table/components/Button/ExportButton/utils';
 import * as R from 'ramda';
 
 describe('export', () => {
-    describe('findMaxLength', () => {
-        it('empty array', () => {
-            const testedArray = [];
-            const maxLength = findMaxLength(testedArray);
-            expect(maxLength).to.equal(0);
-        });
-        it('array with only strings', () => {
-            const testedArray = ['a', 'b', 'c', 'd'];
-            const maxLength = findMaxLength(testedArray);
-            expect(maxLength).to.equal(0);
-        });
-        it ('array with strings and strings array with same length', () => {
-            const testedArray = ['a', ['b', 'c'], ['b', 'd']];
-            const maxLength = findMaxLength(testedArray);
-            expect(maxLength).to.equal(2);
-        });
-        it ('2D strings array', () => {
-            const testedArray = [['a', 'b', 'c'], ['b', 'c', 'd'], ['b', 'd', 'a']];
-            const maxLength = findMaxLength(testedArray);
-            expect(maxLength).to.equal(3);
-        });
-        it ('multidimensional array', () => {
-            const testedArray = [['a', 'b'], ['b', 'c', 'd'], ['a', 'b', 'd', 'a']];
-            const maxLength = findMaxLength(testedArray);
-            expect(maxLength).to.equal(4);
-        });
-        it ('multidimensional array with strings', () => {
-            const testedArray = ['rows', ['a', 'b'], ['b', 'c', 'd'], ['a', 'b', 'd', 'a']];
-            const maxLength = findMaxLength(testedArray);
-            expect(maxLength).to.equal(4);
-        });
-    });
 
     describe('transformMultDimArray', () => {
         it('array with only strings', () => {

@@ -1,17 +1,11 @@
 import * as R from 'ramda';
 import XLSX from 'xlsx';
+import getHeaderRows from 'dash-table/derived/header/headerRows';
+import { IColumn, IVisibleColumn } from 'dash-table/components/Table/props';
 
 interface IMergeObject {
     s: {r: number, c: number};
     e: {r: number, c: number};
-}
-
-export function findMaxLength(array: (string | string[])[]): number {
-    let maxLength = 0;
-    R.forEach(row => { if (row instanceof Array && row.length > maxLength) {
-        maxLength = row.length;
-    }}, array);
-    return maxLength;
 }
 
 export function transformMultDimArray(array: (string | string[])[], maxLength: number): string[][] {
@@ -65,7 +59,7 @@ export function createWorkbook(ws: XLSX.WorkSheet, Heading: string[][], exportHe
 
 export function createWorksheet(Heading: string[][], data: any[], columnID: string[], exportHeader: string ) {
     const ws = XLSX.utils.aoa_to_sheet(Heading);
-    if (exportHeader === 'display' || exportHeader === 'name' || exportHeader === 'none') {
+    if (exportHeader === 'display' || exportHeader === 'names' || exportHeader === 'none') {
         XLSX.utils.sheet_add_json(ws, data, {
             skipHeader: true,
             origin: Heading.length
@@ -76,8 +70,8 @@ export function createWorksheet(Heading: string[][], data: any[], columnID: stri
     return ws;
 }
 
-export function createHeadings(columnHeaders: (string | string[])[]) {
-    const maxLength = findMaxLength(columnHeaders);
+export function createHeadings(columnHeaders: (string | string[])[], columns: IColumn[] & IVisibleColumn[]) {
+    const maxLength = getHeaderRows(columns);
     const transformedArray = transformMultDimArray(columnHeaders, maxLength);
     return R.transpose(transformedArray);
 }

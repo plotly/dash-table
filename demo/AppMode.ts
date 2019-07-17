@@ -72,7 +72,9 @@ function getBaseTableProps(mock: IDataMock) {
             { if: { column_id: 'rows' }, max_width: 60, min_width: 60, width: 60 },
             { if: { column_id: 'bbb' }, max_width: 200, min_width: 200, width: 200 },
             { if: { column_id: 'bbb-readonly' }, max_width: 200, min_width: 200, width: 200 }
-        ]
+        ],
+        export_format: 'xlsx',
+        export_header: 'names'
     };
 }
 

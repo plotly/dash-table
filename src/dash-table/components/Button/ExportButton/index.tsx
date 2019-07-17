@@ -19,7 +19,7 @@ export default class ExportButton extends Component<IExportButtonProps, any> {
         const { columns, export_format, virtual_data, export_header } = this.props;
         const columnID = columns.map(column => column.id);
         const columnHeaders = columns.map(column => column.name);
-        const Heading = (export_header !== 'none') ? createHeadings(columnHeaders) : [];
+        const Heading = (export_header !== 'none') ? createHeadings(columnHeaders, columns) : [];
         const ws = createWorksheet(Heading, virtual_data.data, columnID, export_header);
         const wb = createWorkbook(ws, Heading, export_header);
         if (export_format === 'xlsx') {
