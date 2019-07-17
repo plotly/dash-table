@@ -13,7 +13,7 @@ const DATA_BASE = R.map(i => ({
     vancouver: i * -10,
     temp: i * -100,
     humidity: i * 0.1
-}), R.range(0, 100));
+}), R.range(0, 10));
 
 const COLUMNS_BASE = [
     { name: ['Year', ''], id: 'year' },
