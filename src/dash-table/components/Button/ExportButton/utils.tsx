@@ -1,7 +1,6 @@
 import * as R from 'ramda';
 import XLSX from 'xlsx';
-import getHeaderRows from 'dash-table/derived/header/headerRows';
-import { IColumn, IVisibleColumn } from 'dash-table/components/Table/props';
+
 
 interface IMergeObject {
     s: {r: number, c: number};
@@ -13,7 +12,7 @@ export function transformMultDimArray(array: (string | string[])[], maxLength: n
         if (row instanceof Array && row.length < maxLength) {
             return row.concat(Array(maxLength - row.length).fill(''));
         }
-        if (maxLength === 1) {
+        if (maxLength === 0 || maxLength === 1) {
             return [row];
         }
         if (row instanceof String || typeof(row) === 'string') {
@@ -70,8 +69,7 @@ export function createWorksheet(Heading: string[][], data: any[], columnID: stri
     return ws;
 }
 
-export function createHeadings(columnHeaders: (string | string[])[], columns: IColumn[] & IVisibleColumn[]) {
-    const maxLength = getHeaderRows(columns);
+export function createHeadings(columnHeaders: (string | string[])[], maxLength: number) {
     const transformedArray = transformMultDimArray(columnHeaders, maxLength);
     return R.transpose(transformedArray);
 }

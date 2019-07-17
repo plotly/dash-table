@@ -143,7 +143,7 @@ describe('export', () => {
             const input = [['a', 'b', 'c'],
                            ['d', 'e', 'f'],
                            ['g', 'h', 'i']];
-            const headings = createHeadings(input);
+            const headings = createHeadings(input, 3);
             const expectHeadings = [['a', 'd', 'g'],
                                     ['b', 'e', 'h'],
                                     ['c', 'f', 'i']];
@@ -153,7 +153,7 @@ describe('export', () => {
             const input = [['a', 'b', 'c'],
                            ['d', 'e', 'f'],
                            ['g', 'h', 'i', 'j']];
-            const headings = createHeadings(input);
+            const headings = createHeadings(input, 4);
             const expectHeadings = [['a', 'd', 'g'],
                                     ['b', 'e', 'h'],
                                     ['c', 'f', 'i'],
@@ -164,7 +164,7 @@ describe('export', () => {
             const input = [['a', 'b', 'c'],
                            ['d', 'e', 'f', '1'],
                            ['g', 'h', 'i', 'j', 'k']];
-            const headings = createHeadings(input);
+            const headings = createHeadings(input, 5);
             const expectHeadings = [['a', 'd', 'g'],
                                     ['b', 'e', 'h'],
                                     ['c', 'f', 'i'],
@@ -176,7 +176,7 @@ describe('export', () => {
             const input = ['rows',
                            ['d', 'e', 'f'],
                            ['g', 'h', 'i']];
-            const headings = createHeadings(input);
+            const headings = createHeadings(input, 3);
             const expectHeadings = [['rows', 'd', 'g'],
                                     ['rows', 'e', 'h'],
                                     ['rows', 'f', 'i']];
@@ -186,7 +186,7 @@ describe('export', () => {
             const input = ['rows',
                           ['d', 'e', 'f', 'g'],
                           ['g', 'h', 'i']];
-            const headings = createHeadings(input);
+            const headings = createHeadings(input, 4);
             const expectHeadings = [['rows', 'd', 'g'],
                                 ['rows', 'e', 'h'],
                                 ['rows', 'f', 'i'],
@@ -197,13 +197,13 @@ describe('export', () => {
             const input = ['1',
                           '2',
                           '3'];
-            const headings = createHeadings(input);
+            const headings = createHeadings(input, 1);
             const expectHeadings = [['1', '2', '3']];
             expect(headings).to.deep.equal(expectHeadings);
         });
         it('strings array', () => {
             const input = [];
-            const headings = createHeadings(input);
+            const headings = createHeadings(input, 0);
             const expectHeadings = [];
             expect(headings).to.deep.equal(expectHeadings);
         });
@@ -221,7 +221,7 @@ describe('export', () => {
             ];
         it('create sheet with column names as headers for name or display header mode', () => {
             const columnID = ['col1', 'col2', 'col3'];
-            const wsName = createWorksheet(Headings, data, columnID, 'name');
+            const wsName = createWorksheet(Headings, data, columnID, 'names');
             const wsDisplay = createWorksheet(Headings, data, columnID, 'display');
             const expectedWS = {
                 A1: {t: 's', v: 'rows'},
@@ -316,7 +316,7 @@ describe('export', () => {
         });
         it('create Name workbook', () => {
             const newWS = R.clone(ws);
-            const wbName = createWorkbook(newWS, Headings, 'name');
+            const wbName = createWorkbook(newWS, Headings, 'names');
             expect(wbName.Sheets.SheetJS['!merges']).to.deep.equal(undefined);
         });
         it('create None workbook', () => {

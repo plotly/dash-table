@@ -4,6 +4,7 @@ import React, {
 } from 'react';
 import { IDerivedData, IColumn, IVisibleColumn } from 'dash-table/components/Table/props';
 import { createWorkbook, createHeadings, createWorksheet } from './utils';
+import getHeaderRows from 'dash-table/derived/header/headerRows';
 
 interface IExportButtonProps {
     export_format: string;
@@ -15,11 +16,11 @@ interface IExportButtonProps {
 export default class ExportButton extends Component<IExportButtonProps, any> {
 
     handleExport = () => {
-
         const { columns, export_format, virtual_data, export_header } = this.props;
         const columnID = columns.map(column => column.id);
         const columnHeaders = columns.map(column => column.name);
-        const Heading = (export_header !== 'none') ? createHeadings(columnHeaders, columns) : [];
+        const maxLength = getHeaderRows(columns);
+        const Heading = (export_header !== 'none') ? createHeadings(columnHeaders, maxLength) : [];
         const ws = createWorksheet(Heading, virtual_data.data, columnID, export_header);
         const wb = createWorkbook(ws, Heading, export_header);
         if (export_format === 'xlsx') {
