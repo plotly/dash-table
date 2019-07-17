@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import * as R from 'ramda';
 
 /*#if DEV*/
@@ -13,8 +13,7 @@ import {
     SetProps,
     IState,
     StandaloneState,
-    SanitizedAndDerivedProps,
-    IColumn
+    SanitizedAndDerivedProps
 } from './props';
 
 import 'react-select/dist/react-select.css';
@@ -23,7 +22,6 @@ import './Dropdown.css';
 import { isEqual } from 'core/comparer';
 import { SingleColumnSyntaxTree } from 'dash-table/syntax-tree';
 import derivedFilterMap from 'dash-table/derived/filter/map';
-import MenuBar from '../MenuBar';
 
 import controlledPropsHelper from './controlledPropsHelper';
 import derivedPropsHelper from './derivedPropsHelper';
@@ -91,33 +89,7 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
 
         this.updateDerivedProps(controlled, this.controlledSetProps);
 
-        const {
-            columns,
-            hidden_columns,
-            setProps
-        } = controlled;
-
-        return (<Fragment>
-            <MenuBar
-                columns={columns}
-                hiddenColumns={hidden_columns}
-                toggleColumn={(c: IColumn) => {
-                    const hidden = hidden_columns ? hidden_columns.slice(0) : [];
-
-                    const cIndex = hidden.indexOf(c.id);
-                    if (cIndex >= 0) {
-                        hidden.splice(cIndex, 1);
-                    } else {
-                        hidden.push(c.id);
-                    }
-
-                    setProps({ hidden_columns: hidden });
-                }}
-                toggleColumnOps={() => { }}
-                toggleRowOps={() => { }}
-            />
-            <ControlledTable {...controlled} />)
-        </Fragment>);
+        return (<ControlledTable {...controlled} />);
     }
 
     private get controlledSetProps() {

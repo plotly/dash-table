@@ -9,7 +9,6 @@ import Logger from 'core/Logger';
 import genRandomId from 'dash-table/utils/generate';
 import isValidProps from './validate';
 import Sanitizer from './Sanitizer';
-import MenuBar from 'dash-table/components/MenuBar';
 
 /**
  * Dash DataTable is an interactive table component designed for
