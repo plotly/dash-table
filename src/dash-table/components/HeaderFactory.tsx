@@ -4,7 +4,6 @@ import React, { CSSProperties } from 'react';
 import { arrayMap2 } from 'core/math/arrayZipMap';
 import { matrixMap2, matrixMap3 } from 'core/math/matrixZipMap';
 
-import { ControlledTableProps, Columns } from 'dash-table/components/Table/props';
 import derivedHeaderContent from 'dash-table/derived/header/content';
 import getHeaderRows from 'dash-table/derived/header/headerRows';
 import getIndices from 'dash-table/derived/header/indices';
@@ -16,6 +15,7 @@ import derivedHeaderStyles, { derivedHeaderOpStyles } from 'dash-table/derived/h
 
 import { IEdgesMatrices } from 'dash-table/derived/edges/type';
 import { memoizeOne } from 'core/memoizer';
+import { HeaderFactoryProps, Columns } from './Table/props';
 
 export default class HeaderFactory {
     private readonly headerContent = derivedHeaderContent();
@@ -29,7 +29,7 @@ export default class HeaderFactory {
         return this.propsFn();
     }
 
-    constructor(private readonly propsFn: () => ControlledTableProps) {
+    constructor(private readonly propsFn: () => HeaderFactoryProps) {
 
     }
 
@@ -38,10 +38,12 @@ export default class HeaderFactory {
 
         const {
             data,
+            map,
             merge_duplicate_headers,
             page_action,
             row_deletable,
             row_selectable,
+            setFilter,
             setProps,
             sort_action,
             sort_by,
@@ -92,10 +94,12 @@ export default class HeaderFactory {
             visibleColumns,
             data,
             labelsAndIndices,
+            map,
             sort_action,
             sort_mode,
             sort_by,
             page_action,
+            setFilter,
             setProps,
             merge_duplicate_headers
         );

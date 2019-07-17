@@ -13,15 +13,42 @@ import {
     Columns,
     IColumn,
     SetProps,
-    TableAction
+    TableAction,
+    SetFilter
 } from 'dash-table/components/Table/props';
 import * as actions from 'dash-table/utils/actions';
+import { SingleColumnSyntaxTree } from 'dash-table/syntax-tree';
+import { clearColumnsFilter } from '../filter/map';
 
-function deleteColumn(column: IColumn, columns: Columns, columnRowIndex: any, setProps: SetProps, data: Data) {
-    return () => {
-        setProps(actions.deleteColumn(column, columns, columnRowIndex, data));
-    };
-}
+const doAction = (
+    action: (
+        column: IColumn,
+        columns: Columns,
+        columnRowIndex: any,
+        mergeDuplicateHeaders: boolean,
+        data: Data
+    ) => any,
+    column: IColumn,
+    columns: Columns,
+    columnRowIndex: any,
+    mergeDuplicateHeaders: boolean,
+    setFilter: SetFilter,
+    setProps: SetProps,
+    map: Map<string, SingleColumnSyntaxTree>,
+    data: Data
+) => () => {
+    setProps(action(column, columns, columnRowIndex, mergeDuplicateHeaders, data));
+
+    const affectedColumns: Columns = [];
+    R.forEach(id => {
+        const affectedColumn = columns.find(c => c.id === id);
+        if (affectedColumn) {
+            affectedColumns.push(affectedColumn);
+        }
+    }, actions.getAffectedColumns(column, columns, columnRowIndex, mergeDuplicateHeaders));
+
+    clearColumnsFilter(map, affectedColumns, setFilter);
+};
 
 function doSort(columnId: ColumnId, sortBy: SortBy, mode: SortMode, setProps: SetProps) {
     return () => {
@@ -79,16 +106,24 @@ function getSortingIcon(columnId: ColumnId, sortBy: SortBy) {
     }
 }
 
+function getColumnFlag(i: number, flag?: boolean | boolean[]): boolean {
+    return typeof flag === 'boolean' ?
+        flag :
+        !!flag && flag[i];
+}
+
 function getter(
     columns: Columns,
     data: Data,
     labelsAndIndices: R.KeyValuePair<any[], number[]>[],
+    map: Map<string, SingleColumnSyntaxTree>,
     sort_action: TableAction,
     mode: SortMode,
     sortBy: SortBy,
     paginationMode: TableAction,
+    setFilter: SetFilter,
     setProps: SetProps,
-    merge_duplicate_headers: boolean
+    mergeDuplicateHeaders: boolean
 ): JSX.Element[][] {
     return R.addIndex<R.KeyValuePair<any[], number[]>, JSX.Element[]>(R.map)(
         ([labels, indices], headerRowIndex) => {
@@ -98,15 +133,9 @@ function getter(
                 columnIndex => {
                     const column = columns[columnIndex];
 
-                    const renamable: boolean = typeof column.renamable === 'boolean' ?
-                        column.renamable :
-                        !!column.renamable && column.renamable[headerRowIndex];
-
-                    const deletable = paginationMode !== TableAction.Custom && (
-                        typeof column.deletable === 'boolean' ?
-                            column.deletable :
-                            !!column.deletable && column.deletable[headerRowIndex]
-                    );
+                    const renamable = getColumnFlag(headerRowIndex, column.renamable);
+                    const clearable = paginationMode !== TableAction.Custom && getColumnFlag(headerRowIndex, column.clearable);
+                    const deletable = paginationMode !== TableAction.Custom && getColumnFlag(headerRowIndex, column.deletable);
 
                     return (<div>
                         {sort_action !== TableAction.None && isLastRow ?
@@ -122,24 +151,28 @@ function getter(
                         {renamable ?
                             (<span
                                 className='column-header--edit'
-                                onClick={editColumnName(column, columns, headerRowIndex, setProps, merge_duplicate_headers)}
-                            >
-                                {`✎`}
-                            </span>) :
+                                onClick={editColumnName(column, columns, headerRowIndex, setProps, mergeDuplicateHeaders)}
+                            />) :
+                            ''
+                        }
+
+                        {clearable ?
+                            (<span
+                                className='column-header--clear'
+                                onClick={doAction(actions.clearColumn, column, columns, headerRowIndex, mergeDuplicateHeaders, setFilter, setProps, map, data)}
+                            />) :
                             ''
                         }
 
                         {deletable ?
                             (<span
                                 className='column-header--delete'
-                                onClick={deleteColumn(column, columns, headerRowIndex, setProps, data)}
-                            >
-                                {'×'}
-                            </span>) :
+                                onClick={doAction(actions.deleteColumn, column, columns, headerRowIndex, mergeDuplicateHeaders, setFilter, setProps, map, data)}
+                            />) :
                             ''
                         }
 
-                        <span>{labels[columnIndex]}</span>
+                        <span className='column-header-name'>{labels[columnIndex]}</span>
                     </div>);
                 },
                 indices
