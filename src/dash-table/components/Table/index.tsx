@@ -18,6 +18,7 @@ import {
 
 import 'react-select/dist/react-select.css';
 import './Table.less';
+import './style';
 import './Dropdown.css';
 import { isEqual } from 'core/comparer';
 import { SingleColumnSyntaxTree } from 'dash-table/syntax-tree';

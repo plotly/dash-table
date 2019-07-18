@@ -97,12 +97,12 @@ function getSorting(columnId: ColumnId, sortBy: SortBy): SortDirection {
 function getSortingIcon(columnId: ColumnId, sortBy: SortBy) {
     switch (getSorting(columnId, sortBy)) {
         case SortDirection.Descending:
-            return '↓';
+            return 'sort--desc';
         case SortDirection.Ascending:
-            return '↑';
+            return 'sort--asc';
         case SortDirection.None:
         default:
-            return '↕';
+            return 'sort--none';
     }
 }
 
@@ -140,11 +140,9 @@ function getter(
                     return (<div>
                         {sort_action !== TableAction.None && isLastRow ?
                             (<span
-                                className='sort'
+                                className={`sort ${getSortingIcon(column.id, sortBy)}`}
                                 onClick={doSort(column.id, sortBy, mode, setProps)}
-                            >
-                                {getSortingIcon(column.id, sortBy)}
-                            </span>) :
+                            />) :
                             ''
                         }
 
