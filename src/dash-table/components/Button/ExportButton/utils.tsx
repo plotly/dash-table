@@ -1,7 +1,6 @@
 import * as R from 'ramda';
 import XLSX from 'xlsx';
 
-
 interface IMergeObject {
     s: {r: number, c: number};
     e: {r: number, c: number};
