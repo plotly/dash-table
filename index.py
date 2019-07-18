@@ -23,8 +23,8 @@ apps = {
         ),
         filename.replace(".py", ""),
     )
-    for filename in os.listdir(os.path.join("tests", "integration")):
-        if filename.startswith("app_") and filename.endswith(".py")
+    for filename in os.listdir(os.path.join("tests", "integration"))
+    if filename.startswith("app_") and filename.endswith(".py")
 }
 
 
