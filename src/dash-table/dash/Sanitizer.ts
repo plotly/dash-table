@@ -68,7 +68,7 @@ export default class Sanitizer {
         let headerFormat = props.export_header;
         if (props.export_format === 'xlsx' && headerFormat === 'none' ) {
             headerFormat = 'names';
-        } else if (props.export_format === 'csv' && headerFormat === 'none'){
+        } else if (props.export_format === 'csv' && headerFormat === 'none') {
             headerFormat = 'ids';
         }
         return R.merge(props, {
