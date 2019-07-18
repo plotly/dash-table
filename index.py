@@ -19,7 +19,7 @@ server = app.server
 apps = {
     filename.replace(".py", "").replace("app_", ""): getattr(
         getattr(
-            __import__(".".join(["tests", "dash", filename.replace(".py", "")])), "dash"
+            __import__(".".join(["tests", "integration", filename.replace(".py", "")])), "dash"
         ),
         filename.replace(".py", ""),
     )
