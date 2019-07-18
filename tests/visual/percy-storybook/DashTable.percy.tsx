@@ -451,25 +451,25 @@ storiesOf('DashTable/Sorting', module)
 storiesOf('DashTable/Export', module)
         .add('Export Button for xlsx file', () => (<DataTable
             setProps={setProps}
-            data={dataA2J}
-            columns={columnsA2J}
+            data={dataA2J.slice(0, 10)}
+            columns={columnsA2J.slice(0, 10)}
             export_format= {'xlsx'}
         />))
         .add('Export Button for csv file', () => (<DataTable
             setProps={setProps}
-            data={dataA2J}
-            columns={columnsA2J}
+            data={dataA2J.slice(0, 10)}
+            columns={columnsA2J.slice(0, 10)}
             export_format= {'xlsx'}
         />))
         .add('No export Button for file formatted not supported', () => (<DataTable
             setProps={setProps}
-            data={dataA2J}
-            columns={columnsA2J}
+            data={dataA2J.slice(0, 10)}
+            columns={columnsA2J.slice(0, 10)}
             export_format= {'json'}
         />))
         .add('No export Button', () => (<DataTable
             setProps={setProps}
-            data={dataA2J}
-            columns={columnsA2J}
+            data={dataA2J.slice(0, 10)}
+            columns={columnsA2J.slice(0, 10)}
             export_format= {'none'}
         />));
