@@ -104,11 +104,39 @@ const scenarios: ITest[] = [
             }, COLUMNS_BASE)
         }
     }, {
-        name: 'clearable+deletable',
+        name: 'hideable',
+        props: {
+            columns: R.map(c => R.mergeRight(c, {
+                hideable: true
+            }), COLUMNS_BASE)
+        }
+    }, {
+        name: 'hideable (top-city, bottom-climate)',
+        props: {
+            columns: R.map((c: any) => {
+                const firstName = c.name[0];
+
+                if (firstName === 'City') {
+                    return R.mergeRight(c, {
+                        hideable: [true, false]
+                    });
+                } else if (firstName === 'Climate') {
+                    return R.mergeRight(c, {
+                        hideable: [false, true]
+                    });
+
+                } else {
+                    return c;
+                }
+            }, COLUMNS_BASE)
+        }
+    }, {
+        name: 'clearable+deletable+hideable',
         props: {
             columns: R.map(c => R.mergeRight(c, {
                 clearable: true,
-                deletable: true
+                deletable: true,
+                hideable: true
             }), COLUMNS_BASE)
         }
     }

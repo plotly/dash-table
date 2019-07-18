@@ -165,6 +165,11 @@ export const propTypes = {
          */
         editable: PropTypes.bool,
 
+        hideable: PropTypes.oneOfType([
+            PropTypes.bool,
+            PropTypes.arrayOf(PropTypes.bool)
+        ]),
+
         /**
          * If True, then the name of this column is editable.
          * If there are multiple column headers (if `name` is a list of strings),

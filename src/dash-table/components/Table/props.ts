@@ -156,6 +156,7 @@ export interface IBaseColumn {
     clearable?: boolean | boolean[];
     deletable?: boolean | boolean[];
     editable: boolean;
+    hideable?: boolean | boolean[];
     renamable?: boolean | boolean[];
     sort_as_null: SortAsNull;
     id: ColumnId;

@@ -336,6 +336,7 @@
             .column-header--clear,
             .column-header--delete,
             .column-header--edit,
+            .column-header--hide
             .sort {
                 .not-selectable();
                 cursor: pointer;
@@ -516,7 +517,8 @@
 
         .column-header--clear,
         .column-header--delete,
-        .column-header--edit {
+        .column-header--edit,
+        .column-header--hide {
             float: left;
             opacity: 0.1;
             padding-left: 2px;
@@ -527,7 +529,8 @@
         th:hover {
             .column-header--clear,
             .column-header--delete,
-            .column-header--edit {
+            .column-header--edit,
+            .column-header--hide {
                 color: var(--accent);
                 opacity: 1;
             }

@@ -114,6 +114,7 @@ function getColumnFlag(i: number, flag?: boolean | boolean[]): boolean {
 
 function getter(
     columns: Columns,
+    hiddenColumns: string[] | undefined,
     data: Data,
     labelsAndIndices: R.KeyValuePair<any[], number[]>[],
     map: Map<string, SingleColumnSyntaxTree>,
@@ -133,9 +134,10 @@ function getter(
                 columnIndex => {
                     const column = columns[columnIndex];
 
-                    const renamable = getColumnFlag(headerRowIndex, column.renamable);
                     const clearable = paginationMode !== TableAction.Custom && getColumnFlag(headerRowIndex, column.clearable);
                     const deletable = paginationMode !== TableAction.Custom && getColumnFlag(headerRowIndex, column.deletable);
+                    const hideable = getColumnFlag(headerRowIndex, column.hideable);
+                    const renamable = getColumnFlag(headerRowIndex, column.renamable);
 
                     return (<div>
                         {sort_action !== TableAction.None && isLastRow ?
@@ -166,6 +168,22 @@ function getter(
                             (<span
                                 className='column-header--delete'
                                 onClick={doAction(actions.deleteColumn, column, columns, headerRowIndex, mergeDuplicateHeaders, setFilter, setProps, map, data)}
+                            />) :
+                            ''
+                        }
+
+                        {hideable ?
+                            (<span
+                                className='column-header--hide'
+                                onClick={() => {
+                                    const ids = actions.getColumnIds(column, columns, headerRowIndex, mergeDuplicateHeaders);
+
+                                    const hidden_columns = hiddenColumns ?
+                                        R.union(hiddenColumns, ids) :
+                                        ids;
+
+                                    setProps({ hidden_columns });
+                                }}
                             />) :
                             ''
                         }

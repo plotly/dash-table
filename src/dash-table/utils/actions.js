@@ -61,6 +61,17 @@ export function deleteColumn(column, columns, headerRowIndex, mergeDuplicateHead
     };
 }
 
+export function getColumnIds(column, columns, headerRowIndex, mergeDuplicateHeaders) {
+    const { groupIndexFirst, groupIndexLast } = getGroupedColumnIndices(
+        column, columns, headerRowIndex, mergeDuplicateHeaders, columns.indexOf(column)
+    );
+
+    return R.map(
+        c => c.id,
+        columns.slice(groupIndexFirst, groupIndexLast + 1)
+    );
+}
+
 export const clearSelection = {
     active_cell: undefined,
     start_cell: undefined,
