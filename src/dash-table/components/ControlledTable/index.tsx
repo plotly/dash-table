@@ -8,7 +8,7 @@ import {
     isCtrlDown,
     isNavKey
 } from 'dash-table/utils/unicode';
-import ExportButton from 'dash-table/components/Button/ExportButton';
+import ExportButton from 'dash-table/components/Export';
 import { selectionBounds, selectionCycle } from 'dash-table/utils/navigation';
 import { makeCell, makeSelection } from 'dash-table/derived/cell/cellProps';
 

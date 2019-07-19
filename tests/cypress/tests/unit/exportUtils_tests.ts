@@ -1,4 +1,4 @@
-import { transformMultDimArray, getMergeRanges, createHeadings, createWorksheet, createWorkbook  } from 'dash-table/components/Button/ExportButton/utils';
+import { transformMultDimArray, getMergeRanges, createHeadings, createWorksheet, createWorkbook  } from 'dash-table/components/Export/utils';
 import * as R from 'ramda';
 
 describe('export', () => {
