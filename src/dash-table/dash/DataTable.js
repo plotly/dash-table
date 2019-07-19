@@ -88,7 +88,7 @@ export const defaultProps = {
     columns: [],
     editable: false,
     export_format: 'none',
-    export_header: 'none',
+    export_headers: 'none',
     selected_cells: [],
     selected_rows: [],
     selected_row_ids: [],
@@ -450,7 +450,7 @@ export const propTypes = {
      * `'names'`, then the headers of data file will be the column id or the column
      * names, respectively
      */
-    export_header: PropTypes.oneOf(['none', 'ids', 'names', 'display']),
+    export_headers: PropTypes.oneOf(['none', 'ids', 'names', 'display']),
 
     /**
      * `fill_width` toggles between a set of CSS for two common behaviors:

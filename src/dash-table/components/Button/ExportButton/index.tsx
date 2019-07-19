@@ -10,19 +10,19 @@ interface IExportButtonProps {
     export_format: string;
     virtual_data: IDerivedData;
     columns: IColumn[] & IVisibleColumn[];
-    export_header: string;
+    export_headers: string;
 }
 
 export default class ExportButton extends Component<IExportButtonProps, any> {
 
     handleExport = () => {
-        const { columns, export_format, virtual_data, export_header } = this.props;
+        const { columns, export_format, virtual_data, export_headers } = this.props;
         const columnID = columns.map(column => column.id);
         const columnHeaders = columns.map(column => column.name);
         const maxLength = getHeaderRows(columns);
-        const Heading = (export_header !== 'none') ? createHeadings(columnHeaders, maxLength) : [];
-        const ws = createWorksheet(Heading, virtual_data.data, columnID, export_header);
-        const wb = createWorkbook(ws, Heading, export_header);
+        const Heading = (export_headers !== 'none') ? createHeadings(columnHeaders, maxLength) : [];
+        const ws = createWorksheet(Heading, virtual_data.data, columnID, export_headers);
+        const wb = createWorkbook(ws, Heading, export_headers);
         if (export_format === 'xlsx') {
             XLSX.writeFile(wb, 'Data.xlsx', {bookType: 'xlsx', type: 'buffer'});
         } else if (export_format === 'csv') {
