@@ -66,9 +66,9 @@ export default class Sanitizer {
     sanitize(props: PropsWithDefaults): SanitizedProps {
         const locale_format = this.applyDefaultToLocale(props.locale_format);
         let headerFormat = props.export_headers;
-        if (props.export_format === 'xlsx' && headerFormat === 'none' ) {
+        if (props.export_format === 'xlsx' &&  R.isNil(headerFormat)) {
             headerFormat = 'names';
-        } else if (props.export_format === 'csv' && headerFormat === 'none') {
+        } else if (props.export_format === 'csv' && R.isNil(headerFormat)) {
             headerFormat = 'ids';
         }
         return R.merge(props, {
