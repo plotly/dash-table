@@ -1,5 +1,6 @@
 import * as R from 'ramda';
 import XLSX from 'xlsx';
+import { Data } from 'dash-table/components/Table/props';
 
 interface IMergeObject {
     s: {r: number, c: number};
@@ -55,7 +56,7 @@ export function createWorkbook(ws: XLSX.WorkSheet, heading: string[][], exportHe
     return wb;
 }
 
-export function createWorksheet(heading: string[][], data: any[], columnID: string[], exportHeader: string ) {
+export function createWorksheet(heading: string[][], data: Data, columnID: string[], exportHeader: string ) {
     const ws = XLSX.utils.aoa_to_sheet(heading);
     if (exportHeader === 'display' || exportHeader === 'names' || exportHeader === 'none') {
         XLSX.utils.sheet_add_json(ws, data, {
