@@ -230,6 +230,7 @@ export interface IUSerInterfaceTooltip {
 }
 
 export interface IState {
+    activeMenu?: 'show/hide';
     currentTooltip?: IUSerInterfaceTooltip;
     forcedResizeOnly: boolean;
     rawFilterQuery: string;

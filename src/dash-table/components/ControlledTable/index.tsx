@@ -18,9 +18,10 @@ import { memoizeOne } from 'core/memoizer';
 import lexer from 'core/syntax-tree/lexer';
 
 import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
-import { ControlledTableProps, ICellFactoryProps, TableAction } from 'dash-table/components/Table/props';
+import { ControlledTableProps, ICellFactoryProps, TableAction, IColumn } from 'dash-table/components/Table/props';
 import dropdownHelper from 'dash-table/components/dropdownHelper';
 
+import getHeaderRows from 'dash-table/derived/header/headerRows';
 import derivedTable from 'dash-table/derived/table';
 import derivedTableFragments from 'dash-table/derived/table/fragments';
 import derivedTableFragmentStyles from 'dash-table/derived/table/fragmentStyles';
@@ -36,6 +37,7 @@ const DEFAULT_STYLE = {
 };
 
 export default class ControlledTable extends PureComponent<ControlledTableProps> {
+    private readonly menuRef = React.createRef<HTMLDivElement>();
     private readonly stylesheet: Stylesheet = new Stylesheet(`#${this.props.id}`);
     private readonly tableFn = derivedTable(() => this.props);
     private readonly tableFragments = derivedTableFragments();
@@ -121,13 +123,13 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         // Fallback method for paste handling in Chrome
         // when no input element has focused inside the table
         window.addEventListener('resize', this.forceHandleResize);
+        document.addEventListener('mousedown', this.handleClick);
         document.addEventListener('paste', this.handlePaste);
-        document.addEventListener('mousedown', this.handleClickOutside);
     }
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.forceHandleResize);
-        document.removeEventListener('mousedown', this.handleClickOutside);
+        document.removeEventListener('mousedown', this.handleClick);
         document.removeEventListener('paste', this.handlePaste);
     }
 
@@ -172,7 +174,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         });
     }
 
-    handleClickOutside = (event: any) => {
+    handleClick = (event: any) => {
         const $el = this.$el;
 
         if ($el &&
@@ -182,8 +184,23 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
              * so, only call when the table isn't already focussed, otherwise
              * the app will excessively re-render on _every click on the page_
              */
-            this.props.is_focused) {
-            this.props.setProps({ is_focused: false });
+            this.props.is_focused
+        ) {
+            this.props.setProps({
+                is_focused: false
+            });
+        }
+
+        const menu = this.menuRef;
+
+        if (this.props.activeMenu &&
+            menu &&
+            menu.current &&
+            !menu.current.contains(event.target as Node)
+        ) {
+            this.props.setState({
+                activeMenu: undefined
+            });
         }
     }
 
@@ -679,7 +696,9 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
     render() {
         const {
+            columns,
             id,
+            merge_duplicate_headers,
             tooltip_conditional,
             tooltip,
             currentTooltip,
@@ -760,6 +779,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             tooltip_duration
         );
 
+        const headerRows = getHeaderRows(columns);
+
         return (<div
             id={id}
             onCopy={this.onCopy}
@@ -773,6 +794,58 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                 className='dash-table-tooltip'
                 tooltip={tableTooltip}
             />
+            {!this.showToggleColumns ? null : (
+                <div className='dash-spreadsheet-menu-item' ref={this.menuRef}>
+                    <button className='show-hide'
+                        onClick={() => this.props.setState({
+                            activeMenu: this.props.activeMenu === 'show/hide' ?
+                                undefined :
+                                'show/hide'
+                        })}
+                    >
+                        Toggle Columns
+                    </button>
+                    {this.props.activeMenu !== 'show/hide' ?
+                        null :
+                        <div
+                            className='show-hide-menu'
+                            style={{ display: 'flex', flexDirection: 'column' }}
+                        >
+                            {this.props.columns.map(column => {
+                                const checked = !this.props.hidden_columns || this.props.hidden_columns.indexOf(column.id) < 0;
+                                const disabled = checked && (
+                                    typeof column.hideable === 'undefined' ?
+                                        true :
+                                        typeof column.hideable === 'boolean' ?
+                                            !column.hideable :
+                                            (
+                                                (merge_duplicate_headers && (column.hideable.length !== headerRows || !column.hideable.slice(-1)[0])) ||
+                                                (!merge_duplicate_headers && R.all(c => !c, column.hideable))
+                                            )
+                                );
+                                console.log(column.id, column.hideable, headerRows, checked, disabled);
+                                return (<div
+                                    className='show-hide-menu-item'
+                                    style={{ display: 'flex', flexDirection: 'row' }}
+                                >
+                                    <input
+                                        type='checkbox'
+                                        checked={checked}
+                                        disabled={disabled}
+                                        onClick={this.toggleColumn.bind(this, column)}
+                                    />
+                                    <label>{!column.name ?
+                                        column.id :
+                                        typeof column.name === 'string' ?
+                                            column.name :
+                                            column.name.filter(name => name.length !== 0).join(' | ')
+                                    }</label>
+                                </div>);
+                            })}
+                        </div>
+                    }
+                </div>
+            )}
             <div className={containerClasses.join(' ')} style={tableStyle}>
                 <div
                     ref='table'
@@ -822,5 +895,46 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
             (this.refs.tooltip as TableTooltip).updateBounds(cell);
         }
+    }
+
+    private get showToggleColumns(): boolean {
+        const {
+            columns,
+            hidden_columns,
+            merge_duplicate_headers
+        } = this.props;
+
+        const headerRows = getHeaderRows(columns);
+
+        return (
+            hidden_columns && hidden_columns.length > 0) ||
+            R.any(
+                column => column.hideable === true || (
+                    Array.isArray(column.hideable) && (
+                        (merge_duplicate_headers && column.hideable.length === headerRows && column.hideable.slice(-1)[0]) ||
+                        (!merge_duplicate_headers && R.any(c => c, column.hideable))
+                    )
+
+                ),
+                columns
+            );
+    }
+
+    private toggleColumn = (column: IColumn) => {
+        const {
+            hidden_columns: base,
+            setProps
+        } = this.props;
+
+        const hidden_columns = base ? base.slice(0) : [];
+        const cIndex = hidden_columns.indexOf(column.id);
+
+        if (cIndex >= 0) {
+            hidden_columns.splice(cIndex, 1);
+        } else {
+            hidden_columns.push(column.id);
+        }
+
+        setProps({ hidden_columns });
     }
 }
