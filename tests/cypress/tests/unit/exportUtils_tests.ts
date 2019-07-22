@@ -1,4 +1,4 @@
-import { transformMultDimArray, getMergeRanges, createHeadings, createWorksheet, createWorkbook  } from 'dash-table/components/Export/utils';
+import { transformMultDimArray, getMergeRanges, createHeadings, createWorksheet } from 'dash-table/components/Export/utils';
 import * as R from 'ramda';
 
 describe('export', () => {
@@ -210,10 +210,10 @@ describe('export', () => {
     });
 
     describe('createWorksheet ', () => {
-        const Headings = [['rows', 'a', 'b'],
-                                ['rows', 'c', 'd'],
-                                ['rows', 'e', 'f'],
-                                ['rows', 'g', '']];
+        const Headings =    [['rows', 'rows', 'b'],
+                            ['rows', 'c', 'c'],
+                            ['rows', 'e', 'f'],
+                            ['rows', 'rows', 'rows']];
         const data = [
                 {col1: 1, col2: 2, col3: 3},
                 {col1: 2, col2: 3, col3: 4},
@@ -231,23 +231,27 @@ describe('export', () => {
                 A5: {t: 'n', v: 1},
                 A6: {t: 'n', v: 2},
                 A7: {t: 'n', v: 1},
-                B1: {t: 's', v: 'a'},
+                B1: {t: 's', v: 'rows'},
                 B2: {t: 's', v: 'c'},
                 B3: {t: 's', v: 'e'},
-                B4: {t: 's', v: 'g'},
+                B4: {t: 's', v: 'rows'},
                 B5: {t: 'n', v: 2},
                 B6: {t: 'n', v: 3},
                 B7: {t: 'n', v: 2},
                 C1: {t: 's', v: 'b'},
-                C2: {t: 's', v: 'd'},
+                C2: {t: 's', v: 'c'},
                 C3: {t: 's', v: 'f'},
-                C4: {t: 's', v: ''},
+                C4: {t: 's', v: 'rows'},
                 C5: {t: 'n', v: 3},
                 C6: {t: 'n', v: 4},
                 C7: {t: 'n', v: 3}};
             expectedWS['!ref'] = 'A1:C7';
+            const expectedWSDisplay = R.clone(expectedWS);
+            expectedWSDisplay['!merges'] = [ {s: {r: 0, c: 0}, e: {r: 0, c: 1}},
+                {s: {r: 1, c: 1}, e: {r: 1, c: 2}},
+                {s: {r: 3, c: 0}, e: {r: 3, c: 2}} ];
             expect(wsName).to.deep.equal(expectedWS);
-            expect(wsDisplay).to.deep.equal(expectedWS);
+            expect(wsDisplay).to.deep.equal(expectedWSDisplay);
         });
         it('create sheet with column ids as headers', () => {
             const columnID = ['col1', 'col2', 'col3'];
@@ -286,50 +290,4 @@ describe('export', () => {
         });
     });
 
-    describe('createWorkbook ', () => {
-        const Headings = [['rows', 'rows', 'b'],
-                          ['rows', 'c', 'c'],
-                          ['rows', 'e', 'f'],
-                          ['g', 'g', 'g']];
-        const ws = {A1: {t: 's', v: 'col1'},
-                            A2: {t: 'n', v: 1},
-                            A3: {t: 'n', v: 2},
-                            A4: {t: 'n', v: 1},
-                            B1: {t: 's', v: 'col2'},
-                            B2: {t: 'n', v: 1},
-                            B3: {t: 'n', v: 3},
-                            B4: {t: 'n', v: 1},
-                            C1: {t: 's', v: 'col3'},
-                            C2: {t: 'n', v: 3},
-                            C3: {t: 'n', v: 3},
-                            C4: {t: 'n', v: 3}};
-        ws['!ref'] = 'A1:C4';
-        it('create Display workbook', () => {
-            const newWS = R.clone(ws);
-            const wbDisplay = createWorkbook(newWS, Headings, 'display');
-            const expectedRanges = [
-                {s: {r: 0, c: 0}, e: {r: 0, c: 1}},
-                {s: {r: 1, c: 1}, e: {r: 1, c: 2}},
-                {s: {r: 3, c: 0}, e: {r: 3, c: 2}}
-            ];
-            expect(wbDisplay.Sheets.SheetJS['!merges']).to.deep.equal(expectedRanges);
-        });
-        it('create Name workbook', () => {
-            const newWS = R.clone(ws);
-            const wbName = createWorkbook(newWS, Headings, 'names');
-            expect(wbName.Sheets.SheetJS['!merges']).to.deep.equal(undefined);
-        });
-        it('create None workbook', () => {
-            const newWS = R.clone(ws);
-            const wbNone = createWorkbook(newWS, Headings, 'none');
-            // const wbID = createWorkbook(ws, Headings, 'ids');
-            expect(wbNone.Sheets.SheetJS['!merges']).to.deep.equal(undefined);
-            // expect(wbID.Sheets.SheetJS['!merges']).to.deep.equal([]);
-        });
-        it('create ID workbook', () => {
-            const newWS = R.clone(ws);
-            const wbID = createWorkbook(newWS, Headings, 'ids');
-            expect(wbID.Sheets.SheetJS['!merges']).to.deep.equal(undefined);
-        });
-    });
 });

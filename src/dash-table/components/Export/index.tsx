@@ -22,7 +22,7 @@ export default React.memo((props: IExportButtonProps) => {
         const maxLength = getHeaderRows(columns);
         const heading = (export_headers !== 'none') ? createHeadings(columnHeaders, maxLength) : [];
         const ws = createWorksheet(heading, virtual_data.data, columnID, export_headers);
-        const wb = createWorkbook(ws, heading, export_headers);
+        const wb = createWorkbook(ws);
         if (export_format === 'xlsx') {
             XLSX.writeFile(wb, 'Data.xlsx', {bookType: 'xlsx', type: 'buffer'});
         } else if (export_format === 'csv') {
