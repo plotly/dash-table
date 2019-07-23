@@ -165,10 +165,7 @@ export const propTypes = {
          */
         editable: PropTypes.bool,
 
-        hideable: PropTypes.oneOfType([
-            PropTypes.bool,
-            PropTypes.arrayOf(PropTypes.bool)
-        ]),
+        hideable: PropTypes.bool,
 
         /**
          * If True, then the name of this column is editable.

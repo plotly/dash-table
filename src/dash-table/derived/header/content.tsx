@@ -5,7 +5,7 @@ import { memoizeOneFactory } from 'core/memoizer';
 import { SortDirection, SortBy } from 'core/sorting';
 import multiUpdate from 'core/sorting/multi';
 import singleUpdate from 'core/sorting/single';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     ColumnId,
     Data,
@@ -97,12 +97,12 @@ function getSorting(columnId: ColumnId, sortBy: SortBy): SortDirection {
 function getSortingIcon(columnId: ColumnId, sortBy: SortBy) {
     switch (getSorting(columnId, sortBy)) {
         case SortDirection.Descending:
-            return 'sort--desc';
+            return 'sort-down';
         case SortDirection.Ascending:
-            return 'sort--asc';
+            return 'sort-up';
         case SortDirection.None:
         default:
-            return 'sort--none';
+            return 'sort';
     }
 }
 
@@ -142,9 +142,11 @@ function getter(
                     return (<div>
                         {sort_action !== TableAction.None && isLastRow ?
                             (<span
-                                className={`sort ${getSortingIcon(column.id, sortBy)}`}
+                                className='sort'
                                 onClick={doSort(column.id, sortBy, mode, setProps)}
-                            />) :
+                            >
+                                <FontAwesomeIcon icon={getSortingIcon(column.id, sortBy)} />
+                            </span>) :
                             ''
                         }
 
@@ -152,7 +154,9 @@ function getter(
                             (<span
                                 className='column-header--edit'
                                 onClick={editColumnName(column, columns, headerRowIndex, setProps, mergeDuplicateHeaders)}
-                            />) :
+                            >
+                                <FontAwesomeIcon icon='pencil-alt' />
+                            </span>) :
                             ''
                         }
 
@@ -160,7 +164,9 @@ function getter(
                             (<span
                                 className='column-header--clear'
                                 onClick={doAction(actions.clearColumn, column, columns, headerRowIndex, mergeDuplicateHeaders, setFilter, setProps, map, data)}
-                            />) :
+                            >
+                                <FontAwesomeIcon icon='eraser' />
+                            </span>) :
                             ''
                         }
 
@@ -168,11 +174,13 @@ function getter(
                             (<span
                                 className='column-header--delete'
                                 onClick={doAction(actions.deleteColumn, column, columns, headerRowIndex, mergeDuplicateHeaders, setFilter, setProps, map, data)}
-                            />) :
+                            >
+                                <FontAwesomeIcon icon={['far', 'trash-alt']} />
+                            </span>) :
                             ''
                         }
 
-                        {hideable ?
+                        {(hideable && isLastRow) ?
                             (<span
                                 className='column-header--hide'
                                 onClick={() => {
@@ -183,8 +191,9 @@ function getter(
                                         ids;
 
                                     setProps({ hidden_columns });
-                                }}
-                            />) :
+                                }}>
+                                <FontAwesomeIcon icon={['far', 'eye-slash']} />
+                            </span>) :
                             ''
                         }
 

@@ -1,5 +1,4 @@
 @import (reference) '~dash-table/style/reset.less';
-@import (reference) '~./font-awesome-polyfills.less';
 
 .fit-content-polyfill() {
     width: auto; // MS Edge, IE
@@ -426,18 +425,6 @@
         cursor: pointer;
         float: left;
         color: var(--faded-text-header);
-
-        &.sort--asc {
-            .fa-sort-up();
-        }
-
-        &.sort--desc {
-            .fa-sort-down();
-        }
-
-        &.sort--none {
-            .fa-sort();
-        }
     }
 
     th:hover .sort {
@@ -517,22 +504,6 @@
     }
 
     .dash-spreadsheet-inner {
-        .column-header--clear {
-            .fa-eraser();
-        }
-
-        .column-header--delete {
-            .fa-trash();
-        }
-
-        .column-header--edit {
-            .fa-pencil();
-        }
-
-        .column-header--hide {
-            .fa-eye-slash();
-        }
-
         .column-header--clear,
         .column-header--delete,
         .column-header--edit,

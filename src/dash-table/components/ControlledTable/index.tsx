@@ -21,7 +21,6 @@ import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
 import { ControlledTableProps, ICellFactoryProps, TableAction, IColumn } from 'dash-table/components/Table/props';
 import dropdownHelper from 'dash-table/components/dropdownHelper';
 
-import getHeaderRows from 'dash-table/derived/header/headerRows';
 import derivedTable from 'dash-table/derived/table';
 import derivedTableFragments from 'dash-table/derived/table/fragments';
 import derivedTableFragmentStyles from 'dash-table/derived/table/fragmentStyles';
@@ -696,9 +695,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
     render() {
         const {
-            columns,
             id,
-            merge_duplicate_headers,
             tooltip_conditional,
             tooltip,
             currentTooltip,
@@ -779,8 +776,6 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             tooltip_duration
         );
 
-        const headerRows = getHeaderRows(columns);
-
         return (<div
             id={id}
             onCopy={this.onCopy}
@@ -813,17 +808,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                         >
                             {this.props.columns.map(column => {
                                 const checked = !this.props.hidden_columns || this.props.hidden_columns.indexOf(column.id) < 0;
-                                const disabled = checked && (
-                                    typeof column.hideable === 'undefined' ?
-                                        true :
-                                        typeof column.hideable === 'boolean' ?
-                                            !column.hideable :
-                                            (
-                                                (merge_duplicate_headers && (column.hideable.length !== headerRows || !column.hideable.slice(-1)[0])) ||
-                                                (!merge_duplicate_headers && R.all(c => !c, column.hideable))
-                                            )
-                                );
-                                console.log(column.id, column.hideable, headerRows, checked, disabled);
+                                const disabled = !column.hideable && checked;
+
                                 return (<div
                                     className='show-hide-menu-item'
                                     style={{ display: 'flex', flexDirection: 'row' }}
@@ -900,24 +886,12 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
     private get showToggleColumns(): boolean {
         const {
             columns,
-            hidden_columns,
-            merge_duplicate_headers
+            hidden_columns
         } = this.props;
-
-        const headerRows = getHeaderRows(columns);
 
         return (
             hidden_columns && hidden_columns.length > 0) ||
-            R.any(
-                column => column.hideable === true || (
-                    Array.isArray(column.hideable) && (
-                        (merge_duplicate_headers && column.hideable.length === headerRows && column.hideable.slice(-1)[0]) ||
-                        (!merge_duplicate_headers && R.any(c => c, column.hideable))
-                    )
-
-                ),
-                columns
-            );
+            R.any(column => !!column.hideable, columns);
     }
 
     private toggleColumn = (column: IColumn) => {
