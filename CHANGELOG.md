@@ -4,6 +4,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
+[#314](https://github.com/plotly/dash-table/issues/314)
+- New `column.hideable` flag that displays a "eye" action icon in the column
+    Accepts a boolean. Clicking on the "eye" will add the column to the `hidden_columns` prop.
+    `hidden_columns` can be added back through the Columns toggle menu whether they are hideable or not.
+
 [#313](https://github.com/plotly/dash-table/issues/313)
 - Ability to export table as csv or xlsx file.
 
@@ -23,7 +28,7 @@ reset the filter for the affected column(s)
 
 ### Fixed
 [#491](https://github.com/plotly/dash-table/issues/491)
-- Fixed unconsistent behaviors when editing cell headers
+- Fixed inconsistent behaviors when editing cell headers
 
 ## [4.0.2] - 2019-07-15
 ### Fixed
