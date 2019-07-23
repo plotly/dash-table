@@ -798,49 +798,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                 className='dash-table-tooltip'
                 tooltip={tableTooltip}
             />
-            {!this.showToggleColumns ? null : (
-                <div className='dash-spreadsheet-menu-item' ref={this.menuRef}>
-                    <button className='show-hide'
-                        onClick={() => this.props.setState({
-                            activeMenu: this.props.activeMenu === 'show/hide' ?
-                                undefined :
-                                'show/hide'
-                        })}
-                    >
-                        Toggle Columns
-                    </button>
-                    {this.props.activeMenu !== 'show/hide' ?
-                        null :
-                        <div
-                            className='show-hide-menu'
-                            style={{ display: 'flex', flexDirection: 'column' }}
-                        >
-                            {this.props.columns.map(column => {
-                                const checked = !this.props.hidden_columns || this.props.hidden_columns.indexOf(column.id) < 0;
-                                const disabled = !column.hideable && checked;
-
-                                return (<div
-                                    className='show-hide-menu-item'
-                                    style={{ display: 'flex', flexDirection: 'row' }}
-                                >
-                                    <input
-                                        type='checkbox'
-                                        checked={checked}
-                                        disabled={disabled}
-                                        onClick={this.toggleColumn.bind(this, column)}
-                                    />
-                                    <label>{!column.name ?
-                                        column.id :
-                                        typeof column.name === 'string' ?
-                                            column.name :
-                                            column.name.filter(name => name.length !== 0).join(' | ')
-                                    }</label>
-                                </div>);
-                            })}
-                        </div>
-                    }
-                </div>
-            )}
+            {this.renderMenu()}
             <div className={containerClasses.join(' ')} style={tableStyle}>
                 <div
                     ref='table'
@@ -871,6 +829,60 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                 </div>
             )}
             <ExportButton {...buttonProps} />
+        </div>);
+    }
+
+    renderMenu() {
+        if (!this.showToggleColumns) {
+            return null;
+        }
+
+        const {
+            activeMenu,
+            columns,
+            hidden_columns,
+            setState
+        } = this.props;
+
+        return (<div
+            className='dash-spreadsheet-menu-item'
+            ref={this.menuRef}
+        >
+            <button className='show-hide'
+                onClick={() => setState({
+                    activeMenu: activeMenu === 'show/hide' ? undefined : 'show/hide'
+                })}
+            >Toggle Columns</button>
+            {activeMenu !== 'show/hide' ?
+                null :
+                <div
+                    className='show-hide-menu'
+                    style={{ display: 'flex', flexDirection: 'column' }}
+                >
+                    {columns.map(column => {
+                        const checked = !hidden_columns || hidden_columns.indexOf(column.id) < 0;
+                        const disabled = !column.hideable && checked;
+
+                        return (<div
+                            className='show-hide-menu-item'
+                            style={{ display: 'flex', flexDirection: 'row' }}
+                        >
+                            <input
+                                type='checkbox'
+                                checked={checked}
+                                disabled={disabled}
+                                onClick={this.toggleColumn.bind(this, column)}
+                            />
+                            <label>{!column.name ?
+                                column.id :
+                                typeof column.name === 'string' ?
+                                    column.name :
+                                    column.name.filter(name => name.length !== 0).join(' | ')
+                            }</label>
+                        </div>);
+                    })}
+                </div>
+            }
         </div>);
     }
 
