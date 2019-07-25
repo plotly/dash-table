@@ -798,7 +798,10 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                 className='dash-table-tooltip'
                 tooltip={tableTooltip}
             />
-            {this.renderMenu()}
+            <div className='dash-spreadsheet-menu'>
+                {this.renderMenu()}
+                <ExportButton {...buttonProps} />
+            </div>
             <div className={containerClasses.join(' ')} style={tableStyle}>
                 <div
                     ref='table'
@@ -828,7 +831,6 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                     <button className='next-page' onClick={this.loadNext}>Next</button>
                 </div>
             )}
-            <ExportButton {...buttonProps} />
         </div>);
     }
 
@@ -855,18 +857,12 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             >Toggle Columns</button>
             {activeMenu !== 'show/hide' ?
                 null :
-                <div
-                    className='show-hide-menu'
-                    style={{ display: 'flex', flexDirection: 'column' }}
-                >
+                <div className='show-hide-menu'>
                     {columns.map(column => {
                         const checked = !hidden_columns || hidden_columns.indexOf(column.id) < 0;
                         const disabled = !column.hideable && checked;
 
-                        return (<div
-                            className='show-hide-menu-item'
-                            style={{ display: 'flex', flexDirection: 'row' }}
-                        >
+                        return (<div className='show-hide-menu-item'>
                             <input
                                 type='checkbox'
                                 checked={checked}
