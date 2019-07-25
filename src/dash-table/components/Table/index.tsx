@@ -26,6 +26,7 @@ import derivedFilterMap from 'dash-table/derived/filter/map';
 
 import controlledPropsHelper from './controlledPropsHelper';
 import derivedPropsHelper from './derivedPropsHelper';
+import persistedPropsHelper from './persistedPropsHelper';
 
 const DERIVED_REGEX = /^derived_/;
 
@@ -89,6 +90,7 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
         );
 
         this.updateDerivedProps(controlled, this.controlledSetProps);
+        this.updatePersistedProps(controlled);
 
         return (<ControlledTable {...controlled} />);
     }
@@ -138,4 +140,5 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
 
     private readonly controlledPropsHelper = controlledPropsHelper();
     private readonly updateDerivedProps = derivedPropsHelper();
+    private readonly updatePersistedProps = persistedPropsHelper(this.props.id);
 }
