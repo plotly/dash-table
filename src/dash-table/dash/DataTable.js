@@ -166,6 +166,16 @@ export const propTypes = {
          */
         editable: PropTypes.bool,
 
+        /**
+         * If True, then the column is hideable through the UI.
+         * If there are multiple column headers, only the last row of
+         * the column headers will dispay the `hide` action button.
+         *
+         * Hidden columns are listed by id in the `hidden_columns` prop.
+         *
+         * If `hidden_columns` is not empty, a toggle button is displayed
+         * above the table that allows toggling columns visibility.
+         */
         hideable: PropTypes.bool,
 
         /**
@@ -462,6 +472,11 @@ export const propTypes = {
      */
     fill_width: PropTypes.bool,
 
+    /**
+     * List of columns ids of the columns that are currently hidden.
+     *
+     * See the associated nested prop `columns.hideable`.
+     */
     hidden_columns: PropTypes.arrayOf(PropTypes.string),
 
     /**
