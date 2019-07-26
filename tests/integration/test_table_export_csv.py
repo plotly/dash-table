@@ -20,7 +20,7 @@ def test_tbex001_table_export(dash_duo):
     dash_duo.find_element(".export").click()
 
     download = os.path.sep.join((dash_duo.download_path, "Data.csv"))
-    wait.until(lambda: os.path.exists(download), timeout=2)
+    wait.until(lambda: os.path.exists(download), timeout=4)
 
     df_bis = pd.read_csv(download)
     assert df_bis.equals(df)
