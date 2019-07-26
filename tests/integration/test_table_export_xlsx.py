@@ -18,10 +18,10 @@ def test_tbex001_table_export(dash_duo):
     )
     print(df)
     dash_duo.start_server(app)
-    dash_duo.find_element(".export").click()
+    dash_duo.wait_for_element(".export").click()
 
     download = os.path.sep.join((dash_duo.download_path, "Data.xlsx"))
-    wait.until(lambda: os.path.exists(download), timeout=4)
+    wait.until(lambda: os.path.exists(download), timeout=2)
 
     df_bis = pd.read_excel(download)
     assert df_bis.equals(df)
