@@ -32,7 +32,7 @@ export default React.memo((props: IExportButtonProps) => {
 
     return (<div>
         {!isFormatSupported ? null : (
-            <button className='export' onClick={handleExport}>Export</button>
+            <button className='dash-menu-export' onClick={handleExport}>Export</button>
         )}
     </div>);
 });

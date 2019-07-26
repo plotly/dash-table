@@ -104,10 +104,14 @@
     }
 }
 
-.dash-spreadsheet-menu-item {
+.dash-menu {
+    display: flex;
+    flex-direction: row;
     position: relative;
 
-    .show-hide-menu {
+    .dash-menu-toggle-columns--dropdown {
+        display: flex;
+        flex-direction: column;
         position: absolute;
         top: 100%;
         left: 0;
@@ -115,7 +119,9 @@
         background-color: #fafafa;
         border: 1px solid #d3d3d3;
 
-        .show-hide-menu-item {
+        .dash-menu-toggle-columns--dropdown-item {
+            display: flex;
+            flex-direction: row;
             padding: 5px;
         }
     }

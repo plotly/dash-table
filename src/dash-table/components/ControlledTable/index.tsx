@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 
 import * as R from 'ramda';
 import Stylesheet from 'core/Stylesheet';
@@ -777,14 +777,6 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             tooltip_duration
         );
 
-        const { export_format, export_headers, virtual } = this.props;
-        const buttonProps = {
-            export_format,
-            virtual_data: virtual,
-            columns: visibleColumns,
-            export_headers
-        };
-
         return (<div
             id={id}
             onCopy={this.onCopy}
@@ -828,61 +820,67 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                     <button className='next-page' onClick={this.loadNext}>Next</button>
                 </div>
             )}
-            <ExportButton {...buttonProps} />
         </div>);
     }
 
     renderMenu() {
-        if (!this.showToggleColumns) {
-            return null;
-        }
-
         const {
             activeMenu,
             columns,
+            export_format,
+            export_headers,
             hidden_columns,
-            setState
+            setState,
+            virtual,
+            visibleColumns
         } = this.props;
 
+        const buttonProps = {
+            export_format,
+            virtual_data: virtual,
+            columns: visibleColumns,
+            export_headers
+        };
+
         return (<div
-            className='dash-spreadsheet-menu-item'
+            className='dash-menu'
             ref={this.menuRef}
         >
-            <button className='show-hide'
-                onClick={() => setState({
-                    activeMenu: activeMenu === 'show/hide' ? undefined : 'show/hide'
-                })}
-            >Toggle Columns</button>
-            {activeMenu !== 'show/hide' ?
+            {!this.showToggleColumns ?
                 null :
-                <div
-                    className='show-hide-menu'
-                    style={{ display: 'flex', flexDirection: 'column' }}
-                >
-                    {columns.map(column => {
-                        const checked = !hidden_columns || hidden_columns.indexOf(column.id) < 0;
-                        const disabled = !column.hideable && checked;
+                <Fragment>
+                    <button className='dash-menu-toggle-columns'
+                        onClick={() => setState({
+                            activeMenu: activeMenu === 'show/hide' ? undefined : 'show/hide'
+                        })}
+                    >Toggle Columns</button>
+                    {activeMenu !== 'show/hide' ?
+                        null :
+                        <div className='dash-menu-toggle-columns--dropdown'>
+                            {columns.map(column => {
+                                const checked = !hidden_columns || hidden_columns.indexOf(column.id) < 0;
+                                const disabled = !column.hideable && checked;
 
-                        return (<div
-                            className='show-hide-menu-item'
-                            style={{ display: 'flex', flexDirection: 'row' }}
-                        >
-                            <input
-                                type='checkbox'
-                                checked={checked}
-                                disabled={disabled}
-                                onClick={this.toggleColumn.bind(this, column)}
-                            />
-                            <label>{!column.name ?
-                                column.id :
-                                typeof column.name === 'string' ?
-                                    column.name :
-                                    column.name.filter(name => name.length !== 0).join(' | ')
-                            }</label>
-                        </div>);
-                    })}
-                </div>
+                                return (<div className='dash-menu-toggle-columns--dropdown-item'>
+                                    <input
+                                        type='checkbox'
+                                        checked={checked}
+                                        disabled={disabled}
+                                        onClick={this.toggleColumn.bind(this, column)}
+                                    />
+                                    <label>{!column.name ?
+                                        column.id :
+                                        typeof column.name === 'string' ?
+                                            column.name :
+                                            column.name.filter(name => name.length !== 0).join(' | ')
+                                    }</label>
+                                </div>);
+                            })}
+                        </div>
+                    }
+                </Fragment>
             }
+            <ExportButton {...buttonProps} />
         </div>);
     }
 
