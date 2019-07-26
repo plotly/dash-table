@@ -226,7 +226,7 @@ jobs:
                 name: ⚙️ run integration test
                 command: |
                   . venv/bin/activate
-                  pytest --headless --junitxml=test-reports/dash.xml --log-cli-level DEBUG tests/integration
+                  pytest --junitxml=test-reports/dash.xml tests/integration
             - store_artifacts:
                 path: test-reports
             - store_test_results:

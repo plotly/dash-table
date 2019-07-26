@@ -17,12 +17,9 @@ def test_tbex001_table_export(dash_duo):
         export_format="xlsx",
     )
     dash_duo.start_server(app)
-    import time
-    time.sleep(2)
     dash_duo.wait_for_element(".export").click()
 
     download = os.path.sep.join((dash_duo.download_path, "Data.xlsx"))
-    print(download)
     wait.until(lambda: os.path.exists(download), timeout=2)
 
     df_bis = pd.read_excel(download)
