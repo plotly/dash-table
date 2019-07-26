@@ -226,7 +226,7 @@ jobs:
                 name: Run integration tests
                 command: |
                   . venv/bin/activate
-                  pytest --headless tests/integration
+                  pytest tests/integration
 
 
 workflows:
