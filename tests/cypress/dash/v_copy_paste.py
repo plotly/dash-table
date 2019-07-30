@@ -71,8 +71,6 @@ app.layout = html.Div(
             editable=True,
             sort_action='native',
         ),
-        dcc.Input(id='input-1', type='text', value=''),
-        dcc.Input(id='input-2', type='text', value=''),
     ]
 )
 
