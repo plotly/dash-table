@@ -5,15 +5,22 @@ import Clipboard from 'core/Clipboard';
 import Logger from 'core/Logger';
 
 import { ICellCoordinates, Columns, Data, SelectedCells } from 'dash-table/components/Table/props';
+import { createHeadings } from 'dash-table/components/Export/utils';
 import applyClipboardToData from './applyClipboardToData';
+import getHeaderRows from 'dash-table/derived/header/headerRows';
 
 export default class TableClipboardHelper {
     private static lastLocalCopy: any[][] = [[]];
+    private static localCopyWithoutHeaders: any[][] = [[]];
 
     public static toClipboard(e: any, selectedCells: SelectedCells, columns: Columns, data: Data) {
         const selectedRows = R.uniq(R.pluck('row', selectedCells).sort((a, b) => a - b));
         const selectedCols: any = R.uniq(R.pluck('column', selectedCells).sort((a, b) => a - b));
-
+        const columnNames = R.pluck('name', columns);
+        // const mapIndexOuter = R.addIndex<(string[]), void>(R.map);
+        // const mapIndexInner = R.addIndex<(string), void>(R.map);
+        const transformedArray = createHeadings(columnNames, getHeaderRows(columns));
+        const headers: any = transformedArray.map(row => selectedCols.map((index: number) => row[index]));
         const df = R.slice(
             R.head(selectedRows) as any,
             R.last(selectedRows) as any + 1,
@@ -21,10 +28,10 @@ export default class TableClipboardHelper {
         ).map(row =>
             R.props(selectedCols, R.props(R.pluck('id', columns) as any, row) as any)
         );
-
-        const value = SheetClip.prototype.stringify(df);
-        TableClipboardHelper.lastLocalCopy = df;
-
+        const dfH = headers.concat(df);
+        const value = SheetClip.prototype.stringify(dfH);
+        TableClipboardHelper.lastLocalCopy = dfH;
+        TableClipboardHelper.localCopyWithoutHeaders = df;
         Logger.trace('TableClipboard -- set clipboard data: ', value);
 
         Clipboard.set(e, value);
@@ -47,9 +54,8 @@ export default class TableClipboardHelper {
         }
 
         const localDf = SheetClip.prototype.stringify(TableClipboardHelper.lastLocalCopy);
-
         const values = localDf === text ?
-            TableClipboardHelper.lastLocalCopy :
+            TableClipboardHelper.localCopyWithoutHeaders :
             SheetClip.prototype.parse(text);
 
         return applyClipboardToData(
