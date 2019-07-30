@@ -16,7 +16,6 @@ def test_tbex001_table_export(dash_duo):
         data=df.to_dict("records"),
         export_format="xlsx",
     )
-    print(df)
     dash_duo.start_server(app)
     dash_duo.find_element(".export").click()
 
