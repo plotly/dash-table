@@ -14,12 +14,15 @@ import {
 import { TooltipSyntax } from 'dash-table/tooltips/props';
 
 export enum AppMode {
+    Clearable = 'clearable',
+    ClearableMerged = 'clearableMerged',
     Date = 'date',
     Default = 'default',
     Filtering = 'filtering',
     FixedTooltips = 'fixed,tooltips',
     FixedVirtualized = 'fixed,virtualized',
     Formatting = 'formatting',
+    MergeDuplicateHeaders = 'mergeDuplicateHeaders',
     ReadOnly = 'readonly',
     ColumnsInSpace = 'columnsInSpace',
     TaleOfTwoTables = 'taleOfTwoTables',
@@ -184,6 +187,24 @@ function getTypedState() {
     return state;
 }
 
+function getClearableState() {
+    const state = getDefaultState();
+    state.tableProps.filter_action = TableAction.Native;
+
+    R.forEach(c => {
+        c.clearable = true;
+    }, state.tableProps.columns || []);
+
+    return state;
+}
+
+function getClearableMergedState() {
+    const state = getClearableState();
+    state.tableProps.merge_duplicate_headers = true;
+
+    return state;
+}
+
 function getDateState() {
     const state = getTypedState();
 
@@ -314,10 +335,20 @@ function getFormattingState() {
     return state;
 }
 
+function getMergeDuplicateHeadersState() {
+    const state = getDefaultState();
+    state.tableProps.merge_duplicate_headers = true;
+    return state;
+}
+
 function getState() {
     const mode = Environment.searchParams.get('mode');
 
     switch (mode) {
+        case AppMode.Clearable:
+            return getClearableState();
+        case AppMode.ClearableMerged:
+            return getClearableMergedState();
         case AppMode.Date:
             return getDateState();
         case AppMode.Filtering:
@@ -332,6 +363,8 @@ function getState() {
             return getReadonlyState();
         case AppMode.ColumnsInSpace:
             return getSpaceInColumn();
+        case AppMode.MergeDuplicateHeaders:
+            return getMergeDuplicateHeadersState();
         case AppMode.Tooltips:
             return getTooltipsState();
         case AppMode.Virtualized:

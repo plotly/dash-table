@@ -2,6 +2,32 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Added
+[#313](https://github.com/plotly/dash-table/issues/313)
+- Ability to export table as csv or xlsx file.
+
+[#497](https://github.com/plotly/dash-table/pull/497)
+- New `column.clearable` flag that displays a `Ø` action in the column
+    Accepts a boolean or array of booleans for multi-line headers.
+    Clicking a merged column's `Ø` will clear all related columns.
+
+    - Clearing column(s) will remove the appropriate data props from each datum
+    row of `data`.
+    - Additionally clearing the column will reset the filter for the affected column(s)
+
+### Changed
+[#497](https://github.com/plotly/dash-table/pull/497)
+- Like for clearing above, deleting through the `x` action will also
+reset the filter for the affected column(s)
+
+### Fixed
+[#491](https://github.com/plotly/dash-table/issues/491)
+- Fixed inconsistent behaviors when editing cell headers
+
+[#521](https://github.com/plotly/dash-table/pull/521)
+- Fixed white line artifacts when rendering the table with browser zoom different from 100%
+
 ## [4.0.2] - 2019-07-15
 ### Fixed
 [#489](https://github.com/plotly/dash-table/issues/489)
@@ -28,7 +54,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
     - `column.options`
         Removed. Redundant with `dropdown`.
     - `content_style`
-        Removed. Deemed unnecessary
+        Removed. Deemed unnecessary. NOTE - This was added back in 4.0.2 under the name the "fill_width" property name.
     - `pagination_settings`
         Replaced by two props `page_current` and `page_size`.
 
