@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 
 import * as R from 'ramda';
 import Stylesheet from 'core/Stylesheet';
@@ -8,6 +8,7 @@ import {
     isCtrlDown,
     isNavKey
 } from 'dash-table/utils/unicode';
+import * as actions from 'dash-table/utils/actions';
 import ExportButton from 'dash-table/components/Export';
 import { selectionBounds, selectionCycle } from 'dash-table/utils/navigation';
 import { makeCell, makeSelection } from 'dash-table/derived/cell/cellProps';
@@ -22,6 +23,8 @@ import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
 import { ControlledTableProps, ICellFactoryProps, TableAction, IColumn } from 'dash-table/components/Table/props';
 import dropdownHelper from 'dash-table/components/dropdownHelper';
 
+import getHeaderRows from 'dash-table/derived/header/headerRows';
+import derivedLabelsAndIndices from 'dash-table/derived/header/labelsAndIndices';
 import derivedTable from 'dash-table/derived/table';
 import derivedTableFragments from 'dash-table/derived/table/fragments';
 import derivedTableFragmentStyles from 'dash-table/derived/table/fragmentStyles';
@@ -42,6 +45,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
     private readonly tableFn = derivedTable(() => this.props);
     private readonly tableFragments = derivedTableFragments();
     private readonly tableStyle = derivedTableStyle();
+    private readonly labelsAndIndices = derivedLabelsAndIndices();
 
     private calculateTableStyle = memoizeOne((style: Partial<IStyle>) => R.mergeAll(
         this.tableStyle(DEFAULT_STYLE, style)
@@ -399,7 +403,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         // else we are navigating with arrow keys and extending selection
         // with shift.
 
-        let {minRow, minCol, maxRow, maxCol} = selectionBounds(selected_cells);
+        let { minRow, minCol, maxRow, maxCol } = selectionBounds(selected_cells);
         const selectingDown =
             e.keyCode === KEY_CODES.ARROW_DOWN || e.keyCode === KEY_CODES.ENTER;
         const selectingUp = e.keyCode === KEY_CODES.ARROW_UP;
@@ -448,7 +452,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         }
 
         const finalSelected = makeSelection(
-            {minRow, maxRow, minCol, maxCol},
+            { minRow, maxRow, minCol, maxCol },
             visibleColumns, viewport
         );
 
@@ -511,7 +515,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
         const e = event;
 
-        const {row, column} = currentCell;
+        const { row, column } = currentCell;
         let nextCoords;
 
         switch (e.keyCode) {
@@ -766,7 +770,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             scrollbarWidth
         );
 
-    /* Tooltip */
+        /* Tooltip */
         let tableTooltip = derivedTooltips(
             currentTooltip,
             tooltip_data,
@@ -776,6 +780,14 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             tooltip_delay,
             tooltip_duration
         );
+
+        const { export_format, export_headers, virtual } = this.props;
+        const buttonProps = {
+            export_format,
+            virtual_data: virtual,
+            columns: visibleColumns,
+            export_headers
+        };
 
         return (<div
             id={id}
@@ -790,7 +802,10 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                 className='dash-table-tooltip'
                 tooltip={tableTooltip}
             />
-            {this.renderMenu()}
+            <div className='dash-spreadsheet-menu'>
+                {this.renderMenu()}
+                <ExportButton {...buttonProps} />
+            </div>
             <div className={containerClasses.join(' ')} style={tableStyle}>
                 <div
                     ref='table'
@@ -824,63 +839,68 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
     }
 
     renderMenu() {
+        if (!this.showToggleColumns) {
+            return null;
+        }
+
         const {
             activeMenu,
             columns,
-            export_format,
-            export_headers,
+            hideable_row,
             hidden_columns,
+            merge_duplicate_headers,
             setState,
-            virtual,
             visibleColumns
         } = this.props;
 
-        const buttonProps = {
-            export_format,
-            virtual_data: virtual,
-            columns: visibleColumns,
-            export_headers
-        };
+        const headerRows = getHeaderRows(columns);
+        const hideableRow = R.isNil(hideable_row) ?
+            headerRows - 1 :
+            hideable_row;
+
+        const labelsAndIndices = this.labelsAndIndices(columns, merge_duplicate_headers);
+        const [, indices] = labelsAndIndices[hideableRow];
+
+        const visibleLabelsAndIndices = this.labelsAndIndices(visibleColumns, merge_duplicate_headers);
+        const [, visibleIndices] = visibleLabelsAndIndices[hideableRow];
+
+        const singleColumn = visibleIndices.length === 1;
 
         return (<div
-            className='dash-menu'
+            className='dash-spreadsheet-menu-item'
             ref={this.menuRef}
         >
-            {!this.showToggleColumns ?
+            <button className='show-hide'
+                onClick={() => setState({
+                    activeMenu: activeMenu === 'show/hide' ? undefined : 'show/hide'
+                })}
+            >Toggle Columns</button>
+            {activeMenu !== 'show/hide' ?
                 null :
-                <Fragment>
-                    <button className='dash-menu-toggle-columns'
-                        onClick={() => setState({
-                            activeMenu: activeMenu === 'show/hide' ? undefined : 'show/hide'
-                        })}
-                    >Toggle Columns</button>
-                    {activeMenu !== 'show/hide' ?
-                        null :
-                        <div className='dash-menu-toggle-columns--dropdown'>
-                            {columns.map(column => {
-                                const checked = !hidden_columns || hidden_columns.indexOf(column.id) < 0;
-                                const disabled = !column.hideable && checked;
+                <div className='show-hide-menu'>
+                    {indices.map(index => {
+                        const column = columns[index];
 
-                                return (<div className='dash-menu-toggle-columns--dropdown-item'>
-                                    <input
-                                        type='checkbox'
-                                        checked={checked}
-                                        disabled={disabled}
-                                        onClick={this.toggleColumn.bind(this, column)}
-                                    />
-                                    <label>{!column.name ?
-                                        column.id :
-                                        typeof column.name === 'string' ?
-                                            column.name :
-                                            column.name.filter(name => name.length !== 0).join(' | ')
-                                    }</label>
-                                </div>);
-                            })}
-                        </div>
-                    }
-                </Fragment>
+                        const checked = !hidden_columns || hidden_columns.indexOf(column.id) < 0;
+                        const disabled = (singleColumn && checked) || (!column.hideable && checked);
+
+                        return (<div className='show-hide-menu-item'>
+                            <input
+                                type='checkbox'
+                                checked={checked}
+                                disabled={disabled}
+                                onClick={this.toggleColumn.bind(this, column, hideableRow, merge_duplicate_headers)}
+                            />
+                            <label>{!column.name ?
+                                column.id :
+                                typeof column.name === 'string' ?
+                                    column.name :
+                                    column.name.slice(0, hideableRow + 1).filter(name => name.length !== 0).join(' | ')
+                            }</label>
+                        </div>);
+                    })}
+                </div>
             }
-            <ExportButton {...buttonProps} />
         </div>);
     }
 
@@ -914,20 +934,25 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             R.any(column => !!column.hideable, columns);
     }
 
-    private toggleColumn = (column: IColumn) => {
+    private toggleColumn = (column: IColumn, headerRowIndex: number, mergeDuplicateHeaders: boolean) => {
         const {
+            columns,
             hidden_columns: base,
             setProps
         } = this.props;
 
-        const hidden_columns = base ? base.slice(0) : [];
-        const cIndex = hidden_columns.indexOf(column.id);
+        const ids: string[] = actions.getColumnIds(column, columns, headerRowIndex, mergeDuplicateHeaders);
 
-        if (cIndex >= 0) {
-            hidden_columns.splice(cIndex, 1);
-        } else {
-            hidden_columns.push(column.id);
-        }
+        const hidden_columns = base ? base.slice(0) : [];
+        R.forEach(id => {
+            const cIndex = hidden_columns.indexOf(id);
+
+            if (cIndex >= 0) {
+                hidden_columns.splice(cIndex, 1);
+            } else {
+                hidden_columns.push(id);
+            }
+        }, ids);
 
         setProps({ hidden_columns });
     }

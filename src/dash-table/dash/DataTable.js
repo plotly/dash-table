@@ -88,6 +88,7 @@ export const defaultProps = {
     columns: [],
     editable: false,
     export_format: 'none',
+    hideable: false,
     persisted: [],
     selected_cells: [],
     selected_rows: [],
@@ -167,6 +168,22 @@ export const propTypes = {
          */
         editable: PropTypes.bool,
 
+        /**
+         * There are two `hideable` flags in the table.
+         * This is the column-level hideable flag and there is
+         * also the table-level `hideable` flag.
+         *
+         * These flags determine if a column is hideable or not.
+         *
+         * If True, then the column is hideable through the UI.
+         * If there are multiple column headers, only the last row of
+         * the column headers will dispay the `hide` action button.
+         *
+         * Hidden columns are listed by id in the `hidden_columns` prop.
+         *
+         * If `hidden_columns` is not empty, a toggle button is displayed
+         * above the table that allows toggling columns visibility.
+         */
         hideable: PropTypes.bool,
 
         /**
@@ -426,6 +443,26 @@ export const propTypes = {
     editable: PropTypes.bool,
 
     /**
+     * If True, then the columns will be hideable through the UI.
+     * When `hideable` is True, particular columns can be made
+     * un-hideable by setting `hideable` to `False` in the `columns`
+     * property.
+     *
+     * When `hideable` is False, particular columns can be made
+     * hideable by setting `hideable` to `True` in the `columns`
+     * property.
+     */
+    hideable: PropTypes.bool,
+
+    /**
+     * 'beta'. Define the header row on which the hideable action will be
+     * visible.
+     *
+     * Defaults to the last header row.
+     */
+    hideable_row: PropTypes.number,
+
+    /**
      * When selecting multiple cells
      * (via clicking on a cell and then shift-clicking on another cell),
      * `end_cell` represents the row / column coordinates and IDs of the cell
@@ -463,6 +500,11 @@ export const propTypes = {
      */
     fill_width: PropTypes.bool,
 
+    /**
+     * List of columns ids of the columns that are currently hidden.
+     *
+     * See the associated nested prop `columns.hideable`.
+     */
     hidden_columns: PropTypes.arrayOf(PropTypes.string),
 
     /**

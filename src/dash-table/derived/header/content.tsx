@@ -115,6 +115,7 @@ function getColumnFlag(i: number, flag?: boolean | boolean[]): boolean {
 function getter(
     columns: Columns,
     hiddenColumns: string[] | undefined,
+    hideable_row: number | undefined,
     data: Data,
     labelsAndIndices: R.KeyValuePair<any[], number[]>[],
     map: Map<string, SingleColumnSyntaxTree>,
@@ -129,15 +130,31 @@ function getter(
     return R.addIndex<R.KeyValuePair<any[], number[]>, JSX.Element[]>(R.map)(
         ([labels, indices], headerRowIndex) => {
             const isLastRow = headerRowIndex === labelsAndIndices.length - 1;
+            const isHideableRow = R.isNil(hideable_row) ?
+                isLastRow :
+                headerRowIndex === hideable_row;
 
             return R.addIndex<number, JSX.Element>(R.map)(
-                columnIndex => {
+                (columnIndex, index) => {
                     const column = columns[columnIndex];
+
+                    let colSpan: number;
+                    if (!mergeDuplicateHeaders) {
+                        colSpan = 1;
+                    } else {
+                        if (columnIndex === R.last(indices)) {
+                            colSpan = labels.length - columnIndex;
+                        } else {
+                            colSpan = indices[index + 1] - columnIndex;
+                        }
+                    }
 
                     const clearable = paginationMode !== TableAction.Custom && getColumnFlag(headerRowIndex, column.clearable);
                     const deletable = paginationMode !== TableAction.Custom && getColumnFlag(headerRowIndex, column.deletable);
                     const hideable = getColumnFlag(headerRowIndex, column.hideable);
                     const renamable = getColumnFlag(headerRowIndex, column.renamable);
+
+                    const singleColumn = columns.length === colSpan;
 
                     return (<div>
                         {sort_action !== TableAction.None && isLastRow ?
@@ -172,26 +189,31 @@ function getter(
 
                         {deletable ?
                             (<span
-                                className='column-header--delete'
-                                onClick={doAction(actions.deleteColumn, column, columns, headerRowIndex, mergeDuplicateHeaders, setFilter, setProps, map, data)}
+                                className={'column-header--delete' + (singleColumn ? ' disabled' : '')}
+                                onClick={singleColumn ?
+                                    undefined :
+                                    doAction(actions.deleteColumn, column, columns, headerRowIndex, mergeDuplicateHeaders, setFilter, setProps, map, data)
+                                }
                             >
                                 <FontAwesomeIcon icon={['far', 'trash-alt']} />
                             </span>) :
                             ''
                         }
 
-                        {(hideable && isLastRow) ?
+                        {(hideable && isHideableRow) ?
                             (<span
-                                className='column-header--hide'
-                                onClick={() => {
-                                    const ids = actions.getColumnIds(column, columns, headerRowIndex, mergeDuplicateHeaders);
+                                className={'column-header--hide' + (singleColumn ? ' disabled' : '')}
+                                onClick={singleColumn ?
+                                    undefined :
+                                    () => {
+                                        const ids = actions.getColumnIds(column, columns, headerRowIndex, mergeDuplicateHeaders);
 
-                                    const hidden_columns = hiddenColumns ?
-                                        R.union(hiddenColumns, ids) :
-                                        ids;
+                                        const hidden_columns = hiddenColumns ?
+                                            R.union(hiddenColumns, ids) :
+                                            ids;
 
-                                    setProps({ hidden_columns });
-                                }}>
+                                        setProps({ hidden_columns });
+                                    }}>
                                 <FontAwesomeIcon icon={['far', 'eye-slash']} />
                             </span>) :
                             ''
