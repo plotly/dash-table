@@ -454,6 +454,14 @@ export const propTypes = {
     hideable: PropTypes.bool,
 
     /**
+     * 'beta'. Define the header row on which the hideable action will be
+     * visible.
+     *
+     * Defaults to the last header row.
+     */
+    hideable_row: PropTypes.number,
+
+    /**
      * When selecting multiple cells
      * (via clicking on a cell and then shift-clicking on another cell),
      * `end_cell` represents the row / column coordinates and IDs of the cell

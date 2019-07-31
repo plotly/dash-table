@@ -273,6 +273,7 @@ export interface IProps {
     filter_query?: string;
     filter_action?: TableAction;
     hideable?: boolean;
+    hideable_row: number;
     hidden_columns?: string[];
     locale_format: INumberLocale;
     merge_duplicate_headers?: boolean;
