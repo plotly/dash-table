@@ -120,6 +120,8 @@
             border: 1px solid #d3d3d3;
             display: flex;
             flex-direction: column;
+            max-height: 300px;
+            overflow: auto;
             position: absolute;
             top: 100%;
             left: 0;
@@ -129,6 +131,10 @@
                 display: flex;
                 flex-direction: row;
                 padding: 5px;
+
+                label {
+                    white-space: nowrap;
+                }
             }
         }
     }
@@ -273,10 +279,6 @@
              table {
                 width: 100%;
             }
-        }
-
-        tr {
-            background-color: white;
         }
 
         td {
