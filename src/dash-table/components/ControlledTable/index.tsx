@@ -855,7 +855,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
         const headerRows = getHeaderRows(columns);
         const hideableRow = R.isNil(hideable_row) ?
-            headerRows :
+            headerRows - 1 :
             hideable_row;
 
         const labelsAndIndices = this.labelsAndIndices(columns, merge_duplicate_headers);
