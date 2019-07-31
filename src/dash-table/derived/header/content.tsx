@@ -139,6 +139,8 @@ function getter(
                     const hideable = getColumnFlag(headerRowIndex, column.hideable);
                     const renamable = getColumnFlag(headerRowIndex, column.renamable);
 
+                    const singleColumn = columns.length === 1;
+
                     return (<div>
                         {sort_action !== TableAction.None && isLastRow ?
                             (<span
@@ -172,8 +174,11 @@ function getter(
 
                         {deletable ?
                             (<span
-                                className='column-header--delete'
-                                onClick={doAction(actions.deleteColumn, column, columns, headerRowIndex, mergeDuplicateHeaders, setFilter, setProps, map, data)}
+                                className={'column-header--delete' + (singleColumn ? ' disabled' : '')}
+                                onClick={singleColumn ?
+                                    undefined :
+                                    doAction(actions.deleteColumn, column, columns, headerRowIndex, mergeDuplicateHeaders, setFilter, setProps, map, data)
+                                }
                             >
                                 <FontAwesomeIcon icon={['far', 'trash-alt']} />
                             </span>) :
@@ -182,16 +187,18 @@ function getter(
 
                         {(hideable && isLastRow) ?
                             (<span
-                                className='column-header--hide'
-                                onClick={() => {
-                                    const ids = actions.getColumnIds(column, columns, headerRowIndex, mergeDuplicateHeaders);
+                                className={'column-header--hide' + (singleColumn ? ' disabled' : '')}
+                                onClick={singleColumn ?
+                                    undefined :
+                                    () => {
+                                        const ids = actions.getColumnIds(column, columns, headerRowIndex, mergeDuplicateHeaders);
 
-                                    const hidden_columns = hiddenColumns ?
-                                        R.union(hiddenColumns, ids) :
-                                        ids;
+                                        const hidden_columns = hiddenColumns ?
+                                            R.union(hiddenColumns, ids) :
+                                            ids;
 
-                                    setProps({ hidden_columns });
-                                }}>
+                                        setProps({ hidden_columns });
+                                    }}>
                                 <FontAwesomeIcon icon={['far', 'eye-slash']} />
                             </span>) :
                             ''

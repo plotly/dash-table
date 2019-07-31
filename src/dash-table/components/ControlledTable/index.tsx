@@ -843,8 +843,11 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             activeMenu,
             columns,
             hidden_columns,
-            setState
+            setState,
+            visibleColumns
         } = this.props;
+
+        const singleColumn = visibleColumns.length === 1;
 
         return (<div
             className='dash-spreadsheet-menu-item'
@@ -860,7 +863,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                 <div className='show-hide-menu'>
                     {columns.map(column => {
                         const checked = !hidden_columns || hidden_columns.indexOf(column.id) < 0;
-                        const disabled = !column.hideable && checked;
+                        const disabled = singleColumn || (!column.hideable && checked);
 
                         return (<div className='show-hide-menu-item'>
                             <input

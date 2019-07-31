@@ -272,6 +272,7 @@ export interface IProps {
     fill_width?: boolean;
     filter_query?: string;
     filter_action?: TableAction;
+    hideable?: boolean;
     hidden_columns?: string[];
     locale_format: INumberLocale;
     merge_duplicate_headers?: boolean;
@@ -319,6 +320,7 @@ interface IDefaultProps {
     fill_width: boolean;
     filter_query: string;
     filter_action: TableAction;
+    hideable: boolean;
     merge_duplicate_headers: boolean;
     fixed_columns: Fixed;
     fixed_rows: Fixed;

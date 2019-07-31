@@ -88,6 +88,7 @@ export const defaultProps = {
     columns: [],
     editable: false,
     export_format: 'none',
+    hideable: false,
     selected_cells: [],
     selected_rows: [],
     selected_row_ids: [],
@@ -167,6 +168,12 @@ export const propTypes = {
         editable: PropTypes.bool,
 
         /**
+         * There are two `hideable` flags in the table.
+         * This is the column-level hideable flag and there is
+         * also the table-level `hideable` flag.
+         *
+         * These flags determine if a column is hideable or not.
+         *
          * If True, then the column is hideable through the UI.
          * If there are multiple column headers, only the last row of
          * the column headers will dispay the `hide` action button.
@@ -433,6 +440,18 @@ export const propTypes = {
      * property.
      */
     editable: PropTypes.bool,
+
+    /**
+     * If True, then the columns will be hideable through the UI.
+     * When `hideable` is True, particular columns can be made
+     * un-hideable by setting `hideable` to `False` in the `columns`
+     * property.
+     *
+     * When `hideable` is False, particular columns can be made
+     * hideable by setting `hideable` to `True` in the `columns`
+     * property.
+     */
+    hideable: PropTypes.bool,
 
     /**
      * When selecting multiple cells

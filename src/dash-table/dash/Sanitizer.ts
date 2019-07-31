@@ -15,7 +15,7 @@ import {
     TableAction
 } from 'dash-table/components/Table/props';
 import headerRows from 'dash-table/derived/header/headerRows';
-import isEditable from 'dash-table/derived/cell/isEditable';
+import resolveFlag from 'dash-table/derived/cell/resolveFlag';
 
 const D3_DEFAULT_LOCALE: INumberLocale = {
     symbol: ['$', ''],
@@ -47,9 +47,16 @@ const getFixedRows = (
         0 :
         headerRows(columns) + (filter_action !== TableAction.None ? 1 : 0) + data2number(fixed.data);
 
-const applyDefaultsToColumns = (defaultLocale: INumberLocale, defaultSort: SortAsNull, columns: Columns, editable: boolean) => R.map(column => {
+const applyDefaultsToColumns = (
+    defaultLocale: INumberLocale,
+    defaultSort: SortAsNull,
+    columns: Columns,
+    editable: boolean,
+    hideable: boolean
+) => R.map(column => {
     const c = R.clone(column);
-    c.editable = isEditable(editable, column.editable);
+    c.editable = resolveFlag(editable, column.editable);
+    c.hideable = resolveFlag(hideable, column.hideable);
     c.sort_as_null = c.sort_as_null || defaultSort;
 
     if (c.type === ColumnType.Numeric && c.format) {
@@ -70,7 +77,7 @@ const getVisibleColumns = (
 export default class Sanitizer {
     sanitize(props: PropsWithDefaults): SanitizedProps {
         const locale_format = this.applyDefaultToLocale(props.locale_format);
-        const columns = this.applyDefaultsToColumns(locale_format, props.sort_as_null, props.columns, props.editable);
+        const columns = this.applyDefaultsToColumns(locale_format, props.sort_as_null, props.columns, props.editable, props.hideable);
         const visibleColumns = this.getVisibleColumns(columns, props.hidden_columns);
 
         let headerFormat = props.export_headers;
