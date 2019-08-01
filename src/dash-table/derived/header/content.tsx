@@ -123,7 +123,8 @@ function getter(
 ): JSX.Element[][] {
     return R.addIndex<R.KeyValuePair<any[], number[]>, JSX.Element[]>(R.map)(
         ([labels, indices], headerRowIndex) => {
-            const isLastRow = headerRowIndex === labelsAndIndices.length - 1;
+            const lastRow = labelsAndIndices.length - 1;
+            const isLastRow = headerRowIndex === lastRow;
 
             return R.addIndex<number, JSX.Element>(R.map)(
                 (columnIndex, index) => {
@@ -140,10 +141,10 @@ function getter(
                         }
                     }
 
-                    const clearable = paginationMode !== TableAction.Custom && getColumnFlag(headerRowIndex, column.clearable);
-                    const deletable = paginationMode !== TableAction.Custom && getColumnFlag(headerRowIndex, column.deletable);
-                    const hideable = getColumnFlag(headerRowIndex, column.hideable);
-                    const renamable = getColumnFlag(headerRowIndex, column.renamable);
+                    const clearable = paginationMode !== TableAction.Custom && getColumnFlag(headerRowIndex, lastRow, column.clearable);
+                    const deletable = paginationMode !== TableAction.Custom && getColumnFlag(headerRowIndex, lastRow, column.deletable);
+                    const hideable = getColumnFlag(headerRowIndex, lastRow, column.hideable);
+                    const renamable = getColumnFlag(headerRowIndex, lastRow, column.renamable);
 
                     const spansAllColumns = columns.length === colSpan;
 

@@ -700,6 +700,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
     render() {
         const {
+            columns,
             id,
             tooltip_conditional,
             tooltip,
@@ -785,7 +786,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         const buttonProps = {
             export_format,
             virtual_data: virtual,
-            columns: visibleColumns,
+            columns,
+            visibleColumns,
             export_headers
         };
 
@@ -848,11 +850,11 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             columns,
             hidden_columns,
             merge_duplicate_headers,
-            setState,
-            visibleColumns
+            setState
         } = this.props;
 
-        const labelsAndIndices = this.labelsAndIndices(columns, visibleColumns, merge_duplicate_headers);
+        const labelsAndIndices = this.labelsAndIndices(columns, columns, merge_duplicate_headers);
+        const lastRow = labelsAndIndices.length - 1;
 
         return (<div
             className='dash-spreadsheet-menu-item'
@@ -866,19 +868,19 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             {activeMenu !== 'show/hide' ?
                 null :
                 <div className='show-hide-menu'>
-                    {R.flatten(labelsAndIndices.map(([, indices], i) => indices.map((index, j) => {
+                    {R.unnest(labelsAndIndices.map(([, indices], i) => indices.map((index, j) => {
                         const spansAllColumns = indices.length === 1;
                         const column = columns[index];
 
                         const checked = !hidden_columns || hidden_columns.indexOf(column.id) < 0;
-                        const hideable = getColumnFlag(i, column.hideable);
+                        const hideable = getColumnFlag(i, lastRow, column.hideable);
 
                         const disabled = (spansAllColumns && checked) || (!hideable && checked);
 
                         return {
                             i: index,
                             j,
-                            component: (<div className='show-hide-menu-item'>
+                            component: !hideable ? null : (<div className='show-hide-menu-item'>
                                 <input
                                     type='checkbox'
                                     checked={checked}
@@ -893,7 +895,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                                 }</label>
                             </div>)
                         };
-                    }))).sort((a, b) => a.j - b.j).sort((a, b) => a.i - b.i).map(a => a.component)}
+                    }))).filter(i => !R.isNil(i)).sort((a, b) => a.j - b.j).sort((a, b) => a.i - b.i).map(a => a.component)}
                 </div>
             }
         </div>);

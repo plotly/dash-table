@@ -139,6 +139,7 @@ export default class EdgeFactory {
     public createEdges() {
         const {
             active_cell,
+            columns,
             filter_action,
             workFilter,
             fixed_columns,
@@ -160,6 +161,7 @@ export default class EdgeFactory {
 
         return this.memoizedCreateEdges(
             active_cell,
+            columns,
             visibleColumns,
             (row_deletable ? 1 : 0) + (row_selectable ? 1 : 0),
             filter_action !== TableAction.None,
@@ -183,6 +185,7 @@ export default class EdgeFactory {
     private memoizedCreateEdges = memoizeOne((
         active_cell: ICellCoordinates,
         columns: Columns,
+        visibleColumns: Columns,
         operations: number,
         filter_action: boolean,
         filterMap: Map<string, SingleColumnSyntaxTree>,
@@ -224,7 +227,7 @@ export default class EdgeFactory {
         const headerRows = getHeaderRows(columns);
 
         let dataEdges = this.getDataEdges(
-            columns,
+            visibleColumns,
             dataStyles,
             data,
             offset,
@@ -241,7 +244,7 @@ export default class EdgeFactory {
         );
 
         let filterEdges = this.getFilterEdges(
-            columns,
+            visibleColumns,
             filter_action,
             filterMap,
             filterStyles,
@@ -256,7 +259,7 @@ export default class EdgeFactory {
         );
 
         let headerEdges = this.getHeaderEdges(
-            columns,
+            visibleColumns,
             headerRows,
             headerStyles,
             style_as_list_view

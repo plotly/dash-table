@@ -186,6 +186,7 @@ export const propTypes = {
          * above the table that allows toggling columns visibility.
          */
         hideable: PropTypes.oneOfType([
+            PropTypes.oneOf(['last']),
             PropTypes.bool,
             PropTypes.arrayOf(PropTypes.bool)
         ]),

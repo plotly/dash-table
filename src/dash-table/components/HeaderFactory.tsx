@@ -5,7 +5,6 @@ import { arrayMap2 } from 'core/math/arrayZipMap';
 import { matrixMap2, matrixMap3 } from 'core/math/matrixZipMap';
 
 import derivedHeaderContent from 'dash-table/derived/header/content';
-import getHeaderRows from 'dash-table/derived/header/headerRows';
 import derivedLabelsAndIndices from 'dash-table/derived/header/labelsAndIndices';
 import derivedHeaderOperations from 'dash-table/derived/header/operations';
 import derivedHeaderWrappers from 'dash-table/derived/header/wrappers';
@@ -57,9 +56,8 @@ export default class HeaderFactory {
             visibleColumns
         } = props;
 
-        const headerRows = getHeaderRows(visibleColumns);
-
         const labelsAndIndices = this.labelsAndIndices(columns, visibleColumns, merge_duplicate_headers);
+        const headerRows = labelsAndIndices.length;
 
         const relevantStyles = this.relevantStyles(
             style_cell,
@@ -113,6 +111,11 @@ export default class HeaderFactory {
             headerOpEdges
         );
 
+        console.log('getHeaderCells, wrappers', wrappers);
+        console.log('getHeaderCells, contents', contents);
+        console.log('getHeaderCells, wrapperStyles', wrapperStyles);
+        console.log('getHeaderCells, headerEdges', headerEdges);
+
         const headers = this.getHeaderCells(
             wrappers,
             contents,
@@ -157,12 +160,15 @@ export default class HeaderFactory {
         wrappers,
         styles,
         contents,
-        (w, s, c, i, j) => React.cloneElement(w, {
-            children: [c],
-            style: R.mergeAll([
-                s,
-                edges && edges.getStyle(i, j)
-            ])
-        })
+        (w, s, c, i, j) => {
+            console.log('it', w, s, c, i, j);
+            return React.cloneElement(w, {
+                children: [c],
+                style: R.mergeAll([
+                    s,
+                    edges && edges.getStyle(i, j)
+                ])
+            });
+        }
     ));
 }
