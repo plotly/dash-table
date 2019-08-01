@@ -16,11 +16,9 @@ export default class TableClipboardHelper {
     public static toClipboard(e: any, selectedCells: SelectedCells, columns: Columns, data: Data) {
         const selectedRows = R.uniq(R.pluck('row', selectedCells).sort((a, b) => a - b));
         const selectedCols: any = R.uniq(R.pluck('column', selectedCells).sort((a, b) => a - b));
-        const columnNames = R.pluck('name', columns);
-        // const mapIndexOuter = R.addIndex<(string[]), void>(R.map);
-        // const mapIndexInner = R.addIndex<(string), void>(R.map);
-        const transformedArray = createHeadings(columnNames, getHeaderRows(columns));
-        const headers: any = transformedArray.map(row => selectedCols.map((index: number) => row[index]));
+
+        const transposedHeaders = createHeadings(R.pluck('name', columns), getHeaderRows(columns));
+        const headers: any = R.map((row: string[]) => R.map((index: number) => row[index], selectedCols), transposedHeaders);
         const df = R.slice(
             R.head(selectedRows) as any,
             R.last(selectedRows) as any + 1,
@@ -28,10 +26,12 @@ export default class TableClipboardHelper {
         ).map(row =>
             R.props(selectedCols, R.props(R.pluck('id', columns) as any, row) as any)
         );
-        const dfH = headers.concat(df);
-        const value = SheetClip.prototype.stringify(dfH);
-        TableClipboardHelper.lastLocalCopy = dfH;
+
+        const dfHeaders = headers.concat(df);
+        const value = SheetClip.prototype.stringify(dfHeaders);
+        TableClipboardHelper.lastLocalCopy = dfHeaders;
         TableClipboardHelper.localCopyWithoutHeaders = df;
+
         Logger.trace('TableClipboard -- set clipboard data: ', value);
 
         Clipboard.set(e, value);
