@@ -16,6 +16,7 @@ import {
     TableAction,
     SetFilter
 } from 'dash-table/components/Table/props';
+import getColumnFlag from 'dash-table/derived/header/columnFlag';
 import * as actions from 'dash-table/utils/actions';
 import { SingleColumnSyntaxTree } from 'dash-table/syntax-tree';
 import { clearColumnsFilter } from '../filter/map';
@@ -106,16 +107,9 @@ function getSortingIcon(columnId: ColumnId, sortBy: SortBy) {
     }
 }
 
-function getColumnFlag(i: number, flag?: boolean | boolean[]): boolean {
-    return typeof flag === 'boolean' ?
-        flag :
-        !!flag && flag[i];
-}
-
 function getter(
     columns: Columns,
     hiddenColumns: string[] | undefined,
-    hideable_row: number | undefined,
     data: Data,
     labelsAndIndices: R.KeyValuePair<any[], number[]>[],
     map: Map<string, SingleColumnSyntaxTree>,
@@ -130,9 +124,6 @@ function getter(
     return R.addIndex<R.KeyValuePair<any[], number[]>, JSX.Element[]>(R.map)(
         ([labels, indices], headerRowIndex) => {
             const isLastRow = headerRowIndex === labelsAndIndices.length - 1;
-            const isHideableRow = R.isNil(hideable_row) ?
-                isLastRow :
-                headerRowIndex === hideable_row;
 
             return R.addIndex<number, JSX.Element>(R.map)(
                 (columnIndex, index) => {
@@ -154,7 +145,7 @@ function getter(
                     const hideable = getColumnFlag(headerRowIndex, column.hideable);
                     const renamable = getColumnFlag(headerRowIndex, column.renamable);
 
-                    const singleColumn = columns.length === colSpan;
+                    const spansAllColumns = columns.length === colSpan;
 
                     return (<div>
                         {sort_action !== TableAction.None && isLastRow ?
@@ -189,8 +180,8 @@ function getter(
 
                         {deletable ?
                             (<span
-                                className={'column-header--delete' + (singleColumn ? ' disabled' : '')}
-                                onClick={singleColumn ?
+                                className={'column-header--delete' + (spansAllColumns ? ' disabled' : '')}
+                                onClick={spansAllColumns ?
                                     undefined :
                                     doAction(actions.deleteColumn, column, columns, headerRowIndex, mergeDuplicateHeaders, setFilter, setProps, map, data)
                                 }
@@ -200,10 +191,10 @@ function getter(
                             ''
                         }
 
-                        {(hideable && isHideableRow) ?
+                        {hideable ?
                             (<span
-                                className={'column-header--hide' + (singleColumn ? ' disabled' : '')}
-                                onClick={singleColumn ?
+                                className={'column-header--hide' + (spansAllColumns ? ' disabled' : '')}
+                                onClick={spansAllColumns ?
                                     undefined :
                                     () => {
                                         const ids = actions.getColumnIds(column, columns, headerRowIndex, mergeDuplicateHeaders);

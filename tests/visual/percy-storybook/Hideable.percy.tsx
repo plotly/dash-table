@@ -37,118 +37,121 @@ const variants: ITest[] = [
 
 const scenarios: ITest[] = [
     {
-        name: 'default (bottom row)',
+        name: 'default (all)',
         props: {
-            columns: getColumns(),
-            hideable: true
+            columns: getColumns().map((c: any) => {
+                c.hideable = true;
+
+                return c;
+            })
         }
     },
     {
         name: 'explicit bottom row',
         props: {
-            columns: getColumns(),
-            hideable: true,
-            hideable_row: 2
+            columns: getColumns().map((c: any) => {
+                c.hideable = [false, false, true];
+
+                return c;
+            })
         }
     },
     {
         name: 'explicit middle row',
         props: {
-            columns: getColumns(),
-            hideable: true,
-            hideable_row: 1
+            columns: getColumns().map((c: any) => {
+                c.hideable = [false, true, false];
+
+                return c;
+            })
         }
     },
     {
         name: 'explicit top row',
         props: {
-            columns: getColumns(),
-            hideable: true,
-            hideable_row: 0
+            columns: getColumns().map((c: any) => {
+                c.hideable = [true, false, false];
+
+                return c;
+            })
         }
     },
     {
         name: 'some non-hideable top rows',
         props: {
             columns: getColumns().map((c: any, i) => {
+                c.hideable = [true, false, false];
                 if (i % 8 === 0) {
                     c.hideable = false;
                 }
 
                 return c;
-            }),
-            hideable: true,
-            hideable_row: 0
+            })
         }
     },
     {
         name: 'some non-hideable middle rows',
         props: {
             columns: getColumns().map((c: any, i) => {
+                c.hideable = [false, true, false];
                 if (i % 4 === 0) {
                     c.hideable = false;
                 }
 
                 return c;
-            }),
-            hideable: true,
-            hideable_row: 1
+            })
         }
     },
     {
         name: 'some non-hideable bottom rows',
         props: {
             columns: getColumns().map((c: any, i) => {
+                c.hideable = [false, false, true];
                 if (i % 2 === 0) {
                     c.hideable = false;
                 }
 
                 return c;
-            }),
-            hideable: true,
-            hideable_row: 2
+            })
         }
     },
     {
         name: 'some hideable top rows',
         props: {
             columns: getColumns().map((c: any, i) => {
+                c.hideable = false;
                 if (i % 8 === 0) {
-                    c.hideable = true;
+                    c.hideable = [true, false, false];
                 }
 
                 return c;
-            }),
-            hideable: false,
-            hideable_row: 0
+            })
         }
     },
     {
         name: 'some hideable middle rows',
         props: {
             columns: getColumns().map((c: any, i) => {
+                c.hideable = false;
                 if (i % 4 === 0) {
-                    c.hideable = true;
+                    c.hideable = [false, true, false];
                 }
 
                 return c;
-            }),
-            hideable: false,
-            hideable_row: 1
+            })
         }
     },
     {
         name: 'some hideable bottom rows',
         props: {
             columns: getColumns().map((c: any, i) => {
+                c.hideable = false;
                 if (i % 2 === 0) {
-                    c.hideable = true;
+                    c.hideable = [false, false, true];
                 }
 
                 return c;
-            }),
-            hideable: false,
-            hideable_row: 2
+            })
         }
     }
 ];

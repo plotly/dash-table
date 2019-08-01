@@ -10,12 +10,13 @@ import { Columns } from 'dash-table/components/Table/props';
 
 export default memoizeOneFactory((
     columns: Columns,
+    usedColumns: Columns,
     merge_duplicate_headers: boolean
 ) => {
     const headerRows = getHeaderRows(columns);
 
-    const labels = getLabels(columns, headerRows);
-    const indices = getIndices(columns, labels, merge_duplicate_headers);
+    const labels = getLabels(usedColumns, headerRows);
+    const indices = getIndices(usedColumns, labels, merge_duplicate_headers);
 
     return R.zip(labels, indices);
 });

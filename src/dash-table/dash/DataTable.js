@@ -168,22 +168,27 @@ export const propTypes = {
         editable: PropTypes.bool,
 
         /**
-         * There are two `hideable` flags in the table.
-         * This is the column-level hideable flag and there is
-         * also the table-level `hideable` flag.
-         *
-         * These flags determine if a column is hideable or not.
-         *
          * If True, then the column is hideable through the UI.
-         * If there are multiple column headers, only the last row of
-         * the column headers will dispay the `hide` action button.
+         *
+         * If there are merged, multi-header columns then you can choose
+         * which column header row to display the `hide` action button in by
+         * supplying an array of booleans.
+         * For example, `[true, false]` will display the `hide` action button
+         * on the first row, but not the second row.
+         *
+         * If the `hide` action button appears on a merged column, then
+         * clicking on that button will hide *all* of the merged columns
+         * associated with it.
          *
          * Hidden columns are listed by id in the `hidden_columns` prop.
          *
          * If `hidden_columns` is not empty, a toggle button is displayed
          * above the table that allows toggling columns visibility.
          */
-        hideable: PropTypes.bool,
+        hideable: PropTypes.oneOfType([
+            PropTypes.bool,
+            PropTypes.arrayOf(PropTypes.bool)
+        ]),
 
         /**
          * If True, then the name of this column is editable.
@@ -440,26 +445,6 @@ export const propTypes = {
      * property.
      */
     editable: PropTypes.bool,
-
-    /**
-     * If True, then the columns will be hideable through the UI.
-     * When `hideable` is True, particular columns can be made
-     * un-hideable by setting `hideable` to `False` in the `columns`
-     * property.
-     *
-     * When `hideable` is False, particular columns can be made
-     * hideable by setting `hideable` to `True` in the `columns`
-     * property.
-     */
-    hideable: PropTypes.bool,
-
-    /**
-     * 'beta'. Define the header row on which the hideable action will be
-     * visible.
-     *
-     * Defaults to the last header row.
-     */
-    hideable_row: PropTypes.number,
 
     /**
      * When selecting multiple cells

@@ -156,7 +156,7 @@ export interface IBaseColumn {
     clearable?: boolean | boolean[];
     deletable?: boolean | boolean[];
     editable: boolean;
-    hideable?: boolean;
+    hideable?: boolean | boolean[];
     renamable?: boolean | boolean[];
     sort_as_null: SortAsNull;
     id: ColumnId;
@@ -272,8 +272,7 @@ export interface IProps {
     fill_width?: boolean;
     filter_query?: string;
     filter_action?: TableAction;
-    hideable?: boolean;
-    hideable_row: number;
+    hideable?: boolean | boolean[];
     hidden_columns?: string[];
     locale_format: INumberLocale;
     merge_duplicate_headers?: boolean;
@@ -321,7 +320,7 @@ interface IDefaultProps {
     fill_width: boolean;
     filter_query: string;
     filter_action: TableAction;
-    hideable: boolean;
+    hideable: boolean | boolean[];
     merge_duplicate_headers: boolean;
     fixed_columns: Fixed;
     fixed_rows: Fixed;

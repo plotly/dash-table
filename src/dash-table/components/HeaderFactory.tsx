@@ -37,8 +37,8 @@ export default class HeaderFactory {
         const props = this.props;
 
         const {
+            columns,
             data,
-            hideable_row,
             hidden_columns,
             map,
             merge_duplicate_headers,
@@ -59,7 +59,7 @@ export default class HeaderFactory {
 
         const headerRows = getHeaderRows(visibleColumns);
 
-        const labelsAndIndices = this.labelsAndIndices(visibleColumns, merge_duplicate_headers);
+        const labelsAndIndices = this.labelsAndIndices(columns, visibleColumns, merge_duplicate_headers);
 
         const relevantStyles = this.relevantStyles(
             style_cell,
@@ -95,7 +95,6 @@ export default class HeaderFactory {
         const contents = this.headerContent(
             visibleColumns,
             hidden_columns,
-            hideable_row,
             data,
             labelsAndIndices,
             map,

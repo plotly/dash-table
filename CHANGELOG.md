@@ -6,7 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 [#314](https://github.com/plotly/dash-table/issues/314)
 - New `column.hideable` flag that displays an "eye" action icon in the column
-    Accepts a boolean. Clicking on the "eye" will add the column to the `hidden_columns` prop.
+    Accepts a boolean or array of booleans. Clicking on the "eye" will add the column to the `hidden_columns` prop.
     `hidden_columns` can be added back through the Columns toggle menu whether they are hideable or not.
 
 [#313](https://github.com/plotly/dash-table/issues/313)
