@@ -119,14 +119,14 @@ export const propTypes = {
     columns: PropTypes.arrayOf(PropTypes.exact({
 
         /**
-         * If True, the user can clear the column by clicking on the `clear`
-         * action button on the column. If there are multiple header rows, True
+         * If true, the user can clear the column by clicking on the `clear`
+         * action button on the column. If there are multiple header rows, true
          * will display the action button on each row.
          *
          * If `last`, the `clear` action button will only appear on the last header
          * row. If `first` it will only appear on the first header row. These
-         * are respectively shortcut equivalents to `[False, ..., True]` and
-         * `[True, ..., False]`.
+         * are respectively shortcut equivalents to `[false, ..., false, true]` and
+         * `[true, ..., true, false]`.
          *
          * If there are merged, multi-header columns then you can choose
          * which column header row to display the `clear` action button in by
@@ -147,14 +147,14 @@ export const propTypes = {
         ]),
 
         /**
-         * If True, the user can remove the column by clicking on the `delete`
-         * action button on the column. If there are multiple header rows, True
+         * If true, the user can remove the column by clicking on the `delete`
+         * action button on the column. If there are multiple header rows, true
          * will display the action button on each row.
          *
          * If `last`, the `delete` action button will only appear on the last header
          * row. If `first` it will only appear on the first header row. These
-         * are respectively shortcut equivalents to `[False, ..., True]` and
-         * `[True, ..., False]`.
+         * are respectively shortcut equivalents to `[false, ..., false, true]` and
+         * `[true, ..., true, false]`.
          *
          * If there are merged, multi-header columns then you can choose
          * which column header row to display the `delete` action button in by
@@ -185,14 +185,14 @@ export const propTypes = {
         editable: PropTypes.bool,
 
         /**
-         * If True, the user can hide the column by clicking on the `hide`
-         * action button on the column. If there are multiple header rows, True
+         * If true, the user can hide the column by clicking on the `hide`
+         * action button on the column. If there are multiple header rows, true
          * will display the action button on each row.
          *
          * If `last`, the `hide` action button will only appear on the last header
          * row. If `first` it will only appear on the first header row. These
-         * are respectively shortcut equivalents to `[False, ..., True]` and
-         * `[True, ..., False]`.
+         * are respectively shortcut equivalents to `[false, ..., false, true]` and
+         * `[true, ..., true, false]`.
          *
          * If there are merged, multi-header columns then you can choose
          * which column header row to display the `hide` action button in by
@@ -210,14 +210,14 @@ export const propTypes = {
         ]),
 
         /**
-         * If True, the user can rename the column by clicking on the `rename`
-         * action button on the column. If there are multiple header rows, True
+         * If true, the user can rename the column by clicking on the `rename`
+         * action button on the column. If there are multiple header rows, true
          * will display the action button on each row.
          *
          * If `last`, the `rename` action button will only appear on the last header
          * row. If `first` it will only appear on the first header row. These
-         * are respectively shortcut equivalents to `[False, ..., True]` and
-         * `[True, ..., False]`.
+         * are respectively shortcut equivalents to `[false, ..., false, true]` and
+         * `[true, ..., true, false]`.
          *
          * If there are merged, multi-header columns then you can choose
          * which column header row to display the `rename` action button in by
