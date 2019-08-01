@@ -56,7 +56,7 @@ describe('copy paste', () => {
         }
     });
 
-    it('can copy from one table and paste to another', () => {
+    it('can copy multiple rows and columns from one table and paste to another', () => {
         DashTable.getCell(10, 0).click();
         DOM.focused.type(Key.Shift, { release: false });
         DashTable.getCell(13, 3).click();
