@@ -88,7 +88,6 @@ export const defaultProps = {
     columns: [],
     editable: false,
     export_format: 'none',
-    hideable: false,
     selected_cells: [],
     selected_rows: [],
     selected_row_ids: [],
