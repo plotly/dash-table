@@ -895,7 +895,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                                 }</label>
                             </div>)
                         };
-                    }))).filter(i => !R.isNil(i)).sort((a, b) => a.j - b.j).sort((a, b) => a.i - b.i).map(a => a.component)}
+                    }))).filter(i => !R.isNil(i)).sort((a, b) => (a.i - b.i) || (a.j - b.j)).map(a => a.component)}
                 </div>
             }
         </div>);
