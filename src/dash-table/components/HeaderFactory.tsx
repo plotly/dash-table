@@ -111,11 +111,6 @@ export default class HeaderFactory {
             headerOpEdges
         );
 
-        console.log('getHeaderCells, wrappers', wrappers);
-        console.log('getHeaderCells, contents', contents);
-        console.log('getHeaderCells, wrapperStyles', wrapperStyles);
-        console.log('getHeaderCells, headerEdges', headerEdges);
-
         const headers = this.getHeaderCells(
             wrappers,
             contents,
@@ -160,15 +155,12 @@ export default class HeaderFactory {
         wrappers,
         styles,
         contents,
-        (w, s, c, i, j) => {
-            console.log('it', w, s, c, i, j);
-            return React.cloneElement(w, {
-                children: [c],
-                style: R.mergeAll([
-                    s,
-                    edges && edges.getStyle(i, j)
-                ])
-            });
-        }
+        (w, s, c, i, j) => React.cloneElement(w, {
+            children: [c],
+            style: R.mergeAll([
+                s,
+                edges && edges.getStyle(i, j)
+            ])
+        })
     ));
 }
