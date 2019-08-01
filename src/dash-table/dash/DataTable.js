@@ -134,7 +134,7 @@ export const propTypes = {
          * from the table. It only removed the associated entries from `data`.
          */
         clearable: PropTypes.oneOfType([
-            PropTypes.oneOf(['last']),
+            PropTypes.oneOf(['first', 'last']),
             PropTypes.bool,
             PropTypes.arrayOf(PropTypes.bool)
         ]),
@@ -151,7 +151,7 @@ export const propTypes = {
          * will delete *all* of the merged columns associated with it.
          */
         deletable: PropTypes.oneOfType([
-            PropTypes.oneOf(['last']),
+            PropTypes.oneOf(['first', 'last']),
             PropTypes.bool,
             PropTypes.arrayOf(PropTypes.bool)
         ]),
@@ -188,7 +188,7 @@ export const propTypes = {
          * above the table that allows toggling columns visibility.
          */
         hideable: PropTypes.oneOfType([
-            PropTypes.oneOf(['last']),
+            PropTypes.oneOf(['first', 'last']),
             PropTypes.bool,
             PropTypes.arrayOf(PropTypes.bool)
         ]),
@@ -204,7 +204,7 @@ export const propTypes = {
          * update the name of each column.
          */
         renamable: PropTypes.oneOfType([
-            PropTypes.oneOf(['last']),
+            PropTypes.oneOf(['first', 'last']),
             PropTypes.bool,
             PropTypes.arrayOf(PropTypes.bool)
         ]),

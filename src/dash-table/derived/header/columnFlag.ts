@@ -1,9 +1,11 @@
 export default (
     i: number,
     last: number,
-    flag?: boolean | boolean[] | 'last'
-): boolean => typeof flag === 'string' ?
+    flag?: boolean | boolean[] | 'first' | 'last'
+): boolean => flag === 'last' ?
         i === last :
-        typeof flag === 'boolean' ?
-            flag :
-            !!flag && flag[i];
+        flag === 'first' ?
+            i === 0 :
+            typeof flag === 'boolean' ?
+                flag :
+                !!flag && flag[i];
