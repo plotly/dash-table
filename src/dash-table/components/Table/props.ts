@@ -153,11 +153,11 @@ export interface IDatetimeColumn extends ITypeColumn {
 }
 
 export interface IBaseColumn {
-    clearable?: boolean | boolean[];
-    deletable?: boolean | boolean[];
+    clearable?: boolean | boolean[] | 'last';
+    deletable?: boolean | boolean[] | 'last';
     editable: boolean;
     hideable?: boolean | boolean[] | 'last';
-    renamable?: boolean | boolean[];
+    renamable?: boolean | boolean[] | 'last';
     sort_as_null: SortAsNull;
     id: ColumnId;
     name: string | string[];
