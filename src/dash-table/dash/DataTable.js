@@ -120,15 +120,23 @@ export const propTypes = {
     columns: PropTypes.arrayOf(PropTypes.exact({
 
         /**
-         * If True, the user can clear the column by clicking on a little `Ø`
-         * button on the column.
+         * If True, the user can clear the column by clicking on the `clear`
+         * action button on the column. If there are multiple header rows, True
+         * will display the action button on each row.
+         *
+         * If `last`, the `clear` action button will only appear on the last header
+         * row. If `first` it will only appear on the first header row. These
+         * are respectively shortcut equivalents to `[False, ..., True]` and
+         * `[True, ..., False]`.
+         *
          * If there are merged, multi-header columns then you can choose
-         * which column header row to display the "Ø" in by
+         * which column header row to display the `clear` action button in by
          * supplying an array of booleans.
-         * For example, `[true, false]` will display the "Ø" on the first row,
-         * but not the second row.
-         * If the "Ø" appears on a merged column, then clicking on that button
-         * will clear *all* of the merged columns associated with it.
+         * For example, `[true, false]` will display the `clear` action button
+         * on the first row, but not the second row.
+         *
+         * If the `clear` action button appears on a merged column, then clicking
+         * on that button will clear *all* of the merged columns associated with it.
          *
          * Unlike `column.deletable`, this action does not remove the column(s)
          * from the table. It only removed the associated entries from `data`.
@@ -140,15 +148,23 @@ export const propTypes = {
         ]),
 
         /**
-         * If True, the user can delete the column by clicking on a little `x`
-         * button on the column.
+         * If True, the user can remove the column by clicking on the `delete`
+         * action button on the column. If there are multiple header rows, True
+         * will display the action button on each row.
+         *
+         * If `last`, the `delete` action button will only appear on the last header
+         * row. If `first` it will only appear on the first header row. These
+         * are respectively shortcut equivalents to `[False, ..., True]` and
+         * `[True, ..., False]`.
+         *
          * If there are merged, multi-header columns then you can choose
-         * which column header row to display the "x" in by
+         * which column header row to display the `delete` action button in by
          * supplying an array of booleans.
-         * For example, `[true, false]` will display the "x" on the first row,
-         * but not the second row.
-         * If the "x" appears on a merged column, then clicking on that button
-         * will delete *all* of the merged columns associated with it.
+         * For example, `[true, false]` will display the `delete` action button
+         * on the first row, but not the second row.
+         *
+         * If the `delete` action button appears on a merged column, then clicking
+         * on that button will remove *all* of the merged columns associated with it.
          */
         deletable: PropTypes.oneOfType([
             PropTypes.oneOf(['first', 'last']),
@@ -170,7 +186,14 @@ export const propTypes = {
         editable: PropTypes.bool,
 
         /**
-         * If True, then the column is hideable through the UI.
+         * If True, the user can hide the column by clicking on the `hide`
+         * action button on the column. If there are multiple header rows, True
+         * will display the action button on each row.
+         *
+         * If `last`, the `hide` action button will only appear on the last header
+         * row. If `first` it will only appear on the first header row. These
+         * are respectively shortcut equivalents to `[False, ..., True]` and
+         * `[True, ..., False]`.
          *
          * If there are merged, multi-header columns then you can choose
          * which column header row to display the `hide` action button in by
@@ -178,14 +201,8 @@ export const propTypes = {
          * For example, `[true, false]` will display the `hide` action button
          * on the first row, but not the second row.
          *
-         * If the `hide` action button appears on a merged column, then
-         * clicking on that button will hide *all* of the merged columns
-         * associated with it.
-         *
-         * Hidden columns are listed by id in the `hidden_columns` prop.
-         *
-         * If `hidden_columns` is not empty, a toggle button is displayed
-         * above the table that allows toggling columns visibility.
+         * If the `hide` action button appears on a merged column, then clicking
+         * on that button will hide *all* of the merged columns associated with it.
          */
         hideable: PropTypes.oneOfType([
             PropTypes.oneOf(['first', 'last']),
@@ -194,14 +211,23 @@ export const propTypes = {
         ]),
 
         /**
-         * If True, then the name of this column is editable.
-         * If there are multiple column headers (if `name` is a list of strings),
-         * then `renamable` can refer to _which_ column header should be
-         * editable by defining an array of booleans.
-         * For example, `[true, false]` will make the first row's name editable,
-         * but not the second row.
-         * Also, updating the name in a merged column header cell will
-         * update the name of each column.
+         * If True, the user can rename the column by clicking on the `rename`
+         * action button on the column. If there are multiple header rows, True
+         * will display the action button on each row.
+         *
+         * If `last`, the `rename` action button will only appear on the last header
+         * row. If `first` it will only appear on the first header row. These
+         * are respectively shortcut equivalents to `[False, ..., True]` and
+         * `[True, ..., False]`.
+         *
+         * If there are merged, multi-header columns then you can choose
+         * which column header row to display the `rename` action button in by
+         * supplying an array of booleans.
+         * For example, `[true, false]` will display the `rename` action button
+         * on the first row, but not the second row.
+         *
+         * If the `rename` action button appears on a merged column, then clicking
+         * on that button will rename *all* of the merged columns associated with it.
          */
         renamable: PropTypes.oneOfType([
             PropTypes.oneOf(['first', 'last']),
