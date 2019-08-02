@@ -386,6 +386,13 @@ export const propTypes = {
     })),
 
     /**
+     * If true, headers are included when copying from the table to different
+     * tabs and elsewhere. Note that headers are ignored when copying from the table onto itself and
+     * between two tables within the same tab.
+     */
+    include_headers_on_copy_paste: PropTypes.bool,
+
+    /**
      * The localization specific formatting information applied to all columns in the table.
      *
      * This prop is derived from the [d3.formatLocale](https://github.com/d3/d3-format#formatLocale) data structure specification.
