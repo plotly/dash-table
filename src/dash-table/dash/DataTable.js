@@ -89,6 +89,7 @@ export const defaultProps = {
     editable: false,
     export_format: 'none',
     include_headers_on_copy_paste: false,
+    persisted: [],
     selected_cells: [],
     selected_rows: [],
     selected_row_ids: [],
