@@ -39,6 +39,9 @@ reset the filter for the affected column(s)
 [#524](https://github.com/plotly/dash-table/issues/524)
 - Fixed readonly dropdown cells content (display label, not value)
 
+[#259](https://github.com/plotly/dash-table/issues/259)
+- Fixed columns `sticky` on Safari
+
 [#491](https://github.com/plotly/dash-table/issues/491)
 - Fixed inconsistent behaviors when editing cell headers
 
