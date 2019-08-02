@@ -89,6 +89,7 @@ export const defaultProps = {
     editable: false,
     export_format: 'none',
     hideable: false,
+    include_headers_on_copy_paste: false,
     persisted: [],
     selected_cells: [],
     selected_rows: [],
@@ -287,6 +288,7 @@ export const propTypes = {
          * The `id` is not visible in the table.
          */
         id: PropTypes.string.isRequired,
+
         /**
          * The `name` of the column,
          * as it appears in the column header.
@@ -384,6 +386,13 @@ export const propTypes = {
          */
         type: PropTypes.oneOf(['any', 'numeric', 'text', 'datetime'])
     })),
+
+    /**
+     * If true, headers are included when copying from the table to different
+     * tabs and elsewhere. Note that headers are ignored when copying from the table onto itself and
+     * between two tables within the same tab.
+     */
+    include_headers_on_copy_paste: PropTypes.bool,
 
     /**
      * The localization specific formatting information applied to all columns in the table.
