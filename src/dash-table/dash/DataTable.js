@@ -606,6 +606,19 @@ export const propTypes = {
     ]),
 
     /**
+     * `persisted` will persist in local storage the selected props
+     * to be re-applied across sessions.
+     *
+     * `hidden_columns`: Applies the previously hidden columns. This value
+     * is not applied if `hidden_columns` is not `None` during the table's
+     * initialization. `setProps` will be called with the stored value and
+     * callbacks will be triggered.
+     */
+    persisted: PropTypes.arrayOf(PropTypes.oneOf([
+        'hidden_columns'
+    ])),
+
+    /**
      * If True, then a `x` will appear next to each `row`
      * and the user can delete the row.
      */

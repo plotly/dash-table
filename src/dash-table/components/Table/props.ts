@@ -87,6 +87,10 @@ export enum ChangeFailure {
     Reject = 'reject'
 }
 
+export enum Persisted {
+    HiddenColumn = 'hidden_columns'
+}
+
 export enum Presentation {
     Dropdown = 'dropdown',
     Input = 'input'
@@ -276,6 +280,7 @@ export interface IProps {
     include_headers_on_copy_paste?: boolean;
     locale_format: INumberLocale;
     merge_duplicate_headers?: boolean;
+    persisted?: Persisted[];
     fixed_columns?: Fixed;
     fixed_rows?: Fixed;
     row_deletable?: boolean;
@@ -322,6 +327,7 @@ interface IDefaultProps {
     filter_action: TableAction;
     include_headers_on_copy_paste: boolean;
     merge_duplicate_headers: boolean;
+    persisted: Persisted[];
     fixed_columns: Fixed;
     fixed_rows: Fixed;
     row_deletable: boolean;
