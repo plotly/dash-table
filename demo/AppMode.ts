@@ -192,7 +192,7 @@ function getActionableState() {
 
     R.forEach(c => {
         c.clearable = true;
-        c.hideable = true;
+        c.hideable = [false, false, true];
     }, state.tableProps.columns || []);
 
     return state;

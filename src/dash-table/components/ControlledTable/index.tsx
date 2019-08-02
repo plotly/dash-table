@@ -23,7 +23,7 @@ import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
 import { ControlledTableProps, ICellFactoryProps, TableAction, IColumn } from 'dash-table/components/Table/props';
 import dropdownHelper from 'dash-table/components/dropdownHelper';
 
-import getHeaderRows from 'dash-table/derived/header/headerRows';
+import getColumnFlag from 'dash-table/derived/header/columnFlag';
 import derivedLabelsAndIndices from 'dash-table/derived/header/labelsAndIndices';
 import derivedTable from 'dash-table/derived/table';
 import derivedTableFragments from 'dash-table/derived/table/fragments';
@@ -700,6 +700,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
     render() {
         const {
+            columns,
             id,
             tooltip_conditional,
             tooltip,
@@ -785,7 +786,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         const buttonProps = {
             export_format,
             virtual_data: virtual,
-            columns: visibleColumns,
+            columns,
+            visibleColumns,
             export_headers
         };
 
@@ -824,7 +826,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                             ref={`r${rowIndex}c${columnIndex}`}
                             className={`cell cell-${rowIndex}-${columnIndex} ${c}`}
                         >
-                            {g ? React.cloneElement(g, { style: s.cell }) : g}
+                        {g ? React.cloneElement(g, { style: s.cell }) : g}
                         </div>))}
                     </div>))}
                 </div>
@@ -846,25 +848,13 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         const {
             activeMenu,
             columns,
-            hideable_row,
             hidden_columns,
             merge_duplicate_headers,
-            setState,
-            visibleColumns
+            setState
         } = this.props;
 
-        const headerRows = getHeaderRows(columns);
-        const hideableRow = R.isNil(hideable_row) ?
-            headerRows - 1 :
-            hideable_row;
-
-        const labelsAndIndices = this.labelsAndIndices(columns, merge_duplicate_headers);
-        const [, indices] = labelsAndIndices[hideableRow];
-
-        const visibleLabelsAndIndices = this.labelsAndIndices(visibleColumns, merge_duplicate_headers);
-        const [, visibleIndices] = visibleLabelsAndIndices[hideableRow];
-
-        const singleColumn = visibleIndices.length === 1;
+        const labelsAndIndices = this.labelsAndIndices(columns, columns, merge_duplicate_headers);
+        const lastRow = labelsAndIndices.length - 1;
 
         return (<div
             className='dash-spreadsheet-menu-item'
@@ -878,27 +868,34 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             {activeMenu !== 'show/hide' ?
                 null :
                 <div className='show-hide-menu'>
-                    {indices.map(index => {
+                    {R.unnest(labelsAndIndices.map(([, indices], i) => indices.map((index, j) => {
+                        const spansAllColumns = indices.length === 1;
                         const column = columns[index];
 
                         const checked = !hidden_columns || hidden_columns.indexOf(column.id) < 0;
-                        const disabled = (singleColumn && checked) || (!column.hideable && checked);
+                        const hideable = getColumnFlag(i, lastRow, column.hideable);
 
-                        return (<div className='show-hide-menu-item'>
-                            <input
-                                type='checkbox'
-                                checked={checked}
-                                disabled={disabled}
-                                onClick={this.toggleColumn.bind(this, column, hideableRow, merge_duplicate_headers)}
-                            />
-                            <label>{!column.name ?
-                                column.id :
-                                typeof column.name === 'string' ?
-                                    column.name :
-                                    column.name.slice(0, hideableRow + 1).filter(name => name.length !== 0).join(' | ')
-                            }</label>
-                        </div>);
-                    })}
+                        const disabled = (spansAllColumns && checked) || (!hideable && checked);
+
+                        return {
+                            i: index,
+                            j,
+                            component: !hideable ? null : (<div className='show-hide-menu-item'>
+                                <input
+                                    type='checkbox'
+                                    checked={checked}
+                                    disabled={disabled}
+                                    onClick={this.toggleColumn.bind(this, column, i, merge_duplicate_headers)}
+                                />
+                                <label>{!column.name ?
+                                    column.id :
+                                    typeof column.name === 'string' ?
+                                        column.name :
+                                        column.name.slice(0, i + 1).filter(name => name.length !== 0).join(' | ')
+                                }</label>
+                            </div>)
+                        };
+                    }))).filter(i => !R.isNil(i)).sort((a, b) => (a.i - b.i) || (a.j - b.j)).map(a => a.component)}
                 </div>
             }
         </div>);

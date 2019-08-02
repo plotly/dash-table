@@ -157,11 +157,11 @@ export interface IDatetimeColumn extends ITypeColumn {
 }
 
 export interface IBaseColumn {
-    clearable?: boolean | boolean[];
-    deletable?: boolean | boolean[];
+    clearable?: boolean | boolean[] | 'first' | 'last';
+    deletable?: boolean | boolean[] | 'first' |'last';
     editable: boolean;
-    hideable?: boolean;
-    renamable?: boolean | boolean[];
+    hideable?: boolean | boolean[] | 'first' | 'last';
+    renamable?: boolean | boolean[] | 'first' | 'last';
     sort_as_null: SortAsNull;
     id: ColumnId;
     name: string | string[];
@@ -276,8 +276,6 @@ export interface IProps {
     fill_width?: boolean;
     filter_query?: string;
     filter_action?: TableAction;
-    hideable?: boolean;
-    hideable_row: number;
     hidden_columns?: string[];
     locale_format: INumberLocale;
     merge_duplicate_headers?: boolean;
@@ -326,7 +324,6 @@ interface IDefaultProps {
     fill_width: boolean;
     filter_query: string;
     filter_action: TableAction;
-    hideable: boolean;
     merge_duplicate_headers: boolean;
     fixed_columns: Fixed;
     fixed_rows: Fixed;

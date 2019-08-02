@@ -5,7 +5,6 @@ import { arrayMap2 } from 'core/math/arrayZipMap';
 import { matrixMap2, matrixMap3 } from 'core/math/matrixZipMap';
 
 import derivedHeaderContent from 'dash-table/derived/header/content';
-import getHeaderRows from 'dash-table/derived/header/headerRows';
 import derivedLabelsAndIndices from 'dash-table/derived/header/labelsAndIndices';
 import derivedHeaderOperations from 'dash-table/derived/header/operations';
 import derivedHeaderWrappers from 'dash-table/derived/header/wrappers';
@@ -37,8 +36,8 @@ export default class HeaderFactory {
         const props = this.props;
 
         const {
+            columns,
             data,
-            hideable_row,
             hidden_columns,
             map,
             merge_duplicate_headers,
@@ -57,9 +56,8 @@ export default class HeaderFactory {
             visibleColumns
         } = props;
 
-        const headerRows = getHeaderRows(visibleColumns);
-
-        const labelsAndIndices = this.labelsAndIndices(visibleColumns, merge_duplicate_headers);
+        const labelsAndIndices = this.labelsAndIndices(columns, visibleColumns, merge_duplicate_headers);
+        const headerRows = labelsAndIndices.length;
 
         const relevantStyles = this.relevantStyles(
             style_cell,
@@ -95,7 +93,6 @@ export default class HeaderFactory {
         const contents = this.headerContent(
             visibleColumns,
             hidden_columns,
-            hideable_row,
             data,
             labelsAndIndices,
             map,

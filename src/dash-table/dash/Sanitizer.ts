@@ -51,12 +51,10 @@ const applyDefaultsToColumns = (
     defaultLocale: INumberLocale,
     defaultSort: SortAsNull,
     columns: Columns,
-    editable: boolean,
-    hideable: boolean
+    editable: boolean
 ) => R.map(column => {
     const c = R.clone(column);
     c.editable = resolveFlag(editable, column.editable);
-    c.hideable = resolveFlag(hideable, column.hideable);
     c.sort_as_null = c.sort_as_null || defaultSort;
 
     if (c.type === ColumnType.Numeric && c.format) {
@@ -77,7 +75,7 @@ const getVisibleColumns = (
 export default class Sanitizer {
     sanitize(props: PropsWithDefaults): SanitizedProps {
         const locale_format = this.applyDefaultToLocale(props.locale_format);
-        const columns = this.applyDefaultsToColumns(locale_format, props.sort_as_null, props.columns, props.editable, props.hideable);
+        const columns = this.applyDefaultsToColumns(locale_format, props.sort_as_null, props.columns, props.editable);
         const visibleColumns = this.getVisibleColumns(columns, props.hidden_columns);
 
         let headerFormat = props.export_headers;
