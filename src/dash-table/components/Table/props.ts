@@ -88,7 +88,8 @@ export enum ChangeFailure {
 }
 
 export enum Persisted {
-    HiddenColumn = 'hidden_columns'
+    HiddenColumn = 'hidden_columns',
+    ColumnNames = 'column_names'
 }
 
 export enum Presentation {

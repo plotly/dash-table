@@ -90,7 +90,7 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
         );
 
         this.updateDerivedProps(controlled, this.controlledSetProps);
-        this.updatePersistedProps(controlled);
+        this.updatePersistedProps.check(controlled);
 
         return (<ControlledTable {...controlled} />);
     }
@@ -120,6 +120,15 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
                 newProps.data_previous = data;
             }
 
+            let controlled = this.controlledPropsHelper(
+                this.controlledSetProps,
+                this.controlledSetState,
+                this.props,
+                this.state
+            );
+
+            this.updatePersistedProps.update(controlled, newProps);
+
             setProps(newProps);
         } : (newProps: Partial<SanitizedAndDerivedProps>) => {
             /*#if DEV*/
@@ -129,6 +138,15 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
                 R.keysIn(newProps)
             );
             /*#endif*/
+
+            let controlled = this.controlledPropsHelper(
+                this.controlledSetProps,
+                this.controlledSetState,
+                this.props,
+                this.state
+            );
+
+            this.updatePersistedProps.update(controlled, newProps);
 
             this.setState(newProps);
         };

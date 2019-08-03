@@ -616,7 +616,8 @@ export const propTypes = {
      * callbacks will be triggered.
      */
     persisted: PropTypes.arrayOf(PropTypes.oneOf([
-        'hidden_columns'
+        'hidden_columns',
+        'column_names'
     ])),
 
     /**
