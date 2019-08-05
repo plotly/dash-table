@@ -235,6 +235,12 @@ export const propTypes = {
             PropTypes.arrayOf(PropTypes.bool)
         ]),
 
+        selectable: PropTypes.oneOfType([
+            PropTypes.oneOf(['first', 'last']),
+            PropTypes.bool,
+            PropTypes.arrayOf(PropTypes.bool)
+        ]),
+
         /**
          * The formatting applied to the column's data.
          *
@@ -605,6 +611,8 @@ export const propTypes = {
         })
     ]),
 
+    column_selectable: PropTypes.oneOf(['single', 'multi', false]),
+
     /**
      * If True, then a `x` will appear next to each `row`
      * and the user can delete the row.
@@ -644,6 +652,8 @@ export const propTypes = {
      * `row_selectable` is `'single'` or `'multi'`.
      */
     selected_rows: PropTypes.arrayOf(PropTypes.number),
+
+    selected_columns: PropTypes.arrayOf(PropTypes.string),
 
     /**
      * `selected_row_ids` contains the ids of rows that
