@@ -105,7 +105,7 @@ describe('copy paste', () => {
             }
         });
 
-        it.only('copy multiple rows and columns from one table to another', () => {
+        it('copy multiple rows and columns from one table to another', () => {
             DashTable.hideColumnById(0, '0');
 
             DashTable.getCell(10, 0).click();
