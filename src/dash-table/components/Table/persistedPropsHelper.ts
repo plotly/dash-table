@@ -59,7 +59,7 @@ export default (id: string) => {
 
                         const newColumns = R.clone(columns);
                         newColumns.forEach(c => {
-                            c.name = stored[c.id];
+                            c.name = stored[c.id] || c.name;
                         });
 
                         setTimeout(() => setProps({ columns: newColumns }));
