@@ -1183,6 +1183,8 @@ export const propTypes = {
         PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     ),
 
+    derived_viewport_selected_columns: PropTypes.arrayOf(PropTypes.string),
+
     /**
      * `derived_viewport_selected_rows` represents the indices of the
      * `selected_rows` from the perspective of the `derived_viewport_indices`.
