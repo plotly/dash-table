@@ -225,23 +225,21 @@ export const propTypes = {
          * This prop is derived from the [d3-format](https://github.com/d3/d3-format) library specification. Apart from
          * being structured slightly differently (under a single prop), the usage
          * is the same.
-         *
-         * 'locale': represents localization specific formatting information
-         *   When left unspecified, will use the default value provided by d3-format.
-         *
-         *   'symbol': (default: ['$', '']) a list of two strings representing the
-         *   prefix and suffix symbols. Typically used for currency, and implemented using d3's
-         *   currency format, but you can use this for other symbols such as measurement units.
-         *   'decimal': (default: '.') the string used for the decimal separator
-         *   'group': (default: ',') the string used for the groups separator
-         *   'grouping': (default: [3]) a list of integers representing the grouping pattern
-         *   'numerals': a list of ten strings used as replacements for numbers 0-9
-         *   'percent': (default: '%') the string used for the percentage symbol
-         *   'separate_4digits': (default: True) separate integers with 4-digits or less
-         *
-         * 'nully': a value that will be used in place of the nully value during formatting
-         *   If the value type matches the column type, it will be formatted normally
-         * 'prefix': a number representing the SI unit to use during formatting
+         * 'locale': represents localization specific formatting information.
+         *  When left unspecified, will use the default value provided by d3-format.
+	 *  The keys are as follows:
+         *  'symbol': (default: ['$', '']) a list of two strings representing the
+         *  prefix and suffix symbols. Typically used for currency, and implemented using d3's
+         *  currency format, but you can use this for other symbols such as measurement units;
+         *  'decimal': (default: '.') the string used for the decimal separator;
+         *  'group': (default: ',') the string used for the groups separator;
+         *  'grouping': (default: [3]) a list of integers representing the grouping pattern.
+         *  'numerals': a list of ten strings used as replacements for numbers 0-9;
+         *  'percent': (default: '%') the string used for the percentage symbol;
+         *  'separate_4digits': (default: True) separate integers with 4-digits or less.
+         * 'nully': a value that will be used in place of the nully value during formatting.
+         *   If the value type matches the column type, it will be formatted normally.
+         * 'prefix': a number representing the SI unit to use during formatting.
          *   See `dash_table.Format.Prefix` enumeration for the list of valid values
          * 'specifier': (default: '') represents the rules to apply when formatting the number.
          * dash_table.FormatTemplate contains helper functions to rapidly use certain
@@ -290,16 +288,15 @@ export const propTypes = {
         /**
          * The `on_change` behavior of the column for user-initiated modifications.
          * 'action' (default 'coerce'):
-         *  none: do not validate data
+         *  none: do not validate data;
          *  coerce: check if the data corresponds to the destination type and
-         *  attempts to coerce it into the destination type if not
-         *  validate: check if the data corresponds to the destination type (no coercion)
-         *
-         * 'failure' (default 'reject'): what to do with the value if the action fails
-         *  accept: use the invalid value
-         *  default: replace the provided value with `validation.default`
-         *  reject: do not modify the existing value
-         */
+         *  attempts to coerce it into the destination type if not;
+         *  validate: check if the data corresponds to the destination type (no coercion).
+         * 'failure' (default 'reject'): what to do with the value if the action fails:
+         *  accept: use the invalid value;
+         *  default: replace the provided value with `validation.default`;
+         *  reject: do not modify the existing value.
+	 */
         on_change: PropTypes.exact({
             action: PropTypes.oneOf([
                 'coerce',
@@ -326,8 +323,8 @@ export const propTypes = {
 
         /**
          * The `validation` options.
-         * 'allow_null': Allow the use of nully values (undefined, null, NaN) (default: false)
-         * 'default': The default value to apply with on_change.failure = 'default' (default: null)
+         * 'allow_null': Allow the use of nully values. (undefined, null, NaN) (default: false)
+         * 'default': The default value to apply with on_change.failure = 'default'. (default: null)
          * 'allow_YY': `datetime` columns only, allow 2-digit years (default: false).
          *   If true, we interpret years as ranging from now-70 to now+29 - in 2019
          *   this is 1949 to 2048 but in 2020 it will be different. If used with
@@ -341,8 +338,8 @@ export const propTypes = {
 
         /**
          * The data-type of the column's data.
-         * 'numeric': represents both floats and ints
-         * 'text': represents a string
+         * 'numeric': represents both floats and ints.
+         * 'text': represents a string.
          * 'datetime': a string representing a date or date-time, in the form:
          *   'YYYY-MM-DD HH:MM:SS.ssssss' or some truncation thereof. Years must
          *   have 4 digits, unless you use `validation.allow_YY: true`. Also
@@ -380,12 +377,12 @@ export const propTypes = {
      *   'symbol': (default: ['$', '']) a list of two strings representing the
      *   prefix and suffix symbols. Typically used for currency, and implemented using d3's
      *   currency format, but you can use this for other symbols such as measurement units.
-     *   'decimal': (default: '.') the string used for the decimal separator
-     *   'group': (default: ',') the string used for the groups separator
-     *   'grouping': (default: [3]) a list of integers representing the grouping pattern
-     *   'numerals': a list of ten strings used as replacements for numbers 0-9
-     *   'percent': (default: '%') the string used for the percentage symbol
-     *   'separate_4digits': (default: True) separate integers with 4-digits or less
+     *   'decimal': (default: '.') the string used for the decimal separator.
+     *   'group': (default: ',') the string used for the groups separator.
+     *   'grouping': (default: [3]) a list of integers representing the grouping pattern.
+     *   'numerals': a list of ten strings used as replacements for numbers 0-9.
+     *   'percent': (default: '%') the string used for the percentage symbol.
+     *   'separate_4digits': (default: True) separate integers with 4-digits or less.
      */
     locale_format: PropTypes.exact({
         symbol: PropTypes.arrayOf(PropTypes.string),
@@ -489,8 +486,8 @@ export const propTypes = {
 
     /**
      * `fill_width` toggles between a set of CSS for two common behaviors:
-     * - True: The table container's width will grow to fill the available space
-     * - False: The table container's width will equal the width of its content
+     * True: The table container's width will grow to fill the available space;
+     * False: The table container's width will equal the width of its content.
      */
     fill_width: PropTypes.bool,
 
@@ -654,11 +651,11 @@ export const propTypes = {
      * or we can update the data on-the-fly with callbacks
      * when the user clicks on the "Previous" or "Next" buttons.
      * These modes can be toggled with this `page_action` parameter:
-     * - `'native'`: all data is passed to the table up-front, paging logic is
-     * handled by the table
-     * - `'custom'`: data is passed to the table one page at a time, paging logic
-     * is handled via callbacks
-     * - `none`: disables paging, render all of the data at once
+     * `'native'`: all data is passed to the table up-front, paging logic is
+     * handled by the table;
+     * `'custom'`: data is passed to the table one page at a time, paging logic
+     * is handled via callbacks;
+     * `none`: disables paging, render all of the data at once.
      */
     page_action: PropTypes.oneOf(['custom', 'native', 'none']),
 
@@ -1046,38 +1043,35 @@ export const propTypes = {
 
     /**
      * This property tells the table to use virtualization when rendering.
-     *
      * Assumptions are that:
-     * - the width of the columns is fixed
-     * - the height of the rows is always the same
-     * - runtime styling changes will not affect width and height vs. first rendering
+     * the width of the columns is fixed;
+     * the height of the rows is always the same; and
+     * runtime styling changes will not affect width and height vs. first rendering
      */
     virtualization: PropTypes.bool,
 
     /**
      * This property represents the current structure of
      * `filter_query` as a tree structure. Each node of the
-     * query structure have:
-     * - type (string; required)
-     *   - 'open-block'
-     *   - 'logical-operator'
-     *   - 'relational-operator'
-     *   - 'unary-operator'
-     *   - 'expression'
-     * - subType (string; optional)
-     *   - 'open-block': '()'
-     *   - 'logical-operator': '&&', '||'
-     *   - 'relational-operator': '=', '>=', '>', '<=', '<', '!=', 'contains'
-     *   - 'unary-operator': '!', 'is bool', 'is even', 'is nil', 'is num', 'is object', 'is odd', 'is prime', 'is str'
-     *   - 'expression': 'value', 'field'
-     * - value (any)
-     *   - 'expression, value': passed value
-     *   - 'expression, field': the field/prop name
-     *
-     * - block (nested query structure; optional)
-     * - left (nested query structure; optional)
-     * - right (nested query structure; optional)
-     *
+     * query structure has:
+     * type (string; required):
+     *   'open-block',
+     *   'logical-operator',
+     *   'relational-operator',
+     *   'unary-operator', or
+     *   'expression';
+     * subType (string; optional):
+     *   'open-block': '()',
+     *   'logical-operator': '&&', '||',
+     *   'relational-operator': '=', '>=', '>', '<=', '<', '!=', 'contains',
+     *   'unary-operator': '!', 'is bool', 'is even', 'is nil', 'is num', 'is object', 'is odd', 'is prime', 'is str',
+     *   'expression': 'value', 'field';
+     * value (any):
+     *   'expression, value': passed value,
+     *   'expression, field': the field/prop name.
+     * block (nested query structure; optional).
+     * left (nested query structure; optional).
+     * right (nested query structure; optional).
      * If the query is invalid or empty, the `derived_filter_query_structure` will
      * be null.
      */
