@@ -57,6 +57,7 @@ export function createWorksheet(heading: string[][], data: Data, columnID: strin
     const ws = XLSX.utils.aoa_to_sheet(heading);
     if (exportHeader === 'display' || exportHeader === 'names' || exportHeader === 'none') {
         XLSX.utils.sheet_add_json(ws, data, {
+            header: columnID,
             skipHeader: true,
             origin: heading.length
         });
