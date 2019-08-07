@@ -61,6 +61,18 @@ export default class DashTable {
         return cy.get(`#table tbody td.cell--selected`);
     }
 
+    static scrollFullTableHeight() {
+        cy.get(`.row.row-1`).scrollTo(0, 10000);
+    }
+
+    static getCellInLastRowOfColumn(column: number) {
+        const cellInLastRow = cy.get(`td.dash-cell.column-${column}`).last().then(elem => {
+            const lastRow = elem ? elem.attr(`data-dash-row`) : undefined;
+            return cy.get(`td.dash-cell.column-${column}[data-dash-row="${lastRow}"`);
+        });
+        return cellInLastRow;
+    }
+
     static toggleScroll(toggled: boolean) {
         cy.get('.row-1').then($el => {
             $el[0].style.overflow = toggled ? '' : 'unset';

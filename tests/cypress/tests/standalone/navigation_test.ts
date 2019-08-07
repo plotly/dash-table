@@ -107,6 +107,14 @@ Object.values(BasicModes).forEach(mode => {
                 DashTable.getCell(4, 2).should('have.class', 'focused');
                 DashTable.getCell(3, 1).should('not.have.class', 'focused');
             });
+
+            it('can select a cell outside of the viewport', () => {
+                DashTable.toggleScroll(true);
+                DashTable.getCell(4, 2).click();
+                DashTable.scrollFullTableHeight();
+                DashTable.getCellInLastRowOfColumn(3).click();
+                DashTable.getCell(4, 2).should('not.have.class', 'focused');
+            });
         });
     });
 });
