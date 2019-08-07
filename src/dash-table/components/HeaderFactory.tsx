@@ -45,6 +45,7 @@ export default class HeaderFactory {
             page_action,
             row_deletable,
             row_selectable,
+            selected_columns,
             setFilter,
             setProps,
             sort_action,
@@ -93,11 +94,13 @@ export default class HeaderFactory {
 
         const contents = this.headerContent(
             visibleColumns,
+            columns,
             hidden_columns,
             data,
             labelsAndIndices,
             map,
             column_selectable,
+            selected_columns,
             sort_action,
             sort_mode,
             sort_by,

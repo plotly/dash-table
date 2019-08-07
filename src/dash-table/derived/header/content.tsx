@@ -30,6 +30,7 @@ const doAction = (
         mergeDuplicateHeaders: boolean,
         data: Data
     ) => any,
+    selected_columns: string[],
     column: IColumn,
     columns: Columns,
     columnRowIndex: any,
@@ -39,7 +40,19 @@ const doAction = (
     map: Map<string, SingleColumnSyntaxTree>,
     data: Data
 ) => () => {
-    setProps(action(column, columns, columnRowIndex, mergeDuplicateHeaders, data));
+    const props = action(column, columns, columnRowIndex, mergeDuplicateHeaders, data);
+
+    const affectedColumIds = actions.getAffectedColumns(column, columns, columnRowIndex, mergeDuplicateHeaders);
+
+    if (action === actions.deleteColumn) {
+        if (R.intersection(selected_columns, affectedColumIds).length > 0) {
+            props.selected_columns = R.reject(
+                R.contains(R.__, affectedColumIds),
+                selected_columns
+            );
+        }
+    }
+    setProps(props);
 
     const affectedColumns: Columns = [];
     R.forEach(id => {
@@ -47,7 +60,7 @@ const doAction = (
         if (affectedColumn) {
             affectedColumns.push(affectedColumn);
         }
-    }, actions.getAffectedColumns(column, columns, columnRowIndex, mergeDuplicateHeaders));
+    }, affectedColumIds);
 
     clearColumnsFilter(map, affectedColumns, setFilter);
 };
@@ -90,6 +103,32 @@ function editColumnName(column: IColumn, columns: Columns, columnRowIndex: any, 
     };
 }
 
+function selectColumn(current_selection: string[], column: IColumn, columns: Columns, columnRowIndex: any, setProps: SetProps, mergeDuplicateHeaders: boolean, clearSelection: boolean, select: boolean) {
+    // if 'single' and trying to click selected radio -> do nothing
+    if (clearSelection && !select) {
+        return () => { };
+    }
+
+    let selected_columns = actions.getAffectedColumns(column, columns, columnRowIndex, mergeDuplicateHeaders, true);
+
+    if (clearSelection) {
+        return () => setProps({ selected_columns });
+    } else if (select) {
+        // 'multi' + select -> add to selection (union)
+        return () => setProps({
+            selected_columns: R.union(current_selection, selected_columns)
+        });
+    } else {
+        // 'multi' + unselect -> invert of intersection
+        return () => setProps({
+            selected_columns: R.reject(
+                R.contains(R.__, selected_columns),
+                current_selection
+            )
+        });
+    }
+}
+
 function getSorting(columnId: ColumnId, sortBy: SortBy): SortDirection {
     const sort = R.find(s => s.column_id === columnId, sortBy);
 
@@ -109,12 +148,14 @@ function getSortingIcon(columnId: ColumnId, sortBy: SortBy) {
 }
 
 function getter(
+    visibleColumns: Columns,
     columns: Columns,
     hiddenColumns: string[] | undefined,
     data: Data,
     labelsAndIndices: R.KeyValuePair<any[], number[]>[],
     map: Map<string, SingleColumnSyntaxTree>,
     column_selectable: Selection,
+    selected_columns: string[],
     sort_action: TableAction,
     mode: SortMode,
     sortBy: SortBy,
@@ -130,7 +171,7 @@ function getter(
 
             return R.addIndex<number, JSX.Element>(R.map)(
                 (columnIndex, index) => {
-                    const column = columns[columnIndex];
+                    const column = visibleColumns[columnIndex];
 
                     let colSpan: number;
                     if (!mergeDuplicateHeaders) {
@@ -149,7 +190,25 @@ function getter(
                     const renamable = getColumnFlag(headerRowIndex, lastRow, column.renamable);
                     const selectable = getColumnFlag(headerRowIndex, lastRow, column.selectable);
 
-                    const spansAllColumns = columns.length === colSpan;
+                    const spansAllColumns = visibleColumns.length === colSpan;
+
+                    const affectedColumns = actions.getAffectedColumns(
+                        column,
+                        columns,
+                        headerRowIndex,
+                        mergeDuplicateHeaders,
+                        true
+                    );
+                    const allSelected =
+                        selectable &&
+                        (
+                            column_selectable !== 'single' ||
+                            (selected_columns.length === affectedColumns.length)
+                        ) &&
+                        R.all(
+                            c => selected_columns.indexOf(c) !== -1,
+                            affectedColumns
+                        );
 
                     return (<div>
                         {!column_selectable || !selectable ?
@@ -158,11 +217,22 @@ function getter(
                                 className='column-header--select'
                             >
                                 <input
+                                    checked={allSelected}
+                                    onChange={selectColumn(
+                                        selected_columns,
+                                        column,
+                                        columns,
+                                        headerRowIndex,
+                                        setProps,
+                                        mergeDuplicateHeaders,
+                                        column_selectable === 'single',
+                                        !allSelected
+                                    )}
+                                    name='column-header--select'
                                     type={column_selectable === 'single' ?
                                         'radio' :
                                         'checkbox'
                                     }
-                                    name='column-header--select'
                                 />
                             </span>
                         }
@@ -180,7 +250,7 @@ function getter(
                             null :
                             (<span
                                 className='column-header--edit'
-                                onClick={editColumnName(column, columns, headerRowIndex, setProps, mergeDuplicateHeaders)}
+                                onClick={editColumnName(column, visibleColumns, headerRowIndex, setProps, mergeDuplicateHeaders)}
                             >
                                 <FontAwesomeIcon icon='pencil-alt' />
                             </span>)
@@ -190,7 +260,7 @@ function getter(
                             null :
                             (<span
                                 className='column-header--clear'
-                                onClick={doAction(actions.clearColumn, column, columns, headerRowIndex, mergeDuplicateHeaders, setFilter, setProps, map, data)}
+                                onClick={doAction(actions.clearColumn, selected_columns, column, visibleColumns, headerRowIndex, mergeDuplicateHeaders, setFilter, setProps, map, data)}
                             >
                                 <FontAwesomeIcon icon='eraser' />
                             </span>)
@@ -202,7 +272,7 @@ function getter(
                                 className={'column-header--delete' + (spansAllColumns ? ' disabled' : '')}
                                 onClick={spansAllColumns ?
                                     undefined :
-                                    doAction(actions.deleteColumn, column, columns, headerRowIndex, mergeDuplicateHeaders, setFilter, setProps, map, data)
+                                    doAction(actions.deleteColumn, selected_columns, column, visibleColumns, headerRowIndex, mergeDuplicateHeaders, setFilter, setProps, map, data)
                                 }
                             >
                                 <FontAwesomeIcon icon={['far', 'trash-alt']} />
@@ -216,7 +286,7 @@ function getter(
                                 onClick={spansAllColumns ?
                                     undefined :
                                     () => {
-                                        const ids = actions.getColumnIds(column, columns, headerRowIndex, mergeDuplicateHeaders);
+                                        const ids = actions.getColumnIds(column, visibleColumns, headerRowIndex, mergeDuplicateHeaders);
 
                                         const hidden_columns = hiddenColumns ?
                                             R.union(hiddenColumns, ids) :
