@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [4.1.0] - 2019-08-05
 ### Added
 [#314](https://github.com/plotly/dash-table/issues/314)
 - New `column.hideable` flag that displays an "eye" action icon in the column
@@ -17,25 +17,31 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Ability to export table as csv or xlsx file.
 
 [#497](https://github.com/plotly/dash-table/pull/497)
-- New `column.clearable` flag that displays a `Ø` action in the column
+- New `column.clearable` flag that displays a "eraser" action in the column
     Accepts a boolean or array of booleans for multi-line headers.
-    Clicking a merged column's `Ø` will clear all related columns.
+    Clicking a merged column's "eraser" will clear all related columns.
 
     - Clearing column(s) will remove the appropriate data props from each datum
     row of `data`.
     - Additionally clearing the column will reset the filter for the affected column(s)
 
 [#318](https://github.com/plotly/dash-table/issues/318)
-- Headers are included when copying from the table to different 
-tabs and elsewhere. They are ignored when copying from the table onto itself and 
-between two tables within the same tab. 
+- Headers are included when copying from the table to different
+tabs and elsewhere. They are ignored when copying from the table onto itself and
+between two tables within the same tab.
 
 ### Changed
 [#497](https://github.com/plotly/dash-table/pull/497)
-- Like for clearing above, deleting through the `x` action will also
+- Like for clearing above, deleting through the "trash" action will also
 reset the filter for the affected column(s)
 
 ### Fixed
+[#524](https://github.com/plotly/dash-table/issues/524)
+- Fixed readonly dropdown cells content (display label, not value)
+
+[#259](https://github.com/plotly/dash-table/issues/259)
+- Fixed columns `sticky` on Safari
+
 [#491](https://github.com/plotly/dash-table/issues/491)
 - Fixed inconsistent behaviors when editing cell headers
 
