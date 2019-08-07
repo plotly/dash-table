@@ -227,7 +227,7 @@ export const propTypes = {
          * is the same.
          * 'locale': represents localization specific formatting information.
          *  When left unspecified, will use the default value provided by d3-format.
-	 *  The keys are as follows:
+         *  The keys are as follows:
          *  'symbol': (default: ['$', '']) a list of two strings representing the
          *  prefix and suffix symbols. Typically used for currency, and implemented using d3's
          *  currency format, but you can use this for other symbols such as measurement units;
@@ -296,7 +296,7 @@ export const propTypes = {
          *  accept: use the invalid value;
          *  default: replace the provided value with `validation.default`;
          *  reject: do not modify the existing value.
-	 */
+         */
         on_change: PropTypes.exact({
             action: PropTypes.oneOf([
                 'coerce',
