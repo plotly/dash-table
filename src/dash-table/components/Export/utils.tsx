@@ -53,7 +53,7 @@ export function createWorkbook(ws: XLSX.WorkSheet) {
     return wb;
 }
 
-export function createWorksheet(heading: string[][], data: Data, columnID: string[], exportHeader: string ) {
+export function createWorksheet(heading: string[][], data: Data, columnID: string[], exportHeader: string, mergeDuplicateHeaders: boolean ) {
     const ws = XLSX.utils.aoa_to_sheet(heading);
     if (exportHeader === 'display' || exportHeader === 'names' || exportHeader === 'none') {
         XLSX.utils.sheet_add_json(ws, data, {
@@ -61,7 +61,7 @@ export function createWorksheet(heading: string[][], data: Data, columnID: strin
             skipHeader: true,
             origin: heading.length
         });
-        if (exportHeader === 'display') {
+        if (exportHeader === 'display' && mergeDuplicateHeaders) {
             ws['!merges'] = getMergeRanges(heading);
         }
     } else if (exportHeader === 'ids') {
