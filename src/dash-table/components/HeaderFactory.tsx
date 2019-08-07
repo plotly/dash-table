@@ -36,6 +36,7 @@ export default class HeaderFactory {
         const props = this.props;
 
         const {
+            column_selectable,
             columns,
             data,
             hidden_columns,
@@ -96,6 +97,7 @@ export default class HeaderFactory {
             data,
             labelsAndIndices,
             map,
+            column_selectable,
             sort_action,
             sort_mode,
             sort_by,

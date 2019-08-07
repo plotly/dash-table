@@ -189,10 +189,12 @@ function getTypedState() {
 function getActionableState() {
     const state = getDefaultState();
     state.tableProps.filter_action = TableAction.Native;
+    state.tableProps.column_selectable = 'single';
 
     R.forEach(c => {
         c.clearable = true;
-        c.hideable = [false, false, true];
+        c.hideable = 'last';
+        c.selectable = 'last';
     }, state.tableProps.columns || []);
 
     return state;

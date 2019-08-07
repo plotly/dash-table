@@ -8,13 +8,14 @@ import singleUpdate from 'core/sorting/single';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     ColumnId,
-    Data,
-    SortMode,
     Columns,
+    Data,
     IColumn,
+    Selection,
+    SetFilter,
     SetProps,
-    TableAction,
-    SetFilter
+    SortMode,
+    TableAction
 } from 'dash-table/components/Table/props';
 import getColumnFlag from 'dash-table/derived/header/columnFlag';
 import * as actions from 'dash-table/utils/actions';
@@ -113,6 +114,7 @@ function getter(
     data: Data,
     labelsAndIndices: R.KeyValuePair<any[], number[]>[],
     map: Map<string, SingleColumnSyntaxTree>,
+    column_selectable: Selection,
     sort_action: TableAction,
     mode: SortMode,
     sortBy: SortBy,
@@ -145,41 +147,57 @@ function getter(
                     const deletable = paginationMode !== TableAction.Custom && getColumnFlag(headerRowIndex, lastRow, column.deletable);
                     const hideable = getColumnFlag(headerRowIndex, lastRow, column.hideable);
                     const renamable = getColumnFlag(headerRowIndex, lastRow, column.renamable);
+                    const selectable = getColumnFlag(headerRowIndex, lastRow, column.selectable);
 
                     const spansAllColumns = columns.length === colSpan;
 
                     return (<div>
-                        {sort_action !== TableAction.None && isLastRow ?
+                        {!column_selectable || !selectable ?
+                            null :
+                            <span
+                                className='column-header--select'
+                            >
+                                <input
+                                    type={column_selectable === 'single' ?
+                                        'radio' :
+                                        'checkbox'
+                                    }
+                                    name='column-header--select'
+                                />
+                            </span>
+                        }
+                        {sort_action === TableAction.None || !isLastRow ?
+                            null :
                             (<span
-                                className='sort'
+                                className='column-header--sort'
                                 onClick={doSort(column.id, sortBy, mode, setProps)}
                             >
                                 <FontAwesomeIcon icon={getSortingIcon(column.id, sortBy)} />
-                            </span>) :
-                            ''
+                            </span>)
                         }
 
-                        {renamable ?
+                        {!renamable ?
+                            null :
                             (<span
                                 className='column-header--edit'
                                 onClick={editColumnName(column, columns, headerRowIndex, setProps, mergeDuplicateHeaders)}
                             >
                                 <FontAwesomeIcon icon='pencil-alt' />
-                            </span>) :
-                            ''
+                            </span>)
                         }
 
-                        {clearable ?
+                        {!clearable ?
+                            null :
                             (<span
                                 className='column-header--clear'
                                 onClick={doAction(actions.clearColumn, column, columns, headerRowIndex, mergeDuplicateHeaders, setFilter, setProps, map, data)}
                             >
                                 <FontAwesomeIcon icon='eraser' />
-                            </span>) :
-                            ''
+                            </span>)
                         }
 
-                        {deletable ?
+                        {!deletable ?
+                            null :
                             (<span
                                 className={'column-header--delete' + (spansAllColumns ? ' disabled' : '')}
                                 onClick={spansAllColumns ?
@@ -188,11 +206,11 @@ function getter(
                                 }
                             >
                                 <FontAwesomeIcon icon={['far', 'trash-alt']} />
-                            </span>) :
-                            ''
+                            </span>)
                         }
 
-                        {hideable ?
+                        {!hideable ?
+                            null :
                             (<span
                                 className={'column-header--hide' + (spansAllColumns ? ' disabled' : '')}
                                 onClick={spansAllColumns ?
@@ -207,8 +225,7 @@ function getter(
                                         setProps({ hidden_columns });
                                     }}>
                                 <FontAwesomeIcon icon={['far', 'eye-slash']} />
-                            </span>) :
-                            ''
+                            </span>)
                         }
 
                         <span className='column-header-name'>{labels[columnIndex]}</span>
