@@ -1,6 +1,11 @@
 # Change Log for dash-table
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
+## [Unreleased]
+### Fixed 
+[#314](https://github.com/plotly/dash-table/issues/533)
+- Fixed problem with export with clearable columns and add 
+merge_duplicate_headers prop to the export button.
 
 ## [4.1.0] - 2019-08-05
 ### Added
