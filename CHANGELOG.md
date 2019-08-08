@@ -4,8 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Fixed 
 [#314](https://github.com/plotly/dash-table/issues/533)
-- Fixed problem with export with clearable columns and add 
-merge_duplicate_headers prop to the export button.
+- Fixed problem clearing one column shifting everything to the left and
+leaving the last column blank
+- Add merge_duplicate_headers prop to correct `export_format: display` behaviour.
 
 ## [4.1.0] - 2019-08-05
 ### Added
