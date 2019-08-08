@@ -83,6 +83,13 @@ Object.values(BasicModes).forEach(mode => {
                 DashTable.getCell(2, 1).should('have.class', 'focused');
                 DashTable.getCell(3, 1).should('not.have.class', 'focused');
             });
+
+            it('can move out of the viewport in virtualized mode', () => {
+                DashTable.toggleScroll(true);
+                for (let i = 0; i < 25; i++) {
+                    DOM.focused.type(Key.ArrowDown);
+                }
+            });
         });
 
         describe('with mouse', () => {
