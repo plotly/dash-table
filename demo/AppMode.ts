@@ -335,7 +335,8 @@ function getModeState(mode: string | null) {
 
 function getState() {
     const mode = Environment.searchParams.get('mode');
-    const flavors = (Environment.searchParams.get('flavor') || '').split(';');
+    const flavorParam = Environment.searchParams.get('flavor');
+    const flavors = flavorParam ? flavorParam.split(';') : [];
 
     let state = getModeState(mode);
     flavors.forEach(flavor => {

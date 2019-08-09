@@ -22,7 +22,8 @@ class App extends Component<any, any> {
 
     renderMode() {
         const mode = Environment.searchParams.get('mode');
-        const flavors = (Environment.searchParams.get('flavor') || '').split(';');
+        const flavorParam = Environment.searchParams.get('flavor');
+        const flavors = flavorParam ? flavorParam.split(';') : [];
 
         if (flavors.indexOf(AppFlavor.FilterNative) !== -1) {
             return (<div>
