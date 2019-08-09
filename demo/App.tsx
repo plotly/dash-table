@@ -5,7 +5,7 @@ import { DataTable } from 'dash-table/index';
 import Environment from 'core/environment';
 import { memoizeOne } from 'core/memoizer';
 import Logger from 'core/Logger';
-import AppState, { AppMode } from './AppMode';
+import AppState, { AppMode, AppFlavor } from './AppMode';
 import memoizerCache from 'core/cache/memoizer';
 
 import './style.less';
@@ -22,8 +22,9 @@ class App extends Component<any, any> {
 
     renderMode() {
         const mode = Environment.searchParams.get('mode');
+        const flavors = (Environment.searchParams.get('flavor') || '').split(';');
 
-        if (mode === AppMode.Filtering) {
+        if (flavors.indexOf(AppFlavor.FilterNative) !== -1) {
             return (<div>
                 <button
                     className='clear-filters'

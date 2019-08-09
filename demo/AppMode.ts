@@ -18,7 +18,6 @@ export enum AppMode {
     Actionable = 'actionable',
     Date = 'date',
     Default = 'default',
-    Filtering = 'filtering',
     Formatting = 'formatting',
     ReadOnly = 'readonly',
     ColumnsInSpace = 'columnsInSpace',
@@ -31,6 +30,7 @@ export enum AppMode {
 export enum AppFlavor {
     ColumnSelectableSingle = 'column_selectable="single"',
     ColumnSelectableMulti = 'column_selectable="multi"',
+    FilterNative = 'filter_action="native"',
     FixedColumn = 'fixed_columns={ "headers": true }',
     FixedColumnPlus1 = 'fixed_columns={ "headers": true, "data": 1 }',
     FixedRow = 'fixed_rows={ "headers": true }',
@@ -235,13 +235,6 @@ function getDateState() {
     return state;
 }
 
-function getFilteringState() {
-    const state = getDefaultState();
-    state.tableProps.filter_action = TableAction.Native;
-
-    return state;
-}
-
 function getVirtualizedState() {
     const mock = generateMockData(5000);
 
@@ -321,8 +314,6 @@ function getModeState(mode: string | null) {
             return getActionableState();
         case AppMode.Date:
             return getDateState();
-        case AppMode.Filtering:
-            return getFilteringState();
         case AppMode.Formatting:
             return getFormattingState();
         case AppMode.ReadOnly:
@@ -344,9 +335,7 @@ function getModeState(mode: string | null) {
 
 function getState() {
     const mode = Environment.searchParams.get('mode');
-    const flavorsString = Environment.searchParams.get('flavor');
-
-    const flavors = flavorsString ? flavorsString.split(';') : [];
+    const flavors = (Environment.searchParams.get('flavor') || '').split(';');
 
     let state = getModeState(mode);
     flavors.forEach(flavor => {
