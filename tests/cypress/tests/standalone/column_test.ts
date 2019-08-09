@@ -1,11 +1,11 @@
 import DashTable from 'cypress/DashTable';
 import DOM from 'cypress/DOM';
 
-import { AppMode } from 'demo/AppMode';
+import { AppMode, AppFlavor } from 'demo/AppMode';
 
-describe(`column, mode=${AppMode.ActionableMerged}`, () => {
+describe(`column, mode=${AppMode.Actionable}, flavor=${AppFlavor.Merged}`, () => {
     beforeEach(() => {
-        cy.visit(`http://localhost:8080?mode=${AppMode.ActionableMerged}`);
+        cy.visit(`http://localhost:8080?mode=${AppMode.Actionable}&flavor=${[AppFlavor.Merged, AppFlavor.ColumnSelectableMulti].join(',')}`);
         DashTable.toggleScroll(false);
     });
 
