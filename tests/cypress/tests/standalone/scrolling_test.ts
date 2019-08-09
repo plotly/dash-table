@@ -14,7 +14,7 @@ const variants: [AppMode, AppFlavor[]][] = R.xprod(
 variants.forEach(([mode, flavors]) => {
     describe(`scrolling, mode=${mode}`, () => {
         beforeEach(() => {
-            cy.visit(`http://localhost:8080?mode=${mode}&flavor=${flavors.join(',')}`);
+            cy.visit(`http://localhost:8080?mode=${mode}&flavor=${flavors.join(';')}`);
         });
 
         it('selects cell and keeps it / loses it based on virtualization', () => {

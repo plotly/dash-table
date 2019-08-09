@@ -5,7 +5,7 @@ import { AppMode, AppFlavor } from 'demo/AppMode';
 
 describe(`column, mode=${AppMode.Actionable}, flavor=${AppFlavor.Merged}`, () => {
     beforeEach(() => {
-        cy.visit(`http://localhost:8080?mode=${AppMode.Actionable}&flavor=${[AppFlavor.Merged, AppFlavor.ColumnSelectableMulti].join(',')}`);
+        cy.visit(`http://localhost:8080?mode=${AppMode.Actionable}&flavor=${[AppFlavor.Merged, AppFlavor.ColumnSelectableMulti].join(';')}`);
         DashTable.toggleScroll(false);
     });
 

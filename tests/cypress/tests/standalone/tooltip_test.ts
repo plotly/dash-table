@@ -31,9 +31,9 @@ describe(`tooltips, mode=${AppMode.Tooltips}`, () => {
     });
 });
 
-describe(`tooltips, mode=${AppMode.Tooltips},flavor=${[AppFlavor.FixedColumnPlus1, AppFlavor.FixedRowPlus1].join(',')}`, () => {
+describe(`tooltips, mode=${AppMode.Tooltips},flavor=${[AppFlavor.FixedColumnPlus1, AppFlavor.FixedRowPlus1].join(';')}`, () => {
     beforeEach(() => {
-        cy.visit(`http://localhost:8080?mode=${AppMode.Tooltips}&flavor=${[AppFlavor.FixedColumnPlus1, AppFlavor.FixedRowPlus1].join(',')}`);
+        cy.visit(`http://localhost:8080?mode=${AppMode.Tooltips}&flavor=${[AppFlavor.FixedColumnPlus1, AppFlavor.FixedRowPlus1].join(';')}`);
     });
 
     it('displays in fixed column', () => {

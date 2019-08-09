@@ -31,10 +31,10 @@ export enum AppMode {
 export enum AppFlavor {
     ColumnSelectableSingle = 'column_selectable="single"',
     ColumnSelectableMulti = 'column_selectable="multi"',
-    FixedColumn = 'fixed_columns="{ headers: true }"',
-    FixedColumnPlus1 = 'fixed_columns="{ headers: true, data: 1 }"',
-    FixedRow = 'fixed_rows="{ headers: true }"',
-    FixedRowPlus1 = 'fixed_rows="{ headers: true, data: 1 }"',
+    FixedColumn = 'fixed_columns={ "headers": true }',
+    FixedColumnPlus1 = 'fixed_columns={ "headers": true, "data": 1 }',
+    FixedRow = 'fixed_rows={ "headers": true }',
+    FixedRowPlus1 = 'fixed_rows={ "headers": true, "data": 1 }',
     Merged = 'merge_duplicate_headers=true'
 }
 
@@ -346,7 +346,7 @@ function getState() {
     const mode = Environment.searchParams.get('mode');
     const flavorsString = Environment.searchParams.get('flavor');
 
-    const flavors = flavorsString ? flavorsString.split(',') : [];
+    const flavors = flavorsString ? flavorsString.split(';') : [];
 
     let state = getModeState(mode);
     flavors.forEach(flavor => {
