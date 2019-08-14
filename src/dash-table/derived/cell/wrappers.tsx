@@ -28,7 +28,7 @@ class Wrappers {
             (column, columnIndex) => this.getWrapper(
                 false,
                 false,
-                rowIndex,
+                rowIndex + _offset.rows,
                 columnIndex,
                 column
             ), columns), data));
