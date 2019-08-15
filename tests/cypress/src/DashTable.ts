@@ -73,6 +73,10 @@ export default class DashTable {
         return cellInLastRow;
     }
 
+    static getCellFromDataDash(row: string, column: string) {
+        return cy.get(`td.dash-cell[data-dash-row="${row}"][data-dash-column="${column}"]`);
+    }
+
     static toggleScroll(toggled: boolean) {
         cy.get('.row-1').then($el => {
             $el[0].style.overflow = toggled ? '' : 'unset';
