@@ -110,7 +110,7 @@ Object.values(BasicModes).forEach(mode => {
                 DashTable.getCell(3, 1).should('not.have.class', 'focused');
             });
 
-            it('can select a cell outside of the viewport', () => {
+            it('can select a cell and scroll it out of the viewport', () => {
                 DashTable.toggleScroll(true);
                 DashTable.getCell(4, 2).click();
                 DashTable.scrollFullTableHeight();
