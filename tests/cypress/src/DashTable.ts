@@ -73,8 +73,8 @@ export default class DashTable {
         return cellInLastRow;
     }
 
-    static getCellFromDataDash(row: string, column: string) {
-        return cy.get(`td.dash-cell[data-dash-row="${row}"][data-dash-column="${column}"]`);
+    static getCellFromDataDash(row: number, column: number) {
+        return cy.get(`td.column-${column}[data-dash-row="${row}"]`);
     }
 
     static toggleScroll(toggled: boolean) {
