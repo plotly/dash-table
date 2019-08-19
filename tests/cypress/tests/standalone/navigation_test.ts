@@ -89,6 +89,8 @@ Object.values(BasicModes).forEach(mode => {
                 for (let i = 0; i < 25; i++) {
                     DOM.focused.type(Key.ArrowDown);
                 }
+                DOM.focused.type(Key.ArrowRight);
+                DashTable.getCellFromDataDash(28, 2).should('have.class', 'focused');
             });
         });
 
