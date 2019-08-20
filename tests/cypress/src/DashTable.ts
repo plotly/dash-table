@@ -63,7 +63,7 @@ export default class DashTable {
 
     static scrollToTop() {
         cy.get(`.cell.cell-1-1.dash-fixed-content`).invoke(`outerHeight`).then(height => {
-            cy.scrollTo(0, -1 * height);
+            cy.scrollTo(0, -height);
         })
     }
 
