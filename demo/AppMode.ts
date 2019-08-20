@@ -21,6 +21,7 @@ export enum AppMode {
     Formatting = 'formatting',
     ReadOnly = 'readonly',
     ColumnsInSpace = 'columnsInSpace',
+    SingleHeaders = 'singleHeaders',
     TaleOfTwoTables = 'taleOfTwoTables',
     Tooltips = 'tooltips',
     Typed = 'typed',
@@ -191,6 +192,18 @@ function getTypedState() {
     return state;
 }
 
+function getSingleHeaderState() {
+    const state = getDefaultState();
+
+    R.forEach(column => {
+        if (Array.isArray(column.name)) {
+            column.name = column.name[column.name.length - 1];
+        }
+    }, state.tableProps.columns || []);
+
+    return state;
+}
+
 function getActionableState() {
     const state = getDefaultState();
     state.tableProps.filter_action = TableAction.Native;
@@ -326,6 +339,8 @@ function getModeState(mode: string | null) {
             return getVirtualizedState();
         case AppMode.Typed:
             return getTypedState();
+        case AppMode.SingleHeaders:
+            return getSingleHeaderState();
         case AppMode.TaleOfTwoTables:
         case AppMode.Default:
         default:
