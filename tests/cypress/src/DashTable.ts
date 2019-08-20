@@ -76,7 +76,7 @@ export default class DashTable {
     static getCellInLastRowOfColumn(column: number) {
         const cellInLastRow = cy.get(`td.dash-cell.column-${column}`).last().then(elem => {
             const lastRow = elem ? elem.attr(`data-dash-row`) : undefined;
-            return cy.get(`td.dash-cell.column-${column}[data-dash-row="${lastRow}"`);
+            return lastRow ? cy.get(`td.dash-cell.column-${column}[data-dash-row="${lastRow}"`) : undefined;
         });
         return cellInLastRow;
     }
