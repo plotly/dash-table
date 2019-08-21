@@ -215,7 +215,7 @@ jobs:
                     . venv/bin/activate
                     git clone --depth 1 git@github.com:plotly/dash.git dash-main
                     pip install -e ./dash-main --quiet
-                    cd dash-main && pip install -r requires-ci.txt
+                    cd dash-main && pip install -r requires-ci.txt && pip install -r requires-testing.txt
                     cd dash-renderer && npm run build && pip install -e . && cd ../..
 
             - run:
