@@ -33,6 +33,7 @@ jobs:
                     pip install -r dev-requirements.txt --quiet
                     git clone --depth 1 git@github.com:plotly/dash.git dash-main
                     pip install -e ./dash-main[testing] --quiet
+                    pip list
 
             - run:
                 name: Build
