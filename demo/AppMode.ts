@@ -82,8 +82,12 @@ function getBaseTableProps(mock: IDataMock): Partial<IProps> {
             maxWidth: '1000px',
             width: '1000px'
         },
+        style_cell: {
+            maxWidth: 150,
+            minWidth: 150,
+            width: 150
+        },
         style_cell_conditional: [
-            { if: { }, maxWidth: 150, minWidth: 150, width: 150 },
             { if: { column_id: 'rows' }, maxWidth: 60, minWidth: 60, width: 60 },
             { if: { column_id: 'bbb' }, maxWidth: 200, minWidth: 200, width: 200 },
             { if: { column_id: 'bbb-readonly' }, maxWidth: 200, minWidth: 200, width: 200 }
