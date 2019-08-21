@@ -32,8 +32,7 @@ jobs:
                     . venv/bin/activate
                     pip install -r dev-requirements.txt --quiet
                     git clone --depth 1 git@github.com:plotly/dash.git dash-main
-                    pip install -e ./dash-main --quiet
-                    cd dash-main && pip install -r requires-ci.txt
+                    pip install -e ./dash-main[ci] --quiet
 
             - run:
                 name: Build
@@ -109,8 +108,7 @@ jobs:
                     . venv/bin/activate
                     pip install -r dev-requirements.txt --quiet
                     git clone --depth 1 git@github.com:plotly/dash.git dash-main
-                    pip install -e ./dash-main --quiet
-                    cd dash-main && pip install -r requires-ci.txt
+                    pip install -e ./dash-main[ci] --quiet
 
             - run:
                 name: Run tests
@@ -214,8 +212,7 @@ jobs:
                 command: |
                     . venv/bin/activate
                     git clone --depth 1 git@github.com:plotly/dash.git dash-main
-                    pip install -e ./dash-main --quiet
-                    cd dash-main && pip install -r requires-ci.txt && pip install -r requires-testing.txt
+                    pip install -e ./dash-main[ci,testing] --quiet
                     cd dash-renderer && npm run build && pip install -e . && cd ../..
 
             - run:
