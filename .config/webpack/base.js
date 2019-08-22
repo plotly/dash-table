@@ -1,12 +1,19 @@
 
 const path = require('path');
+const webpack = require('webpack');
+const WebpackDashDynamicImport = require("./experimental-dash-dynamic-import-plugin");
+
+const basePreprocessing = require('./base.preprocessing');
 const packagejson = require('./../../package.json');
 
 const dashLibraryName = packagejson.name.replace(/-/g, '_');
 
+
 module.exports = (options = {}) => {
     const babel = options.babel || undefined;
-    const preprocessor = options.preprocessor || {};
+    const preprocessor = basePreprocessing(options.preprocessor);
+    console.log('*********************');
+    console.log(preprocessor);
     const mode = options.mode || 'development';
     const ts = options.ts || {};
 
@@ -24,6 +31,7 @@ module.exports = (options = {}) => {
         mode: mode,
         output: {
             path: path.resolve(__dirname, `./../../${dashLibraryName}`),
+            chunkFilename: '[name].js',
             filename: '[name].js',
             library: dashLibraryName,
             libraryTarget: 'window'
@@ -87,6 +95,20 @@ module.exports = (options = {}) => {
                 tests: path.resolve('./tests')
             },
             extensions: ['.js', '.ts', '.tsx']
-        }
+        },
+        optimization: {
+            splitChunks: {
+                chunks: 'async',
+                name: true,
+                cacheGroups: {
+                    async: {
+
+                    }
+                }
+            }
+        },
+        plugins: [
+            new WebpackDashDynamicImport()
+        ]
     };
 };

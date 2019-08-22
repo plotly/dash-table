@@ -1,5 +1,4 @@
 import * as R from 'ramda';
-import XLSX from 'xlsx';
 import { Data } from 'dash-table/components/Table/props';
 
 interface IMergeObject {
@@ -7,7 +6,7 @@ interface IMergeObject {
     e: {r: number, c: number};
 }
 
-export function transformMultDimArray(array: (string | string[])[], maxLength: number): string[][] {
+function transformMultiDimArray(array: (string | string[])[], maxLength: number): string[][] {
     const newArray: string[][] = array.map(row => {
         if (row instanceof Array && row.length < maxLength) {
             return row.concat(Array(maxLength - row.length).fill(''));
@@ -23,7 +22,7 @@ export function transformMultDimArray(array: (string | string[])[], maxLength: n
     return newArray;
 }
 
-export function getMergeRanges(array: string[][]) {
+function getMergeRanges(array: string[][]) {
     let apiMergeArray: IMergeObject[] = [];
     const iForEachOuter = R.addIndex<(string[]), void>(R.forEach);
     const iForEachInner = R.addIndex<(string), void>(R.forEach);
@@ -47,13 +46,9 @@ export function getMergeRanges(array: string[][]) {
     return R.filter((item: IMergeObject) => item.s.c !== item.e.c || item.s.r !== item.e.r, apiMergeArray);
 }
 
-export function createWorkbook(ws: XLSX.WorkSheet) {
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'SheetJS');
-    return wb;
-}
+export async function createWorkbook(heading: string[][], data: Data, columnID: string[], exportHeader: string, mergeDuplicateHeaders: boolean) {
+    const XLSX = await import(/* webpackChunkName: "export" */ 'xlsx');
 
-export function createWorksheet(heading: string[][], data: Data, columnID: string[], exportHeader: string, mergeDuplicateHeaders: boolean ) {
     const ws = XLSX.utils.aoa_to_sheet(heading);
     if (exportHeader === 'display' || exportHeader === 'names' || exportHeader === 'none') {
         XLSX.utils.sheet_add_json(ws, data, {
@@ -67,10 +62,13 @@ export function createWorksheet(heading: string[][], data: Data, columnID: strin
     } else if (exportHeader === 'ids') {
         XLSX.utils.sheet_add_json(ws, data, { header: columnID });
     }
-    return ws;
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'SheetJS');
+    return wb;
 }
 
 export function createHeadings(columnHeaders: (string | string[])[], maxLength: number) {
-    const transformedArray = transformMultDimArray(columnHeaders, maxLength);
+    const transformedArray = transformMultiDimArray(columnHeaders, maxLength);
     return R.transpose(transformedArray);
 }
