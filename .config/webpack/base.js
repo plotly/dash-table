@@ -12,8 +12,6 @@ const dashLibraryName = packagejson.name.replace(/-/g, '_');
 module.exports = (options = {}) => {
     const babel = options.babel || undefined;
     const preprocessor = basePreprocessing(options.preprocessor);
-    console.log('*********************');
-    console.log(preprocessor);
     const mode = options.mode || 'development';
     const ts = options.ts || {};
 
