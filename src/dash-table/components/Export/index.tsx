@@ -34,7 +34,6 @@ export default React.memo((props: IExportButtonProps) => {
         }
     };
 
-    console.log('hello');
     return (<div>
         {!isFormatSupported ? null : (
             <button className='export' onClick={handleExport}>Export</button>
