@@ -1,7 +1,7 @@
 import React, { Component, Suspense, lazy } from 'react';
 import PropTypes from 'prop-types';
 
-const LazyDataTable = lazy(() => import(/* webpackChunkName: "dash-table" */ 'dash-table/dash/LazyDataTable'));
+const LazyDataTable = lazy(() => import(/* webpackChunkName: "dash-table", webpackMode: "$${{mode}}" */ 'dash-table/dash/LazyDataTable'));
 
 export default class DataTable extends Component {
     render() {

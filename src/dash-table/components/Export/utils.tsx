@@ -47,7 +47,7 @@ export function getMergeRanges(array: string[][]) {
 }
 
 export async function createWorkbook(heading: string[][], data: Data, columnID: string[], exportHeader: string, mergeDuplicateHeaders: boolean) {
-    const XLSX = await import(/* webpackChunkName: "export" */ 'xlsx');
+    const XLSX = await import(/* webpackChunkName: "export", webpackMode: "$${{mode}}" */ 'xlsx');
 
     const ws = XLSX.utils.aoa_to_sheet(heading);
     if (exportHeader === 'display' || exportHeader === 'names' || exportHeader === 'none') {

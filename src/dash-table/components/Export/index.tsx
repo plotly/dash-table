@@ -18,7 +18,7 @@ export default React.memo((props: IExportButtonProps) => {
     const isFormatSupported = export_format === 'csv' || export_format === 'xlsx';
 
     const handleExport = async () => {
-        const XLSX = await import(/* webpackChunkName: "export" */ 'xlsx');
+        const XLSX = await import(/* webpackChunkName: "export", webpackMode: "$${{mode}}" */ 'xlsx');
 
         const columnID = visibleColumns.map(column => column.id);
         const columnHeaders = visibleColumns.map(column => column.name);
