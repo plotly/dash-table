@@ -6,7 +6,7 @@ interface IMergeObject {
     e: {r: number, c: number};
 }
 
-function transformMultiDimArray(array: (string | string[])[], maxLength: number): string[][] {
+export function transformMultiDimArray(array: (string | string[])[], maxLength: number): string[][] {
     const newArray: string[][] = array.map(row => {
         if (row instanceof Array && row.length < maxLength) {
             return row.concat(Array(maxLength - row.length).fill(''));
@@ -22,7 +22,7 @@ function transformMultiDimArray(array: (string | string[])[], maxLength: number)
     return newArray;
 }
 
-function getMergeRanges(array: string[][]) {
+export function getMergeRanges(array: string[][]) {
     let apiMergeArray: IMergeObject[] = [];
     const iForEachOuter = R.addIndex<(string[]), void>(R.forEach);
     const iForEachInner = R.addIndex<(string), void>(R.forEach);

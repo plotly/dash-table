@@ -1,44 +1,44 @@
-import { transformMultDimArray, getMergeRanges, createHeadings, createWorksheet } from 'dash-table/components/Export/utils';
+import { transformMultiDimArray, getMergeRanges, createHeadings, createWorkbook } from 'dash-table/components/Export/utils';
 import * as R from 'ramda';
 
 describe('export', () => {
 
-    describe('transformMultDimArray', () => {
+    describe('transformMultiDimArray', () => {
         it('array with only strings', () => {
             const testedArray = [];
-            const transformedArray = transformMultDimArray(testedArray, 0);
+            const transformedArray = transformMultiDimArray(testedArray, 0);
             const expectedArray = [];
             expect(transformedArray).to.deep.equal(expectedArray);
         });
         it('array with only strings', () => {
             const testedArray = ['a', 'b', 'c', 'd'];
-            const transformedArray = transformMultDimArray(testedArray, 0);
+            const transformedArray = transformMultiDimArray(testedArray, 0);
             const expectedArray = [['a'], ['b'], ['c'], ['d']];
             expect(transformedArray).to.deep.equal(expectedArray);
         });
         it ('array with strings and strings array with same length', () => {
             const testedArray = ['a', ['b', 'c'], ['b', 'd']];
-            const transformedArray = transformMultDimArray(testedArray, 2);
+            const transformedArray = transformMultiDimArray(testedArray, 2);
             const expectedArray = [['a', 'a'], ['b', 'c'], ['b', 'd']];
             expect(transformedArray).to.deep.equal(expectedArray);
         });
         it ('2D strings array', () => {
             const testedArray = [['a', 'b', 'c'], ['b', 'c', 'd'], ['b', 'd', 'a']];
-            const transformedArray = transformMultDimArray(testedArray, 3);
+            const transformedArray = transformMultiDimArray(testedArray, 3);
             const expectedArray = [['a', 'b', 'c'], ['b', 'c', 'd'], ['b', 'd', 'a']];
             expect(transformedArray).to.deep.equal(expectedArray);
 
         });
         it ('multidimensional array', () => {
             const testedArray = [['a', 'b'], ['b', 'c', 'd'], ['a', 'b', 'd', 'a']];
-            const transformedArray = transformMultDimArray(testedArray, 4);
+            const transformedArray = transformMultiDimArray(testedArray, 4);
             const expectedArray = [['a', 'b', '', ''], ['b', 'c', 'd', ''], ['a', 'b', 'd', 'a']];
             expect(transformedArray).to.deep.equal(expectedArray);
 
         });
         it ('multidimensional array with strings', () => {
             const testedArray = ['rows', ['a', 'b'], ['b', 'c', 'd'], ['a', 'b', 'd', 'a']];
-            const transformedArray = transformMultDimArray(testedArray, 4);
+            const transformedArray = transformMultiDimArray(testedArray, 4);
             const expectedArray = [['rows', 'rows', 'rows', 'rows'], ['a', 'b', '', ''], ['b', 'c', 'd', ''], ['a', 'b', 'd', 'a']];
             expect(transformedArray).to.deep.equal(expectedArray);
         });
@@ -220,10 +220,10 @@ describe('export', () => {
                 {col1: 1, col2: 2, col3: 3}
         ];
         const columnID = ['col1', 'col2', 'col3'];
-        it('create sheet with column names as headers for name or display header mode', () => {
-            const wsName = createWorksheet(Headings, data, columnID, 'names', true);
-            const wsDisplay = createWorksheet(Headings, data, columnID, 'display', true);
-            const wsDisplayNoMerge = createWorksheet(Headings, data, columnID, 'display', false);
+        it('create sheet with column names as headers for name or display header mode', async () => {
+            const wsName = await createWorkbook(Headings, data, columnID, 'names', true);
+            const wsDisplay = await createWorkbook(Headings, data, columnID, 'display', true);
+            const wsDisplayNoMerge = await createWorkbook(Headings, data, columnID, 'display', false);
             const expectedWS = {
                 A1: {t: 's', v: 'rows'},
                 A2: {t: 's', v: 'rows'},
@@ -251,12 +251,12 @@ describe('export', () => {
             expectedWSDisplay['!merges'] = [ {s: {r: 0, c: 0}, e: {r: 0, c: 1}},
                 {s: {r: 1, c: 1}, e: {r: 1, c: 2}},
                 {s: {r: 3, c: 0}, e: {r: 3, c: 2}} ];
-            expect(wsName).to.deep.equal(expectedWS);
-            expect(wsDisplayNoMerge).to.deep.equal(expectedWS);
-            expect(wsDisplay).to.deep.equal(expectedWSDisplay);
+            expect(wsName.Sheets.SheetJS).to.deep.equal(expectedWS);
+            expect(wsDisplayNoMerge.Sheets.SheetJS).to.deep.equal(expectedWS);
+            expect(wsDisplay.Sheets.SheetJS).to.deep.equal(expectedWSDisplay);
         });
-        it('create sheet with column ids as headers', () => {
-            const ws = createWorksheet(Headings, data, columnID, 'ids', true);
+        it('create sheet with column ids as headers', async () => {
+            const ws = await createWorkbook(Headings, data, columnID, 'ids', true);
             const expectedWS = {
                 A1: {t: 's', v: 'col1'},
                 A2: {t: 'n', v: 1},
@@ -271,10 +271,10 @@ describe('export', () => {
                 C3: {t: 'n', v: 4},
                 C4: {t: 'n', v: 3}};
             expectedWS['!ref'] = 'A1:C4';
-            expect(ws).to.deep.equal(expectedWS);
+            expect(ws.Sheets.SheetJS).to.deep.equal(expectedWS);
         });
-        it('create sheet with no headers', () => {
-            const ws = createWorksheet([], data, columnID, 'none', true);
+        it('create sheet with no headers', async () => {
+            const ws = await createWorkbook([], data, columnID, 'none', true);
             const expectedWS = {
                 A1: {t: 'n', v: 1},
                 A2: {t: 'n', v: 2},
@@ -286,15 +286,15 @@ describe('export', () => {
                 C2: {t: 'n', v: 4},
                 C3: {t: 'n', v: 3}};
             expectedWS['!ref'] = 'A1:C3';
-            expect(ws).to.deep.equal(expectedWS);
+            expect(ws.Sheets.SheetJS).to.deep.equal(expectedWS);
         });
-        it('create sheet with undefined column for clearable columns', () => {
+        it('create sheet with undefined column for clearable columns', async () => {
             const newData = [
                 {col2: 2, col3: 3},
                 {col2: 3, col3: 4},
                 {col2: 2, col3: 3}
             ];
-            const ws = createWorksheet(Headings, newData, columnID, 'display', false);
+            const ws = await createWorkbook(Headings, newData, columnID, 'display', false);
             const expectedWS = {A1: {t: 's', v: 'rows'},
                     A2: {t: 's', v: 'rows'},
                     A3: {t: 's', v: 'rows'},
@@ -314,7 +314,7 @@ describe('export', () => {
                     C6: {t: 'n', v: 4},
                     C7: {t: 'n', v: 3}};
             expectedWS['!ref'] = 'A1:C7';
-            expect(ws).to.deep.equal(expectedWS);
+            expect(ws.Sheets.SheetJS).to.deep.equal(expectedWS);
         });
     });
 
