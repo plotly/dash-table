@@ -8,7 +8,7 @@ export default class DataTable extends Component {
         return (<Suspense
             fallback={null}
         >
-            <LazyDataTable {...props} />
+            <LazyDataTable {...this.props} />
         </Suspense>);
     }
 }

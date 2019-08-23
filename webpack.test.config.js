@@ -9,6 +9,5 @@ const options = {
 };
 
 let config = require('./.config/webpack/base.js')(options);
-delete config.plugins;
 
 module.exports = config;
