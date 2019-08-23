@@ -1,6 +1,4 @@
-
 const path = require('path');
-const webpack = require('webpack');
 const WebpackDashDynamicImport = require('webpack-dash-dynamic-import');
 
 const basePreprocessing = require('./base.preprocessing');
