@@ -4,5 +4,6 @@ let config = require('./../.config/webpack/base.js')({
 });
 
 config.externals = {};
+delete config.plugins;
 
 module.exports = config;
