@@ -1,5 +1,7 @@
-import { transformMultiDimArray, getMergeRanges, createHeadings, createWorkbook } from 'dash-table/components/Export/utils';
+import 'xlsx';
 import * as R from 'ramda';
+
+import { transformMultiDimArray, getMergeRanges, createHeadings, createWorkbook } from 'dash-table/components/Export/utils';
 
 describe('export', () => {
 
