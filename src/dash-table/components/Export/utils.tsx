@@ -1,5 +1,6 @@
 import * as R from 'ramda';
 import { Data } from 'dash-table/components/Table/props';
+import { WorkBook } from 'xlsx/types';
 
 interface IMergeObject {
     s: {r: number, c: number};
@@ -66,6 +67,16 @@ export async function createWorkbook(heading: string[][], data: Data, columnID: 
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'SheetJS');
     return wb;
+}
+
+export async function exportWorkbook (wb: WorkBook, format: string) {
+    const XLSX = await import(/* webpackChunkName: "export", webpackMode: "$${{mode}}" */ 'xlsx');
+
+    if (format === 'xlsx') {
+        XLSX.writeFile(wb, 'Data.xlsx', { bookType: 'xlsx', type: 'buffer' });
+    } else if (format === 'csv') {
+        XLSX.writeFile(wb, 'Data.csv', { bookType: 'csv', type: 'buffer' });
+    }
 }
 
 export function createHeadings(columnHeaders: (string | string[])[], maxLength: number) {
