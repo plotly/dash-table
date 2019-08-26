@@ -1,6 +1,8 @@
 import * as R from 'ramda';
-import { Data } from 'dash-table/components/Table/props';
 import { WorkBook } from 'xlsx/types';
+
+import { Data } from 'dash-table/components/Table/props';
+import LazyLoader from 'dash-table/LazyLoader';
 
 interface IMergeObject {
     s: {r: number, c: number};
@@ -48,7 +50,7 @@ export function getMergeRanges(array: string[][]) {
 }
 
 export async function createWorkbook(heading: string[][], data: Data, columnID: string[], exportHeader: string, mergeDuplicateHeaders: boolean) {
-    const XLSX = await import(/* webpackChunkName: "export", webpackMode: "$${{mode}}" */ 'xlsx');
+    const XLSX = await LazyLoader.xlsx;
 
     const ws = XLSX.utils.aoa_to_sheet(heading);
     if (exportHeader === 'display' || exportHeader === 'names' || exportHeader === 'none') {
@@ -70,7 +72,7 @@ export async function createWorkbook(heading: string[][], data: Data, columnID: 
 }
 
 export async function exportWorkbook (wb: WorkBook, format: string) {
-    const XLSX = await import(/* webpackChunkName: "export", webpackMode: "$${{mode}}" */ 'xlsx');
+    const XLSX = await LazyLoader.xlsx;
 
     if (format === 'xlsx') {
         XLSX.writeFile(wb, 'Data.xlsx', { bookType: 'xlsx', type: 'buffer' });
