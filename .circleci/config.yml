@@ -31,7 +31,14 @@ jobs:
                     python -m venv venv || virtualenv venv
                     . venv/bin/activate
                     pip install -r dev-requirements.txt --quiet
-                    git clone --depth 1 git@github.com:plotly/dash.git dash-main
+                    if [ $CIRCLE_BRANCH = "master" ]; then
+                        echo "Clone from master branch"
+                        git clone -b master --depth 1 git@github.com:plotly/dash.git dash-main
+                    else
+                        echo "Clone from default branch"
+                        git clone --depth 1 git@github.com:plotly/dash.git dash-main
+                    fi
+
                     pip install -e ./dash-main[dev] --quiet
 
             - run:
@@ -107,7 +114,15 @@ jobs:
                     python -m venv venv || virtualenv venv
                     . venv/bin/activate
                     pip install -r dev-requirements.txt --quiet
-                    git clone --depth 1 git@github.com:plotly/dash.git dash-main
+
+                    if [ $CIRCLE_BRANCH = "master" ]; then
+                        echo "Clone from master branch"
+                        git clone -b master --depth 1 git@github.com:plotly/dash.git dash-main
+                    else
+                        echo "Clone from default branch"
+                        git clone --depth 1 git@github.com:plotly/dash.git dash-main
+                    fi
+
                     pip install -e ./dash-main[dev] --quiet
 
             - run:
@@ -211,7 +226,15 @@ jobs:
                 name: Install dependencies (dash)
                 command: |
                     . venv/bin/activate
-                    git clone --depth 1 git@github.com:plotly/dash.git dash-main
+
+                    if [ $CIRCLE_BRANCH = "master" ]; then
+                        echo "Clone from master branch"
+                        git clone -b master --depth 1 git@github.com:plotly/dash.git dash-main
+                    else
+                        echo "Clone from default branch"
+                        git clone --depth 1 git@github.com:plotly/dash.git dash-main
+                    fi
+
                     pip install -e ./dash-main[dev,testing] --quiet
                     cd dash-main/dash-renderer && npm run build && pip install -e . && cd ../..
 
