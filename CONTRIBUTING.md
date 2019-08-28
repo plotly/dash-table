@@ -66,7 +66,7 @@ _For larger features, your contribution will have a higher likelihood of getting
 ### Post-Merge checklist
 - [ ] You have deleted the branch.
 - [ ] You have closed all issues that this pull request solves.
-- [ ] If significant enough, you have created an issue about documenting the new feature or change and you have added it to the [Documentation][] project.
+- [ ] If significant enough, you have created an issue about documenting the new feature or change and you have added it to the [dash-docs](https://github.com/plotly/dash-docs) project.
 
 ## Financial Contributions
 
