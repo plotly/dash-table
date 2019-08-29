@@ -1,18 +1,25 @@
 import React, { Component, Suspense, lazy } from 'react';
 import PropTypes from 'prop-types';
 import LazyLoader from 'dash-table/LazyLoader';
+import LazyFactory from './LazyFactory';
 
-const LazyDataTable = lazy(() => LazyLoader.dataTable);
+const LazyDataTable = LazyFactory(DataTable, () => LazyLoader.dataTable);
 
-export default class DataTable extends Component {
-    render() {
-        return (<Suspense
-            fallback={null}
-        >
-            <LazyDataTable {...this.props} />
-        </Suspense>);
-    }
+function DataTable(props) {
+    return (<Suspense
+        fallback={null}
+    >
+        <LazyDataTable {...props} />
+    </Suspense>);
 }
+
+if (DataTable._dashprivate_isLazyComponentReady) {
+    Promise.resolve(DataTable._dashprivate_isLazyComponentReady).then(() => {
+        console.log('LazyDataTable ready', LazyDataTable);
+    });
+}
+
+export default DataTable;
 
 export const defaultProps = {
     page_action: 'native',
