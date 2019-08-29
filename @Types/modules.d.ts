@@ -21,5 +21,5 @@ declare class Remarkable {
 }
 
 declare module 'remarkable' {
-    export default Remarkable;
+    export const Remarkable: Remarkable;
 }
