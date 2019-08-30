@@ -4,8 +4,8 @@ type Boolean = Promise<boolean> | boolean;
 type LazyComponent = React.LazyExoticComponent<React.ComponentType<any>>;
 
 interface IResult {
-    isReady: Boolean,
-    get: LazyComponent
+    isReady: Boolean;
+    get: LazyComponent;
 }
 
 export default (
@@ -42,4 +42,4 @@ export default (
     });
 
     return state.get;
-}
+};
