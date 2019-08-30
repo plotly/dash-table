@@ -13,19 +13,26 @@ export default (
     promise: () => Promise<{ default: React.ComponentType<any> }>
 ): LazyComponent => {
     let resolve: (value: Boolean) => void;
-    let isReady = new Promise<boolean>(r => {
+    const isReady = new Promise<boolean>(r => {
         resolve = r;
     });
 
     const state: IResult = {
         isReady,
         get: lazy(async () => {
-            const component = await promise();
+            // let __r: any;
+            // const p = new Promise(_r => __r = _r);
+            // setTimeout(() => __r(), 10000);
 
-            await resolve(true);
-            state.isReady = true;
+            // await p;
 
-            return component;
+            // delay `isReady`
+            setTimeout(async () => {
+                await resolve(true);
+                state.isReady = true;
+            }, 0);
+
+            return await promise();
         })
     };
 

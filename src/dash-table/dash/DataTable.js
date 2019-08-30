@@ -1,4 +1,4 @@
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import LazyLoader from 'dash-table/LazyLoader';
 import LazyFactory from './LazyFactory';
@@ -11,12 +11,6 @@ function DataTable(props) {
     >
         <LazyDataTable {...props} />
     </Suspense>);
-}
-
-if (DataTable._dashprivate_isLazyComponentReady) {
-    Promise.resolve(DataTable._dashprivate_isLazyComponentReady).then(() => {
-        console.log('LazyDataTable ready', LazyDataTable);
-    });
 }
 
 export default DataTable;
