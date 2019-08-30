@@ -20,6 +20,7 @@ export default (
     const state: IResult = {
         isReady,
         get: lazy(async () => {
+            const res = await promise();
             // let __r: any;
             // const p = new Promise(_r => __r = _r);
             // setTimeout(() => __r(), 10000);
@@ -32,7 +33,7 @@ export default (
                 state.isReady = true;
             }, 0);
 
-            return await promise();
+            return res;
         })
     };
 
