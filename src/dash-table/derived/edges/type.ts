@@ -35,13 +35,6 @@ export const BORDER_PROPERTIES_AND_FRAGMENTS: string[] = R.uniq(
     )
 );
 
-export const HEIGHT_AND_WIDTH_PROPERTIES: string[] = R.uniq(
-    R.filter(
-        p => /(height|width)$/i.test(p),
-        cssProperties
-    )
-);
-
 export interface IEdgesMatrix {
     getEdge(i: number, j: number): Edge;
     getEdges(): Edge[][];
