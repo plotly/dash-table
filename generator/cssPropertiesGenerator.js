@@ -38,6 +38,7 @@ const props = [
     'borderLeftColor',
     'borderLeftStyle',
     'borderLeftWidth',
+    'borderRadius',
     'borderRight',
     'borderRightColor',
     'borderRightStyle',
