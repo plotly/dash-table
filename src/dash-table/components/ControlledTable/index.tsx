@@ -34,6 +34,7 @@ import { IStyle } from 'dash-table/derived/style/props';
 import TableTooltip from './fragments/TableTooltip';
 
 import queryLexicon from 'dash-table/syntax-tree/lexicon/query';
+import { BORDER_PROPERTIES_AND_FRAGMENTS } from 'dash-table/derived/edges/type';
 
 const DEFAULT_STYLE = {
     width: '100%'
@@ -817,7 +818,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                 <div
                     ref='table'
                     className={innerClasses.join(' ')}
-                    style={tableStyle}
+                    style={R.omit(BORDER_PROPERTIES_AND_FRAGMENTS, tableStyle)}
                 >
                     {grid.map((row, rowIndex) => (<div
                         key={`r${rowIndex}`}
