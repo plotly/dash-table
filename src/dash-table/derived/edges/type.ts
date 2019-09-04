@@ -26,10 +26,19 @@ export const BORDER_PROPERTIES: BorderProp[] = [
     'borderTop'
 ];
 
+const cssProperties = Array.from(py2jsCssProperties.values());
+
 export const BORDER_PROPERTIES_AND_FRAGMENTS: string[] = R.uniq(
     R.filter(
         p => p.indexOf('border') === 0,
-        Array.from(py2jsCssProperties.values())
+        cssProperties
+    )
+);
+
+export const HEIGHT_AND_WIDTH_PROPERTIES: string[] = R.uniq(
+    R.filter(
+        p => /(height|width)$/i.test(p),
+        cssProperties
     )
 );
 
