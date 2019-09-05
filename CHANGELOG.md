@@ -11,6 +11,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Add support for missing `border-radius` in style_** props
 - Fix table's inner vs. outer container styling
 
+[#18](https://github.com/plotly/dash-table/issues/18)
+- Fix row selection vertical and horizontal alignment
+
 [#103](https://github.com/plotly/dash-table/issues/103)
 - Simplify usage for multi-line cells and ellipsis. The cell's content now inherits the value of
 `white-space`, `overflow` and `text-overflow` from its parent, making it possible to style
