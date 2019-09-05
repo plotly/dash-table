@@ -7,6 +7,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [#569](https://github.com/plotly/dash-table/issues/569), [#544](https://github.com/plotly/dash-table/issues/544)
 - Allow empty strings in all `filter_query` (e.g filter_query: '{colA} eq ""')
 
+[#567](https://github.com/plotly/dash-table/issues/567)
+- Add support for missing `border-radius` in style_** props
+- Fix table's inner vs. outer container styling 
+
 ## [4.2.0] - 2019-08-27
 ### Added
 [#317](https://github.com/plotly/dash-table/issues/317)
