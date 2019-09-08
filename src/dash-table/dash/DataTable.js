@@ -104,7 +104,7 @@ export const defaultProps = {
     virtualization: false,
 
     persisted_props: [
-        'columns',
+        'columns.name',
         // data is not included by default
         'filter_query',
         'hidden_columns',
@@ -1237,7 +1237,7 @@ export const propTypes = {
      */
     persisted_props: PropTypes.arrayOf(
         PropTypes.oneOf([
-            'columns',
+            'columns.name',
             'data',
             'filter_query',
             'hidden_columns',
@@ -1258,9 +1258,11 @@ export const propTypes = {
 
 DataTable.persistenceTransforms = {
     columns: {
-        extract: propValue => R.pluck('name', propValue),
-        apply: (storedValue, propValue) =>
-            R.zipWith(R.assoc('name'), storedValue, propValue)
+        name: {
+            extract: propValue => R.pluck('name', propValue),
+            apply: (storedValue, propValue) =>
+                R.zipWith(R.assoc('name'), storedValue, propValue)
+        }
     }
 };
 
