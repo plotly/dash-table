@@ -121,5 +121,8 @@ export function changeColumnHeader(column, columns, headerRowIndex, mergeDuplica
 
 export function editColumnName(column, columns, headerRowIndex, mergeDuplicateHeaders) {
     const newColumnName = window.prompt('Enter a new column name');
+    if (newColumnName === null) {
+        return null;
+    }
     return changeColumnHeader(column, columns, headerRowIndex, mergeDuplicateHeaders, newColumnName);
 }

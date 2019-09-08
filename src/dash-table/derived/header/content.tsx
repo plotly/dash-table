@@ -101,7 +101,10 @@ function doSort(columnId: ColumnId, sortBy: SortBy, mode: SortMode, setProps: Se
 
 function editColumnName(column: IColumn, columns: Columns, columnRowIndex: any, setProps: SetProps, mergeDuplicateHeaders: boolean) {
     return () => {
-        setProps(actions.editColumnName(column, columns, columnRowIndex, mergeDuplicateHeaders));
+        const update = actions.editColumnName(column, columns, columnRowIndex, mergeDuplicateHeaders);
+        if (update) {
+            setProps(update);
+        }
     };
 }
 
