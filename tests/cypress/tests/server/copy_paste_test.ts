@@ -136,6 +136,7 @@ describe('copy paste', () => {
     describe('BE roundtrip on copy-paste', () => {
         it('on cell modification', () => {
             DashTable.getCell(0, 0).click();
+            cy.wait(0);
             DOM.focused.type(`10${Key.Enter}`);
 
             DashTable
@@ -152,6 +153,7 @@ describe('copy paste', () => {
             DOM.focused.type(`${Key.Meta}c`);
 
             DashTable.getCell(1, 0).click();
+            cy.wait(0);
             DOM.focused.type(`${Key.Meta}v`);
 
             DashTable
