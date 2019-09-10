@@ -346,6 +346,19 @@
             }
         }
 
+        th {
+            white-space: nowrap;
+
+            .column-header--clear,
+            .column-header--delete,
+            .column-header--edit,
+            .column-header--hide
+            .column-header--sort {
+                .not-selectable();
+                cursor: pointer;
+            }
+        }
+
         // cell content styling
         td, th {
             background-clip: padding-box;
@@ -362,17 +375,6 @@
                 white-space: inherit;
                 overflow: inherit;
                 text-overflow: inherit;
-            }
-        }
-
-        th {
-            .column-header--clear,
-            .column-header--delete,
-            .column-header--edit,
-            .column-header--hide
-            .column-header--sort {
-                .not-selectable();
-                cursor: pointer;
             }
         }
     }
