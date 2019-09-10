@@ -581,10 +581,11 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             sort_by,
             viewport,
             visibleColumns,
-            include_headers_on_copy_paste
+            include_headers_on_copy_paste,
+            data_loading
         } = this.props;
 
-        if (!editable || !active_cell) {
+        if (!editable || !active_cell || data_loading) {
             return;
         }
 

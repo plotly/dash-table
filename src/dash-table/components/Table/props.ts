@@ -409,6 +409,8 @@ export type ControlledTableProps = SanitizedProps & IState & {
     virtual: IDerivedData;
     virtual_selected_rows: Indices;
     virtualized: IVirtualizedDerivedData;
+
+    data_loading: boolean;
 };
 
 export type SetFilter = (
