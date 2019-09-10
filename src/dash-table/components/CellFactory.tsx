@@ -114,7 +114,7 @@ export default class CellFactory {
             selected_cells
         );
 
-        const data_loading = (loading_state && loading_state.is_loading && (loading_state.prop_name === 'data' || loading_state.prop_name === undefined)) || false;
+        const data_loading = (loading_state && loading_state.is_loading && (loading_state.prop_name === 'data' || loading_state.prop_name === '' || loading_state.prop_name === undefined)) || false;
 
         const partialCellContents = this.cellContents.partialGet(
             visibleColumns,
