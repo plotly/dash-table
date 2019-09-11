@@ -15,13 +15,13 @@ describe('copy paste', () => {
         DOM.focused.type(`${Key.Meta}c`);
         DashTable.getCell(3, 0).click();
 
-	/**
-	 * Wait for cell to become editable (see
-	 * https://github.com/plotly/dash-table/issues/577).
-	 * The get('input') below is used for any case
-	 * in which a cell is being edited.
-	 */
-        DashTable.getCell(3, 0).get('input');
+        /**
+         * Wait for cell to become editable (see
+         * https://github.com/plotly/dash-table/issues/577).
+         * The get('input') below is used for any case
+         * in which a cell is being edited.
+         */
+        DashTable.getCell(3, 0).get('input').wait(5000);
         DOM.focused.type(`${Key.Meta}v`);
         DashTable.getCell(0, 0).click();
 
@@ -37,7 +37,7 @@ describe('copy paste', () => {
         DOM.focused.type(`${Key.Meta}c`);
         DashTable.getCell(1, 0).click();
 
-        DashTable.getCell(1, 0).get('input');
+        DashTable.getCell(1, 0).get('input').wait(5000);
         DOM.focused.type(`${Key.Meta}v`);
         DashTable.getCell(0, 0).click();
 
@@ -54,7 +54,7 @@ describe('copy paste', () => {
         DOM.focused.type(`${Key.Meta}c`);
         DashTable.getCell(3, 1).click();
 
-        DashTable.getCell(3, 1).get('input');
+        DashTable.getCell(3, 1).get('input').wait(5000);
         DOM.focused.type(`${Key.Meta}v`);
         DashTable.getCell(0, 0).click();
 
@@ -76,7 +76,7 @@ describe('copy paste', () => {
         DOM.focused.type(`${Key.Meta}c`);
         cy.get(`#table2 tbody tr td.column-${0}`).eq(0).click();
 
-        cy.get(`#table2 tbody tr td.column-${0}`).eq(0).get('input');
+        cy.get(`#table2 tbody tr td.column-${0}`).eq(0).get('input').wait(5000);
         DOM.focused.type(`${Key.Meta}v`);
         cy.get(`#table2 tbody tr td.column-${3}`).eq(3).click();
 
@@ -104,7 +104,7 @@ describe('copy paste', () => {
             DOM.focused.type(`${Key.Meta}c`);
             DashTable.getCell(3, 1).click();
 
-            DashTable.getCell(3, 1).get('input');
+            DashTable.getCell(3, 1).get('input').wait(5000);
             DOM.focused.type(`${Key.Meta}v`);
             DashTable.getCell(5, 3).click();
 
@@ -131,7 +131,7 @@ describe('copy paste', () => {
             DOM.focused.type(`${Key.Meta}c`);
             cy.get(`#table2 tbody tr td.column-${0}`).eq(0).click();
 
-            cy.get(`#table2 tbody tr td.column-${0}`).get('input');
+            cy.get(`#table2 tbody tr td.column-${0}`).get('input').wait(5000);
             DOM.focused.type(`${Key.Meta}v`);
             cy.get(`#table2 tbody tr td.column-${3}`).eq(2).click();
 
@@ -154,7 +154,7 @@ describe('copy paste', () => {
     describe('BE roundtrip on copy-paste', () => {
         it('on cell modification', () => {
             DashTable.getCell(0, 0).click();
-            DashTable.getCell(0, 0).get('input');
+            DashTable.getCell(0, 0).get('input').wait(5000);
             DOM.focused.type(`10${Key.Enter}`);
 
             DashTable
@@ -171,7 +171,7 @@ describe('copy paste', () => {
             DOM.focused.type(`${Key.Meta}c`);
 
             DashTable.getCell(1, 0).click();
-            DashTable.getCell(1, 0).get('input');
+            DashTable.getCell(1, 0).get('input').wait(5000);
             DOM.focused.type(`${Key.Meta}v`);
 
             DashTable
@@ -201,7 +201,7 @@ describe('copy paste', () => {
             DOM.focused.type(`${Key.Meta}c`);
 
             DashTable.getCell(1, 0).click();
-            DashTable.getCell(1, 0).get('input');
+            DashTable.getCell(1, 0).get('input').wait(5000);
             DOM.focused.type(`${Key.Meta}v`);
 
             DashTable
@@ -215,7 +215,7 @@ describe('copy paste', () => {
             DOM.focused.type(`${Key.Meta}c`);
 
             DashTable.getCell(2, 1).click();
-            DashTable.getCell(2, 1).get('input');
+            DashTable.getCell(2, 1).get('input').wait(5000);
             DOM.focused.type(`${Key.Meta}v`);
 
             DashTable
