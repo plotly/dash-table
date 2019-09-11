@@ -410,7 +410,7 @@ export type ControlledTableProps = SanitizedProps & IState & {
     virtual_selected_rows: Indices;
     virtualized: IVirtualizedDerivedData;
 
-    data_loading: boolean;
+    loading_state: ILoadingState | undefined;
 };
 
 export type SetFilter = (

@@ -45,8 +45,7 @@ export default () => {
             uiHeaders,
             uiViewport,
             virtualization,
-            visibleColumns,
-            loading_state
+            visibleColumns
         } = R.merge(props, state) as (SanitizedAndDerivedProps & StandaloneState);
 
         const virtual = getVirtual(
@@ -97,8 +96,6 @@ export default () => {
             virtual.data
         );
 
-        const data_loading = (loading_state && loading_state.is_loading && (loading_state.prop_name === 'data' || loading_state.prop_name === '' || loading_state.prop_name === undefined)) || false;
-
         return R.mergeAll([
             props,
             state,
@@ -111,8 +108,7 @@ export default () => {
                 viewport_selected_rows,
                 virtual,
                 virtual_selected_rows,
-                virtualized,
-                data_loading
+                virtualized
             }
         ]) as ControlledTableProps;
     };

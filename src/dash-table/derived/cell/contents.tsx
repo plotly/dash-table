@@ -11,7 +11,8 @@ import {
     IViewportOffset,
     IColumn,
     Presentation,
-    Columns
+    Columns,
+    ILoadingState
 } from 'dash-table/components/Table/props';
 import CellInput from 'dash-table/components/CellInput';
 import derivedCellEventHandlerProps, { Handler } from 'dash-table/derived/cell/eventHandlerProps';
@@ -20,6 +21,8 @@ import CellDropdown from 'dash-table/components/CellDropdown';
 import { memoizeOne } from 'core/memoizer';
 import getFormatter from 'dash-table/type/formatter';
 import { shallowClone } from 'core/math/matrixZipMap';
+
+import dataLoading from 'dash-table/derived/table/data_loading';
 
 const mapData = R.addIndex<Datum, JSX.Element[]>(R.map);
 const mapRow = R.addIndex<IColumn, JSX.Element>(R.map);
@@ -64,7 +67,7 @@ class Contents {
         _offset: IViewportOffset,
         isFocused: boolean,
         dropdowns: (IDropdown | undefined)[][],
-        data_loading: boolean
+        loading_state: ILoadingState | undefined
     ): JSX.Element[][] => {
         const formatters = R.map(getFormatter, columns);
 
@@ -79,7 +82,7 @@ class Contents {
                     rowIndex,
                     datum,
                     formatters,
-                    data_loading
+                    loading_state
                 ), columns), data);
     });
 
@@ -91,7 +94,7 @@ class Contents {
         offset: IViewportOffset,
         isFocused: boolean,
         dropdowns: (IDropdown | undefined)[][],
-        data_loading: boolean
+        loading_state: ILoadingState | undefined
     ): JSX.Element[][] => {
         if (!activeCell) {
             return contents;
@@ -117,13 +120,13 @@ class Contents {
             iActive,
             data[i],
             formatters,
-            data_loading
+            loading_state
         );
 
         return contents;
     });
 
-    private getContent(active: boolean, isFocused: boolean, column: IColumn, dropdown: IDropdown | undefined, columnIndex: number, rowIndex: number, datum: any, formatters: ((value: any) => any)[], data_loading: boolean) {
+    private getContent(active: boolean, isFocused: boolean, column: IColumn, dropdown: IDropdown | undefined, columnIndex: number, rowIndex: number, datum: any, formatters: ((value: any) => any)[], loading_state: ILoadingState | undefined) {
 
         const className = [
             ...(active ? ['input-active'] : []),
@@ -131,7 +134,7 @@ class Contents {
             'dash-cell-value'
         ].join(' ');
 
-        const cellType = getCellType(active, column.editable, dropdown && dropdown.options, column.presentation, data_loading);
+        const cellType = getCellType(active, column.editable, dropdown && dropdown.options, column.presentation, dataLoading(loading_state));
 
         switch (cellType) {
             case CellType.Dropdown:
