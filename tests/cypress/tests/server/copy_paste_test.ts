@@ -143,7 +143,7 @@ describe('copy paste', () => {
                     let initialValue: string;
 
                     DashTable.getCell(row, column).within(() => cy.get('.dash-cell-value').then($cells => initialValue = $cells[0].innerHTML));
-                    cy.get(`#table2 tbody tr td.column-${column}`).eq(row - 10).within(() => cy.get('.dash-cell-value').should('have.html', initialValue));
+                    cy.get(`#table2 tbody tr td.column-${column}`).eq(row - 10).within(() => cy.get('.dash-cell-value').should('have.html', initialValue).wait(5000));
                 }
             }
         });
@@ -162,7 +162,7 @@ describe('copy paste', () => {
                 .within(() => cy.get('.dash-cell-value').should('have.html', '10'))
                 .then(() => {
                     DashTable.getCell(0, 1)
-                        .within(() => cy.get('.dash-cell-value').should('have.html', 'MODIFIED'));
+                        .within(() => cy.get('.dash-cell-value').should('have.html', 'MODIFIED').wait(5000));
                 });
         });
 
@@ -176,7 +176,7 @@ describe('copy paste', () => {
 
             DashTable
                 .getCell(1, 1)
-                .within(() => cy.get('.dash-cell-value').should('have.html', 'MODIFIED'));
+                .within(() => cy.get('.dash-cell-value').should('have.html', 'MODIFIED').wait(5000));
             DashTable
                 .getCell(1, 0)
                 .within(() => cy.get('.dash-cell-value').should('have.value', '0'));
@@ -189,7 +189,7 @@ describe('copy paste', () => {
 
             DashTable
                 .getCell(2, 1)
-                .within(() => cy.get('.dash-cell-value').should('have.value', 'MODIFIED'));
+                .within(() => cy.get('.dash-cell-value').should('have.value', 'MODIFIED').wait(5000));
         });
 
         it('BE rountrip with sorted, unfiltered data', () => {
@@ -206,7 +206,7 @@ describe('copy paste', () => {
 
             DashTable
                 .getCell(1, 1)
-                .within(() => cy.get('.dash-cell-value').should('have.html', 'MODIFIED'));
+                .within(() => cy.get('.dash-cell-value').should('have.html', 'MODIFIED').wait(5000));
             DashTable
                 .getCell(1, 0)
                 .within(() => cy.get('.dash-cell-value').should('have.value', '11'));
@@ -220,7 +220,7 @@ describe('copy paste', () => {
 
             DashTable
                 .getCell(2, 1)
-                .within(() => cy.get('.dash-cell-value').should('have.value', 'MODIFIED'));
+                .within(() => cy.get('.dash-cell-value').should('have.value', 'MODIFIED').wait(5000));
             DashTable
                 .getCell(1, 0)
                 .within(() => cy.get('.dash-cell-value').should('have.html', '11'));
