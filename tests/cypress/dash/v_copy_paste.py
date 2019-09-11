@@ -95,7 +95,6 @@ def updateData(timestamp, current, previous):
             if datum[0] != previous_datum[0]:
                 datum[1] = "MODIFIED"
 
-    print(current)
     return current
 
 if __name__ == "__main__":
