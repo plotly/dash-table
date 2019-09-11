@@ -51,7 +51,8 @@ export default class CellFactory {
             style_data,
             style_data_conditional,
             virtualized,
-            visibleColumns
+            visibleColumns,
+            loading_state
         } = this.props;
 
         const relevantStyles = this.relevantStyles(
@@ -113,12 +114,15 @@ export default class CellFactory {
             selected_cells
         );
 
+        const data_loading = (loading_state && loading_state.is_loading && (loading_state.prop_name === 'data' || loading_state.prop_name === '' || loading_state.prop_name === undefined)) || false;
+
         const partialCellContents = this.cellContents.partialGet(
             visibleColumns,
             virtualized.data,
             virtualized.offset,
             !!is_focused,
-            dropdowns
+            dropdowns,
+            data_loading
         );
 
         const cellContents = this.cellContents.get(
@@ -128,7 +132,8 @@ export default class CellFactory {
             virtualized.data,
             virtualized.offset,
             !!is_focused,
-            dropdowns
+            dropdowns,
+            data_loading
         );
 
         const ops = this.getDataOpCells(
