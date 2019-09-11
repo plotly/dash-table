@@ -36,15 +36,15 @@ function getCellType(
     editable: boolean,
     dropdown: IDropdownValue[] | undefined,
     presentation: Presentation | undefined,
-    _is_loading: boolean
+    is_loading: boolean
 ): CellType {
     switch (presentation) {
         case Presentation.Input:
-            return (!active || !editable) ? CellType.Label : CellType.Input;
+            return (!active || !editable || is_loading) ? CellType.Label : CellType.Input;
         case Presentation.Dropdown:
             return (!dropdown || !editable) ? CellType.DropdownLabel : CellType.Dropdown;
         default:
-            return (!active || !editable) ? CellType.Label : CellType.Input;
+            return (!active || !editable || is_loading) ? CellType.Label : CellType.Input;
     }
 }
 
@@ -124,6 +124,7 @@ class Contents {
     });
 
     private getContent(active: boolean, isFocused: boolean, column: IColumn, dropdown: IDropdown | undefined, columnIndex: number, rowIndex: number, datum: any, formatters: ((value: any) => any)[], data_loading: boolean) {
+
         const className = [
             ...(active ? ['input-active'] : []),
             isFocused ? 'focused' : 'unfocused',
