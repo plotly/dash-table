@@ -587,7 +587,9 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             loading_state
         } = this.props;
 
-        if (!editable || !active_cell || dataLoading(loading_state)) {
+        const isLoading = dataLoading(loading_state);
+
+        if (!editable || !active_cell || isLoading) {
             return;
         }
 
@@ -721,6 +723,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             filter_action,
             fixed_columns,
             fixed_rows,
+            loading_state,
             scrollbarWidth,
             style_as_list_view,
             style_table,
@@ -735,6 +738,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             virtualization,
             visibleColumns
         } = this.props;
+
+        const isLoading = dataLoading(loading_state);
 
         const fragmentClasses = [
             [
@@ -766,7 +771,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             ...(visibleColumns.length ? [] : ['dash-no-columns']),
             ...(virtualized.data.length ? [] : ['dash-no-data']),
             ...(filter_action !== TableAction.None ? [] : ['dash-no-filter']),
-            ...(fill_width ? ['dash-fill-width'] : [])
+            ...(fill_width ? ['dash-fill-width'] : []),
+            ...(isLoading ? ['dash-loading'] : [])
         ];
 
         const containerClasses = ['dash-spreadsheet-container', ...classes];
