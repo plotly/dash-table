@@ -135,8 +135,11 @@ describe('copy paste', () => {
     // LINK: https://github.com/cypress-io/cypress/issues/2386
     describe('BE roundtrip on copy-paste', () => {
         it('on cell modification', () => {
+            cy.get('dash-spreadsheet:not(.dash-loading)');
             DashTable.getCell(0, 0).click();
             DOM.focused.type(`10${Key.Enter}`);
+            cy.get('dash-spreadsheet.dash-loading');
+            cy.get('dash-spreadsheet:not(.dash-loading)');
 
             DashTable
                 .getCell(0, 0)
