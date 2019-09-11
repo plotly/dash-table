@@ -1,6 +1,7 @@
 # pylint: disable=global-statement
 import dash
 from dash.dependencies import Input, Output, State
+from dash.exceptions import PreventUpdate
 import dash_html_components as html
 import os
 import pandas as pd
@@ -85,8 +86,8 @@ app.layout = html.Div(
 # pylint: disable=unused-argument
 def updateData(timestamp, current, previous):
     # pylint: enable=unused-argument
-    if current is None or previous is None:
-        return current
+    if timestamp is None or current is None or previous is None:
+        raise PreventUpdate
 
     if len(current) == len(previous):
         for (i, datum) in enumerate(current):
@@ -94,6 +95,7 @@ def updateData(timestamp, current, previous):
             if datum[0] != previous_datum[0]:
                 datum[1] = "MODIFIED"
 
+    print(current)
     return current
 
 if __name__ == "__main__":
