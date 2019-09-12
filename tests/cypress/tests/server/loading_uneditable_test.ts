@@ -17,7 +17,7 @@ describe('loading states uneditable', () => {
 
         // Trigger data callback
         cy.get('#change-property').click();
-        DOM.focused.type(`change_data`);
+        DOM.focused.type(`change_data${Key.Enter}`);
 
         // Table is not editable
         DashTable
