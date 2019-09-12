@@ -72,16 +72,15 @@ def dontTriggerWait(to_change):
 
 @app.callback(
     Output("table", "data"),
-    [Input("change-property", "value")],
-    [State("table", "data")]
+    [Input("change-property", "value")]
 )
 # pylint: disable=unused-argument
-def triggerWait(to_change, current):
+def triggerWait(to_change):
     if to_change != 'change_data':
         raise PreventUpdate
 
     sleep(5)
-    return current
+    return df[0:250]
 
 
 if __name__ == "__main__":
