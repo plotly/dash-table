@@ -116,16 +116,16 @@ export default class CellFactory {
             selected_cells
         );
 
-        const data_loading = dataLoading(loading_state);
-
         const partialCellContents = this.cellContents.partialGet(
             visibleColumns,
             virtualized.data,
             virtualized.offset,
             !!is_focused,
             dropdowns,
-            data_loading
+            false
         );
+
+        const data_loading = dataLoading(loading_state);
 
         const cellContents = this.cellContents.get(
             partialCellContents,
