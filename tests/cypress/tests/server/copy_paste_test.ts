@@ -5,6 +5,7 @@ import Key from 'cypress/Key';
 describe('copy paste', () => {
     beforeEach(() => {
         cy.visit('http://localhost:8082');
+        cy.wait(5000);
     });
 
     it('can copy multiple rows', () => {
