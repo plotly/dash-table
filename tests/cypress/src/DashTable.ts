@@ -1,46 +1,46 @@
-const EDITABLE = `.dash-spreadsheet:not(.dash-loading)`;
-const NOT_EDITABLE = `.dash-spreadsheet.dash-loading`;
+const READY = `.dash-spreadsheet:not(.dash-loading)`;
+const LOADING = `.dash-spreadsheet.dash-loading`;
 const ANY = `.dash-spreadsheet`;
 
 export enum State {
-    Editable,
-    NotEditable,
-    Any
+    Any,
+    Loading,
+    Ready
 }
 
 const getSelector = (state: State) => {
     switch (state) {
-        case State.Editable:
-            return EDITABLE;
-        case State.NotEditable:
-            return NOT_EDITABLE;
+        case State.Ready:
+            return READY;
+        case State.Loading:
+            return LOADING;
         default:
             return ANY;
     }
 };
 
 export default class DashTable {
-    static getCell(row: number, column: number, editable: State = State.Editable) {
+    static getCell(row: number, column: number, editable: State = State.Ready) {
         return cy.get(`#table ${getSelector(editable)} tbody tr td.column-${column}`).eq(row);
     }
 
-    static getCellById(row: number, column: string, editable: State = State.Editable) {
+    static getCellById(row: number, column: string, editable: State = State.Ready) {
         return cy.get(`#table ${getSelector(editable)} tbody tr td[data-dash-column="${column}"]`).eq(row);
     }
 
-    static getFilter(column: number, editable: State = State.Editable) {
+    static getFilter(column: number, editable: State = State.Ready) {
         return cy.get(`#table ${getSelector(editable)} tbody tr th.dash-filter.column-${column}`);
     }
 
-    static getFilterById(column: string, editable: State = State.Editable) {
+    static getFilterById(column: string, editable: State = State.Ready) {
         return cy.get(`#table ${getSelector(editable)} tbody tr th.dash-filter[data-dash-column="${column}"]`);
     }
 
-    static getHeader(row: number, column: number, editable: State = State.Editable) {
+    static getHeader(row: number, column: number, editable: State = State.Ready) {
         return cy.get(`#table ${getSelector(editable)} tbody tr th.dash-header.column-${column}`).eq(row);
     }
 
-    static getHeaderById(row: number, column: string, editable: State = State.Editable) {
+    static getHeaderById(row: number, column: string, editable: State = State.Ready) {
         return cy.get(`#table ${getSelector(editable)} tbody tr th.dash-header[data-dash-column="${column}"]`).eq(row);
     }
 
@@ -54,19 +54,19 @@ export default class DashTable {
         return this.getCellById(row, column).click().scrollIntoView();
     }
 
-    static clearColumnById(row: number, column: string, editable: State = State.Editable) {
+    static clearColumnById(row: number, column: string, editable: State = State.Ready) {
         return cy.get(`#table ${getSelector(editable)} tbody tr th.dash-header[data-dash-column="${column}"] .column-header--clear`).eq(row).click();
     }
 
-    static deleteColumnById(row: number, column: string, editable: State = State.Editable) {
+    static deleteColumnById(row: number, column: string, editable: State = State.Ready) {
         return cy.get(`#table ${getSelector(editable)} tbody tr th.dash-header[data-dash-column="${column}"] .column-header--delete`).eq(row).click();
     }
 
-    static hideColumnById(row: number, column: string, editable: State = State.Editable) {
+    static hideColumnById(row: number, column: string, editable: State = State.Ready) {
         return cy.get(`#table ${getSelector(editable)} tbody tr th.dash-header[data-dash-column="${column}"] .column-header--hide`).eq(row).click();
     }
 
-    static getSelectColumnById(row: number, column: string, editable: State = State.Editable) {
+    static getSelectColumnById(row: number, column: string, editable: State = State.Ready) {
         return cy.get(`#table ${getSelector(editable)} tbody tr th.dash-header[data-dash-column="${column}"] .column-header--select input`).eq(row);
     }
 
@@ -74,19 +74,19 @@ export default class DashTable {
         return DashTable.getSelectColumnById(row, column).click();
     }
 
-    static getDelete(row: number, editable: State = State.Editable) {
+    static getDelete(row: number, editable: State = State.Ready) {
         return cy.get(`#table ${getSelector(editable)} tbody tr td.dash-delete-cell`).eq(row);
     }
 
-    static getSelect(row: number, editable: State = State.Editable) {
+    static getSelect(row: number, editable: State = State.Ready) {
         return cy.get(`#table ${getSelector(editable)} tbody tr td.dash-select-cell`).eq(row);
     }
 
-    static getActiveCell(editable: State = State.Editable) {
+    static getActiveCell(editable: State = State.Ready) {
         return cy.get(`#table ${getSelector(editable)} tbody td.focused`);
     }
 
-    static getSelectedCells(editable: State = State.Editable) {
+    static getSelectedCells(editable: State = State.Ready) {
         return cy.get(`#table ${getSelector(editable)} tbody td.cell--selected`);
     }
 

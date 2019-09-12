@@ -21,7 +21,7 @@ describe('loading states uneditable', () => {
 
         // Table is not editable
         DashTable
-            .getCell(0, 0, State.NotEditable)
+            .getCell(0, 0, State.Loading)
             .click()
             .find('.dash-input-cell-value-container > input').should('have.length', 0);
 
@@ -89,28 +89,28 @@ describe('loading states uneditable', () => {
 
         // Table is not editable
         DashTable
-            .getCell(0, 0, State.NotEditable)
+            .getCell(0, 0, State.Loading)
             .click()
             .find('.dash-input-cell-value-container > input').should('have.length', 0);
 
         DOM.focused.type(`${Key.Meta}c`);
 
         DashTable
-            .getCell(0, 1, State.NotEditable)
+            .getCell(0, 1, State.Loading)
             .click();
 
         DashTable
-            .getCell(0, 1, State.NotEditable)
+            .getCell(0, 1, State.Loading)
             .click()
             .find('.dash-input-cell-value-container > input').should('have.length', 0);
 
         DOM.focused.type(`${Key.Meta}v`);
 
         DashTable
-            .getCell(0, 0, State.NotEditable)
+            .getCell(0, 0, State.Loading)
             .click();
 
-        DashTable.getCell(0, 1, State.NotEditable)
+        DashTable.getCell(0, 1, State.Loading)
             .within(() => cy.get('.dash-cell-value')
                 .should('not.have.html', '0'));
 
