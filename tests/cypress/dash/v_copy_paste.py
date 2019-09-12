@@ -89,13 +89,15 @@ def updateData(timestamp, current, previous):
     if timestamp is None or current is None or previous is None:
         raise PreventUpdate
 
+    modified = False
     if len(current) == len(previous):
         for (i, datum) in enumerate(current):
             previous_datum = previous[i]
             if datum[0] != previous_datum[0]:
+                modified = True
                 datum[1] = "MODIFIED"
 
-    return current
+    return current if modified else raise PreventUpdate
 
 if __name__ == "__main__":
     app.run_server(port=8082, debug=False)

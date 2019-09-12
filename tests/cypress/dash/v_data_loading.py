@@ -1,6 +1,7 @@
 # pylint: disable=global-statement
 import dash
 from dash.dependencies import Input, Output, State
+from dash.exceptions import PreventUpdate
 import dash_html_components as html
 import dash_core_components as dcc
 import os
@@ -74,8 +75,8 @@ def dontTriggerWait(to_change):
 )
 # pylint: disable=unused-argument
 def triggerWait(to_change, current):
-    if to_change == 'change_data':
-        sleep(5)
+    sleep(5) if to_change == 'change_data' else raise PreventUpdate
+
     return current
 
 

@@ -62,9 +62,9 @@ describe('copy paste', () => {
         DashTable.getCell(13, 3).click();
 
         DOM.focused.type(`${Key.Meta}c`);
-        cy.get(`#table2 tbody tr td.column-${0}`).eq(0).click();
+        cy.get(`#table2 .dash-spreadsheet:not(.dash-loading) tbody tr td.column-${0}`).eq(0).click();
         DOM.focused.type(`${Key.Meta}v`);
-        cy.get(`#table2 tbody tr td.column-${3}`).eq(3).click();
+        cy.get(`#table2 .dash-spreadsheet:not(.dash-loading) tbody tr td.column-${3}`).eq(3).click();
 
         DashTable.getCell(14, 0).click();
         DOM.focused.type(Key.Shift, { release: false });
@@ -74,7 +74,7 @@ describe('copy paste', () => {
                 let initialValue: string;
 
                 DashTable.getCell(row, column).within(() => cy.get('.dash-cell-value').then($cells => initialValue = $cells[0].innerHTML));
-                cy.get(`#table2 tbody tr td.column-${column}`).eq(row - 10).within(() => cy.get('.dash-cell-value').should('have.html', initialValue));
+                cy.get(`#table2 .dash-spreadsheet:not(.dash-loading) tbody tr td.column-${column}`).eq(row - 10).within(() => cy.get('.dash-cell-value').should('have.html', initialValue));
             }
         }
     });
