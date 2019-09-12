@@ -1,6 +1,7 @@
 # pylint: disable=global-statement
 import dash
 from dash.dependencies import Input, Output, State
+from dash.exceptions import PreventUpdate
 import dash_html_components as html
 import dash_core_components as dcc
 import os
@@ -27,7 +28,8 @@ app.scripts.config.serve_locally = True
 
 app.layout = html.Div(
     [
-        dcc.Input(id='change-property'),
+        dcc.Input(id='change-data-property'),
+        dcc.Input(id='change-other-property'),
 
         dash_table.DataTable(
             id="table",
@@ -59,24 +61,27 @@ app.layout = html.Div(
 
 @app.callback(
     Output("table", "style_cell_conditional"),
-    [Input("change-property", "value")]
+    [Input("change-other-property", "value")]
 )
 def dontTriggerWait(to_change):
-    if to_change == 'dont_change_data':
-        sleep(5)
+    if to_change != 'dont_change_data':
+        raise PreventUpdate
+
+    sleep(5)
     return []
 
 
 @app.callback(
     Output("table", "data"),
-    [Input("change-property", "value")],
-    [State("table", "data")]
+    [Input("change-data-property", "value")]
 )
 # pylint: disable=unused-argument
-def triggerWait(to_change, current):
-    if to_change == 'change_data':
-        sleep(5)
-    return current
+def triggerWait(to_change):
+    if to_change != 'change_data':
+        raise PreventUpdate
+
+    sleep(5)
+    return df[0:250]
 
 
 if __name__ == "__main__":
