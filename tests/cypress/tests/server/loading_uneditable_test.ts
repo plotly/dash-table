@@ -1,4 +1,4 @@
-import DashTable from 'cypress/DashTable';
+import DashTable, { State } from 'cypress/DashTable';
 import DOM from 'cypress/DOM';
 import Key from 'cypress/Key';
 
@@ -9,173 +9,159 @@ describe('loading states uneditable', () => {
     });
 
     it('does not permit editing when data are loading', () => {
-
+        // Table is editable
         DashTable
             .getCell(0, 0)
             .click()
             .find('.dash-input-cell-value-container > input').should('have.length', 1);
-        DashTable
-            .getCell(0, 1)
-            .click()
-            .find('.dash-input-cell-value-container > input').should('have.length', 1);
 
+        // Trigger data callback
         cy.get('#change-property').click();
         DOM.focused.type(`change_data`);
 
+        // Table is not editable
         DashTable
-            .getCell(0, 0)
+            .getCell(0, 0, State.NotEditable)
             .click()
             .find('.dash-input-cell-value-container > input').should('have.length', 0);
 
-        DashTable
-            .getCell(0, 1)
-            .click()
-            .find('.dash-input-cell-value-container > input').should('have.length', 0);
+        DOM.focused.type(`Hello${Key.Enter}`);
+        DashTable.getCell(1, 0, State.Any).click();
 
-        DashTable.getCell(0, 2).click();
-        DOM.focused.type(`Hello`);
+        DashTable
+            .getCell(0, 0, State.Any)
+            .within(() => cy.get('.dash-cell-value')
+                .should('not.have.html', 'Hello'));
 
         cy.wait(5000);
 
-        DashTable.getCell(0, 2).click();
-        DOM.focused.type(`World`);
-
+        // Table is editable
         DashTable
             .getCell(0, 0)
             .click()
             .find('.dash-input-cell-value-container > input').should('have.length', 1);
-        DashTable
-            .getCell(0, 1)
-            .click()
-            .find('.dash-input-cell-value-container > input').should('have.length', 1);
+
+        DOM.focused.type(`Hello${Key.Enter}`);
+        DashTable.getCell(1, 0).click();
 
         DashTable
-            .getCell(0, 2)
+            .getCell(0, 0)
             .within(() => cy.get('.dash-cell-value')
-                .should('have.html', 'World'));
-
+                .should('not.have.html', 'Hello'));
     });
 
     it('permits editing when a non-data prop is being changed', () => {
+        // Table is editable
         DashTable
             .getCell(0, 0)
             .click()
             .find('.dash-input-cell-value-container > input').should('have.length', 1);
-        DashTable
-            .getCell(0, 1)
-            .click()
-            .find('.dash-input-cell-value-container > input').should('have.length', 1);
 
+        // Trigger non-data callback
         cy.get('#change-property').click();
         DOM.focused.type(`dont_change_data${Key.Enter}`);
 
-        DashTable.getCell(0, 2).click();
-        DOM.focused.type(`Hello`);
-
+        // Table is editable
         DashTable
             .getCell(0, 0)
             .click()
             .find('.dash-input-cell-value-container > input').should('have.length', 1);
 
-        DashTable
-            .getCell(0, 1)
-            .click()
-            .find('.dash-input-cell-value-container > input').should('have.length', 1);
-
-        DashTable
-            .getCell(0, 2)
-            .within(() => cy.get('.dash-cell-value')
-                .should('have.html', 'Hello'));
-
-        cy.wait(5000);
-
-        DashTable.getCell(0, 2).click();
-        DOM.focused.type(`World`);
+        DOM.focused.type(`Hello${Key.Enter}`);
+        DashTable.getCell(1, 0).click();
 
         DashTable
             .getCell(0, 0)
-            .click()
-            .find('.dash-input-cell-value-container > input').should('have.length', 1);
-        DashTable
-            .getCell(0, 1)
-            .click()
-            .find('.dash-input-cell-value-container > input').should('have.length', 1);
-
-        DashTable
-            .getCell(0, 2)
             .within(() => cy.get('.dash-cell-value')
-                .should('have.html', 'World'));
-
+                .should('not.have.html', 'Hello'));
     });
 
     it('does not permit copy-paste when data are loading', () => {
+        // Table is editable
+        DashTable
+            .getCell(0, 0)
+            .click()
+            .find('.dash-input-cell-value-container > input').should('have.length', 1);
 
-	cy.get('#change-property').click();
-	DOM.focused.type(`change_data${Key.Enter}`);
+        // Trigger data callback
+        cy.get('#change-property').click();
+        DOM.focused.type(`change_data${Key.Enter}`);
 
-	DashTable
-	    .getCell(0, 0)
-	    .click();
+        // Table is not editable
+        DashTable
+            .getCell(0, 0, State.NotEditable)
+            .click()
+            .find('.dash-input-cell-value-container > input').should('have.length', 0);
 
-	DOM.focused.type(`${Key.Meta}c`);
+        DOM.focused.type(`${Key.Meta}c`);
 
-	DashTable
-	    .getCell(0, 1)
-	    .click();
+        DashTable
+            .getCell(0, 1, State.NotEditable)
+            .click();
 
-	DOM.focused.type(`${Key.Meta}v`);
+        DashTable
+            .getCell(0, 1, State.NotEditable)
+            .click()
+            .find('.dash-input-cell-value-container > input').should('have.length', 0);
 
-	DashTable
-	    .getCell(0, 0)
-	    .click();
+        DOM.focused.type(`${Key.Meta}v`);
 
-	DashTable.getCell(0, 1)
-	    .within(() => cy.get('.dash-cell-value')
-		    .should('have.html', '1291006'));
+        DashTable
+            .getCell(0, 0, State.NotEditable)
+            .click();
 
-	cy.wait(5000);
+        DashTable.getCell(0, 1, State.NotEditable)
+            .within(() => cy.get('.dash-cell-value')
+                .should('have.html', '1291006'));
 
-	DashTable
-	    .getCell(0, 1)
-	    .click();
+        cy.wait(5000);
 
-	DOM.focused.type(`${Key.Meta}v`);
+        // Table is editable
+        DashTable
+            .getCell(0, 1)
+            .click();
 
-	DashTable
-	    .getCell(0, 0)
-	    .click();
+        DOM.focused.type(`${Key.Meta}v`);
 
-	DashTable.getCell(0, 1)
-	    .within(() => cy.get('.dash-cell-value')
-		    .should('have.html', '0'));
+        DashTable
+            .getCell(0, 0)
+            .click();
 
+        DashTable.getCell(0, 1)
+            .within(() => cy.get('.dash-cell-value')
+                .should('have.html', '0'));
     });
 
     it('permits copy-paste when a non-data prop is loading', () => {
+        // Table is editable
+        DashTable
+            .getCell(0, 0)
+            .click()
+            .find('.dash-input-cell-value-container > input').should('have.length', 1);
 
-	cy.get('#change-property').click();
-	DOM.focused.type(`dont_change_data${Key.Enter}`);
+        // Trigger non-data callback
+        cy.get('#change-property').click();
+        DOM.focused.type(`dont_change_data${Key.Enter}`);
 
-	DashTable
-	    .getCell(0, 0)
-	    .click();
+        DashTable
+            .getCell(0, 0)
+            .click();
 
-	DOM.focused.type(`${Key.Meta}c`);
+        DOM.focused.type(`${Key.Meta}c`);
 
-	DashTable
-	    .getCell(0, 1)
-	    .click();
+        DashTable
+            .getCell(0, 1)
+            .click();
 
-	DOM.focused.type(`${Key.Meta}v`);
+        DOM.focused.type(`${Key.Meta}v`);
 
-	DashTable
-	    .getCell(0, 0)
-	    .click();
+        DashTable
+            .getCell(0, 0)
+            .click();
 
-	DashTable.getCell(0, 1)
-	    .within(() => cy.get('.dash-cell-value')
-		    .should('have.html', '0'));
-
+        DashTable.getCell(0, 1)
+            .within(() => cy.get('.dash-cell-value')
+                .should('have.html', '0'));
     });
 
 });
