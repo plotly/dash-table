@@ -28,7 +28,8 @@ app.scripts.config.serve_locally = True
 
 app.layout = html.Div(
     [
-        dcc.Input(id='change-property'),
+        dcc.Input(id='change-data-property'),
+        dcc.Input(id='change-other-property'),
 
         dash_table.DataTable(
             id="table",
@@ -60,7 +61,7 @@ app.layout = html.Div(
 
 @app.callback(
     Output("table", "style_cell_conditional"),
-    [Input("change-property", "value")]
+    [Input("change-other-property", "value")]
 )
 def dontTriggerWait(to_change):
     if to_change != 'dont_change_data':
@@ -72,13 +73,14 @@ def dontTriggerWait(to_change):
 
 @app.callback(
     Output("table", "data"),
-    [Input("change-property", "value")]
+    [Input("change-data-property", "value")]
 )
 # pylint: disable=unused-argument
 def triggerWait(to_change):
     if to_change != 'change_data':
         raise PreventUpdate
 
+    print('triggerWait >> sleep 5')
     sleep(5)
     return df[0:250]
 

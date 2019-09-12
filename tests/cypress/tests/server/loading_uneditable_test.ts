@@ -16,7 +16,7 @@ describe('loading states uneditable', () => {
             .find('.dash-input-cell-value-container > input').should('have.length', 1);
 
         // Trigger data callback
-        cy.get('#change-property').click();
+        cy.get('#change-data-property').click();
         DOM.focused.type(`change_data${Key.Enter}`);
 
         // Table is not editable
@@ -58,7 +58,7 @@ describe('loading states uneditable', () => {
             .find('.dash-input-cell-value-container > input').should('have.length', 1);
 
         // Trigger non-data callback
-        cy.get('#change-property').click();
+        cy.get('#change-other-property').click();
         DOM.focused.type(`dont_change_data${Key.Enter}`);
 
         // Table is editable
@@ -84,7 +84,7 @@ describe('loading states uneditable', () => {
             .find('.dash-input-cell-value-container > input').should('have.length', 1);
 
         // Trigger data callback
-        cy.get('#change-property').click();
+        cy.get('#change-data-property').click();
         DOM.focused.type(`change_data${Key.Enter}`);
 
         // Table is not editable
@@ -140,7 +140,7 @@ describe('loading states uneditable', () => {
             .find('.dash-input-cell-value-container > input').should('have.length', 1);
 
         // Trigger non-data callback
-        cy.get('#change-property').click();
+        cy.get('#change-other-property').click();
         DOM.focused.type(`dont_change_data${Key.Enter}`);
 
         DashTable
