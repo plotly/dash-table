@@ -5,7 +5,7 @@ import Key from 'cypress/Key';
 describe('copy paste', () => {
     beforeEach(() => {
         cy.visit('http://localhost:8082');
-        cy.wait(5000);
+        cy.wait(1000);
     });
 
     it('can copy multiple rows', () => {
@@ -67,7 +67,7 @@ describe('copy paste', () => {
         DOM.focused.type(`${Key.Meta}v`);
         cy.get(`#table2 tbody tr td.column-${3}`).eq(3).click();
 
-        cy.wait(5000);
+        cy.wait(1000);
 
         DashTable.getCell(14, 0).click();
         DOM.focused.type(Key.Shift, { release: false });
@@ -141,6 +141,8 @@ describe('copy paste', () => {
             DashTable.getCell(0, 0).click();
             DOM.focused.type(`10${Key.Enter}`);
 
+            cy.wait(1000);
+
             DashTable
                 .getCell(0, 0, State.Any)
                 .within(() => cy.get('.dash-cell-value').should('have.html', '10'))
@@ -157,6 +159,8 @@ describe('copy paste', () => {
             DashTable.getCell(1, 0).click();
             DOM.focused.type(`${Key.Meta}v`);
 
+            cy.wait(1000);
+
             DashTable
                 .getCell(1, 1, State.Any)
                 .within(() => cy.get('.dash-cell-value').should('have.html', 'MODIFIED'));
@@ -169,6 +173,8 @@ describe('copy paste', () => {
 
             DashTable.getCell(2, 1).click();
             DOM.focused.type(`${Key.Meta}v`);
+
+            cy.wait(1000);
 
             DashTable
                 .getCell(2, 1, State.Any)
@@ -186,6 +192,8 @@ describe('copy paste', () => {
             DashTable.getCell(1, 0).click();
             DOM.focused.type(`${Key.Meta}v`);
 
+            cy.wait(1000);
+
             DashTable
                 .getCell(1, 1, State.Any)
                 .within(() => cy.get('.dash-cell-value').should('have.html', 'MODIFIED'));
@@ -198,6 +206,8 @@ describe('copy paste', () => {
 
             DashTable.getCell(2, 1).click();
             DOM.focused.type(`${Key.Meta}v`);
+
+            cy.wait(1000);
 
             DashTable
                 .getCell(2, 1, State.Any)
