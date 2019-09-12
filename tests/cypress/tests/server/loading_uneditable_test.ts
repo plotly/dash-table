@@ -47,7 +47,7 @@ describe('loading states uneditable', () => {
         DashTable
             .getCell(0, 0)
             .within(() => cy.get('.dash-cell-value')
-                .should('not.have.html', 'Hello'));
+                .should('have.html', 'Hello'));
     });
 
     it('permits editing when a non-data prop is being changed', () => {
@@ -73,7 +73,7 @@ describe('loading states uneditable', () => {
         DashTable
             .getCell(0, 0)
             .within(() => cy.get('.dash-cell-value')
-                .should('not.have.html', 'Hello'));
+                .should('have.html', 'Hello'));
     });
 
     it('does not permit copy-paste when data are loading', () => {
@@ -112,7 +112,7 @@ describe('loading states uneditable', () => {
 
         DashTable.getCell(0, 1, State.NotEditable)
             .within(() => cy.get('.dash-cell-value')
-                .should('have.html', '1291006'));
+                .should('not.have.html', '0'));
 
         cy.wait(5000);
 
