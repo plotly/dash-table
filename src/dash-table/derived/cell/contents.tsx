@@ -142,6 +142,7 @@ class Contents {
                     dropdown={dropdown && dropdown.options}
                     onChange={this.handlers(Handler.Change, rowIndex, columnIndex)}
                     value={datum[column.id]}
+                    disabled={data_loading}
                 />);
             case CellType.Input:
                 return (<CellInput
