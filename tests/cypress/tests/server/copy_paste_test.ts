@@ -1,4 +1,4 @@
-import DashTable from 'cypress/DashTable';
+import DashTable, { State } from 'cypress/DashTable';
 import DOM from 'cypress/DOM';
 import Key from 'cypress/Key';
 
@@ -16,10 +16,10 @@ describe('copy paste', () => {
         DOM.focused.type(`${Key.Meta}c`);
         DashTable.getCell(3, 0).click();
         DOM.focused.type(`${Key.Meta}v`);
-        DashTable.getCell(0, 0).click();
+        DashTable.getCell(0, 0, State.Any).click();
 
         for (let row = 0; row <= 2; ++row) {
-            DashTable.getCell(row + 3, 0).within(() => cy.get('.dash-cell-value').should('have.html', `${row}`));
+            DashTable.getCell(row + 3, 0, State.Any).within(() => cy.get('.dash-cell-value').should('have.html', `${row}`));
         }
     });
 
@@ -30,10 +30,10 @@ describe('copy paste', () => {
         DOM.focused.type(`${Key.Meta}c`);
         DashTable.getCell(1, 0).click();
         DOM.focused.type(`${Key.Meta}v`);
-        DashTable.getCell(0, 0).click();
+        DashTable.getCell(0, 0, State.Any).click();
 
-        DashTable.getCell(1, 0).within(() => cy.get('.dash-cell-value').should('have.html', '9'));
-        DashTable.getCell(2, 0).within(() => cy.get('.dash-cell-value').should('have.html', '10'));
+        DashTable.getCell(1, 0, State.Any).within(() => cy.get('.dash-cell-value').should('have.html', '9'));
+        DashTable.getCell(2, 0, State.Any).within(() => cy.get('.dash-cell-value').should('have.html', '10'));
 
     });
 
@@ -45,14 +45,14 @@ describe('copy paste', () => {
         DOM.focused.type(`${Key.Meta}c`);
         DashTable.getCell(3, 1).click();
         DOM.focused.type(`${Key.Meta}v`);
-        DashTable.getCell(0, 0).click();
+        DashTable.getCell(0, 0, State.Any).click();
 
         for (let row = 0; row <= 2; ++row) {
             for (let column = 1; column <= 2; ++column) {
                 let initialValue: string;
 
-                DashTable.getCell(row, column).within(() => cy.get('.dash-cell-value').then($cells => initialValue = $cells[0].innerHTML));
-                DashTable.getCell(row + 3, column).within(() => cy.get('.dash-cell-value').should('have.html', initialValue));
+                DashTable.getCell(row, column, State.Any).within(() => cy.get('.dash-cell-value').then($cells => initialValue = $cells[0].innerHTML));
+                DashTable.getCell(row + 3, column, State.Any).within(() => cy.get('.dash-cell-value').should('have.html', initialValue));
             }
         }
     });
@@ -63,9 +63,11 @@ describe('copy paste', () => {
         DashTable.getCell(13, 3).click();
 
         DOM.focused.type(`${Key.Meta}c`);
-        cy.get(`#table2 .dash-spreadsheet:not(.dash-loading) tbody tr td.column-${0}`).eq(0).click();
+        cy.get(`#table2 tbody tr td.column-${0}`).eq(0).click();
         DOM.focused.type(`${Key.Meta}v`);
-        cy.get(`#table2 .dash-spreadsheet:not(.dash-loading) tbody tr td.column-${3}`).eq(3).click();
+        cy.get(`#table2 tbody tr td.column-${3}`).eq(3).click();
+
+        cy.wait(5000);
 
         DashTable.getCell(14, 0).click();
         DOM.focused.type(Key.Shift, { release: false });
@@ -75,7 +77,7 @@ describe('copy paste', () => {
                 let initialValue: string;
 
                 DashTable.getCell(row, column).within(() => cy.get('.dash-cell-value').then($cells => initialValue = $cells[0].innerHTML));
-                cy.get(`#table2 .dash-spreadsheet:not(.dash-loading) tbody tr td.column-${column}`).eq(row - 10).within(() => cy.get('.dash-cell-value').should('have.html', initialValue));
+                cy.get(`#table2 tbody tr td.column-${column}`).eq(row - 10).within(() => cy.get('.dash-cell-value').should('have.html', initialValue));
             }
         }
     });
@@ -91,17 +93,17 @@ describe('copy paste', () => {
             DOM.focused.type(`${Key.Meta}c`);
             DashTable.getCell(3, 1).click();
             DOM.focused.type(`${Key.Meta}v`);
-            DashTable.getCell(5, 3).click();
+            DashTable.getCell(5, 3, State.Any).click();
 
-            DashTable.getCell(6, 0).click();
+            DashTable.getCell(6, 0, State.Any).click();
             DOM.focused.type(Key.Shift, { release: false });
 
             for (let row = 0; row <= 2; ++row) {
                 for (let column = 0; column <= 2; ++column) {
                     let initialValue: string;
 
-                    DashTable.getCell(row, column).within(() => cy.get('.dash-cell-value').then($cells => initialValue = $cells[0].innerHTML));
-                    DashTable.getCell(row + 3, column + 1).within(() => cy.get('.dash-cell-value').should('have.html', initialValue));
+                    DashTable.getCell(row, column, State.Any).within(() => cy.get('.dash-cell-value').then($cells => initialValue = $cells[0].innerHTML));
+                    DashTable.getCell(row + 3, column + 1, State.Any).within(() => cy.get('.dash-cell-value').should('have.html', initialValue));
                 }
             }
         });
@@ -140,10 +142,10 @@ describe('copy paste', () => {
             DOM.focused.type(`10${Key.Enter}`);
 
             DashTable
-                .getCell(0, 0)
+                .getCell(0, 0, State.Any)
                 .within(() => cy.get('.dash-cell-value').should('have.html', '10'))
                 .then(() => {
-                    DashTable.getCell(0, 1)
+                    DashTable.getCell(0, 1, State.Any)
                         .within(() => cy.get('.dash-cell-value').should('have.html', 'MODIFIED'));
                 });
         });
@@ -156,10 +158,10 @@ describe('copy paste', () => {
             DOM.focused.type(`${Key.Meta}v`);
 
             DashTable
-                .getCell(1, 1)
+                .getCell(1, 1, State.Any)
                 .within(() => cy.get('.dash-cell-value').should('have.html', 'MODIFIED'));
             DashTable
-                .getCell(1, 0)
+                .getCell(1, 0, State.Any)
                 .within(() => cy.get('.dash-cell-value').should('have.value', '0'));
 
             DashTable.getCell(1, 1).click();
@@ -169,7 +171,7 @@ describe('copy paste', () => {
             DOM.focused.type(`${Key.Meta}v`);
 
             DashTable
-                .getCell(2, 1)
+                .getCell(2, 1, State.Any)
                 .within(() => cy.get('.dash-cell-value').should('have.value', 'MODIFIED'));
         });
 
@@ -185,10 +187,10 @@ describe('copy paste', () => {
             DOM.focused.type(`${Key.Meta}v`);
 
             DashTable
-                .getCell(1, 1)
+                .getCell(1, 1, State.Any)
                 .within(() => cy.get('.dash-cell-value').should('have.html', 'MODIFIED'));
             DashTable
-                .getCell(1, 0)
+                .getCell(1, 0, State.Any)
                 .within(() => cy.get('.dash-cell-value').should('have.value', '11'));
 
             DashTable.getCell(1, 1).click();
@@ -198,10 +200,10 @@ describe('copy paste', () => {
             DOM.focused.type(`${Key.Meta}v`);
 
             DashTable
-                .getCell(2, 1)
+                .getCell(2, 1, State.Any)
                 .within(() => cy.get('.dash-cell-value').should('have.value', 'MODIFIED'));
             DashTable
-                .getCell(1, 0)
+                .getCell(1, 0, State.Any)
                 .within(() => cy.get('.dash-cell-value').should('have.html', '11'));
         });
     });

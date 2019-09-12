@@ -80,7 +80,6 @@ def triggerWait(to_change):
     if to_change != 'change_data':
         raise PreventUpdate
 
-    print('triggerWait >> sleep 5')
     sleep(5)
     return df[0:250]
 
