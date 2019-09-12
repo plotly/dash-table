@@ -587,9 +587,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             loading_state
         } = this.props;
 
-        const isLoading = dataLoading(loading_state);
-
-        if (!editable || !active_cell || isLoading) {
+        if (!editable || !active_cell || dataLoading(loading_state)) {
             return;
         }
 
