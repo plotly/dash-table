@@ -14,6 +14,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [#18](https://github.com/plotly/dash-table/issues/18)
 - Fix row selection vertical and horizontal alignment
 
+[#583](https://github.com/plotly/dash-table/issues/583)
+- Fix regression when editing the content of a cell in a scrolled virtualized table
+
 ## [4.2.0] - 2019-08-27
 ### Added
 [#317](https://github.com/plotly/dash-table/issues/317)
