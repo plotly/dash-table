@@ -1,26 +1,26 @@
 export default class DashTable {
     static getCell(row: number, column: number) {
-        return cy.get(`#table .dash-spreadsheet:not(.dash-loading) tbody tr td.column-${column}`).eq(row);
+        return cy.get(`#table .dash-spreadsheet:not(.dash-loading) tbody tr td.column-${column}`).wait(5000).eq(row);
     }
 
     static getCellById(row: number, column: string) {
-        return cy.get(`#table .dash-spreadsheet:not(.dash-loading) tbody tr td[data-dash-column="${column}"]`).eq(row);
+        return cy.get(`#table .dash-spreadsheet:not(.dash-loading) tbody tr td[data-dash-column="${column}"]`).wait(5000).eq(row);
     }
 
     static getFilter(column: number) {
-        return cy.get(`#table .dash-spreadsheet:not(.dash-loading) tbody tr th.dash-filter.column-${column}`);
+        return cy.get(`#table .dash-spreadsheet:not(.dash-loading) tbody tr th.dash-filter.column-${column}`).wait(5000);
     }
 
     static getFilterById(column: string) {
-        return cy.get(`#table .dash-spreadsheet:not(.dash-loading) tbody tr th.dash-filter[data-dash-column="${column}"]`);
+        return cy.get(`#table .dash-spreadsheet:not(.dash-loading) tbody tr th.dash-filter[data-dash-column="${column}"]`).wait(5000);
     }
 
     static getHeader(row: number, column: number) {
-        return cy.get(`#table .dash-spreadsheet:not(.dash-loading) tbody tr th.dash-header.column-${column}`).eq(row);
+        return cy.get(`#table .dash-spreadsheet:not(.dash-loading) tbody tr th.dash-header.column-${column}`).wait(5000).eq(row);
     }
 
     static getHeaderById(row: number, column: string) {
-        return cy.get(`#table .dash-spreadsheet:not(.dash-loading) tbody tr th.dash-header[data-dash-column="${column}"]`).eq(row);
+        return cy.get(`#table .dash-spreadsheet:not(.dash-loading) tbody tr th.dash-header[data-dash-column="${column}"]`).wait(5000).eq(row);
     }
 
     static focusCell(row: number, column: number) {
@@ -34,19 +34,19 @@ export default class DashTable {
     }
 
     static clearColumnById(row: number, column: string) {
-        return cy.get(`#table .dash-spreadsheet:not(.dash-loading) tbody tr th.dash-header[data-dash-column="${column}"] .column-header--clear`).eq(row).click();
+        return cy.get(`#table .dash-spreadsheet:not(.dash-loading) tbody tr th.dash-header[data-dash-column="${column}"] .column-header--clear`).wait(5000).eq(row).click();
     }
 
     static deleteColumnById(row: number, column: string) {
-        return cy.get(`#table .dash-spreadsheet:not(.dash-loading) tbody tr th.dash-header[data-dash-column="${column}"] .column-header--delete`).eq(row).click();
+        return cy.get(`#table .dash-spreadsheet:not(.dash-loading) tbody tr th.dash-header[data-dash-column="${column}"] .column-header--delete`).wait(5000).eq(row).click();
     }
 
     static hideColumnById(row: number, column: string) {
-        return cy.get(`#table .dash-spreadsheet:not(.dash-loading) tbody tr th.dash-header[data-dash-column="${column}"] .column-header--hide`).eq(row).click();
+        return cy.get(`#table .dash-spreadsheet:not(.dash-loading) tbody tr th.dash-header[data-dash-column="${column}"] .column-header--hide`).wait(5000).eq(row).click();
     }
 
     static getSelectColumnById(row: number, column: string) {
-        return cy.get(`#table .dash-spreadsheet:not(.dash-loading) tbody tr th.dash-header[data-dash-column="${column}"] .column-header--select input`).eq(row);
+        return cy.get(`#table .dash-spreadsheet:not(.dash-loading) tbody tr th.dash-header[data-dash-column="${column}"] .column-header--select input`).wait(5000).eq(row);
     }
 
     static selectColumnById(row: number, column: string) {
@@ -54,19 +54,19 @@ export default class DashTable {
     }
 
     static getDelete(row: number) {
-        return cy.get(`#table .dash-spreadsheet:not(.dash-loading) tbody tr td.dash-delete-cell`).eq(row);
+        return cy.get(`#table .dash-spreadsheet:not(.dash-loading) tbody tr td.dash-delete-cell`).wait(5000).eq(row);
     }
 
     static getSelect(row: number) {
-        return cy.get(`#table .dash-spreadsheet:not(.dash-loading) tbody tr td.dash-select-cell`).eq(row);
+        return cy.get(`#table .dash-spreadsheet:not(.dash-loading) tbody tr td.dash-select-cell`).wait(5000).eq(row);
     }
 
     static getActiveCell() {
-        return cy.get(`#table .dash-spreadsheet:not(.dash-loading) tbody td.focused`);
+        return cy.get(`#table .dash-spreadsheet:not(.dash-loading) tbody td.focused`).wait(5000);
     }
 
     static getSelectedCells() {
-        return cy.get(`#table .dash-spreadsheet:not(.dash-loading) tbody td.cell--selected`);
+        return cy.get(`#table .dash-spreadsheet:not(.dash-loading) tbody td.cell--selected`).wait(5000);
     }
 
     static scrollToTop() {
