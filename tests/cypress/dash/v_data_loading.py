@@ -63,8 +63,10 @@ app.layout = html.Div(
     [Input("change-property", "value")]
 )
 def dontTriggerWait(to_change):
-    if to_change == 'dont_change_data':
-        sleep(5)
+    if to_change != 'dont_change_data':
+        raise PreventUpdate
+
+    sleep(5)
     return []
 
 
@@ -75,8 +77,10 @@ def dontTriggerWait(to_change):
 )
 # pylint: disable=unused-argument
 def triggerWait(to_change, current):
-    sleep(5) if to_change == 'change_data' else raise PreventUpdate
+    if to_change != 'change_data':
+        raise PreventUpdate
 
+    sleep(5)
     return current
 
 
