@@ -20,7 +20,7 @@ export const handleClick = (
         visibleColumns
     } = propsFn();
 
-    const row = idx + virtualized.offset.rows;
+    const row = idx;
     const col = i + virtualized.offset.columns;
 
     const clickedCell = makeCell(row, col, visibleColumns, viewport);
@@ -99,7 +99,7 @@ export const handleDoubleClick = (propsFn: () => ICellFactoryProps, idx: number,
     }
 
     const newCell = makeCell(
-        idx + virtualized.offset.rows,
+        idx,
         i + virtualized.offset.columns,
         visibleColumns, viewport
     );
