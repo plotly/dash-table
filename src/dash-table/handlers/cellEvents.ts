@@ -126,7 +126,7 @@ export const handleChange = (propsFn: () => ICellFactoryProps, idx: number, i: n
     } = propsFn();
 
     const c = visibleColumns[i];
-    const realIdx = virtualized.indices[idx];
+    const realIdx = virtualized.indices[idx - virtualized.offset.rows];
 
     if (!c.editable) {
         return;
@@ -157,7 +157,7 @@ export const handleEnter = (propsFn: () => ICellFactoryProps, idx: number, i: nu
     } = propsFn();
 
     const c = visibleColumns[i];
-    const realIdx = virtualized.indices[idx];
+    const realIdx = virtualized.indices[idx - virtualized.offset.rows];
 
     setState({
         currentTooltip: {
@@ -184,7 +184,7 @@ export const handleMove = (propsFn: () => ICellFactoryProps, idx: number, i: num
     } = propsFn();
 
     const c = visibleColumns[i];
-    const realIdx = virtualized.indices[idx];
+    const realIdx = virtualized.indices[idx - virtualized.offset.rows];
 
     if (currentTooltip && currentTooltip.id === c.id && currentTooltip.row === realIdx) {
         return;

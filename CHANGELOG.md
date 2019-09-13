@@ -19,6 +19,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 `white-space`, `overflow` and `text-overflow` from its parent, making it possible to style
 multi-line & ellipsis with `style_data` and other style props.
 
+[#583](https://github.com/plotly/dash-table/issues/583)
+- Fix regression when editing the content of a cell in a scrolled virtualized table
+
 ### Added
 [#319](https://github.com/plotly/dash-table/issues/319)
 - New 'loading_state' prop that contains information about which prop, if any, is being computed.
