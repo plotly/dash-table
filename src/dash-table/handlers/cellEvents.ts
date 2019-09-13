@@ -9,7 +9,6 @@ export const handleClick = (
     propsFn: () => ICellFactoryProps,
     idx: number,
     i: number,
-    targetTagName: string,
     e: any
 ) => {
     const {
@@ -20,10 +19,6 @@ export const handleClick = (
         virtualized,
         visibleColumns
     } = propsFn();
-
-    if (e.target.tagName.toLowerCase() !== targetTagName) {
-        return;
-    }
 
     const row = idx + virtualized.offset.rows;
     const col = i + virtualized.offset.columns;
