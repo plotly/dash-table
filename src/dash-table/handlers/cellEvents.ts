@@ -5,7 +5,13 @@ import isSelected from 'dash-table/derived/cell/isSelected';
 import { makeCell, makeSelection } from 'dash-table/derived/cell/cellProps';
 import reconcile from 'dash-table/type/reconcile';
 
-export const handleClick = (propsFn: () => ICellFactoryProps, idx: number, i: number, e: any) => {
+export const handleClick = (
+    propsFn: () => ICellFactoryProps,
+    idx: number,
+    i: number,
+    targetTagName: string,
+    e: any
+) => {
     const {
         selected_cells,
         active_cell,
@@ -14,6 +20,10 @@ export const handleClick = (propsFn: () => ICellFactoryProps, idx: number, i: nu
         virtualized,
         visibleColumns
     } = propsFn();
+
+    if (e.target.tagName.toLowerCase() !== targetTagName) {
+        return;
+    }
 
     const row = idx + virtualized.offset.rows;
     const col = i + virtualized.offset.columns;

@@ -39,7 +39,7 @@ class EventHandler {
             case Handler.Change:
                 return handleChange.bind(undefined, this.propsFn, rowIndex, columnIndex);
             case Handler.Click:
-                return handleClick.bind(undefined, this.propsFn, rowIndex, columnIndex);
+                return handleClick.bind(undefined, this.propsFn, rowIndex, columnIndex, 'td');
             case Handler.DoubleClick:
                 return handleDoubleClick.bind(undefined, this.propsFn, rowIndex, columnIndex);
             case Handler.Enter:
