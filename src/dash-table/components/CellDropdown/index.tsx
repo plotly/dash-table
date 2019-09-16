@@ -16,6 +16,7 @@ interface IProps {
     dropdown?: IDropdownValue[];
     onChange: (e: ChangeEvent) => void;
     value: any;
+    disabled?: boolean;
 }
 
 export default class CellDropdown extends PureComponent<IProps> {
@@ -24,10 +25,14 @@ export default class CellDropdown extends PureComponent<IProps> {
             clearable,
             dropdown,
             onChange,
-            value
+            value,
+            disabled
         } = this.props;
 
-        return (<div className='dash-dropdown-cell-value-container dash-cell-value-container'>
+        return (<div
+            className='dash-dropdown-cell-value-container dash-cell-value-container'
+            onClick={this.handleClick}
+        >
             <div className='dropdown-cell-value-shadow cell-value-shadow'>
                 {(dropdown && dropdown.find(entry => entry.value === value) || { label: undefined }).label}
             </div>
@@ -41,6 +46,7 @@ export default class CellDropdown extends PureComponent<IProps> {
                 options={dropdown}
                 placeholder={''}
                 value={value}
+                disabled={disabled}
             />
         </div>);
     }
@@ -51,6 +57,10 @@ export default class CellDropdown extends PureComponent<IProps> {
 
     componentDidMount() {
         this.setFocus();
+    }
+
+    private handleClick(e: React.MouseEvent) {
+        e.stopPropagation();
     }
 
     private setFocus() {
