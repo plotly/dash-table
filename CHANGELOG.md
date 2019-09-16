@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
+[#566](https://github.com/plotly/dash-table/pull/566)
+- Support persisting user edits when the component or the page is reloaded. New props are `persistence`, `persistence_type`, and `persisted_props`. Set `persistence` to a truthy value to enable, the other two modify persistence behavior. See [plotly/dash#903](https://github.com/plotly/dash/pull/903) for more details.
+
 [#319](https://github.com/plotly/dash-table/issues/319)
 - New 'loading_state' prop that contains information about which prop, if any, is being computed.
 - Table no longer allows for editing while the `data` prop is loading.
