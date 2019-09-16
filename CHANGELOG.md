@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+[#319](https://github.com/plotly/dash-table/issues/319)
+- New 'loading_state' prop that contains information about which prop, if any, is being computed.
+- Table no longer allows for editing while the `data` prop is loading.
+
 ### Fixed
 [#578](https://github.com/plotly/dash-table/pull/578)
 - Fix [#576](https://github.com/plotly/dash-table/issues/576), editing column names or deleting columns while other columns are hidden causing the hidden columns to be lost.
@@ -25,11 +30,6 @@ multi-line & ellipsis with `style_data` and other style props.
 
 [#583](https://github.com/plotly/dash-table/issues/583)
 - Fix regression when editing the content of a cell in a scrolled virtualized table
-
-### Added
-[#319](https://github.com/plotly/dash-table/issues/319)
-- New 'loading_state' prop that contains information about which prop, if any, is being computed.
-- Table no longer allows for editing while the `data` prop is loading.
 
 ## [4.2.0] - 2019-08-27
 ### Added
