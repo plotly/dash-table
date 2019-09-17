@@ -4,7 +4,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 
 import random from 'core/math/random';
-import DataTable from 'dash-table/dash/DataTable';
+import DataTable from 'dash-table/dash/LazyDataTable';
 import fixtures from './fixtures';
 
 const setProps = () => { };

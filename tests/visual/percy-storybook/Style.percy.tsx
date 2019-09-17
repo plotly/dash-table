@@ -1,7 +1,7 @@
 import * as R from 'ramda';
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import DataTable from 'dash-table/dash/DataTable';
+import DataTable from 'dash-table/dash/LazyDataTable';
 import { ColumnType } from 'dash-table/components/Table/props';
 import { generateMockData } from '../../../demo/data';
 

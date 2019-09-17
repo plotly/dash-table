@@ -2,7 +2,8 @@ import * as R from 'ramda';
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import random from 'core/math/random';
-import DataTable from 'dash-table/dash/DataTable';
+import DataTable from 'dash-table/dash/LazyDataTable';
+
 const setProps = () => { };
 
 const columns = ['a', 'b', 'c'];
