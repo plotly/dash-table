@@ -37,17 +37,18 @@ function rowSelectCell(idx: number, rowSelectable: Selection, selectedRows: numb
     return (<td
         key='select'
         className='dash-select-cell'
-        style={{ width: `30px`, maxWidth: `30px`, minWidth: `30px` }}
+        style={{ width: `30px`, maxWidth: `30px`, minWidth: `30px`, textAlign: 'center' }}
     >
         <input
             type={rowSelectable === 'single' ? 'radio' : 'checkbox'}
+            style={{ verticalAlign: 'middle' }}
             name='row-select'
-            checked={R.contains(idx, selectedRows)}
+            checked={R.includes(idx, selectedRows)}
             onChange={() => {
                 const newSelectedRows = rowSelectable === 'single' ?
                     [idx] :
                     R.ifElse(
-                        R.contains(idx),
+                        R.includes(idx),
                         R.without([idx]),
                         R.append(idx)
                     )(selectedRows);

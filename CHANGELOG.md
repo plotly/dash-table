@@ -2,6 +2,38 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.3.0] - 2019-09-17
+### Added
+[#566](https://github.com/plotly/dash-table/pull/566)
+- Support persisting user edits when the component or the page is reloaded. New props are `persistence`, `persistence_type`, and `persisted_props`. Set `persistence` to a truthy value to enable, the other two modify persistence behavior. See [plotly/dash#903](https://github.com/plotly/dash/pull/903) for more details.
+
+[#319](https://github.com/plotly/dash-table/issues/319)
+- New 'loading_state' prop that contains information about which prop, if any, is being computed.
+- Table no longer allows for editing while the `data` prop is loading.
+
+### Fixed
+[#578](https://github.com/plotly/dash-table/pull/578)
+- Fix [#576](https://github.com/plotly/dash-table/issues/576), editing column names or deleting columns while other columns are hidden causing the hidden columns to be lost.
+- Fix an unreported bug that clicking "Cancel" at the column name edit prompt would clear the name, rather than leaving it unchanged as it should.
+
+[#569](https://github.com/plotly/dash-table/issues/569), [#544](https://github.com/plotly/dash-table/issues/544)
+- Allow empty strings in all `filter_query` (e.g filter_query: '{colA} eq ""')
+
+[#567](https://github.com/plotly/dash-table/issues/567)
+- Add support for missing `border-radius` in style_** props
+- Fix table's inner vs. outer container styling
+
+[#18](https://github.com/plotly/dash-table/issues/18)
+- Fix row selection vertical and horizontal alignment
+
+[#103](https://github.com/plotly/dash-table/issues/103)
+- Simplify usage for multi-line cells and ellipsis. The cell's content now inherits the value of
+`white-space`, `overflow` and `text-overflow` from its parent, making it possible to style
+multi-line & ellipsis with `style_data` and other style props.
+
+[#583](https://github.com/plotly/dash-table/issues/583)
+- Fix regression when editing the content of a cell in a scrolled virtualized table
+
 ## [4.2.0] - 2019-08-27
 ### Added
 [#317](https://github.com/plotly/dash-table/issues/317)
