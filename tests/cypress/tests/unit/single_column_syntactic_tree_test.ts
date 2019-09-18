@@ -7,6 +7,11 @@ const COLUMN_ANY: SingleColumnConfig = {
     type: ColumnType.Any
 };
 
+const COLUMN_DATE: SingleColumnConfig = {
+    id: 'a',
+    type: ColumnType.Datetime
+};
+
 const COLUMN_NUMERIC: SingleColumnConfig = {
     id: 'a',
     type: ColumnType.Numeric
@@ -110,9 +115,29 @@ describe('Single Column Syntax Tree', () => {
         const tree = new SingleColumnSyntaxTree('"1"', COLUMN_TEXT);
 
         expect(tree.isValid).to.equal(true);
+        expect(tree.evaluate({ a: 1 })).to.equal(true);
+        expect(tree.evaluate({ a: 2 })).to.equal(false);
         expect(tree.evaluate({ a: '1' })).to.equal(true);
         expect(tree.evaluate({ a: '2' })).to.equal(false);
 
         expect(tree.toQueryString()).to.equal('{a} contains "1"');
+    });
+
+    ['1975', '"1975"'].forEach(value => {
+        it(`can be expression '${value}' with datetime column type`, () => {
+            const tree = new SingleColumnSyntaxTree(value, COLUMN_DATE);
+
+            expect(tree.evaluate({ a: 1975 })).to.equal(true);
+            expect(tree.evaluate({ a: '1975' })).to.equal(true);
+            expect(tree.evaluate({ a: '1975-01' })).to.equal(true);
+            expect(tree.evaluate({ a: '1975-01-01' })).to.equal(true);
+            expect(tree.evaluate({ a: '1975-01-01 01:01:01' })).to.equal(true);
+
+            expect(tree.evaluate({ a: 1976 })).to.equal(false);
+            expect(tree.evaluate({ a: '1976' })).to.equal(false);
+            expect(tree.evaluate({ a: '1976-01' })).to.equal(false);
+            expect(tree.evaluate({ a: '1976-01-01' })).to.equal(false);
+            expect(tree.evaluate({ a: '1976-01-01 01:01:01' })).to.equal(false);
+        });
     });
 });
