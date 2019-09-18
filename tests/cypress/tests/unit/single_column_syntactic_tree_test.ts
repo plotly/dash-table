@@ -79,7 +79,9 @@ describe('Single Column Syntax Tree', () => {
         const tree = new SingleColumnSyntaxTree('1', COLUMN_UNDEFINED);
 
         expect(tree.isValid).to.equal(true);
-        expect(tree.evaluate({ a: 1 })).to.equal(true);
+        expect(tree.evaluate({ a: '1' })).to.equal(true);
+        expect(tree.evaluate({ a: '2' })).to.equal(false);
+        expect(tree.evaluate({ a: 1 })).to.equal(false);
         expect(tree.evaluate({ a: 2 })).to.equal(false);
 
         expect(tree.toQueryString()).to.equal('{a} contains 1');

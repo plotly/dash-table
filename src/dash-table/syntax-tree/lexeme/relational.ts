@@ -50,16 +50,12 @@ const LEXEME_BASE = {
 };
 
 export const contains: IUnboundedLexeme = R.merge({
-    evaluate: relationalEvaluator(([op, exp]) => {
-        if (R.isNil(op) || R.isNil(exp)) {
-            return false;
-        }
-
-        op = typeof op === 'number' ? op.toString() : op;
-        exp = typeof exp === 'number' ? exp.toString() : exp;
-
-        return op.toString().indexOf(exp.toString()) !== -1;
-    }),
+    evaluate: relationalEvaluator(([op, exp]) =>
+        !R.isNil(exp) &&
+        !R.isNil(op) &&
+        (R.type(exp) === 'String' || R.type(op) === 'String') &&
+        op.toString().indexOf(exp.toString()) !== -1
+    ),
     subType: RelationalOperator.Contains,
     regexp: /^(contains)/i
 }, LEXEME_BASE);

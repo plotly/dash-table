@@ -75,7 +75,7 @@ describe('Dash Table Queries', () => {
                 describe('contains', () => {
                     processCases(c.syntaxer, [
                         { name: 'compares "11" to 1', query: `${c.hideOperand ? '' : '{a} '}contains 1`, target: { a: '11' }, valid: true, evaluate: true },
-                        { name: 'compares 11 to 1', query: `${c.hideOperand ? '' : '{a} '}contains 1`, target: { a: 11 }, valid: true, evaluate: true },
+                        { name: 'cannot compare 11 to 1', query: `${c.hideOperand ? '' : '{a} '}contains 1`, target: { a: 11 }, valid: true, evaluate: false },
                         { name: 'compares "11" to "1"', query: `${c.hideOperand ? '' : '{a} '}contains "1"`, target: { a: '11' }, valid: true, evaluate: true },
                         { name: 'compares 11 to "1"', query: `${c.hideOperand ? '' : '{a} '}contains "1"`, target: { a: 11 }, valid: true, evaluate: true },
                         { name: 'compares "1" to "1.0"', query: `${c.hideOperand ? '' : '{a} '}contains "1.0"`, target: { a: '1' }, valid: true, evaluate: false },
