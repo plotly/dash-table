@@ -6,28 +6,19 @@ import { LexemeType, boundLexeme } from 'core/syntax-tree/lexicon';
 import { ColumnType, IColumn } from 'dash-table/components/Table/props';
 
 import { fieldExpression } from './lexeme/expression';
-import { equal, RelationalOperator, contains, dateStartsWith } from './lexeme/relational';
+import { equal, RelationalOperator } from './lexeme/relational';
 
 import columnLexicon from './lexicon/column';
 
-function getImplicitLexeme(type: ColumnType = ColumnType.Any): ILexemeResult {
+function getDefaultRelationalOperator(type: ColumnType = ColumnType.Any): RelationalOperator {
     switch (type) {
         case ColumnType.Any:
         case ColumnType.Text:
-            return {
-                lexeme: boundLexeme(contains),
-                value: RelationalOperator.Contains
-            };
+            return RelationalOperator.Contains;
         case ColumnType.Datetime:
-            return {
-                lexeme: boundLexeme(dateStartsWith),
-                value: RelationalOperator.DateStartsWith
-            };
+            return RelationalOperator.DateStartsWith;
         case ColumnType.Numeric:
-            return {
-                lexeme: boundLexeme(equal),
-                value: RelationalOperator.Equal
-            };
+            return RelationalOperator.Equal;
     }
 }
 
@@ -58,7 +49,10 @@ function modifyLex(config: SingleColumnConfig, res: ILexerResult) {
     } else if (isExpression(res.lexemes)) {
         res.lexemes = [
             { lexeme: boundLexeme(fieldExpression), value: `{${config.id}}` },
-            getImplicitLexeme(config.type),
+            {
+                lexeme: boundLexeme(equal),
+                value: getDefaultRelationalOperator(config.type)
+            },
             ...res.lexemes
         ];
     }
