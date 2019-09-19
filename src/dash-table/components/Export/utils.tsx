@@ -1,13 +1,13 @@
 import * as R from 'ramda';
 import XLSX from 'xlsx';
-import { Data } from 'dash-table/components/Table/props';
+import { Data, ExportHeaders } from 'dash-table/components/Table/props';
 
 interface IMergeObject {
     s: {r: number, c: number};
     e: {r: number, c: number};
 }
 
-export function transformMultDimArray(array: (string | string[])[], maxLength: number): string[][] {
+export function transformMultiDimArray(array: (string | string[])[], maxLength: number): string[][] {
     const newArray: string[][] = array.map(row => {
         if (row instanceof Array && row.length < maxLength) {
             return row.concat(Array(maxLength - row.length).fill(''));
@@ -53,12 +53,12 @@ export function createWorkbook(ws: XLSX.WorkSheet) {
     return wb;
 }
 
-export function createWorksheet(heading: string[][], data: Data, columnID: string[], exportHeader: string, mergeDuplicateHeaders: boolean) {
+export function createWorksheet(heading: string[][], data: Data, columnID: string[], exportHeader: ExportHeaders, mergeDuplicateHeaders: boolean) {
     const ws = XLSX.utils.aoa_to_sheet([]);
 
     data = R.map(R.pick(columnID))(data);
 
-    if (exportHeader === 'display' || exportHeader === 'names' || exportHeader === 'none') {
+    if (exportHeader === ExportHeaders.Display || exportHeader === ExportHeaders.Names || exportHeader === ExportHeaders.None) {
         XLSX.utils.sheet_add_json(ws, heading, { skipHeader: true });
 
         const contentOptions = heading.length > 0 ?
@@ -67,16 +67,16 @@ export function createWorksheet(heading: string[][], data: Data, columnID: strin
 
         XLSX.utils.sheet_add_json(ws, data, contentOptions);
 
-        if (exportHeader === 'display' && mergeDuplicateHeaders) {
+        if (exportHeader === ExportHeaders.Display && mergeDuplicateHeaders) {
             ws['!merges'] = getMergeRanges(heading);
         }
-    } else if (exportHeader === 'ids') {
+    } else if (exportHeader === ExportHeaders.Ids) {
         XLSX.utils.sheet_add_json(ws, data, { header: columnID });
     }
     return ws;
 }
 
 export function createHeadings(columnHeaders: (string | string[])[], maxLength: number) {
-    const transformedArray = transformMultDimArray(columnHeaders, maxLength);
+    const transformedArray = transformMultiDimArray(columnHeaders, maxLength);
     return R.transpose(transformedArray);
 }
