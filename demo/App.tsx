@@ -6,7 +6,6 @@ import Environment from 'core/environment';
 import { memoizeOne } from 'core/memoizer';
 import Logger from 'core/Logger';
 import AppState, { AppMode, AppFlavor } from './AppMode';
-import memoizerCache from 'core/cache/memoizer';
 
 import './style.less';
 
