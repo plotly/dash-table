@@ -14,6 +14,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [#546](https://github.com/plotly/dash-table/issues/546)
 - New prop `export_columns` that takes values `all` or `visible` (default). This prop controls the columns used during export
 
+[#591](https://github.com/plotly/dash-table/issues/591)
+- Fixed row and column selection when multiple tables are present
+
 ## [4.3.0] - 2019-09-17
 ### Added
 [#566](https://github.com/plotly/dash-table/pull/566)
