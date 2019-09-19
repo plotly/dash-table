@@ -75,8 +75,6 @@ class App extends Component<any, any> {
         </div>);
     }
 
-    private propCache = memoizerCache<[string]>()(R.clone);
-
     private setProps = memoizeOne(() => {
         return (newProps: any) => {
             Logger.debug('--->', newProps);
