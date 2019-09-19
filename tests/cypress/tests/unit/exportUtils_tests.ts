@@ -210,16 +210,20 @@ describe('export', () => {
     });
 
     describe('createWorksheet ', () => {
-        const Headings =    [['rows', 'rows', 'b'],
-                            ['rows', 'c', 'c'],
-                            ['rows', 'e', 'f'],
-                            ['rows', 'rows', 'rows']];
-        const data = [
-                {col1: 1, col2: 2, col3: 3},
-                {col1: 2, col2: 3, col3: 4},
-                {col1: 1, col2: 2, col3: 3}
+        const Headings = [
+            ['rows', 'rows', 'b'],
+            ['rows', 'c', 'c'],
+            ['rows', 'e', 'f'],
+            ['rows', 'rows', 'rows']
         ];
-        const columnID = ['col1', 'col2', 'col3'];
+
+        const data = [
+            { col1: 1, col2: 2, col3: 'x', col4: 3 },
+            { col1: 2, col2: 3, col3: 'x', col4: 4 },
+            { col1: 1, col2: 2, col3: 'x', col4: 3 }
+        ];
+
+        const columnID = ['col1', 'col2', 'col4'];
         it('create sheet with column names as headers for name or display header mode', () => {
             const wsName = createWorksheet(Headings, data, columnID, 'names', true);
             const wsDisplay = createWorksheet(Headings, data, columnID, 'display', true);
@@ -266,7 +270,7 @@ describe('export', () => {
                 B2: {t: 'n', v: 2},
                 B3: {t: 'n', v: 3},
                 B4: {t: 'n', v: 2},
-                C1: {t: 's', v: 'col3'},
+                C1: {t: 's', v: 'col4'},
                 C2: {t: 'n', v: 3},
                 C3: {t: 'n', v: 4},
                 C4: {t: 'n', v: 3}};
@@ -290,9 +294,9 @@ describe('export', () => {
         });
         it('create sheet with undefined column for clearable columns', () => {
             const newData = [
-                {col2: 2, col3: 3},
-                {col2: 3, col3: 4},
-                {col2: 2, col3: 3}
+                {col2: 2, col4: 3},
+                {col2: 3, col4: 4},
+                {col2: 2, col4: 3}
             ];
             const ws = createWorksheet(Headings, newData, columnID, 'display', false);
             const expectedWS = {A1: {t: 's', v: 'rows'},
