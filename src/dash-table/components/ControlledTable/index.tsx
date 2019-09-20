@@ -37,6 +37,8 @@ import queryLexicon from 'dash-table/syntax-tree/lexicon/query';
 
 import dataLoading from 'dash-table/derived/table/data_loading';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 const DEFAULT_STYLE = {
     width: '100%'
 };
@@ -867,9 +869,12 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                 </div>
             </div>
             {!this.displayPagination ? null : (
-                <div>
-                    <button className='previous-page' onClick={this.loadPrevious}>Previous</button>
-                    <button className='next-page' onClick={this.loadNext}>Next</button>
+                <div className='previous-next-container'>
+                    <button className='first-page' onClick={this.loadFirst} disabled={this.props.page_current === 0}><FontAwesomeIcon icon='angle-double-left' /></button>
+                    <button className='previous-page' onClick={this.loadPrevious} disabled={this.props.page_current === 0}><FontAwesomeIcon icon='angle-left' /></button>
+                    <div className='current-page'>{this.props.page_current + 1} / {this.lastPage() + 1}</div>
+                    <button className='next-page' onClick={this.loadNext} disabled={this.props.page_current === this.lastPage()}><FontAwesomeIcon icon='angle-right' /></button>
+                    <button className='last-page' onClick={this.loadLast} disabled={this.props.page_current === this.lastPage()}><FontAwesomeIcon icon='angle-double-right' /></button>
                 </div>
             )}
         </div>);
