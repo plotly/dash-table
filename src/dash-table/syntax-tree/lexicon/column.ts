@@ -1,7 +1,7 @@
 import {
     fieldExpression,
     stringExpression,
-    valueExpression
+    permissiveValueExpression
 } from '../lexeme/expression';
 import {
     contains,
@@ -60,8 +60,8 @@ const lexicon: ILexeme[] = [
     })),
     ...[
         fieldExpression,
-        stringExpression,
-        valueExpression
+        permissiveValueExpression,
+        stringExpression
     ].map(exp => ({
         ...exp,
         if: ifExpression,
