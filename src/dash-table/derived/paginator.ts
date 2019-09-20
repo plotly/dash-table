@@ -11,6 +11,9 @@ import {
 export interface IPaginator {
     loadNext(): void;
     loadPrevious(): void;
+    loadFirst(): void;
+    loadLast(): void;
+    lastPage: number;
 }
 
 export function lastPage(data: Data, page_size: number) {
@@ -19,7 +22,9 @@ export function lastPage(data: Data, page_size: number) {
 
 function getBackEndPagination(
     page_current: number,
-    setProps: SetProps
+    setProps: SetProps,
+    data: Data,
+    page_size: number
 ): IPaginator {
     return {
         loadNext: () => {
@@ -33,7 +38,16 @@ function getBackEndPagination(
 
             page_current--;
             setProps({ page_current, ...clearSelection });
-        }
+        },
+        loadFirst: () => {
+            page_current = 0;
+            setProps({ page_current, ...clearSelection });
+        },
+        loadLast: () => {
+            page_current = lastPage(data, page_size);
+            setProps({ page_current, ...clearSelection });
+        },
+        lastPage: lastPage(data, page_size)
     };
 }
 
@@ -61,14 +75,26 @@ function getFrontEndPagination(
 
             page_current--;
             setProps({ page_current, ...clearSelection });
-        }
+        },
+        loadFirst: () => {
+            page_current = 0;
+            setProps({ page_current, ...clearSelection });
+        },
+        loadLast: () => {
+            page_current = lastPage(data, page_size);
+            setProps({ page_current, ...clearSelection });
+        },
+        lastPage: lastPage(data, page_size)
     };
 }
 
 function getNoPagination() {
     return {
         loadNext: () => { },
-        loadPrevious: () => { }
+        loadPrevious: () => { },
+        loadFirst: () => { },
+        loadLast: () => { },
+        lastPage: 0
     };
 }
 
@@ -85,7 +111,7 @@ const getter = (
         case TableAction.Native:
             return getFrontEndPagination(page_current, page_size, setProps, data);
         case TableAction.Custom:
-            return getBackEndPagination(page_current, setProps);
+            return getBackEndPagination(page_current, setProps, data, page_size);
         default:
             throw new Error(`Unknown pagination mode: '${page_action}'`);
     }
