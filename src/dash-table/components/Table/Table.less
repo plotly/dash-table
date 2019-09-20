@@ -140,6 +140,35 @@
     }
 }
 
+.previous-next-container {
+    display: inline-block;
+    float: right;
+    padding: 5px 0px;
+}
+
+button.previous-page, button.next-page, .current-page {
+    display: inline-block;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.current-page {
+    font-family: monospace;
+}
+
+button.previous-page, button.next-page, button.first-page, button.last-page {
+    transition-duration: 400ms;
+    padding: 5px;
+    border: none;
+}
+
+button.previous-page:hover, button.next-page:hover, button.first-page:hover, button.last-page:hover {
+    color: hotpink;
+}
+button.previous-page:hover:disabled, button.next-page:hover:disabled, button.first-page:hover:disabled, button.last-page:hover:disabled {
+    color: graytext
+}
+
 .dash-spreadsheet-container {
     .reset-css();
     display: flex;
