@@ -59,7 +59,7 @@ describe('filter', () => {
         DashTable.getFilterById('ddd').within(() => cy.get('input').should('have.value', 'lt 20000'));
     });
 
-    it('handles invalid queries', () => {
+    it('allows permissive syntax queries but not invalid queries', () => {
         let cell_0;
         let cell_1;
 
@@ -89,10 +89,10 @@ describe('filter', () => {
         DashTable.getFilterById('ddd').within(() => cy.get('input').should('have.value', '20 a000'));
         DashTable.getFilterById('eee').within(() => cy.get('input').should('have.value', 'is prime2'));
 
-        DashTable.getFilterById('bbb').should('have.class', 'invalid');
+        DashTable.getFilterById('bbb').should('have.class', 'valid');
         DashTable.getFilterById('ccc').should('have.class', 'invalid');
-        DashTable.getFilterById('ddd').should('have.class', 'invalid');
-        DashTable.getFilterById('eee').should('have.class', 'invalid');
+        DashTable.getFilterById('ddd').should('have.class', 'valid');
+        DashTable.getFilterById('eee').should('have.class', 'valid');
     });
 
     it('filters `Text` columns with `contains` without operator', () => {
