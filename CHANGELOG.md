@@ -10,6 +10,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [#598](https://github.com/plotly/dash-table/issues/598)
 - Allow values with whitespaces in column filters
 
+[#597](https://github.com/plotly/dash-table/issues/597)
+- Add `is blank` unary operator. Returns true for `undefined`, `null` and `''`.
+
 ### Fixed
 [#460](https://github.com/plotly/dash-table/issues/460)
 - The `datestartswith` relational operator now supports number comparison
