@@ -632,6 +632,24 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         paginator.loadPrevious();
     }
 
+    loadFirst = () => {
+        const { paginator } = this.props;
+
+        paginator.loadFirst();
+    }
+
+    loadLast = () => {
+        const { paginator } = this.props;
+
+        paginator.loadLast();
+    }
+
+    lastPage = () => {
+        const { paginator } = this.props;
+
+        return paginator.lastPage;
+    }
+
     applyStyle = () => {
         const {
             fixed_columns,
