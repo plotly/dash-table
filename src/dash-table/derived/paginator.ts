@@ -13,7 +13,7 @@ export interface IPaginator {
     loadPrevious(): void;
     loadFirst(): void;
     loadLast(): void;
-    lastPage: number;
+    lastPage: number | undefined;
 }
 
 export function lastPage(data: Data, page_size: number) {
@@ -23,8 +23,7 @@ export function lastPage(data: Data, page_size: number) {
 function getBackEndPagination(
     page_current: number,
     setProps: SetProps,
-    data: Data,
-    page_size: number
+    max_page_count: number | undefined
 ): IPaginator {
     return {
         loadNext: () => {
@@ -44,10 +43,12 @@ function getBackEndPagination(
             setProps({ page_current, ...clearSelection });
         },
         loadLast: () => {
-            page_current = lastPage(data, page_size);
-            setProps({ page_current, ...clearSelection });
+            if (max_page_count !== undefined) {
+                page_current = max_page_count;
+                setProps({ page_current, ...clearSelection });
+            }
         },
-        lastPage: lastPage(data, page_size)
+        lastPage: max_page_count
     };
 }
 
@@ -102,6 +103,7 @@ const getter = (
     page_action: TableAction,
     page_current: number,
     page_size: number,
+    max_page_count: number | undefined,
     setProps: SetProps,
     data: Data
 ): IPaginator => {
@@ -111,7 +113,7 @@ const getter = (
         case TableAction.Native:
             return getFrontEndPagination(page_current, page_size, setProps, data);
         case TableAction.Custom:
-            return getBackEndPagination(page_current, setProps, data, page_size);
+            return getBackEndPagination(page_current, setProps, max_page_count);
         default:
             throw new Error(`Unknown pagination mode: '${page_action}'`);
     }

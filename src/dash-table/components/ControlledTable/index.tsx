@@ -829,6 +829,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             merge_duplicate_headers
         };
 
+        const lastPage = this.lastPage();
+
         return (<div
             id={id}
             onCopy={this.onCopy}
@@ -869,13 +871,40 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                     </div>))}
                 </div>
             </div>
-            {!this.displayPagination || this.lastPage() === 0 ? null : (
+            {!this.displayPagination || lastPage === 0 ? null : (
                 <div className='previous-next-container'>
-                    <button className='first-page' onClick={this.loadFirst} disabled={this.props.page_current === 0}><FontAwesomeIcon icon='angle-double-left' /></button>
-                    <button className='previous-page' onClick={this.loadPrevious} disabled={this.props.page_current === 0}><FontAwesomeIcon icon='angle-left' /></button>
-                    <div className='current-page'>{this.props.page_current + 1} / {this.lastPage() + 1}</div>
-                    <button className='next-page' onClick={this.loadNext} disabled={this.props.page_current === this.lastPage()}><FontAwesomeIcon icon='angle-right' /></button>
-                    <button className='last-page' onClick={this.loadLast} disabled={this.props.page_current === this.lastPage()}><FontAwesomeIcon icon='angle-double-right' /></button>
+                    <button
+                        className='first-page'
+                        onClick={this.loadFirst}
+                        disabled={this.props.page_current === 0}>
+                        <FontAwesomeIcon icon='angle-double-left' />
+                    </button>
+
+                    <button
+                        className='previous-page'
+                        onClick={this.loadPrevious}
+                        disabled={this.props.page_current === 0}>
+                        <FontAwesomeIcon icon='angle-left' />
+                    </button>
+
+                    <div className='current-page'>
+                        {this.props.page_current + 1} {lastPage !== undefined ? ' / ' : ''}
+                        {lastPage !== undefined ? lastPage + 1 : ''}
+                    </div>
+
+                    <button
+                        className='next-page'
+                        onClick={this.loadNext}
+                        disabled={this.props.page_current === lastPage}>
+                        <FontAwesomeIcon icon='angle-right' />
+                    </button>
+
+                    <button
+                        className='last-page'
+                        onClick={this.loadLast}
+                        disabled={this.props.page_current === lastPage || lastPage === undefined}>
+                        <FontAwesomeIcon icon='angle-double-right' />
+                    </button>
                 </div>
             )}
         </div>);
