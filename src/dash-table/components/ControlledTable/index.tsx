@@ -869,7 +869,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                     </div>))}
                 </div>
             </div>
-            {!this.displayPagination ? null : (
+            {!this.displayPagination || this.lastPage() === 0 ? null : (
                 <div className='previous-next-container'>
                     <button className='first-page' onClick={this.loadFirst} disabled={this.props.page_current === 0}><FontAwesomeIcon icon='angle-double-left' /></button>
                     <button className='previous-page' onClick={this.loadPrevious} disabled={this.props.page_current === 0}><FontAwesomeIcon icon='angle-left' /></button>
