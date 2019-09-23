@@ -757,7 +757,8 @@ export const propTypes = {
             label: PropTypes.string.isRequired,
             value: PropTypes.oneOfType([
                 PropTypes.number,
-                PropTypes.string
+                PropTypes.string,
+                PropTypes.bool
             ]).isRequired
         })).isRequired
     })),
@@ -779,7 +780,8 @@ export const propTypes = {
             label: PropTypes.string.isRequired,
             value: PropTypes.oneOfType([
                 PropTypes.number,
-                PropTypes.string
+                PropTypes.string,
+                PropTypes.bool
             ]).isRequired
         })).isRequired
     })),
@@ -797,7 +799,8 @@ export const propTypes = {
                     label: PropTypes.string.isRequired,
                     value: PropTypes.oneOfType([
                         PropTypes.number,
-                        PropTypes.string
+                        PropTypes.string,
+                        PropTypes.bool
                     ]).isRequired
                 })).isRequired
             })
