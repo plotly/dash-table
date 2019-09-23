@@ -1,7 +1,7 @@
 import * as R from 'ramda';
 import { WorkBook } from 'xlsx/types';
 
-import { Data } from 'dash-table/components/Table/props';
+import { Data, ExportHeaders } from 'dash-table/components/Table/props';
 import LazyLoader from 'dash-table/LazyLoader';
 
 interface IMergeObject {
@@ -49,20 +49,26 @@ export function getMergeRanges(array: string[][]) {
     return R.filter((item: IMergeObject) => item.s.c !== item.e.c || item.s.r !== item.e.r, apiMergeArray);
 }
 
-export async function createWorkbook(heading: string[][], data: Data, columnID: string[], exportHeader: string, mergeDuplicateHeaders: boolean) {
+export async function createWorkbook(heading: string[][], data: Data, columnID: string[], exportHeader: string, mergeDuplicateHeaders: boolean ) {
     const XLSX = await LazyLoader.xlsx;
 
-    const ws = XLSX.utils.aoa_to_sheet(heading);
-    if (exportHeader === 'display' || exportHeader === 'names' || exportHeader === 'none') {
-        XLSX.utils.sheet_add_json(ws, data, {
-            header: columnID,
-            skipHeader: true,
-            origin: heading.length
-        });
-        if (exportHeader === 'display' && mergeDuplicateHeaders) {
+    const ws = XLSX.utils.aoa_to_sheet([]);
+
+    data = R.map(R.pick(columnID))(data);
+
+    if (exportHeader === ExportHeaders.Display || exportHeader === ExportHeaders.Names || exportHeader === ExportHeaders.None) {
+        XLSX.utils.sheet_add_json(ws, heading, { skipHeader: true });
+
+        const contentOptions = heading.length > 0 ?
+            { header: columnID, skipHeader: true, origin: heading.length } :
+            { skipHeader: true };
+
+        XLSX.utils.sheet_add_json(ws, data, contentOptions);
+
+        if (exportHeader === ExportHeaders.Display && mergeDuplicateHeaders) {
             ws['!merges'] = getMergeRanges(heading);
         }
-    } else if (exportHeader === 'ids') {
+    } else if (exportHeader === ExportHeaders.Ids) {
         XLSX.utils.sheet_add_json(ws, data, { header: columnID });
     }
 

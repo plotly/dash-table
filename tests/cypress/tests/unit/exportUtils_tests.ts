@@ -1,4 +1,5 @@
 import * as R from 'ramda';
+import { ExportHeaders } from 'dash-table/components/Table/props';
 
 import { transformMultiDimArray, getMergeRanges, createHeadings, createWorkbook } from 'dash-table/components/Export/utils';
 
@@ -211,20 +212,24 @@ describe('export', () => {
     });
 
     describe('createWorksheet ', () => {
-        const Headings =    [['rows', 'rows', 'b'],
-                            ['rows', 'c', 'c'],
-                            ['rows', 'e', 'f'],
-                            ['rows', 'rows', 'rows']];
-        const data = [
-                {col1: 1, col2: 2, col3: 3},
-                {col1: 2, col2: 3, col3: 4},
-                {col1: 1, col2: 2, col3: 3}
+        const Headings = [
+            ['rows', 'rows', 'b'],
+            ['rows', 'c', 'c'],
+            ['rows', 'e', 'f'],
+            ['rows', 'rows', 'rows']
         ];
-        const columnID = ['col1', 'col2', 'col3'];
+
+        const data = [
+            { col1: 1, col2: 2, col3: 'x', col4: 3 },
+            { col1: 2, col2: 3, col3: 'x', col4: 4 },
+            { col1: 1, col2: 2, col3: 'x', col4: 3 }
+        ];
+
+        const columnID = ['col1', 'col2', 'col4'];
         it('create sheet with column names as headers for name or display header mode', async () => {
-            const wsName = await createWorkbook(Headings, data, columnID, 'names', true);
-            const wsDisplay = await createWorkbook(Headings, data, columnID, 'display', true);
-            const wsDisplayNoMerge = await createWorkbook(Headings, data, columnID, 'display', false);
+            const wsName = await createWorkbook(Headings, data, columnID, ExportHeaders.Names, true);
+            const wsDisplay = await createWorkbook(Headings, data, columnID, ExportHeaders.Display, true);
+            const wsDisplayNoMerge = await createWorkbook(Headings, data, columnID, ExportHeaders.Display, false);
             const expectedWS = {
                 A1: {t: 's', v: 'rows'},
                 A2: {t: 's', v: 'rows'},
@@ -257,7 +262,7 @@ describe('export', () => {
             expect(wsDisplay.Sheets.SheetJS).to.deep.equal(expectedWSDisplay);
         });
         it('create sheet with column ids as headers', async () => {
-            const ws = await createWorkbook(Headings, data, columnID, 'ids', true);
+            const ws = await createWorkbook(Headings, data, columnID, ExportHeaders.Ids, true);
             const expectedWS = {
                 A1: {t: 's', v: 'col1'},
                 A2: {t: 'n', v: 1},
@@ -267,7 +272,7 @@ describe('export', () => {
                 B2: {t: 'n', v: 2},
                 B3: {t: 'n', v: 3},
                 B4: {t: 'n', v: 2},
-                C1: {t: 's', v: 'col3'},
+                C1: {t: 's', v: 'col4'},
                 C2: {t: 'n', v: 3},
                 C3: {t: 'n', v: 4},
                 C4: {t: 'n', v: 3}};
@@ -275,7 +280,7 @@ describe('export', () => {
             expect(ws.Sheets.SheetJS).to.deep.equal(expectedWS);
         });
         it('create sheet with no headers', async () => {
-            const ws = await createWorkbook([], data, columnID, 'none', true);
+            const ws = await createWorkbook([], data, columnID, ExportHeaders.None, true);
             const expectedWS = {
                 A1: {t: 'n', v: 1},
                 A2: {t: 'n', v: 2},
@@ -291,11 +296,11 @@ describe('export', () => {
         });
         it('create sheet with undefined column for clearable columns', async () => {
             const newData = [
-                {col2: 2, col3: 3},
-                {col2: 3, col3: 4},
-                {col2: 2, col3: 3}
+                {col2: 2, col4: 3},
+                {col2: 3, col4: 4},
+                {col2: 2, col4: 3}
             ];
-            const ws = await createWorkbook(Headings, newData, columnID, 'display', false);
+            const ws = await createWorkbook(Headings, newData, columnID, ExportHeaders.Display', false);
             const expectedWS = {A1: {t: 's', v: 'rows'},
                     A2: {t: 's', v: 'rows'},
                     A3: {t: 's', v: 'rows'},
