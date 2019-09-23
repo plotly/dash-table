@@ -300,7 +300,7 @@ describe('export', () => {
                 {col2: 3, col4: 4},
                 {col2: 2, col4: 3}
             ];
-            const ws = await createWorkbook(Headings, newData, columnID, ExportHeaders.Display', false);
+            const ws = await createWorkbook(Headings, newData, columnID, ExportHeaders.Display, false);
             const expectedWS = {A1: {t: 's', v: 'rows'},
                     A2: {t: 's', v: 'rows'},
                     A3: {t: 's', v: 'rows'},
