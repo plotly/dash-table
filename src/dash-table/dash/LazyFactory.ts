@@ -21,13 +21,7 @@ export default (
         isReady,
         get: lazy(async () => {
             const res = await promise();
-            // let __r: any;
-            // const p = new Promise(_r => __r = _r);
-            // setTimeout(() => __r(), 10000);
 
-            // await p;
-
-            // delay `isReady`
             setTimeout(async () => {
                 await resolve(true);
                 state.isReady = true;
