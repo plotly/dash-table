@@ -103,6 +103,7 @@ describe('Single Column Syntax Tree', () => {
         expect(tree.isValid).to.equal(true);
         expect(tree.evaluate({ a: 'Hello world' })).to.equal(true);
         expect(tree.evaluate({ a: 'Helloworld' })).to.equal(false);
+        expect(tree.toQueryString()).to.equal('{a} contains "Hello world"');
     });
 
     it('`undefined` column type can use `contains`', () => {
