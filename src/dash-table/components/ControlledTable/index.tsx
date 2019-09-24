@@ -36,6 +36,7 @@ import TableTooltip from './fragments/TableTooltip';
 import queryLexicon from 'dash-table/syntax-tree/lexicon/query';
 
 import dataLoading from 'dash-table/derived/table/data_loading';
+import reconcile from 'dash-table/type/reconcile';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -412,7 +413,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         // else we are navigating with arrow keys and extending selection
         // with shift.
 
-        let {minRow, minCol, maxRow, maxCol} = selectionBounds(selected_cells);
+        let { minRow, minCol, maxRow, maxCol } = selectionBounds(selected_cells);
         const selectingDown =
             e.keyCode === KEY_CODES.ARROW_DOWN || e.keyCode === KEY_CODES.ENTER;
         const selectingUp = e.keyCode === KEY_CODES.ARROW_UP;
@@ -461,7 +462,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         }
 
         const finalSelected = makeSelection(
-            {minRow, maxRow, minCol, maxCol},
+            { minRow, maxRow, minCol, maxCol },
             visibleColumns, viewport
         );
 
@@ -505,10 +506,18 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         );
 
         realCells.forEach(cell => {
-            if (visibleColumns[cell[1]].editable) {
+            const column = visibleColumns[cell[1]];
+
+            if (column.editable) {
+                /**
+                 * If the cell can reconcile `null`, use this reconciliation value,
+                 * otherwise use the default `''`.
+                 */
+                const result = reconcile(null, column);
+
                 newData = R.set(
-                    R.lensPath([cell[0], visibleColumns[cell[1]].id]),
-                    '',
+                    R.lensPath([cell[0], column.id]),
+                    result.success ? result.value : '',
                     newData
                 );
             }
@@ -524,7 +533,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
         const e = event;
 
-        const {row, column} = currentCell;
+        const { row, column } = currentCell;
         let nextCoords;
 
         switch (e.keyCode) {
@@ -813,7 +822,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             scrollbarWidth
         );
 
-    /* Tooltip */
+        /* Tooltip */
         let tableTooltip = derivedTooltips(
             currentTooltip,
             tooltip_data,
@@ -872,7 +881,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                             ref={`r${rowIndex}c${columnIndex}`}
                             className={`cell cell-${rowIndex}-${columnIndex} ${c}`}
                         >
-                        {g ? React.cloneElement(g, { style: s.cell }) : g}
+                            {g ? React.cloneElement(g, { style: s.cell }) : g}
                         </div>))}
                     </div>))}
                 </div>
