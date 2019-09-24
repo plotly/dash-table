@@ -46,7 +46,7 @@
     "lint": "run-s private::lint:*",
     "test.server": "run-p --race private::host* private::test.server",
     "test.standalone": "run-p --race private::host_js private::test.standalone",
-    "test.unit": "run-s private::test.python private::test.unit",
+    "test.unit": "run-s build private::test.python private::test.unit",
     "test.visual": "build-storybook && percy-storybook",
     "test.visual-local": "build-storybook",
     "test.watch": "run-p --race \"private::build:js-test-watch\" --race private::host* private::opentests"
