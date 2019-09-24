@@ -5,12 +5,10 @@
 
 # production
 /build
-/dash_table/*.html
-/dash_table/*.js
-/dash_table/*.js.map
-/dash_table/DataTable.py
-/dash_table/metadata.json
-/dash_table/package-info.json
+/dash_table
+!/dash_table/__init__.py
+/dash_table/Format.py
+/dash_table/FormatTemplate.py
 /inst
 /man
 /R
