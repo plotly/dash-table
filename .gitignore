@@ -5,6 +5,15 @@
 
 # production
 /build
+/dash_table/*.html
+/dash_table/*.js
+/dash_table/*.js.map
+/dash_table/DataTable.py
+/dash_table/metadata.json
+/dash_table/package-info.json
+/inst
+/man
+/R
 
 # testing
 /coverage
