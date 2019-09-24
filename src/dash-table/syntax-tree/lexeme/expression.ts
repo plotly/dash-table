@@ -6,7 +6,7 @@ import { ISyntaxTree } from 'core/syntax-tree/syntaxer';
 const FIELD_REGEX = /^{(([^{}\\]|\\.)+)}/;
 const STRING_REGEX = /^(('([^'\\]|\\.)*')|("([^"\\]|\\.)*")|(`([^`\\]|\\.)*`))/;
 const VALUE_REGEX = /^(([^\s'"`{}()\\]|\\.)+)(?:[\s)]|$)/;
-const PERMISSIVE_VALUE_REGEX = /^(([^'"`{}()\\]|\\.)+)(?:$)/;
+const PERMISSIVE_VALUE_REGEX = /^(([^'"`{}()\\]|\\.)+)$/;
 
 const getField = (
     value: string
