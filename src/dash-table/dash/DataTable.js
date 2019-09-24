@@ -3,7 +3,34 @@ import PropTypes from 'prop-types';
 import LazyLoader from 'dash-table/LazyLoader';
 import LazyFactory from './LazyFactory';
 
-const LazyDataTable = LazyFactory(DataTable, () => LazyLoader.dataTable);
+const isLazyComponentReady = (target, promise) => {
+    let resolve;
+    const isReady = new Promise(r => {
+        resolve = r;
+    });
+
+    const state = {
+        isReady,
+        get: lazy(() => {
+            return Promise.resolve(promise()).then(res => {
+                setTimeout(async () => {
+                    await resolve(true);
+                    state.isReady = true;
+                }, 0);
+
+                return res;
+            });
+        })
+    };
+
+    Object.defineProperty(target, '_dashprivate_isLazyComponentReady', {
+        get: () => state.isReady
+    });
+
+    return state.get;
+};
+
+const LazyDataTable = isLazyComponentReady(DataTable, () => LazyLoader.dataTable);
 
 function DataTable(props) {
     return (<Suspense
