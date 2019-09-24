@@ -7,8 +7,8 @@
 /build
 /dash_table
 !/dash_table/__init__.py
-/dash_table/Format.py
-/dash_table/FormatTemplate.py
+!/dash_table/Format.py
+!/dash_table/FormatTemplate.py
 /inst
 /man
 /R
