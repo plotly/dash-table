@@ -903,11 +903,11 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                         >
                         </input>
 
-                        {lastPage !== undefined ? ' / ' : ''}
+                        {lastPage ? ' / ' : ''}
 
-                        <div className='last-page'>
-                            {lastPage !== undefined ? lastPage + 1 : ''}
-                        </div>
+                        {lastPage ? <div className='last-page'>
+                            {lastPage ? lastPage + 1 : ''}
+                        </div> : ''}
                     </div>
 
                     <button
@@ -920,7 +920,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                     <button
                         className='last-page'
                         onClick={this.loadLast}
-                        disabled={this.props.page_current === lastPage || lastPage === undefined}>
+                        disabled={this.props.page_current === lastPage || !lastPage}>
                         <FontAwesomeIcon icon='angle-double-right' />
                     </button>
                 </div>

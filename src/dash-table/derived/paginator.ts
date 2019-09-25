@@ -44,7 +44,7 @@ function getBackEndPagination(
             setProps({ page_current, ...clearSelection });
         },
         loadLast: () => {
-            if (max_page_count !== undefined) {
+            if (max_page_count) {
                 page_current = max_page_count;
                 setProps({ page_current, ...clearSelection });
             }
@@ -66,7 +66,7 @@ function getBackEndPagination(
                 return;
             }
 
-            if (max_page_count !== undefined && page > max_page_count) {
+            if (max_page_count && page > max_page_count) {
                 page_current = max_page_count;
                 setProps({ page_current, ...clearSelection });
                 return;
