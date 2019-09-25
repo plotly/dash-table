@@ -43,6 +43,7 @@
     "private::test.standalone": "cypress run --browser chrome --spec 'tests/cypress/tests/standalone/**/*'",
     "build.watch": "webpack-dev-server --content-base dash_table --mode development --config webpack.dev.config.js",
     "build": "run-s private::build:js private::build:py",
+    "format": "run-s \"private::lint:ts -- --fix\"",
     "lint": "run-s private::lint:*",
     "test.server": "run-p --race private::host* private::test.server",
     "test.standalone": "run-p --race private::host_js private::test.standalone",
