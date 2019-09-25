@@ -26,6 +26,12 @@ function getBackEndPagination(
     setProps: SetProps,
     max_page_count: number | undefined
 ): IPaginator {
+
+    // adjust for zero-indexing
+    if (max_page_count) {
+        max_page_count = Math.max(0, max_page_count - 1);
+    }
+
     return {
         loadNext: () => {
             page_current++;
@@ -58,6 +64,7 @@ function getBackEndPagination(
                 return;
             }
 
+            // adjust for zero-indexing
             page--;
 
             if (page < 0) {
