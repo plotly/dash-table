@@ -14,6 +14,7 @@ export interface IPaginator {
     loadFirst(): void;
     loadLast(): void;
     lastPage: number | undefined;
+    goToPage(page_number: string): void;
 }
 
 export function lastPage(data: Data, page_size: number) {
@@ -48,7 +49,32 @@ function getBackEndPagination(
                 setProps({ page_current, ...clearSelection });
             }
         },
-        lastPage: max_page_count
+        lastPage: max_page_count,
+        goToPage: (page_number: string) => {
+
+            let page = parseInt(page_number, 10);
+
+            if (isNaN(page)) {
+                return;
+            }
+
+            page--;
+
+            if (page < 0) {
+                page_current = 0;
+                setProps({ page_current, ...clearSelection });
+                return;
+            }
+
+            if (max_page_count !== undefined && page > max_page_count) {
+                page_current = max_page_count;
+                setProps({ page_current, ...clearSelection });
+                return;
+            }
+
+            page_current = page;
+            setProps({ page_current, ...clearSelection });
+        }
     };
 }
 
@@ -85,7 +111,32 @@ function getFrontEndPagination(
             page_current = lastPage(data, page_size);
             setProps({ page_current, ...clearSelection });
         },
-        lastPage: lastPage(data, page_size)
+        lastPage: lastPage(data, page_size),
+        goToPage: (page_number: string) => {
+
+            let page = parseInt(page_number, 10);
+
+            if (isNaN(page)) {
+                return;
+            }
+
+            page--;
+
+            if (page < 0) {
+                page_current = 0;
+                setProps({ page_current, ...clearSelection });
+                return;
+            }
+
+            if (page > lastPage(data, page_size)) {
+                page_current = lastPage(data, page_size);
+                setProps({ page_current, ...clearSelection });
+                return;
+            }
+
+            page_current = page;
+            setProps({ page_current, ...clearSelection });
+        }
     };
 }
 
@@ -95,7 +146,8 @@ function getNoPagination() {
         loadPrevious: () => { },
         loadFirst: () => { },
         loadLast: () => { },
-        lastPage: 0
+        lastPage: 0,
+        goToPage: () => { }
     };
 }
 

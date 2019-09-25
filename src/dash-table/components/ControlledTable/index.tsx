@@ -652,6 +652,12 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         return paginator.lastPage;
     }
 
+    goToPage = (page_number: string) => {
+        const { paginator } = this.props;
+
+        paginator.goToPage(page_number);
+    }
+
     applyStyle = () => {
         const {
             fixed_columns,
@@ -887,9 +893,21 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                         <FontAwesomeIcon icon='angle-left' />
                     </button>
 
-                    <div className='current-page'>
-                        {this.props.page_current + 1} {lastPage !== undefined ? ' / ' : ''}
-                        {lastPage !== undefined ? lastPage + 1 : ''}
+                    <div className='page-number'>
+                        <input
+                            type='text'
+                            className='current-page'
+                            onBlur={event => { this.goToPage(event.target.value); event.target.value = ''; }}
+                            placeholder={(this.props.page_current + 1).toString()}
+                            defaultValue=''
+                        >
+                        </input>
+
+                        {lastPage !== undefined ? ' / ' : ''}
+
+                        <div className='last-page'>
+                            {lastPage !== undefined ? lastPage + 1 : ''}
+                        </div>
                     </div>
 
                     <button

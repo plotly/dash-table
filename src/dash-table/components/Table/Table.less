@@ -152,8 +152,37 @@ button.previous-page, button.next-page, .current-page {
     margin-right: 5px;
 }
 
-.current-page {
+.page-number {
     font-family: monospace;
+    display: inline-block;
+}
+
+input.current-page, input.current-page::placeholder {
+    color: black;
+    border: none;
+    width:30px;
+    text-align:right;
+    font-family: monospace;
+    font-size: 10pt;
+    margin: 0.5em;
+}
+
+.page-number > .last-page {
+    min-width: 30px;
+    display: inline-block;
+    margin: 0.5em;
+}
+
+.last-page {
+    width: 30px;
+    display: inline-block;
+}
+
+input.current-page:focus {
+    outline: none;
+}
+input.current-page:focus::placeholder {
+    opacity: 0;
 }
 
 button.previous-page, button.next-page, button.first-page, button.last-page {
