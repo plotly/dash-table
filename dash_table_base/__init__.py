@@ -51,7 +51,7 @@ _js_dist = [
             'https://unpkg.com/dash-table@{}/dash_table/async~dash-table.js'
         ).format(__version__),
         'namespace': package_name,
-        'dynamic': True
+        'async': True
     },
     {
         'relative_package_path': 'async~dash-table.js.map',
@@ -67,7 +67,7 @@ _js_dist = [
             'https://unpkg.com/dash-table@{}/dash_table/async~export.js'
         ).format(__version__),
         'namespace': package_name,
-        'dynamic': True
+        'async': True
     },
     {
         'relative_package_path': 'async~export.js.map',
