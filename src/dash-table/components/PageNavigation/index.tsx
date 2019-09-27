@@ -93,6 +93,6 @@ export default class PageNavigation extends Component<IPageNavigationProps> {
                     <FontAwesomeIcon icon='angle-double-right' />
                 </button>
             </div>
-        ))
+        ));
     }
 }
