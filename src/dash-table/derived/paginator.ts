@@ -83,7 +83,7 @@ function getBackEndPagination(
             return page_count !== undefined && page_current === page_count;
         },
         disableLast: () => {
-            return page_count === undefined ? true : page_current === page_count;
+            return !page_count ? true : page_current === page_count;
         }
     };
 }
