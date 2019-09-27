@@ -15,6 +15,9 @@ export interface IPaginator {
     loadLast(): void;
     lastPage: number | undefined;
     goToPage(page: number): void;
+    disablePrevious(): boolean;
+    disableNext(): boolean;
+    disableLast(): boolean;
 }
 
 export function lastPage(data: Data, page_size: number) {
@@ -67,11 +70,20 @@ function getBackEndPagination(
                 page_current = 0;
             }
 
-            else if (page_count && page > page_count) {
+            if (page_count && page > page_count) {
                 page_current = page_count;
             }
 
             setProps({ page_current, ...clearSelection });
+        },
+        disablePrevious: () => {
+            return page_current === 0;
+        },
+        disableNext: () => {
+            return page_count !== undefined && page_current === page_count;
+        },
+        disableLast: () => {
+            return page_count === undefined ? true : page_current === page_count;
         }
     };
 }
@@ -125,6 +137,15 @@ function getFrontEndPagination(
             }
 
             setProps({ page_current, ...clearSelection });
+        },
+        disablePrevious: () => {
+            return (page_current === 0);
+        },
+        disableNext: () => {
+            return (page_current === lastPage(data, page_size));
+        },
+        disableLast: () => {
+            return (page_current === lastPage(data, page_size));
         }
     };
 }
@@ -136,7 +157,10 @@ function getNoPagination() {
         loadFirst: () => { },
         loadLast: () => { },
         lastPage: 0,
-        goToPage: () => { }
+        goToPage: () => { },
+        disablePrevious: () => true,
+        disableNext: () => true,
+        disableLast: () => true
     };
 }
 
