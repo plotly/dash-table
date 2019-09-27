@@ -117,19 +117,16 @@ function getFrontEndPagination(
 
             page--;
 
+            page_current = page;
+
             if (page < 0) {
                 page_current = 0;
-                setProps({ page_current, ...clearSelection });
-                return;
             }
 
             if (page > lastPage(data, page_size)) {
                 page_current = lastPage(data, page_size);
-                setProps({ page_current, ...clearSelection });
-                return;
             }
 
-            page_current = page;
             setProps({ page_current, ...clearSelection });
         }
     };
