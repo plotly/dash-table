@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { PageNavigationProps } from 'dash-table/components/PageNavigation/props';
+import { IPageNavigationProps } from 'dash-table/components/PageNavigation/props';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export default class PageNavigation extends Component<PageNavigationProps> {
+export default class PageNavigation extends Component<IPageNavigationProps> {
 
-    constructor(props: PageNavigationProps) {
+    constructor(props: IPageNavigationProps) {
         super(props);
     }
 
