@@ -200,16 +200,6 @@ describe('table pagination', () => {
 
             });
 
-            it('on undefined/none', () => {
-
-                cy.visit(`http://localhost:8086?page_action=custom`);
-
-                cy.get('.previous-next-container').should('not.exist');
-
-                DashTable.getCell(0, 0).within(() => cy.get('.dash-cell-value').should('have.html', '1'));
-
-            });
-
             it('on negative/zero values', () => {
                 cy.visit(`http://localhost:8086?page_action=custom&page_count=-1`);
 
@@ -217,6 +207,19 @@ describe('table pagination', () => {
 
                 DashTable.getCell(0, 0).within(() => cy.get('.dash-cell-value').should('have.html', '1'));
             });
+        });
+
+        it('undefined/none', () => {
+
+            cy.visit(`http://localhost:8086?page_action=custom`);
+
+            cy.get('.page-number').children().should('have.length', 1);
+            cy.get('.current-page').should('exist');
+            cy.get('button.next-page').should('not.be.disabled');
+            cy.get('button.last-page').should('be.disabled');
+
+            DashTable.getCell(0, 0).within(() => cy.get('.dash-cell-value').should('have.html', '1'));
+
         });
 
         it('limits pages', () => {
