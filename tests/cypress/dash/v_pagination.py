@@ -24,7 +24,7 @@ app.layout = html.Div([
         ],
         page_current=0,
         page_size=PAGE_SIZE,
-        max_page_count=None
+        page_count=None
     )
 ])
 
@@ -32,7 +32,7 @@ app.layout = html.Div([
 @app.callback(
     [Output('table', 'data'),
      Output('table', 'page_action'),
-     Output('table', 'max_page_count')],
+     Output('table', 'page_count')],
     [Input('table', 'page_current'),
      Input('table', 'page_size'),
      Input('url', 'search')]
@@ -57,7 +57,7 @@ def update_table(page_current, page_size, pagination_mode):
         ].to_dict('records')
 
     return data, mode.get('page_action', 'native'), \
-        int(mode.get('max_page_count')) if mode.get('max_page_count') else None
+        int(mode.get('page_count')) if mode.get('page_count') else None
 
 
 if __name__ == '__main__':

@@ -11,7 +11,7 @@ describe('table pagination', () => {
         describe(`can change pages with ${mode} page_action`, () => {
 
             before(() => {
-                cy.visit(`http://localhost:8086?page_action=${mode}&max_page_count=29`);
+                cy.visit(`http://localhost:8086?page_action=${mode}&page_count=29`);
 
                 // initial state: first page, previous/first buttons disabled
                 DashTable.getCell(0, 0).within(() => cy.get('.dash-cell-value').should('have.html', '1'));
@@ -188,11 +188,11 @@ describe('table pagination', () => {
         });
     });
 
-    describe('handles other max_page_count values', () => {
+    describe('handles other page_count values', () => {
 
         describe('hides pagination', () => {
             it('on single page', () => {
-                cy.visit(`http://localhost:8086?page_action=custom&max_page_count=1`);
+                cy.visit(`http://localhost:8086?page_action=custom&page_count=1`);
 
                 cy.get('.previous-next-container').should('not.exist');
 
@@ -211,7 +211,7 @@ describe('table pagination', () => {
             });
 
             it('on negative/zero values', () => {
-                cy.visit(`http://localhost:8086?page_action=custom&max_page_count=-1`);
+                cy.visit(`http://localhost:8086?page_action=custom&page_count=-1`);
 
                 cy.get('.previous-next-container').should('not.exist');
 
@@ -220,7 +220,7 @@ describe('table pagination', () => {
         });
 
         it('limits pages', () => {
-            cy.visit(`http://localhost:8086?page_action=custom&max_page_count=10`);
+            cy.visit(`http://localhost:8086?page_action=custom&page_count=10`);
             cy.get('button.last-page').click();
 
             cy.get('button.first-page').should('not.be.disabled');
