@@ -38,7 +38,7 @@ import queryLexicon from 'dash-table/syntax-tree/lexicon/query';
 import dataLoading from 'dash-table/derived/table/data_loading';
 import reconcile from 'dash-table/type/reconcile';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import PageNavigation from 'dash-table/components/PageNavigation';
 
 const DEFAULT_STYLE = {
     width: '100%'
@@ -631,42 +631,6 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         ) || page_action === TableAction.Custom;
     }
 
-    loadNext = () => {
-        const { paginator } = this.props;
-
-        paginator.loadNext();
-    }
-
-    loadPrevious = () => {
-        const { paginator } = this.props;
-
-        paginator.loadPrevious();
-    }
-
-    loadFirst = () => {
-        const { paginator } = this.props;
-
-        paginator.loadFirst();
-    }
-
-    loadLast = () => {
-        const { paginator } = this.props;
-
-        paginator.loadLast();
-    }
-
-    lastPage = () => {
-        const { paginator } = this.props;
-
-        return paginator.lastPage;
-    }
-
-    goToPage = (page_number: string) => {
-        const { paginator } = this.props;
-
-        paginator.goToPage(page_number);
-    }
-
     applyStyle = () => {
         const {
             fixed_columns,
@@ -833,7 +797,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             tooltip_duration
         );
 
-        const { export_columns, export_format, export_headers, virtual, merge_duplicate_headers } = this.props;
+        const { export_columns, export_format, export_headers, virtual, merge_duplicate_headers, paginator, page_current } = this.props;
         const buttonProps = {
             export_columns,
             export_format,
@@ -843,8 +807,6 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             export_headers,
             merge_duplicate_headers
         };
-
-        const lastPage = this.lastPage();
 
         return (<div
             id={id}
@@ -886,53 +848,10 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                     </div>))}
                 </div>
             </div>
-            {!this.displayPagination || lastPage === 0 ? null : (
-                <div className='previous-next-container'>
-                    <button
-                        className='first-page'
-                        onClick={this.loadFirst}
-                        disabled={this.props.page_current === 0}>
-                        <FontAwesomeIcon icon='angle-double-left' />
-                    </button>
-
-                    <button
-                        className='previous-page'
-                        onClick={this.loadPrevious}
-                        disabled={this.props.page_current === 0}>
-                        <FontAwesomeIcon icon='angle-left' />
-                    </button>
-
-                    <div className='page-number'>
-                        <input
-                            type='text'
-                            className='current-page'
-                            onBlur={event => { this.goToPage(event.target.value); event.target.value = ''; }}
-                            placeholder={(this.props.page_current + 1).toString()}
-                            defaultValue=''
-                        >
-                        </input>
-
-                        {lastPage ? ' / ' : ''}
-
-                        {lastPage ? <div className='last-page'>
-                            {lastPage ? lastPage + 1 : ''}
-                        </div> : ''}
-                    </div>
-
-                    <button
-                        className='next-page'
-                        onClick={this.loadNext}
-                        disabled={this.props.page_current === lastPage}>
-                        <FontAwesomeIcon icon='angle-right' />
-                    </button>
-
-                    <button
-                        className='last-page'
-                        onClick={this.loadLast}
-                        disabled={this.props.page_current === lastPage || !lastPage}>
-                        <FontAwesomeIcon icon='angle-double-right' />
-                    </button>
-                </div>
+            {!this.displayPagination ? null : (
+                <PageNavigation
+                    paginator={paginator}
+                    page_current={page_current} />
             )}
         </div>);
     }
