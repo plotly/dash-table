@@ -61,19 +61,16 @@ function getBackEndPagination(
             // adjust for zero-indexing
             page--;
 
+            page_current = page;
+
             if (page < 0) {
                 page_current = 0;
-                setProps({ page_current, ...clearSelection });
-                return;
             }
 
-            if (page_count && page > page_count) {
+            else if (page_count && page > page_count) {
                 page_current = page_count;
-                setProps({ page_current, ...clearSelection });
-                return;
             }
 
-            page_current = page;
             setProps({ page_current, ...clearSelection });
         }
     };
