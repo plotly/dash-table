@@ -318,7 +318,7 @@ export interface IProps {
     style_as_list_view?: boolean;
     page_action?: TableAction;
     page_current?: number;
-    max_page_count?: number;
+    page_count?: number;
     page_size: number;
 
     style_data?: Style;

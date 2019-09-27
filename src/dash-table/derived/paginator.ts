@@ -14,7 +14,7 @@ export interface IPaginator {
     loadFirst(): void;
     loadLast(): void;
     lastPage: number | undefined;
-    goToPage(page_number: string): void;
+    goToPage(page: number): void;
 }
 
 export function lastPage(data: Data, page_size: number) {
@@ -24,12 +24,12 @@ export function lastPage(data: Data, page_size: number) {
 function getBackEndPagination(
     page_current: number,
     setProps: SetProps,
-    max_page_count: number | undefined
+    page_count: number | undefined
 ): IPaginator {
 
     // adjust for zero-indexing
-    if (max_page_count) {
-        max_page_count = Math.max(0, max_page_count - 1);
+    if (page_count) {
+        page_count = Math.max(0, page_count - 1);
     }
 
     return {
@@ -50,19 +50,13 @@ function getBackEndPagination(
             setProps({ page_current, ...clearSelection });
         },
         loadLast: () => {
-            if (max_page_count) {
-                page_current = max_page_count;
+            if (page_count) {
+                page_current = page_count;
                 setProps({ page_current, ...clearSelection });
             }
         },
-        lastPage: max_page_count,
-        goToPage: (page_number: string) => {
-
-            let page = parseInt(page_number, 10);
-
-            if (isNaN(page)) {
-                return;
-            }
+        lastPage: page_count,
+        goToPage: (page: number) => {
 
             // adjust for zero-indexing
             page--;
@@ -73,8 +67,8 @@ function getBackEndPagination(
                 return;
             }
 
-            if (max_page_count && page > max_page_count) {
-                page_current = max_page_count;
+            if (page_count && page > page_count) {
+                page_current = page_count;
                 setProps({ page_current, ...clearSelection });
                 return;
             }
@@ -119,13 +113,7 @@ function getFrontEndPagination(
             setProps({ page_current, ...clearSelection });
         },
         lastPage: lastPage(data, page_size),
-        goToPage: (page_number: string) => {
-
-            let page = parseInt(page_number, 10);
-
-            if (isNaN(page)) {
-                return;
-            }
+        goToPage: (page: number) => {
 
             page--;
 
@@ -162,7 +150,7 @@ const getter = (
     page_action: TableAction,
     page_current: number,
     page_size: number,
-    max_page_count: number | undefined,
+    page_count: number | undefined,
     setProps: SetProps,
     data: Data
 ): IPaginator => {
@@ -172,7 +160,7 @@ const getter = (
         case TableAction.Native:
             return getFrontEndPagination(page_current, page_size, setProps, data);
         case TableAction.Custom:
-            return getBackEndPagination(page_current, setProps, max_page_count);
+            return getBackEndPagination(page_current, setProps, page_count);
         default:
             throw new Error(`Unknown pagination mode: '${page_action}'`);
     }

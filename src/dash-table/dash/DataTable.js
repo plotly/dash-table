@@ -732,12 +732,12 @@ export const propTypes = {
     page_current: PropTypes.number,
 
     /**
-     * `max_page_count` represents the number of the last page of the
+     * `page_count` represents the number of the last page of the
      * paginated table. This is really only useful when performing
      * backend pagination, since the front end is able to use the
-     * full size of the table to calculate the max page number.
+     * full size of the table to calculate the number of pages.
      */
-    max_page_count: PropTypes.number,
+    page_count: PropTypes.number,
 
     /**
      * `page_size` represents the number of rows that will be
