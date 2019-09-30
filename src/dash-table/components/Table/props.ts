@@ -84,7 +84,7 @@ export interface ICellCoordinates {
 export type ColumnId = string;
 export type Columns = IColumn[];
 export type Data = Datum[];
-export type Datum =  IDatumObject | any;
+export type Datum = IDatumObject | any;
 export type Indices = number[];
 export type RowId = string | number;
 export type SelectedCells = ICellCoordinates[];
@@ -107,7 +107,8 @@ export enum ChangeFailure {
 
 export enum Presentation {
     Dropdown = 'dropdown',
-    Input = 'input'
+    Input = 'input',
+    Markdown = 'markdown'
 }
 
 export interface IChangeOptions {
@@ -156,7 +157,7 @@ export interface INumberColumn extends ITypeColumn {
 }
 
 export interface ITextColumn extends ITypeColumn {
-    presentation?: Presentation.Input | Presentation.Dropdown;
+    presentation?: Presentation.Input | Presentation.Dropdown | Presentation.Markdown;
     type: ColumnType.Text;
 }
 
@@ -172,7 +173,7 @@ export interface IDatetimeColumn extends ITypeColumn {
 
 export interface IBaseColumn {
     clearable?: boolean | boolean[] | 'first' | 'last';
-    deletable?: boolean | boolean[] | 'first' |'last';
+    deletable?: boolean | boolean[] | 'first' | 'last';
     editable: boolean;
     hideable?: boolean | boolean[] | 'first' | 'last';
     renamable?: boolean | boolean[] | 'first' | 'last';
