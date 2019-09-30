@@ -2,6 +2,33 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Added
+[#546](https://github.com/plotly/dash-table/issues/546)
+- New prop `export_columns` that takes values `all` or `visible` (default). This prop controls the columns used during export
+
+[#597](https://github.com/plotly/dash-table/issues/597)
+- Add `is blank` unary operator. Returns true for `undefined`, `null` and `''`.
+
+### Changed
+[#598](https://github.com/plotly/dash-table/issues/598)
+- Allow values with whitespaces in column filters
+
+### Fixed
+[#460](https://github.com/plotly/dash-table/issues/460)
+- The `datestartswith` relational operator now supports number comparison
+- Fixed a bug where the implicit operator for columns was `equal` instead of the expected default for the column type
+
+[#546](https://github.com/plotly/dash-table/issues/546)
+- Visible columns are used correctly for both header and data rows
+
+[#591](https://github.com/plotly/dash-table/issues/591)
+- Fixed row and column selection when multiple tables are present
+
+[#600](https://github.com/plotly/dash-table/issues/600)
+- Fixed reconciliation when validation default value is `0` (number)
+- Apply reconciliation value when deleting cells, if possible
+
 ## [4.3.0] - 2019-09-17
 ### Added
 [#566](https://github.com/plotly/dash-table/pull/566)
@@ -33,6 +60,9 @@ multi-line & ellipsis with `style_data` and other style props.
 
 [#583](https://github.com/plotly/dash-table/issues/583)
 - Fix regression when editing the content of a cell in a scrolled virtualized table
+
+[#539](https://github.com/plotly/dash-table/issues/539)
+- Fix bug where boolean values are not showing up in the table
 
 ## [4.2.0] - 2019-08-27
 ### Added
