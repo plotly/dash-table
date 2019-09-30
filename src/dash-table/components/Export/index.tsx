@@ -1,6 +1,6 @@
 import XLSX from 'xlsx';
 import React from 'react';
-import { IDerivedData, Columns, ExportHeaders, ExportFormat, ExportColumns } from 'dash-table/components/Table/props';
+import { IDerivedData, Columns, Data, Datum, ExportHeaders, ExportFormat, ExportColumns } from 'dash-table/components/Table/props';
 import { createWorkbook, createHeadings, createWorksheet } from './utils';
 import getHeaderRows from 'dash-table/derived/header/headerRows';
 
@@ -16,10 +16,10 @@ interface IExportButtonProps {
 
 export function filterData(data: Data, columnID: string[]) {
 
-    var filteredData: Datum[] = [];
+    let filteredData: Data = [];
 
     data.forEach(data_row => {
-        var filtered_row: Datum = {};
+        let filtered_row: Datum = {};
         columnID.forEach(column => {
             filtered_row[column] = data_row[column];
         });
@@ -42,7 +42,7 @@ export default React.memo((props: IExportButtonProps) => {
 
         const maxLength = getHeaderRows(columns);
         const heading = (export_headers !== ExportHeaders.None) ? createHeadings(columnHeaders, maxLength) : [];
-        const ws = createWorksheet(heading, virtual_data.data, columnID, export_headers, merge_duplicate_headers);
+        const ws = createWorksheet(heading, filterData(virtual_data.data, columnID), columnID, export_headers, merge_duplicate_headers);
         const wb = createWorkbook(ws);
         if (export_format === ExportFormat.Xlsx) {
             XLSX.writeFile(wb, 'Data.xlsx', { bookType: 'xlsx', type: 'buffer' });
