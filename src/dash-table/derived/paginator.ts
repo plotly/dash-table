@@ -24,6 +24,24 @@ export function lastPage(data: Data, page_size: number) {
     return Math.max(Math.ceil(data.length / page_size) - 1, 0);
 }
 
+export function loadPrevious(page_current: number, setProps: SetProps) {
+    if (page_current <= 0) {
+        return;
+    }
+
+    page_current--;
+    setProps({ page_current, ...clearSelection });
+}
+
+export function loadFirst(page_current: number, setProps: SetProps) {
+    page_current = 0;
+    setProps({ page_current, ...clearSelection });
+}
+
+export function hasPrevious(page_current: number) {
+    return (page_current !== 0);
+}
+
 function getBackEndPagination(
     page_current: number,
     setProps: SetProps,
@@ -40,18 +58,8 @@ function getBackEndPagination(
             page_current++;
             setProps({ page_current, ...clearSelection });
         },
-        loadPrevious: () => {
-            if (page_current <= 0) {
-                return;
-            }
-
-            page_current--;
-            setProps({ page_current, ...clearSelection });
-        },
-        loadFirst: () => {
-            page_current = 0;
-            setProps({ page_current, ...clearSelection });
-        },
+        loadPrevious: () => loadPrevious(page_current, setProps),
+        loadFirst: () => loadFirst(page_current, setProps),
         loadLast: () => {
             if (page_count) {
                 page_current = page_count;
@@ -76,9 +84,7 @@ function getBackEndPagination(
 
             setProps({ page_current, ...clearSelection });
         },
-        hasPrevious: () => {
-            return page_current !== 0;
-        },
+        hasPrevious: () => hasPrevious(page_current),
         hasNext: () => {
             return page_count === undefined || page_current !== page_count;
         },
@@ -105,18 +111,8 @@ function getFrontEndPagination(
             page_current++;
             setProps({ page_current, ...clearSelection });
         },
-        loadPrevious: () => {
-            if (page_current <= 0) {
-                return;
-            }
-
-            page_current--;
-            setProps({ page_current, ...clearSelection });
-        },
-        loadFirst: () => {
-            page_current = 0;
-            setProps({ page_current, ...clearSelection });
-        },
+        loadPrevious: () => loadPrevious(page_current, setProps),
+        loadFirst: () => loadFirst(page_current, setProps),
         loadLast: () => {
             page_current = lastPage(data, page_size);
             setProps({ page_current, ...clearSelection });
@@ -138,9 +134,7 @@ function getFrontEndPagination(
 
             setProps({ page_current, ...clearSelection });
         },
-        hasPrevious: () => {
-            return (page_current !== 0);
-        },
+        hasPrevious: () => hasPrevious(page_current),
         hasNext: () => {
             return (page_current !== lastPage(data, page_size));
         },
