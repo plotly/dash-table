@@ -1,19 +1,43 @@
-import React, { Component, lazy, Suspense } from 'react';
+import * as R from 'ramda';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import LazyLoader from 'dash-table/LazyLoader';
-import LazyFactory from './LazyFactory';
 
-const LazyDataTable = LazyFactory(DataTable, () => LazyLoader.dataTable);
+import RealTable from 'dash-table/components/Table';
 
-function DataTable(props) {
-    return (<Suspense
-        fallback={null}
-    >
-        <LazyDataTable {...props} />
-    </Suspense>);
+import Logger from 'core/Logger';
+
+import genRandomId from 'dash-table/utils/generate';
+import isValidProps from './validate';
+import Sanitizer from './Sanitizer';
+
+/**
+ * Dash DataTable is an interactive table component designed for
+ * designed for viewing, editing, and exploring large datasets.
+ * DataTable is rendered with standard, semantic HTML <table/> markup,
+ * which makes it accessible, responsive, and easy to style. This
+ * component was written from scratch in React.js specifically for the
+ * Dash community. Its API was designed to be ergonomic and its behavior
+ * is completely customizable through its properties.
+ */
+export default class DataTable extends Component {
+    constructor(props) {
+        super(props);
+        let id;
+        this.getId = () => (id = id || genRandomId('table-'));
+        this.sanitizer = new Sanitizer();
+    }
+
+    render() {
+        if (!isValidProps(this.props)) {
+            return (<div>Invalid props combination</div>);
+        }
+
+        const sanitizedProps = this.sanitizer.sanitize(this.props);
+        return this.props.id ?
+            (<RealTable {...sanitizedProps} />) :
+            (<RealTable {...sanitizedProps} id={this.getId()} />);
+    }
 }
-
-export default DataTable;
 
 export const defaultProps = {
     page_action: 'native',
