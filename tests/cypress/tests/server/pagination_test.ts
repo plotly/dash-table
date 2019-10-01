@@ -91,20 +91,35 @@ describe('table pagination', () => {
             });
 
             describe('with the text input box', () => {
-                it('correctly navigates to the desired page', () => {
-                    cy.get('input.current-page').click();
-                    DOM.focused.type(`14`);
-                    cy.get('input.current-page').blur();
+                describe('correctly navigates to the desired page', () => {
+                    it('with unfocus', () => {
+                        cy.get('input.current-page').click();
+                        DOM.focused.type(`14`);
+                        cy.get('input.current-page').blur();
 
-                    cy.get('button.first-page').should('not.be.disabled');
-                    cy.get('button.previous-page').should('not.be.disabled');
-                    cy.get('input.current-page').should('have.attr', 'placeholder', '14');
-                    cy.get('.last-page').should('have.html', '29');
-                    cy.get('button.next-page').should('not.be.disabled');
-                    cy.get('button.last-page').should('not.be.disabled');
+                        cy.get('button.first-page').should('not.be.disabled');
+                        cy.get('button.previous-page').should('not.be.disabled');
+                        cy.get('input.current-page').should('have.attr', 'placeholder', '14');
+                        cy.get('.last-page').should('have.html', '29');
+                        cy.get('button.next-page').should('not.be.disabled');
+                        cy.get('button.last-page').should('not.be.disabled');
 
-                    DashTable.getCell(0, 0).within(() => cy.get('.dash-cell-value').should('have.html', '66'));
+                        DashTable.getCell(0, 0).within(() => cy.get('.dash-cell-value').should('have.html', '66'));
+                    }),
+                        it('with enter', () => {
+                            cy.get('input.current-page').click();
+                            DOM.focused.type(`18${Key.Enter}`);
 
+                            cy.get('button.first-page').should('not.be.disabled');
+                            cy.get('button.previous-page').should('not.be.disabled');
+                            cy.get('input.current-page').should('have.attr', 'placeholder', '18');
+                            cy.get('input.current-page').should('not.be.focused');
+                            cy.get('.last-page').should('have.html', '29');
+                            cy.get('button.next-page').should('not.be.disabled');
+                            cy.get('button.last-page').should('not.be.disabled');
+
+                            DashTable.getCell(0, 0).within(() => cy.get('.dash-cell-value').should('have.html', '86'));
+                        })
                 });
 
                 describe('can handle invalid page numbers', () => {
