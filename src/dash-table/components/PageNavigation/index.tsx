@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { IPageNavigationProps } from 'dash-table/components/PageNavigation/props';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { KEY_CODES } from 'dash-table/utils/unicode';
 
 export default class PageNavigation extends Component<IPageNavigationProps> {
 
@@ -47,6 +48,7 @@ export default class PageNavigation extends Component<IPageNavigationProps> {
                         type='text'
                         className='current-page'
                         onBlur={event => { this.goToPage(event.target.value); event.target.value = ''; }}
+                        onKeyDown={event => { if (event.keyCode === KEY_CODES.ENTER) { event.currentTarget.blur(); } }}
                         placeholder={(page_current + 1).toString()}
                         defaultValue=''
                     >
