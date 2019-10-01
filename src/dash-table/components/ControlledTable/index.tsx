@@ -810,6 +810,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
         return (<div
             id={id}
+            className='dash-table-container'
             onCopy={this.onCopy}
             onKeyDown={this.handleKeyDown}
             onPaste={this.onPaste}
