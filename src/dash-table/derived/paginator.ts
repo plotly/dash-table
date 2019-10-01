@@ -15,9 +15,9 @@ export interface IPaginator {
     loadLast(): void;
     lastPage: number | undefined;
     goToPage(page: number): void;
-    disablePrevious(): boolean;
-    disableNext(): boolean;
-    disableLast(): boolean;
+    hasPrevious(): boolean;
+    hasNext(): boolean;
+    hasLast(): boolean;
 }
 
 export function lastPage(data: Data, page_size: number) {
@@ -76,14 +76,14 @@ function getBackEndPagination(
 
             setProps({ page_current, ...clearSelection });
         },
-        disablePrevious: () => {
-            return page_current === 0;
+        hasPrevious: () => {
+            return page_current !== 0;
         },
-        disableNext: () => {
-            return page_count !== undefined && page_current === page_count;
+        hasNext: () => {
+            return page_count === undefined || page_current !== page_count;
         },
-        disableLast: () => {
-            return !page_count ? true : page_current === page_count;
+        hasLast: () => {
+            return !page_count ? false : page_current !== page_count;
         }
     };
 }
@@ -138,14 +138,14 @@ function getFrontEndPagination(
 
             setProps({ page_current, ...clearSelection });
         },
-        disablePrevious: () => {
-            return (page_current === 0);
+        hasPrevious: () => {
+            return (page_current !== 0);
         },
-        disableNext: () => {
-            return (page_current === lastPage(data, page_size));
+        hasNext: () => {
+            return (page_current !== lastPage(data, page_size));
         },
-        disableLast: () => {
-            return (page_current === lastPage(data, page_size));
+        hasLast: () => {
+            return (page_current !== lastPage(data, page_size));
         }
     };
 }
@@ -158,9 +158,9 @@ function getNoPagination() {
         loadLast: () => { },
         lastPage: 0,
         goToPage: () => { },
-        disablePrevious: () => true,
-        disableNext: () => true,
-        disableLast: () => true
+        hasPrevious: () => false,
+        hasNext: () => false,
+        hasLast: () => false
     };
 }
 

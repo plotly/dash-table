@@ -8,26 +8,6 @@ export default class PageNavigation extends Component<IPageNavigationProps> {
         super(props);
     }
 
-    loadNext = () => {
-        const { paginator } = this.props;
-        paginator.loadNext();
-    }
-
-    loadPrevious = () => {
-        const { paginator } = this.props;
-        paginator.loadPrevious();
-    }
-
-    loadFirst = () => {
-        const { paginator } = this.props;
-        paginator.loadFirst();
-    }
-
-    loadLast = () => {
-        const { paginator } = this.props;
-        paginator.loadLast();
-    }
-
     goToPage = (page_number: string) => {
         const { paginator } = this.props;
 
@@ -50,15 +30,15 @@ export default class PageNavigation extends Component<IPageNavigationProps> {
             <div className='previous-next-container'>
                 <button
                     className='first-page'
-                    onClick={this.props.paginator.loadFirst}
-                    disabled={paginator.disablePrevious()}>
+                    onClick={paginator.loadFirst}
+                    disabled={!paginator.hasPrevious()}>
                     <FontAwesomeIcon icon='angle-double-left' />
                 </button>
 
                 <button
                     className='previous-page'
-                    onClick={this.loadPrevious}
-                    disabled={paginator.disablePrevious()}>
+                    onClick={paginator.loadPrevious}
+                    disabled={!paginator.hasPrevious()}>
                     <FontAwesomeIcon icon='angle-left' />
                 </button>
 
@@ -75,21 +55,21 @@ export default class PageNavigation extends Component<IPageNavigationProps> {
                     {paginator.lastPage ? ' / ' : ''}
 
                     {paginator.lastPage ? <div className='last-page'>
-                        {paginator.lastPage ? paginator.lastPage + 1 : ''}
+                        {paginator.lastPage + 1}
                     </div> : ''}
                 </div>
 
                 <button
                     className='next-page'
-                    onClick={this.loadNext}
-                    disabled={paginator.disableNext()} >
+                    onClick={paginator.loadNext}
+                    disabled={!paginator.hasNext()} >
                     <FontAwesomeIcon icon='angle-right' />
                 </button>
 
                 <button
                     className='last-page'
-                    onClick={this.loadLast}
-                    disabled={paginator.disableLast()}>
+                    onClick={paginator.loadLast}
+                    disabled={!paginator.hasLast()}>
                     <FontAwesomeIcon icon='angle-double-right' />
                 </button>
             </div>
