@@ -50,7 +50,7 @@ export default class PageNavigation extends Component<IPageNavigationProps> {
             <div className='previous-next-container'>
                 <button
                     className='first-page'
-                    onClick={this.loadFirst}
+                    onClick={this.props.paginator.loadFirst}
                     disabled={paginator.disablePrevious()}>
                     <FontAwesomeIcon icon='angle-double-left' />
                 </button>
