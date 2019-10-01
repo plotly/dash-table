@@ -2,7 +2,7 @@ import * as R from 'ramda';
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import random from 'core/math/random';
-import DataTable from 'dash-table/dash/LazyDataTable';
+import DataTable from 'dash-table/dash/DataTable';
 
 const setProps = () => { };
 
@@ -93,7 +93,7 @@ storiesOf('DashTable/Border (available space filled)', module)
         fixed_rows={{ headers: true }}
     />))
     .add('with no frozen rows and frozen columns', () => (<DataTable
-        {...props2}DataTable
+        {...props2} DataTable
         fixed_columns={{ headers: true, data: 1 }}
     />))
     .add('with frozen rows and frozen columns', () => (<DataTable

@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
-import DataTable from 'dash-table/dash/LazyDataTable';
+import DataTable from 'dash-table/dash/DataTable';
 import { TableAction } from 'dash-table/components/Table/props';
 
 const actions = [TableAction.Native, TableAction.Custom];

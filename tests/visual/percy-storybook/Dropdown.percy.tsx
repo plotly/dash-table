@@ -2,7 +2,7 @@ import * as R from 'ramda';
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
-import DataTable from 'dash-table/dash/LazyDataTable';
+import DataTable from 'dash-table/dash/DataTable';
 
 const setProps = () => { };
 
