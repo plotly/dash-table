@@ -46,6 +46,12 @@ export enum SortMode {
     Multi = 'multi'
 }
 
+export enum Case {
+    Sensitive = 'sensitive',
+    Insensitive = 'insensitive',
+    Default = 'default'
+}
+
 export enum TableAction {
     Custom = 'custom',
     Native = 'native',
@@ -177,6 +183,8 @@ export interface IBaseColumn {
     hideable?: boolean | boolean[] | 'first' | 'last';
     renamable?: boolean | boolean[] | 'first' | 'last';
     selectable?: boolean | boolean[] | 'first' | 'last';
+    filter_case_sensitive?: boolean;
+    filter_case_insensitive?: boolean;
     sort_as_null: SortAsNull;
     id: ColumnId;
     name: string | string[];
@@ -298,6 +306,7 @@ export interface IProps {
     fill_width?: boolean;
     filter_query?: string;
     filter_action?: TableAction;
+    filter_case?: Case;
     hidden_columns?: string[];
     include_headers_on_copy_paste?: boolean;
     locale_format: INumberLocale;
@@ -352,6 +361,7 @@ interface IDefaultProps {
     fill_width: boolean;
     filter_query: string;
     filter_action: TableAction;
+    filter_case: Case;
     include_headers_on_copy_paste: boolean;
     merge_duplicate_headers: boolean;
     fixed_columns: Fixed;
@@ -442,6 +452,7 @@ export type SetFilter = (
 export interface IFilterFactoryProps {
     filter_query: string;
     filter_action: TableAction;
+    filter_case: Case;
     id: string;
     map: Map<string, SingleColumnSyntaxTree>;
     rawFilterQuery: string;

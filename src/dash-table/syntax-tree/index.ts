@@ -6,7 +6,7 @@ import MultiColumnsSyntaxTree from './MultiColumnsSyntaxTree';
 import QuerySyntaxTree from './QuerySyntaxTree';
 import SingleColumnSyntaxTree from './SingleColumnSyntaxTree';
 import { RelationalOperator } from './lexeme/relational';
-import { IColumn } from 'dash-table/components/Table/props';
+import { IColumn, Case } from 'dash-table/components/Table/props';
 
 export const getMultiColumnQueryString = (
     asts: SingleColumnSyntaxTree[]
@@ -17,7 +17,8 @@ export const getMultiColumnQueryString = (
 
 export const getSingleColumnMap = (
     ast: MultiColumnsSyntaxTree,
-    columns: IColumn[]
+    columns: IColumn[],
+    filter_case: Case
 ) => {
     if (!ast.isValid) {
         return;
@@ -39,7 +40,7 @@ export const getSingleColumnMap = (
                 throw new Error(`column ${sanitizedColumnId} not found`);
             }
 
-            map.set(sanitizedColumnId, new SingleColumnSyntaxTree(s.value, column));
+            map.set(sanitizedColumnId, new SingleColumnSyntaxTree(s.value, column, filter_case));
         } else if (s.lexeme.type === LexemeType.RelationalOperator && s.left && s.right) {
             const sanitizedColumnId = s.left.lexeme.present ? s.left.lexeme.present(s.left) : s.left.value;
 
@@ -49,9 +50,9 @@ export const getSingleColumnMap = (
             }
 
             if (s.lexeme.present && s.lexeme.present(s) === RelationalOperator.Equal) {
-                map.set(sanitizedColumnId, new SingleColumnSyntaxTree(`${s.right.value}`, column));
+                map.set(sanitizedColumnId, new SingleColumnSyntaxTree(`${s.right.value}`, column, filter_case));
             } else {
-                map.set(sanitizedColumnId, new SingleColumnSyntaxTree(`${s.value} ${s.right.value}`, column));
+                map.set(sanitizedColumnId, new SingleColumnSyntaxTree(`${s.value} ${s.right.value}`, column, filter_case));
             }
         }
     }, statements);

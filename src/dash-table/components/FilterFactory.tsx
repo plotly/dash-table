@@ -7,7 +7,7 @@ import memoizerCache from 'core/cache/memoizer';
 import { memoizeOne } from 'core/memoizer';
 
 import ColumnFilter from 'dash-table/components/Filter/Column';
-import { ColumnId, IColumn, TableAction, IFilterFactoryProps, SetFilter } from 'dash-table/components/Table/props';
+import { ColumnId, IColumn, TableAction, IFilterFactoryProps, SetFilter, Case } from 'dash-table/components/Table/props';
 import derivedFilterStyles, { derivedFilterOpStyles } from 'dash-table/derived/filter/wrapperStyles';
 import derivedHeaderOperations from 'dash-table/derived/header/operations';
 import { derivedRelevantFilterStyles } from 'dash-table/derived/style';
@@ -32,19 +32,20 @@ export default class FilterFactory {
 
     }
 
-    private onChange = (column: IColumn, map: Map<string, SingleColumnSyntaxTree>, setFilter: SetFilter, ev: any) => {
+    private onChange = (column: IColumn, map: Map<string, SingleColumnSyntaxTree>, setFilter: SetFilter, filter_case: Case, ev: any) => {
         Logger.debug('Filter -- onChange', column.id, ev.target.value && ev.target.value.trim());
 
         const value = ev.target.value.trim();
 
-        updateColumnFilter(map, column, value, setFilter);
+        updateColumnFilter(map, column, value, setFilter, filter_case);
     }
 
     private filter = memoizerCache<[ColumnId, number]>()((
         column: IColumn,
         index: number,
         map: Map<string, SingleColumnSyntaxTree>,
-        setFilter: SetFilter
+        setFilter: SetFilter,
+        filter_case: Case
     ) => {
         const ast = map.get(column.id.toString());
 
@@ -53,7 +54,7 @@ export default class FilterFactory {
             classes={`dash-filter column-${index}`}
             columnId={column.id}
             isValid={!ast || ast.isValid}
-            setFilter={this.onChange.bind(this, column, map, setFilter)}
+            setFilter={this.onChange.bind(this, column, map, setFilter, filter_case)}
             value={ast && ast.query}
         />);
     });
@@ -83,7 +84,8 @@ export default class FilterFactory {
             style_cell_conditional,
             style_filter,
             style_filter_conditional,
-            visibleColumns
+            visibleColumns,
+            filter_case
         } = this.props;
 
         if (filter_action === TableAction.None) {
@@ -113,7 +115,8 @@ export default class FilterFactory {
                 column,
                 index,
                 map,
-                setFilter
+                setFilter,
+                filter_case
             );
         }, visibleColumns);
 

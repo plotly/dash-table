@@ -2,7 +2,7 @@ import * as R from 'ramda';
 
 import { memoizeOneFactory } from 'core/memoizer';
 
-import { Columns, IColumn, SetFilter } from 'dash-table/components/Table/props';
+import { Columns, IColumn, SetFilter, Case } from 'dash-table/components/Table/props';
 import { SingleColumnSyntaxTree, MultiColumnsSyntaxTree, getMultiColumnQueryString, getSingleColumnMap } from 'dash-table/syntax-tree';
 
 const cloneIf = (
@@ -13,10 +13,11 @@ const cloneIf = (
 export default memoizeOneFactory((
     map: Map<string, SingleColumnSyntaxTree>,
     query: string,
-    columns: Columns
+    columns: Columns,
+    filter_case: Case
 ): Map<string, SingleColumnSyntaxTree> => {
     const multiQuery = new MultiColumnsSyntaxTree(query);
-    const reversedMap = getSingleColumnMap(multiQuery, columns);
+    const reversedMap = getSingleColumnMap(multiQuery, columns, filter_case);
 
     /*
      * Couldn't process the query, just use the previous value.
@@ -61,12 +62,12 @@ export default memoizeOneFactory((
     return newMap;
 });
 
-function updateMap(map: Map<string, SingleColumnSyntaxTree>, column: IColumn, value: any) {
+function updateMap(map: Map<string, SingleColumnSyntaxTree>, column: IColumn, value: any, filter_case: Case) {
     const id = column.id.toString();
     const newMap = new Map<string, SingleColumnSyntaxTree>(map);
 
     if (value && value.length) {
-        newMap.set(id, new SingleColumnSyntaxTree(value, column));
+        newMap.set(id, new SingleColumnSyntaxTree(value, column, filter_case));
     } else {
         newMap.delete(id);
     }
@@ -90,19 +91,21 @@ export const updateColumnFilter = (
     map: Map<string, SingleColumnSyntaxTree>,
     column: IColumn,
     value: any,
-    setFilter: SetFilter
+    setFilter: SetFilter,
+    filter_case: Case
 ) => {
-    map = updateMap(map, column, value);
+    map = updateMap(map, column, value, filter_case);
     updateState(map, setFilter);
 };
 
 export const clearColumnsFilter = (
     map: Map<string, SingleColumnSyntaxTree>,
     columns: Columns,
-    setFilter: SetFilter
+    setFilter: SetFilter,
+    filter_case: Case
 ) => {
     R.forEach(column => {
-        map = updateMap(map, column, '');
+        map = updateMap(map, column, '', filter_case);
     }, columns);
 
     updateState(map, setFilter);

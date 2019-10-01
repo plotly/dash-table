@@ -16,6 +16,7 @@ export interface IUnboundedLexeme {
     resolve?: (target: any, tree: ISyntaxTree) => any;
     subType?: string;
     type: string;
+    case?: string;
     nesting?: number;
     priority?: number;
     regexp: RegExp;

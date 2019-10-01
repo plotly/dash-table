@@ -56,7 +56,8 @@ export default class HeaderFactory {
             style_cell_conditional,
             style_header,
             style_header_conditional,
-            visibleColumns
+            visibleColumns,
+            filter_case
         } = props;
 
         const labelsAndIndices = this.labelsAndIndices(columns, visibleColumns, merge_duplicate_headers);
@@ -109,7 +110,8 @@ export default class HeaderFactory {
             page_action,
             setFilter,
             setProps,
-            merge_duplicate_headers
+            merge_duplicate_headers,
+            filter_case
         );
 
         const ops = this.getHeaderOpCells(

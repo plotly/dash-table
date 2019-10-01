@@ -40,7 +40,8 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
                 map: this.filterMap(
                     new Map<string, SingleColumnSyntaxTree>(),
                     props.filter_query,
-                    props.visibleColumns
+                    props.visibleColumns,
+                    props.filter_case
                 )
             },
             rawFilterQuery: '',
@@ -60,7 +61,8 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
                 const map = this.filterMap(
                     currentMap,
                     nextProps.filter_query,
-                    nextProps.visibleColumns
+                    nextProps.visibleColumns,
+                    nextProps.filter_case
                 );
 
                 return map !== currentMap ? { workFilter: { map, value} } : null;

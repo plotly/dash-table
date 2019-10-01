@@ -24,7 +24,21 @@ import {
     greaterThan,
     lessOrEqual,
     lessThan,
-    notEqual
+    notEqual,
+    icontains,
+    iequal,
+    igreaterOrEqual,
+    igreaterThan,
+    ilessOrEqual,
+    ilessThan,
+    inotEqual,
+    scontains,
+    sequal,
+    sgreaterOrEqual,
+    sgreaterThan,
+    slessOrEqual,
+    slessThan,
+    snotEqual
 } from '../lexeme/relational';
 import {
     isBlank,
@@ -84,7 +98,21 @@ const lexicon: ILexeme[] = [
         greaterThan,
         lessOrEqual,
         lessThan,
-        notEqual
+        notEqual,
+        icontains,
+        iequal,
+        igreaterOrEqual,
+        igreaterThan,
+        ilessOrEqual,
+        ilessThan,
+        inotEqual,
+        scontains,
+        sequal,
+        sgreaterOrEqual,
+        sgreaterThan,
+        slessOrEqual,
+        slessThan,
+        snotEqual
     ].map(op => ({
         ...op,
         if: ifRelationalOperator,

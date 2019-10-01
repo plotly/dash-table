@@ -47,6 +47,7 @@ export const defaultProps = {
     css: [],
     filter_query: '',
     filter_action: 'none',
+    filter_case: 'sensitive',
     sort_as_null: [],
     sort_action: 'none',
     sort_mode: 'single',
@@ -249,13 +250,24 @@ export const propTypes = {
          * will select *all* of the merged columns associated with it.
          * The table-level prop `column_selectable` is used to determine the type of column
          * selection to use.
-         *
          */
         selectable: PropTypes.oneOfType([
             PropTypes.oneOf(['first', 'last']),
             PropTypes.bool,
             PropTypes.arrayOf(PropTypes.bool)
         ]),
+
+        /**
+         * If true, the filter on the column will override the table setting and always be
+         * case-sensitive, unless a case-insensitive operator is used.
+         */
+        filter_case_sensitive: PropTypes.bool,
+
+        /**
+         * If true, the filter on the column will override the table setting and will always be
+         * case-insensitive, nless a case-sensitive operator is used.
+         */
+        filter_case_insensitive: PropTypes.bool,
 
         /**
          * The formatting applied to the column's data.
@@ -956,13 +968,6 @@ export const propTypes = {
     tooltip_duration: PropTypes.number,
 
     /**
-     * If `filter_action` is enabled, then the current filtering
-     * string is represented in this `filter_query`
-     * property.
-     */
-    filter_query: PropTypes.string,
-
-    /**
      * The `filter_action` property controls the behavior of the `filtering` UI.
      * If `'none'`, then the filtering UI is not displayed.
      * If `'native'`, then the filtering UI is displayed and the filtering
@@ -974,6 +979,22 @@ export const propTypes = {
      * and `data` would be the output).
      */
     filter_action: PropTypes.oneOf(['custom', 'native', 'none']),
+
+    /**
+     * If `filter_action` is enabled, then the current filtering
+     * string is represented in this `filter_query`
+     * property.
+     */
+    filter_query: PropTypes.string,
+
+    /**
+     * If `filter_action` is enabled, the `filter_case` property controls the case-sensitivity of
+     * the filters.
+     * If `'sensitive'`, filtering on all columns will be case-sensitive (default behavior).
+     * If `'insensitive'`, filtering on all columns will be case-insensitive.
+     * This setting can be overridden per column.
+     */
+    filter_case: PropTypes.oneOf(['sensitive', 'insensitive']),
 
     /**
      * The `sort_action` property enables data to be
@@ -1142,7 +1163,7 @@ export const propTypes = {
      * subType (string; optional):
      *   'open-block': '()',
      *   'logical-operator': '&&', '||',
-     *   'relational-operator': '=', '>=', '>', '<=', '<', '!=', 'contains',
+     *   'relational-operator': '=', '>=', '>', '<=', '<', '!=', 'contains', 'i=', 'i>=', 'i>', 'i<=', 'i<', 'i!=', 'icontains', 's=', 's>=', 's>', 's<=', 's<', 's!=', 'scontains',
      *   'unary-operator': '!', 'is bool', 'is even', 'is nil', 'is num', 'is object', 'is odd', 'is prime', 'is str',
      *   'expression': 'value', 'field';
      * value (any):
