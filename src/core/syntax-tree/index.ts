@@ -9,6 +9,7 @@ interface IStructure {
     subType?: string;
     type: string;
     value: any;
+    case: string | undefined;
 
     block?: IStructure;
     left?: IStructure;
@@ -21,7 +22,8 @@ function toStructure(tree: ISyntaxTree): IStructure {
     const res: IStructure = {
         subType: lexeme.subType,
         type: lexeme.type,
-        value: lexeme.present ? lexeme.present(tree) : value
+        value: lexeme.present ? lexeme.present(tree) : value,
+        case: lexeme.case
     };
 
     if (block) {
