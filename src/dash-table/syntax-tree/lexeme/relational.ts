@@ -67,19 +67,19 @@ export const equal: IUnboundedLexeme = R.merge({
             op === exp
     ),
     subType: RelationalOperator.Equal,
-    regexp: /^(=|eq)/i
+    regexp: /^(=|eq\s)/i
 }, LEXEME_BASE);
 
 export const greaterOrEqual: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(([op, exp]) => op >= exp),
     subType: RelationalOperator.GreaterOrEqual,
-    regexp: /^(>=|ge)/i
+    regexp: /^(>=|ge\s)/i
 }, LEXEME_BASE);
 
 export const greaterThan: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(([op, exp]) => op > exp),
     subType: RelationalOperator.GreaterThan,
-    regexp: /^(>|gt)/i
+    regexp: /^(>|gt\s)/i
 }, LEXEME_BASE);
 
 const DATE_OPTIONS: IDateValidation = {
@@ -106,13 +106,13 @@ export const dateStartsWith: IUnboundedLexeme = R.merge({
 export const lessOrEqual: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(([op, exp]) => op <= exp),
     subType: RelationalOperator.LessOrEqual,
-    regexp: /^(<=|le)/i
+    regexp: /^(<=|le\s)/i
 }, LEXEME_BASE);
 
 export const lessThan: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(([op, exp]) => op < exp),
     subType: RelationalOperator.LessThan,
-    regexp: /^(<|lt)/i
+    regexp: /^(<|lt\s)/i
 }, LEXEME_BASE);
 
 export const notEqual: IUnboundedLexeme = R.merge({
