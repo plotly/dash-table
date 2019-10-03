@@ -32,7 +32,7 @@ export class Paginator implements IPaginator {
         public readonly __current: number,
         public readonly __count: number | undefined,
         public readonly __size: number,
-        protected readonly setProps: SetProps
+        protected readonly setCurrent: (page: number) => void
     ) { }
 
     get count() { return this.__count || 0; }
@@ -46,7 +46,7 @@ export class Paginator implements IPaginator {
     get isFirst() { return this.current === 0; }
     get isLast() { return this.hasCount && this.current === this.count; }
 
-    toFirst = () => this.setProps({ page_current: 0, ...clearSelection });
+    toFirst = () => this.setCurrent(0);
 
     toIndex = (page: number) => {
         page = Math.max(page, 0);
@@ -55,26 +55,12 @@ export class Paginator implements IPaginator {
             page = Math.min(page, this.count - 1);
         }
 
-        this.setProps({
-            page_current: page,
-            ...clearSelection
-        });
+        this.setCurrent(page);
     }
 
-    toLast = () => this.hasLast && this.hasCount && this.setProps({
-        page_current: this.count - 1,
-        ...clearSelection
-    })
-
-    toNext = () => this.hasNext && this.setProps({
-        page_current: this.current + 1,
-        ...clearSelection
-    })
-
-    toPrevious = () => this.hasPrevious && this.setProps({
-        page_current: this.current - 1,
-        ...clearSelection
-    })
+    toLast = () => this.hasLast && this.hasCount && this.setCurrent(this.count - 1);
+    toNext = () => this.hasNext && this.setCurrent(this.current + 1);
+    toPrevious = () => this.hasPrevious && this.setCurrent(this.current - 1);
 }
 
 const getter = (
@@ -92,7 +78,10 @@ const getter = (
                 Math.max(Math.ceil(data.length / page_size), 0) :
                 page_count,
             page_size,
-            setProps
+            (page: number) => setProps({
+                page_current: page,
+                ...clearSelection
+            })
         );
 
 export default memoizeOneFactory(getter);
