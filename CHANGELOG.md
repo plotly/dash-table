@@ -10,6 +10,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [#597](https://github.com/plotly/dash-table/issues/597)
 - Add `is blank` unary operator. Returns true for `undefined`, `null` and `''`.
 
+[#554](https://github.com/plotly/dash-table/pull/554)
+- Async loading of `xlsx` library on export
+
 ### Changed
 [#598](https://github.com/plotly/dash-table/issues/598)
 - Allow values with whitespaces in column filters
