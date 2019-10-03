@@ -1,5 +1,5 @@
 const path = require('path');
-const WebpackDashDynamicImport = require('webpack-dash-dynamic-import');
+const WebpackDashDynamicImport = require('@plotly/webpack-dash-dynamic-import');
 
 const basePreprocessing = require('./base.preprocessing');
 const packagejson = require('./../../package.json');
