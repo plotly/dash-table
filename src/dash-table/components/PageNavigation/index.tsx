@@ -18,7 +18,7 @@ export default class PageNavigation extends Component<IPageNavigationProps> {
             return;
         }
 
-        paginator.goToPage(page);
+        paginator.loadPage(page - 1);
     }
 
     render() {
@@ -27,7 +27,7 @@ export default class PageNavigation extends Component<IPageNavigationProps> {
             page_current
         } = this.props;
 
-        return (paginator.lastPage === 0 ? null : (
+        return (paginator.lastPage !== undefined && paginator.lastPage <= 0) ? null : (
             <div className='previous-next-container'>
                 <button
                     className='first-page'
@@ -54,9 +54,9 @@ export default class PageNavigation extends Component<IPageNavigationProps> {
                     >
                     </input>
 
-                    {paginator.lastPage ? ' / ' : ''}
+                    {paginator.lastPage !== undefined ? ' / ' : ''}
 
-                    {paginator.lastPage ? <div className='last-page'>
+                    {paginator.lastPage !== undefined ? <div className='last-page'>
                         {paginator.lastPage + 1}
                     </div> : ''}
                 </div>
@@ -71,10 +71,10 @@ export default class PageNavigation extends Component<IPageNavigationProps> {
                 <button
                     className='last-page'
                     onClick={paginator.loadLast}
-                    disabled={!paginator.hasLast()}>
+                    disabled={paginator.lastPage === undefined || paginator.isLast()}>
                     <FontAwesomeIcon icon='angle-double-right' />
                 </button>
             </div>
-        ));
+        );
     }
 }

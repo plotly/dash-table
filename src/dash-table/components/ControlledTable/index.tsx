@@ -797,7 +797,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             tooltip_duration
         );
 
-        const { export_columns, export_format, export_headers, virtual, merge_duplicate_headers, paginator, page_current } = this.props;
+        const { export_columns, export_format, export_headers, virtual, merge_duplicate_headers, paginator, page_current, page_count } = this.props;
         const buttonProps = {
             export_columns,
             export_format,
@@ -852,7 +852,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             {!this.displayPagination ? null : (
                 <PageNavigation
                     paginator={paginator}
-                    page_current={page_current} />
+                    page_current={page_current}
+                    page_count={page_count} />
             )}
         </div>);
     }
