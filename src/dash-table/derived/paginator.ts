@@ -9,153 +9,96 @@ import {
 } from 'dash-table/components/Table/props';
 
 export interface IPaginator {
-    loadNext(): void;
-    loadPrevious(): void;
-    loadFirst(): void;
-    loadLast(): void;
-    lastPage: number | undefined;
-    goToPage(page: number): void;
-    hasPrevious(): boolean;
-    hasNext(): boolean;
-    hasLast(): boolean;
+    count: number;
+    current: number;
+    size: number;
+
+    hasCount: boolean;
+    hasLast: boolean;
+    hasNext: boolean;
+    hasPrevious: boolean;
+    isFirst: boolean;
+    isLast: boolean;
+
+    toFirst(): void;
+    toLast(): void;
+    toNext(): void;
+    toIndex(page: number): void;
+    toPrevious(): void;
 }
 
-export function lastPage(data: Data, page_size: number) {
-    return Math.max(Math.ceil(data.length / page_size) - 1, 0);
+class NullPaginator implements IPaginator {
+    get count() { return 0; }
+    get current() { return 0; }
+    get size() { return 0; }
+
+    get hasCount() { return false; }
+    get hasLast() { return false; }
+    get hasNext() { return false; }
+    get hasPrevious() { return false; }
+    get isFirst() { return false; }
+    get isLast() { return false; }
+
+    toFirst = () => { };
+    toIndex = (_: number) => { };
+    toLast = () => { };
+    toNext = () => { };
+    toPrevious = () => { };
 }
 
-export function loadPrevious(page_current: number, setProps: SetProps) {
-    if (page_current <= 0) {
-        return;
+export class Paginator implements IPaginator {
+    constructor(
+        public readonly __current: number,
+        public readonly __count: number | undefined,
+        public readonly __size: number,
+        protected readonly setProps: SetProps
+    ) { }
+
+    get count() { return this.__count || 0; }
+    get current() { return this.__current; }
+    get size() { return this.__size; }
+
+    get hasLast() { return this.hasCount; }
+    get hasNext() { return !this.hasCount || this.count > this.current; }
+    get hasPrevious() { return Boolean(this.current > 0); }
+    get hasCount() { return this.__count !== undefined; }
+    get isFirst() { return this.current === 0; }
+    get isLast() { return this.hasCount && this.current === this.count; }
+
+    toFirst = () => this.setProps({ page_current: 0, ...clearSelection });
+
+    toIndex = (page: number) => {
+        // adjust for zero-indexing
+        page--;
+
+        if (page < 0) {
+            page = 0;
+        }
+
+        if (this.hasCount && page > this.count) {
+            page = this.count - 1;
+        }
+
+        this.setProps({
+            page_current: page,
+            ...clearSelection
+        });
     }
 
-    page_current--;
-    setProps({ page_current, ...clearSelection });
-}
+    toLast = () => this.hasLast && this.hasCount && this.setProps({
+        page_current: this.count - 1,
+        ...clearSelection
+    })
 
-export function loadFirst(page_current: number, setProps: SetProps) {
-    page_current = 0;
-    setProps({ page_current, ...clearSelection });
-}
+    toNext = () => this.hasNext && this.setProps({
+        page_current: this.current + 1,
+        ...clearSelection
+    })
 
-export function hasPrevious(page_current: number) {
-    return (page_current !== 0);
-}
-
-function getBackEndPagination(
-    page_current: number,
-    setProps: SetProps,
-    page_count: number | undefined
-): IPaginator {
-
-    // adjust for zero-indexing
-    if (page_count) {
-        page_count = Math.max(0, page_count - 1);
-    }
-
-    return {
-        loadNext: () => {
-            page_current++;
-            setProps({ page_current, ...clearSelection });
-        },
-        loadPrevious: () => loadPrevious(page_current, setProps),
-        loadFirst: () => loadFirst(page_current, setProps),
-        loadLast: () => {
-            if (page_count) {
-                page_current = page_count;
-                setProps({ page_current, ...clearSelection });
-            }
-        },
-        lastPage: page_count,
-        goToPage: (page: number) => {
-
-            // adjust for zero-indexing
-            page--;
-
-            page_current = page;
-
-            if (page < 0) {
-                page_current = 0;
-            }
-
-            if (page_count && page > page_count) {
-                page_current = page_count;
-            }
-
-            setProps({ page_current, ...clearSelection });
-        },
-        hasPrevious: () => hasPrevious(page_current),
-        hasNext: () => {
-            return page_count === undefined || page_current !== page_count;
-        },
-        hasLast: () => {
-            return !page_count ? false : page_current !== page_count;
-        }
-    };
-}
-
-function getFrontEndPagination(
-    page_current: number,
-    page_size: number,
-    setProps: SetProps,
-    data: Data
-) {
-    return {
-        loadNext: () => {
-            const maxPageIndex = lastPage(data, page_size);
-
-            if (page_current >= maxPageIndex) {
-                return;
-            }
-
-            page_current++;
-            setProps({ page_current, ...clearSelection });
-        },
-        loadPrevious: () => loadPrevious(page_current, setProps),
-        loadFirst: () => loadFirst(page_current, setProps),
-        loadLast: () => {
-            page_current = lastPage(data, page_size);
-            setProps({ page_current, ...clearSelection });
-        },
-        lastPage: lastPage(data, page_size),
-        goToPage: (page: number) => {
-
-            page--;
-
-            page_current = page;
-
-            if (page < 0) {
-                page_current = 0;
-            }
-
-            if (page > lastPage(data, page_size)) {
-                page_current = lastPage(data, page_size);
-            }
-
-            setProps({ page_current, ...clearSelection });
-        },
-        hasPrevious: () => hasPrevious(page_current),
-        hasNext: () => {
-            return (page_current !== lastPage(data, page_size));
-        },
-        hasLast: () => {
-            return (page_current !== lastPage(data, page_size));
-        }
-    };
-}
-
-function getNoPagination() {
-    return {
-        loadNext: () => { },
-        loadPrevious: () => { },
-        loadFirst: () => { },
-        loadLast: () => { },
-        lastPage: 0,
-        goToPage: () => { },
-        hasPrevious: () => false,
-        hasNext: () => false,
-        hasLast: () => false
-    };
+    toPrevious = () => this.hasPrevious && this.setProps({
+        page_current: this.current - 1,
+        ...clearSelection
+    })
 }
 
 const getter = (
@@ -165,17 +108,15 @@ const getter = (
     page_count: number | undefined,
     setProps: SetProps,
     data: Data
-): IPaginator => {
-    switch (page_action) {
-        case TableAction.None:
-            return getNoPagination();
-        case TableAction.Native:
-            return getFrontEndPagination(page_current, page_size, setProps, data);
-        case TableAction.Custom:
-            return getBackEndPagination(page_current, setProps, page_count);
-        default:
-            throw new Error(`Unknown pagination mode: '${page_action}'`);
-    }
-};
+): IPaginator => page_action === TableAction.None ?
+        new NullPaginator() :
+        new Paginator(
+            page_current,
+            page_action === TableAction.Native ?
+                Math.max(Math.ceil(data.length / page_size), 0) :
+                page_count,
+            page_size,
+            setProps
+        );
 
 export default memoizeOneFactory(getter);

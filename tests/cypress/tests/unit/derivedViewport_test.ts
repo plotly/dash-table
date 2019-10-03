@@ -2,6 +2,9 @@ import * as R from 'ramda';
 
 import derivedViewportData from 'dash-table/derived/data/viewport';
 import { TableAction } from 'dash-table/components/Table/props';
+import { Paginator } from 'dash-table/derived/paginator';
+
+const paginator = new Paginator(0, 1, 250, () => { });
 
 describe('derived viewport', () => {
     const viewportData = derivedViewportData();
@@ -11,8 +14,7 @@ describe('derived viewport', () => {
             it('returns entire data', () => {
                 const result = viewportData(
                     TableAction.None,
-                    0,
-                    250,
+                    paginator,
                     R.map(() => { }, R.range(0, 5)),
                     R.range(0, 5)
                 );
@@ -26,8 +28,7 @@ describe('derived viewport', () => {
             it('returns entire data', () => {
                 const result = viewportData(
                     TableAction.Native,
-                    0,
-                    250,
+                    paginator,
                     R.map(() => { }, R.range(0, 5)),
                     R.range(0, 5)
                 );
@@ -41,8 +42,7 @@ describe('derived viewport', () => {
             it('returns entire data', () => {
                 const result = viewportData(
                     TableAction.Custom,
-                    0,
-                    250,
+                    paginator,
                     R.map(() => { }, R.range(0, 5)),
                     R.range(0, 5)
                 );
@@ -58,8 +58,7 @@ describe('derived viewport', () => {
             it('returns slice of data', () => {
                 const result = viewportData(
                     TableAction.Native,
-                    0,
-                    250,
+                    paginator,
                     R.map(idx => ({ idx }), R.range(0, 500)),
                     R.range(0, 500)
                 );

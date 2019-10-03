@@ -1,5 +1,5 @@
 import { memoizeOneFactory } from 'core/memoizer';
-import { lastPage } from 'dash-table/derived/paginator';
+import { IPaginator } from 'dash-table/derived/paginator';
 
 import {
     Data,
@@ -8,16 +8,14 @@ import {
     TableAction
 } from 'dash-table/components/Table/props';
 
-function getNoPagination(data: Data, indices: Indices): IDerivedData {
-    return { data, indices };
-}
+function getFrontEndPagination(paginator: IPaginator, data: Data, indices: Indices): IDerivedData {
+    let currentPage = paginator.hasCount ?
+        Math.min(paginator.current, paginator.size - 1) :
+        paginator.current;
 
-function getFrontEndPagination(page_current: number, page_size: number, data: Data, indices: Indices): IDerivedData {
-    let currentPage = Math.min(page_current, lastPage(data, page_size));
-
-    const firstIndex = page_size * currentPage;
+    const firstIndex = paginator.size * currentPage;
     const lastIndex = Math.min(
-        firstIndex + page_size,
+        firstIndex + paginator.size,
         data.length
     );
 
@@ -27,24 +25,22 @@ function getFrontEndPagination(page_current: number, page_size: number, data: Da
     };
 }
 
-function getBackEndPagination(data: Data, indices: Indices): IDerivedData {
+function getNullPagination(data: Data, indices: Indices): IDerivedData {
     return { data, indices };
 }
 
 const getter = (
     page_action: TableAction,
-    page_current: number,
-    page_size: number,
+    paginator: IPaginator,
     data: Data,
     indices: Indices
 ): IDerivedData => {
     switch (page_action) {
-        case TableAction.None:
-            return getNoPagination(data, indices);
         case TableAction.Native:
-            return getFrontEndPagination(page_current, page_size, data, indices);
+            return getFrontEndPagination(paginator, data, indices);
+        case TableAction.None:
         case TableAction.Custom:
-            return getBackEndPagination(data, indices);
+            return getNullPagination(data, indices);
         default:
             throw new Error(`Unknown pagination mode: '${page_action}'`);
     }

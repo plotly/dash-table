@@ -58,10 +58,18 @@ export default () => {
             sort_by
         );
 
-        const viewport = getViewport(
+        const paginator = getPaginator(
             page_action,
             page_current,
             page_size,
+            page_count,
+            setProps,
+            virtual.data
+        );
+
+        const viewport = getViewport(
+            page_action,
+            paginator,
             virtual.data,
             virtual.indices
         );
@@ -87,15 +95,6 @@ export default () => {
         const viewport_selected_rows = getViewportSelectedRows(
             viewport.indices,
             selected_rows
-        );
-
-        const paginator = getPaginator(
-            page_action,
-            page_current,
-            page_size,
-            page_count,
-            setProps,
-            virtual.data
         );
 
         return R.mergeAll([
