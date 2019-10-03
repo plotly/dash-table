@@ -31,12 +31,16 @@ function getNullPagination(data: Data, indices: Indices): IDerivedData {
 
 const getter = (
     page_action: TableAction,
-    paginator: IPaginator,
+    paginator: IPaginator | undefined,
     data: Data,
     indices: Indices
 ): IDerivedData => {
     switch (page_action) {
         case TableAction.Native:
+            if (!paginator) {
+                throw new Error(`Paginator missing for native mode`);
+            }
+
             return getFrontEndPagination(paginator, data, indices);
         case TableAction.None:
         case TableAction.Custom:

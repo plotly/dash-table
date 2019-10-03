@@ -27,25 +27,6 @@ export interface IPaginator {
     toPrevious(): void;
 }
 
-class NullPaginator implements IPaginator {
-    get count() { return 0; }
-    get current() { return 0; }
-    get size() { return 0; }
-
-    get hasCount() { return false; }
-    get hasLast() { return false; }
-    get hasNext() { return false; }
-    get hasPrevious() { return false; }
-    get isFirst() { return false; }
-    get isLast() { return false; }
-
-    toFirst = () => { };
-    toIndex = (_: number) => { };
-    toLast = () => { };
-    toNext = () => { };
-    toPrevious = () => { };
-}
-
 export class Paginator implements IPaginator {
     constructor(
         public readonly __current: number,
@@ -108,8 +89,8 @@ const getter = (
     page_count: number | undefined,
     setProps: SetProps,
     data: Data
-): IPaginator => page_action === TableAction.None ?
-        new NullPaginator() :
+): IPaginator | undefined => page_action === TableAction.None ?
+        undefined :
         new Paginator(
             page_current,
             page_action === TableAction.Native ?
