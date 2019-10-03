@@ -18,7 +18,7 @@ export default class PageNavigation extends Component<IPageNavigationProps> {
             return;
         }
 
-        paginator.toIndex(page);
+        paginator.toIndex(page - 1);
     }
 
     render() {

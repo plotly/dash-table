@@ -49,15 +49,10 @@ export class Paginator implements IPaginator {
     toFirst = () => this.setProps({ page_current: 0, ...clearSelection });
 
     toIndex = (page: number) => {
-        // adjust for zero-indexing
-        page--;
+        page = Math.max(page, 0);
 
-        if (page < 0) {
-            page = 0;
-        }
-
-        if (this.hasCount && page > this.count) {
-            page = this.count - 1;
+        if (this.hasCount) {
+            page = Math.min(page, this.count - 1);
         }
 
         this.setProps({
