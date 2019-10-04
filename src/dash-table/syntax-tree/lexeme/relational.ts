@@ -118,5 +118,5 @@ export const lessThan: IUnboundedLexeme = R.merge({
 export const notEqual: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(([op, exp]) => op !== exp),
     subType: RelationalOperator.NotEqual,
-    regexp: /^(!=|ne)/i
+    regexp: /^(!=|ne\s)/i
 }, LEXEME_BASE);
