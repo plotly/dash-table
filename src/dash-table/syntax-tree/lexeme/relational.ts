@@ -57,7 +57,7 @@ export const contains: IUnboundedLexeme = R.merge({
         op.toString().indexOf(exp.toString()) !== -1
     ),
     subType: RelationalOperator.Contains,
-    regexp: /^(contains\s)/i
+    regexp: /^(contains(\s|$))/i
 }, LEXEME_BASE);
 
 export const equal: IUnboundedLexeme = R.merge({
