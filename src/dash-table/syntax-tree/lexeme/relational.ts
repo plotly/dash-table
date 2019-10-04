@@ -57,7 +57,7 @@ export const contains: IUnboundedLexeme = R.merge({
         op.toString().indexOf(exp.toString()) !== -1
     ),
     subType: RelationalOperator.Contains,
-    regexp: /^(contains)/i
+    regexp: /^(contains\s)/i
 }, LEXEME_BASE);
 
 export const equal: IUnboundedLexeme = R.merge({
@@ -100,7 +100,7 @@ export const dateStartsWith: IUnboundedLexeme = R.merge({
             normalizedOp.indexOf(normalizedExp) === 0;
     }),
     subType: RelationalOperator.DateStartsWith,
-    regexp: /^(datestartswith)/i
+    regexp: /^(datestartswith\s)/i
 }, LEXEME_BASE);
 
 export const lessOrEqual: IUnboundedLexeme = R.merge({
