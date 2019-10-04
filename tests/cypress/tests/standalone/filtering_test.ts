@@ -109,7 +109,7 @@ describe('filter', () => {
         DashTable.getCellById(0, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', '100'));
     });
 
-    it.only('does not use relational operators unless they are followed by a space', () => {
+    it('does not use text-based relational operators unless they are followed by a space', () => {
         DashTable.getCellById(2, 'ccc').click();
         DOM.focused.type(`le5${Key.Enter}`);
 
@@ -126,6 +126,16 @@ describe('filter', () => {
         DashTable.getCellById(1, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', '2'));
         DashTable.getCellById(2, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', '4'));
         DashTable.getCellById(3, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', '5'));
+    });
+
+    it('uses symbol relational operators that are not followed by a space', () => {
+        DashTable.getFilterById('ccc').click();
+        DOM.focused.type(`<=5${Key.Enter}`);
+        DashTable.getCellById(0, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', '1'));
+        DashTable.getCellById(1, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', '2'));
+        DashTable.getCellById(2, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', '3'));
+        DashTable.getCellById(3, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', '4'));
+        DashTable.getCellById(4, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', '5'));
     });
 
     it('typing invalid followed by valid query fragment does not reset invalid', () => {
