@@ -207,12 +207,12 @@ export default class CellFactory {
         borderLeft: any,
         borderRight: any,
         borderTop: any
-    ) => {
-        return React.cloneElement(wrapper, {
-            children: [content],
-            style: R.merge(style, { borderBottom, borderLeft, borderRight, borderTop })
-        });
-    });
+    ) => React.cloneElement(wrapper, {
+        children: [content],
+        style: style ?
+            R.merge(style, { borderBottom, borderLeft, borderRight, borderTop }) :
+            { borderBottom, borderLeft, borderRight, borderTop }
+    }));
 
     getDataCells = memoizeOne((
         wrappers: JSX.Element[][],

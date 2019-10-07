@@ -63,10 +63,7 @@ export default class FilterFactory {
         edges: IEdgesMatrices | undefined
     ) => arrayMap(
         styles,
-        (s, j) => R.merge(
-            s,
-            edges && edges.getStyle(0, j)
-        )
+        (s: any, j) => edges ? R.merge(s, edges.getStyle(0, j)) : { ...s }
     ));
 
     public createFilters(
