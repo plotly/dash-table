@@ -57,7 +57,7 @@ export const contains: IUnboundedLexeme = R.merge({
         op.toString().indexOf(exp.toString()) !== -1
     ),
     subType: RelationalOperator.Contains,
-    regexp: /^(contains(\s|$))/i
+    regexp: /^((contains)(?:\s|$))/i
 }, LEXEME_BASE);
 
 export const equal: IUnboundedLexeme = R.merge({
@@ -67,19 +67,19 @@ export const equal: IUnboundedLexeme = R.merge({
             op === exp
     ),
     subType: RelationalOperator.Equal,
-    regexp: /^(=|eq(\s|$))/i
+    regexp: /^(=|(eq)(?:\s|$))/i
 }, LEXEME_BASE);
 
 export const greaterOrEqual: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(([op, exp]) => op >= exp),
     subType: RelationalOperator.GreaterOrEqual,
-    regexp: /^(>=|ge(\s|$))/i
+    regexp: /^(>=|(ge)(?:\s|$))/i
 }, LEXEME_BASE);
 
 export const greaterThan: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(([op, exp]) => op > exp),
     subType: RelationalOperator.GreaterThan,
-    regexp: /^(>|gt(\s|$))/i
+    regexp: /^(>|(gt)(?:\s|$))/i
 }, LEXEME_BASE);
 
 const DATE_OPTIONS: IDateValidation = {
@@ -100,23 +100,23 @@ export const dateStartsWith: IUnboundedLexeme = R.merge({
             normalizedOp.indexOf(normalizedExp) === 0;
     }),
     subType: RelationalOperator.DateStartsWith,
-    regexp: /^(datestartswith(\s|$))/i
+    regexp: /^((datestartswith)(?:\s|$))/i
 }, LEXEME_BASE);
 
 export const lessOrEqual: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(([op, exp]) => op <= exp),
     subType: RelationalOperator.LessOrEqual,
-    regexp: /^(<=|le(\s|$))/i
+    regexp: /^(<=|(le)(?:\s|$))/i
 }, LEXEME_BASE);
 
 export const lessThan: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(([op, exp]) => op < exp),
     subType: RelationalOperator.LessThan,
-    regexp: /^(<|lt(\s|$))/i
+    regexp: /^(<|(lt)(?:\s|$))/i
 }, LEXEME_BASE);
 
 export const notEqual: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(([op, exp]) => op !== exp),
     subType: RelationalOperator.NotEqual,
-    regexp: /^(!=|ne(\s|$))/i
+    regexp: /^(!=|(ne)(?:\s|$))/i
 }, LEXEME_BASE);
