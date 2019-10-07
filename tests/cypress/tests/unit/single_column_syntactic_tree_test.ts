@@ -29,34 +29,46 @@ const COLUMN_UNDEFINED: SingleColumnConfig = {
     type: undefined
 };
 
+const COLUMN_CASE_INSENSITIVE: SingleColumnConfig = {
+    id: 'a',
+    type: ColumnType.Text,
+    filter_case_insensitive: true
+};
+
+const COLUMN_CASE_SENSITIVE: SingleColumnConfig = {
+    id: 'a',
+    type: ColumnType.Text,
+    filter_case_sensitive: true
+};
+
 describe('Single Column Syntax Tree', () => {
     it('cannot have operand', () => {
-        const tree = new SingleColumnSyntaxTree('{a} <= 1', COLUMN_UNDEFINED, Case.Insensitive);
+        const tree = new SingleColumnSyntaxTree('{a} <= 1', COLUMN_UNDEFINED, Case.Sensitive);
 
         expect(tree.isValid).to.equal(false);
     });
 
     it('cannot have binary dangle', () => {
-        const tree = new SingleColumnSyntaxTree('<=', COLUMN_UNDEFINED, Case.Insensitive);
+        const tree = new SingleColumnSyntaxTree('<=', COLUMN_UNDEFINED, Case.Sensitive);
 
         expect(tree.isValid).to.equal(false);
     });
 
     it('cannot be unary + expression', () => {
-        const tree = new SingleColumnSyntaxTree('is prime "a"', COLUMN_UNDEFINED, Case.Insensitive);
+        const tree = new SingleColumnSyntaxTree('is prime "a"', COLUMN_UNDEFINED, Case.Sensitive);
 
         expect(tree.isValid).to.equal(false);
     });
 
     it('can be empty', () => {
-        const tree = new SingleColumnSyntaxTree('', COLUMN_UNDEFINED, Case.Insensitive);
+        const tree = new SingleColumnSyntaxTree('', COLUMN_UNDEFINED, Case.Sensitive);
 
         expect(tree.isValid).to.equal(true);
         expect(tree.evaluate({ a: 0 })).to.equal(true);
     });
 
     it('can be binary + expression', () => {
-        const tree = new SingleColumnSyntaxTree('<= 1', COLUMN_UNDEFINED, Case.Insensitive);
+        const tree = new SingleColumnSyntaxTree('<= 1', COLUMN_UNDEFINED, Case.Sensitive);
 
         expect(tree.isValid).to.equal(true);
         expect(tree.evaluate({ a: 0 })).to.equal(true);
@@ -66,7 +78,7 @@ describe('Single Column Syntax Tree', () => {
     });
 
     it('can be unary', () => {
-        const tree = new SingleColumnSyntaxTree('is prime', COLUMN_UNDEFINED, Case.Insensitive);
+        const tree = new SingleColumnSyntaxTree('is prime', COLUMN_UNDEFINED, Case.Sensitive);
 
         expect(tree.isValid).to.equal(true);
         expect(tree.evaluate({ a: 5 })).to.equal(true);
@@ -76,7 +88,7 @@ describe('Single Column Syntax Tree', () => {
     });
 
     it('can be expression with undefined column type', () => {
-        const tree = new SingleColumnSyntaxTree('1', COLUMN_UNDEFINED, Case.Insensitive);
+        const tree = new SingleColumnSyntaxTree('1', COLUMN_UNDEFINED, Case.Sensitive);
 
         expect(tree.isValid).to.equal(true);
         expect(tree.evaluate({ a: '1' })).to.equal(true);
@@ -88,7 +100,7 @@ describe('Single Column Syntax Tree', () => {
     });
 
     it('can be expression with numeric column type', () => {
-        const tree = new SingleColumnSyntaxTree('1', COLUMN_NUMERIC, Case.Insensitive);
+        const tree = new SingleColumnSyntaxTree('1', COLUMN_NUMERIC, Case.Sensitive);
 
         expect(tree.isValid).to.equal(true);
         expect(tree.evaluate({ a: 1 })).to.equal(true);
@@ -98,7 +110,7 @@ describe('Single Column Syntax Tree', () => {
     });
 
     it.only('can be permissive value expression', () => {
-        const tree = new SingleColumnSyntaxTree('Hello world', COLUMN_TEXT, Case.Insensitive);
+        const tree = new SingleColumnSyntaxTree('Hello world', COLUMN_TEXT, Case.Sensitive);
 
         expect(tree.isValid).to.equal(true);
         expect(tree.evaluate({ a: 'Hello world' })).to.equal(true);
@@ -107,25 +119,25 @@ describe('Single Column Syntax Tree', () => {
     });
 
     it('`undefined` column type can use `contains`', () => {
-        const tree = new SingleColumnSyntaxTree('contains 1', COLUMN_UNDEFINED, Case.Insensitive);
+        const tree = new SingleColumnSyntaxTree('contains 1', COLUMN_UNDEFINED, Case.Sensitive);
 
         expect(tree.isValid).to.equal(true);
     });
 
     it('`any` column type can use `contains`', () => {
-        const tree = new SingleColumnSyntaxTree('contains 1', COLUMN_ANY, Case.Insensitive);
+        const tree = new SingleColumnSyntaxTree('contains 1', COLUMN_ANY, Case.Sensitive);
 
         expect(tree.isValid).to.equal(true);
     });
 
     it('`numeric` column type can use `contains`', () => {
-        const tree = new SingleColumnSyntaxTree('contains 1', COLUMN_NUMERIC, Case.Insensitive);
+        const tree = new SingleColumnSyntaxTree('contains 1', COLUMN_NUMERIC, Case.Sensitive);
 
         expect(tree.isValid).to.equal(true);
     });
 
     it('can be expression with text column type', () => {
-        const tree = new SingleColumnSyntaxTree('"1"', COLUMN_TEXT, Case.Insensitive);
+        const tree = new SingleColumnSyntaxTree('"1"', COLUMN_TEXT, Case.Sensitive);
 
         expect(tree.isValid).to.equal(true);
         expect(tree.evaluate({ a: 1 })).to.equal(true);
@@ -138,7 +150,7 @@ describe('Single Column Syntax Tree', () => {
 
     ['1975', '"1975"'].forEach(value => {
         it(`can be expression '${value}' with datetime column type`, () => {
-            const tree = new SingleColumnSyntaxTree(value, COLUMN_DATE, Case.Insensitive);
+            const tree = new SingleColumnSyntaxTree(value, COLUMN_DATE, Case.Sensitive);
 
             expect(tree.evaluate({ a: 1975 })).to.equal(true);
             expect(tree.evaluate({ a: '1975' })).to.equal(true);
@@ -160,7 +172,7 @@ describe('Single Column Syntax Tree', () => {
         { type: COLUMN_TEXT, name: 'text' }
     ].forEach(({ type, name }) => {
         it(`returns the correct relational operator lexeme for '${name}' column type`, () => {
-            const tree = new SingleColumnSyntaxTree('1', type, Case.Insensitive);
+            const tree = new SingleColumnSyntaxTree('1', type, Case.Sensitive);
             const structure = tree.toStructure();
 
             expect(tree.toQueryString()).to.equal('{a} contains 1');
@@ -189,7 +201,7 @@ describe('Single Column Syntax Tree', () => {
     });
 
     it(`returns the correct relational operator lexeme for 'date' column type`, () => {
-        const tree = new SingleColumnSyntaxTree('1975', COLUMN_DATE, Case.Insensitive);
+        const tree = new SingleColumnSyntaxTree('1975', COLUMN_DATE, Case.Sensitive);
         const structure = tree.toStructure();
 
         expect(tree.toQueryString()).to.equal('{a} datestartswith 1975');
@@ -217,7 +229,7 @@ describe('Single Column Syntax Tree', () => {
     });
 
     it(`returns the correct relational operator lexeme for 'numeric' column type`, () => {
-        const tree = new SingleColumnSyntaxTree('1', COLUMN_NUMERIC, Case.Insensitive);
+        const tree = new SingleColumnSyntaxTree('1', COLUMN_NUMERIC, Case.Default);
         const structure = tree.toStructure();
 
         expect(tree.toQueryString()).to.equal('{a} = 1');
@@ -242,5 +254,41 @@ describe('Single Column Syntax Tree', () => {
                 expect(structure.right.value).to.equal(1);
             }
         }
+    });
+
+    it('can have case-insensitive column', () => {
+        const tree = new SingleColumnSyntaxTree('= Hello world', COLUMN_CASE_INSENSITIVE, Case.Default);
+
+        expect(tree.isValid).to.equal(true);
+        expect(tree.evaluate({ a: 'Hello world' })).to.equal(true);
+        expect(tree.evaluate({ a: 'Helloworld' })).to.equal(false);
+        expect(tree.toQueryString()).to.equal('{a} i= "Hello world"');
+    });
+
+    it('can have forced case-sensitive column in case-insensitive table', () => {
+        const tree = new SingleColumnSyntaxTree('= Hello world', COLUMN_CASE_SENSITIVE, Case.Insensitive);
+
+        expect(tree.isValid).to.equal(true);
+        expect(tree.evaluate({ a: 'Hello world' })).to.equal(true);
+        expect(tree.evaluate({ a: 'Helloworld' })).to.equal(false);
+        expect(tree.toQueryString()).to.equal('{a} = "Hello world"');
+    });
+
+    it('can have forced case-sensitive operator in case-insensitive column', () => {
+        const tree = new SingleColumnSyntaxTree('c= Hello world', COLUMN_CASE_INSENSITIVE, Case.Default);
+
+        expect(tree.isValid).to.equal(true);
+        expect(tree.evaluate({ a: 'Hello world' })).to.equal(true);
+        expect(tree.evaluate({ a: 'Helloworld' })).to.equal(false);
+        expect(tree.toQueryString()).to.equal('{a} = "Hello world"');
+    });
+
+    it('can have forced case-sensitive operator in case-insensitive table', () => {
+        const tree = new SingleColumnSyntaxTree('c= Hello world', COLUMN_CASE_SENSITIVE, Case.Insensitive);
+
+        expect(tree.isValid).to.equal(true);
+        expect(tree.evaluate({ a: 'Hello world' })).to.equal(true);
+        expect(tree.evaluate({ a: 'Helloworld' })).to.equal(false);
+        expect(tree.toQueryString()).to.equal('{a} = "Hello world"');
     });
 });

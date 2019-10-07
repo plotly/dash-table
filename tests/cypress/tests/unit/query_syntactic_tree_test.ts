@@ -599,7 +599,96 @@ describe('Query Syntax Tree', () => {
             const tree = new QuerySyntaxTree('{a}<=5');
             expect(tree.isValid).to.equal(true);
             expect(tree.evaluate({ a: 4 })).to.equal(true);
+        });
 
+        it('can do case insensitive equality (i=) test', () => {
+            const tree = new QuerySyntaxTree('{a} i= "abc v"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({ a: 'abc v' })).to.equal(true);
+            expect(tree.evaluate({ a: 'AbC V' })).to.equal(true);
+            expect(tree.evaluate({ a: 'abc w' })).to.equal(false);
+        });
+
+        it('can do case insensitive equality (ieq) test', () => {
+            const tree = new QuerySyntaxTree('{a} ieq "abc v"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({ a: 'abc v' })).to.equal(true);
+            expect(tree.evaluate({ a: 'AbC V' })).to.equal(true);
+            expect(tree.evaluate({ a: 'abc w' })).to.equal(false);
+        });
+
+        it('can do case insensitive difference (ine) test', () => {
+            const tree = new QuerySyntaxTree('{a} ine "abc v"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({ a: 'abc v' })).to.equal(false);
+            expect(tree.evaluate({ a: 'AbC V' })).to.equal(false);
+            expect(tree.evaluate({ a: 'abc w' })).to.equal(true);
+        });
+
+        it('can do case insensitive difference (i!=) test', () => {
+            const tree = new QuerySyntaxTree('{a} i!= "abc v"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({ a: 'abc v' })).to.equal(false);
+            expect(tree.evaluate({ a: 'AbC V' })).to.equal(false);
+            expect(tree.evaluate({ a: 'abc w' })).to.equal(true);
+        });
+
+        it('can do case insensitive icontains (icontains) test', () => {
+            const tree = new QuerySyntaxTree('{a} icontains v');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({ a: 'abc v' })).to.equal(true);
+            expect(tree.evaluate({ a: 'abc V' })).to.equal(true);
+            expect(tree.evaluate({ a: 'abc w' })).to.equal(false);
+        });
+
+        it('can do case sensitive equality (s=) test', () => {
+            const tree = new QuerySyntaxTree('{a} s= "abc v"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({ a: 'abc v' })).to.equal(true);
+            expect(tree.evaluate({ a: 'AbC V' })).to.equal(false);
+            expect(tree.evaluate({ a: 'abc w' })).to.equal(false);
+        });
+
+        it('can do case sensitive equality (seq) test', () => {
+            const tree = new QuerySyntaxTree('{a} seq "abc v"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({ a: 'abc v' })).to.equal(true);
+            expect(tree.evaluate({ a: 'AbC V' })).to.equal(false);
+            expect(tree.evaluate({ a: 'abc w' })).to.equal(false);
+        });
+
+        it('can do case sensitive difference (sne) test', () => {
+            const tree = new QuerySyntaxTree('{a} sne "abc v"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({ a: 'abc v' })).to.equal(false);
+            expect(tree.evaluate({ a: 'AbC V' })).to.equal(true);
+            expect(tree.evaluate({ a: 'abc w' })).to.equal(true);
+        });
+
+        it('can do case sensitive difference (s!=) test', () => {
+            const tree = new QuerySyntaxTree('{a} s!= "abc v"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({ a: 'abc v' })).to.equal(false);
+            expect(tree.evaluate({ a: 'AbC V' })).to.equal(true);
+            expect(tree.evaluate({ a: 'abc w' })).to.equal(true);
+        });
+
+        it('can do case sensitive scontains (scontains) test', () => {
+            const tree = new QuerySyntaxTree('{a} scontains v');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({ a: 'abc v' })).to.equal(true);
+            expect(tree.evaluate({ a: 'abc V' })).to.equal(false);
+            expect(tree.evaluate({ a: 'abc w' })).to.equal(false);
         });
     });
 });
