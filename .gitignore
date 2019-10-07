@@ -5,6 +5,12 @@
 
 # production
 /build
+/dash_table
+/inst
+/man
+/R
+DESCRIPTION
+NAMESPACE
 
 # testing
 /coverage
@@ -13,6 +19,7 @@
 
 # misc
 .DS_Store
+.vscode
 .env.local
 .env.development.local
 .env.test.local
