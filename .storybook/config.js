@@ -1,6 +1,6 @@
 import { configure, getStorybook, setAddon } from '@storybook/react';
 
-import createPercyAddon from '@percy-io/percy-storybook';
+import createPercyAddon from '@percy/storybook';
 const { percyAddon, serializeStories } = createPercyAddon();
 setAddon(percyAddon);
 
