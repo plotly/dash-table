@@ -13,6 +13,11 @@ column filters not working.
 
 ## [4.4.0] - 2019-10-08
 ### Added
+[#545](https://github.com/plotly/dash-table/issues/545)
+- Case insensitive filtering
+- New props: `filter_case` - to control case of all filters, `columns.filter_case_sensitive`, `columns.filter_case_insensitive` - to control filter case for each column
+- New operators: `i=`, `i>=`, `i>`, `i<=`, `i<`, `i!=`, `icontains` - for case-insensitive filtering, `s=`, `s>=`, `s>`, `s<=`, `s<`, `s!=`, `scontains` - to force case-sensitive filtering on case-insensitive columns
+
 [#546](https://github.com/plotly/dash-table/issues/546)
 - New prop `export_columns` that takes values `all` or `visible` (default). This prop controls the columns used during export
 
