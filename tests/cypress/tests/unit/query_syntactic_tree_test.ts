@@ -595,7 +595,7 @@ describe('Query Syntax Tree', () => {
             expect(tree.isValid).to.equal(false);
         });
 
-        it.only('correctly interprets non-text-based with no spaces as valid', () => {
+        it('correctly interprets non-text-based with no spaces as valid', () => {
             const tree = new QuerySyntaxTree('{a}<=5');
             expect(tree.isValid).to.equal(true);
             expect(tree.evaluate({ a: 4 })).to.equal(true);
