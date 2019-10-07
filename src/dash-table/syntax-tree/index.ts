@@ -49,9 +49,9 @@ export const getSingleColumnMap = (
             }
 
             if (s.lexeme.present && s.lexeme.present(s) === RelationalOperator.Equal) {
-                map.set(sanitizedColumnId, new SingleColumnSyntaxTree(`${s.right.value.trim()}`, column));
+                map.set(sanitizedColumnId, new SingleColumnSyntaxTree(`${s.right.value}`, column));
             } else {
-                map.set(sanitizedColumnId, new SingleColumnSyntaxTree(`${s.value.trim()} ${s.right.value.trim()}`, column));
+                map.set(sanitizedColumnId, new SingleColumnSyntaxTree(`${s.value} ${s.right.value}`, column));
             }
         }
     }, statements);
