@@ -15,13 +15,8 @@
             ]
         }
     },
-    "exclude": [
-        "dash_table/*",
-        "dist/*",
-        "node_modules/*",
-        "storybook-static/*",
-        "tests/*",
-        "venv/*",
-        "vv/*"
+    "include": [
+        "src/*",
+        "demo/*"
     ]
 }
