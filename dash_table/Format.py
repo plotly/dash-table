@@ -51,6 +51,7 @@ Scheme = get_named_tuple('scheme', {
     'decimal_si_prefix': 's',
     'exponent': 'e',
     'fixed': 'f',
+    'percent': '%',
     'percentage': '%',
     'percentage_rounded': 'p',
     'binary': 'b',
@@ -65,6 +66,7 @@ Sign = get_named_tuple('sign', {
     'negative': '-',
     'positive': '+',
     'parantheses': '(',
+    'parentheses': '(',
     'space': ' '
 })
 
