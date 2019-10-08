@@ -4,9 +4,15 @@
         "outDir": "./dist",
         "baseUrl": ".",
         "paths": {
-            "core/*": ["src/core/*"],
-            "dash-table/*": ["src/dash-table/*"],
-            "tests": ["src/tests"]
+            "core/*": [
+                "src/core/*"
+            ],
+            "dash-table/*": [
+                "src/dash-table/*"
+            ],
+            "tests": [
+                "src/tests"
+            ]
         }
     },
     "exclude": [
@@ -15,6 +21,7 @@
         "node_modules/*",
         "storybook-static/*",
         "tests/*",
+        "venv/*",
         "vv/*"
     ]
 }
