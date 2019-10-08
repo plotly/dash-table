@@ -680,6 +680,9 @@ export const propTypes = {
         PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     ),
 
+    /**
+     * Dash-assigned callback that gets fired when the user makes changes.
+     */
     setProps: PropTypes.func,
 
     /**
@@ -730,6 +733,14 @@ export const propTypes = {
      * backend paging.
      */
     page_current: PropTypes.number,
+
+    /**
+     * `page_count` represents the number of the pages in the
+     * paginated table. This is really only useful when performing
+     * backend pagination, since the front end is able to use the
+     * full size of the table to calculate the number of pages.
+     */
+    page_count: PropTypes.number,
 
     /**
      * `page_size` represents the number of rows that will be

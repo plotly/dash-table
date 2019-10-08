@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [4.4.0] - 2019-10-08
 ### Added
 [#546](https://github.com/plotly/dash-table/issues/546)
 - New prop `export_columns` that takes values `all` or `visible` (default). This prop controls the columns used during export
@@ -10,17 +10,33 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [#597](https://github.com/plotly/dash-table/issues/597)
 - Add `is blank` unary operator. Returns true for `undefined`, `null` and `''`.
 
+[#299](https://github.com/plotly/dash-table/issues/299)
+- New prop `page_count` that sets the maximum number of pages that are
+  accessible via the pagination menu when using backend pagination.
+
 ### Changed
 [#598](https://github.com/plotly/dash-table/issues/598)
 - Allow values with whitespaces in column filters
 
+[#580](https://github.com/plotly/dash-table/issues/580)
+- Change pagination menu button UI to use arrow icons instead of plain
+  buttons
+- Move pagination menu to bottom-right of table
+- Include go-to-first and go-to-last buttons
+- Include current-page and total-pages display in pagination menu
+- Include input box for user to navigate directly to a page
+
 ### Fixed
+
 [#460](https://github.com/plotly/dash-table/issues/460)
 - The `datestartswith` relational operator now supports number comparison
 - Fixed a bug where the implicit operator for columns was `equal` instead of the expected default for the column type
 
 [#546](https://github.com/plotly/dash-table/issues/546)
 - Visible columns are used correctly for both header and data rows
+
+[#563](https://github.com/plotly/dash-table/issues/563)
+- Fixed a bug where any string beginning with a relational operator was being interpreted as that operator being applied to the rest of the string (e.g., "lens" was interpreted as "<=ns")
 
 [#591](https://github.com/plotly/dash-table/issues/591)
 - Fixed row and column selection when multiple tables are present
