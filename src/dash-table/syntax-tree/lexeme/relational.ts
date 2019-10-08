@@ -63,7 +63,7 @@ const LEXEME_BASE = {
     type: LexemeType.RelationalOperator
 };
 
-export const contains: IUnboundedLexeme = R.merge({
+export const contains: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(([op, exp]) =>
         !R.isNil(exp) &&
         !R.isNil(op) &&
@@ -76,7 +76,7 @@ export const contains: IUnboundedLexeme = R.merge({
     regexpMatch: 1
 }, LEXEME_BASE);
 
-export const equal: IUnboundedLexeme = R.merge({
+export const equal: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(([op, exp]) =>
         (isNumeric(op) && isNumeric(exp)) ?
             +op === +exp :
@@ -88,7 +88,7 @@ export const equal: IUnboundedLexeme = R.merge({
     regexpMatch: 1
 }, LEXEME_BASE);
 
-export const greaterOrEqual: IUnboundedLexeme = R.merge({
+export const greaterOrEqual: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(([op, exp]) => op >= exp),
     subType: RelationalOperator.GreaterOrEqual,
     case: 'default',
@@ -96,7 +96,7 @@ export const greaterOrEqual: IUnboundedLexeme = R.merge({
     regexpMatch: 1
 }, LEXEME_BASE);
 
-export const greaterThan: IUnboundedLexeme = R.merge({
+export const greaterThan: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(([op, exp]) => op > exp),
     subType: RelationalOperator.GreaterThan,
     case: 'default',
@@ -108,7 +108,7 @@ const DATE_OPTIONS: IDateValidation = {
     allow_YY: true
 };
 
-export const dateStartsWith: IUnboundedLexeme = R.merge({
+export const dateStartsWith: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(([op, exp]) => {
         op = typeof op === 'number' ? op.toString() : op;
         exp = typeof exp === 'number' ? exp.toString() : exp;
@@ -126,7 +126,7 @@ export const dateStartsWith: IUnboundedLexeme = R.merge({
     regexpMatch: 1
 }, LEXEME_BASE);
 
-export const lessOrEqual: IUnboundedLexeme = R.merge({
+export const lessOrEqual: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(([op, exp]) => op <= exp),
     subType: RelationalOperator.LessOrEqual,
     case: 'default',
@@ -134,7 +134,7 @@ export const lessOrEqual: IUnboundedLexeme = R.merge({
     regexpMatch: 1
 }, LEXEME_BASE);
 
-export const lessThan: IUnboundedLexeme = R.merge({
+export const lessThan: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(([op, exp]) => op < exp),
     subType: RelationalOperator.LessThan,
     case: 'default',
@@ -142,7 +142,7 @@ export const lessThan: IUnboundedLexeme = R.merge({
     regexpMatch: 1
 }, LEXEME_BASE);
 
-export const notEqual: IUnboundedLexeme = R.merge({
+export const notEqual: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(([op, exp]) => op !== exp),
     subType: RelationalOperator.NotEqual,
     case: 'default',
@@ -150,7 +150,7 @@ export const notEqual: IUnboundedLexeme = R.merge({
     regexpMatch: 1
 }, LEXEME_BASE);
 
-export const icontains: IUnboundedLexeme = R.merge({
+export const icontains: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(([op, exp]) =>
         !R.isNil(exp) &&
         !R.isNil(op) &&
@@ -163,7 +163,7 @@ export const icontains: IUnboundedLexeme = R.merge({
     regexpMatch: 1
 }, LEXEME_BASE);
 
-export const iequal: IUnboundedLexeme = R.merge({
+export const iequal: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(([op, exp]) =>
         (isNumeric(op) && isNumeric(exp)) ?
             +op === +exp :
@@ -175,7 +175,7 @@ export const iequal: IUnboundedLexeme = R.merge({
     regexpMatch: 1
 }, LEXEME_BASE);
 
-export const igreaterOrEqual: IUnboundedLexeme = R.merge({
+export const igreaterOrEqual: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(([op, exp]) =>
         (isNumeric(op) && isNumeric(exp)) ?
             +op >= +exp :
@@ -186,7 +186,7 @@ export const igreaterOrEqual: IUnboundedLexeme = R.merge({
     regexpMatch: 1
 }, LEXEME_BASE);
 
-export const igreaterThan: IUnboundedLexeme = R.merge({
+export const igreaterThan: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(([op, exp]) =>
         (isNumeric(op) && isNumeric(exp)) ?
             +op > +exp :
@@ -197,7 +197,7 @@ export const igreaterThan: IUnboundedLexeme = R.merge({
     regexpMatch: 1
 }, LEXEME_BASE);
 
-export const ilessOrEqual: IUnboundedLexeme = R.merge({
+export const ilessOrEqual: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(([op, exp]) =>
         (isNumeric(op) && isNumeric(exp)) ?
             +op <= +exp :
@@ -208,7 +208,7 @@ export const ilessOrEqual: IUnboundedLexeme = R.merge({
     regexpMatch: 1
 }, LEXEME_BASE);
 
-export const ilessThan: IUnboundedLexeme = R.merge({
+export const ilessThan: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(([op, exp]) =>
         (isNumeric(op) && isNumeric(exp)) ?
             +op < +exp :
@@ -219,7 +219,7 @@ export const ilessThan: IUnboundedLexeme = R.merge({
     regexpMatch: 1
 }, LEXEME_BASE);
 
-export const inotEqual: IUnboundedLexeme = R.merge({
+export const inotEqual: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(([op, exp]) =>
         (isNumeric(op) && isNumeric(exp)) ?
             +op !== +exp :
@@ -230,7 +230,7 @@ export const inotEqual: IUnboundedLexeme = R.merge({
     regexpMatch: 1
 }, LEXEME_BASE);
 
-export const scontains: IUnboundedLexeme = R.merge({
+export const scontains: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(([op, exp]) =>
         !R.isNil(exp) &&
         !R.isNil(op) &&
@@ -243,7 +243,7 @@ export const scontains: IUnboundedLexeme = R.merge({
     regexpMatch: 1
 }, LEXEME_BASE);
 
-export const sequal: IUnboundedLexeme = R.merge({
+export const sequal: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(([op, exp]) =>
         (isNumeric(op) && isNumeric(exp)) ?
             +op === +exp :
@@ -255,7 +255,7 @@ export const sequal: IUnboundedLexeme = R.merge({
     regexpMatch: 1
 }, LEXEME_BASE);
 
-export const sgreaterOrEqual: IUnboundedLexeme = R.merge({
+export const sgreaterOrEqual: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(([op, exp]) =>
         (isNumeric(op) && isNumeric(exp)) ?
             +op >= +exp :
@@ -266,7 +266,7 @@ export const sgreaterOrEqual: IUnboundedLexeme = R.merge({
     regexpMatch: 1
 }, LEXEME_BASE);
 
-export const sgreaterThan: IUnboundedLexeme = R.merge({
+export const sgreaterThan: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(([op, exp]) =>
         (isNumeric(op) && isNumeric(exp)) ?
             +op > +exp :
@@ -277,7 +277,7 @@ export const sgreaterThan: IUnboundedLexeme = R.merge({
     regexpMatch: 1
 }, LEXEME_BASE);
 
-export const slessOrEqual: IUnboundedLexeme = R.merge({
+export const slessOrEqual: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(([op, exp]) =>
         (isNumeric(op) && isNumeric(exp)) ?
             +op <= +exp :
@@ -288,7 +288,7 @@ export const slessOrEqual: IUnboundedLexeme = R.merge({
     regexpMatch: 1
 }, LEXEME_BASE);
 
-export const slessThan: IUnboundedLexeme = R.merge({
+export const slessThan: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(([op, exp]) =>
         (isNumeric(op) && isNumeric(exp)) ?
             +op < +exp :
@@ -299,7 +299,7 @@ export const slessThan: IUnboundedLexeme = R.merge({
     regexpMatch: 1
 }, LEXEME_BASE);
 
-export const snotEqual: IUnboundedLexeme = R.merge({
+export const snotEqual: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(([op, exp]) =>
         (isNumeric(op) && isNumeric(exp)) ?
             +op !== +exp :

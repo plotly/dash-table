@@ -34,7 +34,7 @@ const getter = (
             return;
         }
 
-        styles[i][j] = R.merge(styles[i][j], SELECTED_CELL_STYLE);
+        styles[i][j] = R.mergeRight(styles[i][j], SELECTED_CELL_STYLE);
     }, selectedCells);
 
     return styles;

@@ -210,7 +210,7 @@ export default class CellFactory {
     ) => {
         return React.cloneElement(wrapper, {
             children: [content],
-            style: R.merge(style, { borderBottom, borderLeft, borderRight, borderTop })
+            style: R.mergeRight(style, { borderBottom, borderLeft, borderRight, borderTop })
         });
     });
 

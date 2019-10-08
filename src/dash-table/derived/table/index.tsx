@@ -25,7 +25,7 @@ const handleSetFilter = (
 function propsAndMapFn(propsFn: () => ControlledTableProps, setFilter: any) {
     const props = propsFn();
 
-    return R.merge(props, { map: props.workFilter.map, setFilter });
+    return R.mergeRight(props, { map: props.workFilter.map, setFilter });
 }
 
 export default (propsFn: () => ControlledTableProps) => {

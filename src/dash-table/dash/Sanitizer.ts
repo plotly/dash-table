@@ -87,7 +87,7 @@ export default class Sanitizer {
             headerFormat = ExportHeaders.Ids;
         }
 
-        return R.merge(props, {
+        return R.mergeRight(props, {
             columns,
             export_headers: headerFormat,
             fixed_columns: getFixedColumns(props.fixed_columns, props.row_deletable, props.row_selectable),

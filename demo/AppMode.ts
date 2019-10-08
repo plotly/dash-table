@@ -54,7 +54,7 @@ export const BasicModes = [
 function getBaseTableProps(mock: IDataMock): Partial<IProps> {
     return {
         id: 'table',
-        columns: mock.columns.map((col: any) => R.merge(col, {
+        columns: mock.columns.map((col: any) => R.mergeRight(col, {
             name: col.name || col.id,
             on_change: {
                 action: ChangeAction.None
@@ -108,7 +108,7 @@ function getDefaultState(
 
     return {
         filter_query: '',
-        tableProps: R.merge(getBaseTableProps(mock), {
+        tableProps: R.mergeRight(getBaseTableProps(mock), {
             data: mock.data,
             editable: true,
             sort_action: TableAction.Native,
@@ -271,7 +271,7 @@ function getVirtualizedState() {
 
     return {
         filter_query: '',
-        tableProps: R.merge(getBaseTableProps(mock), {
+        tableProps: R.mergeRight(getBaseTableProps(mock), {
             data: mock.data,
             editable: true,
             fill_width: false,

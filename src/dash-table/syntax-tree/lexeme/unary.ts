@@ -65,47 +65,47 @@ export const not: IUnboundedLexeme = {
     }
 };
 
-export const isBool: IUnboundedLexeme = R.merge({
+export const isBool: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(opValue => typeof opValue === 'boolean'),
     regexp: /^(is bool)/i
 }, LEXEME_BASE);
 
-export const isEven: IUnboundedLexeme = R.merge({
+export const isEven: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(opValue => typeof opValue === 'number' && opValue % 2 === 0),
     regexp: /^(is even)/i
 }, LEXEME_BASE);
 
-export const isBlank: IUnboundedLexeme = R.merge({
+export const isBlank: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(opValue => opValue === undefined || opValue === null || opValue === ''),
     regexp: /^(is blank)/i
 }, LEXEME_BASE);
 
-export const isNil: IUnboundedLexeme = R.merge({
+export const isNil: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(opValue => opValue === undefined || opValue === null),
     regexp: /^(is nil)/i
 }, LEXEME_BASE);
 
-export const isNum: IUnboundedLexeme = R.merge({
+export const isNum: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(opValue => typeof opValue === 'number'),
     regexp: /^(is num)/i
 }, LEXEME_BASE);
 
-export const isObject: IUnboundedLexeme = R.merge({
+export const isObject: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(opValue => opValue !== null && typeof opValue === 'object'),
     regexp: /^(is object)/i
 }, LEXEME_BASE);
 
-export const isOdd: IUnboundedLexeme = R.merge({
+export const isOdd: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(opValue => typeof opValue === 'number' && opValue % 2 === 1),
     regexp: /^(is odd)/i
 }, LEXEME_BASE);
 
-export const isPrime: IUnboundedLexeme = R.merge({
+export const isPrime: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(opValue => typeof opValue === 'number' && checkPrimality(opValue)),
     regexp: /^(is prime)/i
 }, LEXEME_BASE);
 
-export const isStr: IUnboundedLexeme = R.merge({
+export const isStr: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(opValue => typeof opValue === 'string'),
     regexp: /^(is str)/i
 }, LEXEME_BASE);

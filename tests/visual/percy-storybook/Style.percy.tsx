@@ -357,7 +357,7 @@ storiesOf('DashTable/Style type condition', module)
     .add('paging', () => (<DataTable
         id='styling-20'
         data= {mock.data}
-        columns={ mock.columns.map((col: any) => R.merge(col, {
+        columns={ mock.columns.map((col: any) => R.mergeRight(col, {
             name: col.name,
             deletable: true
         }))}
