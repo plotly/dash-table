@@ -15,6 +15,7 @@
         "node_modules/*",
         "storybook-static/*",
         "tests/*",
+        "venv/*",
         "vv/*"
     ]
 }
