@@ -69,21 +69,21 @@ export const equal: IUnboundedLexeme = R.merge({
     ),
     subType: RelationalOperator.Equal,
     regexp: /^(=|(eq)(?=\s|$))/i,
-    regexpMatch: 1,
+    regexpMatch: 1
 }, LEXEME_BASE);
 
 export const greaterOrEqual: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(([op, exp]) => op >= exp),
     subType: RelationalOperator.GreaterOrEqual,
     regexp: /^(>=|(ge)(?=\s|$))/i,
-    regexpMatch: 1,
+    regexpMatch: 1
 }, LEXEME_BASE);
 
 export const greaterThan: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(([op, exp]) => op > exp),
     subType: RelationalOperator.GreaterThan,
     regexp: /^(>|(gt)(?=\s|$))/i,
-    regexpMatch: 1,
+    regexpMatch: 1
 }, LEXEME_BASE);
 
 const DATE_OPTIONS: IDateValidation = {
