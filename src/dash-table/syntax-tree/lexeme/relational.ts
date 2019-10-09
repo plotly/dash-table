@@ -167,7 +167,7 @@ export const iequal: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(([op, exp]) =>
         (isNumeric(op) && isNumeric(exp)) ?
             +op === +exp :
-            op.toLowerCase() === exp.toLowerCase()
+            op.toString().toLowerCase() === exp.toString().toLowerCase()
     ),
     subType: RelationalOperator.IEqual,
     case: 'insensitive',
@@ -179,7 +179,7 @@ export const igreaterOrEqual: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(([op, exp]) =>
         (isNumeric(op) && isNumeric(exp)) ?
             +op >= +exp :
-            op.toLowerCase() >= exp.toLowerCase()),
+            op.toString().toLowerCase() >= exp.toString().toLowerCase()),
     subType: RelationalOperator.IGreaterOrEqual,
     case: 'insensitive',
     regexp: /^(i>=|(ige)(?=\s|$))/i,
@@ -190,7 +190,7 @@ export const igreaterThan: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(([op, exp]) =>
         (isNumeric(op) && isNumeric(exp)) ?
             +op > +exp :
-            op.toLowerCase() > exp.toLowerCase()),
+            op.toString().toLowerCase() > exp.toString().toLowerCase()),
     subType: RelationalOperator.IGreaterThan,
     case: 'insensitive',
     regexp: /^(i>|(igt)(?=\s|$))/i,
@@ -201,7 +201,7 @@ export const ilessOrEqual: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(([op, exp]) =>
         (isNumeric(op) && isNumeric(exp)) ?
             +op <= +exp :
-            op.toLowerCase() <= exp.toLowerCase()),
+            op.toString().toLowerCase() <= exp.toString().toLowerCase()),
     subType: RelationalOperator.ILessOrEqual,
     case: 'insensitive',
     regexp: /^(i<=|(ile)(?=\s|$))/i,
@@ -212,7 +212,7 @@ export const ilessThan: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(([op, exp]) =>
         (isNumeric(op) && isNumeric(exp)) ?
             +op < +exp :
-            op.toLowerCase() < exp.toLowerCase()),
+            op.toString().toLowerCase() < exp.toString().toLowerCase()),
     subType: RelationalOperator.ILessThan,
     case: 'insensitive',
     regexp: /^(i<|(ilt)(?=\s|$))/i,
@@ -223,7 +223,7 @@ export const inotEqual: IUnboundedLexeme = R.mergeRight({
     evaluate: relationalEvaluator(([op, exp]) =>
         (isNumeric(op) && isNumeric(exp)) ?
             +op !== +exp :
-            op.toLowerCase() !== exp.toLowerCase()),
+            op.toString().toLowerCase() !== exp.toString().toLowerCase()),
     subType: RelationalOperator.INotEqual,
     case: 'insensitive',
     regexp: /^(i!=|(ine)(?=\s|$))/i,
