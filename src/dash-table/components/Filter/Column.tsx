@@ -22,19 +22,7 @@ interface IColumnFilterProps {
     columnFilterCase?: Case;
 }
 
-interface IState {
-    value?: string;
-}
-
-export default class ColumnFilter extends PureComponent<IColumnFilterProps, IState> {
-    constructor(props: IColumnFilterProps) {
-        super(props);
-
-        this.state = {
-            value: props.value
-        };
-    }
-
+export default class ColumnFilter extends PureComponent<IColumnFilterProps> {
     private submit = (value: string | undefined) => {
         const { columns, column, setFilter } = this.props;
 

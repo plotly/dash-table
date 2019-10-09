@@ -7,15 +7,7 @@ interface IFilterCaseButtonProps {
     setColumnCase: () => void;
 }
 
-interface IState {
-    value?: string;
-}
-
-export default class FilterCaseButton extends PureComponent<IFilterCaseButtonProps, IState> {
-    constructor(props: IFilterCaseButtonProps) {
-        super(props);
-    }
-
+export default class FilterCaseButton extends PureComponent<IFilterCaseButtonProps> {
     render() {
         const filterCaseClass: string = (this.props.filterCase !== Case.Insensitive) ?
                 'dash-filter--case--sensitive' : 'dash-filter--case--insensitive';
