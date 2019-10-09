@@ -50,8 +50,8 @@ Object.values([AppMode.ReadOnly, AppMode.SomeReadOnly]).forEach(mode => {
                         DashTable.getCellById(3, 'fff').should('have.class', 'focused');
                         DOM.focused.type(Key.ArrowLeft, { force: true });
 
-                        DashTable.getCellById(3, 'eee').should('not.have.class', 'focused');
-                        DashTable.getCellById(3, 'fff').should('have.class', 'focused');
+                        DashTable.getCellById(3, 'fff').should('not.have.class', 'focused');
+                        DashTable.getCellById(3, 'eee').should('have.class', 'focused');
                     }, R.range(0, 2));
                 });
             });
