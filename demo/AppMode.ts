@@ -137,17 +137,12 @@ function getReadonlyState() {
 
 function getSomeReadonlyState() {
     const state = getDefaultState();
-    state.tableProps.editable = false;
+    state.tableProps.editable = true;
     state.tableProps.row_deletable = false;
 
-    R.forEach(id => {
-        if (state.tableProps.columns) {
-            const column = state.tableProps.columns.find(c => c.id === id);
-            if (column) {
-                column.editable = false;
-            }
-        }
-    }, ['bbb', 'eee', 'fff']);
+    R.forEach(column => {
+        column.editable = !R.includes(column.id, ['bbb', 'eee', 'fff']);
+    }, state.tableProps.columns || []);
 
     return state;
 }
