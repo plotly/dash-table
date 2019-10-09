@@ -42,6 +42,12 @@ export default class TableClipboardHelper {
         Clipboard.set(e, value);
     }
 
+    public static clearClipboard() {
+        Clipboard.clear();
+        TableClipboardHelper.lastLocalCopy = [];
+        TableClipboardHelper.localCopyWithoutHeaders = [];
+    }
+
     public static fromClipboard(
         ev: ClipboardEvent,
         activeCell: ICellCoordinates,
