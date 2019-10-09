@@ -25,10 +25,4 @@ export default class Clipboard {
 
         return value;
     }
-
-    public static clear() {
-        /*#if TEST_COPY_PASTE*/
-        Clipboard.value = '';
-        /*#endif*/
-    }
 }

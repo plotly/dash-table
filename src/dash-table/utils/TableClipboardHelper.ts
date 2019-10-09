@@ -43,7 +43,6 @@ export default class TableClipboardHelper {
     }
 
     public static clearClipboard() {
-        Clipboard.clear();
         TableClipboardHelper.lastLocalCopy = [];
         TableClipboardHelper.localCopyWithoutHeaders = [];
     }
