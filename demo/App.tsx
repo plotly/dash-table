@@ -8,6 +8,8 @@ import Logger from 'core/Logger';
 import AppState, { AppMode, AppFlavor } from './AppMode';
 
 import './style.less';
+import FilterCaseButton from 'dash-table/components/Filter/FilterCaseButton';
+import { Case } from 'dash-table/components/Table/props';
 
 class App extends Component<any, any> {
     constructor(props: any) {
@@ -25,7 +27,7 @@ class App extends Component<any, any> {
         const flavors = flavorParam ? flavorParam.split(';') : [];
 
         if (flavors.indexOf(AppFlavor.FilterNative) !== -1) {
-            return (<div>
+            return (<div className='demo-app-root'>
                 <button
                     className='clear-filters'
                     onClick={() => {
@@ -35,6 +37,17 @@ class App extends Component<any, any> {
                         this.setState({ tableProps });
                     }}
                 >Clear Filter</button>
+                <FilterCaseButton
+                    filterCase={this.state.tableProps.filter_case === Case.Insensitive
+                        ? Case.Insensitive : Case.Sensitive}
+                    setColumnCase={() => {
+                        const tableProps = R.clone(this.state.tableProps);
+                        tableProps.filter_case = tableProps.filter_case === Case.Insensitive
+                            ? Case.Sensitive : Case.Insensitive;
+
+                        this.setState({ tableProps });
+                     }}
+                />
                 <input
                     style={{ width: '500px' }}
                     value={this.state.temp_filtering}
@@ -47,6 +60,7 @@ class App extends Component<any, any> {
 
                         this.setState({ tableProps });
                     }} />
+
             </div>);
         } else if (mode === AppMode.TaleOfTwoTables) {
             if (!this.state.tableProps2) {
