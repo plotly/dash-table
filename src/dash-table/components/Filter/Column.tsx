@@ -2,6 +2,7 @@ import * as R from 'ramda';
 import React, { CSSProperties, PureComponent } from 'react';
 
 import IsolatedInput from 'core/components/IsolatedInput';
+import FilterCaseButton from './FilterCaseButton';
 
 import { Case, SetProps, IColumn } from 'dash-table/components/Table/props';
 import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
@@ -77,9 +78,9 @@ export default class ColumnFilter extends PureComponent<IColumnFilterProps, ISta
             columnFilterCase
         } = this.props;
 
-        const filterCaseClass: string =
-            (globalFilterCase !== Case.Insensitive && columnFilterCase !== Case.Insensitive) ?
-                'dash-filter--case--sensitive' : 'dash-filter--case--insensitive';
+        const filterCase: Case =
+            (globalFilterCase !== Case.Insensitive && columnFilterCase !== Case.Insensitive)
+                ? Case.Sensitive : Case.Insensitive;
 
         return (<th
             className={classes + (isValid ? '' : ' invalid')}
@@ -100,11 +101,9 @@ export default class ColumnFilter extends PureComponent<IColumnFilterProps, ISta
                 submit={this.submit}
             />
             <div>
-                <input
-                    type='button'
-                    className={'dash-filter--case ' + filterCaseClass}
-                    onClick={this.setColumnCase}
-                    value='Aa'
+                <FilterCaseButton
+                    filterCase={filterCase}
+                    setColumnCase={this.setColumnCase}
                 />
             </div>
         </th>);
