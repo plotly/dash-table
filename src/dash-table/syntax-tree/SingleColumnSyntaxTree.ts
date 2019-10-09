@@ -74,7 +74,7 @@ function modifyLex(config: SingleColumnConfig, filter_case: Case, res: ILexerRes
         ];
     }
 
-    if ((filter_case === 'insensitive' || config.filter_case_insensitive)
+    if ((filter_case === 'insensitive' || config.filter_case === 'insensitive')
         && isRelational(res.lexemes) && isDefaultCase(res.lexemes)) {
         const replacement: ILexemeResult =
             CaseMapping.get(res.lexemes[1].lexeme.subType as RelationalOperator) as ILexemeResult;
@@ -89,8 +89,7 @@ function modifyLex(config: SingleColumnConfig, filter_case: Case, res: ILexerRes
 
 export type SingleColumnConfig = RequiredPluck<IColumn, 'id'> &
     OptionalPluck<IColumn, 'type'> &
-    OptionalPluck<IColumn, 'filter_case_sensitive'> &
-    OptionalPluck<IColumn, 'filter_case_insensitive'>;
+    OptionalPluck<IColumn, 'filter_case'>;
 
 export default class SingleColumnSyntaxTree extends SyntaxTree {
     constructor(query: string, config: SingleColumnConfig, filter_case: Case) {

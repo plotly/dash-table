@@ -32,13 +32,13 @@ const COLUMN_UNDEFINED: SingleColumnConfig = {
 const COLUMN_CASE_INSENSITIVE: SingleColumnConfig = {
     id: 'a',
     type: ColumnType.Text,
-    filter_case_insensitive: true
+    filter_case: Case.Insensitive
 };
 
 const COLUMN_CASE_SENSITIVE: SingleColumnConfig = {
     id: 'a',
     type: ColumnType.Text,
-    filter_case_sensitive: true
+    filter_case: Case.Sensitive
 };
 
 describe('Single Column Syntax Tree', () => {

@@ -3,14 +3,14 @@ import React, { CSSProperties, PureComponent } from 'react';
 
 import IsolatedInput from 'core/components/IsolatedInput';
 
-import { ColumnId, Case, SetProps, IColumn } from 'dash-table/components/Table/props';
+import { Case, SetProps, IColumn } from 'dash-table/components/Table/props';
 import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
 
-type SetFilter = (ev: any) => void;
+type SetFilter = (ev: any, c: Case, column: IColumn) => void;
 
 interface IColumnFilterProps {
     classes: string;
-    columnId: ColumnId;
+    column: IColumn;
     columns: IColumn[];
     isValid: boolean;
     setFilter: SetFilter;
@@ -18,8 +18,7 @@ interface IColumnFilterProps {
     style?: CSSProperties;
     value?: string;
     globalFilterCase?: Case;
-    columnFilterCaseSensitive?: boolean;
-    columnFilterCaseInsensitive?: boolean;
+    columnFilterCase?: Case;
 }
 
 interface IState {
@@ -36,46 +35,55 @@ export default class ColumnFilter extends PureComponent<IColumnFilterProps, ISta
     }
 
     private submit = (value: string | undefined) => {
-        const { setFilter } = this.props;
+        const { columns, column, setFilter } = this.props;
 
-        setFilter({
-            target: { value }
-        } as any);
+        setFilter(
+            columns[R.findIndex(R.propEq('id', column.id))(columns)],
+            this.getCase(),
+            { target: { value } } as any);
     }
+
+    private setColumnCase = () => {
+        const { columns, column, setFilter, columnFilterCase, globalFilterCase, setProps, value } = this.props;
+
+        const cols: IColumn[] = R.clone(columns);
+        const inx: number = R.findIndex(R.propEq('id', column.id))(cols);
+
+        const newCase = globalFilterCase === Case.Sensitive
+            ? ((columnFilterCase === Case.Sensitive || columnFilterCase === Case.Default || !columnFilterCase) ? Case.Insensitive : Case.Default)
+            : (columnFilterCase === Case.Insensitive ? Case.Sensitive : Case.Default);
+
+        cols[inx].filter_case = newCase;
+
+        setFilter(
+            cols[inx],
+            newCase,
+            { target: { value: value || '' } } as any);
+        setProps({ columns: cols });
+    }
+
+    private getCase = () =>
+        this.props.columnFilterCase === Case.Insensitive || this.props.globalFilterCase === Case.Insensitive
+            ? Case.Insensitive : Case.Default
 
     render() {
         const {
             classes,
-            columnId,
-            columns,
+            column,
             isValid,
             style,
             value,
             globalFilterCase,
-            columnFilterCaseSensitive,
-            columnFilterCaseInsensitive,
-            setProps
+            columnFilterCase
         } = this.props;
 
         const filterCaseClass: string =
-            (globalFilterCase !== Case.Insensitive && !columnFilterCaseInsensitive) ?
+            (globalFilterCase !== Case.Insensitive && columnFilterCase !== Case.Insensitive) ?
                 'dash-filter--case--sensitive' : 'dash-filter--case--insensitive';
-
-        function setColumnCase() {
-            const cols: IColumn[] = R.clone(columns);
-            const inx: number = R.findIndex(R.propEq('id', columnId))(cols);
-
-            cols[inx].filter_case_sensitive = !columnFilterCaseSensitive &&
-                globalFilterCase === Case.Insensitive;
-            cols[inx].filter_case_insensitive = !columnFilterCaseInsensitive &&
-                (globalFilterCase === Case.Sensitive || globalFilterCase === Case.Default);
-
-            setProps({ columns: cols });
-        }
 
         return (<th
             className={classes + (isValid ? '' : ' invalid')}
-            data-dash-column={columnId}
+            data-dash-column={column.id}
             style={style}
         >
             <IsolatedInput
@@ -95,7 +103,7 @@ export default class ColumnFilter extends PureComponent<IColumnFilterProps, ISta
                 <input
                     type='button'
                     className={'dash-filter--case ' + filterCaseClass}
-                    onClick={setColumnCase}
+                    onClick={this.setColumnCase}
                     value='Aa'
                 />
             </div>

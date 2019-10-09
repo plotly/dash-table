@@ -258,16 +258,10 @@ export const propTypes = {
         ]),
 
         /**
-         * If true, the filter on the column will override the table setting and always be
-         * case-sensitive, unless a case-insensitive operator is used.
+         * If not blank, the filter on the column will override the table setting and always be
+         * case-sensitive, or case-insensitive unless a case-specific operator is used.
          */
-        filter_case_sensitive: PropTypes.bool,
-
-        /**
-         * If true, the filter on the column will override the table setting and will always be
-         * case-insensitive, nless a case-sensitive operator is used.
-         */
-        filter_case_insensitive: PropTypes.bool,
+        filter_case: PropTypes.oneOf(['', 'sensitive', 'insensitive']),
 
         /**
          * The formatting applied to the column's data.

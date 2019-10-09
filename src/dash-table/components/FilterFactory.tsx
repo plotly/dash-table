@@ -32,7 +32,8 @@ export default class FilterFactory {
 
     }
 
-    private onChange = (column: IColumn, map: Map<string, SingleColumnSyntaxTree>, setFilter: SetFilter, filter_case: Case, ev: any) => {
+    private onChange =
+        (map: Map<string, SingleColumnSyntaxTree>, setFilter: SetFilter, column: IColumn, filter_case: Case, ev: any) => {
         Logger.debug('Filter -- onChange', column.id, ev.target.value && ev.target.value.trim());
 
         const value = ev.target.value.trim();
@@ -54,15 +55,14 @@ export default class FilterFactory {
         return (<ColumnFilter
             key={`column-${index}`}
             classes={`dash-filter column-${index}`}
-            columnId={column.id}
+            column={column}
             columns={columns}
             isValid={!ast || ast.isValid}
-            setFilter={this.onChange.bind(this, column, map, setFilter, filter_case)}
+            setFilter={this.onChange.bind(this, map, setFilter)}
             setProps={setProps}
             value={ast && ast.query}
             globalFilterCase={filter_case}
-            columnFilterCaseSensitive={column.filter_case_sensitive}
-            columnFilterCaseInsensitive={column.filter_case_insensitive}
+            columnFilterCase={column.filter_case}
         />);
     });
 

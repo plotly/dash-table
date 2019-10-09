@@ -49,7 +49,7 @@ export enum SortMode {
 export enum Case {
     Sensitive = 'sensitive',
     Insensitive = 'insensitive',
-    Default = 'default'
+    Default = ''
 }
 
 export enum TableAction {
@@ -90,7 +90,7 @@ export interface ICellCoordinates {
 export type ColumnId = string;
 export type Columns = IColumn[];
 export type Data = Datum[];
-export type Datum =  IDatumObject | any;
+export type Datum = IDatumObject | any;
 export type Indices = number[];
 export type RowId = string | number;
 export type SelectedCells = ICellCoordinates[];
@@ -178,13 +178,12 @@ export interface IDatetimeColumn extends ITypeColumn {
 
 export interface IBaseColumn {
     clearable?: boolean | boolean[] | 'first' | 'last';
-    deletable?: boolean | boolean[] | 'first' |'last';
+    deletable?: boolean | boolean[] | 'first' | 'last';
     editable: boolean;
     hideable?: boolean | boolean[] | 'first' | 'last';
     renamable?: boolean | boolean[] | 'first' | 'last';
     selectable?: boolean | boolean[] | 'first' | 'last';
-    filter_case_sensitive?: boolean;
-    filter_case_insensitive?: boolean;
+    filter_case?: Case;
     sort_as_null: SortAsNull;
     id: ColumnId;
     name: string | string[];
