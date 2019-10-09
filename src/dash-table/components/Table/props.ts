@@ -450,6 +450,7 @@ export type SetFilter = (
 ) => void;
 
 export interface IFilterFactoryProps {
+    columns: IColumn[];
     filter_query: string;
     filter_action: TableAction;
     filter_case: Case;
@@ -459,6 +460,7 @@ export interface IFilterFactoryProps {
     row_deletable: boolean;
     row_selectable: Selection;
     setFilter: SetFilter;
+    setProps: SetProps;
     style_cell: Style;
     style_cell_conditional: Cells;
     style_filter: Style;

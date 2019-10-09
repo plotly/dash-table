@@ -7,7 +7,7 @@ import memoizerCache from 'core/cache/memoizer';
 import { memoizeOne } from 'core/memoizer';
 
 import ColumnFilter from 'dash-table/components/Filter/Column';
-import { ColumnId, IColumn, TableAction, IFilterFactoryProps, SetFilter, Case } from 'dash-table/components/Table/props';
+import { ColumnId, IColumn, TableAction, IFilterFactoryProps, SetFilter, Case, SetProps } from 'dash-table/components/Table/props';
 import derivedFilterStyles, { derivedFilterOpStyles } from 'dash-table/derived/filter/wrapperStyles';
 import derivedHeaderOperations from 'dash-table/derived/header/operations';
 import { derivedRelevantFilterStyles } from 'dash-table/derived/style';
@@ -42,9 +42,11 @@ export default class FilterFactory {
 
     private filter = memoizerCache<[ColumnId, number]>()((
         column: IColumn,
+        columns: IColumn[],
         index: number,
         map: Map<string, SingleColumnSyntaxTree>,
         setFilter: SetFilter,
+        setProps: SetProps,
         filter_case: Case
     ) => {
         const ast = map.get(column.id.toString());
@@ -53,9 +55,14 @@ export default class FilterFactory {
             key={`column-${index}`}
             classes={`dash-filter column-${index}`}
             columnId={column.id}
+            columns={columns}
             isValid={!ast || ast.isValid}
             setFilter={this.onChange.bind(this, column, map, setFilter, filter_case)}
+            setProps={setProps}
             value={ast && ast.query}
+            globalFilterCase={filter_case}
+            columnFilterCaseSensitive={column.filter_case_sensitive}
+            columnFilterCaseInsensitive={column.filter_case_insensitive}
         />);
     });
 
@@ -64,7 +71,7 @@ export default class FilterFactory {
         edges: IEdgesMatrices | undefined
     ) => arrayMap(
         styles,
-        (s, j) => R.merge(
+        (s, j) => R.mergeRight(
             s,
             edges && edges.getStyle(0, j)
         )
@@ -75,11 +82,13 @@ export default class FilterFactory {
         filterOpEdges: IEdgesMatrices | undefined
     ) {
         const {
+            columns,
             filter_action,
             map,
             row_deletable,
             row_selectable,
             setFilter,
+            setProps,
             style_cell,
             style_cell_conditional,
             style_filter,
@@ -113,9 +122,11 @@ export default class FilterFactory {
         const filters = R.addIndex<IColumn, JSX.Element>(R.map)((column, index) => {
             return this.filter.get(column.id, index)(
                 column,
+                columns,
                 index,
                 map,
                 setFilter,
+                setProps,
                 filter_case
             );
         }, visibleColumns);

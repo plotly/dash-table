@@ -1,8 +1,9 @@
+import * as R from 'ramda';
 import React, { CSSProperties, PureComponent } from 'react';
 
 import IsolatedInput from 'core/components/IsolatedInput';
 
-import { ColumnId } from 'dash-table/components/Table/props';
+import { ColumnId, Case, SetProps, IColumn } from 'dash-table/components/Table/props';
 import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
 
 type SetFilter = (ev: any) => void;
@@ -10,10 +11,15 @@ type SetFilter = (ev: any) => void;
 interface IColumnFilterProps {
     classes: string;
     columnId: ColumnId;
+    columns: IColumn[];
     isValid: boolean;
     setFilter: SetFilter;
+    setProps: SetProps;
     style?: CSSProperties;
     value?: string;
+    globalFilterCase?: Case;
+    columnFilterCaseSensitive?: boolean;
+    columnFilterCaseInsensitive?: boolean;
 }
 
 interface IState {
@@ -41,10 +47,31 @@ export default class ColumnFilter extends PureComponent<IColumnFilterProps, ISta
         const {
             classes,
             columnId,
+            columns,
             isValid,
             style,
-            value
+            value,
+            globalFilterCase,
+            columnFilterCaseSensitive,
+            columnFilterCaseInsensitive,
+            setProps
         } = this.props;
+
+        const filterCaseClass: string =
+            (globalFilterCase !== Case.Insensitive && !columnFilterCaseInsensitive) ?
+                'dash-filter--case--sensitive' : 'dash-filter--case--insensitive';
+
+        function setColumnCase() {
+            const cols: IColumn[] = R.clone(columns);
+            const inx: number = R.findIndex(R.propEq('id', columnId))(cols);
+
+            cols[inx].filter_case_sensitive = !columnFilterCaseSensitive &&
+                globalFilterCase === Case.Insensitive;
+            cols[inx].filter_case_insensitive = !columnFilterCaseInsensitive &&
+                (globalFilterCase === Case.Sensitive || globalFilterCase === Case.Default);
+
+            setProps({ columns: cols });
+        }
 
         return (<th
             className={classes + (isValid ? '' : ' invalid')}
@@ -60,10 +87,18 @@ export default class ColumnFilter extends PureComponent<IColumnFilterProps, ISta
                     e.stopPropagation();
                 }}
                 value={value}
-                placeholder={`filter data...`}
+                placeholder='filter data...'
                 stopPropagation={true}
                 submit={this.submit}
             />
+            <div>
+                <input
+                    type='button'
+                    className={'dash-filter--case ' + filterCaseClass}
+                    onClick={setColumnCase}
+                    value='Aa'
+                />
+            </div>
         </th>);
     }
 }

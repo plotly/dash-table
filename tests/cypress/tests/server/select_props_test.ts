@@ -137,11 +137,11 @@ describe('select row', () => {
         });
 
         it('selection props are correct, with filter', () => {
-            DashTable.getSelect(0).within(() => cy.get('input').click());
-            DashTable.getSelect(1).within(() => cy.get('input').click());
-            DashTable.getSelect(2).within(() => cy.get('input').click());
+            DashTable.getSelect(0).within(() => cy.get('input[type=text]').click());
+            DashTable.getSelect(1).within(() => cy.get('input[type=text]').click());
+            DashTable.getSelect(2).within(() => cy.get('input[type=text]').click());
 
-            cy.get('tr th.column-0.dash-filter input').type(`is even${Key.Enter}`);
+            cy.get('tr th.column-0.dash-filter input[type=text]').type(`is even${Key.Enter}`);
 
             // filtered-out data is still selected
             expectArray('#selected_rows_container', [0, 1, 2]);
@@ -157,13 +157,13 @@ describe('select row', () => {
         });
 
         it('selection props are correct, with filter & sort', () => {
-            DashTable.getSelect(0).within(() => cy.get('input').click());
-            DashTable.getSelect(1).within(() => cy.get('input').click());
+            DashTable.getSelect(0).within(() => cy.get('input[type=text]').click());
+            DashTable.getSelect(1).within(() => cy.get('input[type=text]').click());
 
             DashTable.getCell(3, 1).click();
             expectCellSelection([3], [3003], [1], [1]);
 
-            cy.get('tr th.column-0.dash-filter input').type(`is even${Key.Enter}`);
+            cy.get('tr th.column-0.dash-filter input[type=text]').type(`is even${Key.Enter}`);
 
             expectCellSelection([]);
 
