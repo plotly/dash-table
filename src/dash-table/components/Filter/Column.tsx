@@ -18,18 +18,18 @@ interface IColumnFilterProps {
     setProps: SetProps;
     style?: CSSProperties;
     value?: string;
-    globalFilterCase?: Case;
-    columnFilterCase?: Case;
+    globalFilterCase: Case;
+    columnFilterCase: Case;
 }
 
 export default class ColumnFilter extends PureComponent<IColumnFilterProps> {
     private submit = (value: string | undefined) => {
-        const { columns, column, setFilter } = this.props;
+        const { column, setFilter, columnFilterCase } = this.props;
 
         setFilter(
-            columns[R.findIndex(R.propEq('id', column.id))(columns)],
-            this.getCase(),
-            { target: { value } } as any);
+            column,
+            this.getComputedCase(columnFilterCase),
+            value as any);
     }
 
     private setColumnCase = () => {
@@ -38,22 +38,27 @@ export default class ColumnFilter extends PureComponent<IColumnFilterProps> {
         const cols: IColumn[] = R.clone(columns);
         const inx: number = R.findIndex(R.propEq('id', column.id))(cols);
 
-        const newCase = globalFilterCase === Case.Sensitive
-            ? ((columnFilterCase === Case.Sensitive || columnFilterCase === Case.Default || !columnFilterCase) ? Case.Insensitive : Case.Default)
-            : (columnFilterCase === Case.Insensitive ? Case.Sensitive : Case.Default);
+        const newColumnFilterCase = globalFilterCase === Case.Sensitive
+            ? ((columnFilterCase === Case.Sensitive || columnFilterCase === Case.Default)
+            ? Case.Insensitive : Case.Default)
+            : ((columnFilterCase === Case.Insensitive || columnFilterCase === Case.Default)
+            ? Case.Sensitive : Case.Default);
 
-        cols[inx].filter_case = newCase;
+        const newComputedCase = this.getComputedCase(newColumnFilterCase);
+
+        cols[inx].filter_case = newColumnFilterCase;
 
         setFilter(
             cols[inx],
-            newCase,
-            { target: { value: value || '' } } as any);
+            newComputedCase,
+            value || '' as any);
         setProps({ columns: cols });
     }
 
-    private getCase = () =>
-        this.props.columnFilterCase === Case.Insensitive || this.props.globalFilterCase === Case.Insensitive
-            ? Case.Insensitive : Case.Default
+    private getComputedCase = (columnFilterCase: Case) =>
+        (columnFilterCase === Case.Insensitive ||
+            (this.props.globalFilterCase === Case.Insensitive && columnFilterCase !== Case.Sensitive))
+            ? Case.Insensitive : Case.Sensitive
 
     render() {
         const {
@@ -62,13 +67,8 @@ export default class ColumnFilter extends PureComponent<IColumnFilterProps> {
             isValid,
             style,
             value,
-            globalFilterCase,
             columnFilterCase
         } = this.props;
-
-        const filterCase: Case =
-            (globalFilterCase !== Case.Insensitive && columnFilterCase !== Case.Insensitive)
-                ? Case.Sensitive : Case.Insensitive;
 
         return (<th
             className={classes + (isValid ? '' : ' invalid')}
@@ -90,7 +90,7 @@ export default class ColumnFilter extends PureComponent<IColumnFilterProps> {
             />
             <div>
                 <FilterCaseButton
-                    filterCase={filterCase}
+                    filterCase={this.getComputedCase(columnFilterCase)}
                     setColumnCase={this.setColumnCase}
                 />
             </div>

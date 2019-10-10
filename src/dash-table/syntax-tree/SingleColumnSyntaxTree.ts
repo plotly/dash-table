@@ -56,7 +56,7 @@ function isDefaultCase(lexemes: ILexemeResult[]) {
     return lexemes[1].lexeme.case === 'default';
 }
 
-function modifyLex(config: SingleColumnConfig, filter_case: Case, res: ILexerResult) {
+function modifyLex(config: SingleColumnConfig, computed_filter_case: Case, res: ILexerResult) {
     if (!res.valid) {
         return res;
     }
@@ -74,13 +74,12 @@ function modifyLex(config: SingleColumnConfig, filter_case: Case, res: ILexerRes
         ];
     }
 
-    if ((filter_case === 'insensitive' || config.filter_case === 'insensitive')
-        && isRelational(res.lexemes) && isDefaultCase(res.lexemes)) {
+    if ((computed_filter_case === 'insensitive') && isRelational(res.lexemes) && isDefaultCase(res.lexemes)) {
         const replacement: ILexemeResult =
             CaseMapping.get(res.lexemes[1].lexeme.subType as RelationalOperator) as ILexemeResult;
         res.lexemes[1] = {
-            lexeme: R.mergeRight(res.lexemes[1].lexeme,
-                replacement.lexeme), value: replacement.value
+            lexeme: R.mergeRight(res.lexemes[1].lexeme, replacement.lexeme),
+            value: replacement.value
         };
     }
 
@@ -92,11 +91,11 @@ export type SingleColumnConfig = RequiredPluck<IColumn, 'id'> &
     OptionalPluck<IColumn, 'filter_case'>;
 
 export default class SingleColumnSyntaxTree extends SyntaxTree {
-    constructor(query: string, config: SingleColumnConfig, filter_case: Case) {
+    constructor(query: string, config: SingleColumnConfig, computed_filter_case: Case) {
         super(
             columnLexicon,
             query,
-            modifyLex.bind(undefined, config, filter_case)
+            modifyLex.bind(undefined, config, computed_filter_case)
         );
     }
 }

@@ -33,12 +33,12 @@ export default class FilterFactory {
     }
 
     private onChange =
-        (map: Map<string, SingleColumnSyntaxTree>, setFilter: SetFilter, column: IColumn, filter_case: Case, ev: any) => {
-        Logger.debug('Filter -- onChange', column.id, ev.target.value && ev.target.value.trim());
+        (map: Map<string, SingleColumnSyntaxTree>, setFilter: SetFilter, column: IColumn, computed_filter_case: Case, ev: any) => {
+        Logger.debug('Filter -- onChange', column.id, ev && ev.trim());
 
-        const value = ev.target.value.trim();
+        const value = ev && ev.trim();
 
-        updateColumnFilter(map, column, value, setFilter, filter_case);
+        updateColumnFilter(map, column, value, setFilter, computed_filter_case);
     }
 
     private filter = memoizerCache<[ColumnId, number]>()((
@@ -61,8 +61,8 @@ export default class FilterFactory {
             setFilter={this.onChange.bind(this, map, setFilter)}
             setProps={setProps}
             value={ast && ast.query}
-            globalFilterCase={filter_case}
-            columnFilterCase={column.filter_case}
+            globalFilterCase={filter_case || Case.Default}
+            columnFilterCase={column.filter_case || Case.Default}
         />);
     });
 
