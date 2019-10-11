@@ -40,6 +40,10 @@ export class DashTableHelper {
         return cy.get(`#${this.id} ${getSelector(editable)} tbody tr th.dash-filter[data-dash-column="${column}"]`);
     }
 
+    public getFilterCaseById(column: string, editable: State = State.Ready) {
+        return this.getFilterById(column, editable).within(() => cy.get('input[type=button]'));
+    }
+
     public getHeader(row: number, column: number, editable: State = State.Ready) {
         return cy.get(`#${this.id} ${getSelector(editable)} tbody tr th.dash-header.column-${column}`).eq(row);
     }

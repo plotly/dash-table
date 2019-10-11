@@ -189,4 +189,20 @@ describe('filter', () => {
         DashTable.getFilterById('ddd').within(() => cy.get('input').should('have.value', ''));
         DashTable.getFilterById('eee').within(() => cy.get('input').should('have.value', ''));
     });
+
+    it.only('sets column filter to case insensitive', () => {
+        let cell_0;
+
+        DashTable.getCellById(0, 'bbb')
+            .within(() => cy.get('.Select-value-label')
+                .then($el => cell_0 = $el[0].innerHTML));
+
+        DashTable.getFilterCaseById('bbb').click();
+        DashTable.getFilterById('bbb').click();
+        DOM.focused.type(`wet`);
+        DashTable.getFilterById('ggg').click();
+        DashTable.getCellById(0, 'bbb').within(() => cy.get('.Select-value-label').should('have.html', cell_0));
+        DashTable.getFilterCaseById('bbb').click();
+        cy.get('.row-1').within(() => cy.get('tr').should('not.exist'));
+    });
 });
