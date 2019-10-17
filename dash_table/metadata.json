@@ -940,7 +940,7 @@
           "name": "func"
         },
         "required": false,
-        "description": ""
+        "description": "Dash-assigned callback that gets fired when the user makes changes."
       },
       "start_cell": {
         "type": {
