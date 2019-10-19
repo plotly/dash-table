@@ -2,16 +2,16 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## Unreleased
+### Changed
+- [#554](https://github.com/plotly/dash-table/pull/554) Async loading of `xlsx` library on export
+
 ## [4.4.1] - 2019-08-17
 ### Fixed
 - [#618](https://github.com/plotly/dash-table/issues/618) Fix a bug with keyboard navigation not working correctly in certain circumstances when the table contains `readonly` columns.
 - [#206](https://github.com/plotly/dash-table/issues/206) Fix a bug with copy/paste to and from column filters not working.
 - [#561](https://github.com/plotly/dash-table/issues/561) Fix an incorrect React PureComponent usage causing warnings in DevTools.
 - [#611](https://github.com/plotly/dash-table/issues/611) Fix a bug with copy/paste causing hidden columns to be removed from the table
-
-## Unreleased
-### Changed
-- [#554](https://github.com/plotly/dash-table/pull/554) Async loading of `xlsx` library on export
 
 ## [4.4.0] - 2019-10-08
 ### Added
