@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import React, { Component, lazy } from 'react';
+import React, { Component, lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import { asyncDecorator } from '@plotly/dash-component-plugins';
 
@@ -9,8 +9,6 @@ import genRandomId from 'dash-table/utils/generate';
 import isValidProps from './validate';
 import Sanitizer from './Sanitizer';
 import LazyLoader from 'dash-table/LazyLoader';
-
-const RealDataTable = asyncDecorator(DataTable, LazyLoader.table);
 
 /**
  * Dash DataTable is an interactive table component designed for
@@ -30,6 +28,8 @@ export default class DataTable extends Component {
         );
     }
 }
+
+const RealDataTable = asyncDecorator(DataTable, LazyLoader.table);
 
 export const defaultProps = {
     page_action: 'native',
