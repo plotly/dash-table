@@ -50,7 +50,7 @@ module.exports = (options = {}) => {
                 },
                 {
                     test: /\.ts(x?)$/,
-                    exclude: /node_modules/,
+                    exclude: /node_modules\/(?!@plotly\/dash-component-plugins)/,
                     use: [
                         { loader: 'babel-loader', options: babel },
                         { loader: 'ts-loader', options: ts },
@@ -59,7 +59,7 @@ module.exports = (options = {}) => {
                 },
                 {
                     test: /\.js$/,
-                    exclude: /node_modules/,
+                    exclude: /node_modules\/(?!@plotly\/dash-component-plugins)/,
                     use: [
                         { loader: 'babel-loader', options: babel },
                         { loader: 'webpack-preprocessor', options: JSON.stringify(preprocessor) }
