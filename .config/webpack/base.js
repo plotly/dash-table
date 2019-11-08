@@ -15,10 +15,7 @@ module.exports = (options = {}) => {
     const ts = options.ts || {};
 
     console.log('********** Webpack Environment Overrides **********');
-    console.log('Preprocessor', JSON.stringify(preprocessor));
-    console.log('mode', mode);
-    console.log('babel', JSON.stringify(babel));
-    console.log('ts', JSON.stringify(ts));
+    console.log('options', JSON.stringify(options));
 
     return {
         entry: {

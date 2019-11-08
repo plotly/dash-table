@@ -1,4 +1,4 @@
-const options = require('./webpack.test.standalone.config.js');
+const options = require('./webpack.test.config.js');
 
 options.preprocessor = options.preprocessor || {};
 options.preprocessor.variables = options.preprocessor.variables || {};
