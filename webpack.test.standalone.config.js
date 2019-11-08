@@ -1,10 +1,17 @@
-const options = require('./webpack.test.config.js');
-
-options.preprocessor = options.preprocessor || {};
-options.preprocessor.variables = options.preprocessor.variables || {};
-options.preprocessor.variables.mode = 'eager';
+const options = {
+    entry: ['@babel/polyfill'],
+    ts: {
+        transpileOnly: true
+    },
+    preprocessor: {
+        definitions: ['TEST', 'TEST_COPY_PASTE'],
+        variable: {
+            mode: 'eager'
+        }
+    },
+    mode: 'development'
+};
 
 let config = require('./.config/webpack/base.js')(options);
-delete config.plugins;
 
 module.exports = config;
