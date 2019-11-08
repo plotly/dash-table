@@ -9,6 +9,7 @@ const dashLibraryName = packagejson.name.replace(/-/g, '_');
 
 module.exports = (options = {}) => {
     const babel = options.babel || undefined;
+    const entry = options.entry || [];
     const preprocessor = basePreprocessing(options.preprocessor);
     const mode = options.mode || 'development';
     const ts = options.ts || {};
@@ -21,8 +22,8 @@ module.exports = (options = {}) => {
 
     return {
         entry: {
-            bundle: './src/dash-table/index.ts',
-            demo: ['./demo/index.html', './demo/index.js']
+            bundle: [...entry, './src/dash-table/index.ts'],
+            demo: [...entry, './demo/index.html', './demo/index.js']
         },
         mode: mode,
         output: {
