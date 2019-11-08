@@ -19,8 +19,8 @@ module.exports = (options = {}) => {
 
     return {
         entry: {
-            bundle: [...entry, './src/dash-table/index.ts'],
-            demo: [...entry, './demo/index.html', './demo/index.js']
+            bundle: entry.concat(['./src/dash-table/index.ts']),
+            demo: entry.concat(['./demo/index.html', './demo/index.js'])
         },
         mode: mode,
         output: {
