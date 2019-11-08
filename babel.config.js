@@ -7,4 +7,4 @@ const plugins = [
     '@babel/plugin-syntax-dynamic-import'
 ];
 
-module.exports = { presets };
+module.exports = { presets, plugins };
