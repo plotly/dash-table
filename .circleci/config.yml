@@ -12,7 +12,7 @@ jobs:
                 key: deps1-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}-{{ checksum ".circleci/config.yml" }}
             - run:
                 name: Install npm packages
-                command: npm install
+                command: npm ci
             - run:
                 name: Cypress Install
                 command: |
@@ -60,7 +60,7 @@ jobs:
                 key: deps1-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}-{{ checksum ".circleci/config.yml" }}
             - run:
                 name: Install npm packages
-                command: npm install
+                command: npm ci
             - run:
                 name: Cypress Install
                 command: |
@@ -88,7 +88,7 @@ jobs:
                 key: deps1-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}-{{ checksum ".circleci/config.yml" }}
             - run:
                 name: Install npm packages
-                command: npm install
+                command: npm ci
             - run:
                 name: Cypress Install
                 command: |
@@ -206,7 +206,7 @@ jobs:
                     python -m venv venv || virtualenv venv
                     . venv/bin/activate
                     pip install -r dev-requirements.txt --quiet
-                    npm install
+                    npm ci
 
             - run:
                 name: Install dependencies (dash)
