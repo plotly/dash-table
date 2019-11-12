@@ -6,6 +6,5 @@
     "screenshotsFolder": "./tests/cypress/screenshots",
     "supportFile": "./tests/cypress/support/index.js",
     "videoFolder": "./tests/cypress/videos",
-    "numTestsKeptInMemory": 0,
-    "defaultCommandTimeout": 60000
+    "numTestsKeptInMemory": 0
 }
