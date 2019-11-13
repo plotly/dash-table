@@ -49,65 +49,81 @@ describe('export', () => {
 
     describe('getMergeRanges', () => {
         it('no merge', () => {
-            const testedArray = [['a', 'b', 'c', 'd'],
-            ['a', 'b', 'c', 'd'],
-            ['a', 'b', 'c', 'd']];
+            const testedArray = [
+                ['a', 'b', 'c', 'd'],
+                ['a', 'b', 'c', 'd'],
+                ['a', 'b', 'c', 'd']
+            ];
             const mergedRanges = getMergeRanges(testedArray);
             const expectedRanges = [];
             expect(mergedRanges).to.deep.equal(expectedRanges);
         });
         it('duplicate values - no merge', () => {
-            const testedArray = [['a', 'b', 'c', 'a'],
-            ['a', 'b', 'c', 'a'],
-            ['a', 'b', 'c', 'a']];
+            const testedArray = [
+                ['a', 'b', 'c', 'a'],
+                ['a', 'b', 'c', 'a'],
+                ['a', 'b', 'c', 'a']
+            ];
             const mergedRanges = getMergeRanges(testedArray);
             const expectedRanges = [];
             expect(mergedRanges).to.deep.equal(expectedRanges);
         });
         it('merge 2 cells right with a different value in between', () => {
-            const testedArray = [['a', 'b', 'c', 'd'],
-            ['a', 'b', 'a', 'a'],
-            ['a', 'b', 'c', 'd']];
+            const testedArray = [
+                ['a', 'b', 'c', 'd'],
+                ['a', 'b', 'a', 'a'],
+                ['a', 'b', 'c', 'd']
+            ];
             const mergedRanges = getMergeRanges(testedArray);
             const expectedRanges = [{ s: { r: 1, c: 2 }, e: { r: 1, c: 3 } }];
             expect(mergedRanges).to.deep.equal(expectedRanges);
         });
         it('merge 2 cells left with a different value in between', () => {
-            const testedArray = [['a', 'b', 'c', 'd'],
-            ['a', 'a', 'b', 'a'],
-            ['a', 'b', 'c', 'd']];
+            const testedArray = [
+                ['a', 'b', 'c', 'd'],
+                ['a', 'a', 'b', 'a'],
+                ['a', 'b', 'c', 'd']
+            ];
             const mergedRanges = getMergeRanges(testedArray);
             const expectedRanges = [{ s: { r: 1, c: 0 }, e: { r: 1, c: 1 } }];
             expect(mergedRanges).to.deep.equal(expectedRanges);
         });
         it('2 cells merge', () => {
-            const testedArray = [['a', 'b', 'c', 'd'],
-            ['a', 'a', 'c', 'd'],
-            ['a', 'b', 'c', 'd']];
+            const testedArray = [
+                ['a', 'b', 'c', 'd'],
+                ['a', 'a', 'c', 'd'],
+                ['a', 'b', 'c', 'd']
+            ];
             const mergedRanges = getMergeRanges(testedArray);
             const expectedRanges = [{ s: { r: 1, c: 0 }, e: { r: 1, c: 1 } }];
             expect(mergedRanges).to.deep.equal(expectedRanges);
         });
         it('3 cells merge', () => {
-            const testedArray = [['a', 'b', 'c', 'd'],
-            ['a', 'a', 'a', 'd'],
-            ['a', 'b', 'c', 'd']];
+            const testedArray = [
+                ['a', 'b', 'c', 'd'],
+                ['a', 'a', 'a', 'd'],
+                ['a', 'b', 'c', 'd']
+            ];
             const mergedRanges = getMergeRanges(testedArray);
             const expectedRanges = [{ s: { r: 1, c: 0 }, e: { r: 1, c: 2 } }];
             expect(mergedRanges).to.deep.equal(expectedRanges);
         });
         it('4 cells merge', () => {
-            const testedArray = [['a', 'b', 'c', 'd'],
-            ['a', 'a', 'a', 'a'],
-            ['a', 'b', 'c', 'd']];
+            const testedArray = [
+                ['a', 'b', 'c', 'd'],
+                ['a', 'a', 'a', 'a'],
+                ['a', 'b', 'c', 'd']
+            ];
             const mergedRanges = getMergeRanges(testedArray);
             const expectedRanges = [{ s: { r: 1, c: 0 }, e: { r: 1, c: 3 } }];
             expect(mergedRanges).to.deep.equal(expectedRanges);
         });
         it('2 cells merge, 4 cells merge - same value', () => {
-            const testedArray = [['a', 'a', 'c', 'd'],
-            ['a', 'a', 'a', 'a'],
-            ['a', 'b', 'c', 'd']];
+            const testedArray = [
+                ['a', 'a', 'c', 'd'],
+                ['a', 'a', 'a', 'a'],
+                ['a', 'b', 'c', 'd']
+            ];
             const mergedRanges = getMergeRanges(testedArray);
             const expectedRanges = [
                 { s: { r: 0, c: 0 }, e: { r: 0, c: 1 } },
@@ -116,9 +132,11 @@ describe('export', () => {
             expect(mergedRanges).to.deep.equal(expectedRanges);
         });
         it('2 cells merge, 4 cells merge, 3 cells merge - same value', () => {
-            const testedArray = [['a', 'a', 'c', 'd'],
-            ['a', 'a', 'a', 'a'],
-            ['a', 'a', 'a', 'd']];
+            const testedArray = [
+                ['a', 'a', 'c', 'd'],
+                ['a', 'a', 'a', 'a'],
+                ['a', 'a', 'a', 'd']
+            ];
             const mergedRanges = getMergeRanges(testedArray);
             const expectedRanges = [
                 { s: { r: 0, c: 0 }, e: { r: 0, c: 1 } },
@@ -128,9 +146,11 @@ describe('export', () => {
             expect(mergedRanges).to.deep.equal(expectedRanges);
         });
         it('table with same value', () => {
-            const testedArray = [['a', 'a', 'a', 'a'],
-            ['a', 'a', 'a', 'a'],
-            ['a', 'a', 'a', 'a']];
+            const testedArray = [
+                ['a', 'a', 'a', 'a'],
+                ['a', 'a', 'a', 'a'],
+                ['a', 'a', 'a', 'a']
+            ];
             const mergedRanges = getMergeRanges(testedArray);
             const expectedRanges = [
                 { s: { r: 0, c: 0 }, e: { r: 0, c: 3 } },
@@ -143,63 +163,81 @@ describe('export', () => {
 
     describe('createHeadings ', () => {
         it('strings 2D array input with same length for inner array', () => {
-            const input = [['a', 'b', 'c'],
-            ['d', 'e', 'f'],
-            ['g', 'h', 'i']];
+            const input = [
+                ['a', 'b', 'c'],
+                ['d', 'e', 'f'],
+                ['g', 'h', 'i']
+            ];
             const headings = createHeadings(input, 3);
-            const expectHeadings = [['a', 'd', 'g'],
-            ['b', 'e', 'h'],
-            ['c', 'f', 'i']];
+            const expectHeadings = [
+                ['a', 'd', 'g'],
+                ['b', 'e', 'h'],
+                ['c', 'f', 'i']
+            ];
             expect(headings).to.deep.equal(expectHeadings);
         });
         it('strings 2D array input with one different length for inner array', () => {
-            const input = [['a', 'b', 'c'],
-            ['d', 'e', 'f'],
-            ['g', 'h', 'i', 'j']];
+            const input = [
+                ['a', 'b', 'c'],
+                ['d', 'e', 'f'],
+                ['g', 'h', 'i', 'j']
+            ];
             const headings = createHeadings(input, 4);
-            const expectHeadings = [['a', 'd', 'g'],
-            ['b', 'e', 'h'],
-            ['c', 'f', 'i'],
-            ['', '', 'j']];
+            const expectHeadings = [
+                ['a', 'd', 'g'],
+                ['b', 'e', 'h'],
+                ['c', 'f', 'i'],
+                ['', '', 'j']
+            ];
             expect(headings).to.deep.equal(expectHeadings);
         });
         it('strings 2D array input with multi different length for inner array', () => {
-            const input = [['a', 'b', 'c'],
-            ['d', 'e', 'f', '1'],
-            ['g', 'h', 'i', 'j', 'k']];
+            const input = [
+                ['a', 'b', 'c'],
+                ['d', 'e', 'f', '1'],
+                ['g', 'h', 'i', 'j', 'k']
+            ];
             const headings = createHeadings(input, 5);
-            const expectHeadings = [['a', 'd', 'g'],
-            ['b', 'e', 'h'],
-            ['c', 'f', 'i'],
-            ['', '1', 'j'],
-            ['', '', 'k']];
+            const expectHeadings = [
+                ['a', 'd', 'g'],
+                ['b', 'e', 'h'],
+                ['c', 'f', 'i'],
+                ['', '1', 'j'],
+                ['', '', 'k']
+            ];
             expect(headings).to.deep.equal(expectHeadings);
         });
         it('strings and string[] array with same length for inner array', () => {
-            const input = ['rows',
+            const input = [
+                'rows',
                 ['d', 'e', 'f'],
-                ['g', 'h', 'i']];
+                ['g', 'h', 'i']
+            ];
             const headings = createHeadings(input, 3);
-            const expectHeadings = [['rows', 'd', 'g'],
-            ['rows', 'e', 'h'],
-            ['rows', 'f', 'i']];
+            const expectHeadings = [
+                ['rows', 'd', 'g'],
+                ['rows', 'e', 'h'],
+                ['rows', 'f', 'i']
+            ];
             expect(headings).to.deep.equal(expectHeadings);
         });
         it('strings and string[] array with different length for inner array', () => {
-            const input = ['rows',
+            const input = [
+                'rows',
                 ['d', 'e', 'f', 'g'],
-                ['g', 'h', 'i']];
+                ['g', 'h', 'i']
+            ];
             const headings = createHeadings(input, 4);
-            const expectHeadings = [['rows', 'd', 'g'],
-            ['rows', 'e', 'h'],
-            ['rows', 'f', 'i'],
-            ['rows', 'g', '']];
+            const expectHeadings = [
+                ['rows', 'd', 'g'],
+                ['rows', 'e', 'h'],
+                ['rows', 'f', 'i'],
+                ['rows', 'g', '']
+            ];
             expect(headings).to.deep.equal(expectHeadings);
         });
         it('strings array', () => {
-            const input = ['1',
-                '2',
-                '3'];
+            const input = ['1', '2', '3'];
             const headings = createHeadings(input, 1);
             const expectHeadings = [['1', '2', '3']];
             expect(headings).to.deep.equal(expectHeadings);
