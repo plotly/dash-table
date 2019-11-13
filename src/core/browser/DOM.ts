@@ -1,8 +1,8 @@
 export default class DOM {
-    public static getFirstParentOfType(element: HTMLElement, type: string): HTMLElement | undefined {
+    public static getFirstParentOfType(element: HTMLElement | undefined, type: string): HTMLElement | undefined {
         type = type.toUpperCase();
 
-        let current: HTMLElement = element;
+        let current: HTMLElement | undefined = element;
         while (current) {
             if (current.tagName.toUpperCase() === type) {
                 return current;
@@ -16,8 +16,8 @@ export default class DOM {
         }
     }
 
-    public static getParentById(element: HTMLElement, id: string): HTMLElement | undefined {
-        let current: HTMLElement = element;
+    public static getParentById(element: HTMLElement | undefined, id: string): HTMLElement | undefined {
+        let current: HTMLElement | undefined = element;
         while (current) {
             if (current.id === id) {
                 return current;

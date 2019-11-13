@@ -72,20 +72,17 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
 
             // state for applying focus
             if (nextProps.active_cell !== this.props.active_cell) {
-                if (!currentApplyFocus) {
-                    nextState.applyFocus = true;
-                }
-            } else if (nextProps.loading_state !== this.props.loading_state) {
-                let applyFocus = false;
-
+                nextState.applyFocus = true;
+            } else if (!nextProps.loading_state && this.props.loading_state) {
                 const activeElement = document.activeElement as HTMLElement;
-                if (activeElement) {
-                    applyFocus = !!DOM.getParentById(activeElement, this.props.id);
-                }
+                const tdElement = DOM.getFirstParentOfType(activeElement, 'td');
+                const tableElement = DOM.getParentById(tdElement, this.props.id);
 
-                if (applyFocus !== currentApplyFocus) {
-                    nextState.applyFocus = applyFocus;
-                }
+                nextState.applyFocus = !!tableElement;
+            }
+
+            if (nextState.applyFocus === currentApplyFocus) {
+                delete nextState.applyFocus;
             }
 
             return R.keysIn(nextState).length ? nextState as any : null;
