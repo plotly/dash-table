@@ -8,7 +8,7 @@ describe('loading states uneditable', () => {
         cy.visit('http://localhost:8084');
     });
 
-    it('prevents editing while loading', () => {
+    it.only('prevents editing while loading', () => {
         // Table is editable
         DashTable
             .getCell(0, 0)
@@ -22,24 +22,29 @@ describe('loading states uneditable', () => {
         // Table is not editable
         DashTable
             .getCell(0, 0, State.Loading)
-            .click();
+            .click()
+            .find('.dash-input-cell-value-container > input').should('have.length', 0);
 
-        DOM.focused.type(`Hello`);
         DashTable
             .getCell(0, 0, State.Any)
-            .within(() => cy.get('.dash-cell-value')
-                .should('not.have.value', 'Hello'));
+            .within(() => cy.get('.dash-cell-value').should('not.have.html', 'Hello'));
+
+        cy.get('#change-data-property').should('have.value', 'change_data');
 
         cy.wait(5000);
 
         // Table is editable
-        DashTable.getCell(0, 0, State.Ready);
+        DashTable
+            .getCell(0, 0, State.Ready)
+            .click()
+            .find('.dash-input-cell-value-container > input').should('have.length', 1);
 
-        DOM.focused.type(`Hello`);
+        DOM.focused.type(`Hello${Key.Enter}`);
+
         DashTable
             .getCell(0, 0)
             .within(() => cy.get('.dash-cell-value')
-                .should('have.value', 'Hello'));
+                .should('have.html', 'Hello'));
     });
 
     it('keeps focus on callback completion', () => {
