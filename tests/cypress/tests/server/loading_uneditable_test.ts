@@ -8,7 +8,7 @@ describe('loading states uneditable', () => {
         cy.visit('http://localhost:8084');
     });
 
-    it.only('prevents editing while loading', () => {
+    it('prevents editing while loading', () => {
         // Table is editable
         DashTable
             .getCell(0, 0)
