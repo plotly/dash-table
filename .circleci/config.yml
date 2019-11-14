@@ -123,7 +123,7 @@ jobs:
 
     "visual-test":
         docker:
-            - image: circleci/node:8.11.3-browsers
+            - image: circleci/node:10-browsers
 
         steps:
             - checkout
