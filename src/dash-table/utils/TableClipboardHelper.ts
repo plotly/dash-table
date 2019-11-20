@@ -42,11 +42,17 @@ export default class TableClipboardHelper {
         Clipboard.set(e, value);
     }
 
+    public static clearClipboard() {
+        TableClipboardHelper.lastLocalCopy = [];
+        TableClipboardHelper.localCopyWithoutHeaders = [];
+    }
+
     public static fromClipboard(
         ev: ClipboardEvent,
         activeCell: ICellCoordinates,
         derived_viewport_indices: number[],
         columns: Columns,
+        visibleColumns: Columns,
         data: Data,
         overflowColumns: boolean = true,
         overflowRows: boolean = true,
@@ -68,6 +74,7 @@ export default class TableClipboardHelper {
             activeCell,
             derived_viewport_indices,
             columns,
+            visibleColumns,
             data,
             overflowColumns,
             overflowRows

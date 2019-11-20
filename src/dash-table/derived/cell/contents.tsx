@@ -76,6 +76,7 @@ class Contents {
             (datum, rowIndex) => mapRow(
                 (column, columnIndex) => this.getContent(
                     false,
+                    false,
                     isFocused,
                     column,
                     dropdowns && dropdowns[rowIndex][columnIndex],
@@ -90,6 +91,7 @@ class Contents {
     get = memoizeOne((
         contents: JSX.Element[][],
         activeCell: ICellCoordinates | undefined,
+        applyFocus: boolean,
         columns: Columns,
         data: Data,
         offset: IViewportOffset,
@@ -114,6 +116,7 @@ class Contents {
         contents = shallowClone(contents);
         contents[i][j] = this.getContent(
             true,
+            applyFocus || false,
             isFocused,
             columns[j],
             dropdowns && dropdowns[i][j],
@@ -127,7 +130,7 @@ class Contents {
         return contents;
     });
 
-    private getContent(active: boolean, isFocused: boolean, column: IColumn, dropdown: IDropdown | undefined, columnIndex: number, rowIndex: number, datum: any, formatters: ((value: any) => any)[], data_loading: boolean) {
+    private getContent(active: boolean, applyFocus: boolean, isFocused: boolean, column: IColumn, dropdown: IDropdown | undefined, columnIndex: number, rowIndex: number, datum: any, formatters: ((value: any) => any)[], data_loading: boolean) {
 
         const className = [
             ...(active ? ['input-active'] : []),
@@ -142,6 +145,7 @@ class Contents {
                 return (<CellDropdown
                     key={`column-${columnIndex}`}
                     active={active}
+                    applyFocus={applyFocus}
                     clearable={dropdown && dropdown.clearable}
                     dropdown={dropdown && dropdown.options}
                     onChange={this.handlers(Handler.Change, rowIndex, columnIndex)}
@@ -152,6 +156,7 @@ class Contents {
                 return (<CellInput
                     key={`column-${columnIndex}`}
                     active={active}
+                    applyFocus={applyFocus}
                     className={className}
                     focused={isFocused}
                     onChange={this.handlers(Handler.Change, rowIndex, columnIndex)}
@@ -173,6 +178,8 @@ class Contents {
                     formatters[columnIndex](datum[column.id]);
 
                 return (<CellLabel
+                    active={active}
+                    applyFocus={applyFocus}
                     className={className}
                     key={`column-${columnIndex}`}
                     value={resolvedValue}

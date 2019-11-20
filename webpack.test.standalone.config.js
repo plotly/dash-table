@@ -4,7 +4,10 @@ const options = {
         transpileOnly: true
     },
     preprocessor: {
-        definitions: ['TEST', 'TEST_COPY_PASTE']
+        definitions: ['TEST', 'TEST_COPY_PASTE'],
+        variable: {
+            mode: 'eager'
+        }
     },
     mode: 'development'
 };
