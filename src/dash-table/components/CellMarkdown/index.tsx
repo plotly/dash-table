@@ -6,6 +6,8 @@ import { Remarkable } from 'remarkable';
 import { memoizeOne } from 'core/memoizer';
 
 interface IProps {
+    active: boolean;
+    applyFocus: boolean;
     className: string;
     value: any;
 }
@@ -19,6 +21,14 @@ export default class CellMarkdown extends PureComponent<IProps> {
         }
     }));
 
+    componentDidUpdate() {
+        this.setFocus();
+    }
+
+    componentDidMount() {
+        this.setFocus();
+    }
+
     render() {
         const {
             className,
@@ -26,8 +36,24 @@ export default class CellMarkdown extends PureComponent<IProps> {
         } = this.props;
 
         return (<div
+            ref='el'
+            tabIndex={-1}
             className={[className, 'cell-markdown'].join(' ')}
             {...this.getMarkdown(value)}
         />);
     }
+
+    private setFocus() {
+        const { active, applyFocus } = this.props;
+        if (!active) {
+            return;
+        }
+
+        const el = this.refs.el as HTMLDivElement;
+
+        if (applyFocus && el && document.activeElement !== el) {
+            el.focus();
+        }
+    }
+
 }

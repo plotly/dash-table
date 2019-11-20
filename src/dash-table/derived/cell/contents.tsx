@@ -167,6 +167,8 @@ class Contents {
                 />);
             case CellType.Markdown:
                 return (<CellMarkdown
+                    active={active}
+                    applyFocus={applyFocus}
                     className={className}
                     value={datum[column.id]}
                 />);
