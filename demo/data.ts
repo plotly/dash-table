@@ -93,6 +93,77 @@ export const generateMockData = (rows: number) => unpackIntoColumnsAndData([
     }
 ]);
 
+export const generateMarkdownMockData = (rows: number) => unpackIntoColumnsAndData([
+    {
+        id: 'markdown-headers',
+        name: ['', 'Headers'],
+        presentation: 'markdown',
+        data: gendata(i => '#'.repeat(i % 6) + ' row ' + i, rows)
+    },
+    {
+        id: 'markdown-italics',
+        name: ['Emphasis', 'Italics'],
+        presentation: 'markdown',
+        data: gendata(i => (i % 2) ? '*' + i + '*' : '_' + i + '_', rows)
+    },
+    {
+        id: 'markdown-links',
+        name: ['', 'Links'],
+        presentation: 'markdown',
+        data: gendata(i => '[Learn about ' + i + '](http://en.wikipedia.org/wiki/' + i + ')', rows)
+    },
+    {
+        id: 'markdown-lists',
+        name: ['', 'Lists'],
+        presentation: 'markdown',
+        data: gendata(i => [
+            '1. Row number ' + i,
+            '    - subitem ' + i,
+            '      - subsubitem ' + i,
+            '    - subitem two ' + i,
+            '2. Next row ' + (i + 1)].join('\n'),
+            rows)
+    },
+    {
+        id: 'markdown-tables',
+        name: ['', 'Tables'],
+        presentation: 'markdown',
+        data: gendata(i => [
+            'Current | Next',
+            '--- | ---',
+            i + ' | ' + (i + 1)].join('\n'),
+            rows)
+    },
+    {
+        id: 'markdown-quotes',
+        name: ['', 'Quotes'],
+        presentation: 'markdown',
+        data: gendata(i => '> A quote for row number ' + i, rows)
+    },
+    {
+        id: 'markdown-inline-code',
+        name: ['', 'Inline code'],
+        presentation: 'markdown',
+        data: gendata(i => 'This is row `' + i + '` in this table.', rows)
+    },
+    {
+        id: 'markdown-code-blocks',
+        name: ['', 'Code blocks'],
+        presentation: 'markdown',
+        data: gendata(i => [
+            '```python',
+            'def hello_table(' + i + '):',
+            '  print("hello, " + i)'].join('\n'), rows)
+    },
+    {
+        id: 'markdown-images',
+        name: ['', 'Images'],
+        presentation: 'markdown',
+        data: gendata(i => '![image ' + i + ' alt text](https://dash.plot.ly/assets/images/logo.png)', rows)
+    }
+
+]);
+
 export const generateSpaceMockData = (rows: number) => unpackIntoColumnsAndData([
     {
         id: 'rows',
