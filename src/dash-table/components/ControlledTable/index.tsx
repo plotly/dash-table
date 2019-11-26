@@ -679,6 +679,17 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             });
         }
 
+	// Adjust the height of rows in the row_selectable and row_deletable columns
+	if (fixed_columns || (row_selectable || row_deletable)) {
+	    Array.from(r1c1.querySelectorAll(`tr`)).forEach((tr, index) => {
+		const style = getComputedStyle(tr);
+		const height = style.height;
+
+		this.stylesheet.setRule(`.dash-fixed-column:not(.dash-fixed-row) tr:nth-of-type(${index + 1})`,
+					`height: ${height} !important;`);
+	    });
+	}
+
         // Adjust the width of the fixed row / fixed columns header
         if (fixed_columns && fixed_rows) {
             Array.from(r1c0.querySelectorAll('tr:first-of-type td, tr:first-of-type th')).forEach((td, index) => {
