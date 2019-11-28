@@ -72,7 +72,7 @@ Object.values(BasicModes).forEach(mode => {
                 DashTable.getCell(3, 1).should('not.have.class', 'focused');
             });
 
-            it('can moved right', () => {
+            it('can move right', () => {
                 DOM.focused.type(Key.ArrowRight);
                 DashTable.getCell(3, 2).should('have.class', 'focused');
                 DashTable.getCell(3, 1).should('not.have.class', 'focused');
