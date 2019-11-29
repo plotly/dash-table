@@ -680,7 +680,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         }
 
         // Adjust the height of rows in the row_selectable and row_deletable columns
-        if (fixed_columns || (row_selectable || row_deletable)) {
+        if (fixed_columns || row_selectable || row_deletable) {
             Array.from(r1c1.querySelectorAll(`tr`)).forEach((tr, index) => {
                 const style = getComputedStyle(tr);
                 const height = style.height;
