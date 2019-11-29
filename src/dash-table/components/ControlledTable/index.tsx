@@ -681,13 +681,16 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
         // Adjust the height of rows in the row_selectable and row_deletable columns
         if (fixed_columns || row_selectable || row_deletable) {
-            Array.from(r1c1.querySelectorAll(`tr`)).forEach((tr, index) => {
+            let newRowStyles = Array.from(r1c1.querySelectorAll(`tr`)).map((tr, index) => {
                 const style = getComputedStyle(tr);
                 const height = style.height;
 
-                this.stylesheet.setRule(`.dash-fixed-column:not(.dash-fixed-row) tr:nth-of-type(${index + 1})`,
-                    `height: ${height} !important;`);
+                return [
+                    `.dash-fixed-column:not(.dash-fixed-row) tr:nth-of-type(${index + 1})`,
+                    `height: ${height} !important;`
+                ];
             });
+            newRowStyles.forEach(styleRule => { this.stylesheet.setRule(styleRule[0], styleRule[1]); });
         }
 
         // Adjust the width of the fixed row / fixed columns header
