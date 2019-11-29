@@ -7,12 +7,12 @@ interface IAccumulator {
     count: number;
 }
 
-function renderFragment(cells: any[][] | null, offset: number = 0) {
+function renderFragment(cells: any[][] | null, offset: number = 0, fixedColumnCells: boolean = false) {
     return cells ?
         (<table tabIndex={-1}>
             <tbody>
                 {cells.map(
-                    (row, idx) => <tr key={`row-${idx + offset}`}>{row}</tr>)
+                    (row, idx) => <tr className={fixedColumnCells ? `dash-fixed-col-row-${idx + offset}` : undefined} key={`row-${idx + offset}`}>{row}</tr>)
                 }
             </tbody>
         </table>) :
@@ -66,8 +66,8 @@ export default memoizeOneFactory((
 
     return {
         grid: [
-            [renderFragment(fixedRowAndColumnCells), renderFragment(fixedRowCells)],
-            [renderFragment(fixedColumnCells), renderFragment(cells, offset)]
+            [renderFragment(fixedRowAndColumnCells, 0, true), renderFragment(fixedRowCells)],
+            [renderFragment(fixedColumnCells, 0, true), renderFragment(cells, offset)]
         ],
         empty: [
             [isEmpty(fixedRowAndColumnCells), isEmpty(fixedRowCells)],
