@@ -5,11 +5,11 @@
 
 # production
 /build
-/dash_table	
-/inst	
-/man	
-/R	
-DESCRIPTION	
+/dash_table
+/inst
+/man
+/R
+DESCRIPTION
 NAMESPACE
 
 # testing
