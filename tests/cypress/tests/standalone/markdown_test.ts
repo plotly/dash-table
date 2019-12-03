@@ -84,4 +84,62 @@ describe('markdown cells', () => {
         });
     });
 
+    describe('filtering', () => {
+        beforeEach(() => {
+            cy.visit(`http://localhost:8080?mode=${AppMode.Markdown}&flavor=${AppFlavor.FilterNative}`);
+        });
+
+        it('general', () => {
+            DashTable.getFilterById('markdown-headers').click();
+
+            DOM.focused.type(`row 5`);
+            DashTable.getFilterById('markdown-italics').click();
+
+            DashTable.getCellById(0, 'markdown-headers').within(() => cy.get('.dash-cell-value h5').should('have.html', 'row 5'));
+            // results should be 5, 51, ..., 59, 500, ..., 599
+            cy.get('.dash-spreadsheet .cell-1-1 table tbody tr td.dash-cell.column-0').should('have.length', 111);
+
+            DOM.focused.type(`7`);
+            DashTable.getFilterById('markdown-code-blocks').click();
+
+            DashTable.getCellById(0, 'markdown-italics').within(() => cy.get('.dash-cell-value p em').should('have.html', '57'));
+            // results should be 57, 507, ..., 567 571, ..., 579, 587, ..., 597
+            cy.get('.dash-spreadsheet .cell-1-1 table tbody tr td.dash-cell.column-0').should('have.length', 20);
+
+            DOM.focused.type(`58`);
+            DashTable.getFilterById('markdown-quotes').click();
+
+            DashTable.getCellById(0, 'markdown-code-blocks').within(() => cy.get('.dash-cell-value pre code').should('have.html', 'def hello_table(587):\n  print("hello, " + i)'));
+        });
+
+        describe('links', () => {
+            it('by link text', () => {
+                DashTable.getFilterById('markdown-links').click();
+                DOM.focused.type(`Learn about 1234`);
+                DOM.focused.type(`${Key.Enter}`);
+
+                cy.get('.dash-spreadsheet .cell-1-1 table tbody tr td.dash-cell.column-2').should('have.length', 1);
+                DashTable.getCellById(0, 'markdown-links').within(() => cy.get('.dash-cell-value > p > a').should('have.attr', 'href', 'http://en.wikipedia.org/wiki/1234'));
+            });
+
+            it('by link value', () => {
+                DashTable.getFilterById('markdown-links').click();
+                DOM.focused.type(`/wiki/4321`);
+                DOM.focused.type(`${Key.Enter}`);
+                cy.get('.dash-spreadsheet .cell-1-1 table tbody tr td.dash-cell.column-2').should('have.length', 1);
+                DashTable.getCellById(0, 'markdown-links').within(() => cy.get('.dash-cell-value > p > a').should('have.html', 'Learn about 4321'));
+
+            });
+        });
+
+        it('images by alt text', () => {
+            DashTable.getFilterById('markdown-images').click();
+            DOM.focused.type(`314`);
+            DOM.focused.type(`${Key.Enter}`);
+
+            cy.get('.dash-spreadsheet .cell-1-1 table tbody tr td.dash-cell.column-8').should('have.length', 15);
+            DashTable.getCellById(0, 'markdown-images').within(() => cy.get('.dash-cell-value > p > img').should('have.attr', 'alt', 'image 314 alt text'));
+        });
+    });
+
 });
