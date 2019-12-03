@@ -2,7 +2,8 @@ import DashTable from 'cypress/DashTable';
 import DOM from 'cypress/DOM';
 import Key from 'cypress/Key';
 
-import { BasicModes } from 'demo/AppMode';
+import { BasicModes, AppMode } from 'demo/AppMode';
+BasicModes.push(AppMode.Markdown);
 
 Object.values(BasicModes).forEach(mode => {
     describe(`navigate, mode=${mode}`, () => {
