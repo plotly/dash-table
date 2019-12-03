@@ -17,7 +17,7 @@ export default class CellMarkdown extends PureComponent<IProps> {
 
     getMarkdown = memoizeOne((value: string) => ({
         dangerouslySetInnerHTML: {
-            __html: CellMarkdown.md.render(value)
+            __html: CellMarkdown.md.render(String(value))
         }
     }));
 
