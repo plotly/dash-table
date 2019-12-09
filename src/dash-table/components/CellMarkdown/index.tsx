@@ -19,7 +19,6 @@ interface IState {
     hljsStylesLoaded: any;
 }
 
-
 let hljsResolve: () => any;
 let hljsStylesResolve: () => any;
 
@@ -32,13 +31,12 @@ let hljsStylesLoaded: Promise<boolean> | true = new Promise<boolean>(resolve => 
 });
 
 let hljs: any;
-let hljsStyles: any
+let hljsStyles: any;
 
 export default class CellMarkdown extends PureComponent<IProps, IState> {
 
     private static readonly md: Remarkable = new Remarkable({
-        highlight: function(str: string, lang: string) {
-
+        highlight: (str: string, lang: string) => {
             if (hljs && hljsStyles) {
                 if (lang && hljs.getLanguage(lang)) {
                     try {
@@ -73,11 +71,11 @@ export default class CellMarkdown extends PureComponent<IProps, IState> {
 
     constructor(props: IProps) {
         super(props);
-        this.state = { hljsLoaded, hljsStylesLoaded }
+        this.state = { hljsLoaded, hljsStylesLoaded };
 
         // if doesn't equal true, assume it's a promise
         if (hljsLoaded !== true) {
-            Promise.all([hljsLoaded, hljsStylesLoaded]).then(() => { this.setState({ hljsLoaded: true }) });
+            Promise.all([hljsLoaded, hljsStylesLoaded]).then(() => { this.setState({ hljsLoaded: true }); });
         }
     }
 
