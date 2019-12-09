@@ -4,7 +4,11 @@ export default class LazyLoader {
     }
 
     public static get hljs() {
-        return import(/* webpackChunkName: "highlight", webpackMode: "$${{mode}}" */ 'highlight.js');
+        return import(/* webpackChunkName: "highlight", webpackMode: "$${{mode}}" */ '../../third-party/highlight.pack');
+    }
+
+    public static get hljsStyles() {
+        return import(/* webpackChunkName: "highlight-styles", webpackMode: "$${{mode}}" */ '../../third-party/styles/github.css');
     }
 
     public static table() {
