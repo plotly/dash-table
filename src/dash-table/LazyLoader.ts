@@ -4,10 +4,12 @@ export default class LazyLoader {
     }
 
     public static get hljs() {
+        // @ts-ignore
         return import(/* webpackChunkName: "highlight", webpackMode: "$${{mode}}" */ '../../third-party/highlight.pack');
     }
 
     public static get hljsStyles() {
+        // @ts-ignore
         return import(/* webpackChunkName: "highlight-styles", webpackMode: "$${{mode}}" */ '../../third-party/styles/github.css');
     }
 
