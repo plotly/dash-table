@@ -109,7 +109,7 @@ describe('markdown cells', () => {
             DOM.focused.type(`58`);
             DashTable.getFilterById('markdown-quotes').click();
 
-            DashTable.getCellById(0, 'markdown-code-blocks').within(() => cy.get('.dash-cell-value pre code').should('have.html', 'def hello_table(587):\n  print("hello, " + i)'));
+            DashTable.getCellById(0, 'markdown-links').within(() => cy.get('.dash-cell-value p a').should('have.html', 'Learn about 587'));
         });
 
         describe('links', () => {
