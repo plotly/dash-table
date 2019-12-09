@@ -16,23 +16,30 @@ interface IProps {
 
 interface IState {
     hljsLoaded: any;
+    hljsStylesLoaded: any;
 }
 
 
 let hljsResolve: () => any;
+let hljsStylesResolve: () => any;
 
 let hljsLoaded: Promise<boolean> | true = new Promise<boolean>(resolve => {
     hljsResolve = resolve;
 });
 
+let hljsStylesLoaded: Promise<boolean> | true = new Promise<boolean>(resolve => {
+    hljsStylesResolve = resolve;
+});
+
 let hljs: any;
+let hljsStyles: any
 
 export default class CellMarkdown extends PureComponent<IProps, IState> {
 
     private static readonly md: Remarkable = new Remarkable({
         highlight: function(str: string, lang: string) {
 
-            if (hljs) {
+            if (hljs && hljsStyles) {
                 if (lang && hljs.getLanguage(lang)) {
                     try {
                         return hljs.highlight(lang, str).value;
@@ -57,17 +64,20 @@ export default class CellMarkdown extends PureComponent<IProps, IState> {
 
     private static async loadhljs() {
         hljs = await LazyLoader.hljs;
+        hljsStyles = await LazyLoader.hljsStyles;
         hljsResolve();
+        hljsStylesResolve();
         hljsLoaded = true;
+        hljsStylesLoaded = true;
     }
 
     constructor(props: IProps) {
         super(props);
-        this.state = { hljsLoaded }
+        this.state = { hljsLoaded, hljsStylesLoaded }
 
         // if doesn't equal true, assume it's a promise
         if (hljsLoaded !== true) {
-            hljsLoaded.then(() => { this.setState({ hljsLoaded: true }) });
+            Promise.all([hljsLoaded, hljsStylesLoaded]).then(() => { this.setState({ hljsLoaded: true }) });
         }
     }
 
