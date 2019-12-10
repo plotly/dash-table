@@ -68,9 +68,9 @@ storiesOf('DashTable/Markdown', module)
                 { a: '> This is a multiline\n> quote.', b: 'multiline quote' },
                 { a: 'The `dash_table` package is super cool!', b: 'inline code' },
                 {
-                    a: ['```',
-                        'def hello_world():',
-                        '  print("hello, world!")',
+                    a: ['```plaintext',
+                        'export default helloworld(){',
+                        '  print("hello, world!")}',
                         '```'].join('\n'),
                     b: 'code block without syntax highlighting'
                 },
