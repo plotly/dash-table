@@ -16,36 +16,29 @@ interface IProps {
 
 interface IState {
     hljsLoaded: any;
-    hljsStylesLoaded: any;
 }
 
 let hljsResolve: () => any;
-let hljsStylesResolve: () => any;
 
 let hljsLoaded: Promise<boolean> | true = new Promise<boolean>(resolve => {
     hljsResolve = resolve;
 });
 
-let hljsStylesLoaded: Promise<boolean> | true = new Promise<boolean>(resolve => {
-    hljsStylesResolve = resolve;
-});
-
 let hljs: any;
-let hljsStyles: any;
 
 export default class CellMarkdown extends PureComponent<IProps, IState> {
 
     private static readonly md: Remarkable = new Remarkable({
         highlight: (str: string, lang: string) => {
-            if (hljs && hljsStyles) {
-                if (lang && hljs.getLanguage(lang)) {
+            if (hljs) {
+                if (lang && hljs.default.getLanguage(lang)) {
                     try {
-                        return hljs.highlight(lang, str).value;
+                        return hljs.default.highlight(lang, str).value;
                     } catch (err) { }
                 }
 
                 try {
-                    return hljs.highlightAuto(str).value;
+                    return hljs.default.highlightAuto(str).value;
                 } catch (err) { }
             } else {
                 CellMarkdown.loadhljs();
@@ -62,20 +55,17 @@ export default class CellMarkdown extends PureComponent<IProps, IState> {
 
     private static async loadhljs() {
         hljs = await LazyLoader.hljs;
-        hljsStyles = await LazyLoader.hljsStyles;
         hljsResolve();
-        hljsStylesResolve();
         hljsLoaded = true;
-        hljsStylesLoaded = true;
     }
 
     constructor(props: IProps) {
         super(props);
-        this.state = { hljsLoaded, hljsStylesLoaded };
+        this.state = { hljsLoaded };
 
         // if doesn't equal true, assume it's a promise
         if (hljsLoaded !== true) {
-            Promise.all([hljsLoaded, hljsStylesLoaded]).then(() => { this.setState({ hljsLoaded: true }); });
+            hljsLoaded.then(() => { this.setState({ hljsLoaded: true }); });
         }
     }
 
