@@ -60,7 +60,10 @@
   "author": "Chris Parmer <chris@plot.ly>",
   "maintainer": "Ryan Patrick Kyle <ryan@plot.ly>",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "@types/highlight.js": "^9.12.3",
+    "highlight.js": "^9.17.0"
+  },
   "devDependencies": {
     "@babel/cli": "^7.6.2",
     "@babel/core": "^7.6.2",
