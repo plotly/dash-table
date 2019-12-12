@@ -41,7 +41,7 @@ Pygments==2.2.0
 pylint==2.1.1
 python-dateutil==2.7.3
 pytz==2018.5
-pyyaml=5.2
+pyyaml==5.2
 retrying==1.3.3
 simplegeneric==0.8.1
 six==1.11.0
