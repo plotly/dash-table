@@ -51,7 +51,7 @@ jobs:
 
     "standalone-test":
         docker:
-            - image: circleci/python:3.6.7-node-browsers
+            - image: circleci/python:3.6-node-browsers
             - image: cypress/base:10
 
         steps:
@@ -75,8 +75,6 @@ jobs:
             - run:
                 name: Run tests
                 command: |
-                    rm -rf node_modules/cypress
-                    npm i cypress@3.4.1
                     npm run test.standalone
 
 
