@@ -51,9 +51,9 @@ jobs:
 
     "standalone-test":
         docker:
-            - image: circleci/python:3.6.7-node-browsers
+            - image: circleci/python:3.6-node-browsers
             - image: cypress/base:10
-
+        resource_class: large
         steps:
             - checkout
             - restore_cache:
