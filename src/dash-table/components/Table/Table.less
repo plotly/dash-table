@@ -494,7 +494,10 @@
              * tried it.
              */
             overflow-x: visible;
-            height: 100%;
+	}
+
+ 	.dash-spreadsheet-inner td.dropdown:not([data-dash-column="string"]) {
+		height: 100%;
 	}
 
 	.dash-spreadsheet-inner :not(.cell--selected) tr:hover,
