@@ -146,4 +146,14 @@ describe('markdown cells', () => {
         });
     });
 
+    describe('loading highlightjs', () => {
+        beforeEach(() => {
+            cy.visit(`http://localhost:8080?mode=${AppMode.Markdown}`);
+            // wait for highlight.js to highlight code
+            DashTable.getCellById(0, 'markdown-code-blocks').within(() => cy.get('code.language-python span.hljs-title'));
+        });
+        it('does not attach hljs to window', () => {
+            cy.window().should('not.have.property', 'hljs');
+        });
+    });
 });
