@@ -1,11 +1,10 @@
 import React, {
     PureComponent
 } from 'react';
-import { Remarkable } from 'remarkable';
 
 import { memoizeOne } from 'core/memoizer';
 
-import LazyLoader from 'dash-table/LazyLoader';
+import Highlight from 'dash-table/components/Highlight';
 
 interface IProps {
     active: boolean;
@@ -14,58 +13,19 @@ interface IProps {
     value: any;
 }
 
-interface IState {
-    hljsLoaded: any;
-}
+export default class CellMarkdown extends PureComponent<IProps, {}> {
 
-let hljsResolve: () => any;
-
-let hljsLoaded: Promise<boolean> | true = new Promise<boolean>(resolve => {
-    hljsResolve = resolve;
-});
-
-let hljs: any;
-
-export default class CellMarkdown extends PureComponent<IProps, IState> {
-
-    private static readonly md: Remarkable = new Remarkable({
-        highlight: (str: string, lang: string) => {
-            if (hljs) {
-                if (lang && hljs.default.getLanguage(lang)) {
-                    try {
-                        return hljs.default.highlight(lang, str).value;
-                    } catch (err) { }
-                }
-
-                try {
-                    return hljs.default.highlightAuto(str).value;
-                } catch (err) { }
-            } else {
-                CellMarkdown.loadhljs();
-            }
-            return '';
-        }
-    });
-
-    getMarkdown = memoizeOne((value: string, _hljsLoaded: any) => ({
+    getMarkdown = memoizeOne((value: string, _ready: any) => ({
         dangerouslySetInnerHTML: {
-            __html: CellMarkdown.md.render(String(value))
+            __html: Highlight.mdHtml(String(value))
         }
     }));
 
-    private static async loadhljs() {
-        hljs = await LazyLoader.hljs;
-        hljsResolve();
-        hljsLoaded = true;
-    }
-
     constructor(props: IProps) {
         super(props);
-        this.state = { hljsLoaded };
 
-        // if doesn't equal true, assume it's a promise
-        if (hljsLoaded !== true) {
-            hljsLoaded.then(() => { this.setState({ hljsLoaded: true }); });
+        if (Highlight.isReady !== true) {
+            Highlight.isReady.then(() => { this.setState({}); });
         }
     }
 
@@ -87,7 +47,7 @@ export default class CellMarkdown extends PureComponent<IProps, IState> {
             ref='el'
             tabIndex={-1}
             className={[className, 'cell-markdown'].join(' ')}
-            {...this.getMarkdown(value, this.state.hljsLoaded)}
+            {...this.getMarkdown(value, Highlight.isReady)}
         />);
     }
 
