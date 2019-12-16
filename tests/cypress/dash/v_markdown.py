@@ -20,6 +20,7 @@ df = pd.read_csv(url)
 df['Complaint ID'] = df['Complaint ID'].map(lambda x: '**' + str(x) + '**')
 df['Product'] = df['Product'].map(lambda x: '[' + str(x) + '](plot.ly)')
 df['Issue'] = df['Issue'].map(lambda x: '![' + str(x) + '](https://dash.plot.ly/assets/images/logo.png)')
+df['State'] = df['State'].map(lambda x: '```python\n"{}"\n```'.format(x))
 
 df = df.values
 
@@ -37,7 +38,7 @@ app.layout = html.Div(
                 {"id": 3, "name": "Sub-product"},
                 {"id": 4, "name": "Issue", "presentation": "markdown"},
                 {"id": 5, "name": "Sub-issue"},
-                {"id": 6, "name": "State"},
+                {"id": 6, "name": "State", "presentation": "markdown"},
                 {"id": 7, "name": "ZIP"}
             ],
             editable=True,
