@@ -76,7 +76,24 @@ _js_dist = [
         ).format(__version__),
         'namespace': package_name,
         'dynamic': True
+    },
+    {
+        'relative_package_path': 'async~highlight.js',
+        'external_url': (
+            'https://unpkg.com/dash-table@{}/dash_table/async~highlight.js'
+        ).format(__version__),
+        'namespace': package_name,
+        'async': True
+    },
+    {
+        'relative_package_path': 'async~highlight.js.map',
+        'external_url': (
+            'https://unpkg.com/dash-table@{}/dash_table/async~highlight.js.map'
+        ).format(__version__),
+        'namespace': package_name,
+        'async': True
     }
+            
 ]
 
 _css_dist = []
