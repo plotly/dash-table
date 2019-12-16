@@ -4,7 +4,7 @@ export default class LazyLoader {
     }
 
     public static get hljs() {
-        return import(/* webpackChunkName: "highlight", webpackMode: "$${{mode}}" */ '../../third-party/highlight.js');
+        return Promise.resolve(window.hljs || import(/* webpackChunkName: "highlight", webpackMode: "$${{mode}}" */ '../../third-party/highlight.js').then(result => result.default));
     }
 
     public static table() {

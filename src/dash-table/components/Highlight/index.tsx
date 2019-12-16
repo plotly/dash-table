@@ -18,14 +18,14 @@ export default class Highlight {
     private static readonly md: Remarkable = new Remarkable({
         highlight: (str: string, lang: string) => {
             if (Highlight.hljs) {
-                if (lang && Highlight.hljs.default.getLanguage(lang)) {
+                if (lang && Highlight.hljs.getLanguage(lang)) {
                     try {
-                        return Highlight.hljs.default.highlight(lang, str).value;
+                        return Highlight.hljs.highlight(lang, str).value;
                     } catch (err) { }
                 }
 
                 try {
-                    return Highlight.hljs.default.highlightAuto(str).value;
+                    return Highlight.hljs.highlightAuto(str).value;
                 } catch (err) { }
             } else {
                 Highlight.loadhljs();
