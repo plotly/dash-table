@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import { Remarkable } from 'remarkable';
 
+import DOM from 'core/browser/DOM';
 import { memoizeOne } from 'core/memoizer';
 
 import LazyLoader from 'dash-table/LazyLoader';
@@ -85,7 +86,6 @@ export default class CellMarkdown extends PureComponent<IProps, IState> {
 
         return (<div
             ref='el'
-            tabIndex={-1}
             className={[className, 'cell-markdown'].join(' ')}
             {...this.getMarkdown(value, this.state.hljsLoaded)}
         />);
@@ -97,10 +97,14 @@ export default class CellMarkdown extends PureComponent<IProps, IState> {
             return;
         }
 
-        const el = this.refs.el as HTMLDivElement;
+        const el = this.refs.el as any;
 
         if (applyFocus && el && document.activeElement !== el) {
-            el.focus();
+            // Limitation. If React >= 16 --> Use React.createRef instead to pass parent ref to child
+            const tdParent = DOM.getFirstParentOfType(el.wrapper, 'td');
+            if (tdParent) {
+                tdParent.focus();
+            }
         }
     }
 
