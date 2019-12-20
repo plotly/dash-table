@@ -9,7 +9,6 @@
             "cypress/**",
             "inst/**",
             "node_modules/**",
-	    "third-party/**",
             "@Types/**",
             "venv/**"
         ]
