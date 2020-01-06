@@ -270,24 +270,24 @@ storiesOf('DashTable/Sorting', module)
         sort_as_null={['']}
         style_data_conditional={style_data_conditional}
     />))
-    .add(`"a" descending -- '' & 426 override`, () => (<DataTable
+    .add(`"a" descending -- empty string & 426 override`, () => (<DataTable
         setProps={setProps}
         id='table'
         data={sparseData}
         columns={mergedColumns}
         sort_action={TableAction.Native}
         sort_by={[{ column_id: 'a', direction: 'desc' }]}
-        sort_as_null={['']}
+        sort_as_null={['', 426]}
         style_data_conditional={style_data_conditional}
     />))
-    .add(`"a" ascending -- '' and 426 override`, () => (<DataTable
+    .add(`"a" ascending -- empty string and 426 override`, () => (<DataTable
         setProps={setProps}
         id='table'
         data={sparseData}
         columns={mergedColumns}
         sort_action={TableAction.Native}
         sort_by={[{ column_id: 'a', direction: 'asc' }]}
-        sort_as_null={['']}
+        sort_as_null={['', 426]}
         style_data_conditional={style_data_conditional}
     />));
 storiesOf('DashTable/Without id', module)
