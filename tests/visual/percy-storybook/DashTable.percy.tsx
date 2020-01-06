@@ -270,7 +270,7 @@ storiesOf('DashTable/Sorting', module)
         sort_as_null={['']}
         style_data_conditional={style_data_conditional}
     />))
-    .add(`"a" descending -- '' & 426 override`, () => (<DataTable
+    .add(`"a" descending -- '' & override 426`, () => (<DataTable
         setProps={setProps}
         id='table'
         data={sparseData}
@@ -280,7 +280,7 @@ storiesOf('DashTable/Sorting', module)
         sort_as_null={['', 426]}
         style_data_conditional={style_data_conditional}
     />))
-    .add(`"a" ascending -- '' and 426 override`, () => (<DataTable
+    .add(`"a" ascending -- '' and override 426`, () => (<DataTable
         setProps={setProps}
         id='table'
         data={sparseData}
