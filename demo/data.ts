@@ -164,6 +164,37 @@ export const generateMarkdownMockData = (rows: number) => unpackIntoColumnsAndDa
 
 ]);
 
+export const generateMixedMarkdownMockData = (rows: number) => unpackIntoColumnsAndData([
+    {
+        id: 'not-markdown-column',
+        name: ['Not Markdown'],
+        editable: true,
+        data: gendata(_ => 'this is not a markdown cell', rows)
+    },
+    {
+        id: 'markdown-column',
+        name: ['Markdown'],
+        type: ColumnType.Text,
+        presentation: 'markdown',
+        data: gendata(_ => [
+            '```javascript',
+            'console.warn("this is a markdown cell")',
+            '```'].join('\n'), rows)
+    },
+    {
+        id: 'also-not-markdown-column',
+        name: ['Also Not Markdown'],
+        editable: false,
+        data: gendata(i => i, rows)
+    },
+    {
+        id: 'also-also-not-markdown-column',
+        name: ['Also Also Not Markdown'],
+        editable: true,
+        data: gendata(_ => 'this is also also not a markdown cell', rows)
+    }
+]);
+
 export const generateSpaceMockData = (rows: number) => unpackIntoColumnsAndData([
     {
         id: 'rows',
