@@ -61,7 +61,7 @@ export default class CellMarkdown extends PureComponent<IProps, {}> {
 
         if (applyFocus && el && document.activeElement !== el) {
             // Limitation. If React >= 16 --> Use React.createRef instead to pass parent ref to child
-            const tdParent = DOM.getFirstParentOfType(el.wrapper, 'td');
+            const tdParent = DOM.getFirstParentOfType(el, 'td');
             if (tdParent) {
                 tdParent.focus();
             }
