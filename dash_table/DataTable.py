@@ -146,8 +146,8 @@ The `id` is not visible in the table.
 as it appears in the column header.
 If `name` is a list of strings, then the columns
 will render with multiple headers rows.
-  - presentation (a value equal to: 'input', 'dropdown'; optional): The `presentation` to use to display the value.
-Defaults to 'input' for ['numeric', 'text', 'any'].
+  - presentation (a value equal to: 'input', 'dropdown', 'markdown'; optional): The `presentation` to use to display the value.
+Defaults to 'input' for ['datetime', 'numeric', 'text', 'any'].
   - on_change (dict; optional): The `on_change` behavior of the column for user-initiated modifications.
 'action' (default 'coerce'):
  none: do not validate data;

@@ -139,7 +139,7 @@ is the same.
  'group': (default: ',') the string used for the groups separator;
  'grouping': (default: [3]) a list of integers representing the grouping pattern.
  'numerals': a list of ten strings used as replacements for numbers 0-9;
- 'percent': (default: '%') the string used for the percentage symbol;
+ 'percent': (default: '\%') the string used for the percentage symbol;
  'separate_4digits': (default: true) separate integers with 4-digits or less.
 'nully': a value that will be used in place of the nully value during formatting.
   if the value type matches the column type, it will be formatted normally.
@@ -169,8 +169,8 @@ the `id` is not visible in the table.
 as it appears in the column header.
 if `name` is a list of strings, then the columns
 will render with multiple headers rows.
-  - presentation (a value equal to: 'input', 'dropdown'; optional): the `presentation` to use to display the value.
-defaults to 'input' for ['numeric', 'text', 'any'].
+  - presentation (a value equal to: 'input', 'dropdown', 'markdown'; optional): the `presentation` to use to display the value.
+defaults to 'input' for ['datetime', 'numeric', 'text', 'any'].
   - on_change (optional): the `on_change` behavior of the column for user-initiated modifications.
 'action' (default 'coerce'):
  none: do not validate data;
@@ -244,7 +244,7 @@ When left unspecified, each individual nested prop will default to a pre-determi
   'group': (default: ',') the string used for the groups separator.
   'grouping': (default: [3]) a list of integers representing the grouping pattern.
   'numerals': a list of ten strings used as replacements for numbers 0-9.
-  'percent': (default: '%') the string used for the percentage symbol.
+  'percent': (default: '\%') the string used for the percentage symbol.
   'separate_4digits': (default: True) separate integers with 4-digits or less.}
 
 \item{css}{List of lists containing elements 'selector', 'rule'.

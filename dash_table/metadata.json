@@ -286,9 +286,13 @@
                   {
                     "value": "'dropdown'",
                     "computed": false
+                  },
+                  {
+                    "value": "'markdown'",
+                    "computed": false
                   }
                 ],
-                "description": "The `presentation` to use to display the value.\nDefaults to 'input' for ['numeric', 'text', 'any'].",
+                "description": "The `presentation` to use to display the value.\nDefaults to 'input' for ['datetime', 'numeric', 'text', 'any'].",
                 "required": false
               },
               "on_change": {
