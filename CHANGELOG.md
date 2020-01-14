@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - [#670](https://github.com/plotly/dash-table/pull/670) Fix a bug where `derived_filter_query_structure` was not getting updated properly
+- [#677](https://github.com/plotly/dash-table/pull/677) Fix a bug where the table fails to load when used inside an iframe with a sandbox attribute that only has allow-scripts
 
 ## [4.5.1] - 2019-11-14
 ### Fixed
