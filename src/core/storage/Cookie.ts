@@ -1,13 +1,14 @@
+import * as R from 'ramda';
+
 const __1day = 86400 * 1000;
 const __20years = 86400 * 1000 * 365 * 20;
 
 export default class CookieStorage {
-    public static enabled() {
-        // From https://github.com/Modernizr/Modernizr/blob/f4d3aa0b3c9eeb7338e8d89ed77929a8e969c502/feature-detects/cookies.js#L1
-        // try..catch because some in situations `document.cookie` is exposed but throws a
-        // SecurityError if you try to access it; e.g. documents created from data URIs
-        // or in sandboxed iframes (depending on flags/context)
-
+    // From https://github.com/Modernizr/Modernizr/blob/f4d3aa0b3c9eeb7338e8d89ed77929a8e969c502/feature-detects/cookies.js#L1
+    // try..catch because some in situations `document.cookie` is exposed but throws a
+    // SecurityError if you try to access it; e.g. documents created from data URIs
+    // or in sandboxed iframes (depending on flags/context)
+    public static enabled = R.once((): boolean => {
         try {
             // Create cookie
             document.cookie = 'cookietest=1';
@@ -18,9 +19,7 @@ export default class CookieStorage {
         } catch (e) {
             return false;
         }
-
-        return false;
-    }
+    });
 
     public static delete(id: string, domain: string = '', path: string = '/') {
         if (!CookieStorage.enabled()) {
