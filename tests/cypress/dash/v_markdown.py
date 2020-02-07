@@ -1,51 +1,40 @@
 # pylint: disable=global-statement
 import dash
 import dash_html_components as html
-import os
+import dash_table
 import pandas as pd
-import sys
-
-sys.path.append(
-    os.path.abspath(
-        os.path.join(os.path.dirname(sys.argv[0]), os.pardir, os.pardir, os.pardir)
-    )
-)
-module_names = ["dash_table"]
-modules = [__import__(x) for x in module_names]
-dash_table = modules[0]
 
 url = "https://github.com/plotly/datasets/raw/master/" "26k-consumer-complaints.csv"
-df = pd.read_csv(url)
+rawDf = pd.read_csv(url)
 
-df['Complaint ID'] = df['Complaint ID'].map(lambda x: '**' + str(x) + '**')
-df['Product'] = df['Product'].map(lambda x: '[' + str(x) + '](plot.ly)')
-df['Issue'] = df['Issue'].map(lambda x: '![' + str(x) + '](https://dash.plot.ly/assets/images/logo.png)')
-df['State'] = df['State'].map(lambda x: '```python\n"{}"\n```'.format(x))
+rawDf['Complaint ID'] = rawDf['Complaint ID'].map(lambda x: '**' + str(x) + '**')
+rawDf['Product'] = rawDf['Product'].map(lambda x: '[' + str(x) + '](plot.ly)')
+rawDf['Issue'] = rawDf['Issue'].map(lambda x: '![' + str(x) + '](https://dash.plot.ly/assets/images/logo.png)')
+rawDf['State'] = rawDf['State'].map(lambda x: '```python\n"{}"\n```'.format(x))
 
-df = df.values
+df = rawDf.to_dict('rows')
 
-app = dash.Dash()
+def get_callbacks(app):
+    return
 
-app.layout = html.Div(
-    [
-        html.Div(id="container", children="Hello World"),
+
+def get_layout():
+    return html.Div([
+        html.Div(id="container_v_markdown", children="Hello World"),
         dash_table.DataTable(
-            id="table",
+            id="table_v_markdown",
             data=df[0:250],
             columns=[
-                {"id": 1, "name": "Complaint ID", "presentation": "markdown"},
-                {"id": 2, "name": "Product", "presentation": "markdown"},
-                {"id": 3, "name": "Sub-product"},
-                {"id": 4, "name": "Issue", "presentation": "markdown"},
-                {"id": 5, "name": "Sub-issue"},
-                {"id": 6, "name": "State", "presentation": "markdown"},
-                {"id": 7, "name": "ZIP"}
+                {"id": "Complaint ID", "name": "Complaint ID", "presentation": "markdown"},
+                {"id": "Product", "name": "Product", "presentation": "markdown"},
+                {"id": "Sub-product", "name": "Sub-product"},
+                {"id": "Issue", "name": "Issue", "presentation": "markdown"},
+                {"id": "Sub-issue", "name": "Sub-issue"},
+                {"id": "State", "name": "State", "presentation": "markdown"},
+                {"id": "ZIP", "name": "ZIP"}
             ],
             editable=True,
             sort_action='native',
             include_headers_on_copy_paste=True
         )
-    ]
-)
-
-app.run_server(debug=False, port=8087)
+    ])

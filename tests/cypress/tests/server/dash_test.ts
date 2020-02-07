@@ -4,7 +4,7 @@ import Key from 'cypress/Key';
 
 describe('dash basic', () => {
     beforeEach(() => {
-        cy.visit('http://localhost:8081');
+        cy.visit('http://localhost:8081/v_be_page');
     });
 
     it('can get cell', () => {

@@ -1,7 +1,7 @@
 import DashTable from 'cypress/DashTable';
 
 describe('delete', () => {
-    beforeEach(() => cy.visit('http://localhost:8081'));
+    beforeEach(() => cy.visit('http://localhost:8081/v_be_page'));
 
     it('can delete row', () => {
         DashTable.getCell(0, 0).within(() => cy.get('.dash-cell-value').should('have.html', '0'));

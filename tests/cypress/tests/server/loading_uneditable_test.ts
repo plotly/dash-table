@@ -5,7 +5,7 @@ import Key from 'cypress/Key';
 describe('loading states uneditable', () => {
 
     beforeEach(() => {
-        cy.visit('http://localhost:8084');
+        cy.visit('http://localhost:8081/v_data_loading');
     });
 
     it('prevents editing while loading', () => {

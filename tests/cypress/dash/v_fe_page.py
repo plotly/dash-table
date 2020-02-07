@@ -1,71 +1,17 @@
 # pylint: disable=global-statement
 import json
-import os
 import pandas as pd
-import sys
 
 import dash
 from dash.dependencies import Input, Output
 import dash_html_components as html
+import dash_table
 
-sys.path.append(
-    os.path.abspath(
-        os.path.join(os.path.dirname(sys.argv[0]),
-                     os.pardir, os.pardir, os.pardir)
-    )
-)
-module_names = ["dash_table"]
-modules = [__import__(module) for module in module_names]
-dash_table = modules[0]
 
 url = ("https://github.com/plotly/datasets/raw/master/"
        "26k-consumer-complaints.csv")
-df = pd.read_csv(url, nrows=1000)
-# add IDs that don't match but are easily derivable from row #s
-data = [
-    {k: v for k, v in list(enumerate(row)) + [('id', i + 3000)]}
-    for i, row in enumerate(df.values)
-]
-
-app = dash.Dash()
-app.css.config.serve_locally = True
-app.scripts.config.serve_locally = True
-
-app.layout = html.Div(
-    [
-        dash_table.DataTable(
-            id="table",
-            data=data,
-            page_action="native",
-            page_current=0,
-            page_size=250,
-            columns=[
-                {"id": 0, "name": "Complaint ID"},
-                {"id": 1, "name": "Product"},
-                {"id": 2, "name": "Sub-product"},
-                {"id": 3, "name": "Issue"},
-                {"id": 4, "name": "Sub-issue"},
-                {"id": 5, "name": "State"},
-                {"id": 6, "name": "ZIP"},
-                {"id": 7, "name": "code"},
-                {"id": 8, "name": "Date received"},
-                {"id": 9, "name": "Date sent to company"},
-                {"id": 10, "name": "Company"},
-                {"id": 11, "name": "Company response"},
-                {"id": 12, "name": "Timely response?"},
-                {"id": 13, "name": "Consumer disputed?"},
-            ],
-            fixed_columns={ 'headers': True },
-            fixed_rows={ 'headers': True },
-            row_selectable=True,
-            row_deletable=True,
-            sort_action="native",
-           filter_action='native',
-            editable=True,
-        ),
-        html.Div(id="props_container")
-    ]
-)
+rawDf = pd.read_csv(url, nrows=1000)
+df = rawDf.to_dict('rows')
 
 props = [
     'active_cell', 'start_cell', 'end_cell', 'selected_cells',
@@ -76,20 +22,39 @@ props = [
     'derived_virtual_indices', 'derived_virtual_row_ids'
 ]
 
-
-@app.callback(
-    Output("props_container", "children"),
-    [Input("table", prop) for prop in props]
-)
-def show_props(*args):
-    return html.Table([
-        html.Tr([
-            html.Td(prop),
-            html.Td(json.dumps(val), id=prop + '_container')
+def get_callbacks(app):
+    @app.callback(
+        Output("props_container_v_fe_page", "children"),
+        [Input("_v_fe_page", prop) for prop in props]
+    )
+    def show_props(*args):
+        return html.Table([
+            html.Tr([
+                html.Td(prop),
+                html.Td(json.dumps(val), id=prop + '_container')
+            ])
+            for prop, val in zip(props, args)
         ])
-        for prop, val in zip(props, args)
+
+def get_layout():
+    return html.Div([
+        dash_table.DataTable(
+            id="table_v_fe_page",
+            data=df,
+            page_action="native",
+            page_current=0,
+            page_size=250,
+            columns=[
+                {"name": i, "id": i}
+                for i in rawDf.columns
+            ],
+            fixed_columns={ 'headers': True },
+            fixed_rows={ 'headers': True },
+            row_selectable='single',
+            row_deletable=True,
+            sort_action="native",
+            filter_action='native',
+            editable=True,
+        ),
+        html.Div(id="props_container_v_fe_page")
     ])
-
-
-if __name__ == "__main__":
-    app.run_server(port=8083, debug=False)

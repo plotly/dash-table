@@ -11,7 +11,7 @@ describe('table pagination', () => {
         describe(`can change pages with ${mode} page_action`, () => {
 
             before(() => {
-                cy.visit(`http://localhost:8086?page_action=${mode}&page_count=29`);
+                cy.visit(`http://localhost:8081/v_pagination?page_action=${mode}&page_count=29`);
 
                 // initial state: first page, previous/first buttons disabled
                 DashTable.getCell(0, 0).within(() => cy.get('.dash-cell-value').should('have.html', '1'));
@@ -207,7 +207,7 @@ describe('table pagination', () => {
 
         describe('hides pagination', () => {
             it('on single page', () => {
-                cy.visit(`http://localhost:8086?page_action=custom&page_count=1`);
+                cy.visit(`http://localhost:8081/v_pagination?page_action=custom&page_count=1`);
 
                 cy.get('.previous-next-container').should('not.exist');
 
@@ -216,7 +216,7 @@ describe('table pagination', () => {
             });
 
             it('on negative/zero values', () => {
-                cy.visit(`http://localhost:8086?page_action=custom&page_count=-1`);
+                cy.visit(`http://localhost:8081/v_pagination?page_action=custom&page_count=-1`);
 
                 cy.get('.previous-next-container').should('not.exist');
 
@@ -226,7 +226,7 @@ describe('table pagination', () => {
 
         it('undefined/none', () => {
 
-            cy.visit(`http://localhost:8086?page_action=custom`);
+            cy.visit(`http://localhost:8081/v_pagination?page_action=custom`);
 
             cy.get('.page-number').children().should('have.length', 1);
             cy.get('.current-page').should('exist');
@@ -238,7 +238,7 @@ describe('table pagination', () => {
         });
 
         it('limits pages', () => {
-            cy.visit(`http://localhost:8086?page_action=custom&page_count=10`);
+            cy.visit(`http://localhost:8081/v_pagination?page_action=custom&page_count=10`);
             cy.get('button.last-page').click();
 
             cy.get('button.first-page').should('not.be.disabled');

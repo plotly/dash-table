@@ -4,7 +4,7 @@ import Key from 'cypress/Key';
 
 describe('copy paste', () => {
     beforeEach(() => {
-        cy.visit('http://localhost:8082');
+        cy.visit('http://localhost:8081/v_copy_paste');
         cy.wait(1000);
     });
 
@@ -221,7 +221,7 @@ describe('copy paste', () => {
 
 describe('copy/paste behaviour with markdown', () => {
     beforeEach(() => {
-        cy.visit('http://localhost:8087')
+        cy.visit('http://localhost:8081/v_markdown')
     });
 
     describe('single cell', () => {

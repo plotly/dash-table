@@ -75,7 +75,7 @@ function range(from: number, to: number, step?: number) {
 
 describe('select row', () => {
     describe('be pagination & sort', () => {
-        beforeEach(() => cy.visit('http://localhost:8081'));
+        beforeEach(() => cy.visit('http://localhost:8081/v_be_page'));
 
         it('can select row', () => {
             DashTable.getSelect(0).within(() => cy.get('input').click());
@@ -97,7 +97,7 @@ describe('select row', () => {
     });
 
     describe('fe pagination & sort', () => {
-        beforeEach(() => cy.visit('http://localhost:8083'));
+        beforeEach(() => cy.visit('http://localhost:8081/v_fe_page'));
 
         it('selection props are correct, no sort / filter', () => {
             DashTable.getSelect(0).within(() => cy.get('input').click());
