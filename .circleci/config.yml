@@ -88,7 +88,8 @@ jobs:
                 name: Build
                 command: |
                     . venv/bin/activate
-                    npm run build
+                    npm run private::build:js-test
+                    npm run private::build:py
                     pip install -e .
 
             - run:
