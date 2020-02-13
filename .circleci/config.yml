@@ -32,7 +32,7 @@ jobs:
                     . venv/bin/activate
                     pip install -r dev-requirements.txt --quiet
                     git clone --depth 1 git@github.com:plotly/dash.git dash-main
-                    pip install -e ./dash-main[dev] --quiet
+                    pip install -e ./dash-main[dev,testing] --quiet
 
             - run:
                 name: Build
@@ -47,6 +47,7 @@ jobs:
                 command: |
                     . venv/bin/activate
                     npm run test.server
+                    npm run test.server2
 
 
     "standalone-test":
