@@ -10,7 +10,6 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 
 import pandas as pd
-import time
 
 url = "https://github.com/plotly/datasets/raw/master/" "26k-consumer-complaints.csv"
 rawDf = pd.read_csv(url)
@@ -86,4 +85,3 @@ def test_tmcp004_copy_null_text_to_markdown(dt):
             target.cell.click(0, 'Product')
 
         assert target.cell.get(0, 'Product').find_element_by_css_selector('.dash-cell-value > p').get_attribute('innerHTML') == 'null'
-        time.sleep(10000)
