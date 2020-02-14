@@ -859,7 +859,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                     >
                         {arrayMap3(row, gridStyle[rowIndex], fragmentClasses[rowIndex], (g, s, c, columnIndex) => (<div
                             style={s.fragment}
-                            key={columnIndex}
+                            key={`row--${rowIndex}--column--${columnIndex}`}
                             ref={`r${rowIndex}c${columnIndex}`}
                             className={`cell cell-${rowIndex}-${columnIndex} ${c}`}
                         >

@@ -27,7 +27,7 @@ function getter(
                 }
 
                 return (<th
-                    key={`header-cell-${columnIndex}`}
+                    key={`header-cell-${columnIndex}--${column.id}`}
                     data-dash-column={column.id}
                     colSpan={colSpan}
                     className={

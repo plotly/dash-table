@@ -143,7 +143,7 @@ class Contents {
         switch (cellType) {
             case CellType.Dropdown:
                 return (<CellDropdown
-                    key={`column-${columnIndex}`}
+                    key={`dp-row-${rowIndex}-column-${columnIndex}`}
                     active={active}
                     applyFocus={applyFocus}
                     clearable={dropdown && dropdown.clearable}
@@ -154,7 +154,7 @@ class Contents {
                 />);
             case CellType.Input:
                 return (<CellInput
-                    key={`column-${columnIndex}`}
+                    key={`ci-row-${rowIndex}-column-${columnIndex}`}
                     active={active}
                     applyFocus={applyFocus}
                     className={className}
@@ -167,6 +167,7 @@ class Contents {
                 />);
             case CellType.Markdown:
                 return (<CellMarkdown
+                    key={`cm-row-${rowIndex}-column-${columnIndex}`}
                     active={active}
                     applyFocus={applyFocus}
                     className={className}
@@ -183,7 +184,7 @@ class Contents {
                     active={active}
                     applyFocus={applyFocus}
                     className={className}
-                    key={`column-${columnIndex}`}
+                    key={`cl-row-${rowIndex}-column-${columnIndex}`}
                     value={resolvedValue}
                 />);
         }
