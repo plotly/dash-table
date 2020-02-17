@@ -65,6 +65,16 @@ class DataTableMixin(object):
         self.cell = DataTableCellMixin(id, dt)
         self.column = DataTableColumnMixin(id, dt)
 
+    def click_next_page(self):
+        self.dt.find_element(
+            '#{} button.next-page'.format(self.id)
+        ).click()
+
+    def click_prev_page(self):
+        self.dt.find_element(
+            '#{} button.previous-page'
+        ).click()
+
 
 class CopyPasteContext:
     def __init__ (self, dt):

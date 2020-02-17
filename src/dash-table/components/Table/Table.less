@@ -173,10 +173,10 @@
 	    &::placeholder {
 		color: black;
 	    }
-	    
+
 	    &:focus {
 		outline: none;
-		
+
 		&::placeholder {
 		    opacity: 0;
 		}
@@ -193,7 +193,7 @@
 
 	    &:hover {
 		color: hotpink;
-		
+
 		&:disabled {
 		    color: graytext
 		}
@@ -204,7 +204,7 @@
 	    }
 	}
     }
-    
+
     .dash-spreadsheet-container {
 	.reset-css();
 	display: flex;
@@ -336,16 +336,16 @@
 		}
             }
 
-            &.dash-fill-width {
-		.cell-0-1,
-		.cell-1-1 {
-                    flex: 1 0 auto;
-		}
-
-		table {
-                    width: 100%;
-		}
+        &.dash-fill-width {
+            .cell-0-1,
+            .cell-1-1 {
+                flex: 1 1 auto;
             }
+
+            table {
+                width: 100%;
+            }
+        }
 
             td {
 		background-color: inherit;
