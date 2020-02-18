@@ -191,5 +191,6 @@ def test(request, dash_thread_server, tmpdir):
         download_path=tmpdir.mkdir("download").strpath,
         percy_assets_root=request.config.getoption("percy_assets"),
         percy_finalize=request.config.getoption("nopercyfinalize"),
+        percy_run=False,
     ) as dc:
         yield dc
