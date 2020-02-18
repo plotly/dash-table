@@ -15,7 +15,7 @@ validate_key = lambda key: isinstance(key, str) and len(key) == 1
 validate_row = lambda row: isinstance(row, int) and row >= 0
 validate_state = lambda state: state in [READY, LOADING, ANY]
 validate_target = lambda target: isinstance(target, DataTableFacade)
-validate_mixin = lambda mixin: isinstance(mixin, DashTableMixin)
+validate_mixin = lambda mixin: isinstance(mixin, DataTableMixin)
 
 READY = '.dash-spreadsheet:not(.dash-loading)'
 LOADING = '.dash-spreadsheet.dash-loading'
@@ -132,7 +132,7 @@ class DataTableFacade(object):
         ).click()
 
 
-class DashTableMixin(object):
+class DataTableMixin(object):
     @preconditions(validate_id, validate_state)
     def wait_for_table(self, id, state=ANY):
         return WebDriverWait(self.driver, TIMEOUT).until(
@@ -161,9 +161,9 @@ class DashTableMixin(object):
         return HoldKeyContext(self, key)
 
 
-class DashTableComposite(Browser, DashTableMixin):
+class DataTableComposite(Browser, DataTableMixin):
     def __init__(self, server, **kwargs):
-        super(DashTableComposite, self).__init__(**kwargs)
+        super(DataTableComposite, self).__init__(**kwargs)
         self.server = server
 
         self.READY = READY
@@ -182,7 +182,7 @@ class DashTableComposite(Browser, DashTableMixin):
 
 @pytest.fixture
 def test(request, dash_thread_server, tmpdir):
-    with DashTableComposite(
+    with DataTableComposite(
         dash_thread_server,
         browser=request.config.getoption("webdriver"),
         remote=request.config.getoption("remote"),
