@@ -15,7 +15,7 @@ validate_key = lambda key: isinstance(key, str) and len(key) == 1
 validate_row = lambda row: isinstance(row, int) and row >= 0
 validate_state = lambda state: state in [READY, LOADING, ANY]
 validate_target = lambda target: isinstance(target, DataTableFacade)
-validate_test = lambda test: isinstance(test, DashTableMixin)
+validate_mixin = lambda mixin: isinstance(mixin, DashTableMixin)
 
 READY = '.dash-spreadsheet:not(.dash-loading)'
 LOADING = '.dash-spreadsheet.dash-loading'
@@ -35,31 +35,31 @@ class DataTableContext:
 
 
 class HoldKeyContext:
-    @preconditions(validate_test, validate_key)
-    def __init__ (self, test, key):
-        self.test = test
+    @preconditions(validate_mixin, validate_key)
+    def __init__ (self, mixin, key):
+        self.mixin = mixin
         self.key = key
 
     def __enter__(self):
-        ActionChains(self.test.driver).key_down(self.key).perform()
+        ActionChains(self.mixin.driver).key_down(self.key).perform()
 
     def __exit__(self, type, value, traceback):
-        ActionChains(self.test.driver).key_up(self.key).perform()
+        ActionChains(self.mixin.driver).key_up(self.key).perform()
 
 
 class DataTableCellFacade(object):
-    @preconditions(validate_id, validate_test)
-    def __init__(self, id, test):
+    @preconditions(validate_id, validate_mixin)
+    def __init__(self, id, mixin):
         self.id = id
-        self.test = test
+        self.mixin = mixin
 
     @preconditions(validate_row, validate_col, validate_state)
     def get(self, row, col, state=READY):
-        self.test.wait_for_table(self.id, state)
+        self.mixin.wait_for_table(self.id, state)
 
-        return self.test.find_elements(
+        return self.mixin.find_elements(
             '#{} {} tbody tr td.dash-cell.column-{}'.format(self.id, state, col)
-        )[row] if isinstance(col, int) else self.test.find_elements(
+        )[row] if isinstance(col, int) else self.mixin.find_elements(
             '#{} {} tbody tr td.dash-cell[data-dash-column="{}"]'.format(self.id, state, col)
         )[row]
 
@@ -82,16 +82,16 @@ class DataTableCellFacade(object):
 
 
 class DataTableColumnFacade(object):
-    @preconditions(validate_id, validate_test)
-    def __init__(self, id, test):
+    @preconditions(validate_id, validate_mixin)
+    def __init__(self, id, mixin):
         self.id = id
-        self.test = test
+        self.mixin = mixin
 
     @preconditions(validate_row, validate_col_id, validate_state)
     def get(self, row, col_id, state = READY):
-        self.test.wait_for_table(self.id, state)
+        self.mixin.wait_for_table(self.id, state)
 
-        return self.test.find_elements(
+        return self.mixin.find_elements(
             '#{} {} tbody tr th.dash-header[data-dash-column="{}"]'.format(self.id, state, col_id)
         )[row]
 
@@ -109,25 +109,25 @@ class DataTableColumnFacade(object):
 
 
 class DataTableFacade(object):
-    @preconditions(validate_id, validate_test)
-    def __init__(self, id, test):
+    @preconditions(validate_id, validate_mixin)
+    def __init__(self, id, mixin):
         self.id = id
-        self.test = test
+        self.mixin = mixin
 
-        self.cell = DataTableCellFacade(id, test)
-        self.column = DataTableColumnFacade(id, test)
+        self.cell = DataTableCellFacade(id, mixin)
+        self.column = DataTableColumnFacade(id, mixin)
 
     def click_next_page(self):
-        self.test.wait_for_table(self.id)
+        self.mixin.wait_for_table(self.id)
 
-        self.test.find_element(
+        self.mixin.find_element(
             '#{} button.next-page'.format(self.id)
         ).click()
 
     def click_prev_page(self):
-        self.test.wait_for_table(self.id)
+        self.mixin.wait_for_table(self.id)
 
-        self.test.find_element(
+        self.mixin.find_element(
             '#{} button.previous-page'
         ).click()
 
