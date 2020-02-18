@@ -43,45 +43,45 @@ def get_app():
     return app
 
 
-def test_tmcp001_copy_markdown_to_text(dt):
-    dt.start_server(get_app())
+def test_tmcp001_copy_markdown_to_text(test):
+    test.start_server(get_app())
 
-    with dt.table('table') as target:
+    with test.table('table') as target:
         target.cell.click(0, 'Issue')
-        with dt.copy():
+        with test.copy():
             target.cell.click(0, 'Sub-product')
 
         assert target.cell.get_text(0, 2) == df[0].get('Issue')
 
 
-def test_tmcp002_copy_markdown_to_markdown(dt):
-    dt.start_server(get_app())
+def test_tmcp002_copy_markdown_to_markdown(test):
+    test.start_server(get_app())
 
-    with dt.table('table') as target:
+    with test.table('table') as target:
         target.cell.click(0, 'Product')
-        with dt.copy():
+        with test.copy():
             target.cell.click(0, 'Complaint ID')
 
         assert target.cell.get_text(0, 'Complaint ID') == target.cell.get_text(0, 'Product')
 
 
-def test_tmcp003_copy_text_to_markdown(dt):
-    dt.start_server(get_app())
+def test_tmcp003_copy_text_to_markdown(test):
+    test.start_server(get_app())
 
-    with dt.table('table') as target:
+    with test.table('table') as target:
         target.cell.click(1, 'Sub-product')
-        with dt.copy():
+        with test.copy():
             target.cell.click(1, 'Product')
 
         assert target.cell.get(1, 'Product').find_element_by_css_selector('.dash-cell-value > p').get_attribute('innerHTML') == df[1].get('Sub-product')
 
 
-def test_tmcp004_copy_null_text_to_markdown(dt):
-    dt.start_server(get_app())
+def test_tmcp004_copy_null_text_to_markdown(test):
+    test.start_server(get_app())
 
-    with dt.table('table') as target:
+    with test.table('table') as target:
         target.cell.click(0, 'Sub-product')
-        with dt.copy():
+        with test.copy():
             target.cell.click(0, 'Product')
 
         assert target.cell.get(0, 'Product').find_element_by_css_selector('.dash-cell-value > p').get_attribute('innerHTML') == 'null'

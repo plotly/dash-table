@@ -37,10 +37,10 @@ def get_app():
     return app
 
 
-def test_tbst001_get_cell(dt):
-    dt.start_server(get_app())
+def test_tbst001_get_cell(test):
+    test.start_server(get_app())
 
-    with dt.table('table') as target:
+    with test.table('table') as target:
         assert target.cell.get_text(0, rawDf.columns[0]) == '0'
         target.click_next_page()
         assert target.cell.get_text(0, rawDf.columns[0]) == '250'

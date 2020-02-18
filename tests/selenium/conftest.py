@@ -13,16 +13,16 @@ ANY = '.dash-spreadsheet'
 TIMEOUT = 10
 
 class CopyPasteContext:
-    def __init__ (self, dt):
-        self.dt = dt
+    def __init__ (self, test):
+        self.test = test
 
     def __enter__(self):
-        ActionChains(self.dt.driver).key_down(Keys.CONTROL).send_keys('c').key_up(
+        ActionChains(self.test.driver).key_down(Keys.CONTROL).send_keys('c').key_up(
             Keys.CONTROL
         ).perform()
 
     def __exit__(self, type, value, traceback):
-        ActionChains(self.dt.driver).key_down(Keys.CONTROL).send_keys('v').key_up(
+        ActionChains(self.test.driver).key_down(Keys.CONTROL).send_keys('v').key_up(
             Keys.CONTROL
         ).perform()
 
@@ -39,28 +39,28 @@ class DataTableContext:
 
 
 class HoldKeyContext:
-    def __init__ (self, dt, key):
-        self.dt = dt
+    def __init__ (self, test, key):
+        self.test = test
         self.key = key
 
     def __enter__(self):
-        ActionChains(self.dt.driver).key_down(self.key).perform()
+        ActionChains(self.test.driver).key_down(self.key).perform()
 
     def __exit__(self, type, value, traceback):
-        ActionChains(self.dt.driver).key_up(self.key).perform()
+        ActionChains(self.test.driver).key_up(self.key).perform()
 
 
 class DataTableCellFacade(object):
-    def __init__(self, id, dt):
+    def __init__(self, id, test):
         self.id = id
-        self.dt = dt
+        self.test = test
 
     def get(self, row, col, state=READY):
-        self.dt.wait_for_table(self.id, state)
+        self.test.wait_for_table(self.id, state)
 
-        return self.dt.find_elements(
+        return self.test.find_elements(
             '#{} {} tbody tr td.dash-cell.column-{}'.format(self.id, state, col)
-        )[row] if isinstance(col, int) else self.dt.find_elements(
+        )[row] if isinstance(col, int) else self.test.find_elements(
             '#{} {} tbody tr td.dash-cell[data-dash-column="{}"]'.format(self.id, state, col)
         )[row]
 
@@ -81,14 +81,14 @@ class DataTableCellFacade(object):
 
 
 class DataTableColumnFacade(object):
-    def __init__(self, id, dt):
+    def __init__(self, id, test):
         self.id = id
-        self.dt = dt
+        self.test = test
 
     def get(self, row, col_id, state = READY):
-        self.dt.wait_for_table(self.id, state)
+        self.test.wait_for_table(self.id, state)
 
-        return self.dt.find_elements(
+        return self.test.find_elements(
             '#{} {} tbody tr th.dash-header[data-dash-column="{}"]'.format(self.id, state, col_id)
         )[row]
 
@@ -104,24 +104,24 @@ class DataTableColumnFacade(object):
 
 
 class DataTableFacade(object):
-    def __init__(self, id, dt):
+    def __init__(self, id, test):
         self.id = id
-        self.dt = dt
+        self.test = test
 
-        self.cell = DataTableCellFacade(id, dt)
-        self.column = DataTableColumnFacade(id, dt)
+        self.cell = DataTableCellFacade(id, test)
+        self.column = DataTableColumnFacade(id, test)
 
     def click_next_page(self):
-        self.dt.wait_for_table(self.id)
+        self.test.wait_for_table(self.id)
 
-        self.dt.find_element(
+        self.test.find_element(
             '#{} button.next-page'.format(self.id)
         ).click()
 
     def click_prev_page(self):
-        self.dt.wait_for_table(self.id)
+        self.test.wait_for_table(self.id)
 
-        self.dt.find_element(
+        self.test.find_element(
             '#{} button.previous-page'
         ).click()
 
@@ -164,7 +164,7 @@ class DashTableComposite(Browser, DashTableMixin):
 
 
 @pytest.fixture
-def dt(request, dash_thread_server, tmpdir):
+def test(request, dash_thread_server, tmpdir):
     with DashTableComposite(
         dash_thread_server,
         browser=request.config.getoption("webdriver"),
