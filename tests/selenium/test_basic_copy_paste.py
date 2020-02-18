@@ -72,8 +72,10 @@ def test_tbcp001_copy_paste_callback(test):
 
     with test.table('table') as target:
         target.cell.click(0, 0)
-        with test.copy():
-            target.cell.click(1, 0)
+
+        test.copy()
+        target.cell.click(1, 0)
+        test.paste()
 
         assert target.cell.get_text(1, 0) == '0'
         assert target.cell.get_text(1, 1) == 'MODIFIED'
@@ -88,15 +90,19 @@ def test_tbcp002_sorted_copy_paste_callback(test):
         assert target.cell.get_text(0,0) == '11'
 
         target.cell.click(0,0)
-        with test.copy():
-            target.cell.click(1,0)
+
+        test.copy()
+        target.cell.click(1,0)
+        test.paste()
 
         assert target.cell.get_text(1,0) == '11'
         assert target.cell.get_text(1,1) == 'MODIFIED'
 
         target.cell.click(1,1)
-        with test.copy():
-            target.cell.click(2,1)
+
+        test.copy()
+        target.cell.click(2,1)
+        test.paste()
 
         assert target.cell.get_text(1,0) == '11'
         assert target.cell.get_text(2,1) == 'MODIFIED'
@@ -110,8 +116,9 @@ def test_tbcp003_copy_multiple_rows(test):
             target.cell.click(0, 0)
             target.cell.click(2, 0)
 
-        with test.copy():
-            target.cell.click(3, 0)
+        test.copy()
+        target.cell.click(3, 0)
+        test.paste()
 
         for i in range(3):
             assert target.cell.get_text(i + 3, 0) == target.cell.get_text(i, 0)
@@ -126,8 +133,9 @@ def test_tbcp004_copy_9_and_10(test):
         with test.hold(Keys.SHIFT):
             ActionChains(test.driver).send_keys(Keys.DOWN).perform()
 
-        with test.copy():
-            target.cell.click(0, 0)
+        test.copy()
+        target.cell.click(0, 0)
+        test.paste()
 
         for row in range(2):
             for col in range(1):
@@ -142,8 +150,9 @@ def test_tbcp005_copy_multiple_rows_and_columns(test):
         with test.hold(Keys.SHIFT):
             table.cell.click(2, 2)
 
-        with test.copy():
-            table.cell.click(3, 1)
+        test.copy()
+        table.cell.click(3, 1)
+        test.paste()
 
         for row in range(3):
             for col in range(1, 3):
@@ -158,8 +167,9 @@ def test_tbcp006_copy_paste_between_tables(test):
         with test.hold(Keys.SHIFT):
             source.cell.click(13, 3)
 
-        with test.copy():
-            target.cell.click(0, 0)
+        test.copy()
+        target.cell.click(0, 0)
+        test.paste()
 
         for row in range(4):
             for col in range(4):
@@ -175,8 +185,9 @@ def test_tbcp007_copy_paste_with_hidden_column(test):
         with test.hold(Keys.SHIFT):
             target.cell.click(2, 2)
 
-        with test.copy():
-            target.cell.click(3, 1)
+        test.copy()
+        target.cell.click(3, 1)
+        test.paste()
 
         for row in range(3):
             for col in range(3):
@@ -192,8 +203,9 @@ def test_tbcp008_copy_paste_between_tables_with_hidden_columns(test):
         with test.hold(Keys.SHIFT):
             target.cell.click(13, 2)
 
-        with test.copy():
-            target.cell.click(0, 0)
+        test.copy()
+        target.cell.click(0, 0)
+        test.paste()
 
         for row in range(4):
             for col in range(3):

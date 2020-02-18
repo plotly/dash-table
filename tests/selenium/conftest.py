@@ -12,20 +12,6 @@ LOADING = '.dash-spreadsheet.dash-loading'
 ANY = '.dash-spreadsheet'
 TIMEOUT = 10
 
-class CopyPasteContext:
-    def __init__ (self, test):
-        self.test = test
-
-    def __enter__(self):
-        ActionChains(self.test.driver).key_down(Keys.CONTROL).send_keys('c').key_up(
-            Keys.CONTROL
-        ).perform()
-
-    def __exit__(self, type, value, traceback):
-        ActionChains(self.test.driver).key_down(Keys.CONTROL).send_keys('v').key_up(
-            Keys.CONTROL
-        ).perform()
-
 
 class DataTableContext:
     def __init__ (self, target):
@@ -138,7 +124,14 @@ class DashTableMixin(object):
         )
 
     def copy(self):
-        return CopyPasteContext(self)
+        ActionChains(self.driver).key_down(Keys.CONTROL).send_keys('c').key_up(
+            Keys.CONTROL
+        ).perform()
+
+    def paste(self):
+        ActionChains(self.driver).key_down(Keys.CONTROL).send_keys('v').key_up(
+            Keys.CONTROL
+        ).perform()
 
     def hold(self, key):
         return HoldKeyContext(self, key)
