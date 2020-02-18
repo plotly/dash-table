@@ -1,12 +1,16 @@
 import pytest
 from dash.testing.browser import Browser
 
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
 
 READY = '.dash-spreadsheet:not(.dash-loading)'
 LOADING = '.dash-spreadsheet.dash-loading'
 ANY = '.dash-spreadsheet'
+TIMEOUT = 10
 
 class CopyPasteContext:
     def __init__ (self, dt):
@@ -52,6 +56,8 @@ class DataTableCellFacade(object):
         self.dt = dt
 
     def get(self, row, col, state=READY):
+        self.dt.wait_for_table(self.id, state)
+
         return self.dt.find_elements(
             '#{} {} tbody tr td.dash-cell.column-{}'.format(self.id, state, col)
         )[row] if isinstance(col, int) else self.dt.find_elements(
@@ -80,6 +86,8 @@ class DataTableColumnFacade(object):
         self.dt = dt
 
     def get(self, row, col_id, state = READY):
+        self.dt.wait_for_table(self.id, state)
+
         return self.dt.find_elements(
             '#{} {} tbody tr th.dash-header[data-dash-column="{}"]'.format(self.id, state, col_id)
         )[row]
@@ -104,17 +112,26 @@ class DataTableFacade(object):
         self.column = DataTableColumnFacade(id, dt)
 
     def click_next_page(self):
+        self.dt.wait_for_table(self.id)
+
         self.dt.find_element(
             '#{} button.next-page'.format(self.id)
         ).click()
 
     def click_prev_page(self):
+        self.dt.wait_for_table(self.id)
+
         self.dt.find_element(
             '#{} button.previous-page'
         ).click()
 
 
 class DashTableMixin(object):
+    def wait_for_table(self, id, state=ANY):
+        return WebDriverWait(self.driver, TIMEOUT).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, '#{} {}'.format(id, state)))
+        )
+
     def table(self, id):
         return DataTableContext(
             DataTableFacade(id, self)
