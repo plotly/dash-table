@@ -8,22 +8,22 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
-validate_col = lambda col: (isinstance(col, str) and len(col) > 0) or (isinstance(col, int) and col >= 0)
-validate_col_id = lambda col_id: isinstance(col_id, str) and len(col_id) > 0
-validate_id = lambda id: isinstance(id, str) and len(id) > 0
-validate_key = lambda key: isinstance(key, str) and len(key) == 1
-validate_row = lambda row: isinstance(row, int) and row >= 0
-validate_state = lambda state: state in [READY, LOADING, ANY]
-validate_target = lambda target: isinstance(target, DataTableFacade)
-validate_mixin = lambda mixin: isinstance(mixin, DataTableMixin)
+_validate_col = lambda col: (isinstance(col, str) and len(col) > 0) or (isinstance(col, int) and col >= 0)
+_validate_col_id = lambda col_id: isinstance(col_id, str) and len(col_id) > 0
+_validate_id = lambda id: isinstance(id, str) and len(id) > 0
+_validate_key = lambda key: isinstance(key, str) and len(key) == 1
+_validate_row = lambda row: isinstance(row, int) and row >= 0
+_validate_state = lambda state: state in [_READY, _LOADING, _ANY]
+_validate_target = lambda target: isinstance(target, DataTableFacade)
+_validate_mixin = lambda mixin: isinstance(mixin, DataTableMixin)
 
-READY = '.dash-spreadsheet:not(.dash-loading)'
-LOADING = '.dash-spreadsheet.dash-loading'
-ANY = '.dash-spreadsheet'
-TIMEOUT = 10
+_READY = '.dash-spreadsheet:not(.dash-loading)'
+_LOADING = '.dash-spreadsheet.dash-loading'
+_ANY = '.dash-spreadsheet'
+_TIMEOUT = 10
 
 class DataTableContext:
-    @preconditions(validate_target)
+    @preconditions(_validate_target)
     def __init__ (self, target):
         self.target = target
 
@@ -35,7 +35,7 @@ class DataTableContext:
 
 
 class HoldKeyContext:
-    @preconditions(validate_mixin, validate_key)
+    @preconditions(_validate_mixin, _validate_key)
     def __init__ (self, mixin, key):
         self.mixin = mixin
         self.key = key
@@ -48,13 +48,13 @@ class HoldKeyContext:
 
 
 class DataTableCellFacade(object):
-    @preconditions(validate_id, validate_mixin)
+    @preconditions(_validate_id, _validate_mixin)
     def __init__(self, id, mixin):
         self.id = id
         self.mixin = mixin
 
-    @preconditions(validate_row, validate_col, validate_state)
-    def get(self, row, col, state=READY):
+    @preconditions(_validate_row, _validate_col, _validate_state)
+    def get(self, row, col, state = _READY):
         self.mixin.wait_for_table(self.id, state)
 
         return self.mixin.find_elements(
@@ -63,12 +63,12 @@ class DataTableCellFacade(object):
             '#{} {} tbody tr td.dash-cell[data-dash-column="{}"]'.format(self.id, state, col)
         )[row]
 
-    @preconditions(validate_row, validate_col, validate_state)
-    def click(self, row, col, state=READY):
+    @preconditions(_validate_row, _validate_col, _validate_state)
+    def click(self, row, col, state = _READY):
         return self.get(row, col, state).click()
 
-    @preconditions(validate_row, validate_col, validate_state)
-    def get_text(self, row, col, state=READY):
+    @preconditions(_validate_row, _validate_col, _validate_state)
+    def get_text(self, row, col, state = _READY):
         cell = self.get(row, col, state).find_element_by_css_selector(
             '.dash-cell-value'
         )
@@ -82,34 +82,34 @@ class DataTableCellFacade(object):
 
 
 class DataTableColumnFacade(object):
-    @preconditions(validate_id, validate_mixin)
+    @preconditions(_validate_id, _validate_mixin)
     def __init__(self, id, mixin):
         self.id = id
         self.mixin = mixin
 
-    @preconditions(validate_row, validate_col_id, validate_state)
-    def get(self, row, col_id, state = READY):
+    @preconditions(_validate_row, _validate_col_id, _validate_state)
+    def get(self, row, col_id, state = _READY):
         self.mixin.wait_for_table(self.id, state)
 
         return self.mixin.find_elements(
             '#{} {} tbody tr th.dash-header[data-dash-column="{}"]'.format(self.id, state, col_id)
         )[row]
 
-    @preconditions(validate_row, validate_col_id, validate_state)
-    def hide(self, row, col_id, state = READY):
+    @preconditions(_validate_row, _validate_col_id, _validate_state)
+    def hide(self, row, col_id, state = _READY):
         self.get(row, col_id, state).find_element_by_css_selector(
             '.column-header--hide'
         ).click()
 
-    @preconditions(validate_row, validate_col_id, validate_state)
-    def sort(self, row, col_id, state = READY):
+    @preconditions(_validate_row, _validate_col_id, _validate_state)
+    def sort(self, row, col_id, state = _READY):
         self.get(row, col_id, state).find_element_by_css_selector(
             '.column-header--sort'
         ).click()
 
 
 class DataTableFacade(object):
-    @preconditions(validate_id, validate_mixin)
+    @preconditions(_validate_id, _validate_mixin)
     def __init__(self, id, mixin):
         self.id = id
         self.mixin = mixin
@@ -133,13 +133,13 @@ class DataTableFacade(object):
 
 
 class DataTableMixin(object):
-    @preconditions(validate_id, validate_state)
-    def wait_for_table(self, id, state=ANY):
-        return WebDriverWait(self.driver, TIMEOUT).until(
+    @preconditions(_validate_id, _validate_state)
+    def wait_for_table(self, id, state = _ANY):
+        return WebDriverWait(self.driver, _TIMEOUT).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, '#{} {}'.format(id, state)))
         )
 
-    @preconditions(validate_id)
+    @preconditions(_validate_id)
     def table(self, id):
         return DataTableContext(
             DataTableFacade(id, self)
@@ -156,7 +156,7 @@ class DataTableMixin(object):
         ).perform()
 
 
-    @preconditions(validate_key)
+    @preconditions(_validate_key)
     def hold(self, key):
         return HoldKeyContext(self, key)
 
@@ -166,9 +166,9 @@ class DataTableComposite(Browser, DataTableMixin):
         super(DataTableComposite, self).__init__(**kwargs)
         self.server = server
 
-        self.READY = READY
-        self.LOADING = LOADING
-        self.ANY = ANY
+        self.READY = _READY
+        self.LOADING = _LOADING
+        self.ANY = _ANY
 
     def start_server(self, app, **kwargs):
         """start the local server with app"""
