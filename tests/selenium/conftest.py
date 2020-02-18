@@ -155,7 +155,6 @@ class DataTableMixin(object):
             Keys.CONTROL
         ).perform()
 
-
     @preconditions(_validate_key)
     def hold(self, key):
         return HoldKeyContext(self, key)
