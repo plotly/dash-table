@@ -55,7 +55,7 @@ class DataTableCellFacade(object):
 
     @preconditions(_validate_row, _validate_col, _validate_state)
     def get(self, row, col, state = _READY):
-        self.mixin.wait_for_table(self.id, state)
+        self.mixin._wait_for_table(self.id, state)
 
         return self.mixin.find_elements(
             '#{} {} tbody tr td.dash-cell.column-{}'.format(self.id, state, col)
@@ -89,7 +89,7 @@ class DataTableColumnFacade(object):
 
     @preconditions(_validate_row, _validate_col_id, _validate_state)
     def get(self, row, col_id, state = _READY):
-        self.mixin.wait_for_table(self.id, state)
+        self.mixin._wait_for_table(self.id, state)
 
         return self.mixin.find_elements(
             '#{} {} tbody tr th.dash-header[data-dash-column="{}"]'.format(self.id, state, col_id)
@@ -118,14 +118,14 @@ class DataTableFacade(object):
         self.column = DataTableColumnFacade(id, mixin)
 
     def click_next_page(self):
-        self.mixin.wait_for_table(self.id)
+        self.mixin._wait_for_table(self.id)
 
         self.mixin.find_element(
             '#{} button.next-page'.format(self.id)
         ).click()
 
     def click_prev_page(self):
-        self.mixin.wait_for_table(self.id)
+        self.mixin._wait_for_table(self.id)
 
         self.mixin.find_element(
             '#{} button.previous-page'
@@ -134,7 +134,7 @@ class DataTableFacade(object):
 
 class DataTableMixin(object):
     @preconditions(_validate_id, _validate_state)
-    def wait_for_table(self, id, state = _ANY):
+    def _wait_for_table(self, id, state = _ANY):
         return WebDriverWait(self.driver, _TIMEOUT).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, '#{} {}'.format(id, state)))
         )
