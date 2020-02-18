@@ -1,19 +1,29 @@
 import pytest
-from dash.testing.browser import Browser
 
+from dash.testing.browser import Browser
+from preconditions import preconditions
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
+validate_col = lambda col: (isinstance(col, str) and len(col) > 0) or (isinstance(col, int) and col >= 0)
+validate_col_id = lambda col_id: isinstance(col_id, str) and len(col_id) > 0
+validate_id = lambda id: isinstance(id, str) and len(id) > 0
+validate_key = lambda key: isinstance(key, str) and len(key) == 1
+validate_row = lambda row: isinstance(row, int) and row >= 0
+validate_state = lambda state: state in [READY, LOADING, ANY]
+validate_target = lambda target: isinstance(target, DataTableFacade)
+validate_test = lambda test: isinstance(test, DashTableMixin)
+
 READY = '.dash-spreadsheet:not(.dash-loading)'
 LOADING = '.dash-spreadsheet.dash-loading'
 ANY = '.dash-spreadsheet'
 TIMEOUT = 10
 
-
 class DataTableContext:
+    @preconditions(validate_target)
     def __init__ (self, target):
         self.target = target
 
@@ -25,6 +35,7 @@ class DataTableContext:
 
 
 class HoldKeyContext:
+    @preconditions(validate_test, validate_key)
     def __init__ (self, test, key):
         self.test = test
         self.key = key
@@ -37,10 +48,12 @@ class HoldKeyContext:
 
 
 class DataTableCellFacade(object):
+    @preconditions(validate_id, validate_test)
     def __init__(self, id, test):
         self.id = id
         self.test = test
 
+    @preconditions(validate_row, validate_col, validate_state)
     def get(self, row, col, state=READY):
         self.test.wait_for_table(self.id, state)
 
@@ -50,9 +63,11 @@ class DataTableCellFacade(object):
             '#{} {} tbody tr td.dash-cell[data-dash-column="{}"]'.format(self.id, state, col)
         )[row]
 
+    @preconditions(validate_row, validate_col, validate_state)
     def click(self, row, col, state=READY):
         return self.get(row, col, state).click()
 
+    @preconditions(validate_row, validate_col, validate_state)
     def get_text(self, row, col, state=READY):
         cell = self.get(row, col, state).find_element_by_css_selector(
             '.dash-cell-value'
@@ -67,10 +82,12 @@ class DataTableCellFacade(object):
 
 
 class DataTableColumnFacade(object):
+    @preconditions(validate_id, validate_test)
     def __init__(self, id, test):
         self.id = id
         self.test = test
 
+    @preconditions(validate_row, validate_col_id, validate_state)
     def get(self, row, col_id, state = READY):
         self.test.wait_for_table(self.id, state)
 
@@ -78,11 +95,13 @@ class DataTableColumnFacade(object):
             '#{} {} tbody tr th.dash-header[data-dash-column="{}"]'.format(self.id, state, col_id)
         )[row]
 
+    @preconditions(validate_row, validate_col_id, validate_state)
     def hide(self, row, col_id, state = READY):
         self.get(row, col_id, state).find_element_by_css_selector(
             '.column-header--hide'
         ).click()
 
+    @preconditions(validate_row, validate_col_id, validate_state)
     def sort(self, row, col_id, state = READY):
         self.get(row, col_id, state).find_element_by_css_selector(
             '.column-header--sort'
@@ -90,6 +109,7 @@ class DataTableColumnFacade(object):
 
 
 class DataTableFacade(object):
+    @preconditions(validate_id, validate_test)
     def __init__(self, id, test):
         self.id = id
         self.test = test
@@ -113,11 +133,13 @@ class DataTableFacade(object):
 
 
 class DashTableMixin(object):
+    @preconditions(validate_id, validate_state)
     def wait_for_table(self, id, state=ANY):
         return WebDriverWait(self.driver, TIMEOUT).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, '#{} {}'.format(id, state)))
         )
 
+    @preconditions(validate_id)
     def table(self, id):
         return DataTableContext(
             DataTableFacade(id, self)
@@ -133,6 +155,8 @@ class DashTableMixin(object):
             Keys.CONTROL
         ).perform()
 
+
+    @preconditions(validate_key)
     def hold(self, key):
         return HoldKeyContext(self, key)
 
