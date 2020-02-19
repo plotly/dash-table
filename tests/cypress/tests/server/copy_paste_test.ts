@@ -231,7 +231,7 @@ describe('copy/paste behaviour with markdown', () => {
             DashTable.getCell(0, 2).click();
             DOM.focused.type(`${Key.Meta}v`);
             DashTable.getCell(0, 2).within(() => {
-                cy.get('.dash-cell-value').should('have.attr', 'value', '![Communication tactics](https://dash.plot.ly/assets/images/logo.png)');
+                cy.get('.dash-cell-value').should('have.attr', 'value', '![Communication tactics](https://dash.plotly.com/assets/images/logo.png)');
             });
         });
 
@@ -242,7 +242,7 @@ describe('copy/paste behaviour with markdown', () => {
             DOM.focused.type(`${Key.Meta}v`);
             DashTable.getCell(0, 0).within(() => {
                 cy.get('.dash-cell-value > p > a').should('have.html', 'Debt collection');
-                cy.get('.dash-cell-value > p > a').should('have.attr', 'href', 'plot.ly');
+                cy.get('.dash-cell-value > p > a').should('have.attr', 'href', 'plotly.com');
             });
         });
 

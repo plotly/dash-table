@@ -18,8 +18,8 @@ url = "https://github.com/plotly/datasets/raw/master/" "26k-consumer-complaints.
 df = pd.read_csv(url)
 
 df['Complaint ID'] = df['Complaint ID'].map(lambda x: '**' + str(x) + '**')
-df['Product'] = df['Product'].map(lambda x: '[' + str(x) + '](plot.ly)')
-df['Issue'] = df['Issue'].map(lambda x: '![' + str(x) + '](https://dash.plot.ly/assets/images/logo.png)')
+df['Product'] = df['Product'].map(lambda x: '[' + str(x) + '](plotly.com)')
+df['Issue'] = df['Issue'].map(lambda x: '![' + str(x) + '](https://dash.plotly.com/assets/images/logo.png)')
 df['State'] = df['State'].map(lambda x: '```python\n"{}"\n```'.format(x))
 
 df = df.values
