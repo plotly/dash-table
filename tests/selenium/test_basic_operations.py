@@ -44,3 +44,34 @@ def test_tbst001_get_cell(test):
         assert target.cell.get_text(0, rawDf.columns[0]) == '0'
         target.click_next_page()
         assert target.cell.get_text(0, rawDf.columns[0]) == '250'
+
+
+def test_tbst002_select_all_text(test):
+    test.start_server(get_app())
+
+    with test.table('table') as target:
+        target.cell.click(0, 1)
+
+        assert target.cell.get_text(0, 1) == test.get_selected_text()
+
+
+# https://github.com/plotly/dash-table/issues/50
+def test_tbst003_edit_on_enter(test):
+    test.start_server(get_app())
+
+    with test.table('table') as target:
+        target.cell.click(249, 0)
+        test.send_keys('abc' + Keys.ENTER)
+
+        assert target.cell.get_text(249, 0) == 'abc'
+
+
+# https://github.com/plotly/dash-table/issues/107
+def test_tbst004_edit_on_tab(test):
+    test.start_server(get_app())
+
+    with test.table('table') as target:
+        target.cell.click(249, 0)
+        test.send_keys('abc' + Keys.TAB)
+
+        assert target.cell.get_text(249, 0) == 'abc'

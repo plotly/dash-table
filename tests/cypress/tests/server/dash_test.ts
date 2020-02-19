@@ -7,47 +7,6 @@ describe('dash basic', () => {
         cy.visit('http://localhost:8081');
     });
 
-    it('cell click selects all text', () => {
-        DashTable.getCell(0, 1).click();
-        DashTable.getCell(0, 1).within(() =>
-            cy.get('input').then($inputs => {
-                const $input = $inputs[0];
-
-                expect($input.selectionStart).to.equal(0);
-                expect($input.selectionEnd).to.equal($input.value.length);
-            })
-        );
-    });
-
-    // https://github.com/plotly/dash-table/issues/50
-    it('can edit last and update data on "enter"', () => {
-        DashTable.focusCell(249, 0);
-        DOM.focused.then($input => {
-            const initialValue = $input.val();
-
-            DOM.focused.type(`abc${Key.Enter}`);
-
-            cy.get('#container').should($container => {
-                expect($container.first()[0].innerText).to.equal(`[249][0] = ${initialValue} -> abc`);
-            });
-        });
-    });
-
-    // https://github.com/plotly/dash-table/issues/107
-    it('can edit last and update data on "tab"', () => {
-        DashTable.focusCell(249, 0);
-        DOM.focused.then($input => {
-            const initialValue = $input.val();
-
-            DOM.focused.type(`abc`);
-
-            cy.tab();
-
-            cy.get('#container').should($container => {
-                expect($container.first()[0].innerText).to.equal(`[249][0] = ${initialValue} -> abc`);
-            });
-        });
-    });
     describe('ArrowKeys navigation', () => {
         describe('When active, but not focused', () => {
             // https://github.com/plotly/dash-table/issues/141

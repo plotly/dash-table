@@ -12,10 +12,11 @@ _validate_col = lambda col: (isinstance(col, str) and len(col) > 0) or (isinstan
 _validate_col_id = lambda col_id: isinstance(col_id, str) and len(col_id) > 0
 _validate_id = lambda id: isinstance(id, str) and len(id) > 0
 _validate_key = lambda key: isinstance(key, str) and len(key) == 1
+_validate_keys = lambda keys: isinstance(keys, str) and len(keys) > 0
+_validate_mixin = lambda mixin: isinstance(mixin, DataTableMixin)
 _validate_row = lambda row: isinstance(row, int) and row >= 0
 _validate_state = lambda state: state in [_READY, _LOADING, _ANY]
 _validate_target = lambda target: isinstance(target, DataTableFacade)
-_validate_mixin = lambda mixin: isinstance(mixin, DataTableMixin)
 
 _READY = '.dash-spreadsheet:not(.dash-loading)'
 _LOADING = '.dash-spreadsheet.dash-loading'
@@ -158,6 +159,15 @@ class DataTableMixin(object):
     @preconditions(_validate_key)
     def hold(self, key):
         return HoldKeyContext(self, key)
+
+    def get_selected_text(self):
+        return self.driver.execute_script(
+            'return window.getSelection().toString()'
+        )
+
+    @preconditions(_validate_keys)
+    def send_keys(self, keys):
+        self.driver.switch_to.active_element.send_keys(keys)
 
 
 class DataTableComposite(Browser, DataTableMixin):
