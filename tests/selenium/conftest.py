@@ -169,16 +169,85 @@ class DataTableFacade(object):
     def click_next_page(self):
         self.mixin._wait_for_table(self.id)
 
-        self.mixin.find_element(
+        return self.mixin.find_element(
             '#{} button.next-page'.format(self.id)
         ).click()
 
     def click_prev_page(self):
         self.mixin._wait_for_table(self.id)
 
-        self.mixin.find_element(
-            '#{} button.previous-page'
+        return self.mixin.find_element(
+            '#{} button.previous-page'.format(self.id)
         ).click()
+
+    def click_first_page(self):
+        self.mixin._wait_for_table(self.id)
+
+        return self.mixin.find_element(
+            '#{} button.first-page'.format(self.id)
+        ).click()
+
+    def click_last_page(self):
+        self.mixin._wait_for_table(self.id)
+
+        return self.mixin.find_element(
+            '#{} button.last-page'.format(self.id)
+        ).click()
+
+    def has_pagination(self):
+        self.mixin._wait_for_table(self.id)
+
+        return len(self.mixin.find_elements('.previous-next-container')) != 0
+
+    def has_next_page(self):
+        self.mixin._wait_for_table(self.id)
+
+        el = self.mixin.find_element(
+            '#{} button.next-page'.format(self.id)
+        )
+
+        return el is not None and el.is_enabled()
+
+    def has_prev_page(self):
+        self.mixin._wait_for_table(self.id)
+
+        el = self.mixin.find_element(
+            '#{} button.previous-page'.format(self.id)
+        )
+
+        return el is not None and el.is_enabled()
+
+    def has_first_page(self):
+        self.mixin._wait_for_table(self.id)
+
+        el = self.mixin.find_element(
+            '#{} button.first-page'.format(self.id)
+        )
+
+        return el is not None and el.is_enabled()
+
+    def has_last_page(self):
+        self.mixin._wait_for_table(self.id)
+
+        el = self.mixin.find_element(
+            '#{} button.last-page'.format(self.id)
+        )
+
+        return el is not None and el.is_enabled()
+
+    def click_current_page(self):
+        self.mixin._wait_for_table(self.id)
+
+        return self.mixin.find_element(
+            '#{} input.current-page'.format(self.id)
+        ).click()
+
+    def get_current_page(self):
+        self.mixin._wait_for_table(self.id)
+
+        return self.mixin.find_element(
+            '#{} input.current-page'.format(self.id)
+        ).get_attribute('placeholder')
 
 
 class DataTableMixin(object):

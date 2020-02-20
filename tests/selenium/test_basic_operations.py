@@ -10,7 +10,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 
 import pandas as pd
-import time
+
 url = "https://github.com/plotly/datasets/raw/master/" "26k-consumer-complaints.csv"
 rawDf = pd.read_csv(url)
 df = rawDf.to_dict('rows')
@@ -24,11 +24,9 @@ def get_app():
         data=df,
         editable=True,
         filter_action="native",
-        fixed_columns={ 'headers': True, 'data': -1 },
-        fixed_rows={ 'headers': True, 'data': -1 },
+        fixed_columns={ 'headers': True },
+        fixed_rows={ 'headers': True },
         page_action="native",
-        page_current=0,
-        page_size=250,
         row_deletable=True,
         row_selectable=True,
         sort_action="native",
