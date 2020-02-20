@@ -156,15 +156,11 @@ class DataTableRowFacade(object):
         )[row].find_element_by_css_selector('input').is_selected()
 
 
-class DataTableFacade(object):
+class DataTablePagingFacade(object):
     @preconditions(_validate_id, _validate_mixin)
     def __init__(self, id, mixin):
         self.id = id
         self.mixin = mixin
-
-        self.cell = DataTableCellFacade(id, mixin)
-        self.column = DataTableColumnFacade(id, mixin)
-        self.row = DataTableRowFacade(id, mixin)
 
     def click_next_page(self):
         self.mixin._wait_for_table(self.id)
@@ -248,6 +244,18 @@ class DataTableFacade(object):
         return self.mixin.find_element(
             '#{} input.current-page'.format(self.id)
         ).get_attribute('placeholder')
+
+
+class DataTableFacade(object):
+    @preconditions(_validate_id, _validate_mixin)
+    def __init__(self, id, mixin):
+        self.id = id
+        self.mixin = mixin
+
+        self.cell = DataTableCellFacade(id, mixin)
+        self.column = DataTableColumnFacade(id, mixin)
+        self.paging = DataTablePagingFacade(id, mixin)
+        self.row = DataTableRowFacade(id, mixin)
 
 
 class DataTableMixin(object):

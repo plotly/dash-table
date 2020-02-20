@@ -62,20 +62,20 @@ def test_tpag001_next_previous(test, mode):
 
     with test.table('table') as target:
         assert target.cell.get_text(0, 0) == '0'
-        assert target.has_next_page()
-        assert not target.has_prev_page()
+        assert target.paging.has_next_page()
+        assert not target.paging.has_prev_page()
 
-        target.click_next_page()
+        target.paging.click_next_page()
 
         assert target.cell.get_text(0, 0) == '5'
-        assert target.has_next_page()
-        assert target.has_prev_page()
+        assert target.paging.has_next_page()
+        assert target.paging.has_prev_page()
 
-        target.click_prev_page()
+        target.paging.click_prev_page()
 
         assert target.cell.get_text(0, 0) == '0'
-        assert target.has_next_page()
-        assert not target.has_prev_page()
+        assert target.paging.has_next_page()
+        assert not target.paging.has_prev_page()
 
 
 @pytest.mark.parametrize('mode', ['custom', 'native'])
@@ -83,11 +83,11 @@ def test_tpag002_ops_on_first_page(test, mode):
     test.start_server(get_app(mode))
 
     with test.table('table') as target:
-        assert target.get_current_page() == '1'
-        assert not target.has_first_page()
-        assert not target.has_prev_page()
-        assert target.has_next_page()
-        assert target.has_last_page()
+        assert target.paging.get_current_page() == '1'
+        assert not target.paging.has_first_page()
+        assert not target.paging.has_prev_page()
+        assert target.paging.has_next_page()
+        assert target.paging.has_last_page()
 
 
 @pytest.mark.parametrize('mode', ['custom', 'native'])
@@ -95,13 +95,13 @@ def test_tpag003_ops_on_last_page(test, mode):
     test.start_server(get_app(mode))
 
     with test.table('table') as target:
-        target.click_last_page()
+        target.paging.click_last_page()
 
-        assert target.get_current_page() == str(pages)
-        assert target.has_first_page()
-        assert target.has_prev_page()
-        assert not target.has_next_page()
-        assert not target.has_last_page()
+        assert target.paging.get_current_page() == str(pages)
+        assert target.paging.has_first_page()
+        assert target.paging.has_prev_page()
+        assert not target.paging.has_next_page()
+        assert not target.paging.has_last_page()
 
 
 def test_tpag004_ops_input_with_enter(test):
@@ -110,12 +110,12 @@ def test_tpag004_ops_input_with_enter(test):
     with test.table('table') as target:
         text00 = target.cell.get_text(0, 0)
 
-        assert target.get_current_page() == '1'
+        assert target.paging.get_current_page() == '1'
 
-        target.click_current_page()
+        target.paging.click_current_page()
         test.send_keys('100' + Keys.ENTER)
 
-        assert target.get_current_page() == '100'
+        assert target.paging.get_current_page() == '100'
         assert target.cell.get_text(0, 0) != text00
 
 
@@ -125,13 +125,13 @@ def test_tpag005_ops_input_with_unfocus(test):
     with test.table('table') as target:
         text00 = target.cell.get_text(0, 0)
 
-        assert target.get_current_page() == '1'
+        assert target.paging.get_current_page() == '1'
 
-        target.click_current_page()
+        target.paging.click_current_page()
         test.send_keys('100')
         target.cell.click(0, 0)
 
-        assert target.get_current_page() == '100'
+        assert target.paging.get_current_page() == '100'
         assert target.cell.get_text(0, 0) != text00
 
 
@@ -147,12 +147,12 @@ def test_tpag006_ops_input_invalid_with_enter(test, value, expected_value):
     with test.table('table') as target:
         text00 = target.cell.get_text(0, 0)
 
-        assert target.get_current_page() == '1'
+        assert target.paging.get_current_page() == '1'
 
-        target.click_current_page()
+        target.paging.click_current_page()
         test.send_keys(str(value) + Keys.ENTER)
 
-        assert target.get_current_page() == str(expected_value)
+        assert target.paging.get_current_page() == str(expected_value)
 
 
 @pytest.mark.parametrize('value,expected_value', [
@@ -167,13 +167,13 @@ def test_tpag007_ops_input_invalid_with_unfocus(test, value, expected_value):
     with test.table('table') as target:
         text00 = target.cell.get_text(0, 0)
 
-        assert target.get_current_page() == '1'
+        assert target.paging.get_current_page() == '1'
 
-        target.click_current_page()
+        target.paging.click_current_page()
         test.send_keys(str(value))
         target.cell.click(0, 0)
 
-        assert target.get_current_page() == str(expected_value)
+        assert target.paging.get_current_page() == str(expected_value)
 
 
 @pytest.mark.parametrize('mode', ['custom', 'native'])
@@ -181,20 +181,20 @@ def test_tpag008_hide_with_single_page(test, mode):
     test.start_server(get_app(mode=mode, data=df[0: PAGE_SIZE]))
 
     with test.table('table') as target:
-        assert not target.has_pagination()
+        assert not target.paging.has_pagination()
 
 
 def test_tpag009_hide_with_invalid_page_count(test):
     test.start_server(get_app(mode='custom', page_count=-1))
 
     with test.table('table') as target:
-        assert not target.has_pagination()
+        assert not target.paging.has_pagination()
 
 
 def test_tpag010_limits_page(test):
     test.start_server(get_app(mode='custom', page_count=10))
 
     with test.table('table') as target:
-        target.click_last_page()
+        target.paging.click_last_page()
 
-        assert target.get_current_page() == '10'
+        assert target.paging.get_current_page() == '10'
