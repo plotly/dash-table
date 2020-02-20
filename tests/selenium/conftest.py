@@ -131,6 +131,31 @@ class DataTableColumnFacade(object):
         ).click()
 
 
+class DataTableRowFacade(object):
+    @preconditions(_validate_id, _validate_mixin)
+    def __init__(self, id, mixin):
+        self.id = id
+        self.mixin = mixin
+
+    @preconditions(_validate_row, _validate_state)
+    def delete(self, row, state = _READY):
+        return self.mixin.find_elements(
+            '#{} {} tbody tr td.dash-delete-cell'.format(self.id, state)
+        )[row].click()
+
+    @preconditions(_validate_row, _validate_state)
+    def select(self, row, state = _READY):
+        return self.mixin.find_elements(
+            '#{} {} tbody tr td.dash-select-cell'.format(self.id, state)
+        )[row].click()
+
+    @preconditions(_validate_row, _validate_state)
+    def is_selected(self, row, state = _READY):
+        return self.mixin.find_elements(
+            '#{} {} tbody tr td.dash-select-cell'.format(self.id, state)
+        )[row].find_element_by_css_selector('input').is_selected()
+
+
 class DataTableFacade(object):
     @preconditions(_validate_id, _validate_mixin)
     def __init__(self, id, mixin):
@@ -139,6 +164,7 @@ class DataTableFacade(object):
 
         self.cell = DataTableCellFacade(id, mixin)
         self.column = DataTableColumnFacade(id, mixin)
+        self.row = DataTableRowFacade(id, mixin)
 
     def click_next_page(self):
         self.mixin._wait_for_table(self.id)

@@ -41,9 +41,9 @@ def test_tbst001_get_cell(test):
     test.start_server(get_app())
 
     with test.table('table') as target:
-        assert target.cell.get_text(0, rawDf.columns[0]) == '0'
+        assert target.cell.get_text(0, 0) == '0'
         target.click_next_page()
-        assert target.cell.get_text(0, rawDf.columns[0]) == '250'
+        assert target.cell.get_text(0, 0) == '250'
 
 
 def test_tbst002_select_all_text(test):
@@ -143,3 +143,66 @@ def test_tbst010_active_with_dblclick(test):
         target.cell.double_click(0, 0)
         assert target.cell.is_active(0, 0)
         assert target.cell.get_text(0, 0) == test.get_selected_text()
+
+
+def test_tbst011_delete_row(test):
+    test.start_server(get_app())
+
+    with test.table('table') as target:
+        text00 = target.cell.get_text(0, 0)
+        text01 = target.cell.get_text(1, 0)
+        target.row.delete(0)
+
+        assert target.cell.get_text(0, 0) == text01
+
+
+def test_tbst012_delete_sorted_row(test):
+    test.start_server(get_app())
+
+    with test.table('table') as target:
+        target.column.sort(0, rawDf.columns[0]) # None -> ASC
+        target.column.sort(0, rawDf.columns[0]) # ASC -> DESC
+
+        text00 = target.cell.get_text(0, 0)
+        text01 = target.cell.get_text(1, 0)
+        target.row.delete(0)
+
+        assert target.cell.get_text(0, 0) == text01
+
+
+def test_tbst013_select_row(test):
+    test.start_server(get_app())
+
+    with test.table('table') as target:
+        target.row.select(0)
+
+        assert target.row.is_selected(0)
+
+
+def test_tbst014_selected_sorted_row(test):
+    test.start_server(get_app())
+
+    with test.table('table') as target:
+        target.column.sort(0, rawDf.columns[0]) # None -> ASC
+        target.column.sort(0, rawDf.columns[0]) # ASC -> DESC
+        target.row.select(0)
+
+        assert target.row.is_selected(0)
+
+
+def test_tbst015_selected_row_respects_sort(test):
+    test.start_server(get_app())
+
+    with test.table('table') as target:
+        target.row.select(0)
+
+        assert target.row.is_selected(0)
+
+        target.column.sort(0, rawDf.columns[0]) # None -> ASC
+        target.column.sort(0, rawDf.columns[0]) # ASC -> DESC
+
+        assert not target.row.is_selected(0)
+
+        target.column.sort(0, rawDf.columns[0]) # DESC -> None
+
+        assert target.row.is_selected(0)
