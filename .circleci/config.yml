@@ -248,7 +248,6 @@ workflows:
         jobs:
             - "python-3.6"
             - "node"
-            - "legacy-server-test"
             - "server-test"
             - "standalone-test"
             - "unit-test"
