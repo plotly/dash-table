@@ -55,23 +55,23 @@ class DataTableCellFacade(object):
         self.mixin = mixin
 
     @preconditions(_validate_row, _validate_col, _validate_state)
-    def _get_cell_value(self, row, col, selector, state = _READY):
+    def _get_cell_value(self, row, col, selector, state = _ANY):
         return self.get(row, col, state).find_element_by_css_selector('.dash-cell-value')
 
     @preconditions(_validate_row, _validate_col, _validate_state)
-    def click(self, row, col, state = _READY):
+    def click(self, row, col, state = _ANY):
         return self.get(row, col, state).click()
 
     @preconditions(_validate_row, _validate_col, _validate_state)
-    def double_click(self, row, col, state = _READY):
+    def double_click(self, row, col, state = _ANY):
         ac = ActionChains(self.mixin.driver)
         ac.move_to_element(self._get_cell_value(row, col, state))
-        ac.pause(1)
+        ac.pause(1) # sometimes experiencing incorrect behavior on scroll otherwise
         ac.double_click()
         return ac.perform()
 
     @preconditions(_validate_row, _validate_col, _validate_state)
-    def get(self, row, col, state = _READY):
+    def get(self, row, col, state = _ANY):
         self.mixin._wait_for_table(self.id, state)
 
         return self.mixin.find_element(
@@ -81,7 +81,7 @@ class DataTableCellFacade(object):
         )
 
     @preconditions(_validate_row, _validate_col, _validate_state)
-    def get_text(self, row, col, state = _READY):
+    def get_text(self, row, col, state = _ANY):
         el = self._get_cell_value(row, col, state)
 
         value = el.get_attribute('value')
@@ -92,13 +92,13 @@ class DataTableCellFacade(object):
         )
 
     @preconditions(_validate_row, _validate_col, _validate_state)
-    def is_active(self, row, col, state = _READY):
+    def is_active(self, row, col, state = _ANY):
         input = self.get(row, col, state).find_element_by_css_selector('input')
 
         return 'focused' in input.get_attribute('class').split(' ')
 
     @preconditions(_validate_row, _validate_col, _validate_state)
-    def is_focused(self, row, col, state = _READY):
+    def is_focused(self, row, col, state = _ANY):
         cell = self.get(row, col, state)
 
         return 'focused' in cell.get_attribute('class').split(' ')
@@ -111,7 +111,7 @@ class DataTableColumnFacade(object):
         self.mixin = mixin
 
     @preconditions(_validate_row, _validate_col_id, _validate_state)
-    def get(self, row, col_id, state = _READY):
+    def get(self, row, col_id, state = _ANY):
         self.mixin._wait_for_table(self.id, state)
 
         return self.mixin.find_elements(
@@ -119,13 +119,13 @@ class DataTableColumnFacade(object):
         )[row]
 
     @preconditions(_validate_row, _validate_col_id, _validate_state)
-    def hide(self, row, col_id, state = _READY):
+    def hide(self, row, col_id, state = _ANY):
         self.get(row, col_id, state).find_element_by_css_selector(
             '.column-header--hide'
         ).click()
 
     @preconditions(_validate_row, _validate_col_id, _validate_state)
-    def sort(self, row, col_id, state = _READY):
+    def sort(self, row, col_id, state = _ANY):
         self.get(row, col_id, state).find_element_by_css_selector(
             '.column-header--sort'
         ).click()
@@ -138,19 +138,19 @@ class DataTableRowFacade(object):
         self.mixin = mixin
 
     @preconditions(_validate_row, _validate_state)
-    def delete(self, row, state = _READY):
+    def delete(self, row, state = _ANY):
         return self.mixin.find_elements(
             '#{} {} tbody tr td.dash-delete-cell'.format(self.id, state)
         )[row].click()
 
     @preconditions(_validate_row, _validate_state)
-    def select(self, row, state = _READY):
+    def select(self, row, state = _ANY):
         return self.mixin.find_elements(
             '#{} {} tbody tr td.dash-select-cell'.format(self.id, state)
         )[row].click()
 
     @preconditions(_validate_row, _validate_state)
-    def is_selected(self, row, state = _READY):
+    def is_selected(self, row, state = _ANY):
         return self.mixin.find_elements(
             '#{} {} tbody tr td.dash-select-cell'.format(self.id, state)
         )[row].find_element_by_css_selector('input').is_selected()
@@ -257,6 +257,11 @@ class DataTableFacade(object):
         self.paging = DataTablePagingFacade(id, mixin)
         self.row = DataTableRowFacade(id, mixin)
 
+    def is_ready(self):
+        return self.mixin._wait_for_table(self.id, _READY)
+
+    def is_loading(self):
+        return self.mixin._wait_for_table(self.id, _LOADING)
 
 class DataTableMixin(object):
     @preconditions(_validate_id, _validate_state)
