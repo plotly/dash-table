@@ -60,9 +60,7 @@ def get_app_and_locks():
         if clicks is None:
             raise PreventUpdate
 
-        print('callback > blocking')
         with blocking_lock:
-            print('callback > blocking > obtained!')
             return df
 
     return app, blocking_lock, non_blocking_lock
@@ -168,5 +166,3 @@ def test_tedi006_allow_copy_paste_on_non_blocking(test):
             for row in range(2):
                 for col in range(2):
                     assert target.cell.get_text(row + 2, col) == target.cell.get_text(row, col)
-
-
