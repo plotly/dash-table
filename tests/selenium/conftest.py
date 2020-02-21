@@ -130,6 +130,11 @@ class DataTableColumnFacade(object):
             '.column-header--sort'
         ).click()
 
+    @preconditions(_validate_col_id, _validate_state)
+    def filter(self, col_id, state = _ANY):
+        return self.mixin.find_element(
+            '#{} {} tbody tr th.dash-filter[data-dash-column="{}"]'.format(self.id, state, col_id)
+        ).click()
 
 class DataTableRowFacade(object):
     @preconditions(_validate_id, _validate_mixin)
