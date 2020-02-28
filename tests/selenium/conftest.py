@@ -110,7 +110,7 @@ class DataTableColumnFacade(object):
         self.state = state
 
     @preconditions(_validate_row)
-    def get(self, row):
+    def get(self, row=0):
         self.mixin._wait_for_table(self.id, self.state)
 
         return self.mixin.find_elements(
@@ -120,11 +120,11 @@ class DataTableColumnFacade(object):
         )[row]
 
     @preconditions(_validate_row)
-    def hide(self, row):
+    def hide(self, row=0):
         self.get(row).find_element_by_css_selector(".column-header--hide").click()
 
     @preconditions(_validate_row)
-    def sort(self, row):
+    def sort(self, row=0):
         self.get(row).find_element_by_css_selector(".column-header--sort").click()
 
     def filter(self):

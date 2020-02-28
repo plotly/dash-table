@@ -514,8 +514,8 @@ def test_tdrp005_filtered_and_sorted_row_select(test):
         "innerHTML"
     ) == json.dumps(list(range(3000, 3100, 2)))
 
-    target.column(rawDf.columns[0]).sort(0)  # None -> ASC
-    target.column(rawDf.columns[0]).sort(0)  # ASC -> DESC
+    target.column(rawDf.columns[0]).sort()  # None -> ASC
+    target.column(rawDf.columns[0]).sort()  # ASC -> DESC
 
     assert test.find_element("#active_cell").get_attribute("innerHTML") in [
         "None",

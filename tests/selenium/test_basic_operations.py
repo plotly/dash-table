@@ -167,8 +167,8 @@ def test_tbst012_delete_sorted_row(test):
 
     target = test.table("table")
 
-    target.column(rawDf.columns[0]).sort(0)  # None -> ASC
-    target.column(rawDf.columns[0]).sort(0)  # ASC -> DESC
+    target.column(rawDf.columns[0]).sort()  # None -> ASC
+    target.column(rawDf.columns[0]).sort()  # ASC -> DESC
 
     text01 = target.cell(1, 0).get_text()
     target.row(0).delete()
@@ -191,8 +191,8 @@ def test_tbst014_selected_sorted_row(test):
 
     target = test.table("table")
 
-    target.column(rawDf.columns[0]).sort(0)  # None -> ASC
-    target.column(rawDf.columns[0]).sort(0)  # ASC -> DESC
+    target.column(rawDf.columns[0]).sort()  # None -> ASC
+    target.column(rawDf.columns[0]).sort()  # ASC -> DESC
     target.row(0).select()
 
     assert target.row(0).is_selected()
@@ -207,12 +207,12 @@ def test_tbst015_selected_row_respects_sort(test):
 
     assert target.row(0).is_selected()
 
-    target.column(rawDf.columns[0]).sort(0)  # None -> ASC
-    target.column(rawDf.columns[0]).sort(0)  # ASC -> DESC
+    target.column(rawDf.columns[0]).sort()  # None -> ASC
+    target.column(rawDf.columns[0]).sort()  # ASC -> DESC
 
     assert not target.row(0).is_selected()
 
-    target.column(rawDf.columns[0]).sort(0)  # DESC -> None
+    target.column(rawDf.columns[0]).sort()  # DESC -> None
 
     assert target.row(0).is_selected()
 
@@ -279,8 +279,8 @@ def test_tbst020_sorted_table_delete_cell(test):
 
     target = test.table("table")
 
-    target.column(rawDf.columns[0]).sort(0)  # None -> ASC
-    target.column(rawDf.columns[0]).sort(0)  # ASC -> DESC
+    target.column(rawDf.columns[0]).sort()  # None -> ASC
+    target.column(rawDf.columns[0]).sort()  # ASC -> DESC
 
     target.cell(0, 1).click()
     test.send_keys(Keys.BACKSPACE)
@@ -295,8 +295,8 @@ def test_tbst021_sorted_table_delete_cell_updates_while_selected(test):
 
     target = test.table("table")
 
-    target.column(rawDf.columns[0]).sort(0)  # None -> ASC
-    target.column(rawDf.columns[0]).sort(0)  # ASC -> DESC
+    target.column(rawDf.columns[0]).sort()  # None -> ASC
+    target.column(rawDf.columns[0]).sort()  # ASC -> DESC
 
     target.cell(0, 1).click()
     test.send_keys(Keys.BACKSPACE)
@@ -309,8 +309,8 @@ def test_tbst022_sorted_table_delete_multiple_cells(test):
 
     target = test.table("table")
 
-    target.column(rawDf.columns[0]).sort(0)  # None -> ASC
-    target.column(rawDf.columns[0]).sort(0)  # ASC -> DESC
+    target.column(rawDf.columns[0]).sort()  # None -> ASC
+    target.column(rawDf.columns[0]).sort()  # ASC -> DESC
 
     target.cell(0, 1).click()
     with test.hold(Keys.SHIFT):
@@ -329,8 +329,8 @@ def test_tbst023_sorted_table_delete_multiple_cells_while_selected(test):
 
     target = test.table("table")
 
-    target.column(rawDf.columns[0]).sort(0)  # None -> ASC
-    target.column(rawDf.columns[0]).sort(0)  # ASC -> DESC
+    target.column(rawDf.columns[0]).sort()  # None -> ASC
+    target.column(rawDf.columns[0]).sort()  # ASC -> DESC
 
     target.cell(0, 1).click()
     with test.hold(Keys.SHIFT):

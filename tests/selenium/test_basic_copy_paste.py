@@ -90,7 +90,7 @@ def test_tbcp002_sorted_copy_paste_callback(test):
     test.start_server(get_app())
 
     target = test.table("table")
-    target.column(rawDf.columns[2]).sort(0)
+    target.column(rawDf.columns[2]).sort()
 
     assert target.cell(0, 0).get_text() == "11"
 
@@ -198,7 +198,7 @@ def test_tbcp007_copy_paste_with_hidden_column(test):
 
     target = test.table("table")
 
-    target.column("Complaint ID").hide(0)
+    target.column("Complaint ID").hide()
     target.cell(0, 0).click()
     with test.hold(Keys.SHIFT):
         target.cell(2, 2).click()
@@ -220,7 +220,7 @@ def test_tbcp008_copy_paste_between_tables_with_hidden_columns(test):
 
     target = test.table("table")
 
-    target.column("Complaint ID").hide(0)
+    target.column("Complaint ID").hide()
     target.cell(10, 0).click()
     with test.hold(Keys.SHIFT):
         target.cell(13, 2).click()
