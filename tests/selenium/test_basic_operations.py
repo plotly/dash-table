@@ -212,15 +212,15 @@ def test_tbst016_delete_cell(test):
         assert target.cell.get_text(0, 1) == ""
 
 
-# # https://github.com/plotly/dash-table/issues/700
-# def test_tbst017_delete_cell_updates_while_selected(test):
-#     test.start_server(get_app())
+@pytest.mark.skip(reason="https://github.com/plotly/dash-table/issues/700")
+def test_tbst017_delete_cell_updates_while_selected(test):
+    test.start_server(get_app())
 
-#     with test.table('table') as target:
-#         target.cell.click(0, 1)
-#         test.send_keys(Keys.BACKSPACE)
+    with test.table('table') as target:
+        target.cell.click(0, 1)
+        test.send_keys(Keys.BACKSPACE)
 
-#         assert target.cell.get_text(0, 1) == ''
+        assert target.cell.get_text(0, 1) == ''
 
 
 def test_tbst018_delete_multiple_cells(test):
@@ -242,20 +242,20 @@ def test_tbst018_delete_multiple_cells(test):
             assert target.cell.get_text(row, col) == ""
 
 
-# # https://github.com/plotly/dash-table/issues/700
-# def test_tbst019_delete_multiple_cells_while_selected(test):
-#     test.start_server(get_app())
+@pytest.mark.skip(reason="https://github.com/plotly/dash-table/issues/700")
+def test_tbst019_delete_multiple_cells_while_selected(test):
+    test.start_server(get_app())
 
-#     with test.table('table') as target:
-#         target.cell.click(0, 1)
-#         with test.hold(Keys.SHIFT):
-#             ActionChains(test.driver).send_keys(Keys.DOWN).send_keys(Keys.RIGHT).perform()
+    with test.table('table') as target:
+        target.cell.click(0, 1)
+        with test.hold(Keys.SHIFT):
+            ActionChains(test.driver).send_keys(Keys.DOWN).send_keys(Keys.RIGHT).perform()
 
-#         ActionChains(test.driver).send_keys(Keys.BACKSPACE).perform()
+        ActionChains(test.driver).send_keys(Keys.BACKSPACE).perform()
 
-#     for row in range(2):
-#         for col in range(1, 3):
-#             assert target.cell.get_text(row, col) == ''
+    for row in range(2):
+        for col in range(1, 3):
+            assert target.cell.get_text(row, col) == ''
 
 
 def test_tbst020_sorted_table_delete_cell(test):
@@ -272,18 +272,18 @@ def test_tbst020_sorted_table_delete_cell(test):
         assert target.cell.get_text(0, 1) == ""
 
 
-# # https://github.com/plotly/dash-table/issues/700
-# def test_tbst021_sorted_table_delete_cell_updates_while_selected(test):
-#     test.start_server(get_app())
+@pytest.mark.skip(reason="https://github.com/plotly/dash-table/issues/700")
+def test_tbst021_sorted_table_delete_cell_updates_while_selected(test):
+    test.start_server(get_app())
 
-#     with test.table('table') as target:
-#         target.column.sort(0, rawDf.columns[0]) # None -> ASC
-#         target.column.sort(0, rawDf.columns[0]) # ASC -> DESC
+    with test.table('table') as target:
+        target.column.sort(0, rawDf.columns[0]) # None -> ASC
+        target.column.sort(0, rawDf.columns[0]) # ASC -> DESC
 
-#         target.cell.click(0, 1)
-#         test.send_keys(Keys.BACKSPACE)
+        target.cell.click(0, 1)
+        test.send_keys(Keys.BACKSPACE)
 
-#         assert target.cell.get_text(0, 1) == ''
+        assert target.cell.get_text(0, 1) == ''
 
 
 def test_tbst022_sorted_table_delete_multiple_cells(test):
@@ -308,20 +308,20 @@ def test_tbst022_sorted_table_delete_multiple_cells(test):
             assert target.cell.get_text(row, col) == ""
 
 
-# # https://github.com/plotly/dash-table/issues/700
-# def test_tbst023_sorted_table_delete_multiple_cells_while_selected(test):
-#     test.start_server(get_app())
+@pytest.mark.skip(reason="https://github.com/plotly/dash-table/issues/700")
+def test_tbst023_sorted_table_delete_multiple_cells_while_selected(test):
+    test.start_server(get_app())
 
-#     with test.table('table') as target:
-#         target.column.sort(0, rawDf.columns[0]) # None -> ASC
-#         target.column.sort(0, rawDf.columns[0]) # ASC -> DESC
+    with test.table('table') as target:
+        target.column.sort(0, rawDf.columns[0]) # None -> ASC
+        target.column.sort(0, rawDf.columns[0]) # ASC -> DESC
 
-#         target.cell.click(0, 1)
-#         with test.hold(Keys.SHIFT):
-#             ActionChains(test.driver).send_keys(Keys.DOWN).send_keys(Keys.RIGHT).perform()
+        target.cell.click(0, 1)
+        with test.hold(Keys.SHIFT):
+            ActionChains(test.driver).send_keys(Keys.DOWN).send_keys(Keys.RIGHT).perform()
 
-#         ActionChains(test.driver).send_keys(Keys.BACKSPACE).perform()
+        ActionChains(test.driver).send_keys(Keys.BACKSPACE).perform()
 
-#     for row in range(2):
-#         for col in range(1, 3):
-#             assert target.cell.get_text(row, col) == ''
+    for row in range(2):
+        for col in range(1, 3):
+            assert target.cell.get_text(row, col) == ''
