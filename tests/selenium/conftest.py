@@ -289,14 +289,12 @@ class DataTableMixin(object):
         return DataTableContext(DataTableFacade(id, self))
 
     def copy(self):
-        ActionChains(self.driver).key_down(Keys.CONTROL).send_keys("c").key_up(
-            Keys.CONTROL
-        ).perform()
+        with self.hold(Keys.CONTROL):
+            self.send_keys("c")
 
     def paste(self):
-        ActionChains(self.driver).key_down(Keys.CONTROL).send_keys("v").key_up(
-            Keys.CONTROL
-        ).perform()
+        with self.hold(Keys.CONTROL):
+            self.send_keys("v")
 
     @preconditions(_validate_key)
     def hold(self, key):
