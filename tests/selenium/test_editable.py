@@ -1,5 +1,5 @@
 import dash
-from dash.dependencies import Input, Output, State
+from dash.dependencies import Input, Output
 from dash.exceptions import PreventUpdate
 
 import dash_core_components as dcc
@@ -8,42 +8,43 @@ from dash_table import DataTable
 
 from multiprocessing import Lock
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.action_chains import ActionChains
 
 import pandas as pd
 
 url = "https://github.com/plotly/datasets/raw/master/" "26k-consumer-complaints.csv"
 rawDf = pd.read_csv(url)
-df = rawDf.to_dict('rows')
+df = rawDf.to_dict("rows")
+
 
 def get_app_and_locks():
     app = dash.Dash(__name__)
 
-    app.layout = html.Div([
-        dcc.Input(id='input'),
-        html.Button(['Blocking'], id='blocking'),
-        html.Button(['Non Blocking'], id='non-blocking'),
-        DataTable(
-            id="table",
-            columns=[{"name": i, "id": i} for i in rawDf.columns],
-            data=df,
-            editable=True,
-            filter_action="native",
-            fixed_columns={ 'headers': True },
-            fixed_rows={ 'headers': True },
-            page_action="native",
-            row_deletable=True,
-            row_selectable=True,
-            sort_action="native",
-        )
-    ])
+    app.layout = html.Div(
+        [
+            dcc.Input(id="input"),
+            html.Button(["Blocking"], id="blocking"),
+            html.Button(["Non Blocking"], id="non-blocking"),
+            DataTable(
+                id="table",
+                columns=[{"name": i, "id": i} for i in rawDf.columns],
+                data=df,
+                editable=True,
+                filter_action="native",
+                fixed_columns={"headers": True},
+                fixed_rows={"headers": True},
+                page_action="native",
+                row_deletable=True,
+                row_selectable=True,
+                sort_action="native",
+            ),
+        ]
+    )
 
     blocking_lock = Lock()
     non_blocking_lock = Lock()
 
     @app.callback(
-        Output("table", "style_cell_conditional"),
-        [Input("non-blocking", "n_clicks")]
+        Output("table", "style_cell_conditional"), [Input("non-blocking", "n_clicks")],
     )
     def non_blocking_callback(clicks):
         if clicks is None:
@@ -52,10 +53,7 @@ def get_app_and_locks():
         with non_blocking_lock:
             return []
 
-    @app.callback(
-        Output("table", "data"),
-        [Input("blocking", "n_clicks")]
-    )
+    @app.callback(Output("table", "data"), [Input("blocking", "n_clicks")])
     def blocking_callback(clicks):
         if clicks is None:
             raise PreventUpdate
@@ -71,15 +69,17 @@ def test_tedi001_loading_on_data_change(test):
 
     test.start_server(app)
 
-    with test.table('table') as target:
+    with test.table("table") as target:
         with blocking:
-            test.find_element('#blocking').click()
+            test.find_element("#blocking").click()
             target.is_loading()
             target.cell.click(0, 0)
-            assert len(target.cell.get(0, 0).find_elements_by_css_selector('input')) == 0
+            assert (
+                len(target.cell.get(0, 0).find_elements_by_css_selector("input")) == 0
+            )
 
         target.is_ready()
-        assert target.cell.get(0, 0).find_element_by_css_selector('input') is not None
+        assert target.cell.get(0, 0).find_element_by_css_selector("input") is not None
 
 
 def test_tedi002_ready_on_non_data_change(test):
@@ -87,15 +87,17 @@ def test_tedi002_ready_on_non_data_change(test):
 
     test.start_server(app)
 
-    with test.table('table') as target:
+    with test.table("table") as target:
         with blocking:
-            test.find_element('#non-blocking').click()
+            test.find_element("#non-blocking").click()
             target.is_ready()
             target.cell.click(0, 0)
-            assert target.cell.get(0, 0).find_element_by_css_selector('input') is not None
+            assert (
+                target.cell.get(0, 0).find_element_by_css_selector("input") is not None
+            )
 
         target.is_ready()
-        assert target.cell.get(0, 0).find_element_by_css_selector('input') is not None
+        assert target.cell.get(0, 0).find_element_by_css_selector("input") is not None
 
 
 def test_tedi003_does_not_steal_focus(test):
@@ -103,14 +105,14 @@ def test_tedi003_does_not_steal_focus(test):
 
     test.start_server(app)
 
-    with test.table('table') as target:
+    with test.table("table") as target:
         with blocking:
-            test.find_element('#blocking').click()
-            test.find_element('#input').click()
-            assert test.find_element('#input') == test.driver.switch_to.active_element
+            test.find_element("#blocking").click()
+            test.find_element("#input").click()
+            assert test.find_element("#input") == test.driver.switch_to.active_element
 
         target.is_ready()
-        assert test.find_element('#input') == test.driver.switch_to.active_element
+        assert test.find_element("#input") == test.driver.switch_to.active_element
 
 
 def test_tedi004_edit_on_non_blocking(test):
@@ -118,12 +120,12 @@ def test_tedi004_edit_on_non_blocking(test):
 
     test.start_server(app)
 
-    with test.table('table') as target:
+    with test.table("table") as target:
         with blocking:
-            test.find_element('#non-blocking').click()
+            test.find_element("#non-blocking").click()
             target.cell.click(0, 0)
-            test.send_keys('abc' + Keys.ENTER)
-            assert target.cell.get_text(0, 0) == 'abc'
+            test.send_keys("abc" + Keys.ENTER)
+            assert target.cell.get_text(0, 0) == "abc"
 
 
 def test_tedi005_prevent_copy_paste_on_blocking(test):
@@ -131,9 +133,9 @@ def test_tedi005_prevent_copy_paste_on_blocking(test):
 
     test.start_server(app)
 
-    with test.table('table') as target:
+    with test.table("table") as target:
         with blocking:
-            test.find_element('#blocking').click()
+            test.find_element("#blocking").click()
             target.cell.click(0, 0)
             with test.hold(Keys.SHIFT):
                 test.send_keys(Keys.DOWN + Keys.RIGHT)
@@ -144,7 +146,9 @@ def test_tedi005_prevent_copy_paste_on_blocking(test):
 
             for row in range(2):
                 for col in range(2):
-                    assert target.cell.get_text(row + 2, col) != target.cell.get_text(row, col)
+                    assert target.cell.get_text(row + 2, col) != target.cell.get_text(
+                        row, col
+                    )
 
 
 def test_tedi006_allow_copy_paste_on_non_blocking(test):
@@ -152,9 +156,9 @@ def test_tedi006_allow_copy_paste_on_non_blocking(test):
 
     test.start_server(app)
 
-    with test.table('table') as target:
+    with test.table("table") as target:
         with non_blocking:
-            test.find_element('#non-blocking').click()
+            test.find_element("#non-blocking").click()
             target.cell.click(0, 0)
             with test.hold(Keys.SHIFT):
                 test.send_keys(Keys.DOWN + Keys.RIGHT)
@@ -165,4 +169,6 @@ def test_tedi006_allow_copy_paste_on_non_blocking(test):
 
             for row in range(2):
                 for col in range(2):
-                    assert target.cell.get_text(row + 2, col) == target.cell.get_text(row, col)
+                    assert target.cell.get_text(row + 2, col) == target.cell.get_text(
+                        row, col
+                    )

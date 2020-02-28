@@ -8,7 +8,9 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
-_validate_col = lambda col: (isinstance(col, str) and len(col) > 0) or (isinstance(col, int) and col >= 0)
+_validate_col = lambda col: (isinstance(col, str) and len(col) > 0) or (
+    isinstance(col, int) and col >= 0
+)
 _validate_col_id = lambda col_id: isinstance(col_id, str) and len(col_id) > 0
 _validate_id = lambda id: isinstance(id, str) and len(id) > 0
 _validate_key = lambda key: isinstance(key, str) and len(key) == 1
@@ -18,14 +20,15 @@ _validate_row = lambda row: isinstance(row, int) and row >= 0
 _validate_state = lambda state: state in [_READY, _LOADING, _ANY]
 _validate_target = lambda target: isinstance(target, DataTableFacade)
 
-_READY = '.dash-spreadsheet:not(.dash-loading)'
-_LOADING = '.dash-spreadsheet.dash-loading'
-_ANY = '.dash-spreadsheet'
+_READY = ".dash-spreadsheet:not(.dash-loading)"
+_LOADING = ".dash-spreadsheet.dash-loading"
+_ANY = ".dash-spreadsheet"
 _TIMEOUT = 10
+
 
 class DataTableContext:
     @preconditions(_validate_target)
-    def __init__ (self, target):
+    def __init__(self, target):
         self.target = target
 
     def __enter__(self):
@@ -37,7 +40,7 @@ class DataTableContext:
 
 class HoldKeyContext:
     @preconditions(_validate_mixin, _validate_key)
-    def __init__ (self, mixin, key):
+    def __init__(self, mixin, key):
         self.mixin = mixin
         self.key = key
 
@@ -55,53 +58,63 @@ class DataTableCellFacade(object):
         self.mixin = mixin
 
     @preconditions(_validate_row, _validate_col, _validate_state)
-    def _get_cell_value(self, row, col, selector, state = _ANY):
-        return self.get(row, col, state).find_element_by_css_selector('.dash-cell-value')
+    def _get_cell_value(self, row, col, selector, state=_ANY):
+        return self.get(row, col, state).find_element_by_css_selector(
+            ".dash-cell-value"
+        )
 
     @preconditions(_validate_row, _validate_col, _validate_state)
-    def click(self, row, col, state = _ANY):
+    def click(self, row, col, state=_ANY):
         return self.get(row, col, state).click()
 
     @preconditions(_validate_row, _validate_col, _validate_state)
-    def double_click(self, row, col, state = _ANY):
+    def double_click(self, row, col, state=_ANY):
         ac = ActionChains(self.mixin.driver)
         ac.move_to_element(self._get_cell_value(row, col, state))
-        ac.pause(1) # sometimes experiencing incorrect behavior on scroll otherwise
+        ac.pause(1)  # sometimes experiencing incorrect behavior on scroll otherwise
         ac.double_click()
         return ac.perform()
 
     @preconditions(_validate_row, _validate_col, _validate_state)
-    def get(self, row, col, state = _ANY):
+    def get(self, row, col, state=_ANY):
         self.mixin._wait_for_table(self.id, state)
 
-        return self.mixin.find_element(
-            '#{} {} tbody td.dash-cell.column-{}[data-dash-row="{}"]'.format(self.id, state, col, row)
-        ) if isinstance(col, int) else self.mixin.find_element(
-            '#{} {} tbody td.dash-cell[data-dash-column="{}"][data-dash-row="{}"]'.format(self.id, state, col, row)
+        return (
+            self.mixin.find_element(
+                '#{} {} tbody td.dash-cell.column-{}[data-dash-row="{}"]'.format(
+                    self.id, state, col, row
+                )
+            )
+            if isinstance(col, int)
+            else self.mixin.find_element(
+                '#{} {} tbody td.dash-cell[data-dash-column="{}"][data-dash-row="{}"]'.format(
+                    self.id, state, col, row
+                )
+            )
         )
 
     @preconditions(_validate_row, _validate_col, _validate_state)
-    def get_text(self, row, col, state = _ANY):
+    def get_text(self, row, col, state=_ANY):
         el = self._get_cell_value(row, col, state)
 
-        value = el.get_attribute('value')
+        value = el.get_attribute("value")
         return (
             value
-            if value is not None and value != ''
-            else el.get_attribute('innerHTML')
+            if value is not None and value != ""
+            else el.get_attribute("innerHTML")
         )
 
     @preconditions(_validate_row, _validate_col, _validate_state)
-    def is_active(self, row, col, state = _ANY):
-        input = self.get(row, col, state).find_element_by_css_selector('input')
+    def is_active(self, row, col, state=_ANY):
+        input = self.get(row, col, state).find_element_by_css_selector("input")
 
-        return 'focused' in input.get_attribute('class').split(' ')
+        return "focused" in input.get_attribute("class").split(" ")
 
     @preconditions(_validate_row, _validate_col, _validate_state)
-    def is_focused(self, row, col, state = _ANY):
+    def is_focused(self, row, col, state=_ANY):
         cell = self.get(row, col, state)
 
-        return 'focused' in cell.get_attribute('class').split(' ')
+        return "focused" in cell.get_attribute("class").split(" ")
 
 
 class DataTableColumnFacade(object):
@@ -111,30 +124,35 @@ class DataTableColumnFacade(object):
         self.mixin = mixin
 
     @preconditions(_validate_row, _validate_col_id, _validate_state)
-    def get(self, row, col_id, state = _ANY):
+    def get(self, row, col_id, state=_ANY):
         self.mixin._wait_for_table(self.id, state)
 
         return self.mixin.find_elements(
-            '#{} {} tbody tr th.dash-header[data-dash-column="{}"]'.format(self.id, state, col_id)
+            '#{} {} tbody tr th.dash-header[data-dash-column="{}"]'.format(
+                self.id, state, col_id
+            )
         )[row]
 
     @preconditions(_validate_row, _validate_col_id, _validate_state)
-    def hide(self, row, col_id, state = _ANY):
+    def hide(self, row, col_id, state=_ANY):
         self.get(row, col_id, state).find_element_by_css_selector(
-            '.column-header--hide'
+            ".column-header--hide"
         ).click()
 
     @preconditions(_validate_row, _validate_col_id, _validate_state)
-    def sort(self, row, col_id, state = _ANY):
+    def sort(self, row, col_id, state=_ANY):
         self.get(row, col_id, state).find_element_by_css_selector(
-            '.column-header--sort'
+            ".column-header--sort"
         ).click()
 
     @preconditions(_validate_col_id, _validate_state)
-    def filter(self, col_id, state = _ANY):
+    def filter(self, col_id, state=_ANY):
         return self.mixin.find_element(
-            '#{} {} tbody tr th.dash-filter[data-dash-column="{}"]'.format(self.id, state, col_id)
+            '#{} {} tbody tr th.dash-filter[data-dash-column="{}"]'.format(
+                self.id, state, col_id
+            )
         ).click()
+
 
 class DataTableRowFacade(object):
     @preconditions(_validate_id, _validate_mixin)
@@ -143,22 +161,26 @@ class DataTableRowFacade(object):
         self.mixin = mixin
 
     @preconditions(_validate_row, _validate_state)
-    def delete(self, row, state = _ANY):
+    def delete(self, row, state=_ANY):
         return self.mixin.find_elements(
-            '#{} {} tbody tr td.dash-delete-cell'.format(self.id, state)
+            "#{} {} tbody tr td.dash-delete-cell".format(self.id, state)
         )[row].click()
 
     @preconditions(_validate_row, _validate_state)
-    def select(self, row, state = _ANY):
+    def select(self, row, state=_ANY):
         return self.mixin.find_elements(
-            '#{} {} tbody tr td.dash-select-cell'.format(self.id, state)
+            "#{} {} tbody tr td.dash-select-cell".format(self.id, state)
         )[row].click()
 
     @preconditions(_validate_row, _validate_state)
-    def is_selected(self, row, state = _ANY):
-        return self.mixin.find_elements(
-            '#{} {} tbody tr td.dash-select-cell'.format(self.id, state)
-        )[row].find_element_by_css_selector('input').is_selected()
+    def is_selected(self, row, state=_ANY):
+        return (
+            self.mixin.find_elements(
+                "#{} {} tbody tr td.dash-select-cell".format(self.id, state)
+            )[row]
+            .find_element_by_css_selector("input")
+            .is_selected()
+        )
 
 
 class DataTablePagingFacade(object):
@@ -170,85 +192,69 @@ class DataTablePagingFacade(object):
     def click_next_page(self):
         self.mixin._wait_for_table(self.id)
 
-        return self.mixin.find_element(
-            '#{} button.next-page'.format(self.id)
-        ).click()
+        return self.mixin.find_element("#{} button.next-page".format(self.id)).click()
 
     def click_prev_page(self):
         self.mixin._wait_for_table(self.id)
 
         return self.mixin.find_element(
-            '#{} button.previous-page'.format(self.id)
+            "#{} button.previous-page".format(self.id)
         ).click()
 
     def click_first_page(self):
         self.mixin._wait_for_table(self.id)
 
-        return self.mixin.find_element(
-            '#{} button.first-page'.format(self.id)
-        ).click()
+        return self.mixin.find_element("#{} button.first-page".format(self.id)).click()
 
     def click_last_page(self):
         self.mixin._wait_for_table(self.id)
 
-        return self.mixin.find_element(
-            '#{} button.last-page'.format(self.id)
-        ).click()
+        return self.mixin.find_element("#{} button.last-page".format(self.id)).click()
 
     def has_pagination(self):
         self.mixin._wait_for_table(self.id)
 
-        return len(self.mixin.find_elements('.previous-next-container')) != 0
+        return len(self.mixin.find_elements(".previous-next-container")) != 0
 
     def has_next_page(self):
         self.mixin._wait_for_table(self.id)
 
-        el = self.mixin.find_element(
-            '#{} button.next-page'.format(self.id)
-        )
+        el = self.mixin.find_element("#{} button.next-page".format(self.id))
 
         return el is not None and el.is_enabled()
 
     def has_prev_page(self):
         self.mixin._wait_for_table(self.id)
 
-        el = self.mixin.find_element(
-            '#{} button.previous-page'.format(self.id)
-        )
+        el = self.mixin.find_element("#{} button.previous-page".format(self.id))
 
         return el is not None and el.is_enabled()
 
     def has_first_page(self):
         self.mixin._wait_for_table(self.id)
 
-        el = self.mixin.find_element(
-            '#{} button.first-page'.format(self.id)
-        )
+        el = self.mixin.find_element("#{} button.first-page".format(self.id))
 
         return el is not None and el.is_enabled()
 
     def has_last_page(self):
         self.mixin._wait_for_table(self.id)
 
-        el = self.mixin.find_element(
-            '#{} button.last-page'.format(self.id)
-        )
+        el = self.mixin.find_element("#{} button.last-page".format(self.id))
 
         return el is not None and el.is_enabled()
 
     def click_current_page(self):
         self.mixin._wait_for_table(self.id)
 
-        return self.mixin.find_element(
-            '#{} input.current-page'.format(self.id)
-        ).click()
+        return self.mixin.find_element("#{} input.current-page".format(self.id)).click()
 
     def get_current_page(self):
         self.mixin._wait_for_table(self.id)
 
         return self.mixin.find_element(
-            '#{} input.current-page'.format(self.id)
-        ).get_attribute('placeholder')
+            "#{} input.current-page".format(self.id)
+        ).get_attribute("placeholder")
 
 
 class DataTableFacade(object):
@@ -268,26 +274,27 @@ class DataTableFacade(object):
     def is_loading(self):
         return self.mixin._wait_for_table(self.id, _LOADING)
 
+
 class DataTableMixin(object):
     @preconditions(_validate_id, _validate_state)
-    def _wait_for_table(self, id, state = _ANY):
+    def _wait_for_table(self, id, state=_ANY):
         return WebDriverWait(self.driver, _TIMEOUT).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, '#{} {}'.format(id, state)))
+            EC.presence_of_element_located(
+                (By.CSS_SELECTOR, "#{} {}".format(id, state))
+            )
         )
 
     @preconditions(_validate_id)
     def table(self, id):
-        return DataTableContext(
-            DataTableFacade(id, self)
-        )
+        return DataTableContext(DataTableFacade(id, self))
 
     def copy(self):
-        ActionChains(self.driver).key_down(Keys.CONTROL).send_keys('c').key_up(
+        ActionChains(self.driver).key_down(Keys.CONTROL).send_keys("c").key_up(
             Keys.CONTROL
         ).perform()
 
     def paste(self):
-        ActionChains(self.driver).key_down(Keys.CONTROL).send_keys('v').key_up(
+        ActionChains(self.driver).key_down(Keys.CONTROL).send_keys("v").key_up(
             Keys.CONTROL
         ).perform()
 
@@ -296,9 +303,7 @@ class DataTableMixin(object):
         return HoldKeyContext(self, key)
 
     def get_selected_text(self):
-        return self.driver.execute_script(
-            'return window.getSelection().toString()'
-        )
+        return self.driver.execute_script("return window.getSelection().toString()")
 
     @preconditions(_validate_keys)
     def send_keys(self, keys):
