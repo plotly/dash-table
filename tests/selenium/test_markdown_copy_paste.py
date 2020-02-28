@@ -41,59 +41,61 @@ def get_app():
 def test_tmcp001_copy_markdown_to_text(test):
     test.start_server(get_app())
 
-    with test.table("table") as target:
-        target.cell.click(0, "Issue")
+    target = test.table("table")
 
-        test.copy()
-        target.cell.click(0, "Sub-product")
-        test.paste()
+    target.cell.click(0, "Issue")
 
-        assert target.cell.get_text(0, 2) == df[0].get("Issue")
+    test.copy()
+    target.cell.click(0, "Sub-product")
+    test.paste()
+
+    assert target.cell.get_text(0, 2) == df[0].get("Issue")
 
 
 def test_tmcp002_copy_markdown_to_markdown(test):
     test.start_server(get_app())
 
-    with test.table("table") as target:
-        target.cell.click(0, "Product")
+    target = test.table("table")
 
-        test.copy()
-        target.cell.click(0, "Complaint ID")
-        test.paste()
+    target.cell.click(0, "Product")
 
-        assert target.cell.get_text(0, "Complaint ID") == target.cell.get_text(
-            0, "Product"
-        )
+    test.copy()
+    target.cell.click(0, "Complaint ID")
+    test.paste()
+
+    assert target.cell.get_text(0, "Complaint ID") == target.cell.get_text(0, "Product")
 
 
 def test_tmcp003_copy_text_to_markdown(test):
     test.start_server(get_app())
 
-    with test.table("table") as target:
-        target.cell.click(1, "Sub-product")
+    target = test.table("table")
 
-        test.copy()
-        target.cell.click(1, "Product")
-        test.paste()
+    target.cell.click(1, "Sub-product")
 
-        assert target.cell.get(1, "Product").find_element_by_css_selector(
-            ".dash-cell-value > p"
-        ).get_attribute("innerHTML") == df[1].get("Sub-product")
+    test.copy()
+    target.cell.click(1, "Product")
+    test.paste()
+
+    assert target.cell.get(1, "Product").find_element_by_css_selector(
+        ".dash-cell-value > p"
+    ).get_attribute("innerHTML") == df[1].get("Sub-product")
 
 
 def test_tmcp004_copy_null_text_to_markdown(test):
     test.start_server(get_app())
 
-    with test.table("table") as target:
-        target.cell.click(0, "Sub-product")
+    target = test.table("table")
 
-        test.copy()
-        target.cell.click(0, "Product")
-        test.paste()
+    target.cell.click(0, "Sub-product")
 
-        assert (
-            target.cell.get(0, "Product")
-            .find_element_by_css_selector(".dash-cell-value > p")
-            .get_attribute("innerHTML")
-            == "null"
-        )
+    test.copy()
+    target.cell.click(0, "Product")
+    test.paste()
+
+    assert (
+        target.cell.get(0, "Product")
+        .find_element_by_css_selector(".dash-cell-value > p")
+        .get_attribute("innerHTML")
+        == "null"
+    )

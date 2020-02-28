@@ -26,18 +26,6 @@ _ANY = ".dash-spreadsheet"
 _TIMEOUT = 10
 
 
-class DataTableContext:
-    @preconditions(_validate_target)
-    def __init__(self, target):
-        self.target = target
-
-    def __enter__(self):
-        return self.target
-
-    def __exit__(self, type, value, traceback):
-        return
-
-
 class HoldKeyContext:
     @preconditions(_validate_mixin, _validate_key)
     def __init__(self, mixin, key):
@@ -286,7 +274,7 @@ class DataTableMixin(object):
 
     @preconditions(_validate_id)
     def table(self, id):
-        return DataTableContext(DataTableFacade(id, self))
+        return DataTableFacade(id, self)
 
     def copy(self):
         with self.hold(Keys.CONTROL):

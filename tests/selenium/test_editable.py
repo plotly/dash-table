@@ -69,17 +69,16 @@ def test_tedi001_loading_on_data_change(test):
 
     test.start_server(app)
 
-    with test.table("table") as target:
-        with blocking:
-            test.find_element("#blocking").click()
-            target.is_loading()
-            target.cell.click(0, 0)
-            assert (
-                len(target.cell.get(0, 0).find_elements_by_css_selector("input")) == 0
-            )
+    target = test.table("table")
 
-        target.is_ready()
-        assert target.cell.get(0, 0).find_element_by_css_selector("input") is not None
+    with blocking:
+        test.find_element("#blocking").click()
+        target.is_loading()
+        target.cell.click(0, 0)
+        assert len(target.cell.get(0, 0).find_elements_by_css_selector("input")) == 0
+
+    target.is_ready()
+    assert target.cell.get(0, 0).find_element_by_css_selector("input") is not None
 
 
 def test_tedi002_ready_on_non_data_change(test):
@@ -87,17 +86,16 @@ def test_tedi002_ready_on_non_data_change(test):
 
     test.start_server(app)
 
-    with test.table("table") as target:
-        with blocking:
-            test.find_element("#non-blocking").click()
-            target.is_ready()
-            target.cell.click(0, 0)
-            assert (
-                target.cell.get(0, 0).find_element_by_css_selector("input") is not None
-            )
+    target = test.table("table")
 
+    with blocking:
+        test.find_element("#non-blocking").click()
         target.is_ready()
+        target.cell.click(0, 0)
         assert target.cell.get(0, 0).find_element_by_css_selector("input") is not None
+
+    target.is_ready()
+    assert target.cell.get(0, 0).find_element_by_css_selector("input") is not None
 
 
 def test_tedi003_does_not_steal_focus(test):
@@ -105,14 +103,15 @@ def test_tedi003_does_not_steal_focus(test):
 
     test.start_server(app)
 
-    with test.table("table") as target:
-        with blocking:
-            test.find_element("#blocking").click()
-            test.find_element("#input").click()
-            assert test.find_element("#input") == test.driver.switch_to.active_element
+    target = test.table("table")
 
-        target.is_ready()
+    with blocking:
+        test.find_element("#blocking").click()
+        test.find_element("#input").click()
         assert test.find_element("#input") == test.driver.switch_to.active_element
+
+    target.is_ready()
+    assert test.find_element("#input") == test.driver.switch_to.active_element
 
 
 def test_tedi004_edit_on_non_blocking(test):
@@ -120,12 +119,13 @@ def test_tedi004_edit_on_non_blocking(test):
 
     test.start_server(app)
 
-    with test.table("table") as target:
-        with blocking:
-            test.find_element("#non-blocking").click()
-            target.cell.click(0, 0)
-            test.send_keys("abc" + Keys.ENTER)
-            assert target.cell.get_text(0, 0) == "abc"
+    target = test.table("table")
+
+    with blocking:
+        test.find_element("#non-blocking").click()
+        target.cell.click(0, 0)
+        test.send_keys("abc" + Keys.ENTER)
+        assert target.cell.get_text(0, 0) == "abc"
 
 
 def test_tedi005_prevent_copy_paste_on_blocking(test):
@@ -133,22 +133,23 @@ def test_tedi005_prevent_copy_paste_on_blocking(test):
 
     test.start_server(app)
 
-    with test.table("table") as target:
-        with blocking:
-            test.find_element("#blocking").click()
-            target.cell.click(0, 0)
-            with test.hold(Keys.SHIFT):
-                test.send_keys(Keys.DOWN + Keys.RIGHT)
+    target = test.table("table")
 
-            test.copy()
-            target.cell.click(2, 0)
-            test.paste()
+    with blocking:
+        test.find_element("#blocking").click()
+        target.cell.click(0, 0)
+        with test.hold(Keys.SHIFT):
+            test.send_keys(Keys.DOWN + Keys.RIGHT)
 
-            for row in range(2):
-                for col in range(2):
-                    assert target.cell.get_text(row + 2, col) != target.cell.get_text(
-                        row, col
-                    )
+        test.copy()
+        target.cell.click(2, 0)
+        test.paste()
+
+        for row in range(2):
+            for col in range(2):
+                assert target.cell.get_text(row + 2, col) != target.cell.get_text(
+                    row, col
+                )
 
 
 def test_tedi006_allow_copy_paste_on_non_blocking(test):
@@ -156,19 +157,20 @@ def test_tedi006_allow_copy_paste_on_non_blocking(test):
 
     test.start_server(app)
 
-    with test.table("table") as target:
-        with non_blocking:
-            test.find_element("#non-blocking").click()
-            target.cell.click(0, 0)
-            with test.hold(Keys.SHIFT):
-                test.send_keys(Keys.DOWN + Keys.RIGHT)
+    target = test.table("table")
 
-            test.copy()
-            target.cell.click(2, 0)
-            test.paste()
+    with non_blocking:
+        test.find_element("#non-blocking").click()
+        target.cell.click(0, 0)
+        with test.hold(Keys.SHIFT):
+            test.send_keys(Keys.DOWN + Keys.RIGHT)
 
-            for row in range(2):
-                for col in range(2):
-                    assert target.cell.get_text(row + 2, col) == target.cell.get_text(
-                        row, col
-                    )
+        test.copy()
+        target.cell.click(2, 0)
+        test.paste()
+
+        for row in range(2):
+            for col in range(2):
+                assert target.cell.get_text(row + 2, col) == target.cell.get_text(
+                    row, col
+                )

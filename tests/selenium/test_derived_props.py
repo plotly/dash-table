@@ -82,483 +82,486 @@ def get_app():
 def test_tdrp001_select_rows(test):
     test.start_server(get_app())
 
-    with test.table("table") as target:
-        target.row.select(0)
-        target.row.select(1)
+    target = test.table("table")
 
-        assert test.find_element("#active_cell").get_attribute("innerHTML") in [
-            "None",
-            json.dumps([]),
-        ]
-        assert test.find_element("#start_cell").get_attribute("innerHTML") in [
-            "None",
-            json.dumps([]),
-        ]
-        assert test.find_element("#end_cell").get_attribute("innerHTML") in [
-            "None",
-            json.dumps([]),
-        ]
-        assert test.find_element("#selected_cells").get_attribute("innerHTML") in [
-            "None",
-            json.dumps([]),
-        ]
-        assert test.find_element("#selected_rows").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(2)))
-        assert test.find_element("#selected_row_ids").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(3000, 3002)))
+    target.row.select(0)
+    target.row.select(1)
 
-        assert test.find_element("#derived_viewport_selected_rows").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(2)))
-        assert test.find_element("#derived_viewport_selected_row_ids").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(3000, 3002)))
-        assert test.find_element("#derived_viewport_indices").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(10)))
-        assert test.find_element("#derived_viewport_row_ids").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(3000, 3010)))
+    assert test.find_element("#active_cell").get_attribute("innerHTML") in [
+        "None",
+        json.dumps([]),
+    ]
+    assert test.find_element("#start_cell").get_attribute("innerHTML") in [
+        "None",
+        json.dumps([]),
+    ]
+    assert test.find_element("#end_cell").get_attribute("innerHTML") in [
+        "None",
+        json.dumps([]),
+    ]
+    assert test.find_element("#selected_cells").get_attribute("innerHTML") in [
+        "None",
+        json.dumps([]),
+    ]
+    assert test.find_element("#selected_rows").get_attribute("innerHTML") == json.dumps(
+        list(range(2))
+    )
+    assert test.find_element("#selected_row_ids").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(3000, 3002)))
 
-        assert test.find_element("#derived_virtual_selected_rows").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(2)))
-        assert test.find_element("#derived_virtual_selected_row_ids").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(3000, 3002)))
-        assert test.find_element("#derived_virtual_indices").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(100)))
-        assert test.find_element("#derived_virtual_row_ids").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(3000, 3100)))
+    assert test.find_element("#derived_viewport_selected_rows").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(2)))
+    assert test.find_element("#derived_viewport_selected_row_ids").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(3000, 3002)))
+    assert test.find_element("#derived_viewport_indices").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(10)))
+    assert test.find_element("#derived_viewport_row_ids").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(3000, 3010)))
+
+    assert test.find_element("#derived_virtual_selected_rows").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(2)))
+    assert test.find_element("#derived_virtual_selected_row_ids").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(3000, 3002)))
+    assert test.find_element("#derived_virtual_indices").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(100)))
+    assert test.find_element("#derived_virtual_row_ids").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(3000, 3100)))
 
 
 def test_tdrp002_select_cell(test):
     test.start_server(get_app())
 
-    with test.table("table") as target:
-        target.cell.click(0, 0)
+    target = test.table("table")
 
-        active = dict(row=0, column=0, column_id=rawDf.columns[0], row_id=3000)
+    target.cell.click(0, 0)
 
-        assert test.find_element("#active_cell").get_attribute(
-            "innerHTML"
-        ) == json.dumps(active)
-        assert test.find_element("#start_cell").get_attribute(
-            "innerHTML"
-        ) == json.dumps(active)
-        assert test.find_element("#end_cell").get_attribute("innerHTML") == json.dumps(
-            active
-        )
-        assert test.find_element("#selected_cells").get_attribute(
-            "innerHTML"
-        ) == json.dumps([active])
-        assert test.find_element("#selected_rows").get_attribute("innerHTML") in [
-            "None",
-            json.dumps([]),
-        ]
-        assert test.find_element("#selected_row_ids").get_attribute("innerHTML") in [
-            "None",
-            json.dumps([]),
-        ]
+    active = dict(row=0, column=0, column_id=rawDf.columns[0], row_id=3000)
 
-        assert test.find_element("#derived_viewport_selected_rows").get_attribute(
-            "innerHTML"
-        ) in ["None", json.dumps([])]
-        assert test.find_element("#derived_viewport_selected_row_ids").get_attribute(
-            "innerHTML"
-        ) in ["None", json.dumps([])]
-        assert test.find_element("#derived_viewport_indices").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(10)))
-        assert test.find_element("#derived_viewport_row_ids").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(3000, 3010)))
+    assert test.find_element("#active_cell").get_attribute("innerHTML") == json.dumps(
+        active
+    )
+    assert test.find_element("#start_cell").get_attribute("innerHTML") == json.dumps(
+        active
+    )
+    assert test.find_element("#end_cell").get_attribute("innerHTML") == json.dumps(
+        active
+    )
+    assert test.find_element("#selected_cells").get_attribute(
+        "innerHTML"
+    ) == json.dumps([active])
+    assert test.find_element("#selected_rows").get_attribute("innerHTML") in [
+        "None",
+        json.dumps([]),
+    ]
+    assert test.find_element("#selected_row_ids").get_attribute("innerHTML") in [
+        "None",
+        json.dumps([]),
+    ]
 
-        assert test.find_element("#derived_virtual_selected_rows").get_attribute(
-            "innerHTML"
-        ) in ["None", json.dumps([])]
-        assert test.find_element("#derived_virtual_selected_row_ids").get_attribute(
-            "innerHTML"
-        ) in ["None", json.dumps([])]
-        assert test.find_element("#derived_virtual_indices").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(100)))
-        assert test.find_element("#derived_virtual_row_ids").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(3000, 3100)))
+    assert test.find_element("#derived_viewport_selected_rows").get_attribute(
+        "innerHTML"
+    ) in ["None", json.dumps([])]
+    assert test.find_element("#derived_viewport_selected_row_ids").get_attribute(
+        "innerHTML"
+    ) in ["None", json.dumps([])]
+    assert test.find_element("#derived_viewport_indices").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(10)))
+    assert test.find_element("#derived_viewport_row_ids").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(3000, 3010)))
+
+    assert test.find_element("#derived_virtual_selected_rows").get_attribute(
+        "innerHTML"
+    ) in ["None", json.dumps([])]
+    assert test.find_element("#derived_virtual_selected_row_ids").get_attribute(
+        "innerHTML"
+    ) in ["None", json.dumps([])]
+    assert test.find_element("#derived_virtual_indices").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(100)))
+    assert test.find_element("#derived_virtual_row_ids").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(3000, 3100)))
 
 
 def test_tdrp003_select_cells(test):
     test.start_server(get_app())
 
-    with test.table("table") as target:
-        target.cell.click(0, 0)
-        with test.hold(Keys.SHIFT):
-            test.send_keys(Keys.DOWN + Keys.DOWN + Keys.RIGHT + Keys.RIGHT)
+    target = test.table("table")
 
-        active = dict(row=0, column=0, column_id=rawDf.columns[0], row_id=3000)
+    target.cell.click(0, 0)
+    with test.hold(Keys.SHIFT):
+        test.send_keys(Keys.DOWN + Keys.DOWN + Keys.RIGHT + Keys.RIGHT)
 
-        selected = []
-        for row in range(3):
-            for col in range(3):
-                selected.append(
-                    dict(
-                        row=row,
-                        column=col,
-                        column_id=rawDf.columns[col],
-                        row_id=row + 3000,
-                    )
-                )
+    active = dict(row=0, column=0, column_id=rawDf.columns[0], row_id=3000)
 
-        assert test.find_element("#active_cell").get_attribute(
-            "innerHTML"
-        ) == json.dumps(active)
-        assert test.find_element("#start_cell").get_attribute(
-            "innerHTML"
-        ) == json.dumps(selected[0])
-        assert test.find_element("#end_cell").get_attribute("innerHTML") == json.dumps(
-            selected[-1]
-        )
-        assert test.find_element("#selected_cells").get_attribute(
-            "innerHTML"
-        ) == json.dumps(selected)
-        assert test.find_element("#selected_rows").get_attribute("innerHTML") in [
-            "None",
-            json.dumps([]),
-        ]
-        assert test.find_element("#selected_row_ids").get_attribute("innerHTML") in [
-            "None",
-            json.dumps([]),
-        ]
-
-        assert test.find_element("#derived_viewport_selected_rows").get_attribute(
-            "innerHTML"
-        ) in ["None", json.dumps([])]
-        assert test.find_element("#derived_viewport_selected_row_ids").get_attribute(
-            "innerHTML"
-        ) in ["None", json.dumps([])]
-        assert test.find_element("#derived_viewport_indices").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(10)))
-        assert test.find_element("#derived_viewport_row_ids").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(3000, 3010)))
-
-        assert test.find_element("#derived_virtual_selected_rows").get_attribute(
-            "innerHTML"
-        ) in ["None", json.dumps([])]
-        assert test.find_element("#derived_virtual_selected_row_ids").get_attribute(
-            "innerHTML"
-        ) in ["None", json.dumps([])]
-        assert test.find_element("#derived_virtual_indices").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(100)))
-        assert test.find_element("#derived_virtual_row_ids").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(3000, 3100)))
-
-        # reduce selection
-        with test.hold(Keys.SHIFT):
-            test.send_keys(Keys.UP + Keys.LEFT)
-
-        selected = []
-        for row in range(2):
-            for col in range(2):
-                selected.append(
-                    dict(
-                        row=row,
-                        column=col,
-                        column_id=rawDf.columns[col],
-                        row_id=row + 3000,
-                    )
-                )
-
-        assert test.find_element("#active_cell").get_attribute(
-            "innerHTML"
-        ) == json.dumps(active)
-        assert test.find_element("#start_cell").get_attribute(
-            "innerHTML"
-        ) == json.dumps(selected[0])
-        assert test.find_element("#end_cell").get_attribute("innerHTML") == json.dumps(
-            selected[-1]
-        )
-        assert test.find_element("#selected_cells").get_attribute(
-            "innerHTML"
-        ) == json.dumps(selected)
-        assert test.find_element("#selected_rows").get_attribute("innerHTML") in [
-            "None",
-            json.dumps([]),
-        ]
-        assert test.find_element("#selected_row_ids").get_attribute("innerHTML") in [
-            "None",
-            json.dumps([]),
-        ]
-
-        assert test.find_element("#derived_viewport_selected_rows").get_attribute(
-            "innerHTML"
-        ) in ["None", json.dumps([])]
-        assert test.find_element("#derived_viewport_selected_row_ids").get_attribute(
-            "innerHTML"
-        ) in ["None", json.dumps([])]
-        assert test.find_element("#derived_viewport_indices").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(10)))
-        assert test.find_element("#derived_viewport_row_ids").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(3000, 3010)))
-
-        assert test.find_element("#derived_virtual_selected_rows").get_attribute(
-            "innerHTML"
-        ) in ["None", json.dumps([])]
-        assert test.find_element("#derived_virtual_selected_row_ids").get_attribute(
-            "innerHTML"
-        ) in ["None", json.dumps([])]
-        assert test.find_element("#derived_virtual_indices").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(100)))
-        assert test.find_element("#derived_virtual_row_ids").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(3000, 3100)))
-
-
-def test_tdrp004_navigate_selected_cells(test):
-    test.start_server(get_app())
-
-    with test.table("table") as target:
-        target.cell.click(0, 0)
-        with test.hold(Keys.SHIFT):
-            test.send_keys(Keys.DOWN + Keys.DOWN + Keys.RIGHT + Keys.RIGHT)
-
-        selected = []
-        for row in range(3):
-            for col in range(3):
-                selected.append(
-                    dict(
-                        row=row,
-                        column=col,
-                        column_id=rawDf.columns[col],
-                        row_id=row + 3000,
-                    )
-                )
-
-        for row in range(3):
-            for col in range(3):
-                active = dict(
+    selected = []
+    for row in range(3):
+        for col in range(3):
+            selected.append(
+                dict(
                     row=row,
                     column=col,
                     column_id=rawDf.columns[col],
                     row_id=row + 3000,
                 )
+            )
 
-                assert test.find_element("#active_cell").get_attribute(
-                    "innerHTML"
-                ) == json.dumps(active)
-                assert test.find_element("#start_cell").get_attribute(
-                    "innerHTML"
-                ) == json.dumps(selected[0])
-                assert test.find_element("#end_cell").get_attribute(
-                    "innerHTML"
-                ) == json.dumps(selected[-1])
-                assert test.find_element("#selected_cells").get_attribute(
-                    "innerHTML"
-                ) == json.dumps(selected)
-                assert test.find_element("#selected_rows").get_attribute(
-                    "innerHTML"
-                ) in ["None", json.dumps([])]
-                assert test.find_element("#selected_row_ids").get_attribute(
-                    "innerHTML"
-                ) in ["None", json.dumps([])]
+    assert test.find_element("#active_cell").get_attribute("innerHTML") == json.dumps(
+        active
+    )
+    assert test.find_element("#start_cell").get_attribute("innerHTML") == json.dumps(
+        selected[0]
+    )
+    assert test.find_element("#end_cell").get_attribute("innerHTML") == json.dumps(
+        selected[-1]
+    )
+    assert test.find_element("#selected_cells").get_attribute(
+        "innerHTML"
+    ) == json.dumps(selected)
+    assert test.find_element("#selected_rows").get_attribute("innerHTML") in [
+        "None",
+        json.dumps([]),
+    ]
+    assert test.find_element("#selected_row_ids").get_attribute("innerHTML") in [
+        "None",
+        json.dumps([]),
+    ]
 
-                assert test.find_element(
-                    "#derived_viewport_selected_rows"
-                ).get_attribute("innerHTML") in ["None", json.dumps([])]
-                assert test.find_element(
-                    "#derived_viewport_selected_row_ids"
-                ).get_attribute("innerHTML") in ["None", json.dumps([])]
-                assert test.find_element("#derived_viewport_indices").get_attribute(
-                    "innerHTML"
-                ) == json.dumps(list(range(10)))
-                assert test.find_element("#derived_viewport_row_ids").get_attribute(
-                    "innerHTML"
-                ) == json.dumps(list(range(3000, 3010)))
+    assert test.find_element("#derived_viewport_selected_rows").get_attribute(
+        "innerHTML"
+    ) in ["None", json.dumps([])]
+    assert test.find_element("#derived_viewport_selected_row_ids").get_attribute(
+        "innerHTML"
+    ) in ["None", json.dumps([])]
+    assert test.find_element("#derived_viewport_indices").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(10)))
+    assert test.find_element("#derived_viewport_row_ids").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(3000, 3010)))
 
-                assert test.find_element(
-                    "#derived_virtual_selected_rows"
-                ).get_attribute("innerHTML") in ["None", json.dumps([])]
-                assert test.find_element(
-                    "#derived_virtual_selected_row_ids"
-                ).get_attribute("innerHTML") in ["None", json.dumps([])]
-                assert test.find_element("#derived_virtual_indices").get_attribute(
-                    "innerHTML"
-                ) == json.dumps(list(range(100)))
-                assert test.find_element("#derived_virtual_row_ids").get_attribute(
-                    "innerHTML"
-                ) == json.dumps(list(range(3000, 3100)))
+    assert test.find_element("#derived_virtual_selected_rows").get_attribute(
+        "innerHTML"
+    ) in ["None", json.dumps([])]
+    assert test.find_element("#derived_virtual_selected_row_ids").get_attribute(
+        "innerHTML"
+    ) in ["None", json.dumps([])]
+    assert test.find_element("#derived_virtual_indices").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(100)))
+    assert test.find_element("#derived_virtual_row_ids").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(3000, 3100)))
 
-                test.send_keys(Keys.TAB)
+    # reduce selection
+    with test.hold(Keys.SHIFT):
+        test.send_keys(Keys.UP + Keys.LEFT)
+
+    selected = []
+    for row in range(2):
+        for col in range(2):
+            selected.append(
+                dict(
+                    row=row,
+                    column=col,
+                    column_id=rawDf.columns[col],
+                    row_id=row + 3000,
+                )
+            )
+
+    assert test.find_element("#active_cell").get_attribute("innerHTML") == json.dumps(
+        active
+    )
+    assert test.find_element("#start_cell").get_attribute("innerHTML") == json.dumps(
+        selected[0]
+    )
+    assert test.find_element("#end_cell").get_attribute("innerHTML") == json.dumps(
+        selected[-1]
+    )
+    assert test.find_element("#selected_cells").get_attribute(
+        "innerHTML"
+    ) == json.dumps(selected)
+    assert test.find_element("#selected_rows").get_attribute("innerHTML") in [
+        "None",
+        json.dumps([]),
+    ]
+    assert test.find_element("#selected_row_ids").get_attribute("innerHTML") in [
+        "None",
+        json.dumps([]),
+    ]
+
+    assert test.find_element("#derived_viewport_selected_rows").get_attribute(
+        "innerHTML"
+    ) in ["None", json.dumps([])]
+    assert test.find_element("#derived_viewport_selected_row_ids").get_attribute(
+        "innerHTML"
+    ) in ["None", json.dumps([])]
+    assert test.find_element("#derived_viewport_indices").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(10)))
+    assert test.find_element("#derived_viewport_row_ids").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(3000, 3010)))
+
+    assert test.find_element("#derived_virtual_selected_rows").get_attribute(
+        "innerHTML"
+    ) in ["None", json.dumps([])]
+    assert test.find_element("#derived_virtual_selected_row_ids").get_attribute(
+        "innerHTML"
+    ) in ["None", json.dumps([])]
+    assert test.find_element("#derived_virtual_indices").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(100)))
+    assert test.find_element("#derived_virtual_row_ids").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(3000, 3100)))
+
+
+def test_tdrp004_navigate_selected_cells(test):
+    test.start_server(get_app())
+
+    target = test.table("table")
+
+    target.cell.click(0, 0)
+    with test.hold(Keys.SHIFT):
+        test.send_keys(Keys.DOWN + Keys.DOWN + Keys.RIGHT + Keys.RIGHT)
+
+    selected = []
+    for row in range(3):
+        for col in range(3):
+            selected.append(
+                dict(
+                    row=row,
+                    column=col,
+                    column_id=rawDf.columns[col],
+                    row_id=row + 3000,
+                )
+            )
+
+    for row in range(3):
+        for col in range(3):
+            active = dict(
+                row=row, column=col, column_id=rawDf.columns[col], row_id=row + 3000,
+            )
+
+            assert test.find_element("#active_cell").get_attribute(
+                "innerHTML"
+            ) == json.dumps(active)
+            assert test.find_element("#start_cell").get_attribute(
+                "innerHTML"
+            ) == json.dumps(selected[0])
+            assert test.find_element("#end_cell").get_attribute(
+                "innerHTML"
+            ) == json.dumps(selected[-1])
+            assert test.find_element("#selected_cells").get_attribute(
+                "innerHTML"
+            ) == json.dumps(selected)
+            assert test.find_element("#selected_rows").get_attribute("innerHTML") in [
+                "None",
+                json.dumps([]),
+            ]
+            assert test.find_element("#selected_row_ids").get_attribute(
+                "innerHTML"
+            ) in ["None", json.dumps([])]
+
+            assert test.find_element("#derived_viewport_selected_rows").get_attribute(
+                "innerHTML"
+            ) in ["None", json.dumps([])]
+            assert test.find_element(
+                "#derived_viewport_selected_row_ids"
+            ).get_attribute("innerHTML") in ["None", json.dumps([])]
+            assert test.find_element("#derived_viewport_indices").get_attribute(
+                "innerHTML"
+            ) == json.dumps(list(range(10)))
+            assert test.find_element("#derived_viewport_row_ids").get_attribute(
+                "innerHTML"
+            ) == json.dumps(list(range(3000, 3010)))
+
+            assert test.find_element("#derived_virtual_selected_rows").get_attribute(
+                "innerHTML"
+            ) in ["None", json.dumps([])]
+            assert test.find_element("#derived_virtual_selected_row_ids").get_attribute(
+                "innerHTML"
+            ) in ["None", json.dumps([])]
+            assert test.find_element("#derived_virtual_indices").get_attribute(
+                "innerHTML"
+            ) == json.dumps(list(range(100)))
+            assert test.find_element("#derived_virtual_row_ids").get_attribute(
+                "innerHTML"
+            ) == json.dumps(list(range(3000, 3100)))
+
+            test.send_keys(Keys.TAB)
 
 
 def test_tdrp005_filtered_and_sorted_row_select(test):
     test.start_server(get_app())
 
-    with test.table("table") as target:
-        target.row.select(0)
-        target.row.select(1)
-        target.row.select(2)
+    target = test.table("table")
 
-        assert test.find_element("#active_cell").get_attribute("innerHTML") in [
-            "None",
-            json.dumps([]),
-        ]
-        assert test.find_element("#start_cell").get_attribute("innerHTML") in [
-            "None",
-            json.dumps([]),
-        ]
-        assert test.find_element("#end_cell").get_attribute("innerHTML") in [
-            "None",
-            json.dumps([]),
-        ]
-        assert test.find_element("#selected_cells").get_attribute("innerHTML") in [
-            "None",
-            json.dumps([]),
-        ]
-        assert test.find_element("#selected_rows").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(3)))
-        assert test.find_element("#selected_row_ids").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(3000, 3003)))
+    target.row.select(0)
+    target.row.select(1)
+    target.row.select(2)
 
-        assert test.find_element("#derived_viewport_selected_rows").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(3)))
-        assert test.find_element("#derived_viewport_selected_row_ids").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(3000, 3003)))
-        assert test.find_element("#derived_viewport_indices").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(10)))
-        assert test.find_element("#derived_viewport_row_ids").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(3000, 3010)))
+    assert test.find_element("#active_cell").get_attribute("innerHTML") in [
+        "None",
+        json.dumps([]),
+    ]
+    assert test.find_element("#start_cell").get_attribute("innerHTML") in [
+        "None",
+        json.dumps([]),
+    ]
+    assert test.find_element("#end_cell").get_attribute("innerHTML") in [
+        "None",
+        json.dumps([]),
+    ]
+    assert test.find_element("#selected_cells").get_attribute("innerHTML") in [
+        "None",
+        json.dumps([]),
+    ]
+    assert test.find_element("#selected_rows").get_attribute("innerHTML") == json.dumps(
+        list(range(3))
+    )
+    assert test.find_element("#selected_row_ids").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(3000, 3003)))
 
-        assert test.find_element("#derived_virtual_selected_rows").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(3)))
-        assert test.find_element("#derived_virtual_selected_row_ids").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(3000, 3003)))
-        assert test.find_element("#derived_virtual_indices").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(100)))
-        assert test.find_element("#derived_virtual_row_ids").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(3000, 3100)))
+    assert test.find_element("#derived_viewport_selected_rows").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(3)))
+    assert test.find_element("#derived_viewport_selected_row_ids").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(3000, 3003)))
+    assert test.find_element("#derived_viewport_indices").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(10)))
+    assert test.find_element("#derived_viewport_row_ids").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(3000, 3010)))
 
-        target.column.filter(rawDf.columns[0])
-        test.send_keys("is even" + Keys.ENTER)
+    assert test.find_element("#derived_virtual_selected_rows").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(3)))
+    assert test.find_element("#derived_virtual_selected_row_ids").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(3000, 3003)))
+    assert test.find_element("#derived_virtual_indices").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(100)))
+    assert test.find_element("#derived_virtual_row_ids").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(3000, 3100)))
 
-        assert test.find_element("#active_cell").get_attribute("innerHTML") in [
-            "None",
-            json.dumps([]),
-        ]
-        assert test.find_element("#start_cell").get_attribute("innerHTML") in [
-            "None",
-            json.dumps([]),
-        ]
-        assert test.find_element("#end_cell").get_attribute("innerHTML") in [
-            "None",
-            json.dumps([]),
-        ]
-        assert test.find_element("#selected_cells").get_attribute("innerHTML") in [
-            "None",
-            json.dumps([]),
-        ]
-        assert test.find_element("#selected_rows").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(3)))
-        assert test.find_element("#selected_row_ids").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(3000, 3003)))
+    target.column.filter(rawDf.columns[0])
+    test.send_keys("is even" + Keys.ENTER)
 
-        assert test.find_element("#derived_viewport_selected_rows").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(0, 2)))
-        assert test.find_element("#derived_viewport_selected_row_ids").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(3000, 3003, 2)))
-        assert test.find_element("#derived_viewport_indices").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(0, 20, 2)))
-        assert test.find_element("#derived_viewport_row_ids").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(3000, 3020, 2)))
+    assert test.find_element("#active_cell").get_attribute("innerHTML") in [
+        "None",
+        json.dumps([]),
+    ]
+    assert test.find_element("#start_cell").get_attribute("innerHTML") in [
+        "None",
+        json.dumps([]),
+    ]
+    assert test.find_element("#end_cell").get_attribute("innerHTML") in [
+        "None",
+        json.dumps([]),
+    ]
+    assert test.find_element("#selected_cells").get_attribute("innerHTML") in [
+        "None",
+        json.dumps([]),
+    ]
+    assert test.find_element("#selected_rows").get_attribute("innerHTML") == json.dumps(
+        list(range(3))
+    )
+    assert test.find_element("#selected_row_ids").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(3000, 3003)))
 
-        assert test.find_element("#derived_virtual_selected_rows").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(0, 2)))
-        assert test.find_element("#derived_virtual_selected_row_ids").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(3000, 3003, 2)))
-        assert test.find_element("#derived_virtual_indices").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(0, 100, 2)))
-        assert test.find_element("#derived_virtual_row_ids").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(3000, 3100, 2)))
+    assert test.find_element("#derived_viewport_selected_rows").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(0, 2)))
+    assert test.find_element("#derived_viewport_selected_row_ids").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(3000, 3003, 2)))
+    assert test.find_element("#derived_viewport_indices").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(0, 20, 2)))
+    assert test.find_element("#derived_viewport_row_ids").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(3000, 3020, 2)))
 
-        target.column.sort(0, rawDf.columns[0])  # None -> ASC
-        target.column.sort(0, rawDf.columns[0])  # ASC -> DESC
+    assert test.find_element("#derived_virtual_selected_rows").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(0, 2)))
+    assert test.find_element("#derived_virtual_selected_row_ids").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(3000, 3003, 2)))
+    assert test.find_element("#derived_virtual_indices").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(0, 100, 2)))
+    assert test.find_element("#derived_virtual_row_ids").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(3000, 3100, 2)))
 
-        assert test.find_element("#active_cell").get_attribute("innerHTML") in [
-            "None",
-            json.dumps([]),
-        ]
-        assert test.find_element("#start_cell").get_attribute("innerHTML") in [
-            "None",
-            json.dumps([]),
-        ]
-        assert test.find_element("#end_cell").get_attribute("innerHTML") in [
-            "None",
-            json.dumps([]),
-        ]
-        assert test.find_element("#selected_cells").get_attribute("innerHTML") in [
-            "None",
-            json.dumps([]),
-        ]
-        assert test.find_element("#selected_rows").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(3)))
-        assert test.find_element("#selected_row_ids").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(3000, 3003)))
+    target.column.sort(0, rawDf.columns[0])  # None -> ASC
+    target.column.sort(0, rawDf.columns[0])  # ASC -> DESC
 
-        assert test.find_element("#derived_viewport_selected_rows").get_attribute(
-            "innerHTML"
-        ) in ["None", json.dumps([])]
-        assert test.find_element("#derived_viewport_selected_row_ids").get_attribute(
-            "innerHTML"
-        ) in ["None", json.dumps([])]
-        assert test.find_element("#derived_viewport_indices").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(80, 100, 2))[::-1])
-        assert test.find_element("#derived_viewport_row_ids").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(3080, 3100, 2))[::-1])
+    assert test.find_element("#active_cell").get_attribute("innerHTML") in [
+        "None",
+        json.dumps([]),
+    ]
+    assert test.find_element("#start_cell").get_attribute("innerHTML") in [
+        "None",
+        json.dumps([]),
+    ]
+    assert test.find_element("#end_cell").get_attribute("innerHTML") in [
+        "None",
+        json.dumps([]),
+    ]
+    assert test.find_element("#selected_cells").get_attribute("innerHTML") in [
+        "None",
+        json.dumps([]),
+    ]
+    assert test.find_element("#selected_rows").get_attribute("innerHTML") == json.dumps(
+        list(range(3))
+    )
+    assert test.find_element("#selected_row_ids").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(3000, 3003)))
 
-        assert test.find_element("#derived_virtual_selected_rows").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(48, 50))[::-1])
-        assert test.find_element("#derived_virtual_selected_row_ids").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(3000, 3003, 2)))
-        assert test.find_element("#derived_virtual_indices").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(0, 100, 2))[::-1])
-        assert test.find_element("#derived_virtual_row_ids").get_attribute(
-            "innerHTML"
-        ) == json.dumps(list(range(3000, 3100, 2))[::-1])
+    assert test.find_element("#derived_viewport_selected_rows").get_attribute(
+        "innerHTML"
+    ) in ["None", json.dumps([])]
+    assert test.find_element("#derived_viewport_selected_row_ids").get_attribute(
+        "innerHTML"
+    ) in ["None", json.dumps([])]
+    assert test.find_element("#derived_viewport_indices").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(80, 100, 2))[::-1])
+    assert test.find_element("#derived_viewport_row_ids").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(3080, 3100, 2))[::-1])
+
+    assert test.find_element("#derived_virtual_selected_rows").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(48, 50))[::-1])
+    assert test.find_element("#derived_virtual_selected_row_ids").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(3000, 3003, 2)))
+    assert test.find_element("#derived_virtual_indices").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(0, 100, 2))[::-1])
+    assert test.find_element("#derived_virtual_row_ids").get_attribute(
+        "innerHTML"
+    ) == json.dumps(list(range(3000, 3100, 2))[::-1])
