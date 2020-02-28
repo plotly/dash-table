@@ -76,41 +76,41 @@ def test_tbcp001_copy_paste_callback(test):
     test.start_server(get_app())
 
     target = test.table("table")
-    target.cell.click(0, 0)
+    target.cell(0, 0).click()
 
     test.copy()
-    target.cell.click(1, 0)
+    target.cell(1, 0).click()
     test.paste()
 
-    assert target.cell.get_text(1, 0) == "0"
-    assert target.cell.get_text(1, 1) == "MODIFIED"
+    assert target.cell(1, 0).get_text() == "0"
+    assert target.cell(1, 1).get_text() == "MODIFIED"
 
 
 def test_tbcp002_sorted_copy_paste_callback(test):
     test.start_server(get_app())
 
     target = test.table("table")
-    target.column.sort(0, rawDf.columns[2])
+    target.column(rawDf.columns[2]).sort(0)
 
-    assert target.cell.get_text(0, 0) == "11"
+    assert target.cell(0, 0).get_text() == "11"
 
-    target.cell.click(0, 0)
-
-    test.copy()
-    target.cell.click(1, 0)
-    test.paste()
-
-    assert target.cell.get_text(1, 0) == "11"
-    assert target.cell.get_text(1, 1) == "MODIFIED"
-
-    target.cell.click(1, 1)
+    target.cell(0, 0).click()
 
     test.copy()
-    target.cell.click(2, 1)
+    target.cell(1, 0).click()
     test.paste()
 
-    assert target.cell.get_text(1, 0) == "11"
-    assert target.cell.get_text(2, 1) == "MODIFIED"
+    assert target.cell(1, 0).get_text() == "11"
+    assert target.cell(1, 1).get_text() == "MODIFIED"
+
+    target.cell(1, 1).click()
+
+    test.copy()
+    target.cell(2, 1).click()
+    test.paste()
+
+    assert target.cell(1, 0).get_text() == "11"
+    assert target.cell(2, 1).get_text() == "MODIFIED"
 
 
 def test_tbcp003_copy_multiple_rows(test):
@@ -118,16 +118,16 @@ def test_tbcp003_copy_multiple_rows(test):
 
     target = test.table("table")
     with test.hold(Keys.SHIFT):
-        target.cell.click(0, 0)
-        target.cell.click(2, 0)
+        target.cell(0, 0).click()
+        target.cell(2, 0).click()
 
     test.copy()
-    target.cell.click(3, 0)
+    target.cell(3, 0).click()
     test.paste()
 
     for i in range(3):
-        assert target.cell.get_text(i + 3, 0) == target.cell.get_text(i, 0)
-        assert target.cell.get_text(i + 3, 1) == "MODIFIED"
+        assert target.cell(i + 3, 0).get_text() == target.cell(i, 0).get_text()
+        assert target.cell(i + 3, 1).get_text() == "MODIFIED"
 
 
 def test_tbcp004_copy_9_and_10(test):
@@ -136,17 +136,19 @@ def test_tbcp004_copy_9_and_10(test):
     source = test.table("table")
     target = test.table("table2")
 
-    source.cell.click(9, 0)
+    source.cell(9, 0).click()
     with test.hold(Keys.SHIFT):
         ActionChains(test.driver).send_keys(Keys.DOWN).perform()
 
     test.copy()
-    target.cell.click(0, 0)
+    target.cell(0, 0).click()
     test.paste()
 
     for row in range(2):
         for col in range(1):
-            assert target.cell.get_text(row, col) == source.cell.get_text(row + 9, col)
+            assert (
+                target.cell(row, col).get_text() == source.cell(row + 9, col).get_text()
+            )
 
 
 def test_tbcp005_copy_multiple_rows_and_columns(test):
@@ -154,17 +156,19 @@ def test_tbcp005_copy_multiple_rows_and_columns(test):
 
     target = test.table("table")
 
-    target.cell.click(0, 1)
+    target.cell(0, 1).click()
     with test.hold(Keys.SHIFT):
-        target.cell.click(2, 2)
+        target.cell(2, 2).click()
 
     test.copy()
-    target.cell.click(3, 1)
+    target.cell(3, 1).click()
     test.paste()
 
     for row in range(3):
         for col in range(1, 3):
-            assert target.cell.get_text(row + 3, col) == target.cell.get_text(row, col)
+            assert (
+                target.cell(row + 3, col).get_text() == target.cell(row, col).get_text()
+            )
 
 
 def test_tbcp006_copy_paste_between_tables(test):
@@ -173,17 +177,20 @@ def test_tbcp006_copy_paste_between_tables(test):
     source = test.table("table")
     target = test.table("table2")
 
-    source.cell.click(10, 0)
+    source.cell(10, 0).click()
     with test.hold(Keys.SHIFT):
-        source.cell.click(13, 3)
+        source.cell(13, 3).click()
 
     test.copy()
-    target.cell.click(0, 0)
+    target.cell(0, 0).click()
     test.paste()
 
     for row in range(4):
         for col in range(4):
-            assert source.cell.get_text(row + 10, col) == target.cell.get_text(row, col)
+            assert (
+                source.cell(row + 10, col).get_text()
+                == target.cell(row, col).get_text()
+            )
 
 
 def test_tbcp007_copy_paste_with_hidden_column(test):
@@ -191,19 +198,20 @@ def test_tbcp007_copy_paste_with_hidden_column(test):
 
     target = test.table("table")
 
-    target.column.hide(0, "Complaint ID")
-    target.cell.click(0, 0)
+    target.column("Complaint ID").hide(0)
+    target.cell(0, 0).click()
     with test.hold(Keys.SHIFT):
-        target.cell.click(2, 2)
+        target.cell(2, 2).click()
 
     test.copy()
-    target.cell.click(3, 1)
+    target.cell(3, 1).click()
     test.paste()
 
     for row in range(3):
         for col in range(3):
-            assert target.cell.get_text(row, col) == target.cell.get_text(
-                row + 3, col + 1
+            assert (
+                target.cell(row, col).get_text()
+                == target.cell(row + 3, col + 1).get_text()
             )
 
 
@@ -212,15 +220,18 @@ def test_tbcp008_copy_paste_between_tables_with_hidden_columns(test):
 
     target = test.table("table")
 
-    target.column.hide(0, "Complaint ID")
-    target.cell.click(10, 0)
+    target.column("Complaint ID").hide(0)
+    target.cell(10, 0).click()
     with test.hold(Keys.SHIFT):
-        target.cell.click(13, 2)
+        target.cell(13, 2).click()
 
     test.copy()
-    target.cell.click(0, 0)
+    target.cell(0, 0).click()
     test.paste()
 
     for row in range(4):
         for col in range(3):
-            assert target.cell.get_text(row + 10, col) == target.cell.get_text(row, col)
+            assert (
+                target.cell(row + 10, col).get_text()
+                == target.cell(row, col).get_text()
+            )

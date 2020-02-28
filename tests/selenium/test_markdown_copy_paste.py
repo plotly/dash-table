@@ -43,13 +43,13 @@ def test_tmcp001_copy_markdown_to_text(test):
 
     target = test.table("table")
 
-    target.cell.click(0, "Issue")
+    target.cell(0, "Issue").click()
 
     test.copy()
-    target.cell.click(0, "Sub-product")
+    target.cell(0, "Sub-product").click()
     test.paste()
 
-    assert target.cell.get_text(0, 2) == df[0].get("Issue")
+    assert target.cell(0, 2).get_text() == df[0].get("Issue")
 
 
 def test_tmcp002_copy_markdown_to_markdown(test):
@@ -57,13 +57,16 @@ def test_tmcp002_copy_markdown_to_markdown(test):
 
     target = test.table("table")
 
-    target.cell.click(0, "Product")
+    target.cell(0, "Product").click()
 
     test.copy()
-    target.cell.click(0, "Complaint ID")
+    target.cell(0, "Complaint ID").click()
     test.paste()
 
-    assert target.cell.get_text(0, "Complaint ID") == target.cell.get_text(0, "Product")
+    assert (
+        target.cell(0, "Complaint ID").get_text()
+        == target.cell(0, "Product").get_text()
+    )
 
 
 def test_tmcp003_copy_text_to_markdown(test):
@@ -71,13 +74,13 @@ def test_tmcp003_copy_text_to_markdown(test):
 
     target = test.table("table")
 
-    target.cell.click(1, "Sub-product")
+    target.cell(1, "Sub-product").click()
 
     test.copy()
-    target.cell.click(1, "Product")
+    target.cell(1, "Product").click()
     test.paste()
 
-    assert target.cell.get(1, "Product").find_element_by_css_selector(
+    assert target.cell(1, "Product").get().find_element_by_css_selector(
         ".dash-cell-value > p"
     ).get_attribute("innerHTML") == df[1].get("Sub-product")
 
@@ -87,14 +90,15 @@ def test_tmcp004_copy_null_text_to_markdown(test):
 
     target = test.table("table")
 
-    target.cell.click(0, "Sub-product")
+    target.cell(0, "Sub-product").click()
 
     test.copy()
-    target.cell.click(0, "Product")
+    target.cell(0, "Product").click()
     test.paste()
 
     assert (
-        target.cell.get(0, "Product")
+        target.cell(0, "Product")
+        .get()
         .find_element_by_css_selector(".dash-cell-value > p")
         .get_attribute("innerHTML")
         == "null"

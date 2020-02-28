@@ -62,19 +62,19 @@ def test_tpag001_next_previous(test, mode):
 
     target = test.table("table")
 
-    assert target.cell.get_text(0, 0) == "0"
+    assert target.cell(0, 0).get_text() == "0"
     assert target.paging.has_next_page()
     assert not target.paging.has_prev_page()
 
     target.paging.click_next_page()
 
-    assert target.cell.get_text(0, 0) == "5"
+    assert target.cell(0, 0).get_text() == "5"
     assert target.paging.has_next_page()
     assert target.paging.has_prev_page()
 
     target.paging.click_prev_page()
 
-    assert target.cell.get_text(0, 0) == "0"
+    assert target.cell(0, 0).get_text() == "0"
     assert target.paging.has_next_page()
     assert not target.paging.has_prev_page()
 
@@ -112,7 +112,7 @@ def test_tpag004_ops_input_with_enter(test):
 
     target = test.table("table")
 
-    text00 = target.cell.get_text(0, 0)
+    text00 = target.cell(0, 0).get_text()
 
     assert target.paging.get_current_page() == "1"
 
@@ -120,7 +120,7 @@ def test_tpag004_ops_input_with_enter(test):
     test.send_keys("100" + Keys.ENTER)
 
     assert target.paging.get_current_page() == "100"
-    assert target.cell.get_text(0, 0) != text00
+    assert target.cell(0, 0).get_text() != text00
 
 
 def test_tpag005_ops_input_with_unfocus(test):
@@ -128,16 +128,16 @@ def test_tpag005_ops_input_with_unfocus(test):
 
     target = test.table("table")
 
-    text00 = target.cell.get_text(0, 0)
+    text00 = target.cell(0, 0).get_text()
 
     assert target.paging.get_current_page() == "1"
 
     target.paging.click_current_page()
     test.send_keys("100")
-    target.cell.click(0, 0)
+    target.cell(0, 0).click()
 
     assert target.paging.get_current_page() == "100"
-    assert target.cell.get_text(0, 0) != text00
+    assert target.cell(0, 0).get_text() != text00
 
 
 @pytest.mark.parametrize(
@@ -148,7 +148,7 @@ def test_tpag006_ops_input_invalid_with_enter(test, value, expected_value):
 
     target = test.table("table")
 
-    text00 = target.cell.get_text(0, 0)
+    text00 = target.cell(0, 0).get_text()
 
     assert target.paging.get_current_page() == "1"
 
@@ -166,13 +166,13 @@ def test_tpag007_ops_input_invalid_with_unfocus(test, value, expected_value):
 
     target = test.table("table")
 
-    text00 = target.cell.get_text(0, 0)
+    text00 = target.cell(0, 0).get_text()
 
     assert target.paging.get_current_page() == "1"
 
     target.paging.click_current_page()
     test.send_keys(str(value))
-    target.cell.click(0, 0)
+    target.cell(0, 0).click()
 
     assert target.paging.get_current_page() == str(expected_value)
 

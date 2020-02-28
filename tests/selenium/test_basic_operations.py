@@ -38,9 +38,9 @@ def test_tbst001_get_cell(test):
 
     target = test.table("table")
 
-    assert target.cell.get_text(0, 0) == "0"
+    assert target.cell(0, 0).get_text() == "0"
     target.paging.click_next_page()
-    assert target.cell.get_text(0, 0) == "250"
+    assert target.cell(0, 0).get_text() == "250"
 
 
 def test_tbst002_select_all_text(test):
@@ -48,9 +48,9 @@ def test_tbst002_select_all_text(test):
 
     target = test.table("table")
 
-    target.cell.click(0, 1)
+    target.cell(0, 1).click()
 
-    assert target.cell.get_text(0, 1) == test.get_selected_text()
+    assert target.cell(0, 1).get_text() == test.get_selected_text()
 
 
 # https://github.com/plotly/dash-table/issues/50
@@ -59,10 +59,10 @@ def test_tbst003_edit_on_enter(test):
 
     target = test.table("table")
 
-    target.cell.click(249, 0)
+    target.cell(249, 0).click()
     test.send_keys("abc" + Keys.ENTER)
 
-    assert target.cell.get_text(249, 0) == "abc"
+    assert target.cell(249, 0).get_text() == "abc"
 
 
 # https://github.com/plotly/dash-table/issues/107
@@ -71,10 +71,10 @@ def test_tbst004_edit_on_tab(test):
 
     target = test.table("table")
 
-    target.cell.click(249, 0)
+    target.cell(249, 0).click()
     test.send_keys("abc" + Keys.TAB)
 
-    assert target.cell.get_text(249, 0) == "abc"
+    assert target.cell(249, 0).get_text() == "abc"
 
 
 def test_tbst005_edit_last_row_on_click_outside(test):
@@ -82,11 +82,11 @@ def test_tbst005_edit_last_row_on_click_outside(test):
 
     target = test.table("table")
 
-    target.cell.click(249, 0)
+    target.cell(249, 0).click()
     test.send_keys("abc")
-    target.cell.click(248, 0)
+    target.cell(248, 0).click()
 
-    assert target.cell.get_text(249, 0) == "abc"
+    assert target.cell(249, 0).get_text() == "abc"
 
 
 # https://github.com/plotly/dash-table/issues/141
@@ -95,11 +95,11 @@ def test_tbst006_focused_arrow_left(test):
 
     target = test.table("table")
 
-    target.cell.click(249, 1)
+    target.cell(249, 1).click()
     test.send_keys("abc" + Keys.LEFT)
 
-    assert target.cell.get_text(249, 1) == "abc"
-    assert target.cell.is_focused(249, 0)
+    assert target.cell(249, 1).get_text() == "abc"
+    assert target.cell(249, 0).is_focused()
 
 
 # https://github.com/plotly/dash-table/issues/141
@@ -108,11 +108,11 @@ def test_tbst007_active_focused_arrow_right(test):
 
     target = test.table("table")
 
-    target.cell.click(249, 0)
+    target.cell(249, 0).click()
     test.send_keys("abc" + Keys.RIGHT)
 
-    assert target.cell.get_text(249, 0) == "abc"
-    assert target.cell.is_focused(249, 1)
+    assert target.cell(249, 0).get_text() == "abc"
+    assert target.cell(249, 1).is_focused()
 
 
 # https://github.com/plotly/dash-table/issues/141
@@ -121,11 +121,11 @@ def test_tbst008_active_focused_arrow_up(test):
 
     target = test.table("table")
 
-    target.cell.click(249, 0)
+    target.cell(249, 0).click()
     test.send_keys("abc" + Keys.UP)
 
-    assert target.cell.get_text(249, 0) == "abc"
-    assert target.cell.is_focused(248, 0)
+    assert target.cell(249, 0).get_text() == "abc"
+    assert target.cell(248, 0).is_focused()
 
 
 # https://github.com/plotly/dash-table/issues/141
@@ -134,11 +134,11 @@ def test_tbst009_active_focused_arrow_down(test):
 
     target = test.table("table")
 
-    target.cell.click(249, 0)
+    target.cell(249, 0).click()
     test.send_keys("abc" + Keys.DOWN)
 
-    assert target.cell.get_text(249, 0) == "abc"
-    assert target.cell.is_focused(249, 0)
+    assert target.cell(249, 0).get_text() == "abc"
+    assert target.cell(249, 0).is_focused()
 
 
 def test_tbst010_active_with_dblclick(test):
@@ -146,9 +146,9 @@ def test_tbst010_active_with_dblclick(test):
 
     target = test.table("table")
 
-    target.cell.double_click(0, 0)
-    assert target.cell.is_active(0, 0)
-    assert target.cell.get_text(0, 0) == test.get_selected_text()
+    target.cell(0, 0).double_click()
+    assert target.cell(0, 0).is_active()
+    assert target.cell(0, 0).get_text() == test.get_selected_text()
 
 
 def test_tbst011_delete_row(test):
@@ -156,10 +156,10 @@ def test_tbst011_delete_row(test):
 
     target = test.table("table")
 
-    text01 = target.cell.get_text(1, 0)
-    target.row.delete(0)
+    text01 = target.cell(1, 0).get_text()
+    target.row(0).delete()
 
-    assert target.cell.get_text(0, 0) == text01
+    assert target.cell(0, 0).get_text() == text01
 
 
 def test_tbst012_delete_sorted_row(test):
@@ -167,13 +167,13 @@ def test_tbst012_delete_sorted_row(test):
 
     target = test.table("table")
 
-    target.column.sort(0, rawDf.columns[0])  # None -> ASC
-    target.column.sort(0, rawDf.columns[0])  # ASC -> DESC
+    target.column(rawDf.columns[0]).sort(0)  # None -> ASC
+    target.column(rawDf.columns[0]).sort(0)  # ASC -> DESC
 
-    text01 = target.cell.get_text(1, 0)
-    target.row.delete(0)
+    text01 = target.cell(1, 0).get_text()
+    target.row(0).delete()
 
-    assert target.cell.get_text(0, 0) == text01
+    assert target.cell(0, 0).get_text() == text01
 
 
 def test_tbst013_select_row(test):
@@ -181,9 +181,9 @@ def test_tbst013_select_row(test):
 
     target = test.table("table")
 
-    target.row.select(0)
+    target.row(0).select()
 
-    assert target.row.is_selected(0)
+    assert target.row(0).is_selected()
 
 
 def test_tbst014_selected_sorted_row(test):
@@ -191,11 +191,11 @@ def test_tbst014_selected_sorted_row(test):
 
     target = test.table("table")
 
-    target.column.sort(0, rawDf.columns[0])  # None -> ASC
-    target.column.sort(0, rawDf.columns[0])  # ASC -> DESC
-    target.row.select(0)
+    target.column(rawDf.columns[0]).sort(0)  # None -> ASC
+    target.column(rawDf.columns[0]).sort(0)  # ASC -> DESC
+    target.row(0).select()
 
-    assert target.row.is_selected(0)
+    assert target.row(0).is_selected()
 
 
 def test_tbst015_selected_row_respects_sort(test):
@@ -203,18 +203,18 @@ def test_tbst015_selected_row_respects_sort(test):
 
     target = test.table("table")
 
-    target.row.select(0)
+    target.row(0).select()
 
-    assert target.row.is_selected(0)
+    assert target.row(0).is_selected()
 
-    target.column.sort(0, rawDf.columns[0])  # None -> ASC
-    target.column.sort(0, rawDf.columns[0])  # ASC -> DESC
+    target.column(rawDf.columns[0]).sort(0)  # None -> ASC
+    target.column(rawDf.columns[0]).sort(0)  # ASC -> DESC
 
-    assert not target.row.is_selected(0)
+    assert not target.row(0).is_selected()
 
-    target.column.sort(0, rawDf.columns[0])  # DESC -> None
+    target.column(rawDf.columns[0]).sort(0)  # DESC -> None
 
-    assert target.row.is_selected(0)
+    assert target.row(0).is_selected()
 
 
 def test_tbst016_delete_cell(test):
@@ -222,11 +222,11 @@ def test_tbst016_delete_cell(test):
 
     target = test.table("table")
 
-    target.cell.click(0, 1)
+    target.cell(0, 1).click()
     test.send_keys(Keys.BACKSPACE)
     test.send_keys(Keys.ENTER)
 
-    assert target.cell.get_text(0, 1) == ""
+    assert target.cell(0, 1).get_text() == ""
 
 
 @pytest.mark.skip(reason="https://github.com/plotly/dash-table/issues/700")
@@ -235,10 +235,10 @@ def test_tbst017_delete_cell_updates_while_selected(test):
 
     target = test.table("table")
 
-    target.cell.click(0, 1)
+    target.cell(0, 1).click()
     test.send_keys(Keys.BACKSPACE)
 
-    assert target.cell.get_text(0, 1) == ""
+    assert target.cell(0, 1).get_text() == ""
 
 
 def test_tbst018_delete_multiple_cells(test):
@@ -246,7 +246,7 @@ def test_tbst018_delete_multiple_cells(test):
 
     target = test.table("table")
 
-    target.cell.click(0, 1)
+    target.cell(0, 1).click()
     with test.hold(Keys.SHIFT):
         ActionChains(test.driver).send_keys(Keys.DOWN).send_keys(Keys.RIGHT).perform()
 
@@ -254,7 +254,7 @@ def test_tbst018_delete_multiple_cells(test):
 
     for row in range(2):
         for col in range(1, 3):
-            assert target.cell.get_text(row, col) == ""
+            assert target.cell(row, col).get_text() == ""
 
 
 @pytest.mark.skip(reason="https://github.com/plotly/dash-table/issues/700")
@@ -263,7 +263,7 @@ def test_tbst019_delete_multiple_cells_while_selected(test):
 
     target = test.table("table")
 
-    target.cell.click(0, 1)
+    target.cell(0, 1).click()
     with test.hold(Keys.SHIFT):
         ActionChains(test.driver).send_keys(Keys.DOWN).send_keys(Keys.RIGHT).perform()
 
@@ -271,7 +271,7 @@ def test_tbst019_delete_multiple_cells_while_selected(test):
 
     for row in range(2):
         for col in range(1, 3):
-            assert target.cell.get_text(row, col) == ""
+            assert target.cell(row, col).get_text() == ""
 
 
 def test_tbst020_sorted_table_delete_cell(test):
@@ -279,14 +279,14 @@ def test_tbst020_sorted_table_delete_cell(test):
 
     target = test.table("table")
 
-    target.column.sort(0, rawDf.columns[0])  # None -> ASC
-    target.column.sort(0, rawDf.columns[0])  # ASC -> DESC
+    target.column(rawDf.columns[0]).sort(0)  # None -> ASC
+    target.column(rawDf.columns[0]).sort(0)  # ASC -> DESC
 
-    target.cell.click(0, 1)
+    target.cell(0, 1).click()
     test.send_keys(Keys.BACKSPACE)
     test.send_keys(Keys.ENTER)
 
-    assert target.cell.get_text(0, 1) == ""
+    assert target.cell(0, 1).get_text() == ""
 
 
 @pytest.mark.skip(reason="https://github.com/plotly/dash-table/issues/700")
@@ -295,13 +295,13 @@ def test_tbst021_sorted_table_delete_cell_updates_while_selected(test):
 
     target = test.table("table")
 
-    target.column.sort(0, rawDf.columns[0])  # None -> ASC
-    target.column.sort(0, rawDf.columns[0])  # ASC -> DESC
+    target.column(rawDf.columns[0]).sort(0)  # None -> ASC
+    target.column(rawDf.columns[0]).sort(0)  # ASC -> DESC
 
-    target.cell.click(0, 1)
+    target.cell(0, 1).click()
     test.send_keys(Keys.BACKSPACE)
 
-    assert target.cell.get_text(0, 1) == ""
+    assert target.cell(0, 1).get_text() == ""
 
 
 def test_tbst022_sorted_table_delete_multiple_cells(test):
@@ -309,10 +309,10 @@ def test_tbst022_sorted_table_delete_multiple_cells(test):
 
     target = test.table("table")
 
-    target.column.sort(0, rawDf.columns[0])  # None -> ASC
-    target.column.sort(0, rawDf.columns[0])  # ASC -> DESC
+    target.column(rawDf.columns[0]).sort(0)  # None -> ASC
+    target.column(rawDf.columns[0]).sort(0)  # ASC -> DESC
 
-    target.cell.click(0, 1)
+    target.cell(0, 1).click()
     with test.hold(Keys.SHIFT):
         ActionChains(test.driver).send_keys(Keys.DOWN).send_keys(Keys.RIGHT).perform()
 
@@ -320,7 +320,7 @@ def test_tbst022_sorted_table_delete_multiple_cells(test):
 
     for row in range(2):
         for col in range(1, 3):
-            assert target.cell.get_text(row, col) == ""
+            assert target.cell(row, col).get_text() == ""
 
 
 @pytest.mark.skip(reason="https://github.com/plotly/dash-table/issues/700")
@@ -329,10 +329,10 @@ def test_tbst023_sorted_table_delete_multiple_cells_while_selected(test):
 
     target = test.table("table")
 
-    target.column.sort(0, rawDf.columns[0])  # None -> ASC
-    target.column.sort(0, rawDf.columns[0])  # ASC -> DESC
+    target.column(rawDf.columns[0]).sort(0)  # None -> ASC
+    target.column(rawDf.columns[0]).sort(0)  # ASC -> DESC
 
-    target.cell.click(0, 1)
+    target.cell(0, 1).click()
     with test.hold(Keys.SHIFT):
         ActionChains(test.driver).send_keys(Keys.DOWN).send_keys(Keys.RIGHT).perform()
 
@@ -340,4 +340,4 @@ def test_tbst023_sorted_table_delete_multiple_cells_while_selected(test):
 
     for row in range(2):
         for col in range(1, 3):
-            assert target.cell.get_text(row, col) == ""
+            assert target.cell(row, col).get_text() == ""

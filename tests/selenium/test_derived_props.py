@@ -84,8 +84,8 @@ def test_tdrp001_select_rows(test):
 
     target = test.table("table")
 
-    target.row.select(0)
-    target.row.select(1)
+    target.row(0).select()
+    target.row(1).select()
 
     assert test.find_element("#active_cell").get_attribute("innerHTML") in [
         "None",
@@ -142,7 +142,7 @@ def test_tdrp002_select_cell(test):
 
     target = test.table("table")
 
-    target.cell.click(0, 0)
+    target.cell(0, 0).click()
 
     active = dict(row=0, column=0, column_id=rawDf.columns[0], row_id=3000)
 
@@ -199,7 +199,7 @@ def test_tdrp003_select_cells(test):
 
     target = test.table("table")
 
-    target.cell.click(0, 0)
+    target.cell(0, 0).click()
     with test.hold(Keys.SHIFT):
         test.send_keys(Keys.DOWN + Keys.DOWN + Keys.RIGHT + Keys.RIGHT)
 
@@ -333,7 +333,7 @@ def test_tdrp004_navigate_selected_cells(test):
 
     target = test.table("table")
 
-    target.cell.click(0, 0)
+    target.cell(0, 0).click()
     with test.hold(Keys.SHIFT):
         test.send_keys(Keys.DOWN + Keys.DOWN + Keys.RIGHT + Keys.RIGHT)
 
@@ -409,9 +409,9 @@ def test_tdrp005_filtered_and_sorted_row_select(test):
 
     target = test.table("table")
 
-    target.row.select(0)
-    target.row.select(1)
-    target.row.select(2)
+    target.row(0).select()
+    target.row(1).select()
+    target.row(2).select()
 
     assert test.find_element("#active_cell").get_attribute("innerHTML") in [
         "None",
@@ -462,7 +462,7 @@ def test_tdrp005_filtered_and_sorted_row_select(test):
         "innerHTML"
     ) == json.dumps(list(range(3000, 3100)))
 
-    target.column.filter(rawDf.columns[0])
+    target.column(rawDf.columns[0]).filter()
     test.send_keys("is even" + Keys.ENTER)
 
     assert test.find_element("#active_cell").get_attribute("innerHTML") in [
@@ -514,8 +514,8 @@ def test_tdrp005_filtered_and_sorted_row_select(test):
         "innerHTML"
     ) == json.dumps(list(range(3000, 3100, 2)))
 
-    target.column.sort(0, rawDf.columns[0])  # None -> ASC
-    target.column.sort(0, rawDf.columns[0])  # ASC -> DESC
+    target.column(rawDf.columns[0]).sort(0)  # None -> ASC
+    target.column(rawDf.columns[0]).sort(0)  # ASC -> DESC
 
     assert test.find_element("#active_cell").get_attribute("innerHTML") in [
         "None",
