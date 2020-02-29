@@ -39,7 +39,7 @@ def test_tbst001_get_cell(test):
     target = test.table("table")
 
     assert target.cell(0, 0).get_text() == "0"
-    target.paging.click_next_page()
+    target.paging.next.click()
     assert target.cell(0, 0).get_text() == "250"
 
 

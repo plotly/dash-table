@@ -17,6 +17,7 @@ _validate_key = lambda key: isinstance(key, str) and len(key) == 1
 _validate_keys = lambda keys: isinstance(keys, str) and len(keys) > 0
 _validate_mixin = lambda mixin: isinstance(mixin, DataTableMixin)
 _validate_row = lambda row: isinstance(row, int) and row >= 0
+_validate_selector = lambda selector: isinstance(selector, str) and len(selector) > 0
 _validate_state = lambda state: state in [_READY, _LOADING, _ANY]
 _validate_target = lambda target: isinstance(target, DataTableFacade)
 
@@ -163,78 +164,65 @@ class DataTableRowFacade(object):
         )
 
 
+class DataTablePagingActionFacade(object):
+    @preconditions(_validate_id, _validate_mixin, _validate_selector)
+    def __init__(self, id, mixin, selector):
+        self.id = id
+        self.mixin = mixin
+        self.selector = selector
+
+    def click(self):
+        self.mixin._wait_for_table(self.id)
+
+        return self.mixin.find_element("#{} {}".format(self.id, self.selector)).click()
+
+    def exists(self):
+        self.mixin._wait_for_table(self.id)
+
+        el = self.mixin.find_element("#{} {}".format(self.id, self.selector))
+
+        return el is not None and el.is_enabled()
+
+
+class DataTablePagingCurrentFacade(object):
+    @preconditions(_validate_id, _validate_mixin)
+    def __init__(self, id, mixin):
+        self.id = id
+        self.mixin = mixin
+
+    def click(self):
+        self.mixin._wait_for_table(self.id)
+
+        return self.mixin.find_element("#{} input.current-page".format(self.id)).click()
+
+    def get_value(self):
+        self.mixin._wait_for_table(self.id)
+
+        return self.mixin.find_element(
+            "#{} input.current-page".format(self.id)
+        ).get_attribute("placeholder")
+
+
 class DataTablePagingFacade(object):
     @preconditions(_validate_id, _validate_mixin)
     def __init__(self, id, mixin):
         self.id = id
         self.mixin = mixin
 
-    def click_next_page(self):
-        self.mixin._wait_for_table(self.id)
+        self.current = DataTablePagingCurrentFacade(self.id, self.mixin)
+        self.first = DataTablePagingActionFacade(
+            self.id, self.mixin, "button.first-page"
+        )
+        self.last = DataTablePagingActionFacade(self.id, self.mixin, "button.last-page")
+        self.next = DataTablePagingActionFacade(self.id, self.mixin, "button.next-page")
+        self.previous = DataTablePagingActionFacade(
+            self.id, self.mixin, "button.previous-page"
+        )
 
-        return self.mixin.find_element("#{} button.next-page".format(self.id)).click()
-
-    def click_prev_page(self):
-        self.mixin._wait_for_table(self.id)
-
-        return self.mixin.find_element(
-            "#{} button.previous-page".format(self.id)
-        ).click()
-
-    def click_first_page(self):
-        self.mixin._wait_for_table(self.id)
-
-        return self.mixin.find_element("#{} button.first-page".format(self.id)).click()
-
-    def click_last_page(self):
-        self.mixin._wait_for_table(self.id)
-
-        return self.mixin.find_element("#{} button.last-page".format(self.id)).click()
-
-    def has_pagination(self):
+    def exists(self):
         self.mixin._wait_for_table(self.id)
 
         return len(self.mixin.find_elements(".previous-next-container")) != 0
-
-    def has_next_page(self):
-        self.mixin._wait_for_table(self.id)
-
-        el = self.mixin.find_element("#{} button.next-page".format(self.id))
-
-        return el is not None and el.is_enabled()
-
-    def has_prev_page(self):
-        self.mixin._wait_for_table(self.id)
-
-        el = self.mixin.find_element("#{} button.previous-page".format(self.id))
-
-        return el is not None and el.is_enabled()
-
-    def has_first_page(self):
-        self.mixin._wait_for_table(self.id)
-
-        el = self.mixin.find_element("#{} button.first-page".format(self.id))
-
-        return el is not None and el.is_enabled()
-
-    def has_last_page(self):
-        self.mixin._wait_for_table(self.id)
-
-        el = self.mixin.find_element("#{} button.last-page".format(self.id))
-
-        return el is not None and el.is_enabled()
-
-    def click_current_page(self):
-        self.mixin._wait_for_table(self.id)
-
-        return self.mixin.find_element("#{} input.current-page".format(self.id)).click()
-
-    def get_current_page(self):
-        self.mixin._wait_for_table(self.id)
-
-        return self.mixin.find_element(
-            "#{} input.current-page".format(self.id)
-        ).get_attribute("placeholder")
 
 
 class DataTableFacade(object):
