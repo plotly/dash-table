@@ -2,10 +2,19 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## Unreleased
+## [4.6.1] - 2020-02-27
+### Changed
+- [#704](https://github.com/plotly/dash-table/pull/704) Renamed async modules with hyphen `-` instead of tilde `~`
+
+## [4.6.0] - 2020-01-14
+### Added
+- [#606](https://github.com/plotly/dash-table/pull/606) Add markdown support for table cells. Cells will be rendered as markdown if the column `presentation` is specified as `markdown`.
+    - Add highlight.js for syntax highlighting. If `window.hljs` is specified, that will be used for highlighting instead.
 
 ### Fixed
 - [#670](https://github.com/plotly/dash-table/pull/670) Fix a bug where `derived_filter_query_structure` was not getting updated properly
+- [#677](https://github.com/plotly/dash-table/pull/677) Fix a bug where the table fails to load when used inside an iframe with a sandbox attribute that only has allow-scripts
+- [#665](https://github.com/plotly/dash-table/pull/665) Fix a bug in Firefox where the dropdown cells height is incorrect
 
 ## [4.5.1] - 2019-11-14
 ### Fixed
