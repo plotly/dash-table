@@ -50,7 +50,7 @@ const INNER_STYLE = {
 
 export default class ControlledTable extends PureComponent<ControlledTableProps> {
     private readonly menuRef = React.createRef<HTMLDivElement>();
-    private readonly stylesheet: Stylesheet = new Stylesheet(`#${this.props.id}`);
+    private readonly stylesheet: Stylesheet = new Stylesheet(this.props.id);
     private readonly tableFn = derivedTable(() => this.props);
     private readonly tableFragments = derivedTableFragments();
     private readonly tableStyle = derivedTableStyle();
