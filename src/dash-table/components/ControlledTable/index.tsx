@@ -132,7 +132,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         this.handleResize();
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         // Fallback method for paste handling in Chrome
         // when no input element has focused inside the table
         window.addEventListener('resize', this.forceHandleResize);
@@ -146,7 +146,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         document.removeEventListener('paste', this.handlePaste);
     }
 
-    componentWillUpdate() {
+    UNSAFE_componentWillUpdate() {
         this.updateStylesheet();
     }
 
