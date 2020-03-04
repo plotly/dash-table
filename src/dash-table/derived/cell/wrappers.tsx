@@ -113,7 +113,7 @@ class Wrappers {
             'data-dash-row': rowIndex
         }}
         classes={classes}
-        key={`column-${columnIndex}`}
+        key={`row-${rowIndex}-column-${columnIndex}`}
         onClick={onClick}
         onDoubleClick={onDoubleClick}
         onMouseEnter={onEnter}
