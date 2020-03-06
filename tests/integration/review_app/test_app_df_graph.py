@@ -156,6 +156,6 @@ def test_rapp002_df_graph(dash_duo):
     dash_duo.start_server(app)
     dash_duo.wait_for_element("#waitfor")
 
-    dash_duo.wait_for_element("#{}".format(IDS["table"])
+    dash_duo.wait_for_element("#{}".format(IDS["table"]))
 
     dash_duo.percy_snapshot("rapp002 - loaded")
