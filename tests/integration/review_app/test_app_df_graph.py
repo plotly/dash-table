@@ -17,6 +17,7 @@ ID_PREFIX = "app_data_updating_graph"
 IDS = {"table": ID_PREFIX, "container": "{}-container".format(ID_PREFIX)}
 _TIMEOUT = 10
 
+
 def test_rapp002_df_graph(dash_duo):
     df = pd.read_csv(
         os.path.realpath(
@@ -157,9 +158,7 @@ def test_rapp002_df_graph(dash_duo):
 
     # Wait for table
     WebDriverWait(dash_duo.driver, _TIMEOUT).until(
-        EC.presence_of_element_located(
-            (By.CSS_SELECTOR, "#{}".format(IDS["table"]))
-        )
+        EC.presence_of_element_located((By.CSS_SELECTOR, "#{}".format(IDS["table"])))
     )
 
     dash_duo.percy_snapshot("rapp002 - loaded")
