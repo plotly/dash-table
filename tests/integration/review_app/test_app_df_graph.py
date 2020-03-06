@@ -7,10 +7,15 @@ from dash.dependencies import Input, Output
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_table
+import time
+
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
 
 ID_PREFIX = "app_data_updating_graph"
 IDS = {"table": ID_PREFIX, "container": "{}-container".format(ID_PREFIX)}
-
+_TIMEOUT = 10
 
 def test_rapp002_df_graph(dash_duo):
     df = pd.read_csv(
@@ -149,4 +154,12 @@ def test_rapp002_df_graph(dash_duo):
 
     dash_duo.start_server(app)
     dash_duo.wait_for_element("#waitfor")
+
+    # Wait for table
+    WebDriverWait(dash_duo.driver, _TIMEOUT).until(
+        EC.presence_of_element_located(
+            (By.CSS_SELECTOR, "#{}".format(IDS["table"]))
+        )
+    )
+
     dash_duo.percy_snapshot("rapp002 - loaded")
