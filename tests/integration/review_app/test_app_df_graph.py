@@ -156,9 +156,6 @@ def test_rapp002_df_graph(dash_duo):
     dash_duo.start_server(app)
     dash_duo.wait_for_element("#waitfor")
 
-    # Wait for table
-    WebDriverWait(dash_duo.driver, _TIMEOUT).until(
-        EC.presence_of_element_located((By.CSS_SELECTOR, "#{}".format(IDS["table"])))
-    )
+    dash_duo.wait_for_element("#{}".format(IDS["TABLE"])
 
     dash_duo.percy_snapshot("rapp002 - loaded")
