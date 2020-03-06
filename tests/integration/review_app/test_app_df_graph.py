@@ -7,11 +7,6 @@ from dash.dependencies import Input, Output
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_table
-import time
-
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.wait import WebDriverWait
 
 ID_PREFIX = "app_data_updating_graph"
 IDS = {"table": ID_PREFIX, "container": "{}-container".format(ID_PREFIX)}
