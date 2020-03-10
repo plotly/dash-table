@@ -3,7 +3,7 @@ version: 2
 jobs:
     "server-test":
         docker:
-            - image: circleci/python:3.7-node-browsers
+            - image: circleci/python:3.6.9-node-browsers
             - image: cypress/base:10
 
         steps:
@@ -48,7 +48,7 @@ jobs:
 
     "standalone-test":
         docker:
-            - image: circleci/python:3.7-node-browsers
+            - image: circleci/python:3.6.7-node-browsers
             - image: cypress/base:10
 
         steps:
@@ -79,7 +79,7 @@ jobs:
 
     "unit-test":
         docker:
-            - image: circleci/python:3.7-node-browsers
+            - image: circleci/python:3.6-node-browsers
             - image: cypress/base:10
 
         steps:
@@ -149,7 +149,7 @@ jobs:
 
     "node":
         docker:
-            - image: circleci/python:3.7-node
+            - image: circleci/python:3.6-node
 
         steps:
             - checkout
@@ -184,9 +184,9 @@ jobs:
                 when: always
 
 
-    "python-3.7":
+    "python-3.6":
         docker:
-            - image: circleci/python:3.7-stretch-node-browsers
+            - image: circleci/python:3.6-stretch-node-browsers
 
         environment:
             PERCY_ENABLED: True
@@ -244,7 +244,7 @@ workflows:
     version: 2
     build:
         jobs:
-            - "python-3.7"
+            - "python-3.6"
             - "node"
             - "server-test"
             - "standalone-test"
