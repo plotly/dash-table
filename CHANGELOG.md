@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - [#713](https://github.com/plotly/dash-table/pull/713) Update from React 16.8.6 to 16.13.0
 
+
 ## [4.6.1] - 2020-02-27
 ### Added
 - [#711](https://github.com/plotly/dash-table/pull/711) Added R examples to package help
