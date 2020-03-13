@@ -230,6 +230,8 @@ jobs:
                 name: ⚙️ run integration test
                 command: |
                   . venv/bin/activate
+                  pip uninstall pytest -y
+                  pip install pytest==5.3.5
                   pytest --junitxml=test-reports/dash.xml tests/integration
             - store_artifacts:
                 path: test-reports
