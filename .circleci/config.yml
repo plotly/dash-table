@@ -43,6 +43,9 @@ jobs:
                 name: Run tests
                 command: |
                     . venv/bin/activate
+                    pip uninstall pytest -y
+                    pip install pytest==5.3.5
+                    pytest --junitxml=test-reports/dash.xml tests/integration
                     npm run test.server
 
 
