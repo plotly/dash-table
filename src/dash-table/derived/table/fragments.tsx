@@ -23,6 +23,21 @@ function renderFragment(cells: any[][] | null, offset: number = 0) {
 const getHiddenCell = (cell: JSX.Element) => React.cloneElement(cell, {
     ...cell.props,
     className: cell.props.className ? `${cell.props.className} phantom-cell` : 'phantom-cell'
+}, cell.type !== 'th' && cell.type !== 'td' ? cell.props.children : null);
+
+const getFixedColSpan = (cell: JSX.Element, maxColSpan: number) => React.cloneElement(cell, {
+    ...cell.props,
+    colSpan: R.isNil(cell.props.colSpan) ? cell.props.colSpan : Math.min(cell.props.colSpan, maxColSpan)
+});
+
+const getLastOfType = (cell: JSX.Element) => React.cloneElement(cell, {
+    ...cell.props,
+    className: cell.props.className ? `${cell.props.className} last-of-type` : 'last-of-type'
+});
+
+const getFirstPhantom = (cell: JSX.Element) => React.cloneElement(cell, {
+    ...cell.props,
+    style: { ...cell.props.style, borderLeft: 'transparent' }
 });
 
 const isEmpty = (cells: JSX.Element[][] | null) =>
@@ -51,7 +66,11 @@ export default memoizeOneFactory((
                 row as any
             ).cells;
 
-            return row.slice(0, pivot).concat(row.slice(pivot).map(getHiddenCell));
+            const res = row.slice(0, pivot).map((c,i) => getFixedColSpan(c, fixedColumns - i - 1)).concat(row.slice(pivot).map(getHiddenCell));
+            res[pivot - 1] = getLastOfType(res[pivot - 1]);
+            res[pivot] = getFirstPhantom(res[pivot]);
+
+            return res;
         }, cells) :
         null;
 

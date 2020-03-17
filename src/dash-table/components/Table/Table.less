@@ -287,11 +287,20 @@
                 }
             }
 
+            .cell-0-0,
+            .cell-1-0 {
+                overflow: hidden;
+            }
+
+            td, th {
+                &.last-of-type {
+                    border-right: none !important;
+                }
+            }
+
             &:not(.dash-empty-01) {
                 .cell-0-0,
                 .cell-1-0 {
-                    overflow: hidden;
-
                     tr {
                         td:last-of-type,
                         th:last-of-type {
@@ -337,14 +346,26 @@
                 }
             }
 
+            .cell {
+                table {
+                    width: min-content;
+                }
+            }
+
             &.dash-fill-width {
                 .cell-0-1,
                 .cell-1-1 {
                     flex: 1 0 auto;
+
+                    table {
+                        width: 100%;
+                    }
                 }
 
-                table {
-                    width: 100%;
+                .cell {
+                    table {
+                        width: max-content;
+                    }
                 }
             }
 
@@ -443,6 +464,7 @@
                 padding: 2px;
                 overflow-x: hidden;
                 white-space: nowrap;
+                box-sizing: content-box;
 
                 height: 30px;
 
