@@ -109,7 +109,7 @@ export class DashTableHelper {
     public getCellInLastRowOfColumn(column: number) {
         const cellInLastRow = cy.get(`td.dash-cell.column-${column}:not(.phantom-cell)`).last().then(elem => {
             const lastRow = elem ? elem.attr(`data-dash-row`) : undefined;
-            return lastRow ? cy.get(`td.dash-cell.column-${column}[data-dash-row="${lastRow}]:not(.phantom-cell)"`) : undefined;
+            return lastRow ? cy.get(`td.dash-cell.column-${column}[data-dash-row="${lastRow}"]:not(.phantom-cell)`) : undefined;
         });
         return cellInLastRow;
     }
