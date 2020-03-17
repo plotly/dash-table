@@ -69,13 +69,13 @@ class DataTableCellFacade(object):
 
         return (
             self.mixin.find_element(
-                '#{} {} tbody td.dash-cell.column-{}[data-dash-row="{}"]'.format(
+                '#{} {} tbody td.dash-cell.column-{}[data-dash-row="{}"]:not(.phantom-cell)'.format(
                     self.id, self.state, self.col, self.row
                 )
             )
             if isinstance(self.col, int)
             else self.mixin.find_element(
-                '#{} {} tbody td.dash-cell[data-dash-column="{}"][data-dash-row="{}"]'.format(
+                '#{} {} tbody td.dash-cell[data-dash-column="{}"][data-dash-row="{}"]:not(.phantom-cell)'.format(
                     self.id, self.state, self.col, self.row
                 )
             )

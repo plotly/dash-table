@@ -261,12 +261,30 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             tr.style.height = getComputedStyle(tr2).height;
         });
 
-        // Adjust fixed columns data to data height
-        const contentTd = r1c1.querySelector('tr > td:first-of-type');
-        if (contentTd) {
-            const contentTr = contentTd.parentElement as HTMLElement;
+        const { fixed_columns } = this.props;
+        if (fixed_columns) {
+            const lastVisibleTd = r1c0.querySelector(`tr:first-of-type > td:nth-of-type(${fixed_columns})`);
+            if (lastVisibleTd) {
+                const r1c0FragmentBounds = r1c0.getBoundingClientRect();
+                const lastTdBounds = lastVisibleTd.getBoundingClientRect();
 
-            this.stylesheet.setRule('.dash-fixed-column tr', `height: ${getComputedStyle(contentTr).height};`);
+                const width = lastTdBounds.right - r1c0FragmentBounds.left;
+
+                this.stylesheet.setRule('.cell.cell-0-0', `width: ${width}px; overflow: hidden;`);
+                this.stylesheet.setRule('.cell.cell-1-0', `width: ${width}px; overflow: hidden;`);
+            }
+
+            const firstVisibleTd = r1c1.querySelector(`tr:first-of-type > td:nth-of-type(${fixed_columns + 1})`);
+            if (firstVisibleTd) {
+                const r1c1FragmentBounds = r1c1.getBoundingClientRect();
+                const firstTdBounds = firstVisibleTd.getBoundingClientRect();
+
+                const width = firstTdBounds.left - r1c1FragmentBounds.left;
+
+                this.stylesheet.setRule('.cell.cell-0-1', `margin-left: ${-width}px;`);
+                this.stylesheet.setRule('.cell.cell-1-1', `margin-left: ${-width}px;`);
+            }
+
         }
     }
 
@@ -715,10 +733,11 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
     }
 
     onScroll = (ev: any) => {
-        const { r0c1 } = this.refs as { [key: string]: HTMLElement };
+        const { r0c1, r1c1 } = this.refs as { [key: string]: HTMLElement };
 
         Logger.trace(`ControlledTable fragment scrolled to (left,top)=(${ev.target.scrollLeft},${ev.target.scrollTop})`);
-        r0c1.style.marginLeft = `${-ev.target.scrollLeft}px`;
+
+        r0c1.style.marginLeft = `calc(${-ev.target.scrollLeft}px + ${r1c1.style.marginLeft})`;
 
         this.updateUiViewport();
         this.handleDropdown();
