@@ -28,14 +28,14 @@ describe(`column, mode=${AppMode.Actionable}, flavor=${AppFlavor.Merged}, ${AppF
     });
 
     it('keeps hidden pieces when deleting a merged column', () => {
-        cy.get('.column-4 .column-header--hide').click(); // Boston
-        cy.get('.column-2 .column-header--hide').click(); // Montréal
+        cy.get('.column-4:not(.phantom-cell) .column-header--hide').click(); // Boston
+        cy.get('.column-2:not(.phantom-cell) .column-header--hide').click(); // Montréal
         DashTable.deleteColumnById(0, 'ccc'); // City
         cy.get('.show-hide').click();
         cy.get('.show-hide-menu-item input').eq(1).click(); // Montréal
         cy.get('.show-hide-menu-item input').eq(2).click(); // Boston
-        cy.get('.column-1 .column-header-name').eq(2).should('have.html', 'Montréal');
-        cy.get('.column-2 .column-header-name').eq(1).should('have.html', 'Boston');
+        cy.get('.column-1:not(.phantom-cell) .column-header-name').eq(2).should('have.html', 'Montréal');
+        cy.get('.column-2:not(.phantom-cell) .column-header-name').eq(1).should('have.html', 'Boston');
     });
 
     it('can clear column', () => {
@@ -81,8 +81,8 @@ describe(`column, mode=${AppMode.Actionable}, flavor=${AppFlavor.Merged}, ${AppF
         DashTable.getCell(0, 4).within(() => cy.get('.dash-cell-value').should('have.html', '2'));
         DashTable.getCell(0, 5).within(() => cy.get('.dash-cell-value').should('have.html', '10'));
 
-        cy.get('.column-4 .column-header--hide').click(); // Boston
-        cy.get('.column-2 .column-header--hide').click(); // Montréal
+        cy.get('.column-4:not(.phantom-cell) .column-header--hide').click(); // Boston
+        cy.get('.column-2:not(.phantom-cell) .column-header--hide').click(); // Montréal
         DashTable.clearColumnById(0, 'ccc'); // City
         cy.get('.show-hide').click();
         cy.get('.show-hide-menu-item input').eq(2).click(); // Montréal
