@@ -270,8 +270,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
                 const width = lastTdBounds.right - r1c0FragmentBounds.left;
 
-                this.stylesheet.setRule('.cell.cell-0-0', `width: ${width}px; overflow: hidden;`);
-                this.stylesheet.setRule('.cell.cell-1-0', `width: ${width}px; overflow: hidden;`);
+                this.stylesheet.setRule('.cell.cell-0-0', `width: ${width}px;`);
+                this.stylesheet.setRule('.cell.cell-1-0', `width: ${width}px;`);
             }
 
             const firstVisibleTd = r1c1.querySelector(`tr:first-of-type > td:nth-of-type(${fixed_columns + 1})`);
