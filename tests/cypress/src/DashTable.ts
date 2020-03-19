@@ -32,6 +32,14 @@ export class DashTableHelper {
         return cy.get(`#${this.id} ${getSelector(editable)} tbody tr td[data-dash-column="${column}"]:not(.phantom-cell)`).eq(row);
     }
 
+    public getFilterInput(column: number, editable: State = State.Ready) {
+        return cy.get(`#${this.id} ${getSelector(editable)} tbody tr th.dash-filter.column-${column}:not(.phantom-cell) input`);
+    }
+
+    public getFilterInputById(column: string, editable: State = State.Ready) {
+        return cy.get(`#${this.id} ${getSelector(editable)} tbody tr th.dash-filter[data-dash-column="${column}"]:not(.phantom-cell) input`);
+    }
+
     public getFilter(column: number, editable: State = State.Ready) {
         return cy.get(`#${this.id} ${getSelector(editable)} tbody tr th.dash-filter.column-${column}:not(.phantom-cell)`);
     }
