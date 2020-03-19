@@ -263,6 +263,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         });
 
         if (fixed_columns) {
+            // Force first column containers width to match visible portion of table
             const lastVisibleTd = r1c0.querySelector(`tr:first-of-type > *:nth-of-type(${fixed_columns})`);
             if (lastVisibleTd) {
                 const r1c0FragmentBounds = r1c0.getBoundingClientRect();
@@ -273,6 +274,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                 r1c0.style.width = `${width}px`;
             }
 
+            // Force second column containers width to match visible portion of table
             const firstVisibleTd = r1c1.querySelector(`tr:first-of-type > *:nth-of-type(${fixed_columns + 1})`);
             if (firstVisibleTd) {
                 const r1c1FragmentBounds = r1c1.getBoundingClientRect();
@@ -284,6 +286,28 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                 r0c1.style.marginRight = `${width}px`;
                 r1c1.style.marginLeft = `${-width}px`;
                 r1c1.style.marginRight = `${width}px`;
+            }
+
+            // Make all fragment tables the same width
+            const r1c1Table = r1c1.querySelector('table');
+            if (r1c1Table) {
+                const r0c0Table = r0c0.querySelector('table');
+                const r0c1Table = r0c1.querySelector('table');
+                const r1c0Table = r1c0.querySelector('table');
+
+                const r1c1TableWidth = `${r1c1Table.getBoundingClientRect().width}px`;
+
+                if (r0c0Table) {
+                    r0c0Table.style.width = r1c1TableWidth;
+                }
+
+                if (r0c1Table) {
+                    r0c1Table.style.width = r1c1TableWidth;
+                }
+
+                if (r1c0Table) {
+                    r1c0Table.style.width = r1c1TableWidth;
+                }
             }
         }
     }
