@@ -16,11 +16,34 @@ const columnFormats = [
 ]
 
 const variants: ITest[] = [
-    { name: '', props: { } },
-    { name: ': fixed_columns (1 data)', props: { fixed_columns: { headers: true, data: 1 } } }
+    {
+        name: '',
+        props: {
+            style_table: { maxWidth: '1000px', minWidth: '1000px', width: '1000px' }
+        }
+    },
+    {
+        name: ': fixed_columns (1 data)',
+        props: {
+            fixed_columns: { headers: true, data: 1 },
+            style_table: { maxWidth: '1000px', minWidth: '1000px', width: '1000px' }
+        }
+    }
 ];
 
 const chain = storiesOf('DashTable/Markdown', module);
+
+chain.add(`Links and images${name}`, () => (
+    <DataTable
+        setProps={setProps}
+        id='table'
+        data={[
+            { a: '[Greatest website ever](http://plot.ly "Plotly site")', b: 'normal link with title' },
+            { a: '![the github logo](https://github.githubassets.com/images/modules/logos_page/GitHub-Logo.png)', b: 'logo with alt text' }
+        ]}
+        columns={columnFormats}
+        {...variants[0]}
+    />));
 
 variants.forEach(variant => {
     const { name, props } = variant;
@@ -63,17 +86,6 @@ variants.forEach(variant => {
                 data={[
                     { a: '1. Ordered list\n  - with subitem\n    * and sub sub item\n  - and another subitem\n2. and another item', b: 'ordered' },
                     { a: '* Unordered list\n  - with subitem\n    * and sub sub item\n  * and another subitem\n- and another item', b: 'unordered' }
-                ]}
-                columns={columnFormats}
-                {...props}
-            />))
-        .add(`Links and images${name}`, () => (
-            <DataTable
-                setProps={setProps}
-                id='table'
-                data={[
-                    { a: '[Greatest website ever](http://plot.ly "Plotly site")', b: 'normal link with title' },
-                    { a: '![the github logo](https://github.githubassets.com/images/modules/logos_page/GitHub-Logo.png)', b: 'logo with alt text' }
                 ]}
                 columns={columnFormats}
                 {...props}
