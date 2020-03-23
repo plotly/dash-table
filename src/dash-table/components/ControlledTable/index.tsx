@@ -115,11 +115,12 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
     }
 
     componentDidMount() {
-        // Fallback method for paste handling in Chrome
+        // Fallback method for copy/paste handling in Chrome
         // when no input element has focused inside the table
         window.addEventListener('resize', this.forceHandleResize);
         document.addEventListener('mousedown', this.handleClick);
         document.addEventListener('paste', this.handlePaste);
+        document.addEventListener('copy', this.handleCopy);
 
         const {
             active_cell,
@@ -219,6 +220,16 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         const $el = this.$el;
         if ($el && $el.contains(document.activeElement)) {
             this.onPaste(event);
+        }
+    }
+
+    handleCopy = (event: any) => {
+        // no need to check for target as this will only be called if
+        // a child fails to handle the copy event (e.g table, table input)
+        // make sure the active element is in the scope of the component
+        const $el = this.$el;
+        if ($el && $el.contains(document.activeElement)) {
+            this.onCopy(event);
         }
     }
 
