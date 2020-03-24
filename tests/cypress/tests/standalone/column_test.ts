@@ -1,5 +1,4 @@
 import DashTable from 'cypress/DashTable';
-import DOM from 'cypress/DOM';
 
 import { AppMode, AppFlavor } from 'demo/AppMode';
 
@@ -40,15 +39,15 @@ describe(`column, mode=${AppMode.Actionable}, flavor=${AppFlavor.Merged}, ${AppF
 
     it('can clear column', () => {
         DashTable.getFilter(0).click();
-        DOM.focused.type(`is num`);
+        DashTable.focusedType(`is num`);
         DashTable.getFilter(1).click();
-        DOM.focused.type(`is num`);
+        DashTable.focusedType(`is num`);
         DashTable.getFilter(2).click();
-        DOM.focused.type(`is num`);
+        DashTable.focusedType(`is num`);
         DashTable.getFilter(3).click();
-        DOM.focused.type(`is num`);
+        DashTable.focusedType(`is num`);
         DashTable.getFilter(4).click();
-        DOM.focused.type(`is num`);
+        DashTable.focusedType(`is num`);
 
         DashTable.clearColumnById(0, 'rows');
         DashTable.clearColumnById(1, 'ccc'); // Canada
@@ -296,15 +295,15 @@ describe(`column, mode=${AppMode.Actionable}`, () => {
 
     it('can clear column', () => {
         DashTable.getFilter(0).click();
-        DOM.focused.type(`is num`);
+        DashTable.focusedType(`is num`);
         DashTable.getFilter(1).click();
-        DOM.focused.type(`is num`);
+        DashTable.focusedType(`is num`);
         DashTable.getFilter(2).click();
-        DOM.focused.type(`is num`);
+        DashTable.focusedType(`is num`);
         DashTable.getFilter(3).click();
-        DOM.focused.type(`is num`);
+        DashTable.focusedType(`is num`);
         DashTable.getFilter(4).click();
-        DOM.focused.type(`is num`);
+        DashTable.focusedType(`is num`);
 
         DashTable.clearColumnById(0, 'rows');
         DashTable.clearColumnById(1, 'ccc'); // Canada

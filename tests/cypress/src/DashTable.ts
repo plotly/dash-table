@@ -1,3 +1,5 @@
+import DOM from "./DOM";
+
 const READY = `.dash-spreadsheet:not(.dash-loading)`;
 const LOADING = `.dash-spreadsheet.dash-loading`;
 const ANY = `.dash-spreadsheet`;
@@ -22,6 +24,26 @@ const getSelector = (state: State) => {
 export class DashTableHelper {
     constructor(private readonly id) {
 
+    }
+
+    public focusedType(text: string, options?: Partial<Cypress.TypeOptions>) {
+        DOM.focused.type(text, { ...options, force: true});
+    }
+
+    public clickCell(row: number, column: number, editable: State = State.Ready) {
+        return cy.get(`#${this.id} ${getSelector(editable)} tbody tr td.column-${column}:not(.phantom-cell)`).eq(row).click({ force: true });
+    }
+
+    public clickCellById(row: number, column: string, editable: State = State.Ready) {
+        return cy.get(`#${this.id} ${getSelector(editable)} tbody tr td[data-dash-column="${column}"]:not(.phantom-cell)`).eq(row).click({ force: true });
+    }
+
+    public clickFilterInput(column: number, editable: State = State.Ready) {
+        return cy.get(`#${this.id} ${getSelector(editable)} tbody tr th.dash-filter.column-${column}:not(.phantom-cell) input`).click({ force: true });
+    }
+
+    public clickFilterInputById(column: string, editable: State = State.Ready) {
+        return cy.get(`#${this.id} ${getSelector(editable)} tbody tr th.dash-filter[data-dash-column="${column}"]:not(.phantom-cell) input`).click({ force: true });
     }
 
     public getCell(row: number, column: number, editable: State = State.Ready) {
