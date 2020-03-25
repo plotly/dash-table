@@ -1,4 +1,5 @@
-import DOM from "./DOM";
+import DOM from './DOM';
+import { dom } from '@fortawesome/fontawesome-svg-core';
 
 const READY = `.dash-spreadsheet:not(.dash-loading)`;
 const LOADING = `.dash-spreadsheet.dash-loading`;
@@ -27,23 +28,23 @@ export class DashTableHelper {
     }
 
     public focusedType(text: string, options?: Partial<Cypress.TypeOptions>) {
-        DOM.focused.type(text, { ...options, force: true});
+        return DOM.focused.type(text, options);
     }
 
     public clickCell(row: number, column: number, editable: State = State.Ready) {
-        return cy.get(`#${this.id} ${getSelector(editable)} tbody tr td.column-${column}:not(.phantom-cell)`).eq(row).click({ force: true });
+        return this.getCell(row, column, editable).click();
     }
 
     public clickCellById(row: number, column: string, editable: State = State.Ready) {
-        return cy.get(`#${this.id} ${getSelector(editable)} tbody tr td[data-dash-column="${column}"]:not(.phantom-cell)`).eq(row).click({ force: true });
+        return this.getCellById(row, column, editable).click();
     }
 
     public clickFilterInput(column: number, editable: State = State.Ready) {
-        return cy.get(`#${this.id} ${getSelector(editable)} tbody tr th.dash-filter.column-${column}:not(.phantom-cell) input`).click({ force: true });
+        return this.getFilterInput(column, editable).click();
     }
 
     public clickFilterInputById(column: string, editable: State = State.Ready) {
-        return cy.get(`#${this.id} ${getSelector(editable)} tbody tr th.dash-filter[data-dash-column="${column}"]:not(.phantom-cell) input`).click({ force: true });
+        return this.getFilterInputById(column, editable).click();
     }
 
     public getCell(row: number, column: number, editable: State = State.Ready) {
