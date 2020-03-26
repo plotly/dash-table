@@ -2,6 +2,17 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Changed
+- [#713](https://github.com/plotly/dash-table/pull/713) Update from React 16.8.6 to 16.13.0
+
+## [4.6.1] - 2020-02-27
+### Added
+- [#711](https://github.com/plotly/dash-table/pull/711) Added R examples to package help
+
+### Changed
+- [#704](https://github.com/plotly/dash-table/pull/704) Renamed async modules with hyphen `-` instead of tilde `~`
+
 ## [4.6.0] - 2020-01-14
 ### Added
 - [#606](https://github.com/plotly/dash-table/pull/606) Add markdown support for table cells. Cells will be rendered as markdown if the column `presentation` is specified as `markdown`.
