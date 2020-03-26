@@ -6,6 +6,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - [#713](https://github.com/plotly/dash-table/pull/713) Update from React 16.8.6 to 16.13.0
 
+### Fixed
+- [#725](https://github.com/plotly/dash-table/pull/725) Fix bug in which copy events were not triggered except upon selection of a different cell.
+
 ## [4.6.1] - 2020-02-27
 ### Added
 - [#711](https://github.com/plotly/dash-table/pull/711) Added R examples to package help
