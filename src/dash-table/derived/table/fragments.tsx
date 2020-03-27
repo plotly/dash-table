@@ -2,7 +2,6 @@ import * as R from 'ramda';
 import React from 'react';
 import { memoizeOneFactory } from 'core/memoizer';
 import isNil from 'ramda/es/isNil';
-import CellInput from 'dash-table/components/CellInput';
 
 interface IAccumulator {
     cells: number;
@@ -24,20 +23,7 @@ function renderFragment(cells: any[][] | null, offset: number = 0) {
 const getHiddenCell = (cell: JSX.Element) => React.cloneElement(cell, {
     ...cell.props,
     className: cell.props.className ? `${cell.props.className} phantom-cell` : 'phantom-cell'
-}, cell.type === 'th' || cell.type === 'td' ?
-    null :
-    (
-        cell.props.children &&
-        cell.props.children.length &&
-        cell.props.children[0].type === CellInput &&
-        cell.props.children[0].props.applyFocus
-    ) ?
-        React.cloneElement(cell.props.children[0], {
-            ...cell.props.children[0].props,
-            applyFocus: false
-        }) :
-        cell.props.children
-);
+}, cell.type === 'th' || cell.type === 'td' ? null : cell.props.children);
 
 const getFixedColSpan = (cell: JSX.Element, maxColSpan: number) => React.cloneElement(cell, {
     ...cell.props,
