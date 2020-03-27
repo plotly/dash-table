@@ -235,3 +235,25 @@ def test_tbcp008_copy_paste_between_tables_with_hidden_columns(test):
                 target.cell(row + 10, col).get_text()
                 == target.cell(row, col).get_text()
             )
+
+
+def test_tbcp009_copy_paste_to_external_element(test):
+    app = get_app()
+
+    new_layout = html.Div([html.Textarea(id="clipboard-content"), app.layout])
+
+    app.layout = new_layout
+
+    test.start_server(app)
+
+    target = test.table("table")
+    with test.hold(Keys.SHIFT):
+        target.cell(0, 0).click()
+        target.cell(2, 1).click()
+    test.copy()
+
+    target.cell(2, 2).click()
+    test.paste()
+    test.driver.find_element_by_id("clipboard-content").click()
+
+    test.paste()
