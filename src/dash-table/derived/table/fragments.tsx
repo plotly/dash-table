@@ -24,7 +24,7 @@ function renderFragment(cells: any[][] | null, offset: number = 0) {
 const getHiddenCell = (cell: JSX.Element) => React.cloneElement(cell, {
     ...cell.props,
     className: cell.props.className ? `${cell.props.className} phantom-cell` : 'phantom-cell'
-}, cell.type !== 'th' && cell.type !== 'td' ?
+}, cell.type === 'th' || cell.type === 'td' ?
     null :
     (
         cell.props.children &&
