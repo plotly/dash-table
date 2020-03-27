@@ -11,7 +11,7 @@ const OPS_VARIANTS: ITest[] = [
     { name: 'fixed rows', props: { fixed_rows: { headers: true }, row_deletable: true, row_selectable: SortMode.Single } },
     { name: 'fixed columns & rows', props: { fixed_columns: { headers: true }, fixed_rows: { headers: true }, row_deletable: true, row_selectable: SortMode.Single } },
     { name: 'fixed columns & rows inside fragments', props: { fixed_columns: { headers: true, data: 1 }, fixed_rows: { headers: true, data: 1 }, row_deletable: true, row_selectable: SortMode.Single } },
-    { name: 'fixed columns & rows inside fragments (no ops)', props: { fixed_columns: { headers: true, data: 1 }, fixed_rows: { headers: true, data: 1 } }
+    { name: 'fixed columns & rows inside fragments (no ops)', props: { fixed_columns: { headers: true, data: 1 }, fixed_rows: { headers: true, data: 1 } } }
 ];
 
 interface ITest {
