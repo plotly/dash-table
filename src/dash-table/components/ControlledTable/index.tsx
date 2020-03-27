@@ -230,6 +230,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
     handleResize = (force: boolean = false) => {
         const {
             fixed_columns,
+            fixed_rows,
             forcedResizeOnly,
             setState
         } = this.props;
@@ -267,6 +268,11 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         });
 
         if (fixed_columns) {
+            const r1c0Table = r1c0.querySelector('table') as HTMLElement;
+            const r1c1Table = r1c0.querySelector('table') as HTMLElement;
+
+            r1c0Table.style.width = getComputedStyle(r1c1Table).width;
+
             const lastVisibleTd = r1c0.querySelector(`tr:first-of-type > *:nth-of-type(${fixed_columns})`);
 
             let it = 0;
@@ -312,21 +318,31 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             } while (true);
         }
 
-        const r1c0CellWidths = Array.from(
-            r1c0.querySelectorAll('tr:first-of-type > *')
-        ).map(c => c.getBoundingClientRect().width);
+        if (fixed_columns || fixed_rows) {
+            const r1c0CellWidths = Array.from(
+                r1c0.querySelectorAll('tr:first-of-type > *')
+            ).map(c => c.getBoundingClientRect().width);
 
-        const r1c1CellWidths = Array.from(
-            r1c1.querySelectorAll('tr:first-of-type > *')
-        ).map(c => c.getBoundingClientRect().width);
+            const r1c1CellWidths = Array.from(
+                r1c1.querySelectorAll('tr:first-of-type > *')
+            ).map(c => c.getBoundingClientRect().width);
 
-        Array.from<HTMLElement>(
-            r0c0.querySelectorAll('tr:last-of-type > *')
-        ).forEach((c, i) => this.setCellWidth(c, r1c0CellWidths[i]));
+            Array.from<HTMLElement>(
+                r0c0.querySelectorAll('tr:first-of-type > *')
+            ).forEach((c, i) => this.setCellWidth(c, r1c0CellWidths[i]));
 
-        Array.from<HTMLElement>(
-            r0c1.querySelectorAll('tr:last-of-type > *')
-        ).forEach((c, i) => this.setCellWidth(c, r1c1CellWidths[i]));
+            Array.from<HTMLElement>(
+                r0c0.querySelectorAll('tr:last-of-type > *')
+            ).forEach((c, i) => this.setCellWidth(c, r1c0CellWidths[i]));
+
+            Array.from<HTMLElement>(
+                r0c1.querySelectorAll('tr:first-of-type > *')
+            ).forEach((c, i) => this.setCellWidth(c, r1c1CellWidths[i]));
+
+            Array.from<HTMLElement>(
+                r0c1.querySelectorAll('tr:last-of-type > *')
+            ).forEach((c, i) => this.setCellWidth(c, r1c1CellWidths[i]));
+        }
     }
 
     get $el() {
