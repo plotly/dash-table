@@ -29,8 +29,8 @@ const getHiddenCell = (cell: JSX.Element) => React.cloneElement(cell, {
     (
         cell.props.children &&
         cell.props.children.length &&
-        cell.props.children[0].props.applyFocus &&
-        cell.props.children[0].type === CellInput
+        cell.props.children[0].type === CellInput &&
+        cell.props.children[0].props.applyFocus
     ) ?
         React.cloneElement(cell.props.children[0], {
             ...cell.props.children[0].props,
