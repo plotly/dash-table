@@ -10,7 +10,7 @@ interface IAccumulator {
 
 function renderFragment(cells: any[][] | null, offset: number = 0) {
     return cells ?
-        (<table tabIndex={-1}>
+        (<table className='cell-table' tabIndex={-1}>
             <tbody>
                 {cells.map(
                     (row, idx) => <tr key={`row-${idx + offset}`}>{row}</tr>)
