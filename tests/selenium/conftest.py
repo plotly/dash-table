@@ -96,6 +96,11 @@ class DataTableCellFacade(object):
 
         return "focused" in input.get_attribute("class").split(" ")
 
+    def is_selected(self):
+        cell = self.get()
+
+        return "cell--selected" in cell.get_attribute("class").split(" ")
+
     def is_focused(self):
         cell = self.get()
 

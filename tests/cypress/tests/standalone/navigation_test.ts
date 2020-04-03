@@ -2,11 +2,9 @@ import DashTable from 'cypress/DashTable';
 import Key from 'cypress/Key';
 
 import { BasicModes, AppMode } from 'demo/AppMode';
-BasicModes.push(AppMode.Markdown);
-BasicModes.push(AppMode.MixedMarkdown);
 
-Object.values(BasicModes).forEach(mode => {
-    describe(`navigate, mode=${mode}`, () => {
+Object.values([...BasicModes, AppMode.Markdown, AppMode.MixedMarkdown]).forEach(mode => {
+    describe(`navigate-1, mode=${mode}`, () => {
         beforeEach(() => {
             cy.visit(`http://localhost:8080?mode=${mode}`);
             DashTable.toggleScroll(false);
@@ -24,6 +22,35 @@ Object.values(BasicModes).forEach(mode => {
             });
         });
 
+        describe('with mouse', () => {
+            beforeEach(() => {
+                DashTable.clickCell(3, 1);
+            });
+
+            it('can select self', () => {
+                DashTable.clickCell(3, 1);
+                DashTable.getCell(3, 1).should('have.class', 'focused');
+            });
+
+            it('can select other', () => {
+                DashTable.clickCell(4, 2);
+                DashTable.getCell(4, 2).should('have.class', 'focused');
+                DashTable.getCell(3, 1).should('not.have.class', 'focused');
+            });
+
+            it('can select a cell and scroll it out of the viewport', () => {
+                DashTable.toggleScroll(true);
+                DashTable.clickCell(4, 2);
+                DashTable.scrollToBottom();
+                DashTable.getCellInLastRowOfColumn(3).click();
+                DashTable.getCell(4, 2).should('not.have.class', 'focused');
+            });
+        });
+    });
+});
+
+Object.values(BasicModes).forEach(mode => {
+    describe(`navigate-2, mode=${mode}`, () => {
         describe('with keyboard', () => {
             beforeEach(() => {
                 DashTable.clickCell(3, 1);
@@ -92,41 +119,6 @@ Object.values(BasicModes).forEach(mode => {
                 }
                 DashTable.focusedType(Key.ArrowRight);
                 DashTable.getCellFromDataDash(28, 2).should('have.class', 'focused');
-            });
-            if (mode === AppMode.MixedMarkdown) {
-                it('can navigate between md and non md cells', () => {
-                    DashTable.clickCell(0, 0);
-                    DashTable.focusedType(Key.ArrowRight);
-                    for (let i = 0; i < 5; i++) {
-                        DashTable.focusedType(Key.ArrowDown);
-                    }
-                    DashTable.getCell(5, 1).should('have.class', 'focused');
-                });
-            }
-        });
-
-        describe('with mouse', () => {
-            beforeEach(() => {
-                DashTable.clickCell(3, 1);
-            });
-
-            it('can select self', () => {
-                DashTable.clickCell(3, 1);
-                DashTable.getCell(3, 1).should('have.class', 'focused');
-            });
-
-            it('can select other', () => {
-                DashTable.clickCell(4, 2);
-                DashTable.getCell(4, 2).should('have.class', 'focused');
-                DashTable.getCell(3, 1).should('not.have.class', 'focused');
-            });
-
-            it('can select a cell and scroll it out of the viewport', () => {
-                DashTable.toggleScroll(true);
-                DashTable.clickCell(4, 2);
-                DashTable.scrollToBottom();
-                DashTable.getCellInLastRowOfColumn(3).click();
-                DashTable.getCell(4, 2).should('not.have.class', 'focused');
             });
         });
     });
