@@ -19,28 +19,29 @@ const variants: ITest[] = [
     {
         name: '',
         props: {
+            row_deletable: true,
             style_table: { maxWidth: '1000px', minWidth: '1000px', width: '1000px' }
         }
     },
     {
-        name: ': fixed_columns (1 data)',
+        name: ': fixed_columns',
         props: {
-            fixed_columns: { headers: true, data: 1 },
+            fixed_columns: { headers: true },
             style_table: { maxWidth: '1000px', minWidth: '1000px', width: '1000px' }
         }
     },
     {
-        name: ': fixed_rows (1 data)',
+        name: ': fixed_rows',
         props: {
-            fixed_rows: { headers: true, data: 1 },
+            fixed_rows: { headers: true },
             style_table: { maxWidth: '1000px', minWidth: '1000px', width: '1000px' }
         }
     },
     {
-        name: ': fixed_columns & fixed_rows (1 data)',
+        name: ': fixed_columns & fixed_rows',
         props: {
-            fixed_columns: { headers: true, data: 1 },
-            fixed_rows: { headers: true, data: 1 },
+            fixed_columns: { headers: true },
+            fixed_rows: { headers: true },
             style_table: { maxWidth: '1000px', minWidth: '1000px', width: '1000px' }
         }
     }
