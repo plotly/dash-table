@@ -51,6 +51,11 @@ Object.values([...BasicModes, AppMode.Markdown, AppMode.MixedMarkdown]).forEach(
 
 Object.values(BasicModes).forEach(mode => {
     describe(`navigate-2, mode=${mode}`, () => {
+        beforeEach(() => {
+            cy.visit(`http://localhost:8080?mode=${mode}`);
+            DashTable.toggleScroll(false);
+        });
+
         describe('with keyboard', () => {
             beforeEach(() => {
                 DashTable.clickCell(3, 1);
