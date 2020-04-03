@@ -1,5 +1,4 @@
 import DOM from './DOM';
-import { dom } from '@fortawesome/fontawesome-svg-core';
 
 const READY = `.dash-spreadsheet:not(.dash-loading)`;
 const LOADING = `.dash-spreadsheet.dash-loading`;
