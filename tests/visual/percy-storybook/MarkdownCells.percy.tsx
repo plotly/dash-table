@@ -26,6 +26,7 @@ const variants: ITest[] = [
     {
         name: ': fixed_columns',
         props: {
+            row_deletable: true,
             fixed_columns: { headers: true },
             style_table: { maxWidth: '1000px', minWidth: '1000px', width: '1000px' }
         }
@@ -33,6 +34,7 @@ const variants: ITest[] = [
     {
         name: ': fixed_rows',
         props: {
+            row_deletable: true,
             fixed_rows: { headers: true },
             style_table: { maxWidth: '1000px', minWidth: '1000px', width: '1000px' }
         }
@@ -40,6 +42,7 @@ const variants: ITest[] = [
     {
         name: ': fixed_columns & fixed_rows',
         props: {
+            row_deletable: true,
             fixed_columns: { headers: true },
             fixed_rows: { headers: true },
             style_table: { maxWidth: '1000px', minWidth: '1000px', width: '1000px' }
