@@ -292,13 +292,38 @@
                 }
             }
 
+            &:not(.dash-empty-01) {
+        		.cell-0-0,
+		        .cell-1-0 {
+                    tr {
+                        td, th {
+                            &:last-of-type {
+                                border-right: none !important;
+                            }
+                        }
+                    }
+	    	    }
+            }
+
             .cell-0-0 {
                 overflow: hidden;
             }
 
-            td, th {
-                &.phantom-cell {
-                    border-color: transparent !important;
+            .cell-0-0,
+            .cell-1-0 {
+                td, th {
+                    &.phantom-cell {
+                        border-color: transparent !important;
+                    }
+                }
+            }
+
+            .cell-0-1,
+            .cell-1-1 {
+                td, th {
+                    &.phantom-cell {
+                        border-color: transparent inherit transparent transparent !important;
+                    }
                 }
             }
 
