@@ -31,9 +31,9 @@ Object.values(BasicModes).forEach(mode => {
 
             it('can navigate 9-10 selected cells', () => {
                 DashTable.clickCell(9, 1);
-                DashTable.focusedType(Key.Shift, { release: false, force: true });
+                DashTable.focusedType(Key.Shift, { release: false });
                 DashTable.clickCell(10, 1);
-                DashTable.focusedType(Key.Shift, { release: false, force: true });
+                DashTable.focusedType(Key.Shift, { release: false });
                 DashTable.clickCell(10, 2);
 
                 for (let row = 9; row <= 10; ++row) {
