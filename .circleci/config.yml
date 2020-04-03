@@ -72,8 +72,6 @@ jobs:
             - run:
                 name: Run tests
                 command: |
-                    rm -rf node_modules/cypress
-                    npm i cypress@3.4.1
                     npm run test.standalone
 
 
