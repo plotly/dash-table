@@ -143,6 +143,14 @@ variants.forEach(variant => {
                             'This table has two rows | no',
                             'This is an example of tableception | yes'].join('\n'),
                         b: 'simple two-column table'
+                    },
+                    {
+                        a: ['Statement | Is it true?',
+                            '--- | ---',
+                            'This page has two tables | yes',
+                            'This table has two rows | no',
+                            'This is an example of tableception | yes'].join('\n'),
+                        b: 'simple two-column table'
                     }
                 ]}
                 columns={columnFormats}
