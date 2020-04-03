@@ -28,6 +28,21 @@ const variants: ITest[] = [
             fixed_columns: { headers: true, data: 1 },
             style_table: { maxWidth: '1000px', minWidth: '1000px', width: '1000px' }
         }
+    },
+    {
+        name: ': fixed_rows (1 data)',
+        props: {
+            fixed_rows: { headers: true, data: 1 },
+            style_table: { maxWidth: '1000px', minWidth: '1000px', width: '1000px' }
+        }
+    },
+    {
+        name: ': fixed_columns & fixed_rows (1 data)',
+        props: {
+            fixed_columns: { headers: true, data: 1 },
+            fixed_rows: { headers: true, data: 1 },
+            style_table: { maxWidth: '1000px', minWidth: '1000px', width: '1000px' }
+        }
     }
 ];
 
