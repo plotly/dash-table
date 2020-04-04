@@ -955,6 +955,11 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         cell.style.maxWidth = `${width}px`;
         cell.style.boxSizing = 'border-box';
 
+        /**
+         * Some browsers handle `th` and `td` size inconsistently.
+         * Checking the size delta and adjusting for it (different handling of padding and borders)
+         * allows the table to make sure all sections are correctly aligned.
+         */
         const delta = cell.getBoundingClientRect().width - width;
         if (delta) {
             cell.style.width = `${width - delta}px`;
