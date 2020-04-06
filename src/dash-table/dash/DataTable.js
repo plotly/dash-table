@@ -1062,7 +1062,7 @@ export const propTypes = {
      */
     style_cell_conditional: PropTypes.arrayOf(PropTypes.shape({
         if: PropTypes.exact({
-            column_id: PropTypes.string,
+            column_id: PropTypes.oneOf([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
             column_type: PropTypes.oneOf(['any', 'numeric', 'text', 'datetime'])
         })
     })),
@@ -1073,12 +1073,13 @@ export const propTypes = {
      */
     style_data_conditional: PropTypes.arrayOf(PropTypes.shape({
         if: PropTypes.exact({
-            column_id: PropTypes.string,
+            column_id: PropTypes.oneOf([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
             column_type: PropTypes.oneOf(['any', 'numeric', 'text', 'datetime']),
             filter_query: PropTypes.string,
             row_index: PropTypes.oneOfType([
                 PropTypes.number,
-                PropTypes.oneOf(['odd', 'even'])
+                PropTypes.oneOf(['odd', 'even']),
+                PropTypes.arrayOf(PropTypes.number)
             ]),
             column_editable: PropTypes.bool
         })
@@ -1090,7 +1091,7 @@ export const propTypes = {
      */
     style_filter_conditional: PropTypes.arrayOf(PropTypes.shape({
         if: PropTypes.exact({
-            column_id: PropTypes.string,
+            column_id: PropTypes.oneOf([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
             column_type: PropTypes.oneOf(['any', 'numeric', 'text', 'datetime']),
             column_editable: PropTypes.bool
         })
@@ -1102,10 +1103,11 @@ export const propTypes = {
      */
     style_header_conditional: PropTypes.arrayOf(PropTypes.shape({
         if: PropTypes.exact({
-            column_id: PropTypes.string,
+            column_id: PropTypes.oneOf([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
             column_type: PropTypes.oneOf(['any', 'numeric', 'text', 'datetime']),
             header_index: PropTypes.oneOfType([
                 PropTypes.number,
+                PropTypes.arrayOf(PropTypes.number),
                 PropTypes.oneOf(['odd', 'even'])
             ]),
             column_editable: PropTypes.bool

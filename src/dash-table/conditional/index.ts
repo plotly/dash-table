@@ -13,11 +13,11 @@ export interface IIndexedHeaderElement {
 }
 
 export interface IIndexedRowElement {
-    row_index?: number | 'odd' | 'even';
+    row_index?: number[] | number | 'odd' | 'even';
 }
 
 export interface INamedElement {
-    column_id?: ColumnId;
+    column_id?: ColumnId[] | ColumnId;
 }
 
 export interface ITypedElement {
@@ -38,8 +38,12 @@ function ifAstFilter(ast: QuerySyntaxTree, datum: Datum) {
 }
 
 export function ifColumnId(condition: INamedElement | undefined, columnId: ColumnId) {
-    return !condition ||
-        condition.column_id === undefined ||
+    if (!condition || condition.column_id === undefined) {
+        return true;
+    }
+
+    return Array.isArray(condition.column_id) ?
+        R.contains(columnId, condition.column_id) :
         condition.column_id === columnId;
 }
 
@@ -56,9 +60,11 @@ export function ifRowIndex(condition: IIndexedRowElement | undefined, rowIndex: 
     }
 
     const rowCondition = condition.row_index;
-    return typeof rowCondition === 'number' ?
-        rowIndex === rowCondition :
-        rowCondition === 'odd' ? rowIndex % 2 === 1 : rowIndex % 2 === 0;
+    return typeof rowCondition === 'string' ?
+        rowCondition === 'odd' ? rowIndex % 2 === 1 : rowIndex % 2 === 0 :
+        Array.isArray(rowCondition) ?
+            R.contains(rowIndex, rowCondition) :
+            rowIndex === rowCondition;
 }
 
 export function ifHeaderIndex(condition: IIndexedHeaderElement | undefined, headerIndex: number) {
@@ -68,9 +74,11 @@ export function ifHeaderIndex(condition: IIndexedHeaderElement | undefined, head
     }
 
     const headerCondition = condition.header_index;
-    return typeof headerCondition === 'number' ?
-        headerIndex === headerCondition :
-        headerCondition === 'odd' ? headerIndex % 2 === 1 : headerIndex % 2 === 0;
+    return typeof headerCondition === 'string' ?
+        headerCondition === 'odd' ? headerIndex % 2 === 1 : headerIndex % 2 === 0 :
+        Array.isArray(headerCondition) ?
+            R.contains(headerIndex, headerCondition) :
+            headerIndex === headerCondition;
 }
 
 export function ifFilter(condition: IConditionalElement | undefined, datum: Datum) {

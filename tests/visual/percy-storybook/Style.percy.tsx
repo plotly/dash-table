@@ -24,6 +24,20 @@ for (let i = 0; i < 6; ++i) {
     });
 }
 
+const DEFAULT_TABLE = {
+    data: [
+        { a: 1, b: 2, c: '3', d: '4' },
+        { a: 11, b: 22, c: '33', d: '44' },
+        { a: 111, b: 222, c: '333', d: '444' }
+    ],
+    columns: [
+        { id: 'a', name: 'A', type: ColumnType.Any },
+        { id: 'b', name: 'B', type: ColumnType.Text },
+        { id: 'c', name: 'C', type: ColumnType.Numeric },
+        { id: 'd', name: 'D' }
+    ]
+};
+
 storiesOf('DashTable/Style type condition', module)
     .add('with 1 column', () => (<DataTable
         setProps={setProps}
@@ -374,4 +388,66 @@ storiesOf('DashTable/Style type condition', module)
             current_page: 0,
             page_size: 10
         }}
+    />))
+    .add('data column_id array', () => (<DataTable
+        {...DEFAULT_TABLE}
+        id='data-column-id-array'
+        style_data_conditional={[{
+            if: {
+                column_id: ['a', 'b', 'd']
+            },
+            backgroundColor: 'MediumPurple'
+        }]}
+    />))
+    .add('data row_index array', () => (<DataTable
+        {...DEFAULT_TABLE}
+        id='data-column-id-array'
+        style_data_conditional={[{
+            if: {
+                row_index: [0, 2]
+            },
+            backgroundColor: 'MediumPurple'
+        }]}
+    />))
+    .add('cell column_id array', () => (<DataTable
+        {...DEFAULT_TABLE}
+        id='data-column-id-array'
+        style_cell_conditional={[{
+            if: {
+                column_id: ['a', 'b', 'd']
+            },
+            backgroundColor: 'MediumPurple'
+        }]}
+    />))
+    .add('filter column_id array', () => (<DataTable
+        {...DEFAULT_TABLE}
+        id='data-column-id-array'
+        filter_action='native'
+        style_filter_conditional={[{
+            if: {
+                column_id: ['a', 'b', 'd']
+            },
+            backgroundColor: 'MediumPurple'
+        }]}
+    />))
+    .add('header column_id array', () => (<DataTable
+        {...DEFAULT_TABLE}
+        id='data-column-id-array'
+        style_header_conditional={[{
+            if: {
+                column_id: ['a', 'b', 'd']
+            },
+            backgroundColor: 'MediumPurple'
+        }]}
+    />))
+    .add('header row_index array', () => (<DataTable
+        {...DEFAULT_TABLE}
+        columns={DEFAULT_TABLE.columns.map(c => ({ ...c, name: [c.name, c.name, c.name, c.name] }))}
+        id='data-column-id-array'
+        style_header_conditional={[{
+            if: {
+                row_index: [1, 3]
+            },
+            backgroundColor: 'MediumPurple'
+        }]}
     />));
