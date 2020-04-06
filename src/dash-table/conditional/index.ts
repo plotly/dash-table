@@ -125,7 +125,6 @@ export const matchesDataCell = (
 ));
 
 export const matchesFilterCell = (column: IColumn): Filter<IConvertedStyle> => R.filter<IConvertedStyle>((style =>
-    !style.checksActive() &&
     style.matchesColumn(column)
 ));
 
