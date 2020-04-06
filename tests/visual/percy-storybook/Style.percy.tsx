@@ -450,4 +450,96 @@ storiesOf('DashTable/Style type condition', module)
             },
             backgroundColor: 'MediumPurple'
         }]}
+    />))
+    .add('active styling', () => (<DataTable
+        {...DEFAULT_TABLE}
+        id='active-styling'
+        style_data_conditional={[{
+            if: {
+                is_active: true
+            },
+            backgroundColor: 'lightblue',
+            border: '1px solid blue'
+        }]}
+        active_cell={{ row: 1, column: 1 }}
+        selected_cells={[
+            { row: 1, column: 1, column_id: 'b' }
+        ]}
+    />))
+    .add('selected styling (not applied to active)', () => (<DataTable
+        {...DEFAULT_TABLE}
+        id='data-column-id-array'
+        style_data_conditional={[{
+            if: {
+                is_selected: true
+            },
+            backgroundColor: 'lightblue',
+            border: '1px solid blue'
+        }]}
+        selected_cells={[
+            { row: 1, column: 1, column_id: 'b' },
+            { row: 1, column: 2, column_id: 'c' },
+            { row: 2, column: 1, column_id: 'b' },
+            { row: 2, column: 2, column_id: 'c' }]}
+        active_cell={{ row: 1, column: 1 }}
+    />))
+    .add('selected styling + active styling', () => (<DataTable
+        {...DEFAULT_TABLE}
+        id='data-column-id-array'
+        style_data_conditional={[
+            {
+                if: {
+                    is_selected: true
+                },
+                backgroundColor: 'lightblue',
+                border: '1px solid blue'
+            },
+            {
+                if: {
+                    is_active: true
+                },
+                backgroundColor: 'black',
+                color: 'white',
+                border: '1px solid white'
+            }
+        ]}
+        selected_cells={[
+            { row: 1, column: 1, column_id: 'b' },
+            { row: 1, column: 2, column_id: 'c' },
+            { row: 2, column: 1, column_id: 'b' },
+            { row: 2, column: 2, column_id: 'c' }]}
+        active_cell={{ row: 1, column: 1 }}
+    />))
+    .add('inactive style applied to all but active', () => (<DataTable
+        {...DEFAULT_TABLE}
+        id='data-column-id-array'
+        style_data_conditional={[{
+            if: {
+                is_active: false
+            },
+            backgroundColor: 'lightblue',
+            border: '1px solid blue'
+        }]}
+        active_cell={{ row: 1, column: 1 }}
+        selected_cells={[
+            { row: 1, column: 1, column_id: 'b' }
+        ]}
+    />))
+    .add('unselected style applied to all but active', () => (<DataTable
+        {...DEFAULT_TABLE}
+        id='data-column-id-array'
+        style_data_conditional={[{
+            if: {
+                is_selected: false
+            },
+            backgroundColor: 'lightblue',
+            border: '1px solid blue'
+        }]}
+        active_cell={{ row: 1, column: 1 }}
+        selected_cells={[
+            { row: 1, column: 1, column_id: 'b' }
+        ]}
     />));
+
+
+

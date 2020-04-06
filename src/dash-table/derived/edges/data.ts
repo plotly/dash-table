@@ -1,3 +1,5 @@
+import * as R from 'ramda';
+
 import Environment from 'core/environment';
 import { memoizeOneFactory } from 'core/memoizer';
 
@@ -5,20 +7,22 @@ import {
     IViewportOffset,
     Columns,
     Data,
-    ICellCoordinates
+    ICellCoordinates,
+    SelectedCells
 } from 'dash-table/components/Table/props';
 
+import isActiveCell from 'dash-table/derived/cell/isActive';
+
 import { IConvertedStyle } from '../style';
-import { EdgesMatrices } from './type';
+import { EdgesMatrices, BorderStyle } from './type';
 import { getDataCellEdges } from '.';
 import { traverse2 } from 'core/math/matrixZipMap';
 
-export default memoizeOneFactory((
+const partialGetter = (
     columns: Columns,
     styles: IConvertedStyle[],
     data: Data,
     offset: IViewportOffset,
-    active_cell: ICellCoordinates | undefined,
     listViewStyle: boolean
 ) => {
     if (data.length === 0 || columns.length === 0) {
@@ -30,17 +34,57 @@ export default memoizeOneFactory((
     traverse2(
         data,
         columns,
-        (datum, column, i, j) => edges.setEdges(i, j, getDataCellEdges(datum, i + offset.rows, column)(styles))
+        (datum, column, i, j) => edges.setEdges(i, j, getDataCellEdges(
+            datum,
+            i + offset.rows,
+            column,
+            false,
+            false
+        )(styles))
     );
 
-    if (active_cell) {
-        edges.setEdges(active_cell.row - offset.rows, active_cell.column - offset.columns, {
-            borderBottom: [Environment.activeEdge, Infinity],
-            borderLeft: [Environment.activeEdge, Infinity],
-            borderRight: [Environment.activeEdge, Infinity],
-            borderTop: [Environment.activeEdge, Infinity]
-        });
+    return edges;
+}
+
+const getter = (
+    baseline: EdgesMatrices | undefined,
+    columns: Columns,
+    styles: IConvertedStyle[],
+    data: Data,
+    offset: IViewportOffset,
+    activeCell: ICellCoordinates | undefined,
+    selectedCells: SelectedCells
+) => {
+    if (!baseline) {
+        return baseline;
     }
 
+    const edges = baseline.clone();
+
+    R.forEach(({ row: i, column: j }) => {
+        const active = isActiveCell(activeCell, i, j);
+        const priority = active ? Number.MAX_SAFE_INTEGER : Number.MAX_SAFE_INTEGER - 1;
+
+        const style: BorderStyle = {
+            borderBottom: [Environment.activeEdge, priority],
+            borderLeft: [Environment.activeEdge, priority],
+            borderRight: [Environment.activeEdge, priority],
+            borderTop: [Environment.activeEdge, priority],
+            ...getDataCellEdges(
+                data[i][j],
+                i + offset.rows,
+                columns[j],
+                active,
+                true,
+                priority
+            )(styles)
+        };
+
+        edges.setEdges(i, j, style);
+    }, selectedCells);
+
     return edges;
-});
+}
+
+export const derivedPartialDataEdges = memoizeOneFactory(partialGetter);
+export const derivedDataEdges = memoizeOneFactory(getter);

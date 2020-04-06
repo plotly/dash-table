@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Added
+- []() Improve conditional styling
+    - `style_data_conditional`: Add support for `row_index` and `column_id` array of values
+    - `style_header_conditional`: Add support for `header_index` and `column_id` array of values
+    - `style_filter_conditional`: Add support for `column_id` array of values
+    - `style_cell_conditional`: Add support for `column_id` array of values
+    - `style_data_conditional`: Add new conditions `is_active: bool` and `is_selected: bool` to customize selected and active cell styles
+
 ## [4.6.2] - 2020-04-01
 ### Changed
 - [#713](https://github.com/plotly/dash-table/pull/713) Update from React 16.8.6 to 16.13.0

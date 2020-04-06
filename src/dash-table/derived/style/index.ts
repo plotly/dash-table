@@ -24,7 +24,9 @@ import {
     IEditableElement,
     ifColumnId,
     ifColumnType,
-    ifEditable
+    ifEditable,
+    ifColumnActive,
+    IActiveElement
  } from 'dash-table/conditional';
 import { QuerySyntaxTree } from 'dash-table/syntax-tree';
 import { BORDER_PROPERTIES_AND_FRAGMENTS } from '../edges/type';
@@ -32,15 +34,17 @@ import { matchesDataCell, matchesDataOpCell, matchesFilterCell, getFilterOpStyle
 
 export interface IConvertedStyle {
     style: CSSProperties;
+    checksActive: () => boolean;
     checksColumn: () => boolean;
     checksRow: () => boolean;
     checksFilter: () => boolean;
+    matchesActive: (active: boolean, selected: boolean) => boolean;
     matchesColumn: (column: IColumn | undefined) => boolean;
     matchesRow: (index: number | undefined) => boolean;
     matchesFilter: (datum: Datum) => boolean;
 }
 
-type GenericIf = Partial<IConditionalElement & IIndexedHeaderElement & IIndexedRowElement & INamedElement & ITypedElement & IEditableElement>;
+type GenericIf = Partial<IActiveElement & IConditionalElement & IIndexedHeaderElement & IIndexedRowElement & INamedElement & ITypedElement & IEditableElement>;
 type GenericStyle = Style & Partial<{ if: GenericIf }>;
 
 function convertElement(style: GenericStyle): IConvertedStyle {
@@ -48,6 +52,10 @@ function convertElement(style: GenericStyle): IConvertedStyle {
     let ast: QuerySyntaxTree;
 
     return {
+        checksActive: () => !R.isNil(style.if) && (
+            !R.isNil(style.if.is_active) ||
+            !R.isNil(style.if.is_selected)
+        ),
         checksColumn: () => !R.isNil(style.if) && (
             !R.isNil(style.if.column_id) ||
             !R.isNil(style.if.column_type) ||
@@ -56,6 +64,8 @@ function convertElement(style: GenericStyle): IConvertedStyle {
         checksRow: () => !R.isNil(indexFilter),
         checksFilter: () => !R.isNil(style.if) && !R.isNil(style.if.filter_query),
 
+        matchesActive: (active: boolean, selected: boolean) =>
+            ifColumnActive(style.if, active, selected),
         matchesColumn: (column: IColumn | undefined) =>
             !style.if || (
                 !R.isNil(column) &&
@@ -139,7 +149,7 @@ export function resolveStyle(styles: IConvertedStyle[]): CSSProperties {
     return R.omit(BORDER_PROPERTIES_AND_FRAGMENTS, res);
 }
 
-export const getDataCellStyle = (datum: Datum, i: number, column: IColumn) => (styles: IConvertedStyle[]) => resolveStyle(matchesDataCell(datum, i, column)(styles));
+export const getDataCellStyle = (datum: Datum, i: number, column: IColumn, active: boolean, selected: boolean) => (styles: IConvertedStyle[]) => resolveStyle(matchesDataCell(datum, i, column, active, selected)(styles));
 export const getDataOpCellStyle = (datum: Datum, i: number) => (styles: IConvertedStyle[]) => resolveStyle(matchesDataOpCell(datum, i)(styles));
 export const getFilterCellStyle = (column: IColumn) => (styles: IConvertedStyle[]) => resolveStyle(matchesFilterCell(column)(styles));
 export const getFilterOpCellStyle = () => (styles: IConvertedStyle[]) => resolveStyle(getFilterOpStyles(styles));
