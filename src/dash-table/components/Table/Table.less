@@ -173,10 +173,10 @@
 	    &::placeholder {
 		color: black;
 	    }
-	    
+
 	    &:focus {
 		outline: none;
-		
+
 		&::placeholder {
 		    opacity: 0;
 		}
@@ -193,7 +193,7 @@
 
 	    &:hover {
 		color: hotpink;
-		
+
 		&:disabled {
 		    color: graytext
 		}
@@ -204,7 +204,7 @@
 	    }
 	}
     }
-    
+
     .dash-spreadsheet-container {
 	.reset-css();
 	display: flex;
@@ -365,20 +365,22 @@
 		}
 
 		.dash-cell-value {
-                    height: 100%;
-                    width: 100%;
+            height: 100%;
+            width: 100%;
+
+            &.unfocused::selection {
+			    background-color: transparent;
+            }
+
+            &.unfocused {
+			    caret-color: transparent;
+            }
 		}
 
 		input.dash-cell-value {
                     position: absolute;
                     left: 0;
                     top: 0;
-                    &.unfocused::selection {
-			background-color: transparent;
-                    }
-                    &.unfocused {
-			caret-color: transparent;
-                    }
 		}
 
 		.cell-value-shadow {
