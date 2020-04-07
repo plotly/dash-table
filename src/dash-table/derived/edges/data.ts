@@ -61,6 +61,10 @@ const getter = (
 
     const edges = baseline.clone();
 
+    const cells = selectedCells.length ?
+        selectedCells :
+        activeCell ? [activeCell] : [];
+
     R.forEach(({ row: i, column: j, column_id }) => {
         const iWithOffset = i - offset.rows;
         const jWithOffset = j - offset.columns;
@@ -88,7 +92,7 @@ const getter = (
         };
 
         edges.setEdges(iWithOffset, j, style);
-    }, selectedCells);
+    }, cells);
 
     return edges;
 }

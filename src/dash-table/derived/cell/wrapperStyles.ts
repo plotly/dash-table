@@ -32,6 +32,10 @@ const getter = (
 ) => {
     baseline = shallowClone(baseline);
 
+    const cells = selectedCells.length ?
+        selectedCells :
+        activeCell ? [activeCell] : [];
+
     R.forEach(({ row: i, column: j }) => {
         const iNoOffset = i - offset.rows;
         const jNoOffset = j - offset.columns;
@@ -48,7 +52,7 @@ const getter = (
         };
 
         baseline[iNoOffset][jNoOffset] = style;
-    }, selectedCells);
+    }, cells);
 
     return baseline;
 };
