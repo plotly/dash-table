@@ -4,7 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Fixed
-- [#731](https://github.com/plotly/dash-table/pull/731) Flag `data` and `columns` as required props
+- [#731](https://github.com/plotly/dash-table/pull/731) Fix a bug where `data=None` and `columns=None` caused the table to throw an error
 
 ## [4.6.2] - 2020-04-01
 ### Changed

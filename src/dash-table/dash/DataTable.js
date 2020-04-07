@@ -77,8 +77,6 @@ export const defaultProps = {
     tooltip_duration: 2000,
 
     column_selectable: false,
-    columns: [],
-    data: [],
     editable: false,
     export_columns: 'visible',
     export_format: 'none',
@@ -390,7 +388,7 @@ export const propTypes = {
          * Stay tuned by following [https://github.com/plotly/dash-table/issues/166](https://github.com/plotly/dash-table/issues/166)
          */
         type: PropTypes.oneOf(['any', 'numeric', 'text', 'datetime'])
-    })).isRequired,
+    })),
 
     /**
      * If true, headers are included when copying from the table to different
@@ -450,7 +448,7 @@ export const propTypes = {
      *      {'column-1': 8, 'column-2': 'boston', 'column-3': 'america'}
      * ]
      */
-    data: PropTypes.arrayOf(PropTypes.object).isRequired,
+    data: PropTypes.arrayOf(PropTypes.object),
 
     /**
      * The previous state of `data`. `data_previous`
