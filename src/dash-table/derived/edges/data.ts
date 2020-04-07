@@ -77,11 +77,15 @@ const getter = (
         const column_id = columns[jWithOffset].id;
         const priority = active ? Number.MAX_SAFE_INTEGER : Number.MAX_SAFE_INTEGER - 1;
 
-        const style: BorderStyle = {
+        const baseStyle: BorderStyle = active ? {
             borderBottom: [Environment.activeEdge, priority],
             borderLeft: [Environment.activeEdge, priority],
             borderRight: [Environment.activeEdge, priority],
-            borderTop: [Environment.activeEdge, priority],
+            borderTop: [Environment.activeEdge, priority]
+        } : {};
+
+        const style: BorderStyle = {
+            ...baseStyle,
             ...getDataCellEdges(
                 data[iWithOffset][column_id],
                 iWithOffset,
