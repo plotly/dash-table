@@ -36,6 +36,8 @@ const getter = (
         selectedCells :
         activeCell ? [activeCell] : [];
 
+    styles = styles.filter(style => style.checksActive());
+
     R.forEach(({ row: i, column: j }) => {
         const iNoOffset = i - offset.rows;
         const jNoOffset = j - offset.columns;
