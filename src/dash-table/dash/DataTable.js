@@ -390,7 +390,7 @@ export const propTypes = {
          * Stay tuned by following [https://github.com/plotly/dash-table/issues/166](https://github.com/plotly/dash-table/issues/166)
          */
         type: PropTypes.oneOf(['any', 'numeric', 'text', 'datetime'])
-    })),
+    })).isRequired,
 
     /**
      * If true, headers are included when copying from the table to different
@@ -450,7 +450,7 @@ export const propTypes = {
      *      {'column-1': 8, 'column-2': 'boston', 'column-3': 'america'}
      * ]
      */
-    data: PropTypes.arrayOf(PropTypes.object),
+    data: PropTypes.arrayOf(PropTypes.object).isRequired,
 
     /**
      * The previous state of `data`. `data_previous`
