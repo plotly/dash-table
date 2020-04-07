@@ -65,7 +65,8 @@ const getter = (
         selectedCells :
         activeCell ? [activeCell] : [];
 
-    styles = styles.filter(style => style.checksActive());
+    const activeStyles = styles.filter(style => style.checksActive());
+    const inactiveStyles = styles.filter(style => !style.checksActive());
 
     R.forEach(({ row: i, column: j }) => {
         const iWithOffset = i - offset.rows;
@@ -87,6 +88,14 @@ const getter = (
         } : {};
 
         const style: BorderStyle = {
+            ...getDataCellEdges(
+                data[iWithOffset][column_id],
+                iWithOffset,
+                columns[j],
+                active,
+                true,
+                priority
+            )(inactiveStyles),
             ...baseStyle,
             ...getDataCellEdges(
                 data[iWithOffset][column_id],
@@ -95,7 +104,7 @@ const getter = (
                 active,
                 true,
                 priority
-            )(styles)
+            )(activeStyles)
         };
 
         edges.setEdges(iWithOffset, j, style);
