@@ -65,7 +65,7 @@ const getter = (
         selectedCells :
         activeCell ? [activeCell] : [];
 
-    R.forEach(({ row: i, column: j, column_id }) => {
+    R.forEach(({ row: i, column: j }) => {
         const iWithOffset = i - offset.rows;
         const jWithOffset = j - offset.columns;
 
@@ -74,6 +74,7 @@ const getter = (
         }
 
         const active = isActiveCell(activeCell, i, j);
+        const column_id = columns[jWithOffset].id;
         const priority = active ? Number.MAX_SAFE_INTEGER : Number.MAX_SAFE_INTEGER - 1;
 
         const style: BorderStyle = {
