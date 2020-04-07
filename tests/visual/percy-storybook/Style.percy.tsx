@@ -462,9 +462,6 @@ storiesOf('DashTable/Style type condition', module)
             border: '1px solid blue'
         }]}
         active_cell={{ row: 1, column: 1 }}
-        selected_cells={[
-            { row: 1, column: 1, column_id: 'b' }
-        ]}
     />))
     .add('selected styling (not applied to active)', () => (<DataTable
         {...DEFAULT_TABLE}
@@ -521,9 +518,6 @@ storiesOf('DashTable/Style type condition', module)
             border: '1px solid blue'
         }]}
         active_cell={{ row: 1, column: 1 }}
-        selected_cells={[
-            { row: 1, column: 1, column_id: 'b' }
-        ]}
     />))
     .add('unselected style applied to all but active', () => (<DataTable
         {...DEFAULT_TABLE}
