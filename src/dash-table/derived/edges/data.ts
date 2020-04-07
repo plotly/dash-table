@@ -61,7 +61,14 @@ const getter = (
 
     const edges = baseline.clone();
 
-    R.forEach(({ row: i, column: j }) => {
+    R.forEach(({ row: i, column: j, column_id }) => {
+        const iWithOffset = i - offset.rows;
+        const jWithOffset = j - offset.columns;
+
+        if (iWithOffset < 0 || jWithOffset < 0 || data.length <= iWithOffset || data[iWithOffset].length <= jWithOffset) {
+            return;
+        }
+
         const active = isActiveCell(activeCell, i, j);
         const priority = active ? Number.MAX_SAFE_INTEGER : Number.MAX_SAFE_INTEGER - 1;
 
@@ -71,8 +78,8 @@ const getter = (
             borderRight: [Environment.activeEdge, priority],
             borderTop: [Environment.activeEdge, priority],
             ...getDataCellEdges(
-                data[i][j],
-                i + offset.rows,
+                data[iWithOffset][column_id],
+                iWithOffset,
                 columns[j],
                 active,
                 true,
@@ -80,7 +87,7 @@ const getter = (
             )(styles)
         };
 
-        edges.setEdges(i, j, style);
+        edges.setEdges(iWithOffset, j, style);
     }, selectedCells);
 
     return edges;

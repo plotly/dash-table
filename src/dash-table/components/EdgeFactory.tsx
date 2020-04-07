@@ -204,7 +204,7 @@ export default class EdgeFactory {
         style_filter_conditional: BasicFilters,
         style_header: Style,
         style_header_conditional: Headers,
-        data: Data,
+        virtualizedData: Data,
         offset: IViewportOffset
     ) => {
         const dataStyles = this.dataStyles(
@@ -233,7 +233,7 @@ export default class EdgeFactory {
         const partialDataEdges = this.getPartialDataEdges(
             visibleColumns,
             dataStyles,
-            data,
+            virtualizedData,
             offset,
             style_as_list_view
         )
@@ -242,7 +242,7 @@ export default class EdgeFactory {
             partialDataEdges,
             visibleColumns,
             dataStyles,
-            data,
+            virtualizedData,
             offset,
             active_cell,
             selected_cells
@@ -251,7 +251,7 @@ export default class EdgeFactory {
         let dataOpEdges = this.getDataOpEdges(
             operations,
             dataStyles,
-            data,
+            virtualizedData,
             offset,
             style_as_list_view
         );
