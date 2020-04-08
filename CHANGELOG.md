@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Fixed
+- [#732](https://github.com/plotly/dash-table/pull/732) Fix a bug where opening a dropdown scrolled
+the table down its last row
+
 ## [4.6.2] - 2020-04-01
 ### Changed
 - [#713](https://github.com/plotly/dash-table/pull/713) Update from React 16.8.6 to 16.13.0
