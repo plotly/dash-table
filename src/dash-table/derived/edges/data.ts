@@ -18,6 +18,9 @@ import { EdgesMatrices, BorderStyle } from './type';
 import { getDataCellEdges } from '.';
 import { traverse2 } from 'core/math/matrixZipMap';
 
+const ACTIVE_PRIORITY = Number.MAX_SAFE_INTEGER;
+const SELECTED_PRIORITY = Number.MAX_SAFE_INTEGER - 1;
+
 const partialGetter = (
     columns: Columns,
     styles: IConvertedStyle[],
@@ -65,8 +68,9 @@ const getter = (
         selectedCells :
         activeCell ? [activeCell] : [];
 
-    const activeStyles = styles.filter(style => style.checksActive());
-    const inactiveStyles = styles.filter(style => !style.checksActive());
+    const inactiveStyles = styles.filter(style => !style.checksState());
+    const selectedStyles = styles.filter(style => style.checksStateSelected());
+    const activeStyles = styles.filter(style => style.checksStateActive());
 
     R.forEach(({ row: i, column: j }) => {
         const iWithOffset = i - offset.rows;
@@ -78,14 +82,9 @@ const getter = (
 
         const active = isActiveCell(activeCell, i, j);
         const column_id = columns[jWithOffset].id;
-        const priority = active ? Number.MAX_SAFE_INTEGER : Number.MAX_SAFE_INTEGER - 1;
 
-        const baseStyle: BorderStyle = active ? {
-            borderBottom: [Environment.activeEdge, priority],
-            borderLeft: [Environment.activeEdge, priority],
-            borderRight: [Environment.activeEdge, priority],
-            borderTop: [Environment.activeEdge, priority]
-        } : {};
+        const priority = active ? ACTIVE_PRIORITY : SELECTED_PRIORITY;
+        const defaultEdge = active ? Environment.activeEdge : Environment.defaultEdge;
 
         const style: BorderStyle = {
             ...getDataCellEdges(
@@ -96,7 +95,20 @@ const getter = (
                 true,
                 priority
             )(inactiveStyles),
-            ...baseStyle,
+
+            borderBottom: [defaultEdge, priority],
+            borderLeft: [defaultEdge, priority],
+            borderRight: [defaultEdge, priority],
+            borderTop: [defaultEdge, priority],
+
+            ...getDataCellEdges(
+                data[iWithOffset][column_id],
+                iWithOffset,
+                columns[j],
+                active,
+                true,
+                priority
+            )(selectedStyles),
             ...getDataCellEdges(
                 data[iWithOffset][column_id],
                 iWithOffset,

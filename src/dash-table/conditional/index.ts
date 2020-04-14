@@ -4,11 +4,6 @@ import { ColumnId, Datum, ColumnType, IColumn } from 'dash-table/components/Tabl
 import { QuerySyntaxTree } from 'dash-table/syntax-tree';
 import { IConvertedStyle } from 'dash-table/derived/style';
 
-export interface IActiveElement {
-    is_active?: boolean;
-    is_selected?: boolean;
-}
-
 export interface IConditionalElement {
     filter_query?: string;
 }
@@ -25,6 +20,10 @@ export interface INamedElement {
     column_id?: ColumnId[] | ColumnId;
 }
 
+export interface IStateElement {
+    state?: 'active' | 'selected';
+}
+
 export interface ITypedElement {
     column_type?: ColumnType;
 }
@@ -34,7 +33,7 @@ export interface IEditableElement {
 }
 
 export type ConditionalBasicFilter = INamedElement & ITypedElement;
-export type ConditionalDataCell = IActiveElement & IConditionalElement & IIndexedRowElement & INamedElement & ITypedElement & IEditableElement;
+export type ConditionalDataCell = IConditionalElement & IIndexedRowElement & INamedElement & IStateElement & ITypedElement & IEditableElement;
 export type ConditionalCell = INamedElement & ITypedElement;
 export type ConditionalHeader = IIndexedHeaderElement & INamedElement & ITypedElement;
 
@@ -42,14 +41,12 @@ function ifAstFilter(ast: QuerySyntaxTree, datum: Datum) {
     return ast.isValid && ast.evaluate(datum);
 }
 
-export function ifColumnActive(condition: IActiveElement | undefined, active: boolean, selected: boolean) {
-    if (!condition) {
-        return true;
-    }
+export function ifColumnStateActive(condition: IStateElement | undefined, active: boolean) {
+    return condition?.state !== 'active' || active;
+}
 
-    // Apply active if active, apply selected if selected AND not active (active and selected styling don't overlap)
-    return (condition.is_active === undefined || active === condition.is_active) &&
-        (condition.is_selected === undefined || (selected === condition.is_selected && !active));
+export function ifColumnStateSelected(condition: IStateElement | undefined, selected: boolean) {
+    return condition?.state !== 'selected' || selected;
 }
 
 export function ifColumnId(condition: INamedElement | undefined, columnId: ColumnId) {
@@ -118,33 +115,38 @@ export const matchesDataCell = (
     active: boolean,
     selected: boolean
 ): Filter<IConvertedStyle> => R.filter<IConvertedStyle>((style =>
-    style.matchesActive(active, selected) &&
+    style.matchesActive(active) &&
+    style.matchesSelected(selected) &&
     style.matchesRow(i) &&
     style.matchesColumn(column) &&
     style.matchesFilter(datum)
 ));
 
 export const matchesFilterCell = (column: IColumn): Filter<IConvertedStyle> => R.filter<IConvertedStyle>((style =>
+    !style.checksState() &&
     style.matchesColumn(column)
 ));
 
 export const matchesHeaderCell = (i: number, column: IColumn): Filter<IConvertedStyle> => R.filter<IConvertedStyle>((style =>
+    !style.checksState() &&
     style.matchesRow(i) &&
     style.matchesColumn(column)
 ));
 
 export const matchesDataOpCell = (datum: Datum, i: number): Filter<IConvertedStyle> => R.filter<IConvertedStyle>((style =>
-    !style.checksActive() &&
+    !style.checksState() &&
     !style.checksColumn() &&
     style.matchesRow(i) &&
     style.matchesFilter(datum)
 ));
 
 export const getFilterOpStyles: Filter<IConvertedStyle> = R.filter<IConvertedStyle>((style =>
+    !style.checksState() &&
     !style.checksColumn()
 ));
 
 export const getHeaderOpStyles = (i: number): Filter<IConvertedStyle> => R.filter<IConvertedStyle>((style =>
     style.matchesRow(i) &&
+    !style.checksState() &&
     !style.checksColumn()
 ));

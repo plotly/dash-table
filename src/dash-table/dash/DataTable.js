@@ -1076,8 +1076,7 @@ export const propTypes = {
             column_id: PropTypes.oneOf([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
             column_type: PropTypes.oneOf(['any', 'numeric', 'text', 'datetime']),
             filter_query: PropTypes.string,
-            is_active: PropTypes.bool,
-            is_selected: PropTypes.bool,
+            state: PropTypes.oneOf(['active', 'selected']),
             row_index: PropTypes.oneOfType([
                 PropTypes.number,
                 PropTypes.oneOf(['odd', 'even']),

@@ -9,7 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
     - `style_header_conditional`: Add support for `header_index` and `column_id` array of values
     - `style_filter_conditional`: Add support for `column_id` array of values
     - `style_cell_conditional`: Add support for `column_id` array of values
-    - `style_data_conditional`: Add new conditions `is_active: bool` and `is_selected: bool` to customize selected and active cell styles
+    - `style_data_conditional`: Add new conditions `state: 'active'|'selected'` to customize selected and active cell styles
 
 ## [4.6.2] - 2020-04-01
 ### Changed

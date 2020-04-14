@@ -36,8 +36,9 @@ const getter = (
         selectedCells :
         activeCell ? [activeCell] : [];
 
-    const activeStyles = styles.filter(style => style.checksActive());
-    const inactiveStyles = styles.filter(style => !style.checksActive());
+    const inactiveStyles = styles.filter(style => !style.checksState());
+    const selectedStyles = styles.filter(style => style.checksStateSelected());
+    const activeStyles = styles.filter(style => style.checksStateActive());
 
     R.forEach(({ row: i, column: j }) => {
         const iNoOffset = i - offset.rows;
@@ -52,6 +53,7 @@ const getter = (
         const style = {
             ...getDataCellStyle(data[i], i + offset.rows, columns[j], active, true)(inactiveStyles),
             ...SELECTED_CELL_STYLE,
+            ...getDataCellStyle(data[i], i + offset.rows, columns[j], active, true)(selectedStyles),
             ...getDataCellStyle(data[i], i + offset.rows, columns[j], active, true)(activeStyles)
         }
 

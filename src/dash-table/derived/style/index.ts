@@ -25,8 +25,9 @@ import {
     ifColumnId,
     ifColumnType,
     ifEditable,
-    ifColumnActive,
-    IActiveElement
+    ifColumnStateActive,
+    IStateElement,
+    ifColumnStateSelected
  } from 'dash-table/conditional';
 import { QuerySyntaxTree } from 'dash-table/syntax-tree';
 import { BORDER_PROPERTIES_AND_FRAGMENTS } from '../edges/type';
@@ -34,17 +35,20 @@ import { matchesDataCell, matchesDataOpCell, matchesFilterCell, getFilterOpStyle
 
 export interface IConvertedStyle {
     style: CSSProperties;
-    checksActive: () => boolean;
     checksColumn: () => boolean;
     checksRow: () => boolean;
     checksFilter: () => boolean;
-    matchesActive: (active: boolean, selected: boolean) => boolean;
+    checksState: () => boolean;
+    checksStateActive: () => boolean;
+    checksStateSelected: () => boolean;
+    matchesActive: (active: boolean) => boolean;
     matchesColumn: (column: IColumn | undefined) => boolean;
-    matchesRow: (index: number | undefined) => boolean;
     matchesFilter: (datum: Datum) => boolean;
+    matchesRow: (index: number | undefined) => boolean;
+    matchesSelected: (selected: boolean) => boolean;
 }
 
-type GenericIf = Partial<IActiveElement & IConditionalElement & IIndexedHeaderElement & IIndexedRowElement & INamedElement & ITypedElement & IEditableElement>;
+type GenericIf = Partial<IStateElement & IConditionalElement & IIndexedHeaderElement & IIndexedRowElement & INamedElement & ITypedElement & IEditableElement>;
 type GenericStyle = Style & Partial<{ if: GenericIf }>;
 
 function convertElement(style: GenericStyle): IConvertedStyle {
@@ -52,20 +56,17 @@ function convertElement(style: GenericStyle): IConvertedStyle {
     let ast: QuerySyntaxTree;
 
     return {
-        checksActive: () => !R.isNil(style.if) && (
-            !R.isNil(style.if.is_active) ||
-            !R.isNil(style.if.is_selected)
-        ),
         checksColumn: () => !R.isNil(style.if) && (
             !R.isNil(style.if.column_id) ||
             !R.isNil(style.if.column_type) ||
             !R.isNil(style.if.column_editable)
         ),
-        checksRow: () => !R.isNil(indexFilter),
         checksFilter: () => !R.isNil(style.if) && !R.isNil(style.if.filter_query),
-
-        matchesActive: (active: boolean, selected: boolean) =>
-            ifColumnActive(style.if, active, selected),
+        checksRow: () => !R.isNil(indexFilter),
+        checksState: () => !R.isNil(style.if?.state),
+        checksStateActive: () => style.if?.state === 'active',
+        checksStateSelected: () => style.if?.state === 'selected',
+        matchesActive: (active: boolean) => ifColumnStateActive(style.if, active),
         matchesColumn: (column: IColumn | undefined) =>
             !style.if || (
                 !R.isNil(column) &&
@@ -73,16 +74,17 @@ function convertElement(style: GenericStyle): IConvertedStyle {
                 ifColumnType(style.if, column && column.type) &&
                 ifEditable (style.if, column && column.editable)
             ),
+        matchesFilter: (datum: Datum) =>
+            !style.if ||
+            style.if.filter_query === undefined ||
+            (ast = ast || new QuerySyntaxTree(style.if.filter_query)).evaluate(datum),
         matchesRow: (index: number | undefined) =>
             indexFilter === undefined ?
                 true :
                 typeof indexFilter === 'number' ?
                     index === indexFilter :
                     !R.isNil(index) && (indexFilter === 'odd' ? index % 2 === 1 : index % 2 === 0),
-        matchesFilter: (datum: Datum) =>
-            !style.if ||
-            style.if.filter_query === undefined ||
-            (ast = ast || new QuerySyntaxTree(style.if.filter_query)).evaluate(datum),
+        matchesSelected: (selected: boolean) => ifColumnStateSelected(style.if, selected),
         style: convertStyle(style)
     };
 }

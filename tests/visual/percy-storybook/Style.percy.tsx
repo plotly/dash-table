@@ -456,19 +456,19 @@ storiesOf('DashTable/Style type condition', module)
         id='active-styling'
         style_data_conditional={[{
             if: {
-                is_active: true
+                state: 'active'
             },
             backgroundColor: 'lightblue',
             border: '1px solid blue'
         }]}
         active_cell={{ row: 1, column: 1 }}
     />))
-    .add('selected styling (not applied to active)', () => (<DataTable
+    .add('selected styling (applied to active)', () => (<DataTable
         {...DEFAULT_TABLE}
         id='data-column-id-array'
         style_data_conditional={[{
             if: {
-                is_selected: true
+                state: 'selected'
             },
             backgroundColor: 'lightblue',
             border: '1px solid blue'
@@ -480,20 +480,20 @@ storiesOf('DashTable/Style type condition', module)
             { row: 2, column: 2, column_id: 'c' }]}
         active_cell={{ row: 1, column: 1 }}
     />))
-    .add('selected styling + active styling', () => (<DataTable
+    .add('active styling overrides selected', () => (<DataTable
         {...DEFAULT_TABLE}
         id='data-column-id-array'
         style_data_conditional={[
             {
                 if: {
-                    is_selected: true
+                    state: 'selected'
                 },
                 backgroundColor: 'lightblue',
                 border: '1px solid blue'
             },
             {
                 if: {
-                    is_active: true
+                    state: 'active'
                 },
                 backgroundColor: 'black',
                 color: 'white',
@@ -506,33 +506,6 @@ storiesOf('DashTable/Style type condition', module)
             { row: 2, column: 1, column_id: 'b' },
             { row: 2, column: 2, column_id: 'c' }]}
         active_cell={{ row: 1, column: 1 }}
-    />))
-    .add('inactive style applied to all but active', () => (<DataTable
-        {...DEFAULT_TABLE}
-        id='data-column-id-array'
-        style_data_conditional={[{
-            if: {
-                is_active: false
-            },
-            backgroundColor: 'lightblue',
-            border: '1px solid blue'
-        }]}
-        active_cell={{ row: 1, column: 1 }}
-    />))
-    .add('unselected style applied to all but active', () => (<DataTable
-        {...DEFAULT_TABLE}
-        id='data-column-id-array'
-        style_data_conditional={[{
-            if: {
-                is_selected: false
-            },
-            backgroundColor: 'lightblue',
-            border: '1px solid blue'
-        }]}
-        active_cell={{ row: 1, column: 1 }}
-        selected_cells={[
-            { row: 1, column: 1, column_id: 'b' }
-        ]}
     />));
 
 
