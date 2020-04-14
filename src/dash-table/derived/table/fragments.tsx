@@ -1,7 +1,6 @@
 import * as R from 'ramda';
 import React from 'react';
 import { memoizeOneFactory } from 'core/memoizer';
-import isNil from 'ramda/es/isNil';
 
 interface IAccumulator {
     cells: number;
@@ -68,7 +67,7 @@ export default memoizeOneFactory((
         }, cells) :
         null;
 
-    cells = isNil(fixedColumnCells) ?
+    cells = R.isNil(fixedColumnCells) ?
         cells :
         R.map(row => {
             const pivot = R.reduceWhile<JSX.Element, IAccumulator>(
