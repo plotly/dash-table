@@ -45,7 +45,7 @@ export default memoizeOneFactory((
     cells: JSX.Element[][],
     offset: number
 ): { grid: (JSX.Element | null)[][], empty: boolean[][] } => {
-    const getPivot = row => R.reduceWhile<JSX.Element, IAccumulator>(
+    const getPivot = (row: JSX.Element[]) => R.reduceWhile<JSX.Element, IAccumulator>(
         acc => acc.count < fixedColumns,
         (acc, cell) => {
             acc.cells++;
