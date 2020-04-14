@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Fixed
+- [#722](https://github.com/plotly/dash-table/pull/722) Fix a bug where row height is misaligned when using fixed_columns and/or fixed_rows
+- [#728](https://github.com/plotly/dash-table/pull/728) Fix copy/paste on readonly cells
 - [#732](https://github.com/plotly/dash-table/pull/732) Fix a bug where opening a dropdown scrolled
 the table down its last row
 
