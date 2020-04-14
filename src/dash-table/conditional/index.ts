@@ -58,7 +58,7 @@ export function ifColumnId(condition: INamedElement | undefined, columnId: Colum
     }
 
     return Array.isArray(condition.column_id) ?
-        R.contains(columnId, condition.column_id) :
+        R.includes(columnId, condition.column_id) :
         condition.column_id === columnId;
 }
 
@@ -78,7 +78,7 @@ export function ifRowIndex(condition: IIndexedRowElement | undefined, rowIndex: 
     return typeof rowCondition === 'string' ?
         rowCondition === 'odd' ? rowIndex % 2 === 1 : rowIndex % 2 === 0 :
         Array.isArray(rowCondition) ?
-            R.contains(rowIndex, rowCondition) :
+            R.includes(rowIndex, rowCondition) :
             rowIndex === rowCondition;
 }
 
@@ -92,7 +92,7 @@ export function ifHeaderIndex(condition: IIndexedHeaderElement | undefined, head
     return typeof headerCondition === 'string' ?
         headerCondition === 'odd' ? headerIndex % 2 === 1 : headerIndex % 2 === 0 :
         Array.isArray(headerCondition) ?
-            R.contains(headerIndex, headerCondition) :
+            R.includes(headerIndex, headerCondition) :
             headerIndex === headerCondition;
 }
 
