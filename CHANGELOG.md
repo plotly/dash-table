@@ -11,6 +11,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
     - `style_cell_conditional`: Add support for `column_id` array of values
     - `style_data_conditional`: Add new conditions `is_active: bool` and `is_selected: bool` to customize selected and active cell styles
 
+### Fixed
+- [#722](https://github.com/plotly/dash-table/pull/722) Fix a bug where row height is misaligned when using fixed_columns and/or fixed_rows
+- [#728](https://github.com/plotly/dash-table/pull/728) Fix copy/paste on readonly cells
+
 ## [4.6.2] - 2020-04-01
 ### Changed
 - [#713](https://github.com/plotly/dash-table/pull/713) Update from React 16.8.6 to 16.13.0
