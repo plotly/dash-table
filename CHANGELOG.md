@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Fixed
+- [#722](https://github.com/plotly/dash-table/pull/722) Fix a bug where row height is misaligned when using fixed_columns and/or fixed_rows
+- [#728](https://github.com/plotly/dash-table/pull/728) Fix copy/paste on readonly cells
 - [#731](https://github.com/plotly/dash-table/pull/731) Fix a bug where `data=None` and `columns=None` caused the table to throw an error
 
 ## [4.6.2] - 2020-04-01
