@@ -87,7 +87,7 @@ export function ifHeaderIndex(condition: IIndexedHeaderElement | undefined, head
 
     const headerCondition = condition.header_index;
     return typeof headerCondition === 'string' ?
-        headerCondition === 'odd' ? headerIndex % 2 === 1 : headerIndex % 2 === 0 :
+        headerIndex % 2 === (headerCondition === 'odd' ? 1 : 0) :
         Array.isArray(headerCondition) ?
             R.includes(headerIndex, headerCondition) :
             headerIndex === headerCondition;
