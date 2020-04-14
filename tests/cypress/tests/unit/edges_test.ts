@@ -2,14 +2,17 @@ import { derivedPartialDataEdges } from 'dash-table/derived/edges/data';
 import Environment from 'core/environment';
 
 const converter = {
-    checksActive: () => true,
+    checksState: () => true,
+    checksStateActive: () => true,
+    checksStateSelected: () => true,
     checksColumn: () => true,
     checksFilter: () => true,
     checksRow: () => true,
     matchesActive: () => true,
     matchesColumn: () => true,
     matchesFilter: () => true,
-    matchesRow: () => true
+    matchesRow: () => true,
+    matchesSelected: () => true
 };
 
 describe('data edges', () => {
