@@ -308,14 +308,10 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                 }
 
                 it++;
-
-                if (
-                    (Math.abs(currentWidth - lastWidth) < WIDTH_EPSILON && it % 2 === 0) ||
-                    it >= MAX_WIDTH_ITERATIONS
-                ) {
-                    break;
-                }
-            } while (true);
+            } while (
+                Math.abs(currentWidth - lastWidth) > WIDTH_EPSILON ||
+                it < MAX_WIDTH_ITERATIONS
+            )
         }
 
         if (fixed_columns || fixed_rows) {
