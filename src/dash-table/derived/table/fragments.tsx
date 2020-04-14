@@ -45,20 +45,22 @@ export default memoizeOneFactory((
     cells: JSX.Element[][],
     offset: number
 ): { grid: (JSX.Element | null)[][], empty: boolean[][] } => {
+    const getPivot = row => R.reduceWhile<JSX.Element, IAccumulator>(
+        acc => acc.count < fixedColumns,
+        (acc, cell) => {
+            acc.cells++;
+            acc.count += (cell.props.colSpan || 1);
+
+            return acc;
+        },
+        { cells: 0, count: 0 },
+        row as any
+    ).cells;
+
     // slice out fixed columns
     let fixedColumnCells = fixedColumns ?
         R.map(row => {
-            const pivot = R.reduceWhile<JSX.Element, IAccumulator>(
-                acc => acc.count < fixedColumns,
-                (acc, cell) => {
-                    acc.cells++;
-                    acc.count += (cell.props.colSpan || 1);
-
-                    return acc;
-                },
-                { cells: 0, count: 0 },
-                row as any
-            ).cells;
+            const pivot = getPivot(row);
 
             const res = row.slice(0, pivot).map((c,i) => getFixedColSpan(c, fixedColumns - i - 1)).concat(row.slice(pivot).map(getHiddenCell));
             res[pivot - 1] = getLastOfType(res[pivot - 1]);
@@ -70,17 +72,7 @@ export default memoizeOneFactory((
     cells = R.isNil(fixedColumnCells) ?
         cells :
         R.map(row => {
-            const pivot = R.reduceWhile<JSX.Element, IAccumulator>(
-                acc => acc.count < fixedColumns,
-                (acc, cell) => {
-                    acc.cells++;
-                    acc.count += (cell.props.colSpan || 1);
-
-                    return acc;
-                },
-                { cells: 0, count: 0 },
-                row as any
-            ).cells;
+            const pivot = getPivot(row);
 
             return row.slice(0, pivot).map(getHiddenCell).concat(row.slice(pivot));
         }, cells);
