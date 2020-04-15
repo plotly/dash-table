@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Fixed
+- [#722](https://github.com/plotly/dash-table/pull/722) Fix a bug where row height is misaligned when using fixed_columns and/or fixed_rows
+- [#728](https://github.com/plotly/dash-table/pull/728) Fix copy/paste on readonly cells
+
 ## [4.6.2] - 2020-04-01
 ### Changed
 - [#713](https://github.com/plotly/dash-table/pull/713) Update from React 16.8.6 to 16.13.0
