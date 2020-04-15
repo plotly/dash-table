@@ -84,7 +84,7 @@ export interface ICellCoordinates {
 export type ColumnId = string;
 export type Columns = IColumn[];
 export type Data = Datum[];
-export type Datum = IDatumObject | any;
+export type Datum = IDatumObject;
 export type Indices = number[];
 export type RowId = string | number;
 export type SelectedCells = ICellCoordinates[];

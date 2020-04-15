@@ -81,14 +81,13 @@ const getter = (
         }
 
         const active = isActiveCell(activeCell, i, j);
-        const column_id = columns[jWithOffset].id;
 
         const priority = active ? ACTIVE_PRIORITY : SELECTED_PRIORITY;
         const defaultEdge = active ? Environment.activeEdge : Environment.defaultEdge;
 
         const style: BorderStyle = {
             ...getDataCellEdges(
-                data[iWithOffset][column_id],
+                data[iWithOffset],
                 iWithOffset,
                 columns[j],
                 active,
@@ -102,7 +101,7 @@ const getter = (
             borderTop: [defaultEdge, priority],
 
             ...getDataCellEdges(
-                data[iWithOffset][column_id],
+                data[iWithOffset],
                 iWithOffset,
                 columns[j],
                 active,
@@ -110,7 +109,7 @@ const getter = (
                 priority
             )(selectedStyles),
             ...getDataCellEdges(
-                data[iWithOffset][column_id],
+                data[iWithOffset],
                 iWithOffset,
                 columns[j],
                 active,
