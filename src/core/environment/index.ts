@@ -7,7 +7,7 @@ const DASH_DEBUG = 'dash_debug';
 const DASH_LOG = 'dash_log';
 
 const DEFAULT_EDGE: Edge = '1px solid #d3d3d3';
-const ACTIVE_EDGE: Edge = '1px solid var(--accent)';
+const ACTIVE_EDGE: Edge = '1px solid hotpink';
 
 interface ISearchParams {
     get: (key: string) => string | null;
