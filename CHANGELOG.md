@@ -6,9 +6,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - [#722](https://github.com/plotly/dash-table/pull/722) Fix a bug where row height is misaligned when using fixed_columns and/or fixed_rows
 - [#728](https://github.com/plotly/dash-table/pull/728) Fix copy/paste on readonly cells
-the table down its last row
 - [#724](https://github.com/plotly/dash-table/pull/724) Fix `active_cell` docstring: clarify optional nature of the `row_id` nested prop
-- [#732](https://github.com/plotly/dash-table/pull/732) Fix a bug where opening a dropdown scrolled
+- [#732](https://github.com/plotly/dash-table/pull/732) Fix a bug where opening a dropdown scrolled the table down its last row
 
 ## [4.6.2] - 2020-04-01
 ### Changed
