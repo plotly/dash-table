@@ -1,17 +1,20 @@
 import { derivedPartialDataEdges } from 'dash-table/derived/edges/data';
 import Environment from 'core/environment';
+import { IConvertedStyle } from 'dash-table/derived/style';
 
-const converter = {
-    checksState: () => true,
-    checksStateActive: () => true,
-    checksStateSelected: () => true,
-    checksColumn: () => true,
-    checksFilter: () => true,
-    checksRow: () => true,
+const converter: Omit<IConvertedStyle, 'style'> = {
+    checksColumn: () => false,
+    checksDataRow: () => false,
+    checksFilter: () => false,
+    checksHeaderRow: () => false,
+    checksState: () => false,
+    checksStateActive: () => false,
+    checksStateSelected: () => false,
     matchesActive: () => true,
     matchesColumn: () => true,
+    matchesDataRow: () => true,
     matchesFilter: () => true,
-    matchesRow: () => true,
+    matchesHeaderRow: () => true,
     matchesSelected: () => true
 };
 
