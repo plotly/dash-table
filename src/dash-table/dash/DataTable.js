@@ -965,7 +965,23 @@ export const propTypes = {
      * through a callback (where `filter_query` or `derived_filter_query_structure` would be the input
      * and `data` would be the output).
      */
-    filter_action: PropTypes.oneOf(['custom', 'native', 'none']),
+    filter_action: PropTypes.oneOfType([
+        PropTypes.oneOf([
+            'custom',
+            'native',
+            'none'
+        ]),
+        PropTypes.object({
+            type: PropTypes.oneOf([
+                'custom',
+                'native'
+            ]).isRequired,
+            join: PropTypes.oneOf([
+                'and',
+                'or'
+            ])
+        })
+    ]),
 
     /**
      * The `sort_action` property enables data to be

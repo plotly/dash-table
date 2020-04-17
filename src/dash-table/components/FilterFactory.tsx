@@ -86,7 +86,7 @@ export default class FilterFactory {
             visibleColumns
         } = this.props;
 
-        if (filter_action === TableAction.None) {
+        if (filter_action.type === TableAction.None) {
             return NO_FILTERS;
         }
 

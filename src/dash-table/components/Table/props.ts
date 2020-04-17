@@ -57,6 +57,11 @@ export interface IDerivedData {
     indices: Indices;
 }
 
+export interface IFilterAction {
+    type: TableAction;
+    join: 'and' | 'or';
+}
+
 export interface IViewportOffset {
     rows: number;
     columns: number;
@@ -299,7 +304,7 @@ export interface IProps {
     editable?: boolean;
     fill_width?: boolean;
     filter_query?: string;
-    filter_action?: TableAction;
+    filter_action?: TableAction | IFilterAction;
     hidden_columns?: string[];
     include_headers_on_copy_paste?: boolean;
     locale_format: INumberLocale;
@@ -410,6 +415,7 @@ export type PropsWithDefaults = IProps & IDefaultProps;
 
 export type SanitizedProps = Omit<Omit<
     Merge<PropsWithDefaults, {
+        filter_action: IFilterAction;
         fixed_columns: number;
         fixed_rows: number;
         loading_state: boolean;
@@ -442,7 +448,7 @@ export type SetFilter = (
 
 export interface IFilterFactoryProps {
     filter_query: string;
-    filter_action: TableAction;
+    filter_action: IFilterAction;
     id: string;
     map: Map<string, SingleColumnSyntaxTree>;
     rawFilterQuery: string;
