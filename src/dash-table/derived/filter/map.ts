@@ -12,12 +12,12 @@ const cloneIf = (
 
 export default memoizeOneFactory((
     map: Map<string, SingleColumnSyntaxTree>,
+    operator: FilterLogicalOperator,
     query: string,
     columns: Columns
 ): Map<string, SingleColumnSyntaxTree> => {
-    const multiQuery = new MultiColumnsSyntaxTree(query);
+    const multiQuery = new MultiColumnsSyntaxTree(query, operator);
     const reversedMap = getSingleColumnMap(multiQuery, columns);
-
     /*
      * Couldn't process the query, just use the previous value.
      */
