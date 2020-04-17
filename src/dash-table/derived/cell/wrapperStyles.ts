@@ -7,8 +7,11 @@ import { IConvertedStyle, getDataCellStyle, getDataOpCellStyle } from '../style'
 import { traverseMap2, shallowClone } from 'core/math/matrixZipMap';
 
 import isActiveCell from 'dash-table/derived/cell/isActive';
+import Environment from 'core/environment';
 
-const SELECTED_CELL_STYLE = { backgroundColor: 'rgba(255, 65, 54, 0.2)' };
+const SELECTED_CELL_STYLE = {
+    backgroundColor: Environment.supportsCssVariables ? 'var(--selected-background)' : 'rgba(255, 65, 54, 0.2)'
+};
 
 const partialGetter = (
     columns: Columns,
