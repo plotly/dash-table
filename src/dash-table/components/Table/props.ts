@@ -57,9 +57,14 @@ export interface IDerivedData {
     indices: Indices;
 }
 
+export enum FilterLogicalOperator {
+    And = 'and',
+    Or = 'or'
+}
+
 export interface IFilterAction {
     type: TableAction;
-    join: 'and' | 'or';
+    operator: FilterLogicalOperator;
 }
 
 export interface IViewportOffset {

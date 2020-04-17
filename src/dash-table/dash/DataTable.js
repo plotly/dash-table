@@ -976,7 +976,7 @@ export const propTypes = {
                 'custom',
                 'native'
             ]).isRequired,
-            join: PropTypes.oneOf([
+            operator: PropTypes.oneOf([
                 'and',
                 'or'
             ])

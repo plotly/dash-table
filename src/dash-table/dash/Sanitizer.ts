@@ -15,7 +15,8 @@ import {
     TableAction,
     ExportFormat,
     ExportHeaders,
-    IFilterAction
+    IFilterAction,
+    FilterLogicalOperator
 } from 'dash-table/components/Table/props';
 import headerRows from 'dash-table/derived/header/headerRows';
 import resolveFlag from 'dash-table/derived/cell/resolveFlag';
@@ -74,8 +75,8 @@ const applyDefaultToLocale = (locale: INumberLocale) => getLocale(locale);
 const getFilterAction = (
     action: TableAction | IFilterAction
 ): IFilterAction => typeof action === 'object' ?
-        { type: action.type ?? TableAction.None, join: action.join ?? 'and' } :
-        { type: action, join: 'and' };
+        { type: action.type ?? TableAction.None, operator: action.operator ?? FilterLogicalOperator.And } :
+        { type: action, operator: FilterLogicalOperator.And };
 
 const getVisibleColumns = (
     columns: Columns,
