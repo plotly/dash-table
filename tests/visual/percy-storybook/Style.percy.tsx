@@ -450,17 +450,6 @@ storiesOf('DashTable/Style type condition', module)
             backgroundColor: 'MediumPurple'
         }]}
     />))
-    .add('header row_index array', () => (<DataTable
-        {...DEFAULT_TABLE}
-        columns={DEFAULT_TABLE.columns.map(c => ({ ...c, name: [c.name, c.name, c.name, c.name] }))}
-        id='data-column-id-array'
-        style_header_conditional={[{
-            if: {
-                row_index: [1, 3]
-            },
-            backgroundColor: 'MediumPurple'
-        }]}
-    />))
     .add('active styling', () => (<DataTable
         {...DEFAULT_TABLE}
         id='active-styling'
