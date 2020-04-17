@@ -971,7 +971,7 @@ export const propTypes = {
             'native',
             'none'
         ]),
-        PropTypes.object({
+        PropTypes.shape({
             type: PropTypes.oneOf([
                 'custom',
                 'native'
