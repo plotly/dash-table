@@ -27,7 +27,9 @@ import {
     ifEditable,
     ifColumnStateActive,
     IStateElement,
-    ifColumnStateSelected
+    ifColumnStateSelected,
+    ifRowIndex,
+    ifHeaderIndex
  } from 'dash-table/conditional';
 import { QuerySyntaxTree } from 'dash-table/syntax-tree';
 import { BORDER_PROPERTIES_AND_FRAGMENTS } from '../edges/type';
@@ -36,7 +38,8 @@ import { matchesDataCell, matchesDataOpCell, matchesFilterCell, getFilterOpStyle
 export interface IConvertedStyle {
     style: CSSProperties;
     checksColumn: () => boolean;
-    checksRow: () => boolean;
+    checksDataRow: () => boolean;
+    checksHeaderRow: () => boolean;
     checksFilter: () => boolean;
     checksState: () => boolean;
     checksStateActive: () => boolean;
@@ -44,7 +47,8 @@ export interface IConvertedStyle {
     matchesActive: (active: boolean) => boolean;
     matchesColumn: (column: IColumn | undefined) => boolean;
     matchesFilter: (datum: Datum) => boolean;
-    matchesRow: (index: number | undefined) => boolean;
+    matchesDataRow: (index: number) => boolean;
+    matchesHeaderRow: (index: number) => boolean;
     matchesSelected: (selected: boolean) => boolean;
 }
 
@@ -52,7 +56,6 @@ type GenericIf = Partial<IStateElement & IConditionalElement & IIndexedHeaderEle
 type GenericStyle = Style & Partial<{ if: GenericIf }>;
 
 function convertElement(style: GenericStyle): IConvertedStyle {
-    const indexFilter = style.if && (style.if.header_index || style.if.row_index);
     let ast: QuerySyntaxTree;
 
     return {
@@ -62,7 +65,8 @@ function convertElement(style: GenericStyle): IConvertedStyle {
             !R.isNil(style.if.column_editable)
         ),
         checksFilter: () => !R.isNil(style.if) && !R.isNil(style.if.filter_query),
-        checksRow: () => !R.isNil(indexFilter),
+        checksDataRow: () => !R.isNil(style.if) && !R.isNil(style.if.row_index),
+        checksHeaderRow: () => !R.isNil(style.if) && !R.isNil(style.if.header_index),
         checksState: () => !R.isNil(style.if?.state),
         checksStateActive: () => style.if?.state === 'active',
         checksStateSelected: () => style.if?.state === 'selected',
@@ -78,12 +82,8 @@ function convertElement(style: GenericStyle): IConvertedStyle {
             !style.if ||
             style.if.filter_query === undefined ||
             (ast = ast || new QuerySyntaxTree(style.if.filter_query)).evaluate(datum),
-        matchesRow: (index: number | undefined) =>
-            indexFilter === undefined ?
-                true :
-                typeof indexFilter === 'number' ?
-                    index === indexFilter :
-                    !R.isNil(index) && (indexFilter === 'odd' ? index % 2 === 1 : index % 2 === 0),
+        matchesDataRow: (index: number) => ifRowIndex(style.if, index),
+        matchesHeaderRow: (index: number) => ifHeaderIndex(style.if, index),
         matchesSelected: (selected: boolean) => ifColumnStateSelected(style.if, selected),
         style: convertStyle(style)
     };

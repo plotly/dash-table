@@ -66,22 +66,20 @@ export function ifColumnType(condition: ITypedElement | undefined, columnType?: 
 }
 
 export function ifRowIndex(condition: IIndexedRowElement | undefined, rowIndex: number) {
-    if (!condition ||
-        condition.row_index === undefined) {
+    if (!condition || condition.row_index === undefined) {
         return true;
     }
 
     const rowCondition = condition.row_index;
     return typeof rowCondition === 'string' ?
-        rowCondition === 'odd' ? rowIndex % 2 === 1 : rowIndex % 2 === 0 :
+        rowIndex % 2 === (rowCondition === 'odd' ? 1 : 0) :
         Array.isArray(rowCondition) ?
             R.includes(rowIndex, rowCondition) :
             rowIndex === rowCondition;
 }
 
 export function ifHeaderIndex(condition: IIndexedHeaderElement | undefined, headerIndex: number) {
-    if (!condition ||
-        condition.header_index === undefined) {
+    if (!condition || condition.header_index === undefined) {
         return true;
     }
 
@@ -115,38 +113,46 @@ export const matchesDataCell = (
     active: boolean,
     selected: boolean
 ): Filter<IConvertedStyle> => R.filter<IConvertedStyle>((style =>
+    !style.checksHeaderRow() &&
     style.matchesActive(active) &&
     style.matchesSelected(selected) &&
-    style.matchesRow(i) &&
+    style.matchesDataRow(i) &&
     style.matchesColumn(column) &&
     style.matchesFilter(datum)
 ));
 
 export const matchesFilterCell = (column: IColumn): Filter<IConvertedStyle> => R.filter<IConvertedStyle>((style =>
     !style.checksState() &&
+    !style.checksDataRow() &&
+    !style.checksHeaderRow() &&
     style.matchesColumn(column)
 ));
 
 export const matchesHeaderCell = (i: number, column: IColumn): Filter<IConvertedStyle> => R.filter<IConvertedStyle>((style =>
     !style.checksState() &&
-    style.matchesRow(i) &&
+    !style.checksDataRow() &&
+    style.matchesHeaderRow(i) &&
     style.matchesColumn(column)
 ));
 
 export const matchesDataOpCell = (datum: Datum, i: number): Filter<IConvertedStyle> => R.filter<IConvertedStyle>((style =>
     !style.checksState() &&
     !style.checksColumn() &&
-    style.matchesRow(i) &&
+    !style.checksHeaderRow() &&
+    style.matchesDataRow(i) &&
     style.matchesFilter(datum)
 ));
 
 export const getFilterOpStyles: Filter<IConvertedStyle> = R.filter<IConvertedStyle>((style =>
     !style.checksState() &&
+    !style.checksDataRow() &&
+    !style.checksHeaderRow() &&
     !style.checksColumn()
 ));
 
 export const getHeaderOpStyles = (i: number): Filter<IConvertedStyle> => R.filter<IConvertedStyle>((style =>
-    style.matchesRow(i) &&
+    !style.checksDataRow() &&
     !style.checksState() &&
-    !style.checksColumn()
+    !style.checksColumn() &&
+    style.matchesHeaderRow(i)
 ));

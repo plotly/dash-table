@@ -409,6 +409,16 @@ storiesOf('DashTable/Style type condition', module)
             backgroundColor: 'MediumPurple'
         }]}
     />))
+    .add('header header_index array', () => (<DataTable
+        setProps={setProps}
+        id='table'
+        {...DEFAULT_TABLE}
+        columns={DEFAULT_TABLE.columns.map(c => ({ ...c, name: [c.name, c.name, c.name] }))}
+        style_header_conditional={[
+            { if: { header_index: [0, 2] }, background_color: 'blue', color: 'white' }
+        ]}
+    />))
+
     .add('cell column_id array', () => (<DataTable
         {...DEFAULT_TABLE}
         id='data-column-id-array'
