@@ -479,6 +479,32 @@ storiesOf('DashTable/Style type condition', module)
             { row: 2, column: 2, column_id: 'c' }]}
         active_cell={{ row: 1, column: 1 }}
     />))
+    .add('active styling partially overrides selected', () => (<DataTable
+        {...DEFAULT_TABLE}
+        id='data-column-id-array'
+        style_data_conditional={[
+            {
+                if: {
+                    state: 'selected'
+                },
+                backgroundColor: 'lightblue',
+                border: '1px solid blue'
+            },
+            {
+                if: {
+                    state: 'active'
+                },
+                color: 'white',
+                border: '2px solid white'
+            }
+        ]}
+        selected_cells={[
+            { row: 1, column: 1, column_id: 'b' },
+            { row: 1, column: 2, column_id: 'c' },
+            { row: 2, column: 1, column_id: 'b' },
+            { row: 2, column: 2, column_id: 'c' }]}
+        active_cell={{ row: 1, column: 1 }}
+    />))
     .add('active styling overrides selected', () => (<DataTable
         {...DEFAULT_TABLE}
         id='data-column-id-array'
