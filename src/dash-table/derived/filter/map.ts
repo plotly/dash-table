@@ -85,7 +85,7 @@ function updateState(
     const rawGlobalFilter = R.map(
         ast => ast.query || '',
         R.filter<SingleColumnSyntaxTree>(ast => Boolean(ast), asts)
-    ).join(` ${operator === FilterLogicalOperator.And ? '&&' : '||'} `);
+    ).join(operator === FilterLogicalOperator.And ? ' && ' : ' || ');
 
     setFilter(globalFilter, rawGlobalFilter, map);
 }
