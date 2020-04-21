@@ -76,7 +76,7 @@ const getter = (
         const iWithOffset = i - offset.rows;
         const jWithOffset = j - offset.columns;
 
-        if (iWithOffset < 0 || jWithOffset < 0 || data.length <= iWithOffset || data[iWithOffset].length <= jWithOffset) {
+        if (iWithOffset < 0 || jWithOffset < 0 || data.length <= iWithOffset) {
             return;
         }
 
