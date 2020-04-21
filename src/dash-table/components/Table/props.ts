@@ -84,7 +84,9 @@ export interface ICellCoordinates {
 export type ColumnId = string;
 export type Columns = IColumn[];
 export type Data = Datum[];
+export type IndexedData = IndexedDatum[];
 export type Datum = IDatumObject;
+export type IndexedDatum = Omit<Datum, 'id'> & { id: number | string; };
 export type Indices = number[];
 export type RowId = string | number;
 export type SelectedCells = ICellCoordinates[];
@@ -199,7 +201,7 @@ export type IColumnType = INumberColumn | ITextColumn | IDatetimeColumn | IAnyCo
 export type IColumn = IBaseColumn & IColumnType;
 
 interface IDatumObject {
-    [key: string]: any;
+    [key: string]: boolean | number | string | null | undefined;
 }
 
 export interface IDropdownValue {
