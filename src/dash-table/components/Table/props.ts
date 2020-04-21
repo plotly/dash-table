@@ -343,12 +343,10 @@ export interface IProps {
 interface IDefaultProps {
     active_cell: ICellCoordinates;
     column_selectable: Selection;
-    columns: Columns;
     dropdown: StaticDropdowns;
     dropdown_conditional: ConditionalDropdowns;
     dropdown_data: DataDropdowns;
     css: IStylesheetRule[];
-    data: Data;
     editable: boolean;
     export_columns: ExportColumns;
     export_format: ExportFormat;
@@ -412,6 +410,8 @@ export type PropsWithDefaults = IProps & IDefaultProps;
 
 export type SanitizedProps = Omit<Omit<
     Merge<PropsWithDefaults, {
+        columns: Columns;
+        data: Data;
         fixed_columns: number;
         fixed_rows: number;
         loading_state: boolean;
