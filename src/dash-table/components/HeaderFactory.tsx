@@ -40,13 +40,13 @@ export default class HeaderFactory {
             columns,
             data,
             hidden_columns,
-            id,
             map,
             merge_duplicate_headers,
             page_action,
             row_deletable,
             row_selectable,
             selected_columns,
+            safeId,
             setFilter,
             setProps,
             sort_action,
@@ -94,7 +94,7 @@ export default class HeaderFactory {
         );
 
         const contents = this.headerContent(
-            id,
+            safeId,
             visibleColumns,
             columns,
             hidden_columns,

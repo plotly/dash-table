@@ -342,7 +342,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
     }
 
     get $el() {
-        return document.getElementById(this.props.id) as HTMLElement;
+        return document.getElementById(this.props.safeId) as HTMLElement;
     }
 
     handleKeyDown = (e: any) => {

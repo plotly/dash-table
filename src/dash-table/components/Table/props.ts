@@ -280,7 +280,7 @@ export interface IProps {
     is_focused?: boolean;
     start_cell?: ICellCoordinates;
 
-    id: string;
+    id?: string;
 
     tooltip_data?: DataTooltips;
     tooltip_delay: number | null;
@@ -413,6 +413,7 @@ export type SanitizedProps = Omit<Omit<
         fixed_columns: number;
         fixed_rows: number;
         loading_state: boolean;
+        safeId: string;
         visibleColumns: Columns;
     }>,
     'locale_format'>,
@@ -443,11 +444,11 @@ export type SetFilter = (
 export interface IFilterFactoryProps {
     filter_query: string;
     filter_action: TableAction;
-    id: string;
     map: Map<string, SingleColumnSyntaxTree>;
     rawFilterQuery: string;
     row_deletable: boolean;
     row_selectable: Selection;
+    safeId: string;
     setFilter: SetFilter;
     style_cell: Style;
     style_cell_conditional: Cells;
@@ -474,12 +475,12 @@ export interface ICellFactoryProps {
     end_cell: ICellCoordinates;
     fixed_columns: number;
     fixed_rows: number;
-    id: string;
     is_focused?: boolean;
     loading_state: boolean;
     paginator: IPaginator;
     row_deletable: boolean;
     row_selectable: Selection;
+    safeId: string;
     selected_cells: SelectedCells;
     selected_rows: Indices;
     setProps: SetProps;

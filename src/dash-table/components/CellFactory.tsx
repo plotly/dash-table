@@ -41,11 +41,11 @@ export default class CellFactory {
             dropdown,
             data,
             dropdown_data,
-            id,
             is_focused,
             loading_state,
             row_deletable,
             row_selectable,
+            safeId,
             selected_cells,
             selected_rows,
             setProps,
@@ -94,7 +94,7 @@ export default class CellFactory {
         );
 
         const operations = this.cellOperations(
-            id,
+            safeId,
             data,
             virtualized.data,
             virtualized.indices,

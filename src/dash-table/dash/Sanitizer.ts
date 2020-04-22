@@ -19,6 +19,7 @@ import {
 import headerRows from 'dash-table/derived/header/headerRows';
 import resolveFlag from 'dash-table/derived/cell/resolveFlag';
 import dataLoading from 'dash-table/derived/table/data_loading';
+import genRandomId from 'dash-table/utils/generate';
 
 const D3_DEFAULT_LOCALE: INumberLocale = {
     symbol: ['$', ''],
@@ -75,6 +76,19 @@ const getVisibleColumns = (
     hiddenColumns: string[] | undefined
 ) => R.filter(column => !hiddenColumns || hiddenColumns.indexOf(column.id) < 0, columns);
 
+const safeIdRegex = /[~\!@\$%\^&\*\(\)\+=,\.\/';:\"\?><\\\[\]\{\}|`#\s]/g;
+
+const getSafeId = (id?: string): string => {
+    if (!id) {
+        return genRandomId('table-');
+    }
+
+    const sanitizedId = id.replace(safeIdRegex, '_');
+    return sanitizedId === id ?
+        id :
+        'table-' + sanitizedId;
+}
+
 export default class Sanitizer {
     sanitize(props: PropsWithDefaults): SanitizedProps {
         const locale_format = this.applyDefaultToLocale(props.locale_format);
@@ -94,6 +108,7 @@ export default class Sanitizer {
             fixed_columns: getFixedColumns(props.fixed_columns, props.row_deletable, props.row_selectable),
             fixed_rows: getFixedRows(props.fixed_rows, props.columns, props.filter_action),
             loading_state: dataLoading(props.loading_state),
+            safeId: this.getSafeId(props.id),
             locale_format,
             visibleColumns
         });
@@ -102,6 +117,8 @@ export default class Sanitizer {
     private readonly applyDefaultToLocale = memoizeOne(applyDefaultToLocale);
 
     private readonly applyDefaultsToColumns = memoizeOne(applyDefaultsToColumns);
+
+    private readonly getSafeId = memoizeOne(getSafeId);
 
     private readonly getVisibleColumns = memoizeOne(getVisibleColumns);
 }
