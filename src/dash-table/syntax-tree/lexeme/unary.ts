@@ -25,8 +25,12 @@ function evaluator(
     return t.left.lexeme.evaluate(target, t.left);
 }
 
-function relationalSyntaxer([left, lexeme]: any[]) {
-    return Object.assign({ left }, lexeme);
+function relationalSyntaxer(lexs: any[], pivot: any, pivotIndex: number) {
+    const left = lexs.slice(0, pivotIndex);
+
+    return Object.assign({
+        left: left.length === 1 ? left[0] : left
+    }, pivot);
 }
 
 function relationalEvaluator(

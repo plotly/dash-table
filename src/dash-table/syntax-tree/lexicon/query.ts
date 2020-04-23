@@ -58,7 +58,8 @@ import {
     isTerminal,
     isTerminalExpression,
     ifTransformation,
-    ifTransformRelationalOperator
+    ifTransformRelationalOperator,
+    ifTransformUnaryOperator
 } from '.';
 
 const ifNotUnaryOperator = (_: ILexemeResult[], previous: ILexemeResult | undefined) =>
@@ -139,6 +140,22 @@ const lexicon: ILexeme[] = [
     ].map(op => ({
         ...op,
         if: ifUnaryOperator,
+        terminal: isTerminal
+    })),
+    ...[isBlank,
+        isBool,
+        isDate,
+        isEven,
+        isNil,
+        isNum,
+        isObject,
+        isOdd,
+        isPrime,
+        isStr
+    ].map(op => ({
+        ...op,
+        if: ifTransformUnaryOperator,
+        priority: (blockClose.priority ?? 0) + (op.priority ?? 0) + 2,
         terminal: isTerminal
     })),
     {

@@ -465,6 +465,15 @@ describe('Query Syntax Tree', () => {
     });
 
     describe('unary operators', () => {
+        it.only('on transform', () => {
+            const tree = new QuerySyntaxTree('month({a}) is odd');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({ a: '2019-01' })).to.equal(true);
+            expect(tree.evaluate({ a: '2019-02' })).to.equal(false);
+            expect(tree.evaluate({ a: '2019' })).to.equal(false);
+        });
+
         it('can check nil', () => {
             const tree = new QuerySyntaxTree('{d} is nil');
 

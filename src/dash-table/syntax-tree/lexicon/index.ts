@@ -103,3 +103,4 @@ export const ifTransformRelationalOperator = (lexemes: ILexemeResult[], previous
 }
 
 export const ifUnaryOperator = ifRelationalOperator;
+export const ifTransformUnaryOperator = ifTransformRelationalOperator;
