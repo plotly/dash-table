@@ -1,6 +1,7 @@
 import { IDatetimeColumn, IDateValidation } from 'dash-table/components/Table/props';
 import { reconcileNull } from './null';
 import { IReconciliation } from './reconcile';
+import { FixedArray } from 'core/type';
 
 // pattern and convertToMs pulled from plotly.js
 // (simplified - no international calendars for now)
@@ -12,6 +13,36 @@ const DATETIME_REGEXP = /^\s*(-?\d{4}|\d{2})(-(\d{1,2})(-(\d{1,2})([ Tt]([01]?\d
 // Also pulled from plotly.js - see discussion there for details
 // Please don't use 2-digit years!
 const YFIRST = new Date().getFullYear() - 70;
+
+export enum DatePart {
+    Year = 0,
+    Month = 1,
+    Day = 2,
+    Hour = 3,
+    Minute = 4,
+    Second = 5
+}
+
+export function extractDateParts(value: any, options?: IDateValidation): FixedArray<number, 6> | null {
+    const res = normalizeDate(value, options);
+    if (!res) {
+        return null;
+    }
+
+    const match = res.match(DATETIME_REGEXP);
+    if (!match) {
+        return null;
+    }
+
+    return [
+        +match[1],
+        +match[3],
+        +match[5],
+        +match[7],
+        +match[9],
+        +match[11]
+    ]
+}
 
 export function normalizeDate(value: any, options?: IDateValidation): string | null {
     // unlike plotly.js, do not accept year as a number - only strings.

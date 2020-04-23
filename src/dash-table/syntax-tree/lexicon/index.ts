@@ -7,6 +7,20 @@ const nestingReducer = R.reduce<ILexemeResult, number>(
     (nesting, l) => nesting + (l.lexeme.nesting || 0)
 );
 
+const isNestingTransform = (lexemes: ILexemeResult[]) => {
+    let nesting = 0;
+    for (let i = lexemes.length - 1; i >= 0; --i) {
+        const l = lexemes[i];
+        nesting += (l.lexeme.nesting || 0);
+
+        if (nesting === 0) {
+            return lexemes[i].lexeme.type === LexemeType.Transformation;
+        }
+    }
+
+    return false;
+}
+
 export const isTerminal = (lexemes: ILexemeResult[], _: ILexemeResult | undefined) =>
     nestingReducer(0, lexemes) === 0;
 
@@ -34,6 +48,7 @@ export const ifBlockOpen = (_: ILexemeResult[], previous: ILexemeResult | undefi
         [
             LexemeType.BlockOpen,
             LexemeType.LogicalOperator,
+            LexemeType.Transformation,
             LexemeType.UnaryOperator
         ]
     );
@@ -44,10 +59,13 @@ export const ifExpression = (_: ILexemeResult[], previous: ILexemeResult | undef
         [
             LexemeType.BlockOpen,
             LexemeType.LogicalOperator,
-            LexemeType.RelationalOperator
+            LexemeType.RelationalOperator,
+            LexemeType.Transformation
         ]
     );
 };
+
+export const ifTransformation = ifExpression;
 
 export const ifLeading = (_lexs: ILexemeResult[], previous: ILexemeResult | undefined) =>
     !previous;
@@ -65,7 +83,23 @@ export const ifLogicalOperator = (_: ILexemeResult[], previous: ILexemeResult | 
 export const ifRelationalOperator = (_: ILexemeResult[], previous: ILexemeResult | undefined) =>
     !!previous && R.includes(
         previous.lexeme.type,
-        [LexemeType.Expression]
+        [
+            LexemeType.Expression
+        ]
     );
+
+export const ifTransformRelationalOperator = (lexemes: ILexemeResult[], previous: ILexemeResult | undefined) => {
+    const res = !!previous && R.includes(
+        previous.lexeme.type,
+        [
+            (
+                previous.lexeme.type === LexemeType.BlockClose &&
+                isNestingTransform(lexemes)
+            ) ? LexemeType.BlockClose : null
+        ]
+    );
+
+    return res;
+}
 
 export const ifUnaryOperator = ifRelationalOperator;

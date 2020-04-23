@@ -15,15 +15,20 @@ function evaluator(
 
     const t = tree as any;
 
-    const opValue = t.left.lexeme.resolve(target, t.left);
-    const expValue = t.right.lexeme.resolve(target, t.right);
-    Logger.trace(`opValue: ${opValue}, expValue: ${expValue}`);
-
-    return [opValue, expValue];
+    return [
+        t.left.lexeme.evaluate(target, t.left),
+        t.right.lexeme.evaluate(target, t.right)
+    ];
 }
 
-function relationalSyntaxer([left, lexeme, right]: any[]) {
-    return Object.assign({ left, right }, lexeme);
+function relationalSyntaxer(lexs: any[], pivot: any, pivotIndex: number) {
+    const left = lexs.slice(0, pivotIndex);
+    const right = lexs.slice(pivotIndex + 1);
+
+    return Object.assign({
+        left: left.length === 1 ? left[0] : left,
+        right: right.length === 1 ? right[0] : right
+    }, pivot);
 }
 
 function relationalEvaluator(

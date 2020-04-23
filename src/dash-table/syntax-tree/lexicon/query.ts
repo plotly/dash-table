@@ -27,8 +27,17 @@ import {
     notEqual
 } from '../lexeme/relational';
 import {
+    year,
+    month,
+    day,
+    hour,
+    minute,
+    second
+} from '../lexeme/transformation';
+import {
     isBlank,
     isBool,
+    isDate,
     isEven,
     isNil,
     isNum,
@@ -47,7 +56,9 @@ import {
     ifRelationalOperator,
     ifUnaryOperator,
     isTerminal,
-    isTerminalExpression
+    isTerminalExpression,
+    ifTransformation,
+    ifTransformRelationalOperator
 } from '.';
 
 const ifNotUnaryOperator = (_: ILexemeResult[], previous: ILexemeResult | undefined) =>
@@ -77,6 +88,17 @@ const lexicon: ILexeme[] = [
         if: ifBlockOpen,
         terminal: false
     },
+    ...[year,
+        month,
+        day,
+        hour,
+        minute,
+        second
+    ].map(op => ({
+        ...op,
+        if: ifTransformation,
+        terminal: false
+    })),
     ...[contains,
         dateStartsWith,
         equal,
@@ -90,8 +112,23 @@ const lexicon: ILexeme[] = [
         if: ifRelationalOperator,
         terminal: false
     })),
+    ...[contains,
+        dateStartsWith,
+        equal,
+        greaterOrEqual,
+        greaterThan,
+        lessOrEqual,
+        lessThan,
+        notEqual
+    ].map(op => ({
+        ...op,
+        if: ifTransformRelationalOperator,
+        priority: (blockClose.priority ?? 0) + (op.priority ?? 0) + 2,
+        terminal: false
+    })),
     ...[isBlank,
         isBool,
+        isDate,
         isEven,
         isNil,
         isNum,

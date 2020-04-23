@@ -3,6 +3,7 @@ import * as R from 'ramda';
 import Logger from 'core/Logger';
 import { LexemeType, IUnboundedLexeme } from 'core/syntax-tree/lexicon';
 import { ISyntaxTree } from 'core/syntax-tree/syntaxer';
+import { normalizeDate } from 'dash-table/type/date';
 
 const checkPrimality = (c: number) => {
     if (c === 2) { return true; }
@@ -20,9 +21,8 @@ function evaluator(
     Logger.trace('evaluate -> unary', target, tree);
 
     const t = tree as any;
-    const opValue = t.left.lexeme.resolve(target, t.left);
 
-    return opValue;
+    return t.left.lexeme.evaluate(target, t.left);
 }
 
 function relationalSyntaxer([left, lexeme]: any[]) {
@@ -78,6 +78,11 @@ export const isEven: IUnboundedLexeme = R.merge({
 export const isBlank: IUnboundedLexeme = R.merge({
     evaluate: relationalEvaluator(opValue => opValue === undefined || opValue === null || opValue === ''),
     regexp: /^(is blank)/i
+}, LEXEME_BASE);
+
+export const isDate: IUnboundedLexeme = R.merge({
+    evaluate: relationalEvaluator(opValue => normalizeDate(opValue, { allow_YY: true }) !== null),
+    regexp: /^(is date)/i
 }, LEXEME_BASE);
 
 export const isNil: IUnboundedLexeme = R.merge({

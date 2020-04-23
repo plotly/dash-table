@@ -16,7 +16,7 @@ const getField = (
 
 export const fieldExpression: IUnboundedLexeme = {
     present: (tree: ISyntaxTree) => getField(tree.value),
-    resolve: (target: any, tree: ISyntaxTree) => {
+    evaluate: (target: any, tree: ISyntaxTree) => {
         if (FIELD_REGEX.test(tree.value)) {
             return target[getField(tree.value)];
         } else {
@@ -34,7 +34,7 @@ const getString = (
 
 export const stringExpression: IUnboundedLexeme = {
     present: (tree: ISyntaxTree) => getString(tree.value),
-    resolve: (_target: any, tree: ISyntaxTree) => {
+    evaluate: (_target: any, tree: ISyntaxTree) => {
         if (STRING_REGEX.test(tree.value)) {
             return getString(tree.value);
         } else {
@@ -62,7 +62,7 @@ const valueExpressionFactory = (
 
     return {
         present: (tree: ISyntaxTree) => getValue(tree.value),
-        resolve: (_target: any, tree: ISyntaxTree) => {
+        evaluate: (_target: any, tree: ISyntaxTree) => {
             if (regex.test(tree.value)) {
                 return getValue(tree.value);
             } else {

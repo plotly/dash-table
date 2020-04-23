@@ -7,13 +7,13 @@ export enum LexemeType {
     LogicalOperator = 'logical-operator',
     RelationalOperator = 'relational-operator',
     UnaryOperator = 'unary-operator',
-    Expression = 'expression'
+    Expression = 'expression',
+    Transformation = 'transformation'
 }
 
 export interface IUnboundedLexeme {
-    evaluate?: (target: any, tree: ISyntaxTree) => boolean;
+    evaluate?: (target: any, tree: ISyntaxTree) => any;
     present?: (tree: ISyntaxTree) => any;
-    resolve?: (target: any, tree: ISyntaxTree) => any;
     subType?: string;
     type: string;
     nesting?: number;
@@ -22,6 +22,10 @@ export interface IUnboundedLexeme {
     regexpMatch?: number;
     syntaxer?: (lexs: any[], pivot: any, pivotIndex: number) => any;
     transform?: (value: any) => any;
+}
+
+export interface IUnboundedTypedLexeme<T> extends IUnboundedLexeme {
+    evaluate: (target: any, tree: ISyntaxTree) => T | void;
 }
 
 export interface ILexeme extends IUnboundedLexeme {

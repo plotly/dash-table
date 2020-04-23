@@ -10,3 +10,5 @@ export type OptionalProp<T, R extends keyof T> = T[R] | undefined;
 export type PropOf<T, R extends keyof T> = R;
 
 export type Merge<M, N> = Omit<M, Extract<keyof M, keyof N>> & N;
+
+export type FixedArray<TItem, TLength extends number> = [TItem, ...TItem[]] & { length: TLength };

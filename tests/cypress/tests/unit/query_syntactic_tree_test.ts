@@ -8,6 +8,143 @@ describe('Query Syntax Tree', () => {
     const data2 = { a: '2', b: '1', c: 2, d: '', '\\{': 2, 'a.dot': '2.dot', 'a-dot': '2-dot', a_dot: '2_dot', 'a+dot': '2+dot', 'a dot': '2 dot', 'a:dot': '2:dot', '_-6.:+** *@$': '2*dot', '{a:dot}': '2*dot*', '\'""\'': '2\'"dot' };
     const data3 = { a: '3', b: '1', c: 3, d: false, '\\{': 3, 'a.dot': '3.dot', 'a-dot': '3-dot', a_dot: '3_dot', 'a+dot': '3+dot', 'a dot': '3 dot', 'a:dot': '3:dot', '_-6.:+** *@$': '3*dot', '{a:dot}': '3*dot*', '\'""\'': '3\'"dot' };
 
+    it('year field expression', () => {
+        const tree = new QuerySyntaxTree('year({a}) = 2019');
+        expect(tree.isValid).to.equal(true);
+        expect(tree.evaluate({ a: '2019' })).to.equal(true);
+        expect(tree.evaluate({ a: '2019-01' })).to.equal(true);
+        expect(tree.evaluate({ a: '2019-02-02' })).to.equal(true);
+        expect(tree.evaluate({ a: '2019-03-06T01' })).to.equal(true);
+        expect(tree.evaluate({ a: '2019-04-08T02:01' })).to.equal(true);
+        expect(tree.evaluate({ a: '2019-05-10T03:02:01' })).to.equal(true);
+        expect(tree.evaluate({ a: '19-05-10T03:02:01' })).to.equal(true);
+        expect(tree.evaluate({ a: 'abc' })).to.equal(false);
+        expect(tree.evaluate({ a: 10 })).to.equal(false);
+    });
+
+    it('month field expression', () => {
+        const tree = new QuerySyntaxTree('month({a}) = 10');
+        expect(tree.isValid).to.equal(true);
+        expect(tree.evaluate({ a: '2011-10' })).to.equal(true);
+        expect(tree.evaluate({ a: '2011-10-03T01' })).to.equal(true);
+        expect(tree.evaluate({ a: '2011-10-03T27' })).to.equal(false);
+        expect(tree.evaluate({ a: '2011-09' })).to.equal(false);
+        expect(tree.evaluate({ a: 10 })).to.equal(false);
+        expect(tree.evaluate({ a: 'abc' })).to.equal(false);
+    });
+
+    it('day field expression', () => {
+        const tree = new QuerySyntaxTree('day({a}) = 17');
+        expect(tree.isValid).to.equal(true);
+        expect(tree.evaluate({ a: '2019-02-17' })).to.equal(true);
+        expect(tree.evaluate({ a: '19-02-17T08' })).to.equal(true);
+        expect(tree.evaluate({ a: '2019' })).to.equal(false);
+        expect(tree.evaluate({ a: '2019-01' })).to.equal(false);
+        expect(tree.evaluate({ a: '2019-02-02' })).to.equal(false);
+        expect(tree.evaluate({ a: '2019-03-06T01' })).to.equal(false);
+        expect(tree.evaluate({ a: '2019-04-08T02:01' })).to.equal(false);
+        expect(tree.evaluate({ a: '2019-05-10T03:02:01' })).to.equal(false);
+        expect(tree.evaluate({ a: '19-05-10T03:02:01' })).to.equal(false);
+        expect(tree.evaluate({ a: 'abc' })).to.equal(false);
+        expect(tree.evaluate({ a: 10 })).to.equal(false);
+    });
+
+    it('hour field expression', () => {
+        const tree = new QuerySyntaxTree('hour({a}) = 18');
+        expect(tree.isValid).to.equal(true);
+        expect(tree.evaluate({ a: '2019-02-17T18' })).to.equal(true);
+        expect(tree.evaluate({ a: '2019-02-17 18' })).to.equal(true);
+        expect(tree.evaluate({ a: '19-02-17T18' })).to.equal(true);
+        expect(tree.evaluate({ a: '2019' })).to.equal(false);
+        expect(tree.evaluate({ a: '2019-01' })).to.equal(false);
+        expect(tree.evaluate({ a: '2019-02-02' })).to.equal(false);
+        expect(tree.evaluate({ a: '2019-03-06T01' })).to.equal(false);
+        expect(tree.evaluate({ a: '2019-04-08T02:01' })).to.equal(false);
+        expect(tree.evaluate({ a: '2019-05-10T03:02:01' })).to.equal(false);
+        expect(tree.evaluate({ a: '19-05-10T03:02:01' })).to.equal(false);
+        expect(tree.evaluate({ a: 'abc' })).to.equal(false);
+        expect(tree.evaluate({ a: 10 })).to.equal(false);
+    });
+
+    it('minute field expression', () => {
+        const tree = new QuerySyntaxTree('minute({a}) = 19');
+        expect(tree.isValid).to.equal(true);
+        expect(tree.evaluate({ a: '2019-02-17T18:19' })).to.equal(true);
+        expect(tree.evaluate({ a: '2019-02-17 18:19' })).to.equal(true);
+        expect(tree.evaluate({ a: '19-02-17T18:19' })).to.equal(true);
+        expect(tree.evaluate({ a: '2019' })).to.equal(false);
+        expect(tree.evaluate({ a: '2019-01' })).to.equal(false);
+        expect(tree.evaluate({ a: '2019-02-02' })).to.equal(false);
+        expect(tree.evaluate({ a: '2019-03-06T01' })).to.equal(false);
+        expect(tree.evaluate({ a: '2019-04-08T02:01' })).to.equal(false);
+        expect(tree.evaluate({ a: '2019-05-10T03:02:01' })).to.equal(false);
+        expect(tree.evaluate({ a: '19-05-10T03:02:01' })).to.equal(false);
+        expect(tree.evaluate({ a: 'abc' })).to.equal(false);
+        expect(tree.evaluate({ a: 10 })).to.equal(false);
+    });
+
+    it('second field expression', () => {
+        const tree = new QuerySyntaxTree('second({a}) = 20');
+        expect(tree.isValid).to.equal(true);
+        expect(tree.evaluate({ a: '2019-02-17T18:19:20' })).to.equal(true);
+        expect(tree.evaluate({ a: '2019-02-17 18:19:20' })).to.equal(true);
+        expect(tree.evaluate({ a: '19-02-17T18:19:20' })).to.equal(true);
+        expect(tree.evaluate({ a: '2019' })).to.equal(false);
+        expect(tree.evaluate({ a: '2019-01' })).to.equal(false);
+        expect(tree.evaluate({ a: '2019-02-02' })).to.equal(false);
+        expect(tree.evaluate({ a: '2019-03-06T01' })).to.equal(false);
+        expect(tree.evaluate({ a: '2019-04-08T02:01' })).to.equal(false);
+        expect(tree.evaluate({ a: '2019-05-10T03:02:01' })).to.equal(false);
+        expect(tree.evaluate({ a: '19-05-10T03:02:01' })).to.equal(false);
+        expect(tree.evaluate({ a: 'abc' })).to.equal(false);
+        expect(tree.evaluate({ a: 10 })).to.equal(false);
+    });
+
+    it('month string expression', () => {
+        const tree = new QuerySyntaxTree('month("2011-10") = 10');
+        expect(tree.isValid).to.equal(true);
+        expect(tree.evaluate({})).to.equal(true);
+    });
+
+    it('month field expression / rel / expression', () => {
+        const tree = new QuerySyntaxTree('month({a}) = {b}');
+        expect(tree.isValid).to.equal(true);
+        expect(tree.evaluate({ a: '2011-10', b: 10 })).to.equal(true);
+        expect(tree.evaluate({ a: '2011-10', b: 9 })).to.equal(false);
+        expect(tree.evaluate({ a: '2011-09', b: 10 })).to.equal(false);
+        expect(tree.evaluate({ a: 10, b: 10 })).to.equal(false);
+    });
+
+    it('month / rel / month', () => {
+        const tree = new QuerySyntaxTree('month({a}) = month({b})');
+        expect(tree.isValid).to.equal(true);
+
+        expect(tree.evaluate({ a: '2011-10', b: '2011-10' })).to.equal(true);
+        expect(tree.evaluate({ a: '2011-10-03', b: '2011-10-04' })).to.equal(true);
+
+        expect(tree.evaluate({ a: '2011-09', b: '2011-10' })).to.equal(false);
+        expect(tree.evaluate({ a: 'abc', b: '2011-10' })).to.equal(false);
+        expect(tree.evaluate({ a: 10, b: '2011-10' })).to.equal(false);
+    });
+
+    it('month / rel / month(month)', () => {
+        const tree = new QuerySyntaxTree('month({a}) = month(month({b}))');
+        expect(tree.isValid).to.equal(true);
+
+        expect(tree.evaluate({ a: '2011-10', b: '2011-10' })).to.equal(false);
+        expect(tree.evaluate({ a: '2011-10-03', b: '2011-10-04' })).to.equal(false);
+        expect(tree.evaluate({ a: '2011-09', b: '2011-10' })).to.equal(false);
+        expect(tree.evaluate({ a: 'abc', b: '2011-10' })).to.equal(false);
+        expect(tree.evaluate({ a: 10, b: '2011-10' })).to.equal(false);
+    });
+
+    it('month(month) / rel / month(month)', () => {
+        const tree = new QuerySyntaxTree('month(month({a})) = month(month({b}))');
+        expect(tree.isValid).to.equal(true);
+
+        expect(tree.evaluate({ a: '2011-10', b: '2011-10' })).to.equal(false);
+    });
+
     describe('special whitespace characters are valid', () => {
         processCases((query: string) => new QuerySyntaxTree(query), [
             { name: 'suports new line', query: '{a}\neq\n"0"', target: data0, valid: true, evaluate: true },
@@ -346,6 +483,16 @@ describe('Query Syntax Tree', () => {
             expect(tree.evaluate(data1)).to.equal(false);
             expect(tree.evaluate(data2)).to.equal(true);
             expect(tree.evaluate(data3)).to.equal(false);
+        });
+
+        it.only('can check date', () => {
+            const tree = new QuerySyntaxTree('{a} is date');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({ a: '2019' })).to.equal(true);
+            expect(tree.evaluate({ a: '19' })).to.equal(true);
+            expect(tree.evaluate({ a: 'abc' })).to.equal(false);
+            expect(tree.evaluate({ a: 10 })).to.equal(false);
         });
 
         it('can invert check nil', () => {
