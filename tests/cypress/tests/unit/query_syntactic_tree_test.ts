@@ -465,7 +465,7 @@ describe('Query Syntax Tree', () => {
     });
 
     describe('unary operators', () => {
-        it.only('on transform', () => {
+        it('on transform', () => {
             const tree = new QuerySyntaxTree('month({a}) is odd');
 
             expect(tree.isValid).to.equal(true);
