@@ -5,8 +5,6 @@ interface IRule {
     selectorText: string;
 }
 
-export const sanitizeId = (id: string) => id.replace(/([`~\!\@#\$%\^&\*\(\)=\+\\|\/,.'\";:\?><\[\]\{\}\s])/g, '\\$1');
-
 class StylesheetFacade {
     constructor(private readonly name: string) {
 
