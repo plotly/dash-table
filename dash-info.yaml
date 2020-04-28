@@ -22,7 +22,7 @@ r_examples:
             # The following if statement is not required to run this
             # example locally, but was added at the request of CRAN
             # maintainers.
-            if (require("dash")) {
+            if (interactive()) {
               library(dash)
               library(dashTable)
 
@@ -48,11 +48,8 @@ r_examples:
                 )
               )
 
-              # block=FALSE also required to pass CRAN checks
-              app$run_server(block=FALSE)
+              app$run_server()
               
-              app$server$stop()
-
               app <- Dash$new()
 
               # We can also make rows and columns selectable/deletable
@@ -83,7 +80,5 @@ r_examples:
                 )
               )
 
-              # block=FALSE also required to pass CRAN checks
-              app$run_server(block=FALSE)
-              app$server$stop()
-           } 
+              app$run_server()
+            }
