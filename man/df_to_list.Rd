@@ -17,8 +17,11 @@ df_to_list(df=NULL)
 \item{df}{A \code{data.frame} object, which will be transformed into a list of lists. Each row will become a single named list, in which the elements are named as the columns from which they were extracted.}
 }
 
+\value{
+a \code{list} object, in which the sublists are named elements of varying type; the names correspond to the column names in the \code{data.frame} specified by \code{df}.
+}
+
 \examples{
-\dontrun{
 # first, create data frame
 df <- read.csv(url(
   'https://raw.githubusercontent.com/plotly/datasets/master/solar.csv'
@@ -37,5 +40,4 @@ dashDataTable(
   }),
   data = df_to_list(df)
 )
-}
 }
