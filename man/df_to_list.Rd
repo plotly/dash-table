@@ -10,7 +10,7 @@ Convert a \code{\link{data.frame}} to a list of lists for compatibility with \co
 }
 
 \usage{
-df_to_list(df=NULL)
+df_to_list(df)
 }
 
 \arguments{
