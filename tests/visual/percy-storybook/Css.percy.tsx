@@ -34,5 +34,5 @@ storiesOf('DashTable/CSS override', module)
     />))
     .add('stringified object as id', () => (<DataTable
         {...props}
-        id={{ id: 3, group: 'A' }}
+        id={"{ id: 3, group: 'A' }"}
     />));
