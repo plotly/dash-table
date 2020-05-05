@@ -2,6 +2,26 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.7.0] - 2020-05-05
+### Added
+- [#729](https://github.com/plotly/dash-table/pull/729) Improve conditional styling
+    - `style_data_conditional`: Add support for `row_index` and `column_id` array of values
+    - `style_header_conditional`: Add support for `header_index` and `column_id` array of values
+    - `style_filter_conditional`: Add support for `column_id` array of values
+    - `style_cell_conditional`: Add support for `column_id` array of values
+    - `style_data_conditional`: Add new conditions `state: 'active'|'selected'` to customize selected and active cell styles
+
+### Fixed
+- [#722](https://github.com/plotly/dash-table/pull/722) Fix a bug where row height is misaligned when using fixed_columns and/or fixed_rows
+- [#728](https://github.com/plotly/dash-table/pull/728) Fix copy/paste on readonly cells
+- [#724](https://github.com/plotly/dash-table/pull/724) Fix `active_cell` docstring: clarify optional nature of the `row_id` nested prop
+- [#732](https://github.com/plotly/dash-table/pull/732) Fix a bug where opening a dropdown scrolled the table down its last row
+- [#731](https://github.com/plotly/dash-table/pull/731) Fix a bug where `data=None` and `columns=None` caused the table to throw an error
+- [#766](https://github.com/plotly/dash-table/pull/766) Sanitize table `id` for stylesheet injection (fixes usage with Pattern-Matching callbacks)
+
+## Changed
+- [#758](https://github.com/plotly/dash-table/pull/758) Improve error message for invalid filter queries
+
 ## [4.6.2] - 2020-04-01
 ### Changed
 - [#713](https://github.com/plotly/dash-table/pull/713) Update from React 16.8.6 to 16.13.0

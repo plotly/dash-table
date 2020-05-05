@@ -10,30 +10,41 @@ Dash DataTable is an interactive table component designed for designed for viewi
 }
 
 \usage{
-dashDataTable(active_cell=NULL, columns=NULL, include_headers_on_copy_paste=NULL,
-locale_format=NULL, css=NULL, data=NULL, data_previous=NULL,
-data_timestamp=NULL, editable=NULL, end_cell=NULL, export_columns=NULL,
-export_format=NULL, export_headers=NULL, fill_width=NULL, hidden_columns=NULL,
-id=NULL, is_focused=NULL, merge_duplicate_headers=NULL, fixed_columns=NULL,
-fixed_rows=NULL, column_selectable=NULL, row_deletable=NULL,
-row_selectable=NULL, selected_cells=NULL, selected_rows=NULL,
-selected_columns=NULL, selected_row_ids=NULL, start_cell=NULL,
-style_as_list_view=NULL, page_action=NULL, page_current=NULL, page_count=NULL,
-page_size=NULL, dropdown=NULL, dropdown_conditional=NULL, dropdown_data=NULL,
-tooltip=NULL, tooltip_conditional=NULL, tooltip_data=NULL, tooltip_delay=NULL,
-tooltip_duration=NULL, filter_query=NULL, filter_action=NULL, sort_action=NULL,
-sort_mode=NULL, sort_by=NULL, sort_as_null=NULL, style_table=NULL,
-style_cell=NULL, style_data=NULL, style_filter=NULL, style_header=NULL,
-style_cell_conditional=NULL, style_data_conditional=NULL,
-style_filter_conditional=NULL, style_header_conditional=NULL,
-virtualization=NULL, derived_filter_query_structure=NULL,
+dashDataTable(active_cell=NULL, columns=NULL,
+include_headers_on_copy_paste=NULL, locale_format=NULL,
+css=NULL, data=NULL, data_previous=NULL,
+data_timestamp=NULL, editable=NULL, end_cell=NULL,
+export_columns=NULL, export_format=NULL,
+export_headers=NULL, fill_width=NULL, hidden_columns=NULL,
+id=NULL, is_focused=NULL, merge_duplicate_headers=NULL,
+fixed_columns=NULL, fixed_rows=NULL, column_selectable=NULL,
+row_deletable=NULL, row_selectable=NULL,
+selected_cells=NULL, selected_rows=NULL,
+selected_columns=NULL, selected_row_ids=NULL,
+start_cell=NULL, style_as_list_view=NULL, page_action=NULL,
+page_current=NULL, page_count=NULL, page_size=NULL,
+dropdown=NULL, dropdown_conditional=NULL,
+dropdown_data=NULL, tooltip=NULL, tooltip_conditional=NULL,
+tooltip_data=NULL, tooltip_delay=NULL,
+tooltip_duration=NULL, filter_query=NULL,
+filter_action=NULL, sort_action=NULL, sort_mode=NULL,
+sort_by=NULL, sort_as_null=NULL, style_table=NULL,
+style_cell=NULL, style_data=NULL, style_filter=NULL,
+style_header=NULL, style_cell_conditional=NULL,
+style_data_conditional=NULL, style_filter_conditional=NULL,
+style_header_conditional=NULL, virtualization=NULL,
+derived_filter_query_structure=NULL,
 derived_viewport_data=NULL, derived_viewport_indices=NULL,
-derived_viewport_row_ids=NULL, derived_viewport_selected_columns=NULL,
-derived_viewport_selected_rows=NULL, derived_viewport_selected_row_ids=NULL,
+derived_viewport_row_ids=NULL,
+derived_viewport_selected_columns=NULL,
+derived_viewport_selected_rows=NULL,
+derived_viewport_selected_row_ids=NULL,
 derived_virtual_data=NULL, derived_virtual_indices=NULL,
-derived_virtual_row_ids=NULL, derived_virtual_selected_rows=NULL,
-derived_virtual_selected_row_ids=NULL, loading_state=NULL, persistence=NULL,
-persisted_props=NULL, persistence_type=NULL)
+derived_virtual_row_ids=NULL,
+derived_virtual_selected_rows=NULL,
+derived_virtual_selected_row_ids=NULL, loading_state=NULL,
+persistence=NULL, persisted_props=NULL,
+persistence_type=NULL)
 }
 
 \arguments{
@@ -42,7 +53,8 @@ those elements have the following types:
   - row (numeric; optional)
   - column (numeric; optional)
   - row_id (character | numeric; optional)
-  - column_id (character; optional). The row and column indices and IDs of the currently active cell.}
+  - column_id (character; optional). The row and column indices and IDs of the currently active cell.
+`row_id` is only returned if the data rows have an `id` key.}
 
 \item{columns}{List of lists containing elements 'clearable', 'deletable', 'editable', 'hideable', 'renamable', 'selectable', 'format', 'id', 'name', 'presentation', 'on_change', 'sort_as_null', 'validation', 'type'.
 those elements have the following types:
@@ -610,7 +622,10 @@ Defaults to 2000.}
 string is represented in this `filter_query`
 property.}
 
-\item{filter_action}{A value equal to: 'custom', 'native', 'none'. The `filter_action` property controls the behavior of the `filtering` UI.
+\item{filter_action}{A value equal to: 'custom', 'native', 'none' | lists containing elements 'type', 'operator'.
+those elements have the following types:
+  - type (a value equal to: 'custom', 'native'; required)
+  - operator (a value equal to: 'and', 'or'; optional). The `filter_action` property controls the behavior of the `filtering` UI.
 If `'none'`, then the filtering UI is not displayed.
 If `'native'`, then the filtering UI is displayed and the filtering
 logic is handled by the table. That is, it is performed on the data
@@ -681,18 +696,19 @@ That is, unlike `style_cell`, it excludes the `data` and filter cells.}
 those elements have the following types:
   - if (optional): . if has the following type: lists containing elements 'column_id', 'column_type'.
 those elements have the following types:
-  - column_id (character; optional)
+  - column_id (character | list of characters; optional)
   - column_type (a value equal to: 'any', 'numeric', 'text', 'datetime'; optional)s. Conditional CSS styles for the cells.
 This can be used to apply styles to cells on a per-column basis.}
 
 \item{style_data_conditional}{List of lists containing elements 'if'.
 those elements have the following types:
-  - if (optional): . if has the following type: lists containing elements 'column_id', 'column_type', 'filter_query', 'row_index', 'column_editable'.
+  - if (optional): . if has the following type: lists containing elements 'column_id', 'column_type', 'filter_query', 'state', 'row_index', 'column_editable'.
 those elements have the following types:
-  - column_id (character; optional)
+  - column_id (character | list of characters; optional)
   - column_type (a value equal to: 'any', 'numeric', 'text', 'datetime'; optional)
   - filter_query (character; optional)
-  - row_index (numeric | a value equal to: 'odd', 'even'; optional)
+  - state (a value equal to: 'active', 'selected'; optional)
+  - row_index (numeric | a value equal to: 'odd', 'even' | list of numerics; optional)
   - column_editable (logical; optional)s. Conditional CSS styles for the data cells.
 This can be used to apply styles to data cells on a per-column basis.}
 
@@ -700,7 +716,7 @@ This can be used to apply styles to data cells on a per-column basis.}
 those elements have the following types:
   - if (optional): . if has the following type: lists containing elements 'column_id', 'column_type', 'column_editable'.
 those elements have the following types:
-  - column_id (character; optional)
+  - column_id (character | list of characters; optional)
   - column_type (a value equal to: 'any', 'numeric', 'text', 'datetime'; optional)
   - column_editable (logical; optional)s. Conditional CSS styles for the filter cells.
 This can be used to apply styles to filter cells on a per-column basis.}
@@ -709,9 +725,9 @@ This can be used to apply styles to filter cells on a per-column basis.}
 those elements have the following types:
   - if (optional): . if has the following type: lists containing elements 'column_id', 'column_type', 'header_index', 'column_editable'.
 those elements have the following types:
-  - column_id (character; optional)
+  - column_id (character | list of characters; optional)
   - column_type (a value equal to: 'any', 'numeric', 'text', 'datetime'; optional)
-  - header_index (numeric | a value equal to: 'odd', 'even'; optional)
+  - header_index (numeric | list of numerics | a value equal to: 'odd', 'even'; optional)
   - column_editable (logical; optional)s. Conditional CSS styles for the header cells.
 This can be used to apply styles to header cells on a per-column basis.}
 
@@ -810,70 +826,78 @@ memory: only kept in memory, reset on page refresh.
 local: window.localStorage, data is kept after the browser quit.
 session: window.sessionStorage, data is cleared once the browser quit.}
 }
+
+\value{named list of JSON elements corresponding to React.js properties and their values}
+
 \examples{
-\dontrun{
 # For comprehensive documentation of this package's features,
 # please consult https://dashr.plot.ly/datatable
 #
 # A package vignette is currently in development and will
 # provide many of the same examples currently available online
 # in an offline-friendly format.
-library(dash)
-library(dashTable)
 
-app <- Dash$new()
+# The following if statement is not required to run this
+# example locally, but was added at the request of CRAN
+# maintainers.
+if (interactive() && require(dash)) {
+  library(dash)
+  library(dashTable)
 
-# We can easily restrict the number of rows to display at
-# once by using style_table:
-app$layout(
-  dashDataTable(
-    id = "table",
-    columns = lapply(colnames(iris), 
-                     function(colName){
-                       list(
-                         id = colName,
-                         name = colName
-                       )
-                     }),
-    style_table = list(
-      maxHeight = "250px",
-      overflowY = "scroll"
-    ),
-    data = df_to_list(iris)
+  app <- Dash$new()
+
+  # We can easily restrict the number of rows to display at
+  # once by using style_table:
+  app$layout(
+    dashDataTable(
+      id = "table",
+      columns = lapply(colnames(iris),
+                       function(colName){
+                         list(
+                           id = colName,
+                           name = colName
+                         )
+                       }),
+      style_table = list(
+        maxHeight = "250px",
+        overflowY = "scroll"
+      ),
+      data = df_to_list(iris)
+    )
   )
-)
 
-app$run_server()
+  app$run_server()
+  
+  app <- Dash$new()
 
-app <- Dash$new()
-
-# We can also make rows and columns selectable/deletable
-# by setting a few additional attributes:
-app$layout(
-  dashDataTable(
-    id = "table",
-    columns = lapply(colnames(iris), 
-                     function(colName){
-                       list(
-                         id = colName,
-                         name = colName,
-                         deletable = TRUE
-                       )
-                     }),
-    style_table = list(
-      maxHeight = "250px",
-      overflowY = "scroll"
-    ),
-    data = df_to_list(iris),
-    editable = TRUE,
-    filter_action = "native",
-    sort_action = "native",
-    sort_mode = "multi",
-    column_selectable = "single",
-    row_selectable = "multi",
-    row_deletable = TRUE
+  # We can also make rows and columns selectable/deletable
+  # by setting a few additional attributes:
+  app$layout(
+    dashDataTable(
+      id = "table",
+      columns = lapply(colnames(iris),
+                       function(colName){
+                         list(
+                           id = colName,
+                           name = colName,
+                           deletable = TRUE
+                         )
+                       }),
+      style_table = list(
+        maxHeight = "250px",
+        overflowY = "scroll"
+      ),
+      data = df_to_list(iris),
+      editable = TRUE,
+      filter_action = "native",
+      sort_action = "native",
+      sort_mode = "multi",
+      column_selectable = "single",
+      row_selectable = "multi",
+      row_deletable = TRUE
+    )
   )
-)
 
-app$run_server()
-}}
+  app$run_server()
+}
+}

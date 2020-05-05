@@ -44,6 +44,10 @@ class Wrappers {
     ) => {
         wrappers = shallowClone(wrappers);
 
+        const cells = selectedCells.length ?
+            selectedCells :
+            activeCell ? [activeCell] : [];
+
         R.forEach(({ row: i, column: j }) => {
             i -= offset.rows;
             j -= offset.columns;
@@ -56,10 +60,10 @@ class Wrappers {
             const active = isActiveCell(activeCell, i + offset.rows, j + offset.columns);
 
             wrappers[i][j] = React.cloneElement(w, {
-                classes: w.props.classes + ' cell--selected' + (active ? ' focused' : '')
+                className: w.props.className + ' cell--selected' + (active ? ' focused' : '')
             });
 
-        }, selectedCells);
+        }, cells);
 
         return wrappers;
     });
@@ -72,7 +76,7 @@ class Wrappers {
         column: IColumn
     ) {
         const isDropdown = column.presentation === Presentation.Dropdown;
-        const classes = 'dash-cell' +
+        const className = 'dash-cell' +
             ` column-${columnIndex}` +
             (active ? ' focused' : '') +
             (selected ? ' cell--selected' : '') +
@@ -80,7 +84,7 @@ class Wrappers {
 
         return this.wrapper.get(rowIndex, columnIndex)(
             active,
-            classes,
+            className,
             columnIndex,
             column.id,
             rowIndex,
@@ -97,7 +101,7 @@ class Wrappers {
      */
     private wrapper = memoizerCache<[number, number]>()((
         active: boolean,
-        classes: string,
+        className: string,
         columnIndex: number,
         columnId: ColumnId,
         rowIndex: number,
@@ -112,7 +116,7 @@ class Wrappers {
             'data-dash-column': columnId,
             'data-dash-row': rowIndex
         }}
-        classes={classes}
+        className={className}
         key={`column-${columnIndex}`}
         onClick={onClick}
         onDoubleClick={onDoubleClick}

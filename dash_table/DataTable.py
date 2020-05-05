@@ -14,7 +14,8 @@ Dash community. Its API was designed to be ergonomic and its behavior
 is completely customizable through its properties.
 
 Keyword arguments:
-- active_cell (dict; optional): The row and column indices and IDs of the currently active cell. active_cell has the following type: dict containing keys 'row', 'column', 'row_id', 'column_id'.
+- active_cell (dict; optional): The row and column indices and IDs of the currently active cell.
+`row_id` is only returned if the data rows have an `id` key. active_cell has the following type: dict containing keys 'row', 'column', 'row_id', 'column_id'.
 Those keys have the following types:
   - row (number; optional)
   - column (number; optional)
@@ -551,7 +552,7 @@ Defaults to 2000.
 - filter_query (string; default ''): If `filter_action` is enabled, then the current filtering
 string is represented in this `filter_query`
 property.
-- filter_action (a value equal to: 'custom', 'native', 'none'; default 'none'): The `filter_action` property controls the behavior of the `filtering` UI.
+- filter_action (dict; default 'none'): The `filter_action` property controls the behavior of the `filtering` UI.
 If `'none'`, then the filtering UI is not displayed.
 If `'native'`, then the filtering UI is displayed and the filtering
 logic is handled by the table. That is, it is performed on the data
@@ -559,7 +560,10 @@ that exists in the `data` property.
 If `'custom'`, then the filtering UI is displayed but it is the
 responsibility of the developer to program the filtering
 through a callback (where `filter_query` or `derived_filter_query_structure` would be the input
-and `data` would be the output).
+and `data` would be the output). filter_action has the following type: a value equal to: 'custom', 'native', 'none' | dict containing keys 'type', 'operator'.
+Those keys have the following types:
+  - type (a value equal to: 'custom', 'native'; required)
+  - operator (a value equal to: 'and', 'or'; optional)
 - sort_action (a value equal to: 'custom', 'native', 'none'; default 'none'): The `sort_action` property enables data to be
 sorted on a per-column basis.
 If `'none'`, then the sorting UI is not displayed.
@@ -613,24 +617,25 @@ This can be used to apply styles to cells on a per-column basis. style_cell_cond
 Those keys have the following types:
   - if (dict; optional): if has the following type: dict containing keys 'column_id', 'column_type'.
 Those keys have the following types:
-  - column_id (string; optional)
+  - column_id (string | list of strings; optional)
   - column_type (a value equal to: 'any', 'numeric', 'text', 'datetime'; optional)
 - style_data_conditional (dict; optional): Conditional CSS styles for the data cells.
 This can be used to apply styles to data cells on a per-column basis. style_data_conditional has the following type: list of dicts containing keys 'if'.
 Those keys have the following types:
-  - if (dict; optional): if has the following type: dict containing keys 'column_id', 'column_type', 'filter_query', 'row_index', 'column_editable'.
+  - if (dict; optional): if has the following type: dict containing keys 'column_id', 'column_type', 'filter_query', 'state', 'row_index', 'column_editable'.
 Those keys have the following types:
-  - column_id (string; optional)
+  - column_id (string | list of strings; optional)
   - column_type (a value equal to: 'any', 'numeric', 'text', 'datetime'; optional)
   - filter_query (string; optional)
-  - row_index (number | a value equal to: 'odd', 'even'; optional)
+  - state (a value equal to: 'active', 'selected'; optional)
+  - row_index (number | a value equal to: 'odd', 'even' | list of numbers; optional)
   - column_editable (boolean; optional)
 - style_filter_conditional (dict; optional): Conditional CSS styles for the filter cells.
 This can be used to apply styles to filter cells on a per-column basis. style_filter_conditional has the following type: list of dicts containing keys 'if'.
 Those keys have the following types:
   - if (dict; optional): if has the following type: dict containing keys 'column_id', 'column_type', 'column_editable'.
 Those keys have the following types:
-  - column_id (string; optional)
+  - column_id (string | list of strings; optional)
   - column_type (a value equal to: 'any', 'numeric', 'text', 'datetime'; optional)
   - column_editable (boolean; optional)
 - style_header_conditional (dict; optional): Conditional CSS styles for the header cells.
@@ -638,9 +643,9 @@ This can be used to apply styles to header cells on a per-column basis. style_he
 Those keys have the following types:
   - if (dict; optional): if has the following type: dict containing keys 'column_id', 'column_type', 'header_index', 'column_editable'.
 Those keys have the following types:
-  - column_id (string; optional)
+  - column_id (string | list of strings; optional)
   - column_type (a value equal to: 'any', 'numeric', 'text', 'datetime'; optional)
-  - header_index (number | a value equal to: 'odd', 'even'; optional)
+  - header_index (number | list of numbers | a value equal to: 'odd', 'even'; optional)
   - column_editable (boolean; optional)
 - virtualization (boolean; default False): This property tells the table to use virtualization when rendering.
 Assumptions are that:

@@ -43,6 +43,7 @@ export default class CellDropdown extends PureComponent<IProps> {
                 onChange={(newValue: any) => {
                     onChange(newValue ? newValue.value : newValue);
                 }}
+                scrollMenuIntoView={false}
                 onOpen={this.handleOpenDropdown}
                 options={dropdown}
                 placeholder={''}
@@ -75,7 +76,7 @@ export default class CellDropdown extends PureComponent<IProps> {
         if (applyFocus && dropdown && document.activeElement !== dropdown) {
             // Limitation. If React >= 16 --> Use React.createRef instead to pass parent ref to child
             const tdParent = DOM.getFirstParentOfType(dropdown.wrapper, 'td');
-            if (tdParent) {
+            if (tdParent && tdParent.className.indexOf('phantom-cell') === -1) {
                 tdParent.focus();
             }
         }

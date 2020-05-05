@@ -35,7 +35,7 @@
           }
         },
         "required": false,
-        "description": "The row and column indices and IDs of the currently active cell."
+        "description": "The row and column indices and IDs of the currently active cell.\n`row_id` is only returned if the data rows have an `id` key."
       },
       "columns": {
         "type": {
@@ -403,11 +403,7 @@
           }
         },
         "required": false,
-        "description": "Columns describes various aspects about each individual column.\n`name` and `id` are the only required parameters.",
-        "defaultValue": {
-          "value": "[]",
-          "computed": false
-        }
+        "description": "Columns describes various aspects about each individual column.\n`name` and `id` are the only required parameters."
       },
       "include_headers_on_copy_paste": {
         "type": {
@@ -498,11 +494,7 @@
           }
         },
         "required": false,
-        "description": "The contents of the table.\nThe keys of each item in data should match the column IDs.\nEach item can also have an 'id' key, whose value is its row ID. If there\nis a column with ID='id' this will display the row ID, otherwise it is\njust used to reference the row for selections, filtering, etc.\nExample:\n[\n     {'column-1': 4.5, 'column-2': 'montreal', 'column-3': 'canada'},\n     {'column-1': 8, 'column-2': 'boston', 'column-3': 'america'}\n]",
-        "defaultValue": {
-          "value": "[]",
-          "computed": false
-        }
+        "description": "The contents of the table.\nThe keys of each item in data should match the column IDs.\nEach item can also have an 'id' key, whose value is its row ID. If there\nis a column with ID='id' this will display the row ID, otherwise it is\njust used to reference the row for selections, filtering, etc.\nExample:\n[\n     {'column-1': 4.5, 'column-2': 'montreal', 'column-3': 'canada'},\n     {'column-1': 8, 'column-2': 'boston', 'column-3': 'america'}\n]"
       },
       "data_previous": {
         "type": {
@@ -1421,19 +1413,57 @@
       },
       "filter_action": {
         "type": {
-          "name": "enum",
+          "name": "union",
           "value": [
             {
-              "value": "'custom'",
-              "computed": false
+              "name": "enum",
+              "value": [
+                {
+                  "value": "'custom'",
+                  "computed": false
+                },
+                {
+                  "value": "'native'",
+                  "computed": false
+                },
+                {
+                  "value": "'none'",
+                  "computed": false
+                }
+              ]
             },
             {
-              "value": "'native'",
-              "computed": false
-            },
-            {
-              "value": "'none'",
-              "computed": false
+              "name": "shape",
+              "value": {
+                "type": {
+                  "name": "enum",
+                  "value": [
+                    {
+                      "value": "'custom'",
+                      "computed": false
+                    },
+                    {
+                      "value": "'native'",
+                      "computed": false
+                    }
+                  ],
+                  "required": true
+                },
+                "operator": {
+                  "name": "enum",
+                  "value": [
+                    {
+                      "value": "'and'",
+                      "computed": false
+                    },
+                    {
+                      "value": "'or'",
+                      "computed": false
+                    }
+                  ],
+                  "required": false
+                }
+              }
             }
           ]
         },
@@ -1598,7 +1628,18 @@
                 "name": "exact",
                 "value": {
                   "column_id": {
-                    "name": "string",
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "arrayOf",
+                        "value": {
+                          "name": "string"
+                        }
+                      }
+                    ],
                     "required": false
                   },
                   "column_type": {
@@ -1646,7 +1687,18 @@
                 "name": "exact",
                 "value": {
                   "column_id": {
-                    "name": "string",
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "arrayOf",
+                        "value": {
+                          "name": "string"
+                        }
+                      }
+                    ],
                     "required": false
                   },
                   "column_type": {
@@ -1675,6 +1727,20 @@
                     "name": "string",
                     "required": false
                   },
+                  "state": {
+                    "name": "enum",
+                    "value": [
+                      {
+                        "value": "'active'",
+                        "computed": false
+                      },
+                      {
+                        "value": "'selected'",
+                        "computed": false
+                      }
+                    ],
+                    "required": false
+                  },
                   "row_index": {
                     "name": "union",
                     "value": [
@@ -1693,6 +1759,12 @@
                             "computed": false
                           }
                         ]
+                      },
+                      {
+                        "name": "arrayOf",
+                        "value": {
+                          "name": "number"
+                        }
                       }
                     ],
                     "required": false
@@ -1724,7 +1796,18 @@
                 "name": "exact",
                 "value": {
                   "column_id": {
-                    "name": "string",
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "arrayOf",
+                        "value": {
+                          "name": "string"
+                        }
+                      }
+                    ],
                     "required": false
                   },
                   "column_type": {
@@ -1776,7 +1859,18 @@
                 "name": "exact",
                 "value": {
                   "column_id": {
-                    "name": "string",
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "arrayOf",
+                        "value": {
+                          "name": "string"
+                        }
+                      }
+                    ],
                     "required": false
                   },
                   "column_type": {
@@ -1806,6 +1900,12 @@
                     "value": [
                       {
                         "name": "number"
+                      },
+                      {
+                        "name": "arrayOf",
+                        "value": {
+                          "name": "number"
+                        }
                       },
                       {
                         "name": "enum",

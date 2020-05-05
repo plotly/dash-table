@@ -1,6 +1,6 @@
 {
   "name": "dash-table",
-  "version": "4.6.2",
+  "version": "4.7.0",
   "description": "Dash table",
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
     "private::build:js-test": "run-s \"private::build -- --mode development --config webpack.test.config.js\"",
     "private::build:js-test-standalone": "run-s \"private::build -- --mode development --config webpack.test.standalone.config.js\"",
     "private::build:js-test-watch": "run-s \"private::build -- --mode development --config webpack.test.config.js --watch\"",
-    "private::build:py": "dash-generate-components src/dash-table/dash/DataTable.js dash_table -p package-info.json && cp dash_table_base/** dash_table/ && dash-generate-components src/dash-table/dash/DataTable.js dash_table -p package-info.json --r-prefix 'dash'",
+    "private::build:py": "dash-generate-components src/dash-table/dash/DataTable.js dash_table -p package-info.json && cp dash_table_base/** dash_table/ && dash-generate-components src/dash-table/dash/DataTable.js dash_table -p package-info.json --r-prefix 'dash' --r-suggests 'dash'",
     "private::format.ts": "npm run private::lint.ts -- --fix",
     "private::format.black": "black --exclude dash_table .",
     "private::host_js": "http-server ./dash_table -c-1 --silent",
@@ -75,6 +75,7 @@
     "@types/react-select": "^3.0.10",
     "babel-loader": "^8.0.6",
     "css-loader": "^3.4.2",
+    "css.escape": "^1.5.1",
     "cypress": "^3.8.1",
     "d3-format": "^1.4.3",
     "es-check": "^5.1.0",
