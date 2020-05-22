@@ -1,0 +1,12 @@
+
+name = "DashTable"
+uuid = "1b08a953-4be3-4667-9a23-759fc69216d1"
+authors = ["Chris Parmer <chris@plotly.com>"]
+version = "4.7.0"
+
+[deps]
+Dash = "1b08a953-4be3-4667-9a23-3db579824955"
+
+[compact]
+julia = "1.1"
+Dash = ">=0.1"
