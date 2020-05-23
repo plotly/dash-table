@@ -112,7 +112,7 @@ is the same.
 'locale': represents localization specific formatting information.
  When left unspecified, will use the default value provided by d3-format.
  The keys are as follows:
- 'symbol': (default: ['$', '']) a list of two strings representing the
+ 'symbol': (default: ['\$', '']) a list of two strings representing the
  prefix and suffix symbols. Typically used for currency, and implemented using d3's
  currency format, but you can use this for other symbols such as measurement units;
  'decimal': (default: '.') the string used for the decimal separator;
@@ -206,7 +206,7 @@ between two tables within the same tab.
 - `locale_format` (optional): The localization specific formatting information applied to all columns in the table.
 This prop is derived from the [d3.formatLocale](https://github.com/d3/d3-format#formatLocale) data structure specification.
 When left unspecified, each individual nested prop will default to a pre-determined value.
-  'symbol': (default: ['$', '']) a list of two strings representing the
+  'symbol': (default: ['\$', '']) a list of two strings representing the
   prefix and suffix symbols. Typically used for currency, and implemented using d3's
   currency format, but you can use this for other symbols such as measurement units.
   'decimal': (default: '.') the string used for the decimal separator.
