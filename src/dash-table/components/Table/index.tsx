@@ -97,7 +97,7 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
 
         return R.any(key =>
             !DERIVED_REGEX.test(key) && props[key] !== nextProps[key],
-            R.keysIn(props)
+            R.keysIn({ ...props, ...nextProps })
         ) || !isEqual(state, nextState);
     }
 

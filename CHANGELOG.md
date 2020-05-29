@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Fixed
+- [#785](https://github.com/plotly/dash-table/pull/785) Fix a bug where the table does not refresh correctly if a property was previously missing
+
 ## [4.7.0] - 2020-05-05
 ### Added
 - [#729](https://github.com/plotly/dash-table/pull/729) Improve conditional styling
