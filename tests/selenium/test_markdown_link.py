@@ -1,7 +1,7 @@
 import dash
 from dash_table import DataTable
-import time
 import pandas as pd
+import pytest
 
 url = "https://github.com/plotly/datasets/raw/master/" "26k-consumer-complaints.csv"
 rawDf = pd.read_csv(url)
@@ -15,7 +15,7 @@ rawDf["State"] = rawDf["State"].map(lambda x: '```python\n"{}"\n```'.format(x))
 df = rawDf.to_dict("rows")
 
 
-def get_app():
+def get_app(cell_selectable):
     md = "[Click me](https://www.google.com)"
 
     data = [
@@ -32,13 +32,15 @@ def get_app():
             dict(name="b", id="b", type="text", presentation="markdown"),
         ],
         data=data,
+        cell_selectable=cell_selectable,
     )
 
     return app
 
 
-def test_tmdl001_copy_markdown_to_text(test):
-    test.start_server(get_app())
+@pytest.mark.parametrize("cell_selectable", [True, False])
+def test_tmdl001_copy_markdown_to_text(test, cell_selectable):
+    test.start_server(get_app(cell_selectable))
 
     target = test.table("table")
 

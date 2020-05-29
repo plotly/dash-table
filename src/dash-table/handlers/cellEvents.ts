@@ -12,6 +12,7 @@ export const handleClick = (
     e: any
 ) => {
     const {
+        cell_selectable,
         selected_cells,
         active_cell,
         setProps,
@@ -32,6 +33,10 @@ export const handleClick = (
     const column = visibleColumns[col];
     if (column.presentation !== Presentation.Markdown) {
         e.preventDefault();
+    }
+
+    if (!cell_selectable) {
+        return;
     }
 
     /*
