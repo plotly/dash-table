@@ -2,6 +2,7 @@ import dash
 from dash_table import DataTable
 import pytest
 
+
 def get_app(cell_selectable):
     md = "[Click me](https://www.google.com)"
 
