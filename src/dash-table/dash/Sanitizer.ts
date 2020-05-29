@@ -16,12 +16,12 @@ import {
     ExportFormat,
     ExportHeaders,
     IFilterAction,
-    FilterLogicalOperator
+    FilterLogicalOperator,
+    SelectedCells
 } from 'dash-table/components/Table/props';
 import headerRows from 'dash-table/derived/header/headerRows';
 import resolveFlag from 'dash-table/derived/cell/resolveFlag';
 import dataLoading from 'dash-table/derived/table/data_loading';
-import { defaultProps } from './DataTable';
 
 const D3_DEFAULT_LOCALE: INumberLocale = {
     symbol: ['$', ''],
@@ -34,6 +34,7 @@ const D3_DEFAULT_LOCALE: INumberLocale = {
 
 const DEFAULT_NULLY = '';
 const DEFAULT_SPECIFIER = '';
+const NULL_SELECTED_CELLS: SelectedCells = [];
 
 const data2number = (data?: any) => +data || 0;
 
@@ -106,7 +107,7 @@ export default class Sanitizer {
 
         const selected_cells = props.cell_selectable ?
             props.selected_cells :
-            defaultProps.selected_cells
+            NULL_SELECTED_CELLS;
 
         return R.merge(props, {
             active_cell,
