@@ -31,7 +31,8 @@ export default class MarkdownHighlighter {
                 MarkdownHighlighter.loadhljs();
             }
             return '';
-        }
+        },
+        linkTarget:'_blank'
     });
 
     private static async loadhljs() {
