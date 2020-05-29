@@ -1,19 +1,6 @@
 import dash
 from dash_table import DataTable
-import pandas as pd
 import pytest
-
-url = "https://github.com/plotly/datasets/raw/master/" "26k-consumer-complaints.csv"
-rawDf = pd.read_csv(url)
-rawDf["Complaint ID"] = rawDf["Complaint ID"].map(lambda x: "**" + str(x) + "**")
-rawDf["Product"] = rawDf["Product"].map(lambda x: "[" + str(x) + "](plot.ly)")
-rawDf["Issue"] = rawDf["Issue"].map(
-    lambda x: "![" + str(x) + "](https://dash.plot.ly/assets/images/logo.png)"
-)
-rawDf["State"] = rawDf["State"].map(lambda x: '```python\n"{}"\n```'.format(x))
-
-df = rawDf.to_dict("rows")
-
 
 def get_app(cell_selectable):
     md = "[Click me](https://www.google.com)"
