@@ -34,4 +34,13 @@ def test_tmdl001_copy_markdown_to_text(test, cell_selectable):
 
     assert len(test.driver.window_handles) == 1
     target.cell(0, "a").get().find_element_by_css_selector("a").click()
+    assert target.cell(0, "a").is_selected() == cell_selectable
     assert len(test.driver.window_handles) == 2
+
+    # Make sure the new tab is what's expected
+    test.driver.switch_to_window(test.driver.window_handles[1])
+    assert test.driver.current_url.startswith("https://www.google.com")
+
+    # Make sure the cell is still selected iff cell_selectable, after switching tabs
+    test.driver.switch_to_window(test.driver.window_handles[0])
+    assert target.cell(0, "a").is_selected() == cell_selectable
