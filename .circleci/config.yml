@@ -168,6 +168,7 @@ jobs:
                 command: |
                     . venv/bin/activate
                     pip install -r dev-requirements.txt --quiet
+                    pip install --progress-bar off -e git+https://github.com/plotly/dash.git@dev#egg=dash[dev,testing]
 
             - run:
                 name: Run eslint
