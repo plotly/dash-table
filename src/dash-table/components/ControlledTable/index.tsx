@@ -325,19 +325,19 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
             Array.from<HTMLElement>(
                 r0c0.querySelectorAll('table.cell-table > tbody > tr:first-of-type > *')
-            ).forEach((c, i) => this.setCellWidth(c, r1c0CellWidths[i]));
+            ).forEach((c, i) => this.setCellWidth(c, r1c0CellWidths[i], !!fixed_columns));
 
             Array.from<HTMLElement>(
                 r0c0.querySelectorAll('table.cell-table > tbody > tr:last-of-type > *')
-            ).forEach((c, i) => this.setCellWidth(c, r1c0CellWidths[i]));
+            ).forEach((c, i) => this.setCellWidth(c, r1c0CellWidths[i], !!fixed_columns));
 
             Array.from<HTMLElement>(
                 r0c1.querySelectorAll('table.cell-table > tbody > tr:first-of-type > *')
-            ).forEach((c, i) => this.setCellWidth(c, r1c1CellWidths[i]));
+            ).forEach((c, i) => this.setCellWidth(c, r1c1CellWidths[i], !!fixed_columns));
 
             Array.from<HTMLElement>(
                 r0c1.querySelectorAll('table.cell-table > tbody > tr:last-of-type > *')
-            ).forEach((c, i) => this.setCellWidth(c, r1c1CellWidths[i]));
+            ).forEach((c, i) => this.setCellWidth(c, r1c1CellWidths[i], !!fixed_columns));
         }
     }
 
@@ -945,22 +945,24 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         }
     }
 
-    private setCellWidth(cell: HTMLElement, width: number) {
+    private setCellWidth(cell: HTMLElement, width: number, applyDelta: boolean) {
         cell.style.width = `${width}px`;
         cell.style.minWidth = `${width}px`;
         cell.style.maxWidth = `${width}px`;
         cell.style.boxSizing = 'border-box';
 
-        /**
-         * Some browsers handle `th` and `td` size inconsistently.
-         * Checking the size delta and adjusting for it (different handling of padding and borders)
-         * allows the table to make sure all sections are correctly aligned.
-         */
-        const delta = cell.getBoundingClientRect().width - width;
-        if (delta) {
-            cell.style.width = `${width - delta}px`;
-            cell.style.minWidth = `${width - delta}px`;
-            cell.style.maxWidth = `${width - delta}px`;
+        if (applyDelta) {
+            /**
+             * Some browsers handle `th` and `td` size inconsistently.
+             * Checking the size delta and adjusting for it (different handling of padding and borders)
+             * allows the table to make sure all sections are correctly aligned.
+             */
+            const delta = cell.getBoundingClientRect().width - width;
+            if (delta) {
+                cell.style.width = `${width - delta}px`;
+                cell.style.minWidth = `${width - delta}px`;
+                cell.style.maxWidth = `${width - delta}px`;
+            }
         }
     }
 
