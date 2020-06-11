@@ -332,7 +332,15 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             ).forEach((c, i) => this.setCellWidth(c, r1c0CellWidths[i]));
 
             Array.from<HTMLElement>(
+                r0c0.querySelectorAll('table.cell-table > tbody > tr:last-of-type > *')
+            ).forEach((c, i) => this.setCellWidth(c, r1c0CellWidths[i]));
+
+            Array.from<HTMLElement>(
                 r0c1.querySelectorAll('table.cell-table > tbody > tr:first-of-type > *')
+            ).forEach((c, i) => this.setCellWidth(c, r1c1CellWidths[i]));
+
+            Array.from<HTMLElement>(
+                r0c1.querySelectorAll('table.cell-table > tbody > tr:last-of-type > *')
             ).forEach((c, i) => this.setCellWidth(c, r1c1CellWidths[i]));
         }
     }
