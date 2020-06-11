@@ -268,6 +268,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         });
 
         if (fixed_columns) {
+            const r0c1Table = r0c1.querySelector('table');
             const r1c0Table = r1c0.querySelector('table') as HTMLElement;
             const r1c1Table = r1c0.querySelector('table') as HTMLElement;
 
@@ -303,6 +304,9 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                     const width = firstTdBounds.left - r1c1FragmentBounds.left;
                     r0c1.style.marginLeft = `-${width}px`;
                     r0c1.style.marginRight = `${width}px`;
+                    if (r0c1Table) {
+                        r0c1Table.style.width = `${r1c1Table.getBoundingClientRect().width}px`;
+                    }
                     r1c1.style.marginLeft = `-${width}px`;
                     r1c1.style.marginRight = `${width}px`;
                 }
@@ -325,19 +329,11 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
             Array.from<HTMLElement>(
                 r0c0.querySelectorAll('table.cell-table > tbody > tr:first-of-type > *')
-            ).forEach((c, i) => this.setCellWidth(c, r1c0CellWidths[i], !!fixed_columns));
-
-            Array.from<HTMLElement>(
-                r0c0.querySelectorAll('table.cell-table > tbody > tr:last-of-type > *')
-            ).forEach((c, i) => this.setCellWidth(c, r1c0CellWidths[i], !!fixed_columns));
+            ).forEach((c, i) => this.setCellWidth(c, r1c0CellWidths[i]));
 
             Array.from<HTMLElement>(
                 r0c1.querySelectorAll('table.cell-table > tbody > tr:first-of-type > *')
-            ).forEach((c, i) => this.setCellWidth(c, r1c1CellWidths[i], !!fixed_columns));
-
-            Array.from<HTMLElement>(
-                r0c1.querySelectorAll('table.cell-table > tbody > tr:last-of-type > *')
-            ).forEach((c, i) => this.setCellWidth(c, r1c1CellWidths[i], !!fixed_columns));
+            ).forEach((c, i) => this.setCellWidth(c, r1c1CellWidths[i]));
         }
     }
 
@@ -945,24 +941,22 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         }
     }
 
-    private setCellWidth(cell: HTMLElement, width: number, applyDelta: boolean) {
+    private setCellWidth(cell: HTMLElement, width: number) {
         cell.style.width = `${width}px`;
         cell.style.minWidth = `${width}px`;
         cell.style.maxWidth = `${width}px`;
         cell.style.boxSizing = 'border-box';
 
-        if (applyDelta) {
-            /**
-             * Some browsers handle `th` and `td` size inconsistently.
-             * Checking the size delta and adjusting for it (different handling of padding and borders)
-             * allows the table to make sure all sections are correctly aligned.
-             */
-            const delta = cell.getBoundingClientRect().width - width;
-            if (delta) {
-                cell.style.width = `${width - delta}px`;
-                cell.style.minWidth = `${width - delta}px`;
-                cell.style.maxWidth = `${width - delta}px`;
-            }
+        /**
+         * Some browsers handle `th` and `td` size inconsistently.
+         * Checking the size delta and adjusting for it (different handling of padding and borders)
+         * allows the table to make sure all sections are correctly aligned.
+         */
+        const delta = cell.getBoundingClientRect().width - width;
+        if (delta) {
+            cell.style.width = `${width - delta}px`;
+            cell.style.minWidth = `${width - delta}px`;
+            cell.style.maxWidth = `${width - delta}px`;
         }
     }
 
