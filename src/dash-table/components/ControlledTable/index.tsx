@@ -324,21 +324,22 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         }
 
         if (fixed_columns || fixed_rows) {
-            const r1c0CellWidths = Array.from(
-                r1c0.querySelectorAll('table.cell-table > tbody > tr:first-of-type > *')
-            ).map(c => c.getBoundingClientRect().width);
-
             const r1c1CellWidths = Array.from(
                 r1c1.querySelectorAll('table.cell-table > tbody > tr:first-of-type > *')
             ).map(c => c.getBoundingClientRect().width);
 
             Array.from<HTMLElement>(
                 r0c0.querySelectorAll('table.cell-table > tbody > tr:last-of-type > *')
-            ).forEach((c, i) => this.setCellWidth(c, r1c0CellWidths[i]));
+            ).forEach((c, i) => this.setCellWidth(c, r1c1CellWidths[i]));
 
             Array.from<HTMLElement>(
                 r0c1.querySelectorAll('table.cell-table > tbody > tr:last-of-type > *')
             ).forEach((c, i) => this.setCellWidth(c, r1c1CellWidths[i]));
+
+            Array.from<HTMLElement>(
+                r1c0.querySelectorAll('table.cell-table > tbody > tr:last-of-type > *')
+            ).forEach((c, i) => this.setCellWidth(c, r1c1CellWidths[i]));
+
         }
     }
 
