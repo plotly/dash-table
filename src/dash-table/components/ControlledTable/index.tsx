@@ -38,6 +38,7 @@ import queryLexicon from 'dash-table/syntax-tree/lexicon/query';
 import reconcile from 'dash-table/type/reconcile';
 
 import PageNavigation from 'dash-table/components/PageNavigation';
+import isChrome from 'core/browser/isChrome';
 
 const DEFAULT_STYLE = {
     width: '100%'
@@ -251,7 +252,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         const r1c0Table = r1c0.querySelector('table');
         const r1c1Table = r1c1.querySelector('table') as HTMLElement;
 
-        const tableWidth = getComputedStyle(r1c1Table).width
+        const tableWidth = getComputedStyle(r1c1Table).width;
 
         if (r0c0Table) {
             r0c0Table.style.width = tableWidth;
@@ -268,29 +269,33 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                 r1c1.querySelectorAll('table.cell-table > tbody > tr:first-of-type > *')
             ).map(c => c.getBoundingClientRect().width);
 
+            const totalWidth = r1c1CellWidths.reduce((sum, w) => sum + w, 0);
+            const forcedCellsWidths = isChrome ?
+                r1c1CellWidths :
+                r1c1CellWidths.map(w => `${(100 * w) / totalWidth}%`);
+
             Array.from<HTMLElement>(
                 r0c0.querySelectorAll('table.cell-table > tbody > tr:last-of-type > *')
-            ).forEach((c, i) => this.setCellWidth(c, r1c1CellWidths[i]));
+            ).forEach((c, i) => this.setCellWidth(c, forcedCellsWidths[i]));
 
             Array.from<HTMLElement>(
                 r0c1.querySelectorAll('table.cell-table > tbody > tr:last-of-type > *')
-            ).forEach((c, i) => this.setCellWidth(c, r1c1CellWidths[i]));
+            ).forEach((c, i) => this.setCellWidth(c, forcedCellsWidths[i]));
 
             Array.from<HTMLElement>(
                 r1c0.querySelectorAll('table.cell-table > tbody > tr:last-of-type > *')
-            ).forEach((c, i) => this.setCellWidth(c, r1c1CellWidths[i]));
+            ).forEach((c, i) => this.setCellWidth(c, forcedCellsWidths[i]));
         }
 
         if (fixed_columns) {
-            const lastVisibleTd = r1c0.querySelector(`tr:first-of-type > *:nth-of-type(${fixed_columns})`);
-            if (lastVisibleTd) {
-                const lastTdBounds = lastVisibleTd.getBoundingClientRect();
-                const r1c0FragmentBounds = r1c0.getBoundingClientRect();
-                const widthToLastFixed = lastTdBounds.right - r1c0FragmentBounds.left;
+            const lastFixedTd = r1c1.querySelector(`tr:first-of-type > *:nth-of-type(${fixed_columns})`);
+            if (lastFixedTd) {
+                const lastFixedTdBounds = lastFixedTd.getBoundingClientRect();
+                const lastFixedTdRight = lastFixedTdBounds.right - r1c1.getBoundingClientRect().left;
 
                 // Force first column containers width to match visible portion of table
-                r0c0.style.width = `${widthToLastFixed}px`;
-                r1c0.style.width = `${widthToLastFixed}px`;
+                r0c0.style.width = `${lastFixedTdRight}px`;
+                r1c0.style.width = `${lastFixedTdRight}px`;
 
                 // Force second column containers width to match visible portion of table
                 const firstVisibleTd = r1c1.querySelector(`tr:first-of-type > *:nth-of-type(${fixed_columns + 1})`);
@@ -305,6 +310,11 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                     r1c1.style.marginRight = `${width}px`;
                 }
             }
+        }
+
+        const currentTableWidth = getComputedStyle(r1c1Table).width;
+        if (tableWidth !== currentTableWidth) {
+            this.handleResize();
         }
     }
 
@@ -912,25 +922,15 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         }
     }
 
-    private setCellWidth(cell: HTMLElement, width: number, applyDelta: boolean = false) {
-        if (applyDelta) {
-            /**
-             * Some browsers handle `th` and `td` size inconsistently.
-             * Checking the size delta and adjusting for it (different handling of padding and borders)
-             * allows the table to make sure all sections are correctly aligned.
-             */
-            const delta = cell.getBoundingClientRect().width - width;
-            if (delta) {
-                cell.style.width = `${width - delta}px`;
-                cell.style.minWidth = `${width - delta}px`;
-                cell.style.maxWidth = `${width - delta}px`;
-            }
-        } else {
-            cell.style.width = `${width}px`;
-            cell.style.minWidth = `${width}px`;
-            cell.style.maxWidth = `${width}px`;
-            cell.style.boxSizing = 'border-box';
+    private setCellWidth(cell: HTMLElement, width: string | number) {
+        if (typeof width === 'number') {
+            width = `${width}px`;
         }
+
+        cell.style.width = width;
+        cell.style.minWidth = width;
+        cell.style.maxWidth = width;
+        cell.style.boxSizing = 'border-box';
     }
 
     private get showToggleColumns(): boolean {
