@@ -48,9 +48,6 @@ const INNER_STYLE = {
     minWidth: '100%'
 };
 
-const WIDTH_EPSILON = 0.5;
-const MAX_WIDTH_ITERATIONS = 30;
-
 export default class ControlledTable extends PureComponent<ControlledTableProps> {
     private readonly menuRef = React.createRef<HTMLDivElement>();
     private readonly stylesheet: Stylesheet = new Stylesheet(`#${CSS.escape(this.props.id)}`);
@@ -138,7 +135,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         }
 
         this.updateUiViewport();
-        this.forceHandleResize();
+        this.handleResize();
     }
 
     componentWillUnmount() {
@@ -249,78 +246,21 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
         const { r0c0, r0c1, r1c0, r1c1 } = this.refs as { [key: string]: HTMLElement };
 
+        const r0c0Table = r0c0.querySelector('table');
+        const r0c1Table = r0c1.querySelector('table');
+        const r1c0Table = r1c0.querySelector('table');
+        const r1c1Table = r1c1.querySelector('table') as HTMLElement;
 
-        // Adjust [fixed columns/fixed rows combo] to fixed rows height
-        let trs = r0c1.querySelectorAll('tr');
-        Array.from(r0c0.querySelectorAll('tr')).forEach((tr, index) => {
-            const tr2 = trs[index];
+        const tableWidth = getComputedStyle(r1c1Table).width
 
-            tr.style.height = `${tr2.clientHeight}px`;
-        });
-
-        // Adjust fixed columns headers to header's height
-        let trths = r1c1.querySelectorAll('tr > th:first-of-type');
-        Array.from(r1c0.querySelectorAll('tr > th:first-of-type')).forEach((th, index) => {
-            const tr2 = trths[index].parentElement as HTMLElement;
-            const tr = th.parentElement as HTMLElement;
-
-            tr.style.height = getComputedStyle(tr2).height;
-        });
-
-        if (fixed_columns) {
-            const r0c0Table = r0c0.querySelector('table');
-            const r0c1Table = r0c1.querySelector('table');
-            const r1c0Table = r1c0.querySelector('table') as HTMLElement;
-            const r1c1Table = r1c1.querySelector('table') as HTMLElement;
-
-            r1c0Table.style.width = getComputedStyle(r1c1Table).width;
-
-            if (r0c1Table) {
-                r0c1Table.style.width = getComputedStyle(r1c1Table).width;
-            }
-            if (r0c0Table) {
-                r0c0Table.style.width = getComputedStyle(r1c1Table).width;
-            }
-
-            const lastVisibleTd = r1c0.querySelector(`tr:first-of-type > *:nth-of-type(${fixed_columns})`);
-
-            let it = 0;
-            let currentWidth = r1c0.getBoundingClientRect().width;
-            let lastWidth = currentWidth;
-
-            do {
-                lastWidth = currentWidth
-
-                // Force first column containers width to match visible portion of table
-                if (lastVisibleTd) {
-                    const r1c0FragmentBounds = r1c0.getBoundingClientRect();
-                    const lastTdBounds = lastVisibleTd.getBoundingClientRect();
-                    currentWidth = lastTdBounds.right - r1c0FragmentBounds.left;
-
-                    const width = `${currentWidth}px`;
-
-                    r0c0.style.width = width;
-                    r1c0.style.width = width;
-                }
-
-                // Force second column containers width to match visible portion of table
-                const firstVisibleTd = r1c1.querySelector(`tr:first-of-type > *:nth-of-type(${fixed_columns + 1})`);
-                if (firstVisibleTd) {
-                    const r1c1FragmentBounds = r1c1.getBoundingClientRect();
-                    const firstTdBounds = firstVisibleTd.getBoundingClientRect();
-
-                    const width = firstTdBounds.left - r1c1FragmentBounds.left;
-                    r0c1.style.marginLeft = `-${width}px`;
-                    r0c1.style.marginRight = `${width}px`;
-                    r1c1.style.marginLeft = `-${width}px`;
-                    r1c1.style.marginRight = `${width}px`;
-                }
-
-                it++;
-            } while (
-                Math.abs(currentWidth - lastWidth) > WIDTH_EPSILON ||
-                it < MAX_WIDTH_ITERATIONS
-            )
+        if (r0c0Table) {
+            r0c0Table.style.width = tableWidth;
+        }
+        if (r0c1Table) {
+            r0c1Table.style.width = tableWidth;
+        }
+        if (r1c0Table) {
+            r1c0Table.style.width = tableWidth;
         }
 
         if (fixed_columns || fixed_rows) {
@@ -339,7 +279,32 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             Array.from<HTMLElement>(
                 r1c0.querySelectorAll('table.cell-table > tbody > tr:last-of-type > *')
             ).forEach((c, i) => this.setCellWidth(c, r1c1CellWidths[i]));
+        }
 
+        if (fixed_columns) {
+            const lastVisibleTd = r1c0.querySelector(`tr:first-of-type > *:nth-of-type(${fixed_columns})`);
+            if (lastVisibleTd) {
+                const lastTdBounds = lastVisibleTd.getBoundingClientRect();
+                const r1c0FragmentBounds = r1c0.getBoundingClientRect();
+                const widthToLastFixed = lastTdBounds.right - r1c0FragmentBounds.left;
+
+                // Force first column containers width to match visible portion of table
+                r0c0.style.width = `${widthToLastFixed}px`;
+                r1c0.style.width = `${widthToLastFixed}px`;
+
+                // Force second column containers width to match visible portion of table
+                const firstVisibleTd = r1c1.querySelector(`tr:first-of-type > *:nth-of-type(${fixed_columns + 1})`);
+                if (firstVisibleTd) {
+                    const r1c1FragmentBounds = r1c1.getBoundingClientRect();
+                    const firstTdBounds = firstVisibleTd.getBoundingClientRect();
+
+                    const width = firstTdBounds.left - r1c1FragmentBounds.left;
+                    r0c1.style.marginLeft = `-${width}px`;
+                    r0c1.style.marginRight = `${width}px`;
+                    r1c1.style.marginLeft = `-${width}px`;
+                    r1c1.style.marginRight = `${width}px`;
+                }
+            }
         }
     }
 
