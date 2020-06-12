@@ -226,7 +226,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
     forceHandleResize = () => this.handleResize(true);
 
     resizeFragmentCells = (fragment: HTMLElement, forcedCellsWidths: string[] | number[]) => {
-        const lastRowOfCells = fragment.querySelectorAll('table.cell-table > tbody > tr:last-of-type > *');
+        const lastRowOfCells = fragment.querySelectorAll<HTMLElement>('table.cell-table > tbody > tr:last-of-type > *');
         if (!lastRowOfCells.length) {
             return;
         }
@@ -247,8 +247,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             return;
         }
 
-        Array.from(
-            lastTrOfThs.children
+        Array.from<HTMLElement>(
+            lastTrOfThs.children as any
         ).forEach((c, i) => this.setCellWidth(c, forcedCellsWidths[i]));
     }
 
@@ -942,7 +942,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         }
     }
 
-    private setCellWidth(cell: Element, width: string | number) {
+    private setCellWidth(cell: HTMLElement, width: string | number) {
         if (typeof width === 'number') {
             width = `${width}px`;
         }
