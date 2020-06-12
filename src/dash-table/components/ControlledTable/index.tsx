@@ -225,6 +225,41 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
     forceHandleResize = () => this.handleResize(true);
 
+    resizeFragmentCells = (fragment: HTMLElement, forcedCellsWidths: string[] | number[]) => {
+        const lastRowOfCells = fragment.querySelectorAll('table.cell-table > tbody > tr:last-of-type > *');
+        if (!lastRowOfCells.length) {
+            return;
+        }
+
+        Array.from(
+            lastRowOfCells
+        ).forEach((c, i) => this.setCellWidth(c, forcedCellsWidths[i]));
+
+        const lastTh = Array.from(fragment.querySelectorAll('table.cell-table > tbody th:last-of-type')).slice(-1)[0];
+        if (!lastTh) {
+            return;
+        }
+
+        const lastTr = lastRowOfCells[0].parentElement;
+        const lastTrOfThs = lastTh.parentElement;
+
+        if (!lastTrOfThs || lastTrOfThs === lastTr) {
+            return;
+        }
+
+        Array.from(
+            lastTrOfThs.children
+        ).forEach((c, i) => this.setCellWidth(c, forcedCellsWidths[i]));
+    }
+
+    resizeFragmentTable = (table: HTMLElement | null, width: string) => {
+        if (!table) {
+            return;
+        }
+
+        table.style.width = width;
+    }
+
     handleResize = (force: boolean = false) => {
         const {
             fixed_columns,
@@ -254,15 +289,9 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
         const tableWidth = getComputedStyle(r1c1Table).width;
 
-        if (r0c0Table) {
-            r0c0Table.style.width = tableWidth;
-        }
-        if (r0c1Table) {
-            r0c1Table.style.width = tableWidth;
-        }
-        if (r1c0Table) {
-            r1c0Table.style.width = tableWidth;
-        }
+        this.resizeFragmentTable(r0c0Table, tableWidth);
+        this.resizeFragmentTable(r0c1Table, tableWidth);
+        this.resizeFragmentTable(r1c0Table, tableWidth);
 
         if (fixed_columns || fixed_rows) {
             const r1c1CellWidths = Array.from(
@@ -274,17 +303,9 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                 r1c1CellWidths :
                 r1c1CellWidths.map(w => `${(100 * w) / totalWidth}%`);
 
-            Array.from<HTMLElement>(
-                r0c0.querySelectorAll('table.cell-table > tbody > tr:last-of-type > *')
-            ).forEach((c, i) => this.setCellWidth(c, forcedCellsWidths[i]));
-
-            Array.from<HTMLElement>(
-                r0c1.querySelectorAll('table.cell-table > tbody > tr:last-of-type > *')
-            ).forEach((c, i) => this.setCellWidth(c, forcedCellsWidths[i]));
-
-            Array.from<HTMLElement>(
-                r1c0.querySelectorAll('table.cell-table > tbody > tr:last-of-type > *')
-            ).forEach((c, i) => this.setCellWidth(c, forcedCellsWidths[i]));
+            this.resizeFragmentCells(r0c0, forcedCellsWidths);
+            this.resizeFragmentCells(r0c1, forcedCellsWidths);
+            this.resizeFragmentCells(r1c0, forcedCellsWidths);
         }
 
         if (fixed_columns) {
@@ -312,8 +333,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             }
         }
 
-        const currentTableWidth = getComputedStyle(r1c1Table).width;
-        if (tableWidth !== currentTableWidth) {
+        if (tableWidth !== getComputedStyle(r1c1Table).width) {
             this.handleResize();
         }
     }
@@ -922,7 +942,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         }
     }
 
-    private setCellWidth(cell: HTMLElement, width: string | number) {
+    private setCellWidth(cell: Element, width: string | number) {
         if (typeof width === 'number') {
             width = `${width}px`;
         }
