@@ -38,7 +38,6 @@ import queryLexicon from 'dash-table/syntax-tree/lexicon/query';
 import reconcile from 'dash-table/type/reconcile';
 
 import PageNavigation from 'dash-table/components/PageNavigation';
-import isChrome from 'core/browser/isChrome';
 
 const DEFAULT_STYLE = {
     width: '100%'
@@ -225,7 +224,10 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
     forceHandleResize = () => this.handleResize(true);
 
-    resizeFragmentCells = (fragment: HTMLElement, forcedCellsWidths: string[] | number[]) => {
+    resizeFragmentCells = (
+        fragment: HTMLElement,
+        widths: number[]
+    ) => {
         const lastRowOfCells = fragment.querySelectorAll<HTMLElement>('table.cell-table > tbody > tr:last-of-type > *');
         if (!lastRowOfCells.length) {
             return;
@@ -233,23 +235,19 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
         Array.from(
             lastRowOfCells
-        ).forEach((c, i) => this.setCellWidth(c, forcedCellsWidths[i]));
+        ).forEach((c, i) => this.setCellWidth(c, widths[i]));
 
         const lastTh = Array.from(fragment.querySelectorAll('table.cell-table > tbody th:last-of-type')).slice(-1)[0];
-        if (!lastTh) {
+        const lastTrOfThs = lastTh?.parentElement;
+
+        if (!lastTrOfThs || lastTrOfThs === lastRowOfCells[0].parentElement) {
             return;
         }
 
-        const lastTr = lastRowOfCells[0].parentElement;
-        const lastTrOfThs = lastTh.parentElement;
-
-        if (!lastTrOfThs || lastTrOfThs === lastTr) {
-            return;
-        }
-
+        // For  some reason, some browsers require the size to be set explicitly on the header cells too
         Array.from<HTMLElement>(
             lastTrOfThs.children as any
-        ).forEach((c, i) => this.setCellWidth(c, forcedCellsWidths[i]));
+        ).forEach((c, i) => this.setCellWidth(c, widths[i]));
     }
 
     resizeFragmentTable = (table: HTMLElement | null, width: string) => {
@@ -294,18 +292,13 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         this.resizeFragmentTable(r1c0Table, tableWidth);
 
         if (fixed_columns || fixed_rows) {
-            const r1c1CellWidths = Array.from(
+            const widths = Array.from(
                 r1c1.querySelectorAll('table.cell-table > tbody > tr:first-of-type > *')
             ).map(c => c.getBoundingClientRect().width);
 
-            const totalWidth = r1c1CellWidths.reduce((sum, w) => sum + w, 0);
-            const forcedCellsWidths = isChrome ?
-                r1c1CellWidths :
-                r1c1CellWidths.map(w => `${(100 * w) / totalWidth}%`);
-
-            this.resizeFragmentCells(r0c0, forcedCellsWidths);
-            this.resizeFragmentCells(r0c1, forcedCellsWidths);
-            this.resizeFragmentCells(r1c0, forcedCellsWidths);
+            this.resizeFragmentCells(r0c0, widths);
+            this.resizeFragmentCells(r0c1, widths);
+            this.resizeFragmentCells(r1c0, widths);
         }
 
         if (fixed_columns) {
@@ -333,6 +326,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             }
         }
 
+        // It's possible that the previous steps resized the r1c1 fragment, if it did,
+        // handleResize again until it stabilizes
         if (tableWidth !== getComputedStyle(r1c1Table).width) {
             this.handleResize();
         }
