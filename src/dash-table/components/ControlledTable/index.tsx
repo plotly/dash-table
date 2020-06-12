@@ -138,7 +138,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         }
 
         this.updateUiViewport();
-        this.handleResize();
+        this.forceHandleResize();
     }
 
     componentWillUnmount() {
@@ -268,11 +268,19 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         });
 
         if (fixed_columns) {
+            const r0c0Table = r0c0.querySelector('table');
             const r0c1Table = r0c1.querySelector('table');
             const r1c0Table = r1c0.querySelector('table') as HTMLElement;
-            const r1c1Table = r1c0.querySelector('table') as HTMLElement;
+            const r1c1Table = r1c1.querySelector('table') as HTMLElement;
 
             r1c0Table.style.width = getComputedStyle(r1c1Table).width;
+
+            if (r0c1Table) {
+                r0c1Table.style.width = getComputedStyle(r1c1Table).width;
+            }
+            if (r0c0Table) {
+                r0c0Table.style.width = getComputedStyle(r1c1Table).width;
+            }
 
             const lastVisibleTd = r1c0.querySelector(`tr:first-of-type > *:nth-of-type(${fixed_columns})`);
 
@@ -304,9 +312,6 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                     const width = firstTdBounds.left - r1c1FragmentBounds.left;
                     r0c1.style.marginLeft = `-${width}px`;
                     r0c1.style.marginRight = `${width}px`;
-                    if (r0c1Table) {
-                        r0c1Table.style.width = `${r1c1Table.getBoundingClientRect().width}px`;
-                    }
                     r1c1.style.marginLeft = `-${width}px`;
                     r1c1.style.marginRight = `${width}px`;
                 }
