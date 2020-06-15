@@ -258,7 +258,11 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         table.style.width = width;
     }
 
-    handleResize = (force: boolean = false) => {
+    handleResize = (force: boolean = false, iteration: number = 0) => {
+        if (iteration >= 10) {
+            return;
+        }
+
         const {
             fixed_columns,
             fixed_rows,
@@ -329,7 +333,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         // It's possible that the previous steps resized the r1c1 fragment, if it did,
         // handleResize again until it stabilizes
         if (tableWidth !== getComputedStyle(r1c1Table).width) {
-            this.handleResize();
+            this.handleResize(force, ++iteration);
         }
     }
 
