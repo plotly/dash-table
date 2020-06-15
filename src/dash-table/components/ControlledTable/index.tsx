@@ -258,7 +258,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         table.style.width = width;
     }
 
-    handleResize = (force: boolean = false, previousWidth: number = NaN) => {
+    handleResize = (force: boolean = false, previousWidth: number = NaN, fixed: boolean = false) => {
         const {
             fixed_columns,
             fixed_rows,
@@ -311,33 +311,31 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                 r0c0.style.width = `${lastFixedTdRight}px`;
                 r1c0.style.width = `${lastFixedTdRight}px`;
 
-                // Force second column containers width to match visible portion of table
-                const firstVisibleTd = r1c1.querySelector(`tr:first-of-type > *:nth-of-type(${fixed_columns + 1})`);
-                if (firstVisibleTd) {
-                    const r1c1FragmentBounds = r1c1.getBoundingClientRect();
-                    const firstTdBounds = firstVisibleTd.getBoundingClientRect();
+                if (!fixed) {
+                    // Force second column containers width to match visible portion of table
+                    const firstVisibleTd = r1c1.querySelector(`tr:first-of-type > *:nth-of-type(${fixed_columns + 1})`);
+                    if (firstVisibleTd) {
+                        const r1c1FragmentBounds = r1c1.getBoundingClientRect();
+                        const firstTdBounds = firstVisibleTd.getBoundingClientRect();
 
-                    const width = firstTdBounds.left - r1c1FragmentBounds.left;
-                    r0c1.style.marginLeft = `-${width}px`;
-                    r0c1.style.marginRight = `${width}px`;
-                    r1c1.style.marginLeft = `-${width}px`;
-                    r1c1.style.marginRight = `${width}px`;
+                        const width = firstTdBounds.left - r1c1FragmentBounds.left;
+                        r0c1.style.marginLeft = `-${width}px`;
+                        r0c1.style.marginRight = `${width}px`;
+                        r1c1.style.marginLeft = `-${width}px`;
+                        r1c1.style.marginRight = `${width}px`;
+                    }
                 }
             }
         }
 
-        // It's possible that the previous steps resized the r1c1 fragment, if it did,
-        // handleResize again until it stabilizes
         const currentWidth = parseInt(currentTableWith, 10);
         const nextWidth = parseInt(getComputedStyle(r1c1Table).width, 10);
 
-        // If the table was resized, re-run `handleResize` except if the
-        // new size is the starting size from the previous iteration
-        if (
-            Math.abs(nextWidth - currentWidth) > 0.1 &&
-            nextWidth !== previousWidth
-        ) {
-            this.handleResize(true, currentWidth);
+        // If the table was resized and wasn't fixed, re-run `handleResize`.
+        // If the final size is the same as the starting size from the previous iteration, do not
+        // resize the main table, instead just use as is, otherwise it will oscillate.
+        if (!fixed && nextWidth !== currentWidth) {
+            this.handleResize(true, currentWidth, nextWidth === previousWidth);
         }
     }
 
