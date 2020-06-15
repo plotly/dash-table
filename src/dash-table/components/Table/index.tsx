@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import * as R from 'ramda';
 
 /*#if DEV*/
@@ -111,7 +111,10 @@ export default class Table extends Component<SanitizedAndDerivedProps, Standalon
 
         this.updateDerivedProps(controlled, this.controlledSetProps);
 
-        return (<ControlledTable {...controlled} />);
+        return (<Fragment>
+            <div>{navigator.userAgent}</div>
+            <ControlledTable {...controlled} />
+        </Fragment>);
     }
 
     private get controlledSetProps() {
