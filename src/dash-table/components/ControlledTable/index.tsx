@@ -258,7 +258,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         table.style.width = width;
     }
 
-    handleResize = (force: boolean = false, previousWidth: number = NaN, fixed: boolean = false) => {
+    handleResize = (force: boolean = false, previousWidth: number = NaN, cycle: boolean = false) => {
         const {
             fixed_columns,
             fixed_rows,
@@ -287,7 +287,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
         const currentTableWith = getComputedStyle(r1c1Table).width;
 
-        if (!fixed) {
+        if (!cycle) {
             this.resizeFragmentTable(r0c0Table, currentTableWith);
             this.resizeFragmentTable(r0c1Table, currentTableWith);
             this.resizeFragmentTable(r1c0Table, currentTableWith);
@@ -298,7 +298,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                 r1c1.querySelectorAll('table.cell-table > tbody > tr:first-of-type > *')
             ).map(c => c.getBoundingClientRect().width);
 
-            if (!fixed) {
+            if (!cycle) {
                 this.resizeFragmentCells(r0c0, widths);
                 this.resizeFragmentCells(r0c1, widths);
                 this.resizeFragmentCells(r1c0, widths);
@@ -315,7 +315,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                 r0c0.style.width = `${lastFixedTdRight}px`;
                 r1c0.style.width = `${lastFixedTdRight}px`;
 
-                if (!fixed) {
+                if (!cycle) {
                     // Force second column containers width to match visible portion of table
                     const firstVisibleTd = r1c1.querySelector(`tr:first-of-type > *:nth-of-type(${fixed_columns + 1})`);
                     if (firstVisibleTd) {
@@ -332,11 +332,11 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             }
         }
 
-        if (!fixed) {
+        if (!cycle) {
             const currentWidth = parseInt(currentTableWith, 10);
             const nextWidth = parseInt(getComputedStyle(r1c1Table).width, 10);
 
-            // If the table was resized and wasn't fixed, re-run `handleResize`.
+            // If the table was resized and isn't in a cycle, re-run `handleResize`.
             // If the final size is the same as the starting size from the previous iteration, do not
             // resize the main table, instead just use as is, otherwise it will oscillate.
             if (nextWidth !== currentWidth) {
