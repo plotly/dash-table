@@ -287,18 +287,22 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
         const currentTableWith = getComputedStyle(r1c1Table).width;
 
-        this.resizeFragmentTable(r0c0Table, currentTableWith);
-        this.resizeFragmentTable(r0c1Table, currentTableWith);
-        this.resizeFragmentTable(r1c0Table, currentTableWith);
+        if (!fixed) {
+            this.resizeFragmentTable(r0c0Table, currentTableWith);
+            this.resizeFragmentTable(r0c1Table, currentTableWith);
+            this.resizeFragmentTable(r1c0Table, currentTableWith);
+        }
 
         if (fixed_columns || fixed_rows) {
             const widths = Array.from(
                 r1c1.querySelectorAll('table.cell-table > tbody > tr:first-of-type > *')
             ).map(c => c.getBoundingClientRect().width);
 
-            this.resizeFragmentCells(r0c0, widths);
-            this.resizeFragmentCells(r0c1, widths);
-            this.resizeFragmentCells(r1c0, widths);
+            if (!fixed) {
+                this.resizeFragmentCells(r0c0, widths);
+                this.resizeFragmentCells(r0c1, widths);
+                this.resizeFragmentCells(r1c0, widths);
+            }
         }
 
         if (fixed_columns) {
@@ -328,14 +332,16 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             }
         }
 
-        const currentWidth = parseInt(currentTableWith, 10);
-        const nextWidth = parseInt(getComputedStyle(r1c1Table).width, 10);
+        if (!fixed) {
+            const currentWidth = parseInt(currentTableWith, 10);
+            const nextWidth = parseInt(getComputedStyle(r1c1Table).width, 10);
 
-        // If the table was resized and wasn't fixed, re-run `handleResize`.
-        // If the final size is the same as the starting size from the previous iteration, do not
-        // resize the main table, instead just use as is, otherwise it will oscillate.
-        if (!fixed && nextWidth !== currentWidth) {
-            this.handleResize(true, currentWidth, nextWidth === previousWidth);
+            // If the table was resized and wasn't fixed, re-run `handleResize`.
+            // If the final size is the same as the starting size from the previous iteration, do not
+            // resize the main table, instead just use as is, otherwise it will oscillate.
+            if (nextWidth !== currentWidth) {
+                this.handleResize(true, currentWidth, nextWidth === previousWidth);
+            }
         }
     }
 
