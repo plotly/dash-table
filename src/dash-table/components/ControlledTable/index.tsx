@@ -331,9 +331,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         const currentWidth = parseInt(currentTableWith, 10);
         const nextWidth = parseInt(getComputedStyle(r1c1Table).width, 10);
 
-        // If the table was resized, re-run handleResize
-        // except if the new size is the starting size from the previous
-        // iteration
+        // If the table was resized, re-run `handleResize` except if the
+        // new size is the starting size from the previous iteration
         if (
             Math.abs(nextWidth - currentWidth) > 0.5 &&
             nextWidth !== previousWidth
