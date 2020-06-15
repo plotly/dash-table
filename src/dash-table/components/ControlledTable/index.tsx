@@ -258,7 +258,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         table.style.width = width;
     }
 
-    handleResize = (force: boolean = false) => {
+    handleResize = (force: boolean = false, previousWidth: number = NaN) => {
         const {
             fixed_columns,
             fixed_rows,
@@ -285,11 +285,11 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         const r1c0Table = r1c0.querySelector('table');
         const r1c1Table = r1c1.querySelector('table') as HTMLElement;
 
-        const tableWidth = getComputedStyle(r1c1Table).width;
+        const currentTableWith = getComputedStyle(r1c1Table).width;
 
-        this.resizeFragmentTable(r0c0Table, tableWidth);
-        this.resizeFragmentTable(r0c1Table, tableWidth);
-        this.resizeFragmentTable(r1c0Table, tableWidth);
+        this.resizeFragmentTable(r0c0Table, currentTableWith);
+        this.resizeFragmentTable(r0c1Table, currentTableWith);
+        this.resizeFragmentTable(r1c0Table, currentTableWith);
 
         if (fixed_columns || fixed_rows) {
             const widths = Array.from(
@@ -328,11 +328,17 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
         // It's possible that the previous steps resized the r1c1 fragment, if it did,
         // handleResize again until it stabilizes
-        const prevWidth = parseInt(tableWidth, 10);
-        const currentWidth = parseInt(getComputedStyle(r1c1Table).width, 10);
+        const currentWidth = parseInt(currentTableWith, 10);
+        const nextWidth = parseInt(getComputedStyle(r1c1Table).width, 10);
 
-        if (Math.abs(prevWidth - currentWidth) > 0.5) {
-            this.handleResize(true);
+        // If the table was resized, re-run handleResize
+        // except if the new size is the starting size from the previous
+        // iteration
+        if (
+            Math.abs(nextWidth - currentWidth) > 0.5 &&
+            nextWidth !== previousWidth
+        ) {
+            this.handleResize(true, currentWidth);
         }
     }
 
