@@ -324,9 +324,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
                         const width = firstTdBounds.left - r1c1FragmentBounds.left;
                         r0c1.style.marginLeft = `-${width}px`;
-                        r0c1.style.marginRight = `${width}px`;
                         r1c1.style.marginLeft = `-${width}px`;
-                        r1c1.style.marginRight = `${width}px`;
                     }
                 }
             }
