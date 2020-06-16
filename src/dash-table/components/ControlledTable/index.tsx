@@ -147,7 +147,33 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
     componentDidUpdate() {
         this.updateStylesheet();
         this.updateUiViewport();
-        this.handleResize();
+
+        const {
+            style_as_list_view,
+            style_cell,
+            style_cell_conditional,
+            style_data,
+            style_data_conditional,
+            style_filter,
+            style_filter_conditional,
+            style_header,
+            style_header_conditional,
+            style_table
+        } = this.props;
+
+        this.handleResizeIf(
+            style_as_list_view,
+            style_cell,
+            style_cell_conditional,
+            style_data,
+            style_data_conditional,
+            style_filter,
+            style_filter_conditional,
+            style_header,
+            style_header_conditional,
+            style_table
+        );
+
         this.handleDropdown();
         this.adjustTooltipPosition();
 
@@ -222,8 +248,6 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         }
     }
 
-    forceHandleResize = () => this.handleResize(true);
-
     resizeFragmentCells = (
         fragment: HTMLElement,
         widths: number[]
@@ -258,39 +282,95 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         table.style.width = width;
     }
 
-    handleResize = (force: boolean = false, previousWidth: number = NaN, cycle: boolean = false) => {
-        const {
-            fixed_columns,
-            fixed_rows,
-            forcedResizeOnly,
-            setState
-        } = this.props;
+    forceHandleResize = () => this.handleResize();
 
-        if (forcedResizeOnly && !force) {
+    handleResizeIf = memoizeOne((..._: any[]) => {
+        const { r0c0, r0c1, r1c0, r1c1 } = this.refs as { [key: string]: HTMLElement };
+
+        r0c1.style.marginLeft = '';
+        r1c1.style.marginLeft = '';
+        r0c0.style.width = '';
+        r1c0.style.width = '';
+
+        const r0c0Table = r0c0.querySelector('table');
+        const r0c1Table = r0c1.querySelector('table');
+        const r1c0Table = r1c0.querySelector('table');
+
+        if (r0c0Table) { r0c0Table.style.width = ''; }
+        if (r0c1Table) { r0c1Table.style.width = ''; }
+        if (r1c0Table) { r1c0Table.style.width = ''; }
+
+        this.resetFragmentCells(r0c0);
+        this.resetFragmentCells(r0c1);
+        this.resetFragmentCells(r1c0);
+
+        this.handleResize();
+    });
+
+    private resetFragmentCells = (
+        fragment: HTMLElement
+    ) => {
+        const lastRowOfCells = fragment.querySelectorAll<HTMLElement>('table.cell-table > tbody > tr:last-of-type > *');
+        if (!lastRowOfCells.length) {
             return;
         }
 
-        if (!force) {
-            setState({ forcedResizeOnly: true });
+        Array.from(
+            lastRowOfCells
+        ).forEach(this.clearCellWidth);
+
+        const lastTh = Array.from(fragment.querySelectorAll('table.cell-table > tbody th:last-of-type')).slice(-1)[0];
+        const lastTrOfThs = lastTh?.parentElement;
+
+        if (!lastTrOfThs || lastTrOfThs === lastRowOfCells[0].parentElement) {
+            return;
+        }
+
+        // For some reason, some browsers require the size to be set explicitly on the header cells too
+        Array.from<HTMLElement>(
+            lastTrOfThs.children as any
+        ).forEach(this.clearCellWidth);
+    }
+
+    private clearCellWidth(cell: HTMLElement) {
+        cell.style.width = '';
+        cell.style.minWidth = '';
+        cell.style.maxWidth = '';
+        cell.style.boxSizing = '';
+    }
+
+    handleResize = (previousWidth: number = NaN, cycle: boolean = false) => {
+        const {
+            fixed_columns,
+            fixed_rows,
+            setState
+        } = this.props;
+
+        const { r1c1 } = this.refs as { [key: string]: HTMLElement };
+        const r1c1Table = r1c1.querySelector('table') as HTMLElement;
+
+        const currentTableWidth = getComputedStyle(r1c1Table).width;
+
+        // Not pixels -> not displayed
+        if (!/\d+px/.test(currentTableWidth)) {
+            return;
         }
 
         this.updateStylesheet();
 
         getScrollbarWidth().then((scrollbarWidth: number) => setState({ scrollbarWidth }));
 
-        const { r0c0, r0c1, r1c0, r1c1 } = this.refs as { [key: string]: HTMLElement };
+        const { r0c0, r0c1, r1c0 } = this.refs as { [key: string]: HTMLElement };
 
         const r0c0Table = r0c0.querySelector('table');
         const r0c1Table = r0c1.querySelector('table');
         const r1c0Table = r1c0.querySelector('table');
-        const r1c1Table = r1c1.querySelector('table') as HTMLElement;
 
-        const currentTableWith = getComputedStyle(r1c1Table).width;
 
         if (!cycle) {
-            this.resizeFragmentTable(r0c0Table, currentTableWith);
-            this.resizeFragmentTable(r0c1Table, currentTableWith);
-            this.resizeFragmentTable(r1c0Table, currentTableWith);
+            this.resizeFragmentTable(r0c0Table, currentTableWidth);
+            this.resizeFragmentTable(r0c1Table, currentTableWidth);
+            this.resizeFragmentTable(r1c0Table, currentTableWidth);
         }
 
         if (fixed_columns || fixed_rows) {
@@ -331,14 +411,14 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         }
 
         if (!cycle) {
-            const currentWidth = parseInt(currentTableWith, 10);
+            const currentWidth = parseInt(currentTableWidth, 10);
             const nextWidth = parseInt(getComputedStyle(r1c1Table).width, 10);
 
             // If the table was resized and isn't in a cycle, re-run `handleResize`.
             // If the final size is the same as the starting size from the previous iteration, do not
             // resize the main table, instead just use as is, otherwise it will oscillate.
             if (nextWidth !== currentWidth) {
-                this.handleResize(true, currentWidth, nextWidth === previousWidth);
+                this.handleResize(currentWidth, nextWidth === previousWidth);
             }
         }
     }
