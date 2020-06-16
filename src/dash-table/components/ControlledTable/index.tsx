@@ -248,6 +248,39 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         }
     }
 
+    private clearCellWidth(cell: HTMLElement) {
+        cell.style.width = '';
+        cell.style.minWidth = '';
+        cell.style.maxWidth = '';
+        cell.style.boxSizing = '';
+    }
+
+    private resetFragmentCells = (
+        fragment: HTMLElement
+    ) => {
+        const lastRowOfCells = fragment.querySelectorAll<HTMLElement>('table.cell-table > tbody > tr:last-of-type > *');
+        if (!lastRowOfCells.length) {
+            return;
+        }
+
+        Array.from(
+            lastRowOfCells
+        ).forEach(this.clearCellWidth);
+
+        const firstThs = Array.from(fragment.querySelectorAll('table.cell-table > tbody > tr > th:first-of-type'));
+        const trOfThs = firstThs.map(th => th.parentElement);
+
+        trOfThs.forEach(tr => {
+            const ths = Array.from<HTMLElement>(tr?.children as any);
+
+            if (!ths) {
+                return;
+            }
+
+            ths.forEach(this.clearCellWidth);
+        });
+    }
+
     resizeFragmentCells = (
         fragment: HTMLElement,
         widths: number[]
@@ -261,17 +294,21 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             lastRowOfCells
         ).forEach((c, i) => this.setCellWidth(c, widths[i]));
 
-        const lastTh = Array.from(fragment.querySelectorAll('table.cell-table > tbody th:last-of-type')).slice(-1)[0];
-        const lastTrOfThs = lastTh?.parentElement;
+        const firstThs = Array.from<HTMLElement>(fragment.querySelectorAll('table.cell-table > tbody > tr > th:first-of-type'));
+        const trOfThs = firstThs.map(th => th.parentElement);
 
-        if (!lastTrOfThs || lastTrOfThs === lastRowOfCells[0].parentElement) {
-            return;
-        }
+        trOfThs.forEach(tr => {
+            const ths = Array.from<HTMLElement>(tr?.children as any);
 
-        // For  some reason, some browsers require the size to be set explicitly on the header cells too
-        Array.from<HTMLElement>(
-            lastTrOfThs.children as any
-        ).forEach((c, i) => this.setCellWidth(c, widths[i]));
+            if (!ths) {
+                return;
+            }
+            if (ths.length === widths.length) {
+                ths.forEach((c, i) => this.setCellWidth(c, widths[i]));
+            } else {
+                ths.forEach(c => this.setCellWidth(c, 0));
+            }
+        });
     }
 
     resizeFragmentTable = (table: HTMLElement | null, width: string) => {
@@ -306,38 +343,6 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
         this.handleResize();
     });
-
-    private resetFragmentCells = (
-        fragment: HTMLElement
-    ) => {
-        const lastRowOfCells = fragment.querySelectorAll<HTMLElement>('table.cell-table > tbody > tr:last-of-type > *');
-        if (!lastRowOfCells.length) {
-            return;
-        }
-
-        Array.from(
-            lastRowOfCells
-        ).forEach(this.clearCellWidth);
-
-        const lastTh = Array.from(fragment.querySelectorAll('table.cell-table > tbody th:last-of-type')).slice(-1)[0];
-        const lastTrOfThs = lastTh?.parentElement;
-
-        if (!lastTrOfThs || lastTrOfThs === lastRowOfCells[0].parentElement) {
-            return;
-        }
-
-        // For some reason, some browsers require the size to be set explicitly on the header cells too
-        Array.from<HTMLElement>(
-            lastTrOfThs.children as any
-        ).forEach(this.clearCellWidth);
-    }
-
-    private clearCellWidth(cell: HTMLElement) {
-        cell.style.width = '';
-        cell.style.minWidth = '';
-        cell.style.maxWidth = '';
-        cell.style.boxSizing = '';
-    }
 
     handleResize = (previousWidth: number = NaN, cycle: boolean = false) => {
         const {
