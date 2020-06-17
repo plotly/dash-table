@@ -235,7 +235,7 @@ def test_szng002_percentages_result_in_same_widths(test):
                 )
                 i = i + 1
 
-    tables = [DataTable(**variation) for i, variation in enumerate(variations)]
+    tables = [DataTable(**variation) for variation in variations]
 
     app = dash.Dash(__name__)
     app.layout = Div(tables)
