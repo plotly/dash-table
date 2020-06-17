@@ -39,6 +39,8 @@ import reconcile from 'dash-table/type/reconcile';
 
 import PageNavigation from 'dash-table/components/PageNavigation';
 
+type Refs = { [key: string]: HTMLElement };
+
 const DEFAULT_STYLE = {
     width: '100%'
 };
@@ -93,7 +95,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             return;
         }
 
-        const { r1c1 } = this.refs as { [key: string]: HTMLElement };
+        const { r1c1 } = this.refs as Refs;
         let parent: any = r1c1.parentElement;
 
         if (uiViewport &&
@@ -191,7 +193,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             return;
         }
 
-        const { r1c1 } = this.refs as { [key: string]: HTMLElement };
+        const { r1c1 } = this.refs as Refs;
         const contentTd = r1c1.querySelector('tr > td:first-of-type');
 
         if (!contentTd) {
@@ -319,27 +321,30 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         table.style.width = width;
     }
 
+    isDisplayed = (el: HTMLElement) => getComputedStyle(el).display !== 'none';
+
     forceHandleResize = () => this.handleResize();
 
     handleResizeIf = memoizeOne((..._: any[]) => {
-        const { r0c0, r0c1, r1c0, r1c1 } = this.refs as { [key: string]: HTMLElement };
+        const { r0c0, r0c1, r1c0, r1c1 } = this.refs as Refs;
+
+        if (!this.isDisplayed(r1c1)) {
+            return;
+        }
 
         r0c1.style.marginLeft = '';
         r1c1.style.marginLeft = '';
         r0c0.style.width = '';
         r1c0.style.width = '';
 
-        const r0c0Table = r0c0.querySelector('table');
-        const r0c1Table = r0c1.querySelector('table');
-        const r1c0Table = r1c0.querySelector('table');
+        [r0c0, r0c1, r1c0].forEach(rc => {
+            const table = rc.querySelector('table');
+            if (table) {
+                table.style.width = '';
+            }
 
-        if (r0c0Table) { r0c0Table.style.width = ''; }
-        if (r0c1Table) { r0c1Table.style.width = ''; }
-        if (r1c0Table) { r1c0Table.style.width = ''; }
-
-        this.resetFragmentCells(r0c0);
-        this.resetFragmentCells(r0c1);
-        this.resetFragmentCells(r1c0);
+            this.resetFragmentCells(rc);
+        });
 
         this.handleResize();
     });
@@ -351,13 +356,9 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             setState
         } = this.props;
 
-        const { r1c1 } = this.refs as { [key: string]: HTMLElement };
-        const r1c1Table = r1c1.querySelector('table') as HTMLElement;
+        const { r1c1 } = this.refs as Refs;
 
-        const currentTableWidth = getComputedStyle(r1c1Table).width;
-
-        // Not pixels -> not displayed
-        if (!/\d+px/.test(currentTableWidth)) {
+        if (!this.isDisplayed(r1c1)) {
             return;
         }
 
@@ -365,12 +366,14 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
         getScrollbarWidth().then((scrollbarWidth: number) => setState({ scrollbarWidth }));
 
-        const { r0c0, r0c1, r1c0 } = this.refs as { [key: string]: HTMLElement };
+        const { r0c0, r0c1, r1c0 } = this.refs as Refs;
 
         const r0c0Table = r0c0.querySelector('table');
         const r0c1Table = r0c1.querySelector('table');
         const r1c0Table = r1c0.querySelector('table');
+        const r1c1Table = r1c1.querySelector('table') as HTMLElement;
 
+        const currentTableWidth = getComputedStyle(r1c1Table).width;
 
         if (!cycle) {
             this.resizeFragmentTable(r0c0Table, currentTableWidth);
@@ -786,13 +789,13 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
     }
 
     handleDropdown = () => {
-        const { r1c1 } = this.refs as { [key: string]: HTMLElement };
+        const { r1c1 } = this.refs as Refs;
 
         dropdownHelper(r1c1.querySelector('.Select-menu-outer'));
     }
 
     onScroll = (ev: any) => {
-        const { r0c0, r0c1 } = this.refs as { [key: string]: HTMLElement };
+        const { r0c0, r0c1 } = this.refs as Refs;
 
         Logger.trace(`ControlledTable fragment scrolled to (left,top)=(${ev.target.scrollLeft},${ev.target.scrollTop})`);
 

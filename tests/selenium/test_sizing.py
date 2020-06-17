@@ -75,6 +75,14 @@ def test_szng001_widths_on_style_change(test):
                 width=500, minWidth=500, maxWidth=500, paddingBottom=10, display="none"
             )
         ),
+        dict(style_table=dict(width=500, minWidth=500, maxWidth=500, paddingBottom=10)),
+        dict(style_table=dict(width=750, minWidth=750, maxWidth=750, paddingBottom=10)),
+        dict(
+            style_table=dict(
+                width=750, minWidth=750, maxWidth=750, paddingBottom=10, display="none"
+            )
+        ),
+        dict(style_table=dict(width=350, minWidth=350, maxWidth=350, paddingBottom=10)),
     ]
 
     fixes = [
@@ -91,40 +99,34 @@ def test_szng001_widths_on_style_change(test):
     ]
 
     variations = []
+    style = styles[0]
     i = 0
-    for style in styles:
-        for fix in fixes:
-            variations.append({**style, **fix, **base_props, "id": "table{}".format(i)})
-            i = i + 1
+    for fix in fixes:
+        variations.append({**style, **fix, **base_props, "id": "table{}".format(i)})
+        i = i + 1
 
     variations_range = range(0, len(variations))
 
-    tables = [DataTable(**variation) for i, variation in enumerate(variations)]
+    tables = [DataTable(**variation) for variation in variations]
 
     app = dash.Dash(__name__)
     app.layout = Div(
         children=[
             Button(id="btn", children="Click me"),
-            DataTable(
-                **base_props,
-                id="table350",
-                style_table=dict(
-                    width=350, minWidth=350, maxWidth=350, paddingBottom=10
-                )
-            ),
-            DataTable(
-                **base_props,
-                id="table500",
-                style_table=dict(
-                    width=500, minWidth=500, maxWidth=500, paddingBottom=10
-                )
-            ),
-            DataTable(
-                **base_props,
-                id="table750",
-                style_table=dict(
-                    width=750, minWidth=750, maxWidth=750, paddingBottom=10
-                )
+            Div(
+                [
+                    DataTable(
+                        **base_props,
+                        id="table{}".format(width),
+                        style_table=dict(
+                            width=width,
+                            minWidth=width,
+                            maxWidth=width,
+                            paddingBottom=10,
+                        )
+                    )
+                    for width in [350, 500, 750]
+                ]
             ),
             Div(tables),
         ]
@@ -136,41 +138,18 @@ def test_szng001_widths_on_style_change(test):
         prevent_initial_call=True,
     )
     def update_styles(n_clicks):
-        if n_clicks == 1:
-            return [
-                dict(width=500, minWidth=500, maxWidth=500, paddingBottom=10)
-                for i in variations_range
-            ]
-        elif n_clicks == 2:
-            return [
-                dict(width=750, minWidth=750, maxWidth=750, paddingBottom=10)
-                for i in variations_range
-            ]
-        elif n_clicks == 3:
-            return [
-                dict(
-                    width=750,
-                    minWidth=750,
-                    maxWidth=750,
-                    display="none",
-                    paddingBottom=10,
-                )
-                for i in variations_range
-            ]
-        elif n_clicks:
-            return [
-                dict(width=350, minWidth=350, maxWidth=350, paddingBottom=10)
-                for i in variations_range
-            ]
+        if n_clicks < len(styles):
+            style_table = styles[n_clicks]["style_table"]
+            return [style_table for i in variations_range]
 
     test.start_server(app)
 
-    targets = [None, "table500", "table750", None, "table350"]
-
-    for targetId in targets:
+    for style in styles:
+        display = style.get("style_table", dict()).get("display")
+        width = style.get("style_table", dict()).get("width")
         target = (
-            test.driver.find_element_by_css_selector("#{}".format(targetId))
-            if targetId is not None
+            test.driver.find_element_by_css_selector("#table{}".format(width))
+            if display != "none"
             else None
         )
 
@@ -178,7 +157,7 @@ def test_szng001_widths_on_style_change(test):
             table = test.driver.find_element_by_css_selector(
                 "#{}".format(variation["id"])
             )
-            if targetId is None:
+            if target is None:
                 assert table is not None
                 assert (
                     test.driver.execute_script(
@@ -217,9 +196,9 @@ def test_szng002_percentages_result_in_same_widths(test):
             {
                 "id": "c",
                 "name": [
-                    "A-----------------VERY LONG",
-                    "B-----------------VERY LONG",
-                    "C-----------------VERY LONG",
+                    "A-----------------VERY LONG---",
+                    "B-----------------VERY LONG---------",
+                    "C-----------------VERY LONG------------------",
                 ],
             },
         ],
@@ -231,7 +210,7 @@ def test_szng002_percentages_result_in_same_widths(test):
             {"_": 0, "a": 809, "b": 591, "c": 511},
         ],
         style_table=dict(width=500, minWidth=500, maxWidth=500, paddingBottom=10),
-        style_cell=dict(width="20%", minWidth="20%", maxWidth="20%"),
+        style_cell=dict(width="25%", minWidth="25%", maxWidth="25%"),
     )
 
     _fixed_columns = [dict(headers=True, data=1), dict(headers=True)]
@@ -264,6 +243,7 @@ def test_szng002_percentages_result_in_same_widths(test):
     test.start_server(app)
 
     target = test.driver.find_element_by_css_selector("#table0")
+    cells_are_same_width(target, target)
 
     for i in range(1, len(variations)):
         table = test.driver.find_element_by_css_selector("#table{}".format(i))
