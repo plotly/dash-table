@@ -8,9 +8,16 @@ jobs:
 
         steps:
             - checkout
+            - restore_cache:
+                key: dep-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}-{{ checksum ".circleci/config.yml" }}
             - run:
                 name: Install npm packages
                 command: npm ci
+            - save_cache:
+                key: dep-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}-{{ checksum ".circleci/config.yml" }}
+                paths:
+                    - node_modules
+
             - run:
                 name: Install requirements
                 command: |
@@ -18,7 +25,7 @@ jobs:
                     python -m venv venv || virtualenv venv
                     . venv/bin/activate
                     pip install -r dev-requirements.txt --quiet
-                    git clone -b state-machine --depth 1 git@github.com:plotly/dash.git dash-main
+                    git clone --depth 1 git@github.com:plotly/dash.git dash-main
                     pip install -e ./dash-main[dev,testing] --quiet
                     cd dash-main/dash-renderer && npm ci && npm run build && pip install -e . && cd ./../..
 
@@ -100,8 +107,7 @@ jobs:
                     python -m venv venv || virtualenv venv
                     . venv/bin/activate
                     pip install -r dev-requirements.txt --quiet
-                    git clone -b state-machine --depth 1 git@github.com:plotly/dash.git dash-main
-                    pip install -e ./dash-main[dev] --quiet
+                    pip install --progress-bar off -e git+https://github.com/plotly/dash.git@dev#egg=dash[dev,testing]
 
             - run:
                 name: Run tests
@@ -168,6 +174,7 @@ jobs:
                 command: |
                     . venv/bin/activate
                     pip install -r dev-requirements.txt --quiet
+                    pip install --progress-bar off -e git+https://github.com/plotly/dash.git@dev#egg=dash[dev,testing]
 
             - run:
                 name: Run eslint
@@ -206,7 +213,7 @@ jobs:
                 name: Install dependencies (dash)
                 command: |
                     . venv/bin/activate
-                    git clone -b state-machine --depth 1 git@github.com:plotly/dash.git dash-main
+                    git clone --depth 1 git@github.com:plotly/dash.git dash-main
                     pip install -e ./dash-main[dev,testing] --quiet
                     cd dash-main/dash-renderer && npm ci && npm run build && pip install -e . && cd ../..
 
