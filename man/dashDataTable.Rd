@@ -18,10 +18,11 @@ export_columns=NULL, export_format=NULL,
 export_headers=NULL, fill_width=NULL, hidden_columns=NULL,
 id=NULL, is_focused=NULL, merge_duplicate_headers=NULL,
 fixed_columns=NULL, fixed_rows=NULL, column_selectable=NULL,
-row_deletable=NULL, row_selectable=NULL,
-selected_cells=NULL, selected_rows=NULL,
-selected_columns=NULL, selected_row_ids=NULL,
-start_cell=NULL, style_as_list_view=NULL, page_action=NULL,
+row_deletable=NULL, cell_selectable=NULL,
+row_selectable=NULL, selected_cells=NULL,
+selected_rows=NULL, selected_columns=NULL,
+selected_row_ids=NULL, start_cell=NULL,
+style_as_list_view=NULL, page_action=NULL,
 page_current=NULL, page_count=NULL, page_size=NULL,
 dropdown=NULL, dropdown_conditional=NULL,
 dropdown_data=NULL, tooltip=NULL, tooltip_conditional=NULL,
@@ -398,6 +399,9 @@ and `derived_viewport_selected_columns`.}
 
 \item{row_deletable}{Logical. If True, then a `x` will appear next to each `row`
 and the user can delete the row.}
+
+\item{cell_selectable}{Logical. If True (default), then it is possible to click and navigate
+table cells.}
 
 \item{row_selectable}{A value equal to: 'single', 'multi', false. If `single`, then the user can select a single row
 via a radio button that will appear next to each row.

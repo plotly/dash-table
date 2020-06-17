@@ -816,6 +816,17 @@
         "required": false,
         "description": "If True, then a `x` will appear next to each `row`\nand the user can delete the row."
       },
+      "cell_selectable": {
+        "type": {
+          "name": "bool"
+        },
+        "required": false,
+        "description": "If True (default), then it is possible to click and navigate\ntable cells.",
+        "defaultValue": {
+          "value": "true",
+          "computed": false
+        }
+      },
       "row_selectable": {
         "type": {
           "name": "enum",
