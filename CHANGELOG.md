@@ -2,6 +2,21 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.8.0] - 2020-06-17
+### Added
+- [#787](https://github.com/plotly/dash-table/pull/787) Add `cell_selectable` property to allow/disallow cell selection
+
+### Changed
+- [#787](https://github.com/plotly/dash-table/pull/787)
+    - Clicking on a link in a Markdown cell now requires a single click instead of two
+    - Links in Markdown cells now open a new tab (target="_blank")
+
+### Fixed
+- [#785](https://github.com/plotly/dash-table/pull/785) Fix a bug where the table does not refresh correctly if a property was previously missing
+- [#793](https://github.com/plotly/dash-table/pull/793)
+    - Fix a bug where headers aren't aligned with columns with fixed_rows [#777](https://github.com/plotly/dash-table/issues/777)
+    - Fix a regression where headers don't scroll horizontally with fixed_rows [#780](https://github.com/plotly/dash-table/issues/780)
+
 ## [4.7.0] - 2020-05-05
 ### Added
 - [#729](https://github.com/plotly/dash-table/pull/729) Improve conditional styling
