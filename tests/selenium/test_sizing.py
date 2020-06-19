@@ -255,7 +255,7 @@ def test_szng002_percentages_result_in_same_widths(test):
 @pytest.mark.parametrize(
     "fixed_columns",
     [
-        dict(),
+        # dict(),
         dict(fixed_columns=dict(headers=True)),
         dict(fixed_columns=dict(headers=True, data=1)),
     ],
@@ -263,7 +263,7 @@ def test_szng002_percentages_result_in_same_widths(test):
 @pytest.mark.parametrize(
     "fixed_rows",
     [
-        dict(),
+        # dict(),
         dict(fixed_rows=dict(headers=True)),
         dict(fixed_rows=dict(headers=True, data=1)),
     ],
@@ -291,8 +291,8 @@ def test_szng002_percentages_result_in_same_widths(test):
             ]
         ),
         dict(merge_duplicate_headers=True),
-        dict(fixed_rows=dict(headers=True)),
-        dict(fixed_columns=dict(headers=True)),
+        # dict(fixed_rows=dict(headers=True)),
+        # dict(fixed_columns=dict(headers=True)),
         dict(fixed_columns=dict(headers=True), fixed_rows=dict(headers=True)),
         dict(style_cell=dict(width=200, minWidth=200, maxWidth=200)),
         dict(style_table=dict(width=500, minWidth=500, maxWidth=500)),
