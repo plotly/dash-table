@@ -150,31 +150,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         this.updateStylesheet();
         this.updateUiViewport();
 
-        const {
-            style_as_list_view,
-            style_cell,
-            style_cell_conditional,
-            style_data,
-            style_data_conditional,
-            style_filter,
-            style_filter_conditional,
-            style_header,
-            style_header_conditional,
-            style_table
-        } = this.props;
-
-        this.handleResizeIf(
-            style_as_list_view,
-            style_cell,
-            style_cell_conditional,
-            style_data,
-            style_data_conditional,
-            style_filter,
-            style_filter_conditional,
-            style_header,
-            style_header_conditional,
-            style_table
-        );
+        this.handleResizeIf(...R.values(this.props));
 
         this.handleDropdown();
         this.adjustTooltipPosition();
