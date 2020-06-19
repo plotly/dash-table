@@ -150,7 +150,14 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         this.updateStylesheet();
         this.updateUiViewport();
 
-        this.handleResizeIf(...R.values(this.props));
+        const {
+            fixed_columns,
+            fixed_rows
+        } = this.props;
+
+        if (fixed_columns || fixed_rows) {
+            this.handleResizeIf(...R.values(this.props));
+        }
 
         this.handleDropdown();
         this.adjustTooltipPosition();
