@@ -215,8 +215,6 @@ def test_szng001_widths_on_style_change(test):
 
 
 def test_szng002_percentages_result_in_same_widths(test):
-    global base_props
-
     _fixed_columns = [dict(headers=True, data=1), dict(headers=True)]
     _fixed_rows = [dict(headers=True, data=1), dict(headers=True)]
     _merge_duplicate_headers = [True, False]
@@ -301,8 +299,6 @@ def test_szng002_percentages_result_in_same_widths(test):
 def test_szng003_on_prop_change(
     test, fixed_columns, fixed_rows, merge_duplicate_headers, callback_props
 ):
-    global base_props
-
     props = {**base_props, **fixed_columns, **fixed_rows, **merge_duplicate_headers}
 
     table = DataTable(**props, id="table")
