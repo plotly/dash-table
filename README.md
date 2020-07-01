@@ -39,7 +39,7 @@ DataTable is rendered with standard, semantic HTML `<table/>` markup, which make
 
 This component was written from scratch in React.js and Typescript specifically for the Dash community. Its API was designed to be ergonomic and its behavior is completely customizable through its properties.
 
-DataTable was designed with a featureset that allows that Dash users to create complex, spreadsheet driven applications with no compromises. We're excited to continue to work with users and companies that [invest in DataTable's future](https://plotly.com/products/consulting-and-oem/).
+DataTable was designed with a featureset that allows Dash users to create complex, spreadsheet driven applications with no compromises. We're excited to continue to work with users and companies that [invest in DataTable's future](https://plotly.com/products/consulting-and-oem/).
 
 Please subscribe to [dash-table#207](https://github.com/plotly/dash-table/issues/207) and the [CHANGELOG.md](https://github.com/plotly/dash-table/blob/master/CHANGELOG.md) to stay up-to-date with any breaking changes. Note: DataTable is currently supported in Chrome, Firefox, Safari, Edge (version 15+), and Internet Explorer 11. 
 
