@@ -16,6 +16,8 @@ interface IExportButtonProps {
     virtual_data: IDerivedData;
     visibleColumns: Columns;
     export_headers: ExportHeaders;
+    export_className?: string;
+    export_text?: string;
     merge_duplicate_headers: boolean;
 }
 
@@ -27,6 +29,8 @@ export default React.memo((props: IExportButtonProps) => {
         virtual_data,
         export_headers,
         visibleColumns,
+        export_className,
+        export_text,
         merge_duplicate_headers
     } = props;
     const isFormatSupported =
@@ -57,13 +61,9 @@ export default React.memo((props: IExportButtonProps) => {
         await exportWorkbook(wb, export_format);
     };
 
-    return (
-        <div>
-            {!isFormatSupported ? null : (
-                <button className='export' onClick={handleExport}>
-                    Export
-                </button>
-            )}
-        </div>
-    );
+    return (<div>
+        {!isFormatSupported ? null : (
+            <button className={export_className} onClick={handleExport}>{export_text}</button>
+        )}
+    </div>);
 });

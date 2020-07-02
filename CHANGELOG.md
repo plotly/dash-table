@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [UNRELEASED]
 ### Fixed
 - [#854](https://github.com/plotly/dash-table/pull/854) - part of fixing dash import bug https://github.com/plotly/dash/issues/1143
+### Added
+- [#799](https://github.com/plotly/dash-table/pull/799) Added export_className and export_text
+  to modify class and text of the export button
 
 ## [4.11.1] - 2020-12-07
 ### Fixed

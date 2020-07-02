@@ -382,4 +382,11 @@ storiesOf('DashTable/Export', module)
         data={dataA2J.slice(0, 10)}
         columns={columnsA2J.slice(0, 10)}
         export_format={ExportFormat.None}
+    />))
+    .add('Export Button with different text', () => (<DataTable
+        setProps={setProps}
+        data={dataA2J.slice(0, 10)}
+        columns={columnsA2J.slice(0, 10)}
+        export_format={ExportFormat.Xlsx}
+        export_text="Export with Love"
     />));

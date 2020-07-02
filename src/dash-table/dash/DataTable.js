@@ -536,6 +536,18 @@ export const propTypes = {
     export_headers: PropTypes.oneOf(['none', 'ids', 'names', 'display']),
 
     /**
+     * Denotes the text of the export button
+     * Defaults to `'Export'`
+     */
+    export_text: PropTypes.string,
+
+    /**
+     * Denotes the class name of the export button
+     * Defaults to `'export'`
+     */
+    export_className: PropTypes.string,
+
+    /**
      * `fill_width` toggles between a set of CSS for two common behaviors:
      * True: The table container's width will grow to fill the available space;
      * False: The table container's width will equal the width of its content.
