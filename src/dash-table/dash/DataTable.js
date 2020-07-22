@@ -427,13 +427,22 @@ export const propTypes = {
         separate_4digits: PropTypes.bool
     }),
 
+    /**
+     * The `markdown_options` property allows customization of the markdown cells behavior.
+     *  'linkTarget': (default: '_blank') the link's behavior (_blank opens the link in a
+     * new tab, _parent opens the link in the parent frame, _self opens the link in the
+     * current tab, and _top opens the link in the top frame) or a string
+     */
     markdown_options: PropTypes.exact({
-        linkTarget: PropTypes.oneOf([
-            '_blank',
-            '_parent',
-            '_self',
-            '_top'
-        ])
+        linkTarget: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.oneOf([
+                '_blank',
+                '_parent',
+                '_self',
+                '_top'
+            ])
+        ]).isRequired
     }),
 
     /**
