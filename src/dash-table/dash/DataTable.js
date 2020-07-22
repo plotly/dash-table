@@ -70,6 +70,10 @@ export const defaultProps = {
         data: 0
     },
 
+    markdown_options: {
+        linkTarget: '_blank'
+    },
+
     tooltip: {},
     tooltip_conditional: [],
     tooltip_data: [],
@@ -421,6 +425,15 @@ export const propTypes = {
         numerals: PropTypes.arrayOf(PropTypes.string),
         percent: PropTypes.string,
         separate_4digits: PropTypes.bool
+    }),
+
+    markdown_options: PropTypes.exact({
+        linkTarget: PropTypes.oneOf([
+            '_blank',
+            '_parent',
+            '_self',
+            '_top'
+        ])
     }),
 
     /**
