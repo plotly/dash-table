@@ -40,9 +40,7 @@ def get_app(cell_selectable, markdown_options):
     ],
 )
 @pytest.mark.parametrize("cell_selectable", [True, False])
-def test_tmdl001_copy_markdown_to_text(
-    test, markdown_options, new_tab, cell_selectable
-):
+def test_tmdl001_click_markdown_link(test, markdown_options, new_tab, cell_selectable):
     test.start_server(get_app(cell_selectable, markdown_options))
 
     target = test.table("table")
