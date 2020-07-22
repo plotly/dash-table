@@ -156,7 +156,7 @@ export interface INumberLocale {
 }
 
 export interface IMarkdownOptions {
-    linkTarget: '_blank' | '_parent' | '_self' | '_top' | string;
+    link_target: '_blank' | '_parent' | '_self' | '_top' | string;
 }
 
 export type NumberFormat = ({

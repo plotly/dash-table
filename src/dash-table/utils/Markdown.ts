@@ -1,4 +1,5 @@
 import { Remarkable } from 'remarkable';
+import objPropsToCamel from 'core/objPropsToCamel';
 import LazyLoader from 'dash-table/LazyLoader';
 import { IMarkdownOptions } from 'dash-table/components/Table/props';
 
@@ -21,7 +22,7 @@ export default class Markdown {
             }
             return '';
         },
-        ...this.options
+        ...objPropsToCamel(this.options)
     });
 
     constructor(private readonly options: IMarkdownOptions) {

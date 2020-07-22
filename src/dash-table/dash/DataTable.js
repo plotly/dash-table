@@ -71,7 +71,7 @@ export const defaultProps = {
     },
 
     markdown_options: {
-        linkTarget: '_blank'
+        link_target: '_blank'
     },
 
     tooltip: {},
@@ -429,12 +429,12 @@ export const propTypes = {
 
     /**
      * The `markdown_options` property allows customization of the markdown cells behavior.
-     *  'linkTarget': (default: '_blank') the link's behavior (_blank opens the link in a
+     *  'link_target': (default: '_blank') the link's behavior (_blank opens the link in a
      * new tab, _parent opens the link in the parent frame, _self opens the link in the
      * current tab, and _top opens the link in the top frame) or a string
      */
     markdown_options: PropTypes.exact({
-        linkTarget: PropTypes.oneOfType([
+        link_target: PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.oneOf([
                 '_blank',
