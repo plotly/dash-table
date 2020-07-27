@@ -462,6 +462,49 @@
         "required": false,
         "description": "The localization specific formatting information applied to all columns in the table.\nThis prop is derived from the [d3.formatLocale](https://github.com/d3/d3-format#formatLocale) data structure specification.\nWhen left unspecified, each individual nested prop will default to a pre-determined value.\n  'symbol': (default: ['$', '']) a list of two strings representing the\n  prefix and suffix symbols. Typically used for currency, and implemented using d3's\n  currency format, but you can use this for other symbols such as measurement units.\n  'decimal': (default: '.') the string used for the decimal separator.\n  'group': (default: ',') the string used for the groups separator.\n  'grouping': (default: [3]) a list of integers representing the grouping pattern.\n  'numerals': a list of ten strings used as replacements for numbers 0-9.\n  'percent': (default: '%') the string used for the percentage symbol.\n  'separate_4digits': (default: True) separate integers with 4-digits or less."
       },
+      "markdown_options": {
+        "type": {
+          "name": "exact",
+          "value": {
+            "link_target": {
+              "name": "union",
+              "value": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "enum",
+                  "value": [
+                    {
+                      "value": "'_blank'",
+                      "computed": false
+                    },
+                    {
+                      "value": "'_parent'",
+                      "computed": false
+                    },
+                    {
+                      "value": "'_self'",
+                      "computed": false
+                    },
+                    {
+                      "value": "'_top'",
+                      "computed": false
+                    }
+                  ]
+                }
+              ],
+              "required": true
+            }
+          }
+        },
+        "required": false,
+        "description": "The `markdown_options` property allows customization of the markdown cells behavior.\n 'link_target': (default: '_blank') the link's behavior (_blank opens the link in a\nnew tab, _parent opens the link in the parent frame, _self opens the link in the\ncurrent tab, and _top opens the link in the top frame) or a string",
+        "defaultValue": {
+          "value": "{\n    link_target: '_blank'\n}",
+          "computed": false
+        }
+      },
       "css": {
         "type": {
           "name": "arrayOf",

@@ -12,9 +12,9 @@ Dash DataTable is an interactive table component designed for designed for viewi
 \usage{
 dashDataTable(active_cell=NULL, columns=NULL,
 include_headers_on_copy_paste=NULL, locale_format=NULL,
-css=NULL, data=NULL, data_previous=NULL,
-data_timestamp=NULL, editable=NULL, end_cell=NULL,
-export_columns=NULL, export_format=NULL,
+markdown_options=NULL, css=NULL, data=NULL,
+data_previous=NULL, data_timestamp=NULL, editable=NULL,
+end_cell=NULL, export_columns=NULL, export_format=NULL,
 export_headers=NULL, fill_width=NULL, hidden_columns=NULL,
 id=NULL, is_focused=NULL, merge_duplicate_headers=NULL,
 fixed_columns=NULL, fixed_rows=NULL, column_selectable=NULL,
@@ -259,6 +259,13 @@ When left unspecified, each individual nested prop will default to a pre-determi
   'numerals': a list of ten strings used as replacements for numbers 0-9.
   'percent': (default: '\%') the string used for the percentage symbol.
   'separate_4digits': (default: True) separate integers with 4-digits or less.}
+
+\item{markdown_options}{Lists containing elements 'link_target'.
+those elements have the following types:
+  - link_target (character | a value equal to: '_blank', '_parent', '_self', '_top'; required). The `markdown_options` property allows customization of the markdown cells behavior.
+ 'link_target': (default: '_blank') the link's behavior (_blank opens the link in a
+new tab, _parent opens the link in the parent frame, _self opens the link in the
+current tab, and _top opens the link in the top frame) or a string}
 
 \item{css}{List of lists containing elements 'selector', 'rule'.
 those elements have the following types:

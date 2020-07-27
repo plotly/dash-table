@@ -308,6 +308,8 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
 
     forceHandleResize = () => this.handleResize();
 
+    getScrollbarWidthOnce = R.once(getScrollbarWidth);
+
     handleResizeIf = memoizeOne((..._: any[]) => {
         const { r0c0, r0c1, r1c0, r1c1 } = this.refs as Refs;
 
@@ -339,15 +341,13 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
             setState
         } = this.props;
 
-        const { r1c1 } = this.refs as Refs;
+        const { r1, r1c1 } = this.refs as Refs;
 
         if (!this.isDisplayed(r1c1)) {
             return;
         }
 
-        this.updateStylesheet();
-
-        getScrollbarWidth().then((scrollbarWidth: number) => setState({ scrollbarWidth }));
+        this.getScrollbarWidthOnce(r1).then((scrollbarWidth: number) => setState({ scrollbarWidth }));
 
         const { r0c0, r0c1, r1c0 } = this.refs as Refs;
 
@@ -385,20 +385,19 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
                 // Force first column containers width to match visible portion of table
                 r0c0.style.width = `${lastFixedTdRight}px`;
                 r1c0.style.width = `${lastFixedTdRight}px`;
-
-                if (!cycle) {
-                    // Force second column containers width to match visible portion of table
-                    const firstVisibleTd = r1c1.querySelector(`tr:first-of-type > *:nth-of-type(${fixed_columns + 1})`);
-                    if (firstVisibleTd) {
-                        const r1c1FragmentBounds = r1c1.getBoundingClientRect();
-                        const firstTdBounds = firstVisibleTd.getBoundingClientRect();
-
-                        const width = firstTdBounds.left - r1c1FragmentBounds.left;
-                        r0c1.style.marginLeft = `-${width}px`;
-                        r1c1.style.marginLeft = `-${width}px`;
-                    }
-                }
             }
+        }
+
+        // Force second column containers width to match visible portion of table
+        const firstVisibleTd = r1c1.querySelector(`tr:first-of-type > *:nth-of-type(${fixed_columns + 1})`);
+        if (firstVisibleTd) {
+            const r1c1FragmentBounds = r1c1.getBoundingClientRect();
+            const firstTdBounds = firstVisibleTd.getBoundingClientRect();
+
+            const width = firstTdBounds.left - r1c1FragmentBounds.left;
+
+            r0c1.style.marginLeft = `-${width + r1.scrollLeft}px`;
+            r1c1.style.marginLeft = `-${width}px`;
         }
 
         if (!cycle) {
