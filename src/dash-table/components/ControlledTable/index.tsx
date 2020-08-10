@@ -42,7 +42,8 @@ import PageNavigation from 'dash-table/components/PageNavigation';
 type Refs = { [key: string]: HTMLElement };
 
 const DEFAULT_STYLE = {
-    width: '100%'
+    width: '100%',
+    overflow: 'auto'
 };
 
 const INNER_STYLE = {
