@@ -50,8 +50,6 @@ const DEFAULT_STYLE = {
     width: '100%'
 };
 
-const pouet = "'''";
-
 const INNER_STYLE = {
     minHeight: '100%',
     minWidth: '100%'
