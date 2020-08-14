@@ -1,5 +1,3 @@
-type Array<T> = T[];
-
 export function arrayMap<T1, TR>(
     a1: T1[],
     fn: (d1: T1, i: number) => TR
