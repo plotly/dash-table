@@ -42,8 +42,7 @@ import PageNavigation from 'dash-table/components/PageNavigation';
 type Refs = { [key: string]: HTMLElement };
 
 const DEFAULT_STYLE = {
-    width: '100%',
-    overflow: 'auto'
+    width: '100%'
 };
 
 const INNER_STYLE = {
@@ -1012,7 +1011,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         const { table, tooltip: t } = this.refs as { [key: string]: any };
 
         if (t) {
-            const cell = table.querySelector(`td[data-dash-column="${id}"][data-dash-row="${row}"]`);
+            const cell = table.querySelector(`td[data-dash-column="${id}"][data-dash-row="${row}"]:not(.phantom-cell)`);
 
             (this.refs.tooltip as TableTooltip).updateBounds(cell);
         }
