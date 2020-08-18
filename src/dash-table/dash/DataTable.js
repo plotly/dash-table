@@ -1,3 +1,4 @@
+import * as R from 'ramda';
 import React, {Component, Suspense} from 'react';
 import {asyncDecorator} from '@plotly/dash-component-plugins';
 
@@ -20,14 +21,14 @@ const DataTable = props => (
 
 export default DataTable;
 
-const RealDataTable = asyncDecorator(DataTable, () =>
-    LazyLoader.table().then(res => {
-        const realDataTable = res.default;
+const RealDataTable = asyncDecorator(DataTable, LazyLoader.table, true);
 
-        DataTable.defaultProps = realDataTable.defaultProps;
-        DataTable.propTypes = realDataTable.propTypes;
-        DataTable.persistenceTransforms = realDataTable.persistenceTransforms;
-
-        return res;
-    })
-);
+DataTable.persistenceTransforms = {
+    columns: {
+        name: {
+            extract: propValue => R.pluck('name', propValue),
+            apply: (storedValue, propValue) =>
+                R.zipWith(R.assoc('name'), storedValue, propValue)
+        }
+    }
+};
