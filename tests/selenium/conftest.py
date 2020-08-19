@@ -261,7 +261,9 @@ class DataTableTooltipFacade(object):
     def exists(self):
         self.mixin._wait_for_table(self.id)
 
-        return self._get_tooltip() is not None
+        tooltip = self._get_tooltip()
+
+        return tooltip is not None and tooltip.is_displayed()
 
     def get_text(self):
         return (

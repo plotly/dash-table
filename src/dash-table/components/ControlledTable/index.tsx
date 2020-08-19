@@ -1092,7 +1092,9 @@ export default class ControlledTable extends PureComponent<
         const {table, tooltip: t} = this.refs as {[key: string]: any};
 
         if (t) {
-            const cell = table.querySelector(`td[data-dash-column="${id}"][data-dash-row="${row}"]:not(.phantom-cell)`);
+            const cell = table.querySelector(
+                `td[data-dash-column="${id}"][data-dash-row="${row}"]:not(.phantom-cell)`
+            );
             (this.refs.tooltip as TableTooltip).updateBounds(cell);
         }
     }

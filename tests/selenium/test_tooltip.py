@@ -1,6 +1,7 @@
 import dash
 import math
 import pytest
+import dash.testing.wait as wait
 from dash_table import DataTable
 
 columns = [dict(id=str(i), name="Column {}".format(i)) for i in range(1, 30)]
@@ -112,3 +113,28 @@ def test_ttip002_displays_tooltip_content(test, tooltip_data, expected_text):
     cell.move_to()
     assert tooltip.exists()
     assert tooltip.get_text().strip() == expected_text
+
+
+def test_ttip003_tooltip_disappears(test):
+    props = {
+        **base_props,
+        **dict(
+            tooltip_delay=2000, tooltip_duration=2000, tooltip_data=tooltip_data_text
+        ),
+    }
+
+    app = dash.Dash(__name__)
+    app.layout = DataTable(**props)
+
+    test.start_server(app)
+
+    target = test.table("table")
+    tooltip = target.tooltip
+
+    target.is_ready()
+
+    target.cell(0, 0).move_to()
+    assert not tooltip.exists()
+
+    wait.until(lambda: tooltip.exists(), 2.5)
+    wait.until(lambda: not tooltip.exists(), 2.5)
