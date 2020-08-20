@@ -143,41 +143,39 @@
 
 .dash-table-container {
     .previous-next-container {
-        display: inline-block;
         float: right;
         padding: 5px 0px;
 
         .page-number {
             font-family: monospace;
             display: inline-block;
+
             .last-page {
-            min-width: 30px;
-            display: inline-block;
-            text-align: center;
-            margin: 0.5em;
+                width: 7ch;
+                display: inline-block;
+                text-align: center;
             }
-        }
 
-        input.current-page {
-            display: inline-block;
-            border-bottom: solid lightgrey 1px !important;
-            color: black;
-            border: none;
-            width: 30px;
-            text-align: center;
-            font-family: monospace;
-            font-size: 10pt;
-            margin: 0.5em;
-
-            &::placeholder {
+            input.current-page {
+                display: inline-block;
+                border-bottom: solid lightgrey 1px !important;
                 color: black;
-            }
-
-            &:focus {
-                outline: none;
+                border: none;
+                width: 7ch;
+                text-align: center;
+                font-family: monospace;
+                font-size: 10pt;
 
                 &::placeholder {
-                    opacity: 0;
+                    color: black;
+                }
+
+                &:focus {
+                    outline: none;
+
+                    &::placeholder {
+                        opacity: 0;
+                    }
                 }
             }
         }
