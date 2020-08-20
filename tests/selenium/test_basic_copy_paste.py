@@ -120,11 +120,12 @@ def test_tbcp003_copy_multiple_rows(test, mouse_navigation):
 
     target = test.table("table")
 
-    target.cell(0, 0).click()
     if mouse_navigation:
         with test.hold(Keys.SHIFT):
+            target.cell(0, 0).click()
             target.cell(2, 0).click()
     else:
+        target.cell(0, 0).click()
         with test.hold(Keys.SHIFT):
             test.send_keys(Keys.ARROW_DOWN + Keys.ARROW_DOWN)
 

@@ -163,6 +163,28 @@ export default class ControlledTable extends PureComponent<
         this.handleDropdown();
         this.adjustTooltipPosition();
 
+        const {active_cell} = this.props;
+
+        // Check if the focus is inside this table
+        if (this.containsActiveElement()) {
+            const active = this.getActiveCellAttributes();
+
+            // If there is an active cell and it does not have focus -> transfer focus
+            if (
+                active &&
+                active_cell &&
+                (active.column_id !== active_cell?.column_id ||
+                    active.row !== active_cell?.row)
+            ) {
+                const target = this.$el.querySelector(
+                    `td[data-dash-row="${active_cell.row}"][data-dash-column="${active_cell.column_id}"]:not(.phantom-cell)`
+                ) as HTMLElement;
+                if (target) {
+                    target.focus();
+                }
+            }
+        }
+
         const {setState, uiCell, virtualization} = this.props;
 
         if (!virtualization) {
@@ -194,11 +216,8 @@ export default class ControlledTable extends PureComponent<
     }
 
     handleClick = (event: any) => {
-        const $el = this.$el;
-
         if (
-            $el &&
-            !$el.contains(event.target as Node) &&
+            this.containsActiveElement() &&
             /*
              * setProps is expensive, it causes excessive re-rendering in Dash.
              * so, only call when the table isn't already focussed, otherwise
@@ -429,24 +448,44 @@ export default class ControlledTable extends PureComponent<
         return document.getElementById(this.props.id) as HTMLElement;
     }
 
-    /*#if TEST_COPY_PASTE*/
-    private preventCopyPaste(): boolean {
-        const {active_cell} = this.props;
+    private containsActiveElement(): boolean {
+        const $el = this.$el;
+
+        return $el && $el.contains(document.activeElement);
+    }
+
+    private getActiveCellAttributes(): {
+        column_id: string | null;
+        row: number | null;
+    } | void {
         let activeElement = document.activeElement;
         while (activeElement && activeElement.nodeName.toLowerCase() !== 'td') {
             activeElement = activeElement.parentElement;
         }
 
         if (!activeElement) {
-            return true;
+            return;
         }
 
         const column_id = activeElement.getAttribute('data-dash-column');
         const row = activeElement.getAttribute('data-dash-row');
 
+        return {column_id, row: +(row ?? 0)};
+    }
+
+    /*#if TEST_COPY_PASTE*/
+    private preventCopyPaste(): boolean {
+        if (!this.containsActiveElement()) {
+            return false;
+        }
+
+        const {active_cell} = this.props;
+        const active = this.getActiveCellAttributes();
+
         if (
-            column_id !== active_cell?.column_id ||
-            +(row ?? 0) !== active_cell?.row
+            !active ||
+            active.column_id !== active_cell?.column_id ||
+            active.row !== active_cell?.row
         ) {
             return true;
         }
