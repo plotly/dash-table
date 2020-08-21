@@ -151,31 +151,45 @@
             display: inline-block;
 
             .last-page {
-                width: 7ch;
                 display: inline-block;
                 text-align: center;
+                padding: 1px 2px;
             }
 
-            input.current-page {
+            .current-page-container {
                 display: inline-block;
-                border-bottom: solid lightgrey 1px !important;
-                color: black;
-                border: none;
-                width: 7ch;
-                text-align: center;
-                font-family: monospace;
-                font-size: 10pt;
+                position: relative;
 
-                &::placeholder {
+                .current-page-shadow,
+                input.current-page {
+                    display: inline-block;
+                    border-bottom: solid lightgrey 1px !important;
                     color: black;
-                }
-
-                &:focus {
-                    outline: none;
+                    border: none;
+                    text-align: center;
+                    font-family: monospace;
+                    font-size: 10pt;
+                    padding: 1px 2px;
 
                     &::placeholder {
-                        opacity: 0;
+                        color: black;
                     }
+
+                    &:focus {
+                        outline: none;
+
+                        &::placeholder {
+                            opacity: 0;
+                        }
+                    }
+                }
+
+                input.current-page {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
                 }
             }
         }
