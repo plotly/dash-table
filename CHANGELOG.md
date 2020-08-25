@@ -4,7 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
-- [#820](https://github.com/plotly/dash-table/pull/820) Support for dash-table is now available for Julia users of Dash.
+- [#820](https://github.com/plotly/dash-table/pull/820) Add support for Dash.jl Julia built components
 
 ### Fixed
 - [#817](https://github.com/plotly/dash-table/pull/817) Fix a regression introduced with [#722](https://github.com/plotly/dash-table/pull/722) causing the tooltips to be misaligned with respect to their parent cell
