@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.10.0] - 2020-08-25
+### Added
+- [#820](https://github.com/plotly/dash-table/pull/820) Add support for Dash.jl Julia built components
+
+### Fixed
+- [#817](https://github.com/plotly/dash-table/pull/817) Fix a regression introduced with [#722](https://github.com/plotly/dash-table/pull/722) causing the tooltips to be misaligned with respect to their parent cell
+- [#818](https://github.com/plotly/dash-table/pull/818) Fix a regression causing copy/paste not to work when selecting a range of cells with Shift + mouse click
+- [#819](https://github.com/plotly/dash-table/pull/819) Fix pagination `page_current` and `page_count` fields to accommodate larger numbers
+
 ## [4.9.0] - 2020-07-27
 ### Added
 - [#808](https://github.com/plotly/dash-table/pull/808)Fix a regression introduced with [#787](https://github.com/plotly/dash-table/pull/787) making it impossible to open markdown links in the current tab.
