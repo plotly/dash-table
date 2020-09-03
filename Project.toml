@@ -2,11 +2,11 @@
 name = "DashTable"
 uuid = "1b08a953-4be3-4667-9a23-f0e2ba4deb9a"
 authors = ["Chris Parmer <chris@plotly.com>"]
-version = "4.10.0"
+version = "4.10.1"
 
 [deps]
 DashBase = "03207cf0-e2b3-4b91-9ca8-690cf0fb507e"
 
-[compact]
+[compat]
 julia = "1.2"
 DashBase = ">=0.1"
