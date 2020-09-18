@@ -1155,15 +1155,21 @@ export default class ControlledTable extends PureComponent<
             return;
         }
 
-        const id = currentTooltip.id;
-        const row = currentTooltip.row;
+        const {id, row, header} = currentTooltip;
 
         const {table, tooltip: t} = this.refs as {[key: string]: any};
 
         if (t) {
-            const cell = table.querySelector(
-                `td[data-dash-column="${id}"][data-dash-row="${row}"]:not(.phantom-cell)`
-            );
+            const cell = header
+                ? table.querySelector(
+                      `tr:nth-of-type(${
+                          row + 1
+                      }) th[data-dash-column="${id}"]:not(.phantom-cell)`
+                  )
+                : table.querySelector(
+                      `td[data-dash-column="${id}"][data-dash-row="${row}"]:not(.phantom-cell)`
+                  );
+
             (this.refs.tooltip as TableTooltip).updateBounds(cell);
         }
     }

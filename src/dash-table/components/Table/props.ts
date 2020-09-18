@@ -273,6 +273,7 @@ export interface IUserInterfaceViewport {
 export interface IUSerInterfaceTooltip {
     delay?: number;
     duration?: number;
+    header: boolean;
     id: ColumnId;
     row: number;
 }
