@@ -962,7 +962,7 @@ export const propTypes = {
      * `tooltip_header` represents the tooltip shown
      * for different header columns and cells.
      * The `property` name refers to the column ID. Each property
-     * contains a list of tooltips mapped to the source `data`
+     * contains a list of tooltips mapped to the table's `header`
      * row index.
      * The `type` refers to the type of tooltip syntax used
      * for the tooltip generation. Can either be `markdown`
