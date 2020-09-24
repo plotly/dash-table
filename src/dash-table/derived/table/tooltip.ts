@@ -7,7 +7,11 @@ import {
     DataTooltips
 } from 'dash-table/components/Table/props';
 import {ifColumnId, ifRowIndex, ifFilter} from 'dash-table/conditional';
-import {ConditionalTooltip, TooltipSyntax} from 'dash-table/tooltips/props';
+import {
+    ConditionalTooltip,
+    TooltipUsage,
+    TooltipSyntax
+} from 'dash-table/tooltips/props';
 import {memoizeOne} from 'core/memoizer';
 
 // 2^32-1 the largest value setTimout can take safely
@@ -16,6 +20,7 @@ export const MAX_32BITS = 2147483647;
 function getSelectedTooltip(
     currentTooltip: IUSerInterfaceTooltip,
     tooltip_data: DataTooltips,
+    tooltip_header: DataTooltips,
     tooltip_conditional: ConditionalTooltip[],
     tooltip_static: ITableStaticTooltips,
     virtualized: IVirtualizedDerivedData
@@ -24,30 +29,39 @@ function getSelectedTooltip(
         return undefined;
     }
 
-    const {id, row} = currentTooltip;
+    const {header, id, row} = currentTooltip;
+
+    const tooltip_source = header ? tooltip_header : tooltip_data;
 
     if (id === undefined || row === undefined) {
         return undefined;
     }
 
-    const appliedStaticTooltip =
-        (tooltip_data &&
-            tooltip_data.length > row &&
-            tooltip_data[row] &&
-            tooltip_data[row][id]) ||
-        tooltip_static[id];
+    const staticTooltip = tooltip_static?.[id];
+    const staticUseWith =
+        staticTooltip && typeof staticTooltip !== 'string'
+            ? staticTooltip.use_with
+            : undefined;
+    const staticApplicable =
+        !staticUseWith || (staticUseWith === TooltipUsage.Header) === header;
+    const resolvedStaticTooltip = staticApplicable ? staticTooltip : undefined;
 
-    const conditionalTooltips = R.filter(tt => {
-        return (
-            !tt.if ||
-            (ifColumnId(tt.if, id) &&
-                ifRowIndex(tt.if, row) &&
-                ifFilter(
-                    tt.if,
-                    virtualized.data[row - virtualized.offset.rows]
-                ))
-        );
-    }, tooltip_conditional);
+    const appliedStaticTooltip =
+        tooltip_source?.[row]?.[id] || resolvedStaticTooltip;
+
+    const conditionalTooltips = header
+        ? []
+        : R.filter(tt => {
+              return (
+                  !tt.if ||
+                  (ifColumnId(tt.if, id) &&
+                      ifRowIndex(tt.if, row) &&
+                      ifFilter(
+                          tt.if,
+                          virtualized.data[row - virtualized.offset.rows]
+                      ))
+              );
+          }, tooltip_conditional);
 
     return conditionalTooltips.length
         ? conditionalTooltips.slice(-1)[0]
@@ -78,6 +92,7 @@ export default memoizeOne(
     (
         currentTooltip: IUSerInterfaceTooltip,
         tooltip_data: DataTooltips,
+        tooltip_header: DataTooltips,
         tooltip_conditional: ConditionalTooltip[],
         tooltip_static: ITableStaticTooltips,
         virtualized: IVirtualizedDerivedData,
@@ -87,6 +102,7 @@ export default memoizeOne(
         const selectedTooltip = getSelectedTooltip(
             currentTooltip,
             tooltip_data,
+            tooltip_header,
             tooltip_conditional,
             tooltip_static,
             virtualized

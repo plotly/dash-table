@@ -843,6 +843,8 @@ export const propTypes = {
      * or `text`. Defaults to `text`.
      * The `value` refers to the syntax-based content of
      * the tooltip. This value is required.
+     * The `use_with` refers to whether the tooltip will be shown
+     * only on data or headers. If not set, it applies to both.
      * The `delay` represents the delay in milliseconds before
      * the tooltip is shown when hovering a cell. This overrides
      * the table's `tooltip_delay` property. If set to `null`,
@@ -858,6 +860,7 @@ export const propTypes = {
     tooltip: PropTypes.objectOf(
         PropTypes.oneOfType([
             PropTypes.exact({
+                use_with: PropTypes.oneOf(['data', 'header']),
                 delay: PropTypes.number,
                 duration: PropTypes.number,
                 type: PropTypes.oneOf(['text', 'markdown']),
@@ -942,6 +945,43 @@ export const propTypes = {
      * that case.
      */
     tooltip_data: PropTypes.arrayOf(
+        PropTypes.objectOf(
+            PropTypes.oneOfType([
+                PropTypes.string,
+                PropTypes.exact({
+                    delay: PropTypes.number,
+                    duration: PropTypes.number,
+                    type: PropTypes.oneOf(['text', 'markdown']),
+                    value: PropTypes.string.isRequired
+                })
+            ])
+        )
+    ),
+
+    /**
+     * `tooltip_header` represents the tooltip shown
+     * for different header columns and cells.
+     * The `property` name refers to the column ID. Each property
+     * contains a list of tooltips mapped to the source `data`
+     * row index.
+     * The `type` refers to the type of tooltip syntax used
+     * for the tooltip generation. Can either be `markdown`
+     * or `text`. Defaults to `text`.
+     * The `value` refers to the syntax-based content of
+     * the tooltip. This value is required.
+     * The `delay` represents the delay in milliseconds before
+     * the tooltip is shown when hovering a cell. This overrides
+     * the table's `tooltip_delay` property. If set to `null`,
+     * the tooltip will be shown immediately.
+     * The `duration` represents the duration in milliseconds
+     * during which the tooltip is shown when hovering a cell.
+     * This overrides the table's `tooltip_duration` property.
+     * If set to `null`, the tooltip will not disappear.
+     * Alternatively, the value of the property can also be
+     * a plain string. The `text` syntax will be used in
+     * that case.
+     */
+    tooltip_header: PropTypes.arrayOf(
         PropTypes.objectOf(
             PropTypes.oneOfType([
                 PropTypes.string,

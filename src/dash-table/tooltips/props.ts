@@ -5,7 +5,13 @@ export enum TooltipSyntax {
     Markdown = 'markdown'
 }
 
+export enum TooltipUsage {
+    Data = 'data',
+    Header = 'header'
+}
+
 export interface ITooltip {
+    use_with?: TooltipUsage;
     delay?: number | null;
     duration?: number | null;
     type?: TooltipSyntax;
