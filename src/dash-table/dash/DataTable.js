@@ -861,7 +861,6 @@ export const propTypes = {
      */
     tooltip: PropTypes.objectOf(
         PropTypes.oneOfType([
-            PropTypes.nully,
             PropTypes.string,
             PropTypes.exact({
                 delay: PropTypes.number,
