@@ -860,14 +860,14 @@ export const propTypes = {
      */
     tooltip: PropTypes.objectOf(
         PropTypes.oneOfType([
+            PropTypes.nully,
+            PropTypes.string,
             PropTypes.exact({
-                use_with: PropTypes.oneOf(['both', 'data', 'header']),
                 delay: PropTypes.number,
                 duration: PropTypes.number,
                 type: PropTypes.oneOf(['text', 'markdown']),
                 value: PropTypes.string.isRequired
-            }),
-            PropTypes.string
+            })
         ])
     ),
 
@@ -945,19 +945,36 @@ export const propTypes = {
      * a plain string. The `text` syntax will be used in
      * that case.
      */
-    tooltip_data: PropTypes.arrayOf(
+    tooltip_data: PropTypes.oneOf([
+        PropTypes.arrayOf(
+            PropTypes.objectOf(
+                PropTypes.oneOfType([
+                    PropTypes.nully,
+                    PropTypes.string,
+                    PropTypes.exact({
+                        delay: PropTypes.number,
+                        duration: PropTypes.number,
+                        type: PropTypes.oneOf(['text', 'markdown']),
+                        value: PropTypes.string.isRequired
+                    })
+                ])
+            )
+        ),
         PropTypes.objectOf(
-            PropTypes.oneOfType([
-                PropTypes.string,
-                PropTypes.exact({
-                    delay: PropTypes.number,
-                    duration: PropTypes.number,
-                    type: PropTypes.oneOf(['text', 'markdown']),
-                    value: PropTypes.string.isRequired
-                })
-            ])
+            PropTypes.arrayOf(
+                PropTypes.oneOfType([
+                    PropTypes.nully,
+                    PropTypes.string,
+                    PropTypes.exact({
+                        delay: PropTypes.number,
+                        duration: PropTypes.number,
+                        type: PropTypes.oneOf(['text', 'markdown']),
+                        value: PropTypes.string.isRequired
+                    })
+                ])
+            )
         )
-    ),
+    ]),
 
     /**
      * `tooltip_header` represents the tooltip shown
@@ -982,19 +999,36 @@ export const propTypes = {
      * a plain string. The `text` syntax will be used in
      * that case.
      */
-    tooltip_header: PropTypes.arrayOf(
+    tooltip_header: PropTypes.oneOf([
+        PropTypes.arrayOf(
+            PropTypes.objectOf(
+                PropTypes.oneOfType([
+                    PropTypes.nully,
+                    PropTypes.string,
+                    PropTypes.exact({
+                        delay: PropTypes.number,
+                        duration: PropTypes.number,
+                        type: PropTypes.oneOf(['text', 'markdown']),
+                        value: PropTypes.string.isRequired
+                    })
+                ])
+            )
+        ),
         PropTypes.objectOf(
-            PropTypes.oneOfType([
-                PropTypes.string,
-                PropTypes.exact({
-                    delay: PropTypes.number,
-                    duration: PropTypes.number,
-                    type: PropTypes.oneOf(['text', 'markdown']),
-                    value: PropTypes.string.isRequired
-                })
-            ])
+            PropTypes.arrayOf(
+                PropTypes.oneOfType([
+                    PropTypes.nully,
+                    PropTypes.string,
+                    PropTypes.exact({
+                        delay: PropTypes.number,
+                        duration: PropTypes.number,
+                        type: PropTypes.oneOf(['text', 'markdown']),
+                        value: PropTypes.string.isRequired
+                    })
+                ])
+            )
         )
-    ),
+    ]),
 
     /**
      * `tooltip_delay` represents the table-wide delay in milliseconds before

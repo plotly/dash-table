@@ -141,7 +141,14 @@ def test_ttip003_tooltip_disappears(test):
     wait.until(lambda: not tooltip.exists(), 2.5)
 
 
-def test_ttip004_tooltip_applied(test):
+@pytest.mark.parametrize(
+    "tooltip_data,tooltip_header",
+    [
+        ([{"1": "alt-text1"}], [{}, {"1": "alt-header1-row1"}]),
+        ({"1": ["alt-text1"]}, {"1": [None, "alt-header1-row1"]}),
+    ],
+)
+def test_ttip004_tooltip_applied(test, tooltip_data, tooltip_header):
     props = {
         **base_props,
         "columns": [
@@ -159,8 +166,8 @@ def test_ttip004_tooltip_applied(test):
             "2": {"use_with": "data", "value": "text2"},
             "3": {"use_with": "header", "value": "text3"},
         },
-        "tooltip_data": [{"1": "alt-text1"}],
-        "tooltip_header": [{}, {"1": "alt-header1-row1"}],
+        "tooltip_data": tooltip_data,
+        "tooltip_header": tooltip_header,
     }
 
     app = dash.Dash(__name__)

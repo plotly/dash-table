@@ -31,7 +31,7 @@ function getSelectedTooltip(
 
     const {header, id, row} = currentTooltip;
 
-    const tooltip_source = header ? tooltip_header : tooltip_data;
+    const tooltipSource = header ? tooltip_header : tooltip_data;
 
     if (id === undefined || row === undefined) {
         return undefined;
@@ -48,7 +48,9 @@ function getSelectedTooltip(
     const resolvedStaticTooltip = staticApplicable ? staticTooltip : undefined;
 
     const appliedStaticTooltip =
-        tooltip_source?.[row]?.[id] || resolvedStaticTooltip;
+        (Array.isArray(tooltipSource)
+            ? tooltipSource?.[row]?.[id]
+            : tooltipSource?.[id]?.[row]) || resolvedStaticTooltip;
 
     const conditionalTooltips = header
         ? []

@@ -209,7 +209,9 @@ export interface ILoadingState {
 
 export type ConditionalDropdowns = IConditionalDropdown[];
 export type DataDropdowns = Partial<IDataDropdowns>[];
-export type DataTooltips = Partial<ITableTooltips>[];
+export type DataTooltips =
+    | {[key: string]: Partial<Tooltip>}[]
+    | {[key: string]: Partial<Tooltip>[]};
 export type StaticDropdowns = Partial<IStaticDropdowns>;
 
 export type Fixed = {headers: false; data?: 0} | {headers: true; data?: number};
@@ -244,10 +246,6 @@ export interface IDataDropdowns {
 
 export interface IStaticDropdowns {
     [key: string]: IDropdown;
-}
-
-export interface ITableTooltips {
-    [key: string]: Tooltip;
 }
 
 export interface ITableStaticTooltips {
