@@ -41,9 +41,10 @@ function getSelectedTooltip(
     const staticUseWith =
         staticTooltip && typeof staticTooltip !== 'string'
             ? staticTooltip.use_with
-            : undefined;
+            : TooltipUsage.Both;
     const staticApplicable =
-        !staticUseWith || (staticUseWith === TooltipUsage.Header) === header;
+        staticUseWith === TooltipUsage.Both ||
+        (staticUseWith === TooltipUsage.Header) === header;
     const resolvedStaticTooltip = staticApplicable ? staticTooltip : undefined;
 
     const appliedStaticTooltip =

@@ -6,6 +6,7 @@ export enum TooltipSyntax {
 }
 
 export enum TooltipUsage {
+    Both = 'both',
     Data = 'data',
     Header = 'header'
 }
