@@ -77,6 +77,7 @@ export const defaultProps = {
     tooltip: {},
     tooltip_conditional: [],
     tooltip_data: [],
+    tooltip_header: [],
     tooltip_delay: 350,
     tooltip_duration: 2000,
 
@@ -866,6 +867,7 @@ export const propTypes = {
                 delay: PropTypes.number,
                 duration: PropTypes.number,
                 type: PropTypes.oneOf(['text', 'markdown']),
+                use_with: PropTypes.oneOf(['both', 'data', 'header']),
                 value: PropTypes.string.isRequired
             })
         ])
@@ -925,9 +927,11 @@ export const propTypes = {
     /**
      * `tooltip_data` represents the tooltip shown
      * for different columns and cells.
-     * The `property` name refers to the column ID. Each property
-     * contains a list of tooltips mapped to the source `data`
-     * row index.
+     * Can be either an array of objects for which each key is
+     * a column id and the value a tooltip configuration, or it
+     * can be an object for which each key us a column id and the
+     * value an array of tooltip configurations.
+     * For each tooltip configuration,
      * The `type` refers to the type of tooltip syntax used
      * for the tooltip generation. Can either be `markdown`
      * or `text`. Defaults to `text`.
@@ -942,7 +946,7 @@ export const propTypes = {
      * This overrides the table's `tooltip_duration` property.
      * If set to `null`, the tooltip will not disappear.
      * Alternatively, the value of the property can also be
-     * a plain string. The `text` syntax will be used in
+     * a plain string or a nully value to . The `text` syntax will be used in
      * that case.
      */
     tooltip_data: PropTypes.oneOf([
@@ -978,10 +982,12 @@ export const propTypes = {
 
     /**
      * `tooltip_header` represents the tooltip shown
-     * for different header columns and cells.
-     * The `property` name refers to the column ID. Each property
-     * contains a list of tooltips mapped to the table's `header`
-     * row index.
+     * for different columns and cells.
+     * Can be either an array of objects for which each key is
+     * a column id and the value a tooltip configuration, or it
+     * can be an object for which each key us a column id and the
+     * value an array of tooltip configurations.
+     * For each tooltip configuration,
      * The `type` refers to the type of tooltip syntax used
      * for the tooltip generation. Can either be `markdown`
      * or `text`. Defaults to `text`.
@@ -996,7 +1002,7 @@ export const propTypes = {
      * This overrides the table's `tooltip_duration` property.
      * If set to `null`, the tooltip will not disappear.
      * Alternatively, the value of the property can also be
-     * a plain string. The `text` syntax will be used in
+     * a plain string or a nully value to . The `text` syntax will be used in
      * that case.
      */
     tooltip_header: PropTypes.oneOf([
