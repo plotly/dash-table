@@ -49,6 +49,7 @@ vars:
 
   R:
     pkg_help_description: ${js.core.readFile('pkg_help_description.txt')}
+    pkg_help_title: Core Interactive Table Component for 'Dash'
     prefix: dash
     examples:
       dashDataTable:
