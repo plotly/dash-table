@@ -1,4 +1,3 @@
-path: .
 componentPaths:
   - src/dash-table/dash/DataTable.js
 
