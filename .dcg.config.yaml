@@ -60,7 +60,7 @@ vars:
     pkg_copyright: Plotly Technologies, Inc.
     examples:
       DataTable:
-        dontrun: FALSE
+        dontrun: false
         code: ${js.core.readConfigFile('dashDataTable.R')}
     dist:
       - source: df_to_list.Rd
