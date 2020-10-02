@@ -1,0 +1,57 @@
+path: .
+componentPaths:
+  - src/dash-table/dash/DataTable.js
+
+dist:
+  - source: dash_table/bundle.js
+    target: bundle.js
+    external: true
+  - source: dash_table/bundle.js.map
+    target: bundle.js.map
+    dynamic: true
+    external: true
+  - source: dash_table/async-export.js
+    target: async-export.js
+    async: true
+    external: true
+  - source: dash_table/async-export.js.map
+    target: async-export.js.map
+    async: true
+    external: true
+  - source: dash_table/async-highlight.js
+    target: async-highlight.js
+    async: true
+    external: true
+  - source: dash_table/async-highlight.js.map
+    target: async-highlight.js.map
+    async: true
+    external: true
+  - source: dash_table/async-table.js
+    target: async-table.js
+    async: true
+    external: true
+  - source: dash_table/async-table.js.map
+    target: async-table.js.map
+    async: true
+    external: true
+
+vars:
+  py:
+    dist:
+      - source: Format.py
+        target: Format.py
+      - source: FormatTemplate.py
+        target: FormatTemplate.py
+
+  R:
+    pkg_help_description: ${js.core.readFile('pkg_help_description.txt')}
+    prefix: dash
+    examples:
+      dashDataTable:
+        dontrun: FALSE
+        code: ${js.core.readFile('dashDataTable.R')}
+    dist:
+      - source: df_to_list.Rd
+        target: man/df_to_list.Rd
+      - source: df_to_list.R
+        target: R/df_to_list.R
