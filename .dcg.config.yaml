@@ -48,13 +48,20 @@ vars:
         target: FormatTemplate.py
 
   R:
-    pkg_help_description: ${js.core.readFile('pkg_help_description.txt')}
-    pkg_help_title: Core Interactive Table Component for 'Dash'
     prefix: dash
+    depends:
+    imports:
+    suggests:
+      - dash
+
+    pkg_authors: c(person("Chris", "Parmer", email = "chris@plotly.com", role = c("aut")), person("Ryan Patrick", "Kyle", email = "ryan@plotly.com", role = c("cre"), comment = c(ORCID = "0000-0002-4958-2844")), person(family = "Plotly Technologies, Inc.", role = "cph"))
+    pkg_help_description: ${js.core.readConfigFile('pkg_help_description.txt')}
+    pkg_help_title: Core Interactive Table Component for 'Dash'
+    pkg_copyright: Plotly Technologies, Inc.
     examples:
-      dashDataTable:
+      DataTable:
         dontrun: FALSE
-        code: ${js.core.readFile('dashDataTable.R')}
+        code: ${js.core.readConfigFile('dashDataTable.R')}
     dist:
       - source: df_to_list.Rd
         target: man/df_to_list.Rd
