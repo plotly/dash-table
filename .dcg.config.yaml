@@ -2,6 +2,10 @@ path: .
 componentPaths:
   - src/dash-table/dash/DataTable.js
 
+recipes:
+  - py
+  - R
+
 dist:
   - source: dash_table/bundle.js
     target: bundle.js
