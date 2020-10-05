@@ -141,14 +141,39 @@ def test_ttip003_tooltip_disappears(test):
     wait.until(lambda: not tooltip.exists(), 2.5)
 
 
+ttip004_tooltip = {
+    "1": "text1",
+    "2": {"use_with": "data", "value": "text2"},
+    "3": {"use_with": "header", "value": "text3"},
+}
+
+
 @pytest.mark.parametrize(
-    "tooltip_data,tooltip_header",
+    "tooltip_data,tooltip_header,data_expected,header_expected",
     [
-        ([{"1": "alt-text1"}], [{}, {"1": "alt-header1-row1"}]),
-        ({"1": ["alt-text1"]}, {"1": [None, "alt-header1-row1"]}),
+        (
+            [{"1": "alt-text1"}],
+            {"1": ["alt-header1-row1", "alt-header1-row2"]},
+            ["alt-text1", "text1"],
+            ["alt-header1-row1", "alt-header1-row2"],
+        ),
+        (
+            [{"1": "alt-text1"}],
+            {"1": [None, "alt-header1-row1"]},
+            ["alt-text1", "text1"],
+            ["text1", "alt-header1-row1"],
+        ),
+        (
+            [{"1": "alt-text1"}, {"1": "alt-text2"}],
+            {"1": "alt-header1-row1"},
+            ["alt-text1", "alt-text2"],
+            ["alt-header1-row1", "alt-header1-row1"],
+        ),
     ],
 )
-def test_ttip004_tooltip_applied(test, tooltip_data, tooltip_header):
+def test_ttip004_tooltip_applied(
+    test, tooltip_data, tooltip_header, data_expected, header_expected
+):
     props = {
         **base_props,
         "columns": [
@@ -183,12 +208,12 @@ def test_ttip004_tooltip_applied(test, tooltip_data, tooltip_header):
 
     target.cell(0, "1").move_to()
     wait.until(lambda: target.tooltip.exists(), 3)
-    assert tooltip.get_text().strip() == "alt-text1"
+    assert tooltip.get_text().strip() == data_expected[0]
     cell55.move_to()
 
     target.cell(1, "1").move_to()
     wait.until(lambda: target.tooltip.exists(), 3)
-    assert tooltip.get_text().strip() == "text1"
+    assert tooltip.get_text().strip() == data_expected[1]
     cell55.move_to()
 
     target.cell(0, "2").move_to()
@@ -203,12 +228,12 @@ def test_ttip004_tooltip_applied(test, tooltip_data, tooltip_header):
 
     target.column("1").move_to(0)
     wait.until(lambda: target.tooltip.exists(), 3)
-    assert tooltip.get_text().strip() == "text1"
+    assert tooltip.get_text().strip() == header_expected[0]
     cell55.move_to()
 
     target.column("1").move_to(1)
     wait.until(lambda: target.tooltip.exists(), 3)
-    assert tooltip.get_text().strip() == "alt-header1-row1"
+    assert tooltip.get_text().strip() == header_expected[1]
     cell55.move_to()
 
     target.column("2").move_to(1)

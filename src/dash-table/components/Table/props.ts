@@ -209,9 +209,8 @@ export interface ILoadingState {
 
 export type ConditionalDropdowns = IConditionalDropdown[];
 export type DataDropdowns = Partial<IDataDropdowns>[];
-export type DataTooltips =
-    | {[key: string]: Partial<Tooltip>}[]
-    | {[key: string]: Partial<Tooltip>[]};
+export type DataTooltips = Partial<ITableDataTooltips>[];
+
 export type StaticDropdowns = Partial<IStaticDropdowns>;
 
 export type Fixed = {headers: false; data?: 0} | {headers: true; data?: number};
@@ -246,6 +245,14 @@ export interface IDataDropdowns {
 
 export interface IStaticDropdowns {
     [key: string]: IDropdown;
+}
+
+export interface ITableDataTooltips {
+    [key: string]: Tooltip;
+}
+
+export interface ITableHeaderTooltips {
+    [key: string]: (Tooltip | null)[] | Tooltip;
 }
 
 export interface ITableStaticTooltips {
@@ -307,7 +314,7 @@ export interface IProps {
     tooltip_data?: DataTooltips;
     tooltip_delay: number | null;
     tooltip_duration: number | null;
-    tooltip_header?: DataTooltips;
+    tooltip_header?: ITableHeaderTooltips;
 
     active_cell?: ICellCoordinates;
     cell_selectable?: boolean;
@@ -393,7 +400,7 @@ interface IDefaultProps {
     start_cell: ICellCoordinates;
     style_as_list_view: boolean;
     tooltip_data: DataTooltips;
-    tooltip_header: DataTooltips;
+    tooltip_header: ITableHeaderTooltips;
 
     page_action: TableAction;
     page_current: number;
@@ -529,7 +536,7 @@ export interface ICellFactoryProps {
     style_header_conditional: Headers;
     style_table: Table;
     tooltip_data: DataTooltips;
-    tooltip_header: DataTooltips;
+    tooltip_header: ITableHeaderTooltips;
     uiCell?: IUserInterfaceCell;
     uiViewport?: IUserInterfaceViewport;
     viewport: IDerivedData;

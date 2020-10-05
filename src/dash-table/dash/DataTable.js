@@ -77,7 +77,7 @@ export const defaultProps = {
     tooltip: {},
     tooltip_conditional: [],
     tooltip_data: [],
-    tooltip_header: [],
+    tooltip_header: {},
     tooltip_delay: 350,
     tooltip_duration: 2000,
 
@@ -926,10 +926,8 @@ export const propTypes = {
     /**
      * `tooltip_data` represents the tooltip shown
      * for different columns and cells.
-     * Can be either an array of objects for which each key is
-     * a column id and the value a tooltip configuration, or it
-     * can be an object for which each key us a column id and the
-     * value an array of tooltip configurations.
+     * A list of objects for which each key is
+     * a column id and the value a tooltip configuration.
      * For each tooltip configuration,
      * The `type` refers to the type of tooltip syntax used
      * for the tooltip generation. Can either be `markdown`
@@ -945,47 +943,30 @@ export const propTypes = {
      * This overrides the table's `tooltip_duration` property.
      * If set to `null`, the tooltip will not disappear.
      * Alternatively, the value of the property can also be
-     * a plain string or a nully value to . The `text` syntax will be used in
+     * a plain string. The `text` syntax will be used in
      * that case.
      */
-    tooltip_data: PropTypes.oneOf([
-        PropTypes.arrayOf(
-            PropTypes.objectOf(
-                PropTypes.oneOfType([
-                    PropTypes.nully,
-                    PropTypes.string,
-                    PropTypes.exact({
-                        delay: PropTypes.number,
-                        duration: PropTypes.number,
-                        type: PropTypes.oneOf(['text', 'markdown']),
-                        value: PropTypes.string.isRequired
-                    })
-                ])
-            )
-        ),
+    tooltip_data: PropTypes.arrayOf(
         PropTypes.objectOf(
-            PropTypes.arrayOf(
-                PropTypes.oneOfType([
-                    PropTypes.nully,
-                    PropTypes.string,
-                    PropTypes.exact({
-                        delay: PropTypes.number,
-                        duration: PropTypes.number,
-                        type: PropTypes.oneOf(['text', 'markdown']),
-                        value: PropTypes.string.isRequired
-                    })
-                ])
-            )
+            PropTypes.oneOfType([
+                PropTypes.string,
+                PropTypes.exact({
+                    delay: PropTypes.number,
+                    duration: PropTypes.number,
+                    type: PropTypes.oneOf(['text', 'markdown']),
+                    value: PropTypes.string.isRequired
+                })
+            ])
         )
-    ]),
+    ),
 
     /**
      * `tooltip_header` represents the tooltip shown
      * for different columns and cells.
-     * Can be either an array of objects for which each key is
-     * a column id and the value a tooltip configuration, or it
-     * can be an object for which each key us a column id and the
-     * value an array of tooltip configurations.
+     * An object for which each key is a column id and the value
+     * a list of tooltip configurations or a toolttip configuration.
+     * If the value is tooltip configuration, the same tooltip will
+     * be used for all header rows of the corresponding column.
      * For each tooltip configuration,
      * The `type` refers to the type of tooltip syntax used
      * for the tooltip generation. Can either be `markdown`
@@ -1004,22 +985,15 @@ export const propTypes = {
      * a plain string or a nully value to . The `text` syntax will be used in
      * that case.
      */
-    tooltip_header: PropTypes.oneOf([
-        PropTypes.arrayOf(
-            PropTypes.objectOf(
-                PropTypes.oneOfType([
-                    PropTypes.nully,
-                    PropTypes.string,
-                    PropTypes.exact({
-                        delay: PropTypes.number,
-                        duration: PropTypes.number,
-                        type: PropTypes.oneOf(['text', 'markdown']),
-                        value: PropTypes.string.isRequired
-                    })
-                ])
-            )
-        ),
-        PropTypes.objectOf(
+    tooltip_header: PropTypes.objectOf(
+        PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.exact({
+                delay: PropTypes.number,
+                duration: PropTypes.number,
+                type: PropTypes.oneOf(['text', 'markdown']),
+                value: PropTypes.string.isRequired
+            }),
             PropTypes.arrayOf(
                 PropTypes.oneOfType([
                     PropTypes.nully,
@@ -1032,8 +1006,8 @@ export const propTypes = {
                     })
                 ])
             )
-        )
-    ]),
+        ])
+    ),
 
     /**
      * `tooltip_delay` represents the table-wide delay in milliseconds before
