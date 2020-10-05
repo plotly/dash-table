@@ -19,7 +19,7 @@ dist:
     external: true
   - source: dash_table/async-export.js.map
     target: async-export.js.map
-    async: true
+    dynamic: true
     external: true
   - source: dash_table/async-highlight.js
     target: async-highlight.js
@@ -27,7 +27,7 @@ dist:
     external: true
   - source: dash_table/async-highlight.js.map
     target: async-highlight.js.map
-    async: true
+    dynamic: true
     external: true
   - source: dash_table/async-table.js
     target: async-table.js
@@ -35,7 +35,7 @@ dist:
     external: true
   - source: dash_table/async-table.js.map
     target: async-table.js.map
-    async: true
+    dynamic: true
     external: true
 
 vars:
