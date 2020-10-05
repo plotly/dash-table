@@ -25,9 +25,9 @@ jobs:
                     python -m venv venv || virtualenv venv
                     . venv/bin/activate
                     pip install -r dev-requirements.txt --quiet
-                    git clone --depth 1 git@github.com:plotly/dash.git dash-main
-                    pip install -e ./dash-main[dev,testing] --quiet
-                    cd dash-main/dash-renderer && npm ci && npm run build && pip install -e . && cd ./../..
+                    git clone --depth 1 -b dcg-template git@github.com:plotly/dash.git main
+                    pip install -e ./main[dev,testing] --quiet
+                    cd main/dash-renderer && npm ci && npm run build && pip install -e . && cd ./../..
 
             - run:
                 name: Build
@@ -213,15 +213,16 @@ jobs:
                 name: Install dependencies (dash)
                 command: |
                     . venv/bin/activate
-                    git clone --depth 1 git@github.com:plotly/dash.git dash-main
-                    pip install -e ./dash-main[dev,testing] --quiet
-                    cd dash-main/dash-renderer && npm ci && npm run build && pip install -e . && cd ../..
+                    git clone --depth 1 -b dcg-template git@github.com:plotly/dash.git main
+                    pip install -e ./main[dev,testing] --quiet
+                    cd main/dash-renderer && npm ci && npm run build && pip install -e . && cd ../..
 
             - run:
                 name: Install test requirements
                 command: |
                     . venv/bin/activate
                     npm run build
+                    cd .dcg/dist/py
                     python setup.py sdist
                     cd dist
                     find . -name "*.gz" | xargs pip install --no-cache-dir --ignore-installed && cd ..
