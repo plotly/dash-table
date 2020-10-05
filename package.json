@@ -21,7 +21,7 @@
     "private::build:js-test": "run-s \"private::build -- --mode development --config webpack.test.config.js\"",
     "private::build:js-test-standalone": "run-s \"private::build -- --mode development --config webpack.test.standalone.config.js\"",
     "private::build:js-test-watch": "run-s \"private::build -- --mode development --config webpack.test.config.js --watch\"",
-    "private::build:backends": "node ../main/\\@plotly/dash-generate-components/src/run.js -c .dcg/config.yaml",
+    "private::build:backends": "node ./main/\\@plotly/dash-generate-components/src/run.js -c .dcg/config.yaml",
     "private::format.ts": "npm run private::lint.ts -- --fix",
     "private::format.prettier": "prettier --config .prettierrc --write \"src/**/*.{js,ts,tsx}\"",
     "private::format.black": "black --exclude dash_table .dcg .",
