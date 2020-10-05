@@ -43,6 +43,7 @@ jobs:
                 name: Run tests
                 command: |
                     . venv/bin/activate
+                    ls -laR .dcg/dist/py
                     npm run test.server
 
 
