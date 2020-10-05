@@ -221,6 +221,9 @@ jobs:
                 name: Install test requirements
                 command: |
                     . venv/bin/activate
+                    cd main/\\@plotly/dash-generate-components
+                    npm ci
+                    cd ../../..
                     npm run build
                     cd .dcg/dist/py
                     python setup.py sdist
