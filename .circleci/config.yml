@@ -216,6 +216,7 @@ jobs:
                 command: |
                     . venv/bin/activate
                     git clone --depth 1 -b dcg-template git@github.com:plotly/dash.git main
+                    cd ./main/\@plotly/dash-generate-components; npm ci; cd ../../..
                     pip install -e ./main[dev,testing] --quiet
                     cd main/dash-renderer && npm ci && npm run build && pip install -e . && cd ../..
 
