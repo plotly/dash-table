@@ -36,6 +36,7 @@ jobs:
                     . venv/bin/activate
                     npm run private::build:js-test
                     npm run private::build:backends
+                    ls -laR .dcg/dist/py
                     cd .dcg/dist/py; python setup.py sdist; cd dist
                     find . -name "*.gz" | xargs pip install --no-cache-dir --ignore-installed && cd ..
 
@@ -43,7 +44,6 @@ jobs:
                 name: Run tests
                 command: |
                     . venv/bin/activate
-                    ls -laR .dcg/dist/py
                     npm run test.server
 
 
