@@ -4,7 +4,13 @@ jobs:
     "server-test":
         docker:
             - image: circleci/python:3.7.6-node-browsers
+              auth:
+                username: dashautomation
+                password: $DASH_PAT_DOCKERHUB
             - image: cypress/base:10
+              auth:
+                username: dashautomation
+                password: $DASH_PAT_DOCKERHUB
 
         steps:
             - checkout
@@ -49,7 +55,13 @@ jobs:
     "standalone-test":
         docker:
             - image: circleci/python:3.6.7-node-browsers
+              auth:
+                username: dashautomation
+                password: $DASH_PAT_DOCKERHUB
             - image: cypress/base:10
+              auth:
+                username: dashautomation
+                password: $DASH_PAT_DOCKERHUB
 
         steps:
             - checkout
@@ -80,7 +92,13 @@ jobs:
     "unit-test":
         docker:
             - image: circleci/python:3.7.5-node-browsers
+              auth:
+                username: dashautomation
+                password: $DASH_PAT_DOCKERHUB
             - image: cypress/base:10
+              auth:
+                username: dashautomation
+                password: $DASH_PAT_DOCKERHUB
 
         steps:
             - checkout
@@ -120,6 +138,9 @@ jobs:
     "visual-test":
         docker:
             - image: circleci/node:10-browsers
+              auth:
+                username: dashautomation
+                password: $DASH_PAT_DOCKERHUB
 
         steps:
             - checkout
@@ -149,6 +170,9 @@ jobs:
     "node":
         docker:
             - image: circleci/python:3.7.5-node
+              auth:
+                username: dashautomation
+                password: $DASH_PAT_DOCKERHUB
 
         steps:
             - checkout
@@ -187,6 +211,9 @@ jobs:
     "python-3.6":
         docker:
             - image: circleci/python:3.7.5-stretch-node-browsers
+              auth:
+                username: dashautomation
+                password: $DASH_PAT_DOCKERHUB
 
         environment:
             PERCY_ENABLED: True
@@ -244,9 +271,15 @@ workflows:
     version: 2
     build:
         jobs:
-            - "python-3.6"
-            - "node"
-            - "server-test"
-            - "standalone-test"
-            - "unit-test"
-            - "visual-test"
+            - "python-3.6":
+                context: dash-docker-hub
+            - "node":
+                context: dash-docker-hub
+            - "server-test":
+                context: dash-docker-hub
+            - "standalone-test":
+                context: dash-docker-hub
+            - "unit-test":
+                context: dash-docker-hub
+            - "visual-test":
+                context: dash-docker-hub
