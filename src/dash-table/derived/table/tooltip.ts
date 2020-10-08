@@ -37,8 +37,8 @@ function getSelectedTooltip(
         return undefined;
     }
     const conditionalTooltips = header
-        ? []
-        : R.filter(tt => {
+        ? undefined
+        : R.findLast(tt => {
               return (
                   !tt.if ||
                   (ifColumnId(tt.if, id) &&
@@ -50,8 +50,8 @@ function getSelectedTooltip(
               );
           }, tooltip_conditional);
 
-    if (conditionalTooltips.length) {
-        return conditionalTooltips.slice(-1)[0];
+    if (conditionalTooltips) {
+        return conditionalTooltips;
     }
 
     let tooltip: Tooltip | null | undefined;
