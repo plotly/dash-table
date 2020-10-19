@@ -135,7 +135,7 @@ def test_tdrp001_select_rows(test):
     assert test.find_element("#derived_virtual_row_ids").get_attribute(
         "innerHTML"
     ) == json.dumps(list(range(3000, 3100)))
-    assert len(test.get_logs()) == 0
+    assert len(test.get_log_errors()) == 0
 
 
 def test_tdrp002_select_cell(test):
@@ -193,7 +193,7 @@ def test_tdrp002_select_cell(test):
     assert test.find_element("#derived_virtual_row_ids").get_attribute(
         "innerHTML"
     ) == json.dumps(list(range(3000, 3100)))
-    assert len(test.get_logs()) == 0
+    assert len(test.get_log_errors()) == 0
 
 
 def test_tdrp003_select_cells(test):
@@ -328,7 +328,7 @@ def test_tdrp003_select_cells(test):
     assert test.find_element("#derived_virtual_row_ids").get_attribute(
         "innerHTML"
     ) == json.dumps(list(range(3000, 3100)))
-    assert len(test.get_logs()) == 0
+    assert len(test.get_log_errors()) == 0
 
 
 def test_tdrp004_navigate_selected_cells(test):
@@ -406,7 +406,7 @@ def test_tdrp004_navigate_selected_cells(test):
 
             test.send_keys(Keys.TAB)
 
-    assert len(test.get_logs()) == 0
+    assert len(test.get_log_errors()) == 0
 
 
 def test_tdrp005_filtered_and_sorted_row_select(test):
@@ -570,4 +570,4 @@ def test_tdrp005_filtered_and_sorted_row_select(test):
     assert test.find_element("#derived_virtual_row_ids").get_attribute(
         "innerHTML"
     ) == json.dumps(list(range(3000, 3100, 2))[::-1])
-    assert len(test.get_logs()) == 0
+    assert len(test.get_log_errors()) == 0

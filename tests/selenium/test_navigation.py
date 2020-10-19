@@ -135,7 +135,7 @@ def test_navg001_keyboard_through_9_10_cells(test, props):
     assert target.cell(10, 2).is_focused()
     test.send_keys(Keys.ENTER)
     assert target.cell(9, 1).is_focused()
-    assert len(test.get_logs()) == 0
+    assert len(test.get_log_errors()) == 0
 
 
 @pytest.mark.parametrize("props", [get_markdown_table(), get_mixed_markdown_table()])
@@ -150,7 +150,7 @@ def test_navg002_keyboard_after_ctrl_copy(test, props):
 
     assert target.cell(4, 1).is_focused()
     assert not target.cell(3, 1).is_focused()
-    assert len(test.get_logs()) == 0
+    assert len(test.get_log_errors()) == 0
 
 
 @pytest.mark.parametrize("props", [get_markdown_table(), get_mixed_markdown_table()])
@@ -172,7 +172,7 @@ def test_navg003_keyboard_can_move_down(test, props, key, row, col):
 
     assert target.cell(3 + row, 1 + col).is_focused()
     assert not target.cell(3, 1).is_focused()
-    assert len(test.get_logs()) == 0
+    assert len(test.get_log_errors()) == 0
 
 
 @pytest.mark.parametrize("props", [get_mixed_markdown_table()])
@@ -189,7 +189,7 @@ def test_navg004_keyboard_between_md_and_standard_cells(test, props):
         test.send_keys(Keys.ARROW_DOWN)
         assert target.cell(i, i).is_focused()
 
-    assert len(test.get_logs()) == 0
+    assert len(test.get_log_errors()) == 0
 
 
 @pytest.mark.parametrize("cell_selectable", [True, False])
@@ -208,4 +208,4 @@ def test_navg005_unselectable_cells(test, cell_selectable):
     target.cell(0, "a").click()
 
     assert target.cell(0, "a").is_selected() == cell_selectable
-    assert len(test.get_logs()) == 0
+    assert len(test.get_log_errors()) == 0

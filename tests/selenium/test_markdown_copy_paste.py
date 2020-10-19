@@ -50,7 +50,7 @@ def test_tmcp001_copy_markdown_to_text(test):
     test.paste()
 
     assert target.cell(0, 2).get_text() == df[0].get("Issue")
-    assert len(test.get_logs()) == 0
+    assert len(test.get_log_errors()) == 0
 
 
 def test_tmcp002_copy_markdown_to_markdown(test):
@@ -68,7 +68,7 @@ def test_tmcp002_copy_markdown_to_markdown(test):
         target.cell(0, "Complaint ID").get_text()
         == target.cell(0, "Product").get_text()
     )
-    assert len(test.get_logs()) == 0
+    assert len(test.get_log_errors()) == 0
 
 
 def test_tmcp003_copy_text_to_markdown(test):
@@ -85,7 +85,7 @@ def test_tmcp003_copy_text_to_markdown(test):
     assert target.cell(1, "Product").get().find_element_by_css_selector(
         ".dash-cell-value > p"
     ).get_attribute("innerHTML") == df[1].get("Sub-product")
-    assert len(test.get_logs()) == 0
+    assert len(test.get_log_errors()) == 0
 
 
 def test_tmcp004_copy_null_text_to_markdown(test):
@@ -106,4 +106,4 @@ def test_tmcp004_copy_null_text_to_markdown(test):
         .get_attribute("innerHTML")
         == "null"
     )
-    assert len(test.get_logs()) == 0
+    assert len(test.get_log_errors()) == 0

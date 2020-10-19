@@ -64,4 +64,4 @@ def test_tmdl001_click_markdown_link(test, markdown_options, new_tab, cell_selec
         assert len(test.driver.window_handles) == 1
         assert test.driver.current_url.startswith("https://www.google.com")
 
-    assert len(test.get_logs()) == 0
+    assert len(test.get_log_errors()) == 0
