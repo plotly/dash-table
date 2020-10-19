@@ -82,6 +82,7 @@ def test_scrol001_fixed_alignment(test, fixed_rows, fixed_columns, ops):
     wait.until(
         lambda: -get_margin(test) == fixed_width, 3,
     )
+    assert len(test.get_logs()) == 0
 
 
 @pytest.mark.parametrize(
@@ -131,3 +132,4 @@ def test_scrol002_edit_navigate(test, fixed_rows, fixed_columns, ops):
     wait.until(
         lambda: -get_margin(test) == fixed_width + get_scroll(test), 3,
     )
+    assert len(test.get_logs()) == 0

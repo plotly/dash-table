@@ -24,3 +24,4 @@ def test_tbex001_table_export(dash_duo):
 
     df_bis = pd.read_excel(download)
     assert df_bis.equals(df)
+    assert len(dash_duo.get_logs()) == 0

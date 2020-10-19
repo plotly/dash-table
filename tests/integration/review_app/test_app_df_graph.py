@@ -155,5 +155,5 @@ def test_rapp002_df_graph(dash_duo):
     dash_duo.wait_for_element("#pop svg")
     dash_duo.wait_for_element("#lifeExp svg")
     dash_duo.wait_for_element("#gdpPercap svg")
-
+    assert len(dash_duo.get_logs()) == 0
     dash_duo.percy_snapshot("rapp002 - loaded")

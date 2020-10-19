@@ -396,4 +396,5 @@ def test_rapp001_df_backend_paging(dash_duo):
 
     dash_duo.start_server(app)
     dash_duo.wait_for_element("#waitfor")
+    assert len(dash_duo.get_logs()) == 0
     dash_duo.percy_snapshot("rapp001 - loaded")
