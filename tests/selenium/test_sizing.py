@@ -2,6 +2,7 @@ import dash
 import pytest
 
 from dash.dependencies import Input, Output
+from dash.exceptions import PreventUpdate
 from dash.testing import wait
 from dash_table import DataTable
 from dash_html_components import Button, Div
@@ -182,6 +183,8 @@ def test_szng001_widths_on_style_change(test):
         if n_clicks < len(styles):
             style_table = styles[n_clicks]["style_table"]
             return [style_table for i in variations_range]
+        else:
+            raise PreventUpdate
 
     test.start_server(app)
 
