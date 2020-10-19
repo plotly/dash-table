@@ -1,4 +1,4 @@
-import highlightjs from 'highlight.js/lib/highlight';
+import highlightjs from 'highlight.js/lib/core';
 import 'highlight.js/styles/github.css';
 
 import bash from 'highlight.js/lib/languages/bash';
