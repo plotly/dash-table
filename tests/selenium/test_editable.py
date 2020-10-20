@@ -79,7 +79,7 @@ def test_tedi001_loading_on_data_change(test):
 
     target.is_ready()
     assert target.cell(0, 0).get().find_element_by_css_selector("input") is not None
-    assert len(test.get_log_errors()) == 0
+    assert test.get_log_errors() == []
 
 
 def test_tedi002_ready_on_non_data_change(test):
@@ -97,7 +97,7 @@ def test_tedi002_ready_on_non_data_change(test):
 
     target.is_ready()
     assert target.cell(0, 0).get().find_element_by_css_selector("input") is not None
-    assert len(test.get_log_errors()) == 0
+    assert test.get_log_errors() == []
 
 
 def test_tedi003_does_not_steal_focus(test):
@@ -114,7 +114,7 @@ def test_tedi003_does_not_steal_focus(test):
 
     target.is_ready()
     assert test.find_element("#input") == test.driver.switch_to.active_element
-    assert len(test.get_log_errors()) == 0
+    assert test.get_log_errors() == []
 
 
 def test_tedi004_edit_on_non_blocking(test):
@@ -130,7 +130,7 @@ def test_tedi004_edit_on_non_blocking(test):
         test.send_keys("abc" + Keys.ENTER)
         assert target.cell(0, 0).get_text() == "abc"
 
-    assert len(test.get_log_errors()) == 0
+    assert test.get_log_errors() == []
 
 
 def test_tedi005_prevent_copy_paste_on_blocking(test):
@@ -157,7 +157,7 @@ def test_tedi005_prevent_copy_paste_on_blocking(test):
                     != target.cell(row, col).get_text()
                 )
 
-    assert len(test.get_log_errors()) == 0
+    assert test.get_log_errors() == []
 
 
 def test_tedi006_allow_copy_paste_on_non_blocking(test):
@@ -184,4 +184,4 @@ def test_tedi006_allow_copy_paste_on_non_blocking(test):
                     == target.cell(row, col).get_text()
                 )
 
-    assert len(test.get_log_errors()) == 0
+    assert test.get_log_errors() == []

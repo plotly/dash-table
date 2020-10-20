@@ -49,7 +49,7 @@ def test_tmcp001_copy_markdown_to_text(test):
     test.paste()
 
     wait.until(lambda: target.cell(0, 2).get_text() == df[0].get("Issue"), 3)
-    assert len(test.get_log_errors()) == 0
+    assert test.get_log_errors() == []
 
 
 def test_tmcp002_copy_markdown_to_markdown(test):
@@ -68,7 +68,7 @@ def test_tmcp002_copy_markdown_to_markdown(test):
         == target.cell(0, "Product").get_text(),
         3,
     )
-    assert len(test.get_log_errors()) == 0
+    assert test.get_log_errors() == []
 
 
 def test_tmcp003_copy_text_to_markdown(test):
@@ -90,7 +90,7 @@ def test_tmcp003_copy_text_to_markdown(test):
         == df[1].get("Sub-product"),
         3,
     )
-    assert len(test.get_log_errors()) == 0
+    assert test.get_log_errors() == []
 
 
 def test_tmcp004_copy_null_text_to_markdown(test):
@@ -112,4 +112,4 @@ def test_tmcp004_copy_null_text_to_markdown(test):
         == "null",
         3,
     )
-    assert len(test.get_log_errors()) == 0
+    assert test.get_log_errors() == []

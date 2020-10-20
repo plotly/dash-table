@@ -216,7 +216,7 @@ def test_szng001_widths_on_style_change(test):
 
         test.driver.find_element_by_css_selector("#btn").click()
 
-    assert len(test.get_log_errors()) == 0
+    assert test.get_log_errors() == []
 
 
 def test_szng002_percentages_result_in_same_widths(test):
@@ -254,7 +254,7 @@ def test_szng002_percentages_result_in_same_widths(test):
         table = test.driver.find_element_by_css_selector("#table{}".format(i))
         cells_are_same_width(target, table)
 
-    assert len(test.get_log_errors()) == 0
+    assert test.get_log_errors() == []
 
 
 @pytest.mark.parametrize(
@@ -329,4 +329,4 @@ def test_szng003_on_prop_change(
     test.driver.find_element_by_css_selector("#btn").click()
     cells_are_same_width(target, target)
 
-    assert len(test.get_log_errors()) == 0
+    assert test.get_log_errors() == []

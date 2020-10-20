@@ -24,4 +24,4 @@ def test_tbex001_table_export(test):
 
     df_bis = pd.read_excel(download)
     assert df_bis.equals(df)
-    assert len(test.get_log_errors()) == 0
+    assert test.get_log_errors() == []
