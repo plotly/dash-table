@@ -12,7 +12,7 @@ function renderFragment(cells: any[][] | null, offset: number = 0) {
         <table className='cell-table' tabIndex={-1}>
             <tbody>
                 {cells.map((row, idx) => (
-                    <tr key={`row-${idx + offset}`}>{row}</tr>
+                    <tr key={`table-row-${idx + offset}`}>{row}</tr>
                 ))}
             </tbody>
         </table>
