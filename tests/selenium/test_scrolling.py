@@ -29,13 +29,13 @@ def get_margin(test):
 
 def get_scroll(test):
     return test.driver.execute_script(
-        "return document.querySelector('#table .row-1').scrollLeft;"
+        "return document.querySelector('#table .table-row-1').scrollLeft;"
     )
 
 
 def scroll_by(test, value):
     test.driver.execute_script(
-        "document.querySelector('#table .row-1').scrollBy({}, 0);".format(value)
+        "document.querySelector('#table .table-row-1').scrollBy({}, 0);".format(value)
     )
 
 

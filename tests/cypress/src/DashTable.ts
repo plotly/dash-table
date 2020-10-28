@@ -149,7 +149,7 @@ export class DashTableHelper {
     }
 
     public toggleScroll(toggled: boolean) {
-        cy.get('.row-1').then($el => {
+        cy.get('.table-row-1').then($el => {
             $el[0].style.overflow = toggled ? '' : 'unset';
         });
     }
