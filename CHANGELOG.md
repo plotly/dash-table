@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - [#841](https://github.com/plotly/dash-table/pull/841)
   - Fix prop-types regression causing console errors in browser devtools
   - Fix syntax highlighting regression for Markdown cells
+- [#844](https://github.com/plotly/dash-table/pull/844) Fix a bug where the table is using classes that are styled by Bootstrap
 
 ### Added
 - [#841](https://github.com/plotly/dash-table/pull/841) Add Julia syntax highlighting support for Markdown cells
