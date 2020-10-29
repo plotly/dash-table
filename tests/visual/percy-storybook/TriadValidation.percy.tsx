@@ -3,6 +3,7 @@ import { storiesOf } from '@storybook/react';
 
 import DataTable from 'dash-table/dash/DataTable';
 import { TableAction } from 'dash-table/components/Table/props';
+import './common';
 
 const actions = [TableAction.Native, TableAction.Custom];
 

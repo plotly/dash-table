@@ -1,6 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import DataTable from 'dash-table/dash/DataTable';
+import './common';
 
 const props = {
     setProps: () => { },

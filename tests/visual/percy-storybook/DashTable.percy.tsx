@@ -6,6 +6,7 @@ import { storiesOf } from '@storybook/react';
 import random from 'core/math/random';
 import DataTable from 'dash-table/dash/DataTable';
 import fixtures from './fixtures';
+import './common';
 
 const setProps = () => { };
 

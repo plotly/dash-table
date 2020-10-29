@@ -3,6 +3,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import random from 'core/math/random';
 import DataTable from 'dash-table/dash/DataTable';
+import './common';
 
 const setProps = () => { };
 

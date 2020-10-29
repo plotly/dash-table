@@ -6,6 +6,8 @@ import { storiesOf } from '@storybook/react';
 import DataTable from 'dash-table/dash/DataTable';
 
 import dataset from './../../assets/gapminder.csv';
+import './common';
+
 const result = parser.parse(dataset, { delimiter: ',', header: true });
 
 const getColumns = () => R.addIndex(R.map)(
