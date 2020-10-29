@@ -26,7 +26,7 @@ style_as_list_view=NULL, page_action=NULL,
 page_current=NULL, page_count=NULL, page_size=NULL,
 dropdown=NULL, dropdown_conditional=NULL,
 dropdown_data=NULL, tooltip=NULL, tooltip_conditional=NULL,
-tooltip_data=NULL, tooltip_delay=NULL,
+tooltip_data=NULL, tooltip_header=NULL, tooltip_delay=NULL,
 tooltip_duration=NULL, filter_query=NULL,
 filter_action=NULL, sort_action=NULL, sort_mode=NULL,
 sort_by=NULL, sort_as_null=NULL, style_table=NULL,
@@ -524,12 +524,13 @@ those elements have the following types:
 Each item in the array corresponds to the corresponding dropdowns for the `data` item
 at the same index. Each entry in the item refers to the Column ID.}
 
-\item{tooltip}{List with named elements and values of type lists containing elements 'delay', 'duration', 'type', 'value'.
+\item{tooltip}{List with named elements and values of type character | lists containing elements 'delay', 'duration', 'type', 'use_with', 'value'.
 those elements have the following types:
   - delay (numeric; optional)
   - duration (numeric; optional)
   - type (a value equal to: 'text', 'markdown'; optional)
-  - value (character; required) | character. `tooltip` represents the tooltip shown
+  - use_with (a value equal to: 'both', 'data', 'header'; optional)
+  - value (character; required). `tooltip` represents the tooltip shown
 for different columns.
 The `property` name refers to the column ID.
 The `type` refers to the type of tooltip syntax used
@@ -537,6 +538,9 @@ for the tooltip generation. Can either be `markdown`
 or `text`. Defaults to `text`.
 The `value` refers to the syntax-based content of
 the tooltip. This value is required.
+The `use_with` refers to whether the tooltip will be shown
+only on data or headers. Can be `both`, `data`, `header`.
+Defaults to `both`.
 The `delay` represents the delay in milliseconds before
 the tooltip is shown when hovering a cell. This overrides
 the table's `tooltip_delay` property. If set to `null`,
@@ -599,9 +603,9 @@ those elements have the following types:
   - type (a value equal to: 'text', 'markdown'; optional)
   - value (character; required)s. `tooltip_data` represents the tooltip shown
 for different columns and cells.
-The `property` name refers to the column ID. Each property
-contains a list of tooltips mapped to the source `data`
-row index.
+A list of objects for which each key is
+a column id and the value a tooltip configuration.
+For each tooltip configuration,
 The `type` refers to the type of tooltip syntax used
 for the tooltip generation. Can either be `markdown`
 or `text`. Defaults to `text`.
@@ -617,6 +621,40 @@ This overrides the table's `tooltip_duration` property.
 If set to `null`, the tooltip will not disappear.
 Alternatively, the value of the property can also be
 a plain string. The `text` syntax will be used in
+that case.}
+
+\item{tooltip_header}{List with named elements and values of type character | lists containing elements 'delay', 'duration', 'type', 'value'.
+those elements have the following types:
+  - delay (numeric; optional)
+  - duration (numeric; optional)
+  - type (a value equal to: 'text', 'markdown'; optional)
+  - value (character; required) | list of a value equal to: null | character | lists containing elements 'delay', 'duration', 'type', 'value'.
+those elements have the following types:
+  - delay (numeric; optional)
+  - duration (numeric; optional)
+  - type (a value equal to: 'text', 'markdown'; optional)
+  - value (character; required)s. `tooltip_header` represents the tooltip shown
+for different columns and cells.
+An object for which each key is a column id and the value
+a list of tooltip configurations or a toolttip configuration.
+If the value is tooltip configuration, the same tooltip will
+be used for all header rows of the corresponding column.
+For each tooltip configuration,
+The `type` refers to the type of tooltip syntax used
+for the tooltip generation. Can either be `markdown`
+or `text`. Defaults to `text`.
+The `value` refers to the syntax-based content of
+the tooltip. This value is required.
+The `delay` represents the delay in milliseconds before
+the tooltip is shown when hovering a cell. This overrides
+the table's `tooltip_delay` property. If set to `null`,
+the tooltip will be shown immediately.
+The `duration` represents the duration in milliseconds
+during which the tooltip is shown when hovering a cell.
+This overrides the table's `tooltip_duration` property.
+If set to `null`, the tooltip will not disappear.
+Alternatively, the value of the property can also be
+a plain string or a nully value to . The `text` syntax will be used in
 that case.}
 
 \item{tooltip_delay}{Numeric. `tooltip_delay` represents the table-wide delay in milliseconds before
