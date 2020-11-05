@@ -5,7 +5,7 @@ import time
 import dash_bootstrap_components as dbc
 import dash_html_components as html
 from dash_table import DataTable
-
+from percy import percySnapshot
 import pandas as pd
 
 url = "https://github.com/plotly/datasets/raw/master/" "26k-consumer-complaints.csv"
@@ -94,7 +94,7 @@ def test_tbbs001_display(
 
     time.sleep(3)
 
-    test.percy_snapshot(
+    percySnapshot(test.driver,
         "DataTable Bootstrap side-effects with rows={} columns={} ops={}".format(
             fixed_rows_description, fixed_columns_description, ops_description
         )
