@@ -8,6 +8,12 @@ jobs:
 
         steps:
             - checkout
+
+            - run:
+                name: Inject Percy Environment variables
+                command: |
+                  echo 'export PERCY_TOKEN="$PERCY_TOKEN_E2E"' >> $BASH_ENV
+
             - restore_cache:
                 key: dep-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}-{{ checksum ".circleci/config.yml" }}
             - run:
