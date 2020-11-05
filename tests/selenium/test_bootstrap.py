@@ -48,21 +48,21 @@ def get_app(id, fixed_rows, fixed_columns, ops, iframe_url):
 
 @pytest.mark.parametrize(
     "fixed_rows,fixed_rows_description",
-    [(dict(), "rows: unfixed"), (dict(fixed_rows=dict(headers=True)), "rows: fixed")],
+    [(dict(), "unfixed_rows"), (dict(fixed_rows=dict(headers=True)), "fixed_rows")],
 )
 @pytest.mark.parametrize(
     "fixed_columns,fixed_columns_description",
     [
-        (dict(), "columns: unfixed"),
-        (dict(fixed_columns=dict(headers=True)), "columns: fixed"),
+        (dict(), "unfixed_columns"),
+        (dict(fixed_columns=dict(headers=True)), "fixed_columns"),
     ],
 )
 @pytest.mark.parametrize(
     "ops,ops_description",
     [
         (dict(), "ops: none"),
-        (dict(row_selectable="single", row_deletable=True), "ops: sinle/deletable"),
-        (dict(row_selectable="multi", row_deletable=True), "ops: multi/deletable"),
+        (dict(row_selectable="single", row_deletable=True), "ops: sinle+deletable"),
+        (dict(row_selectable="multi", row_deletable=True), "ops: multi+deletable"),
     ],
 )
 def test_tbbs001_display(
@@ -92,7 +92,7 @@ def test_tbbs001_display(
     test.table("framed_table").is_ready()
 
     dash_duo.percy_snapshot(
-        "DataTable Bootstrap side-effects with {}, {}, {}".format(
-            fixed_rows_description, fixed_rows_description, ops_description
+        "DataTable Bootstrap side-effects with rows={} columns={} ops={}".format(
+            fixed_rows_description, fixed_columns_description, ops_description
         )
     )
