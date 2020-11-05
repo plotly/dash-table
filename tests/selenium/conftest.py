@@ -368,7 +368,7 @@ class DataTableComposite(Browser, DataTableMixin):
 
 
 @pytest.fixture
-def test(request, dash_thread_server, tmpdir):
+def test(request, dash_thread_server, tmp_path):
     with DataTableComposite(
         dash_thread_server,
         browser=request.config.getoption("webdriver"),
@@ -376,7 +376,7 @@ def test(request, dash_thread_server, tmpdir):
         remote_url=request.config.getoption("remote_url"),
         headless=request.config.getoption("headless"),
         options=request.config.hook.pytest_setup_options(),
-        download_path=tmpdir.mkdir("dt-download").strpath,
+        download_path=tmp_path.mkdir("download", exists_ok=True).strpath,
         percy_finalize=request.config.getoption("nopercyfinalize"),
     ) as dc:
         yield dc
