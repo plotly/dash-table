@@ -376,6 +376,6 @@ def test(request, dash_thread_server, tmpdir):
         remote_url=request.config.getoption("remote_url"),
         headless=request.config.getoption("headless"),
         options=request.config.hook.pytest_setup_options(),
-        download_path=tmpdir.mkdir("dt-download").strpath
+        download_path=tmpdir.mkdir("dt-download").strpath,
     ) as dc:
         yield dc
