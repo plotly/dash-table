@@ -4,7 +4,6 @@ import { storiesOf } from '@storybook/react';
 import DataTable from 'dash-table/dash/DataTable';
 import { ColumnType } from 'dash-table/components/Table/props';
 import { generateMockData } from '../../../demo/data';
-import './common';
 
 const setProps = () => { };
 

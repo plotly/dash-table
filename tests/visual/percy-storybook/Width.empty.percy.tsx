@@ -5,7 +5,6 @@ import { storiesOf } from '@storybook/react';
 import random from 'core/math/random';
 import DataTable from 'dash-table/dash/DataTable';
 import { TableAction } from 'dash-table/components/Table/props';
-import './common';
 
 const setProps = () => { };
 

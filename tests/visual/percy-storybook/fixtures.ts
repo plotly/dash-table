@@ -1,5 +1,4 @@
 import { ColumnType, Presentation } from 'dash-table/components/Table/props';
-import './common';
 
 export default [
     {

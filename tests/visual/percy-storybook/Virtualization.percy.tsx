@@ -7,7 +7,6 @@ import dataset from './../../assets/16zpallagi-25cols-100klines.csv';
 
 import DataTable from 'dash-table/dash/DataTable';
 import { TableAction } from 'dash-table/components/Table/props';
-import './common';
 
 const setProps = () => { };
 

@@ -35,7 +35,9 @@ def get_scroll(test):
 
 def scroll_by(test, value):
     test.driver.execute_script(
-        "document.querySelector('#table .dt-table-container__row-1').scrollBy({}, 0);".format(value)
+        "document.querySelector('#table .dt-table-container__row-1').scrollBy({}, 0);".format(
+            value
+        )
     )
 
 

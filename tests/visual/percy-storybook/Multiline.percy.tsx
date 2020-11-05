@@ -4,7 +4,6 @@ import { storiesOf } from '@storybook/react';
 import DataTable from 'dash-table/dash/DataTable';
 import { BORDER_PROPS_DEFAULTS } from './Border.defaults.percy';
 import { SortMode } from 'dash-table/components/Table/props';
-import './common';
 
 const OPS_VARIANTS: ITest[] = [
     { name: 'with ops', props: { row_deletable: true, row_selectable: SortMode.Single } },
