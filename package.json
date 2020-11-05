@@ -76,7 +76,6 @@
     "@types/react-dom": "^16.9.8",
     "@types/react-select": "^3.0.16",
     "babel-loader": "^8.1.0",
-    "bootstrap": "^4.5.3",
     "css-loader": "^3.6.0",
     "css.escape": "^1.5.1",
     "cypress": "^3.8.1",
