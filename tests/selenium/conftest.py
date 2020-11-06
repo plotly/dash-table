@@ -377,6 +377,5 @@ def test(request, dash_thread_server, tmpdir):
         headless=request.config.getoption("headless"),
         options=request.config.hook.pytest_setup_options(),
         download_path=tmpdir.mkdir("dt-download").strpath,
-        percy_finalize=request.config.getoption("nopercyfinalize"),
     ) as dc:
         yield dc
