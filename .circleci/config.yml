@@ -14,6 +14,11 @@ jobs:
                 command: |
                   echo 'export PERCY_TOKEN="$PERCY_TOKEN_E2E"' >> $BASH_ENV
 
+            - run:
+                name: Install Puppeteer dependencies
+                command: |
+                sudo apt-get install libnss3
+
             - restore_cache:
                 key: dep-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}-{{ checksum ".circleci/config.yml" }}
             - run:
