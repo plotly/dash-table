@@ -14,7 +14,7 @@ df = rawDf.to_dict("rows")
 
 
 def get_app(fixed_rows, fixed_columns, ops):
-    app = dash.Dash(__name__, external_stylesheets=[])
+    app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
     props = dict(
         id="table",
