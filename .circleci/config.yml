@@ -58,6 +58,10 @@ jobs:
                 command: |
                     . venv/bin/activate
                     npm run test.server
+            - run:
+                name: 🦔 percy finalize
+                command: npx percy finalize --all
+                when: always
 
 
     "standalone-test":
