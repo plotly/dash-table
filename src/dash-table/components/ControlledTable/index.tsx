@@ -1010,7 +1010,7 @@ export default class ControlledTable extends PureComponent<
                             <div
                                 key={`r${rowIndex}`}
                                 ref={`r${rowIndex}`}
-                                className={`dt-table-container__row dt-table-container__row-${rowIndex}`}
+                                className={`row row-${rowIndex}`}
                                 onScroll={this.onScroll}
                             >
                                 {arrayMap3(
