@@ -1,9 +1,11 @@
-version: 2
+version: 2.1
+orbs:
+  puppeteer: threetreeslight/puppeteer@0.1.2
 
 jobs:
     "server-test":
         docker:
-            - image: circleci/python:3.7-stretch-node
+            - image: circleci/python:3.7-node
             - image: cypress/base:10
 
         steps:
