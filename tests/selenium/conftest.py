@@ -376,7 +376,7 @@ def test(request, dash_thread_server, tmp_path):
         remote_url=request.config.getoption("remote_url"),
         headless=request.config.getoption("headless"),
         options=request.config.hook.pytest_setup_options(),
-        download_path=tmp_path.mkdir("download", exists_ok=True).strpath,
+        download_path=tmp_path.mkdir("dt-download").strpath,
         percy_finalize=request.config.getoption("nopercyfinalize"),
     ) as dc:
         yield dc
