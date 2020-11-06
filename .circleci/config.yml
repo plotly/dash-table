@@ -4,8 +4,6 @@ jobs:
     "server-test":
         docker:
             - image: circleci/python:3.7.6-node-browsers
-              environment:
-                PERCY_PARALLEL_TOTAL: -1
             - image: cypress/base:10
 
         steps:
