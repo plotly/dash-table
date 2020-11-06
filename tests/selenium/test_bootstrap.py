@@ -92,7 +92,7 @@ def test_tbbs001_display(
 
     test.table("framed_table").is_ready()
 
-    time.sleep(3)
+    time.sleep(10)
 
     test.percy_snapshot(
         "DataTable Bootstrap side-effects with rows={} columns={} ops={}".format(
