@@ -13,13 +13,11 @@ rawDf = pd.read_csv(url)
 df = rawDf.to_dict("rows")
 
 
-def get_app(id, fixed_rows, fixed_columns, ops, iframe_url):
-    stylesheets = [dbc.themes.BOOTSTRAP] if iframe_url is None else []
-
-    app = dash.Dash(__name__, external_stylesheets=stylesheets)
+def get_app(fixed_rows, fixed_columns, ops):
+    app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
     props = dict(
-        id=id,
+        id="table",
         data=df[0:250],
         columns=[
             {"name": i, "id": i, "hideable": i == "Complaint ID"} for i in rawDf.columns
@@ -33,16 +31,7 @@ def get_app(id, fixed_rows, fixed_columns, ops, iframe_url):
         **ops
     )
 
-    app.layout = html.Div(
-        [
-            DataTable(**props),
-            html.Iframe(
-                id="iframe", src=iframe_url, style=dict(height="600px", width="100%")
-            )
-            if iframe_url is not None
-            else None,
-        ]
-    )
+    app.layout = html.Div([DataTable(**props)])
 
     return app
 
@@ -77,22 +66,11 @@ def test_tbbs001_display(
     fixed_columns_description,
     ops_description,
 ):
-    iframe_app = get_app("framed_table", fixed_rows, fixed_columns, ops, None)
-    dash_thread_server(iframe_app, port=8060)
+    test.start_server(get_app(fixed_rows, fixed_columns, ops))
 
-    host_app = get_app(
-        "host_table", fixed_rows, fixed_columns, ops, dash_thread_server.url
-    )
-    test.start_server(host_app, port=8050)
+    test.table("table").is_ready()
 
-    test.table("host_table").is_ready()
-
-    iframe = test.driver.find_element_by_css_selector("#iframe")
-    test.driver.switch_to.frame(iframe)
-
-    test.table("framed_table").is_ready()
-
-    time.sleep(10)
+    time.sleep(3)
 
     test.percy_snapshot(
         "DataTable Bootstrap side-effects with rows={} columns={} ops={}".format(
