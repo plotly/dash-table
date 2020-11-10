@@ -1,6 +1,5 @@
 import dash
 import pytest
-import time
 
 import dash_bootstrap_components as dbc
 import dash_html_components as html
@@ -69,8 +68,6 @@ def test_tbbs001_display(
     test.start_server(get_app(fixed_rows, fixed_columns, ops))
 
     test.table("table").is_ready()
-
-    time.sleep(3)
 
     test.percy_snapshot(
         "DataTable Bootstrap side-effects with rows={} columns={} ops={}".format(
