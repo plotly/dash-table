@@ -44,7 +44,7 @@ def get_app_and_locks():
     non_blocking_lock = Lock()
 
     @app.callback(
-        Output("table", "style_cell_conditional"), [Input("non-blocking", "n_clicks")],
+        Output("table", "style_cell_conditional"), [Input("non-blocking", "n_clicks")]
     )
     def non_blocking_callback(clicks):
         if clicks is None:
