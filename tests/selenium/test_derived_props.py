@@ -13,7 +13,7 @@ url = "https://github.com/plotly/datasets/raw/master/" "26k-consumer-complaints.
 rawDf = pd.read_csv(url, nrows=100)
 rawDf["id"] = rawDf.index + 3000
 
-df = rawDf.to_dict("rows")
+df = rawDf.to_dict("records")
 
 props = [
     "active_cell",
