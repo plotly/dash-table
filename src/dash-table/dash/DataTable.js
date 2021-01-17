@@ -260,8 +260,8 @@ export const propTypes = {
              * See also dash_table.FormatTemplate.  It contains helper functions for typical number formats.
              */
             format: PropTypes.exact({
-            	/**
-            	 * Represents localization specific formatting information.
+               /**
+                * Represents localization specific formatting information.
                 * When left unspecified, will use the default value provided by d3-format.
                 */
                 locale: PropTypes.exact({
@@ -342,15 +342,15 @@ export const propTypes = {
              */
             on_change: PropTypes.exact({
             
-            	/**
-            	 * (default 'coerce'):  'none': do not validate data;
+               /**
+                * (default 'coerce'):  'none': do not validate data;
                 *  'coerce': check if the data corresponds to the destination type and
                 *  attempts to coerce it into the destination type if not;
                 *  'validate': check if the data corresponds to the destination type (no coercion).
                 */
                 action: PropTypes.oneOf(['coerce', 'none', 'validate']),
                 /**
-                 *(default 'reject'):  What to do with the value if the action fails.
+                 *  (default 'reject'):  What to do with the value if the action fails.
                  *  'accept': use the invalid value;
                  *  'default': replace the provided value with `validation.default`;
                  *  'reject': do not modify the existing value.
@@ -377,7 +377,7 @@ export const propTypes = {
              */
             validation: PropTypes.exact({
                 /**
-                 *Allow the use of nully values. (undefined, null, NaN) (default: False)
+                 * Allow the use of nully values. (undefined, null, NaN) (default: False)
                  */
                 allow_null: PropTypes.bool,
                 /**
@@ -432,7 +432,7 @@ export const propTypes = {
      */
     locale_format: PropTypes.exact({
         /**
-         *(default: ['$', '']). A  list of two strings representing the
+         *   (default: ['$', '']). A  list of two strings representing the
          *   prefix and suffix symbols. Typically used for currency, and implemented using d3's
          *   currency format, but you can use this for other symbols such as measurement units.
          */
@@ -454,8 +454,8 @@ export const propTypes = {
          */
         numerals: PropTypes.arrayOf(PropTypes.string),
         /**
-        * (default: '%'). The string used for the percentage symbol.
-        */
+         * (default: '%'). The string used for the percentage symbol.
+         */
         percent: PropTypes.string,
         /**
          * (default: True). Separate integers with 4-digits or less.
@@ -630,7 +630,7 @@ export const propTypes = {
              * Example `{'headers':False, 'data':0}` No columns are fixed (the default)
              */           
             data: PropTypes.oneOf([0]),
-            headers: PropTypes.oneOf([false]),
+            headers: PropTypes.oneOf([false])
         }),
         
         PropTypes.exact({
@@ -638,7 +638,7 @@ export const propTypes = {
              * Example `{'headers':True, 'data':1}` one column is fixed. 
              */            
             data: PropTypes.number,
-            headers: PropTypes.oneOf([true]).isRequired,
+            headers: PropTypes.oneOf([true]).isRequired
         })
     ]),
 
@@ -661,14 +661,14 @@ export const propTypes = {
               * Example `{'headers':False, 'data':0}` No rows are fixed (the default)
               */            
             data: PropTypes.oneOf([0]),
-            headers: PropTypes.oneOf([false]),
+            headers: PropTypes.oneOf([false])
         }),
         PropTypes.exact({
             /**
              * Example `{'headers':True, 'data':1}` one row is fixed. 
              */            
             data: PropTypes.number,
-            headers: PropTypes.oneOf([true]).isRequired,
+            headers: PropTypes.oneOf([true]).isRequired
         })
     ]),
 
@@ -975,7 +975,7 @@ export const propTypes = {
                  */
                 column_id: PropTypes.string,
                 /**
-                 *`filter_query` refers to the query that must evaluate to True.
+                 * `filter_query` refers to the query that must evaluate to True.
                  */
                 filter_query: PropTypes.string,
                 /**
@@ -1072,7 +1072,7 @@ export const propTypes = {
                  * Alternatively, the value of the property can also be
                  * a plain string. The `text` syntax will be used in
                  * that case.                    
-                     */
+                 */
                 duration: PropTypes.number,
                 /**
                  * For each tooltip configuration,
