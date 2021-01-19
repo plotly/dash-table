@@ -1,4 +1,4 @@
-from __future__ import print_function as _
+from __future__ import print_function
 
 import os as _os
 import sys as _sys
@@ -6,10 +6,7 @@ import json
 
 import dash as _dash
 
-from ._imports_ import *  # noqa: F401, F403
-from ._imports_ import __all__
-
-if not hasattr(_dash, "development"):
+if not hasattr(_dash, "__plotly_dash") and not hasattr(_dash, "development"):
     print(
         "Dash was not successfully imported. "
         "Make sure you don't have a file "
@@ -17,6 +14,9 @@ if not hasattr(_dash, "development"):
         file=_sys.stderr,
     )
     _sys.exit(1)
+
+from ._imports_ import *  # noqa: E402, F401, F403
+from ._imports_ import __all__  # noqa: E402
 
 _basepath = _os.path.dirname(__file__)
 _filepath = _os.path.abspath(_os.path.join(_basepath, "package-info.json"))
