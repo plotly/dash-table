@@ -85,6 +85,8 @@ export const defaultProps = {
     editable: false,
     export_columns: 'visible',
     export_format: 'none',
+    export_className: 'export',
+    export_text: 'Export',
     include_headers_on_copy_paste: false,
     selected_cells: [],
     selected_columns: [],
