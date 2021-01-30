@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [UNRELEASED]
+## [4.11.2] - 2021-01-19
 ### Fixed
 - [#854](https://github.com/plotly/dash-table/pull/854) - part of fixing dash import bug https://github.com/plotly/dash/issues/1143
 
@@ -328,7 +328,7 @@ reset the filter for the affected column(s)
         `'fe'` is now `'native'`, `'be'` is now `'custom'`, and `false` is now '`none'`
     -  `column_static_dropdown`
         Renamed to `dropdown`.
-        Now an object with each entry refering to a Column ID. Each nested prop expects.
+        Now an object with each entry referring to a Column ID. Each nested prop expects.
         `clearable` and `options`.
     - `column_conditional_dropdowns`
         Renamed to `dropdown_conditional`.
