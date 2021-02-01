@@ -366,6 +366,9 @@ export interface IProps {
     virtualization?: boolean;
 
     loading_state?: ILoadingState;
+
+    export_text?: string;
+    export_className?: string;
 }
 
 interface IDefaultProps {

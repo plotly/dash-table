@@ -965,6 +965,8 @@ export default class ControlledTable extends PureComponent<
             export_columns,
             export_format,
             export_headers,
+            export_className,
+            export_text,
             virtual,
             merge_duplicate_headers,
             paginator,
@@ -978,6 +980,8 @@ export default class ControlledTable extends PureComponent<
             columns,
             visibleColumns,
             export_headers,
+            export_className,
+            export_text,
             merge_duplicate_headers
         };
 

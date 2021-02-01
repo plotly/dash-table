@@ -85,6 +85,8 @@ export const defaultProps = {
     editable: false,
     export_columns: 'visible',
     export_format: 'none',
+    export_className: 'export',
+    export_text: 'Export',
     include_headers_on_copy_paste: false,
     selected_cells: [],
     selected_columns: [],
@@ -575,6 +577,18 @@ export const propTypes = {
      * names, respectively
      */
     export_headers: PropTypes.oneOf(['none', 'ids', 'names', 'display']),
+
+    /**
+     * Denotes the text of the export button
+     * Defaults to `'Export'`
+     */
+    export_text: PropTypes.string,
+
+    /**
+     * Denotes the class name of the export button
+     * Defaults to `'export'`
+     */
+    export_className: PropTypes.string,
 
     /**
      * `fill_width` toggles between a set of CSS for two common behaviors:
