@@ -80,7 +80,7 @@
     "babel-loader": "^8.2.2",
     "css-loader": "^3.6.0",
     "css.escape": "^1.5.1",
-    "cypress": "^3.8.1",
+    "cypress": "^6.6.0",
     "d3-format": "^1.4.4",
     "es-check": "^5.1.0",
     "fast-isnumeric": "^1.1.4",
