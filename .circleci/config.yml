@@ -67,11 +67,6 @@ jobs:
             - restore_cache:
                 key: dep-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}-{{ checksum ".circleci/config.yml" }}
             - run:
-                name: versions
-                command: |
-                    npm --version
-                    node --version
-            - run:
                 name: Install npm packages
                 command: npm ci
             - run:
