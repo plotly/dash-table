@@ -3,7 +3,7 @@ version: 2.1
 jobs:
     "server-test":
         docker:
-            - image: circleci/python:3.7.9-node-browsers
+            - image: cimg/python:3.7.10-node-browsers
               environment:
                 PERCY_PARALLEL_TOTAL: -1
             - image: cypress/base:10
@@ -59,7 +59,7 @@ jobs:
 
     "standalone-test":
         docker:
-            - image: circleci/python:3.7.9-node-browsers
+            - image: cimg/python:3.7.10-node-browsers
             - image: cypress/base:10
 
         steps:
@@ -88,8 +88,7 @@ jobs:
 
     "unit-test":
         docker:
-            - image: circleci/python:3.7.9-node-browsers
-            - image: cypress/base:10
+            - image: cimg/python:3.7.10-node-browsers
 
         steps:
             - checkout
@@ -98,17 +97,6 @@ jobs:
             - run:
                 name: Install npm packages
                 command: npm ci
-            - run:
-                name: Cypress Install
-                command: |
-                    $(npm bin)/cypress install
-
-            - save_cache:
-                key: dep-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}-{{ checksum ".circleci/config.yml" }}
-                paths:
-                    - node_modules
-                    - /home/circleci/.cache/Cypress
-
             - run:
                 name: Install requirements
                 command: |
