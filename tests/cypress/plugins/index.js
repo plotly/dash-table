@@ -1,11 +1,16 @@
-const wp = require('@cypress/webpack-preprocessor');
+const wp = require('cypress-webpack-preprocessor-v5');
 
 module.exports = on => {
+    const webpackOptions = require('../../../webpack.test.standalone.config.js');
+
     const options = {
-        webpackOptions: require('../../../webpack.test.standalone.config.js')
+        webpackOptions: {
+            module: webpackOptions.module,
+            resolve: webpackOptions.resolve
+        }
     };
 
-    on('file:preprocessor', wp(options));
+    on('file:preprocessor', wp(options))
 
     on('before:browser:launch', (browser = {}, args) => {
         if (browser.name === 'chrome') {

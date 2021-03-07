@@ -1,3 +1,5 @@
+import { assert, expect } from 'chai';
+
 import { QuerySyntaxTree } from 'dash-table/syntax-tree';
 
 import { processCases } from './dash_table_queries_test';

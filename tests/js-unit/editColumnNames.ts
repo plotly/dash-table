@@ -1,3 +1,5 @@
+import { assert, expect } from 'chai';
+
 import { changeColumnHeader } from 'dash-table/utils/actions';
 
 describe('changeColumnHeader', () => {

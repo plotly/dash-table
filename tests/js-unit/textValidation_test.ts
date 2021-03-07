@@ -1,3 +1,5 @@
+import { assert, expect } from 'chai';
+
 import { ColumnType, ITextColumn } from 'dash-table/components/Table/props';
 import { isNully } from 'dash-table/type/null';
 import { validate } from 'dash-table/type/text';

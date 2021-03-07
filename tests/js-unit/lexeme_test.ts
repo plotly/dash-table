@@ -1,3 +1,5 @@
+import { assert, expect } from 'chai';
+
 import {
     fieldExpression,
     stringExpression,
@@ -20,17 +22,17 @@ describe('expression', () => {
             expect(fieldExpression.resolve({ abc: 3 }, { value: '{a bc}' } as ISyntaxTree) === undefined).to.equal(true);
             expect(fieldExpression.resolve({ abc: 3 }, { value: '{"abc"}' } as ISyntaxTree) === undefined).to.equal(true);
 
-            expect(fieldExpression.resolve.bind(undefined, {}, { value: '3' } as ISyntaxTree)).to.throw(Error);
-            expect(fieldExpression.resolve.bind(undefined, {}, { value: 'abc' } as ISyntaxTree)).to.throw(Error);
-            expect(fieldExpression.resolve.bind(undefined, {}, { value: '{abc' } as ISyntaxTree)).to.throw(Error);
-            expect(fieldExpression.resolve.bind(undefined, {}, { value: 'abc}' } as ISyntaxTree)).to.throw(Error);
-            expect(fieldExpression.resolve.bind(undefined, {}, { value: '}abc{' } as ISyntaxTree)).to.throw(Error);
-            expect(fieldExpression.resolve.bind(undefined, {}, { value: '{{abc}}' } as ISyntaxTree)).to.throw(Error);
-            expect(fieldExpression.resolve.bind(undefined, {}, { value: '"' } as ISyntaxTree)).to.throw(Error);
-            expect(fieldExpression.resolve.bind(undefined, {}, { value: '`' } as ISyntaxTree)).to.throw(Error);
-            expect(fieldExpression.resolve.bind(undefined, {}, { value: `'` } as ISyntaxTree)).to.throw(Error);
-            expect(fieldExpression.resolve.bind(undefined, {}, { value: '{' } as ISyntaxTree)).to.throw(Error);
-            expect(fieldExpression.resolve.bind(undefined, {}, { value: '}' } as ISyntaxTree)).to.throw(Error);
+            expect(fieldExpression.resolve.bind(undefined, {}, { value: '3' } as ISyntaxTree)).to.throw();
+            expect(fieldExpression.resolve.bind(undefined, {}, { value: 'abc' } as ISyntaxTree)).to.throw();
+            expect(fieldExpression.resolve.bind(undefined, {}, { value: '{abc' } as ISyntaxTree)).to.throw();
+            expect(fieldExpression.resolve.bind(undefined, {}, { value: 'abc}' } as ISyntaxTree)).to.throw();
+            expect(fieldExpression.resolve.bind(undefined, {}, { value: '}abc{' } as ISyntaxTree)).to.throw();
+            expect(fieldExpression.resolve.bind(undefined, {}, { value: '{{abc}}' } as ISyntaxTree)).to.throw();
+            expect(fieldExpression.resolve.bind(undefined, {}, { value: '"' } as ISyntaxTree)).to.throw();
+            expect(fieldExpression.resolve.bind(undefined, {}, { value: '`' } as ISyntaxTree)).to.throw();
+            expect(fieldExpression.resolve.bind(undefined, {}, { value: `'` } as ISyntaxTree)).to.throw();
+            expect(fieldExpression.resolve.bind(undefined, {}, { value: '{' } as ISyntaxTree)).to.throw();
+            expect(fieldExpression.resolve.bind(undefined, {}, { value: '}' } as ISyntaxTree)).to.throw();
         }
     });
 
@@ -48,17 +50,17 @@ describe('expression', () => {
             expect(stringExpression.resolve(undefined, { value: '`\\``' } as ISyntaxTree)).to.equal('`');
             expect(stringExpression.resolve(undefined, { value: '\'\\\\\'' } as ISyntaxTree)).to.equal('\\');
 
-            expect(stringExpression.resolve.bind(undefined, {}, { value: '3' } as ISyntaxTree)).to.throw(Error);
-            expect(stringExpression.resolve.bind(undefined, {}, { value: 'abc' } as ISyntaxTree)).to.throw(Error);
-            expect(stringExpression.resolve.bind(undefined, {}, { value: '{abc' } as ISyntaxTree)).to.throw(Error);
-            expect(stringExpression.resolve.bind(undefined, {}, { value: 'abc}' } as ISyntaxTree)).to.throw(Error);
-            expect(stringExpression.resolve.bind(undefined, {}, { value: '}abc{' } as ISyntaxTree)).to.throw(Error);
-            expect(stringExpression.resolve.bind(undefined, {}, { value: '{{abc}}' } as ISyntaxTree)).to.throw(Error);
-            expect(stringExpression.resolve.bind(undefined, {}, { value: '"' } as ISyntaxTree)).to.throw(Error);
-            expect(stringExpression.resolve.bind(undefined, {}, { value: '`' } as ISyntaxTree)).to.throw(Error);
-            expect(stringExpression.resolve.bind(undefined, {}, { value: `'` } as ISyntaxTree)).to.throw(Error);
-            expect(stringExpression.resolve.bind(undefined, {}, { value: '{' } as ISyntaxTree)).to.throw(Error);
-            expect(stringExpression.resolve.bind(undefined, {}, { value: '}' } as ISyntaxTree)).to.throw(Error);
+            expect(stringExpression.resolve.bind(undefined, {}, { value: '3' } as ISyntaxTree)).to.throw();
+            expect(stringExpression.resolve.bind(undefined, {}, { value: 'abc' } as ISyntaxTree)).to.throw();
+            expect(stringExpression.resolve.bind(undefined, {}, { value: '{abc' } as ISyntaxTree)).to.throw();
+            expect(stringExpression.resolve.bind(undefined, {}, { value: 'abc}' } as ISyntaxTree)).to.throw();
+            expect(stringExpression.resolve.bind(undefined, {}, { value: '}abc{' } as ISyntaxTree)).to.throw();
+            expect(stringExpression.resolve.bind(undefined, {}, { value: '{{abc}}' } as ISyntaxTree)).to.throw();
+            expect(stringExpression.resolve.bind(undefined, {}, { value: '"' } as ISyntaxTree)).to.throw();
+            expect(stringExpression.resolve.bind(undefined, {}, { value: '`' } as ISyntaxTree)).to.throw();
+            expect(stringExpression.resolve.bind(undefined, {}, { value: `'` } as ISyntaxTree)).to.throw();
+            expect(stringExpression.resolve.bind(undefined, {}, { value: '{' } as ISyntaxTree)).to.throw();
+            expect(stringExpression.resolve.bind(undefined, {}, { value: '}' } as ISyntaxTree)).to.throw();
         }
     });
 
@@ -83,15 +85,15 @@ describe('expression', () => {
             expect(valueExpression.resolve(undefined, { value: '\\}abc\\{' } as ISyntaxTree)).to.equal('}abc{');
             expect(valueExpression.resolve(undefined, { value: '\\{\\{abc\\}\\}' } as ISyntaxTree)).to.equal('{{abc}}');
 
-            expect(valueExpression.resolve.bind(undefined, {}, { value: '{abc' } as ISyntaxTree)).to.throw(Error);
-            expect(valueExpression.resolve.bind(undefined, {}, { value: 'abc}' } as ISyntaxTree)).to.throw(Error);
-            expect(valueExpression.resolve.bind(undefined, {}, { value: '}abc{' } as ISyntaxTree)).to.throw(Error);
-            expect(valueExpression.resolve.bind(undefined, {}, { value: '{{abc}}' } as ISyntaxTree)).to.throw(Error);
-            expect(valueExpression.resolve.bind(undefined, {}, { value: '"' } as ISyntaxTree)).to.throw(Error);
-            expect(valueExpression.resolve.bind(undefined, {}, { value: '`' } as ISyntaxTree)).to.throw(Error);
-            expect(valueExpression.resolve.bind(undefined, {}, { value: `'` } as ISyntaxTree)).to.throw(Error);
-            expect(valueExpression.resolve.bind(undefined, {}, { value: '{' } as ISyntaxTree)).to.throw(Error);
-            expect(valueExpression.resolve.bind(undefined, {}, { value: '}' } as ISyntaxTree)).to.throw(Error);
+            expect(valueExpression.resolve.bind(undefined, {}, { value: '{abc' } as ISyntaxTree)).to.throw();
+            expect(valueExpression.resolve.bind(undefined, {}, { value: 'abc}' } as ISyntaxTree)).to.throw();
+            expect(valueExpression.resolve.bind(undefined, {}, { value: '}abc{' } as ISyntaxTree)).to.throw();
+            expect(valueExpression.resolve.bind(undefined, {}, { value: '{{abc}}' } as ISyntaxTree)).to.throw();
+            expect(valueExpression.resolve.bind(undefined, {}, { value: '"' } as ISyntaxTree)).to.throw();
+            expect(valueExpression.resolve.bind(undefined, {}, { value: '`' } as ISyntaxTree)).to.throw();
+            expect(valueExpression.resolve.bind(undefined, {}, { value: `'` } as ISyntaxTree)).to.throw();
+            expect(valueExpression.resolve.bind(undefined, {}, { value: '{' } as ISyntaxTree)).to.throw();
+            expect(valueExpression.resolve.bind(undefined, {}, { value: '}' } as ISyntaxTree)).to.throw();
         }
     });
 });

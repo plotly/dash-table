@@ -1,3 +1,5 @@
+import { assert, expect } from 'chai';
+
 import shouldComponentUpdate from 'dash-table/components/Table/shouldComponentUpdate';
 
 describe('shouldComponentUpdate', () => {

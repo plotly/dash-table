@@ -1,3 +1,5 @@
+import { assert, expect } from 'chai';
+
 import { getFormatter } from 'dash-table/type/number';
 import { getLocale, getNully, getSpecifier } from 'dash-table/dash/Sanitizer';
 

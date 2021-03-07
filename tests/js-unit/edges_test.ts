@@ -1,3 +1,5 @@
+import { assert, expect } from 'chai';
+
 import { derivedPartialDataEdges } from 'dash-table/derived/edges/data';
 import Environment from 'core/environment';
 import { IConvertedStyle } from 'dash-table/derived/style';

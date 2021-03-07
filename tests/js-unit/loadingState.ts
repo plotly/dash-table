@@ -1,3 +1,5 @@
+import { assert, expect } from 'chai';
+
 import dataLoading from 'dash-table/derived/table/data_loading';
 
 describe('loading state uneditable', () => {

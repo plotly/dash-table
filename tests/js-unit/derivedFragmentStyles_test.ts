@@ -1,3 +1,5 @@
+import { assert, expect } from 'chai';
+
 import derivedFragmentStyles from 'dash-table/derived/table/fragmentStyles';
 
 function validate(style, width) {

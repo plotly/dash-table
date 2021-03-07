@@ -1,3 +1,5 @@
+import { assert, expect } from 'chai';
+
 import { ColumnType, IDatetimeColumn } from 'dash-table/components/Table/props';
 import { isNully } from 'dash-table/type/null';
 import { coerce } from 'dash-table/type/date';

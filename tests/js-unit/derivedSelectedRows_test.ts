@@ -1,3 +1,4 @@
+import { assert, expect } from 'chai';
 import * as R from 'ramda';
 
 import derivedSelectedRows from 'dash-table/derived/selects/rows';

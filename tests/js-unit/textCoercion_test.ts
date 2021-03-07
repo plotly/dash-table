@@ -1,3 +1,5 @@
+import { assert, expect } from 'chai';
+
 import { ColumnType, ITextColumn } from 'dash-table/components/Table/props';
 import { coerce } from 'dash-table/type/text';
 

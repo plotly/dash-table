@@ -1,3 +1,4 @@
+import { expect } from 'chai';
 import * as R from 'ramda';
 
 import SyntaxTree from 'core/syntax-tree';

@@ -1,3 +1,4 @@
+import { assert, expect } from 'chai';
 import * as R from 'ramda';
 
 import sort, { SortDirection, SortBy } from 'core/sorting';

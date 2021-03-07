@@ -1,3 +1,5 @@
+import { assert, expect } from 'chai';
+
 import { SingleColumnSyntaxTree } from 'dash-table/syntax-tree';
 import { ColumnType } from 'dash-table/components/Table/props';
 import { SingleColumnConfig } from 'dash-table/syntax-tree/SingleColumnSyntaxTree';
@@ -97,7 +99,7 @@ describe('Single Column Syntax Tree', () => {
         expect(tree.toQueryString()).to.equal('{a} = 1');
     });
 
-    it.only('can be permissive value expression', () => {
+    it('can be permissive value expression', () => {
         const tree = new SingleColumnSyntaxTree('Hello world', COLUMN_TEXT);
 
         expect(tree.isValid).to.equal(true);

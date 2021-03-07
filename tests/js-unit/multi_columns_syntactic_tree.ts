@@ -1,3 +1,5 @@
+import { assert, expect } from 'chai';
+
 import { MultiColumnsSyntaxTree } from 'dash-table/syntax-tree';
 import { FilterLogicalOperator } from 'dash-table/components/Table/props';
 

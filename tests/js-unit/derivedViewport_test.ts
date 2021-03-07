@@ -1,3 +1,4 @@
+import { assert, expect } from 'chai';
 import * as R from 'ramda';
 
 import derivedViewportData from 'dash-table/derived/data/viewport';

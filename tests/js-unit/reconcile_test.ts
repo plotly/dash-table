@@ -1,3 +1,5 @@
+import { assert, expect } from 'chai';
+
 import reconcile from 'dash-table/type/reconcile';
 import { ColumnType, ChangeAction, ChangeFailure } from 'dash-table/components/Table/props';
 

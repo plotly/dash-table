@@ -1,3 +1,5 @@
+import { assert, expect } from 'chai';
+
 import resolveFlag from 'dash-table/derived/cell/resolveFlag';
 
 describe('isEditable', () => {

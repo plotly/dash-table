@@ -1,7 +1,8 @@
+import { assert, expect } from 'chai';
 import * as R from 'ramda';
-import { ExportHeaders } from 'dash-table/components/Table/props';
-
 import 'xlsx'; /* Cheat and get the async resource pre-emptively */
+
+import { ExportHeaders } from 'dash-table/components/Table/props';
 import { transformMultiDimArray, getMergeRanges, createHeadings, createWorkbook } from 'dash-table/components/Export/utils';
 
 describe('export', () => {
