@@ -140,10 +140,26 @@ class DataTableColumnFacade(object):
         self.get(row).find_element_by_css_selector(".column-header--hide").click()
 
     @preconditions(_validate_row)
+    def is_selected(self, row=0):
+        return self.mixin.driver.execute_script(
+            """
+            return document.querySelector('#{} {} tbody tr:nth-of-type({}) th.dash-header[data-dash-column="{}"]:not(.phantom-cell) .column-header--select input').checked;
+        """.format(
+                self.id, self.state, row + 1, self.col_id
+            )
+        )
+
+    @preconditions(_validate_row)
     def move_to(self, row=0):
         ac = ActionChains(self.mixin.driver)
         ac.move_to_element(self.get(row))
         return ac.perform()
+
+    @preconditions(_validate_row)
+    def select(self, row=0):
+        self.get(row).find_element_by_css_selector(
+            ".column-header--select input"
+        ).click()
 
     @preconditions(_validate_row)
     def sort(self, row=0):
@@ -324,6 +340,17 @@ class DataTableMixin(object):
     @preconditions(_validate_id)
     def table(self, id):
         return DataTableFacade(id, self)
+
+    def get_table_ids(self):
+        return self.driver.execute_script(
+            """
+            return Array.from(
+                document.querySelectorAll('.dash-spreadsheet-container')
+            ).map(
+                e => e.parentElement.getAttribute('id')
+            )
+        """
+        )
 
     def copy(self):
         with self.hold(Keys.CONTROL):
