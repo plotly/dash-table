@@ -1,6 +1,14 @@
 import dash
 import pytest
 
+from utils import (
+    basic_modes,
+    get_props,
+    generate_mock_data,
+    generate_markdown_mock_data,
+    generate_mixed_markdown_data,
+)
+
 from dash.dependencies import Input, Output
 from dash.exceptions import PreventUpdate
 from dash.testing import wait
@@ -328,5 +336,37 @@ def test_szng003_on_prop_change(
 
     test.driver.find_element_by_css_selector("#btn").click()
     cells_are_same_width(target, target)
+
+    assert test.get_log_errors() == []
+
+
+@pytest.mark.parametrize("props", basic_modes)
+@pytest.mark.parametrize(
+    "data_fn",
+    [generate_mock_data, generate_markdown_mock_data, generate_mixed_markdown_data],
+)
+def test_szng004_on_focus(test, props, data_fn):
+    app = dash.Dash(__name__)
+
+    baseProps1 = get_props(data_fn=data_fn)
+    baseProps2 = get_props(data_fn=data_fn)
+
+    baseProps1.update(dict(**props, id="table1"))
+    baseProps2.update(dict(**props, id="table2"))
+
+    app.layout = Div([DataTable(**baseProps1), DataTable(**baseProps2),])
+
+    test.start_server(app)
+
+    table2 = test.table("table2")
+
+    for i in range(len(baseProps1.get("columns"))):
+        table2.cell(0, i).click()
+
+        t1 = test.driver.find_element_by_css_selector("#table1")
+        t2 = test.driver.find_element_by_css_selector("#table2")
+
+        cells_are_same_width(t1, t1)
+        cells_are_same_width(t1, t2)
 
     assert test.get_log_errors() == []
