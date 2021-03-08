@@ -3,39 +3,29 @@ version: 2.1
 jobs:
     "server-test":
         docker:
-            - image: cimg/python:3.7.10-node-browsers
+            - image: circleci/python:3.9.2-buster-node-browsers
               environment:
                 PERCY_PARALLEL_TOTAL: -1
             - image: cypress/base:10
-
         steps:
             - checkout
             - run:
                 name: Inject Percy Environment variables
                 command: |
                   echo 'export PERCY_TOKEN="$PERCY_TOKEN_E2E"' >> $BASH_ENV
-
-            - restore_cache:
-                key: dep-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}-{{ checksum ".circleci/config.yml" }}
             - run:
                 name: Install npm packages
                 command: npm ci
-            - save_cache:
-                key: dep-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}-{{ checksum ".circleci/config.yml" }}
-                paths:
-                    - node_modules
-
             - run:
                 name: Install requirements
                 command: |
-                    sudo pip install --upgrade virtualenv
+                    pip install --upgrade virtualenv
                     python -m venv venv || virtualenv venv
                     . venv/bin/activate
                     pip install -r dev-requirements.txt --quiet
                     git clone --depth 1 git@github.com:plotly/dash.git dash-main
                     pip install -e ./dash-main[dev,testing] --quiet
                     cd dash-main/dash-renderer && npm ci && npm run build && pip install -e . && cd ./../..
-
             - run:
                 name: Build
                 command: |
@@ -45,7 +35,6 @@ jobs:
                     python setup.py sdist
                     cd dist
                     find . -name "*.gz" | xargs pip install --no-cache-dir --ignore-installed && cd ..
-
             - run:
                 name: Run tests
                 command: |
@@ -56,16 +45,12 @@ jobs:
                 command: npx percy finalize --all
                 when: always
 
-
     "standalone-test":
         docker:
-            - image: cimg/python:3.7.10-node-browsers
+            - image: circleci/python:3.9.2-buster-node-browsers
             - image: cypress/base:10
-
         steps:
             - checkout
-            - restore_cache:
-                key: dep-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}-{{ checksum ".circleci/config.yml" }}
             - run:
                 name: Install npm packages
                 command: npm ci
@@ -73,70 +58,44 @@ jobs:
                 name: Cypress Install
                 command: |
                     $(npm bin)/cypress install
-
-            - save_cache:
-                key: dep-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}-{{ checksum ".circleci/config.yml" }}
-                paths:
-                    - node_modules
-                    - /home/circleci/.cache/Cypress
-
             - run:
                 name: Run tests
                 command: |
                     npm run test.standalone
 
-
     "unit-test":
         docker:
-            - image: cimg/python:3.7.10-node-browsers
-
+            - image: circleci/python:3.9.2-buster-node-browsers
         steps:
             - checkout
-            - restore_cache:
-                key: dep-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}-{{ checksum ".circleci/config.yml" }}
             - run:
                 name: Install npm packages
                 command: npm ci
             - run:
                 name: Install requirements
                 command: |
-                    sudo pip install --upgrade virtualenv
+                    pip install --upgrade virtualenv
                     python -m venv venv || virtualenv venv
                     . venv/bin/activate
                     pip install -r dev-requirements.txt --quiet
                     pip install --progress-bar off -e git+https://github.com/plotly/dash.git@dev#egg=dash[dev,testing]
-
             - run:
                 name: Run tests
                 command: |
                     . venv/bin/activate
-                    npm run build
                     npm run test.unit
-
 
     "visual-test":
         docker:
             - image: circleci/node:10-browsers
-
         steps:
             - checkout
-
-            - restore_cache:
-                key: dep-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}
-
             - run:
                 name: Install package.json
                 command: npm ci
-
-            - save_cache:
-                key: dep-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}
-                paths:
-                    - node_modules
-
             - run:
                 name: Run build:js
                 command: npm run private::build:js
-
             - run:
                 name: Run visual tests
                 command: npm run test.visual
@@ -146,33 +105,20 @@ jobs:
     "node":
         docker:
             - image: circleci/python:3.7.5-node
-
         steps:
             - checkout
-
             - run:
                   name: Create virtual env
                   command: python -m venv || virtualenv venv
-
-            - restore_cache:
-                key: dep-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}
-
             - run:
                 name: Install package.json
                 command: npm ci
-
-            - save_cache:
-                key: dep-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}
-                paths:
-                    - node_modules
-
             - run:
                 name: Install requirements
                 command: |
                     . venv/bin/activate
                     pip install -r dev-requirements.txt --quiet
                     pip install --progress-bar off -e git+https://github.com/plotly/dash.git@dev#egg=dash[dev,testing]
-
             - run:
                 name: Run eslint
                 command: |
