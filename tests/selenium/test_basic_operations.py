@@ -66,41 +66,59 @@ def test_tbst002_select_all_text(test, props):
 
 
 # https://github.com/plotly/dash-table/issues/50
-def test_tbst003_edit_on_enter(test):
-    test.start_server(get_app())
+@pytest.mark.parametrize("props", [dict(editable=False), dict(editable=True)])
+def test_tbst003_edit_on_enter(test, props):
+    test.start_server(get_app(props))
 
     target = test.table("table")
+    initial_text = target.cell(249, 0).get_text()
 
     target.cell(249, 0).click()
     test.send_keys("abc" + Keys.ENTER)
 
-    assert target.cell(249, 0).get_text() == "abc"
+    if props.get("editable"):
+        assert target.cell(249, 0).get_text() == "abc"
+    else:
+        assert target.cell(249, 0).get_text() == initial_text
+
     assert test.get_log_errors() == []
 
 
 # https://github.com/plotly/dash-table/issues/107
-def test_tbst004_edit_on_tab(test):
-    test.start_server(get_app())
+@pytest.mark.parametrize("props", [dict(editable=False), dict(editable=True)])
+def test_tbst004_edit_on_tab(test, props):
+    test.start_server(get_app(props))
 
     target = test.table("table")
+    initial_text = target.cell(249, 0).get_text()
 
     target.cell(249, 0).click()
     test.send_keys("abc" + Keys.TAB)
 
-    assert target.cell(249, 0).get_text() == "abc"
+    if props.get("editable"):
+        assert target.cell(249, 0).get_text() == "abc"
+    else:
+        assert target.cell(249, 0).get_text() == initial_text
+
     assert test.get_log_errors() == []
 
 
-def test_tbst005_edit_last_row_on_click_outside(test):
-    test.start_server(get_app())
+@pytest.mark.parametrize("props", [dict(editable=False), dict(editable=True)])
+def test_tbst005_edit_last_row_on_click_outside(test, props):
+    test.start_server(get_app(props))
 
     target = test.table("table")
+    initial_text = target.cell(249, 0).get_text()
 
     target.cell(249, 0).click()
     test.send_keys("abc")
     target.cell(248, 0).click()
 
-    assert target.cell(249, 0).get_text() == "abc"
+    if props.get("editable"):
+        assert target.cell(249, 0).get_text() == "abc"
+    else:
+        assert target.cell(249, 0).get_text() == initial_text
+
     assert test.get_log_errors() == []
 
 
