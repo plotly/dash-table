@@ -1,3 +1,8 @@
+read_write_modes = [dict(virtualization=False), dict(virtualization=True)]
+
+basic_modes = read_write_modes + [dict(editable=False)]
+
+
 def get_base_props(rows=100):
     mockProps = generate_mock_data(rows)
 

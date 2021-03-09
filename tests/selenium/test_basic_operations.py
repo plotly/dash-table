@@ -1,5 +1,7 @@
 import dash
 
+from utils import read_write_modes
+
 from dash_table import DataTable
 
 from selenium.webdriver.common.keys import Keys
@@ -37,9 +39,7 @@ def get_app(props=dict()):
     return app
 
 
-@pytest.mark.parametrize(
-    "props", [dict(virtualization=False), dict(virtualization=True)]
-)
+@pytest.mark.parametrize("props", read_write_modes)
 def test_tbst001_get_cell(test, props):
     test.start_server(get_app(props))
 
@@ -51,9 +51,7 @@ def test_tbst001_get_cell(test, props):
     assert test.get_log_errors() == []
 
 
-@pytest.mark.parametrize(
-    "props", [dict(virtualization=False), dict(virtualization=True)]
-)
+@pytest.mark.parametrize("props", read_write_modes)
 def test_tbst002_select_all_text(test, props):
     test.start_server(get_app(props))
 
@@ -178,9 +176,7 @@ def test_tbst009_active_focused_arrow_down(test):
     assert test.get_log_errors() == []
 
 
-@pytest.mark.parametrize(
-    "props", [dict(virtualization=False), dict(virtualization=True)]
-)
+@pytest.mark.parametrize("props", read_write_modes)
 def test_tbst010_active_with_dblclick(test, props):
     test.start_server(get_app(props))
 
@@ -192,9 +188,7 @@ def test_tbst010_active_with_dblclick(test, props):
     assert test.get_log_errors() == []
 
 
-@pytest.mark.parametrize(
-    "props", [dict(virtualization=False), dict(virtualization=True)]
-)
+@pytest.mark.parametrize("props", read_write_modes)
 def test_tbst011_delete_row(test, props):
     test.start_server(get_app(props))
 
@@ -207,9 +201,7 @@ def test_tbst011_delete_row(test, props):
     assert test.get_log_errors() == []
 
 
-@pytest.mark.parametrize(
-    "props", [dict(virtualization=False), dict(virtualization=True)]
-)
+@pytest.mark.parametrize("props", read_write_modes)
 def test_tbst012_delete_sorted_row(test, props):
     test.start_server(get_app(props))
 
@@ -226,12 +218,7 @@ def test_tbst012_delete_sorted_row(test, props):
 
 
 @pytest.mark.parametrize(
-    "props",
-    [
-        dict(virtualization=False),
-        dict(virtualization=True),
-        dict(editable=False, row_deletable=False),
-    ],
+    "props", read_write_modes + [dict(editable=False, row_deletable=False),],
 )
 def test_tbst013_select_row(test, props):
     test.start_server(get_app(props))
@@ -245,12 +232,7 @@ def test_tbst013_select_row(test, props):
 
 
 @pytest.mark.parametrize(
-    "props",
-    [
-        dict(virtualization=False),
-        dict(virtualization=True),
-        dict(editable=False, row_deletable=False),
-    ],
+    "props", read_write_modes + [dict(editable=False, row_deletable=False),],
 )
 def test_tbst014_selected_sorted_row(test, props):
     test.start_server(get_app(props))
@@ -266,12 +248,7 @@ def test_tbst014_selected_sorted_row(test, props):
 
 
 @pytest.mark.parametrize(
-    "props",
-    [
-        dict(virtualization=False),
-        dict(virtualization=True),
-        dict(editable=False, row_deletable=False),
-    ],
+    "props", read_write_modes + [dict(editable=False, row_deletable=False),],
 )
 def test_tbst015_selected_row_respects_sort(test, props):
     test.start_server(get_app(props))
@@ -293,9 +270,7 @@ def test_tbst015_selected_row_respects_sort(test, props):
     assert test.get_log_errors() == []
 
 
-@pytest.mark.parametrize(
-    "props", [dict(virtualization=False), dict(virtualization=True)]
-)
+@pytest.mark.parametrize("props", read_write_modes)
 def test_tbst016_delete_cell(test, props):
     test.start_server(get_app(props))
 
@@ -310,9 +285,7 @@ def test_tbst016_delete_cell(test, props):
 
 
 @pytest.mark.skip(reason="https://github.com/plotly/dash-table/issues/700")
-@pytest.mark.parametrize(
-    "props", [dict(virtualization=False), dict(virtualization=True)]
-)
+@pytest.mark.parametrize("props", read_write_modes)
 def test_tbst017_delete_cell_updates_while_selected(test, props):
     test.start_server(get_app(props))
 
@@ -325,9 +298,7 @@ def test_tbst017_delete_cell_updates_while_selected(test, props):
     assert test.get_log_errors() == []
 
 
-@pytest.mark.parametrize(
-    "props", [dict(virtualization=False), dict(virtualization=True)]
-)
+@pytest.mark.parametrize("props", read_write_modes)
 def test_tbst018_delete_multiple_cells(test, props):
     test.start_server(get_app(props))
 
@@ -347,9 +318,7 @@ def test_tbst018_delete_multiple_cells(test, props):
 
 
 @pytest.mark.skip(reason="https://github.com/plotly/dash-table/issues/700")
-@pytest.mark.parametrize(
-    "props", [dict(virtualization=False), dict(virtualization=True)]
-)
+@pytest.mark.parametrize("props", read_write_modes)
 def test_tbst019_delete_multiple_cells_while_selected(test, props):
     test.start_server(get_app(props))
 
@@ -368,9 +337,7 @@ def test_tbst019_delete_multiple_cells_while_selected(test, props):
     assert test.get_log_errors() == []
 
 
-@pytest.mark.parametrize(
-    "props", [dict(virtualization=False), dict(virtualization=True)]
-)
+@pytest.mark.parametrize("props", read_write_modes)
 def test_tbst020_sorted_table_delete_cell(test, props):
     test.start_server(get_app(props))
 
@@ -388,9 +355,7 @@ def test_tbst020_sorted_table_delete_cell(test, props):
 
 
 @pytest.mark.skip(reason="https://github.com/plotly/dash-table/issues/700")
-@pytest.mark.parametrize(
-    "props", [dict(virtualization=False), dict(virtualization=True)]
-)
+@pytest.mark.parametrize("props", read_write_modes)
 def test_tbst021_sorted_table_delete_cell_updates_while_selected(test, props):
     test.start_server(get_app(props))
 
@@ -406,9 +371,7 @@ def test_tbst021_sorted_table_delete_cell_updates_while_selected(test, props):
     assert test.get_log_errors() == []
 
 
-@pytest.mark.parametrize(
-    "props", [dict(virtualization=False), dict(virtualization=True)]
-)
+@pytest.mark.parametrize("props", read_write_modes)
 def test_tbst022_sorted_table_delete_multiple_cells(test, props):
     test.start_server(get_app(props))
 
@@ -431,9 +394,7 @@ def test_tbst022_sorted_table_delete_multiple_cells(test, props):
 
 
 @pytest.mark.skip(reason="https://github.com/plotly/dash-table/issues/700")
-@pytest.mark.parametrize(
-    "props", [dict(virtualization=False), dict(virtualization=True)]
-)
+@pytest.mark.parametrize("props", read_write_modes)
 def test_tbst023_sorted_table_delete_multiple_cells_while_selected(test, props):
     test.start_server(get_app(props))
 
