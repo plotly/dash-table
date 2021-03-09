@@ -10,47 +10,6 @@ Object.values(ReadWriteModes).forEach(mode => {
             DashTable.toggleScroll(false);
         });
 
-        describe('readonly cell', () => {
-            describe('with input', () => {
-                it('does not modify value', () => {
-                    DashTable.clickCellById(0, 'aaa-readonly');
-                    DashTable.getCellById(0, 'aaa-readonly').within(() => {
-                        cy.get('input').should('not.exist');
-                    });
-                });
-            });
-
-            describe('with dropdown', () => {
-                it('does not modify value', () => {
-                    DashTable.clickCellById(0, 'bbb-readonly');
-                    DashTable.getCellById(0, 'bbb-readonly').within(() => {
-                        cy.get('.Select-value-label').should('not.exist');
-                    });
-                });
-            });
-
-            describe('paste', () => {
-                let copiedValue;
-
-                beforeEach(() => {
-                    DashTable.getCellById(0, 'rows').within(
-                        () => cy.get('.dash-cell-value').then($cells => copiedValue = $cells[0].innerHTML)
-                    );
-
-                    DashTable.clickCellById(0, 'rows');
-                    DashTable.focusedType(`${Key.Meta}c`);
-                });
-
-                it('does nothing', () => {
-                    DashTable.clickCellById(0, 'bbb-readonly');
-                    DashTable.focusedType(`${Key.Meta}v`);
-                    DashTable.getCellById(0, 'bbb-readonly').within(
-                        () => cy.get('.dash-cell-value').should('not.have.html', copiedValue)
-                    );
-                });
-            });
-        });
-
         it('can delete dropdown', () => {
             DashTable.getCell(0, 6).trigger('mouseover', { force: true });
             DashTable.getCell(0, 6).within(() => cy.get('.Select-clear').click({ force : true }));

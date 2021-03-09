@@ -81,6 +81,20 @@ class DataTableCellFacade(object):
             )
         )
 
+    def get_input_type(self):
+        el = self.get().find_elements_by_css_selector(".dash-cell-value")
+
+        # check for input
+        if len(el) == 1:
+            return el[0].get_attribute("type")
+
+        dropdown = self.get().find_elements_by_css_selector(".Select-arrow")
+
+        if len(dropdown) == 1:
+            return "dropdown"
+
+        return None
+
     def get_text(self):
         el = self._get_cell_value()
 
