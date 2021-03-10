@@ -9,18 +9,6 @@ Object.values([...BasicModes, AppMode.Markdown, AppMode.MixedMarkdown]).forEach(
             DashTable.toggleScroll(false);
         });
 
-        it('does not change column width', () => {
-            DashTable.getCell(3, 1).then(startCell => {
-                const startWidth = startCell.outerWidth();
-
-                DashTable.getCell(3, 1).then(endCell => {
-                    const endWidth = endCell.outerWidth();
-
-                    expect(endWidth).to.equal(startWidth);
-                });
-            });
-        });
-
         describe('with mouse', () => {
             beforeEach(() => {
                 DashTable.clickCell(3, 1);
