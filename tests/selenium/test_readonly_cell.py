@@ -1,16 +1,16 @@
 import dash
 
-from utils import get_base_props
+from utils import get_props, generate_mock_data
 
 from dash_table import DataTable
 
 import pytest
 
 
-def get_app(props=dict()):
+def get_app(props=dict(), data_fn=generate_mock_data):
     app = dash.Dash(__name__)
 
-    baseProps = get_base_props()
+    baseProps = get_props(data_fn=data_fn)
 
     baseProps.update(props)
 

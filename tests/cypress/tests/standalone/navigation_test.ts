@@ -26,17 +26,6 @@ Object.values([...BasicModes, AppMode.Markdown, AppMode.MixedMarkdown]).forEach(
                 DashTable.clickCell(3, 1);
             });
 
-            it('can select self', () => {
-                DashTable.clickCell(3, 1);
-                DashTable.getCell(3, 1).should('have.class', 'focused');
-            });
-
-            it('can select other', () => {
-                DashTable.clickCell(4, 2);
-                DashTable.getCell(4, 2).should('have.class', 'focused');
-                DashTable.getCell(3, 1).should('not.have.class', 'focused');
-            });
-
             it('can select a cell and scroll it out of the viewport', () => {
                 DashTable.toggleScroll(true);
                 DashTable.clickCell(4, 2);
