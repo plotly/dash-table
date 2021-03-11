@@ -157,6 +157,25 @@ class DataTableColumnFacade(object):
             )
         )
 
+    def exists(self, row=0):
+        self.mixin._wait_for_table(self.id, self.state)
+
+        els = (
+            self.mixin.find_elements(
+                "#{} {} tbody tr:nth-of-type({}) th.dash-header.column-{}:not(.phantom-cell)".format(
+                    self.id, self.state, row + 1, self.col
+                )
+            )
+            if isinstance(self.col, int)
+            else self.mixin.find_elements(
+                '#{} {} tbody tr:nth-of-type({}) th.dash-header[data-dash-column="{}"]:not(.phantom-cell)'.format(
+                    self.id, self.state, row + 1, self.col
+                )
+            )
+        )
+
+        return len(els) != 0
+
     @preconditions(_validate_row)
     def clear(self, row=0):
         self.get(row).find_element_by_css_selector(".column-header--clear").click()
@@ -180,7 +199,7 @@ class DataTableColumnFacade(object):
         return (
             self.get(row)
             .find_element_by_css_selector(".column-header--select input")
-            .checked
+            .is_selected()
         )
 
     @preconditions(_validate_row)

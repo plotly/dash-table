@@ -143,3 +143,105 @@ def test_colm004_can_hide(test):
     assert target.column(0).get_text(2) == "rows"
     assert target.column(1).get_text(2) == "Toronto"
     assert target.column(2).get_text(2) == "Montréal"
+
+
+def test_colm005_dont_clear_hidden(test):
+    test.start_server(get_app())
+
+    target = test.table("table")
+
+    # initial state
+    assert target.cell(0, "ccc").get_text() == "0"
+    assert target.cell(0, "ddd").get_text() == "0"
+    assert target.cell(0, "eee").get_text() == "0"
+    assert target.cell(0, "fff").get_text() == "1"
+    assert target.cell(0, "ggg").get_text() == "0"
+
+    # hide Montreal and Boston
+    target.column("ddd").hide(2)
+    target.column("fff").hide(2)
+
+    # clear all cities
+    target.column("ccc").clear(0)
+
+    toggle = target.toggle_columns()
+
+    toggle.open()
+    assert toggle.is_opened()
+
+    hidden = toggle.get_hidden()
+    assert len(hidden) == 2
+
+    for el in hidden:
+        el.click()
+
+    toggle.close()
+
+    assert target.cell(0, "ccc").get_text() == ""
+    assert target.cell(0, "ddd").get_text() == "0"
+    assert target.cell(0, "eee").get_text() == ""
+    assert target.cell(0, "fff").get_text() == "1"
+    assert target.cell(0, "ggg").get_text() == ""
+
+
+def test_colm006_multi_select(test):
+    test.start_server(get_app(dict(column_selectable="multi")))
+
+    target = test.table("table")
+
+    target.column("ccc").select(0)
+
+    assert not target.column("rows").is_selected(0)
+    assert not target.column("rows").is_selected(1)
+    assert not target.column("rows").is_selected(2)
+
+    for c in ["ccc", "ddd", "eee", "fff", "ggg"]:
+        for r in range(3):
+            if target.column(c).exists(r):
+                assert target.column(c).is_selected(r)
+
+    target.column("rows").select(0)
+
+    for c in ["rows" "ccc", "ddd", "eee", "fff", "ggg"]:
+        for r in range(3):
+            if target.column(c).exists(r):
+                assert target.column(c).is_selected(r)
+
+    target.column("rows").select(0)
+    target.column("ccc").select(0)
+
+    for c in ["rows" "ccc", "ddd", "eee", "fff", "ggg"]:
+        for r in range(3):
+            if target.column(c).exists(r):
+                assert not target.column(c).is_selected(r)
+
+
+def test_colm007_top_row_by_subset(test):
+    test.start_server(get_app(dict(column_selectable="multi")))
+
+    target = test.table("table")
+
+    target.column("ccc").select(1)
+    target.column("ggg").select(1)
+
+    for c in ["rows", "eee", "fff"]:
+        for r in range(3):
+            if target.column(c).exists(r):
+                assert not target.column(c).is_selected(r)
+
+    for c in ["ccc", "ddd", "ggg"]:
+        for r in range(1, 3):
+            if target.column(c).exists(r):
+                assert target.column(c).is_selected(r)
+
+    target.column("eee").select(1)
+
+    for c in ["rows"]:
+        for r in range(3):
+            if target.column(c).exists(r):
+                assert not target.column(c).is_selected(r)
+
+    for c in ["ccc", "ddd", "eee", "fff", "ggg"]:
+        for r in range(3):
+            if target.column(c).exists(r):
+                assert target.column(c).is_selected(r)
