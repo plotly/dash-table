@@ -8,35 +8,6 @@ describe(`column, mode=${AppMode.Actionable}, flavor=${AppFlavor.Merged}, ${AppF
         DashTable.toggleScroll(false);
     });
 
-    it('can delete column', () => {
-        DashTable.getHeader(0, 0).within(() => cy.get('span.column-header-name').should('have.html', 'rows'));
-        DashTable.deleteColumnById(0, 'rows');
-        DashTable.getHeader(0, 0).within(() => cy.get('span.column-header-name').should('have.html', 'City'));
-        DashTable.getHeader(1, 0).within(() => cy.get('span.column-header-name').should('have.html', 'Canada'));
-        DashTable.getHeader(2, 0).within(() => cy.get('span.column-header-name').should('have.html', 'Toronto'));
-        DashTable.deleteColumnById(1, 'ccc'); // Canada
-        DashTable.getHeader(0, 0).within(() => cy.get('span.column-header-name').should('have.html', 'City'));
-        DashTable.getHeader(1, 0).within(() => cy.get('span.column-header-name').should('have.html', 'America'));
-        DashTable.getHeader(2, 0).within(() => cy.get('span.column-header-name').should('have.html', 'New York City'));
-        DashTable.deleteColumnById(0, 'fff'); // Boston
-        DashTable.getHeader(0, 0).within(() => cy.get('span.column-header-name').should('have.html', 'City'));
-        DashTable.getHeader(1, 0).within(() => cy.get('span.column-header-name').should('have.html', 'America'));
-        DashTable.getHeader(2, 0).within(() => cy.get('span.column-header-name').should('have.html', 'New York City'));
-        DashTable.getHeader(0, 1).within(() => cy.get('span.column-header-name').should('have.html', 'France'));
-        DashTable.getHeader(1, 1).within(() => cy.get('span.column-header-name').should('have.html', 'Paris'));
-    });
-
-    it('keeps hidden pieces when deleting a merged column', () => {
-        cy.get('.column-4:not(.phantom-cell) .column-header--hide').click(); // Boston
-        cy.get('.column-2:not(.phantom-cell) .column-header--hide').click(); // Montréal
-        DashTable.deleteColumnById(0, 'ccc'); // City
-        cy.get('.show-hide').click();
-        cy.get('.show-hide-menu-item input').eq(1).click(); // Montréal
-        cy.get('.show-hide-menu-item input').eq(2).click(); // Boston
-        cy.get('.column-1:not(.phantom-cell) .column-header-name').eq(2).should('have.html', 'Montréal');
-        cy.get('.column-2:not(.phantom-cell) .column-header-name').eq(1).should('have.html', 'Boston');
-    });
-
     it('can clear column', () => {
         DashTable.getFilter(0).click();
         DashTable.focusedType(`is num`);
