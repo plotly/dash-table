@@ -458,7 +458,7 @@ def test_tdrp005_filtered_and_sorted_row_select(test):
         "innerHTML"
     ) == json.dumps(list(range(3000, 3100)))
 
-    target.column(rawDf.columns[0]).filter()
+    target.column(rawDf.columns[0]).filter_click()
     test.send_keys("is even" + Keys.ENTER)
 
     assert test.find_element("#active_cell").get_attribute("innerHTML") in [

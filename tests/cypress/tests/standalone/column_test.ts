@@ -8,41 +8,6 @@ describe(`column, mode=${AppMode.Actionable}, flavor=${AppFlavor.Merged}, ${AppF
         DashTable.toggleScroll(false);
     });
 
-    it('can clear column', () => {
-        DashTable.getFilter(0).click();
-        DashTable.focusedType(`is num`);
-        DashTable.getFilter(1).click();
-        DashTable.focusedType(`is num`);
-        DashTable.getFilter(2).click();
-        DashTable.focusedType(`is num`);
-        DashTable.getFilter(3).click();
-        DashTable.focusedType(`is num`);
-        DashTable.getFilter(4).click();
-        DashTable.focusedType(`is num`);
-
-        DashTable.clearColumnById(0, 'rows');
-        DashTable.clearColumnById(1, 'ccc'); // Canada
-        DashTable.clearColumnById(0, 'fff'); // Boston
-
-        DashTable.getHeader(2, 0).within(() => cy.get('span.column-header-name').should('have.html', 'rows'));
-        DashTable.getHeader(2, 1).within(() => cy.get('span.column-header-name').should('have.html', 'Toronto'));
-        DashTable.getHeader(0, 2).within(() => cy.get('span.column-header-name').should('have.html', 'Montréal'));
-        DashTable.getHeader(1, 3).within(() => cy.get('span.column-header-name').should('have.html', 'New York City'));
-        DashTable.getHeader(0, 4).within(() => cy.get('span.column-header-name').should('have.html', 'Boston'));
-
-        DashTable.getCell(0, 0).within(() => cy.get('.dash-cell-value').should('have.html', ''));
-        DashTable.getCell(0, 1).within(() => cy.get('.dash-cell-value').should('have.html', ''));
-        DashTable.getCell(0, 2).within(() => cy.get('.dash-cell-value').should('have.html', ''));
-        DashTable.getCell(0, 3).within(() => cy.get('.dash-cell-value').should('have.html', '1'));
-        DashTable.getCell(0, 4).within(() => cy.get('.dash-cell-value').should('have.html', ''));
-
-        DashTable.getFilter(0).within(() => cy.get('input').should('have.value', ''));
-        DashTable.getFilter(1).within(() => cy.get('input').should('have.value', ''));
-        DashTable.getFilter(2).within(() => cy.get('input').should('have.value', ''));
-        DashTable.getFilter(3).within(() => cy.get('input').should('have.value', 'is num'));
-        DashTable.getFilter(4).within(() => cy.get('input').should('have.value', ''));
-    });
-
     it('keeps hidden pieces when clearing a merged column', () => {
         // initial state of city columns
         DashTable.getCell(0, 1).within(() => cy.get('.dash-cell-value').should('have.html', '1'));
@@ -64,26 +29,6 @@ describe(`column, mode=${AppMode.Actionable}, flavor=${AppFlavor.Merged}, ${AppF
         DashTable.getCell(0, 3).within(() => cy.get('.dash-cell-value').should('have.html', ''));
         DashTable.getCell(0, 4).within(() => cy.get('.dash-cell-value').should('have.html', '2'));
         DashTable.getCell(0, 5).within(() => cy.get('.dash-cell-value').should('have.html', ''));
-    });
-
-    it('can hide column', () => {
-        DashTable.getHeader(0, 0).within(() => cy.get('span.column-header-name').should('have.html', 'rows'));
-        DashTable.hideColumnById(0, 'rows');
-        DashTable.getHeader(0, 0).within(() => cy.get('span.column-header-name').should('have.html', 'City'));
-        DashTable.getHeader(1, 0).within(() => cy.get('span.column-header-name').should('have.html', 'Canada'));
-        DashTable.getHeader(2, 0).within(() => cy.get('span.column-header-name').should('have.html', 'Toronto'));
-        DashTable.hideColumnById(0, 'ccc'); // Canada
-        DashTable.getHeader(0, 0).within(() => cy.get('span.column-header-name').should('have.html', 'City'));
-        DashTable.getHeader(1, 0).within(() => cy.get('span.column-header-name').should('have.html', 'Canada'));
-        DashTable.getHeader(2, 0).within(() => cy.get('span.column-header-name').should('have.html', 'Montréal'));
-        DashTable.hideColumnById(0, 'fff'); // Boston
-        DashTable.getHeader(0, 0).within(() => cy.get('span.column-header-name').should('have.html', 'City'));
-        DashTable.getHeader(1, 0).within(() => cy.get('span.column-header-name').should('have.html', 'Canada'));
-        DashTable.getHeader(0, 1).within(() => cy.get('span.column-header-name').should('have.html', 'America'));
-        DashTable.getHeader(1, 1).within(() => cy.get('span.column-header-name').should('have.html', 'New York City'));
-        DashTable.getHeader(0, 0).within(() => cy.get('span.column-header-name').should('have.html', 'City'));
-        DashTable.getHeader(0, 2).within(() => cy.get('span.column-header-name').should('have.html', 'France'));
-        DashTable.getHeader(1, 2).within(() => cy.get('span.column-header-name').should('have.html', 'Paris'));
     });
 });
 

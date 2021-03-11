@@ -200,11 +200,27 @@ class DataTableColumnFacade(object):
         self.get(row).find_element_by_css_selector(".column-header--sort").click()
 
     def filter(self):
-        return self.mixin.find_element(
-            '#{} {} tbody tr th.dash-filter[data-dash-column="{}"]:not(.phantom-cell)'.format(
-                self.id, self.state, self.col
+        return (
+            self.mixin.find_element(
+                "#{} {} tbody tr th.dash-filter.column-{}:not(.phantom-cell)".format(
+                    self.id, self.state, self.col
+                )
             )
-        ).click()
+            if isinstance(self.col, int)
+            else self.mixin.find_element(
+                '#{} {} tbody tr th.dash-filter[data-dash-column="{}"]:not(.phantom-cell)'.format(
+                    self.id, self.state, self.col
+                )
+            )
+        )
+
+    def filter_click(self):
+        self.filter().click()
+
+    def filter_value(self):
+        return (
+            self.filter().find_element_by_css_selector("input").get_attribute("value")
+        )
 
 
 class DataTableRowFacade(object):

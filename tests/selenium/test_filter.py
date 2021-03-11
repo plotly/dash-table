@@ -69,16 +69,16 @@ def test_filt001_basic(test, props, expect):
 
     target = test.table("table")
 
-    target.column("a").filter()
+    target.column("a").filter_click()
     test.send_keys("gt 3")
 
-    target.column("b").filter()
+    target.column("b").filter_click()
     test.send_keys("is prime")
 
-    target.column("c").filter()
+    target.column("c").filter_click()
     test.send_keys("ne 113")
 
-    target.column("a").filter()
+    target.column("a").filter_click()
 
     for index, value in enumerate(expect):
         assert target.cell(index, "a").get_text() == value

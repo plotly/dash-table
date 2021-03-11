@@ -3,6 +3,7 @@ import dash
 from utils import get_props
 
 from dash_table import DataTable
+from selenium.webdriver.common.keys import Keys
 
 
 def get_app(props=dict()):
@@ -82,3 +83,63 @@ def test_colm002_keep_hidden_on_delete(test):
         el.click()
 
     assert len(toggle.get_hidden()) == 0
+
+
+def test_colm003_can_clear(test):
+    test.start_server(get_app())
+
+    target = test.table("table")
+
+    for i in range(5):
+        target.column(i).filter_click()
+        test.send_keys("is num" + Keys.ENTER)
+
+    target.column("rows").clear(0)  # rows
+    target.column("ccc").clear(1)  # Canada
+    target.column("fff").clear(2)  # Boston
+
+    assert target.cell(0, "rows").get_text() == ""
+    assert target.cell(0, "ccc").get_text() == ""
+    assert target.cell(0, "ddd").get_text() == ""
+    assert target.cell(0, "eee").get_text() == "0"
+    assert target.cell(0, "fff").get_text() == ""
+
+    assert target.column("rows").filter_value() == ""
+    assert target.column("ccc").filter_value() == ""
+    assert target.column("ddd").filter_value() == ""
+    assert target.column("eee").filter_value() == "is num"
+    assert target.column("fff").filter_value() == ""
+
+
+def test_colm004_can_hide(test):
+    test.start_server(get_app())
+
+    target = test.table("table")
+
+    assert target.column(0).get_text(2) == "rows"
+    target.column("rows").hide(2)
+
+    assert target.column(0).get_text(2) == "Toronto"
+    target.column("ccc").hide(2)  # Toronto
+
+    assert target.column(0).get_text(2) == "Montréal"
+    target.column("ddd").hide(2)  # Montreal
+
+    assert target.column(0).get_text(2) == "New York City"
+
+    toggle = target.toggle_columns()
+
+    toggle.open()
+    assert toggle.is_opened()
+
+    hidden = toggle.get_hidden()
+    assert len(hidden) == 3
+
+    for el in hidden:
+        el.click()
+
+    toggle.close()
+
+    assert target.column(0).get_text(2) == "rows"
+    assert target.column(1).get_text(2) == "Toronto"
+    assert target.column(2).get_text(2) == "Montréal"
