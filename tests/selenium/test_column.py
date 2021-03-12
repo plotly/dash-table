@@ -216,7 +216,28 @@ def test_colm006_multi_select(test):
                 assert not target.column(c).is_selected(r)
 
 
-def test_colm007_top_row_by_subset(test):
+def test_colm007_single_select(test):
+    test.start_server(get_app(dict(column_selectable="single")))
+
+    target = test.table("table")
+
+    for select in [
+        ("ccc", 0),
+        ("ccc", 1),
+        ("ccc", 2),
+        ("rows", 0),
+    ]:
+        target.column(select[0]).select(select[1])
+
+        for c in ["rows" "ccc", "ddd", "eee", "fff", "ggg"]:
+            for r in range(3):
+                if target.column(c).exists(r):
+                    assert target.column(c).is_selected(r) == (
+                        c == select[0] and r == select[1]
+                    )
+
+
+def test_colm008_top_row_by_subset(test):
     test.start_server(get_app(dict(column_selectable="multi")))
 
     target = test.table("table")
