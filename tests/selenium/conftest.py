@@ -80,20 +80,15 @@ class DataTableCellFacade(object):
             )
         )
 
-    # MARK -- CLEAN THIS UP! is_text_input, is_dropdown, etc.
-    def get_input_type(self):
+    def is_dropdown(self):
+        el = self.get().find_elements_by_css_selector(".Select-arrow")
+
+        return len(el) == 1
+
+    def is_input(self):
         el = self.get().find_elements_by_css_selector(".dash-cell-value")
 
-        # check for input
-        if len(el) == 1:
-            return el[0].get_attribute("type")
-
-        dropdown = self.get().find_elements_by_css_selector(".Select-arrow")
-
-        if len(dropdown) == 1:
-            return "dropdown"
-
-        return None
+        return len(el) == 1 and el[0].get_attribute("type") is not None
 
     def get_text(self):
         el = self._get_cell_value()

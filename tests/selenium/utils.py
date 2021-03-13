@@ -154,11 +154,20 @@ def generate_mock_data(rows=100):
 def get_props(rows=100, data_fn=generate_mock_data):
     mockProps = data_fn(rows)
 
-    for c in mockProps.get("columns"):
-        c["name"] = c["name"] if "name" in c else c["id"]
-        c["on_change"] = dict(action="none")
-        c["renamable"] = True
-        c["deletable"] = True
+    mockProps.update(
+        dict(
+            columns=[
+                dict(
+                    c,
+                    name=c["name"] if "name" in c else c["id"],
+                    on_change=dict(action="none"),
+                    renamable=True,
+                    deletable=True,
+                )
+                for c in mockProps["columns"]
+            ]
+        )
+    )
 
     baseProps = dict(
         id="table",
@@ -171,7 +180,5 @@ def get_props(rows=100, data_fn=generate_mock_data):
     )
 
     baseProps.update(mockProps)
-
-    baseProps.update(generate_mock_data(rows))
 
     return baseProps

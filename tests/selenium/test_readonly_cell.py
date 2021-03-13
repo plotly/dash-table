@@ -31,10 +31,10 @@ def test_tbed001_readonly_text(test, props):
     cell = target.cell(0, "aaa")
 
     readonly_cell.click()
-    assert readonly_cell.get_input_type() is None
+    assert not readonly_cell.is_input() and not readonly_cell.is_dropdown()
 
     cell.click()
-    assert cell.get_input_type() == "text"
+    assert cell.is_input()
 
     assert test.get_log_errors() == []
 
@@ -51,10 +51,10 @@ def test_tbed002_readonly_dropdown(test, props):
     cell = target.cell(0, "bbb")
 
     readonly_cell.click()
-    assert readonly_cell.get_input_type() is None
+    assert not readonly_cell.is_input() and not readonly_cell.is_dropdown()
 
     cell.click()
-    assert cell.get_input_type() == "dropdown"
+    assert cell.is_dropdown()
     assert test.get_log_errors() == []
 
 
