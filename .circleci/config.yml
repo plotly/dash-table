@@ -7,7 +7,7 @@ jobs:
               environment:
                 PERCY_PARALLEL_TOTAL: -1
             - image: cypress/base:10
-        parallelism: 2
+        parallelism: 4
         steps:
             - checkout
             - run:
