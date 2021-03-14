@@ -48,8 +48,8 @@ def test_tbmu001_select_row(test):
     table1.row(0).select()
     table2.row(1).select()
 
-    assert table1.row(0).is_selected()
-    assert table2.row(1).is_selected()
+    wait.until(lambda: table1.row(0).is_selected(), 3)
+    wait.until(lambda: table2.row(1).is_selected(), 3)
 
     assert test.get_log_errors() == []
 
