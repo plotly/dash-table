@@ -87,7 +87,7 @@ jobs:
 
     "visual-test":
         docker:
-            - image: circleci/node:10-browsers
+            - image: circleci/node:14-browsers
         steps:
             - checkout
             - run:
@@ -104,7 +104,7 @@ jobs:
 
     "node":
         docker:
-            - image: circleci/python:3.7.5-node
+            - image: circleci/python:3.9.2-node
         steps:
             - checkout
             - run:
