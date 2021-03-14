@@ -45,9 +45,10 @@ def test_tbmu001_select_row(test):
     table1 = test.table(ids[0])
     table2 = test.table(ids[1])
 
-    table1.row(0).select()
     table2.row(1).select()
+    wait.until(lambda: table2.row(1).is_selected(), 3)
 
+    table1.row(0).select()
     wait.until(lambda: table1.row(0).is_selected(), 3)
     wait.until(lambda: table2.row(1).is_selected(), 3)
 
