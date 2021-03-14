@@ -1,3 +1,5 @@
+from datetime import date, timedelta
+
 read_write_modes = [dict(virtualization=False), dict(virtualization=True)]
 basic_modes = read_write_modes + [dict(editable=False)]
 
@@ -147,6 +149,31 @@ def generate_mock_data(rows=100):
             },
         ],
     )
+
+
+def generate_mock_data_with_date(rows=100):
+    props = generate_mock_data(rows)
+
+    for c in props["columns"]:
+        if c["id"] == "ccc":
+            c.update(
+                dict(
+                    name=["Date", "only"],
+                    type="datetime",
+                    validation=dict(allow_YY=True),
+                )
+            )
+        elif c["id"] == "ddd":
+            c.update(dict(name=["Date", "with", "time"], type="datetime"))
+
+    for i in range(len(props["data"])):
+        d = props["data"][i]
+        d["ccc"] = (date(2018, 1, 1) + timedelta(days=3 * i)).strftime("%Y-%m-%d")
+        d["ddd"] = (date(2018, 1, 1) + timedelta(seconds=7211 * i)).strftime(
+            "%Y-%m-%d %H:%M:%S"
+        )
+
+    return props
 
 
 def get_props(rows=100, data_fn=generate_mock_data):
