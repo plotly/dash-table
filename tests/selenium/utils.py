@@ -54,9 +54,7 @@ def generate_markdown_mock_data(rows=100):
                 """.format(
                     i
                 ),
-                "markdown-images": "![image {0} alt text](https://dash.plotly.com/assets/images/logo.png)".format(
-                    i
-                ),
+                "markdown-images": "![image {0} alt text](assets/logo.png)".format(i),
             }
             for i in range(rows)
         ],
