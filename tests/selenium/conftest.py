@@ -63,6 +63,29 @@ class DataTableCellFacade(object):
         ac.double_click()
         return ac.perform()
 
+    def exists(self):
+        self.mixin._wait_for_table(self.id, self.state)
+
+        return (
+            len(
+                self.mixin.find_elements(
+                    '#{} {} tbody td.dash-cell.column-{}[data-dash-row="{}"]:not(.phantom-cell)'.format(
+                        self.id, self.state, self.col, self.row
+                    )
+                )
+            )
+            == 1
+            if isinstance(self.col, int)
+            else len(
+                self.mixin.find_elements(
+                    '#{} {} tbody td.dash-cell[data-dash-column="{}"][data-dash-row="{}"]:not(.phantom-cell)'.format(
+                        self.id, self.state, self.col, self.row
+                    )
+                )
+            )
+            == 1
+        )
+
     def get(self):
         self.mixin._wait_for_table(self.id, self.state)
 

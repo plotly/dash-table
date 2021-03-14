@@ -3,43 +3,6 @@ import Key from 'cypress/Key';
 
 import { AppMode, AppFlavor } from 'demo/AppMode';
 
-describe(`filter special characters`, () => {
-    beforeEach(() => {
-        cy.visit(`http://localhost:8080?mode=${AppMode.ColumnsInSpace}`);
-        DashTable.toggleScroll(false);
-    });
-
-    it('can filter on special column id', () => {
-        DashTable.clickFilterInputById('b+bb');
-        DashTable.focusedType(`Wet${Key.Enter}`);
-
-        DashTable.clickFilterInputById('c cc');
-        DashTable.focusedType(`gt 90${Key.Enter}`);
-
-        DashTable.clickFilterInputById('d:dd');
-        DashTable.focusedType(`lt 12500${Key.Enter}`);
-
-        DashTable.clickFilterInputById('e-ee');
-        DashTable.focusedType(`is prime${Key.Enter}`);
-
-        DashTable.clickFilterInputById('f_ff');
-        DashTable.focusedType(`le 106${Key.Enter}`);
-
-        DashTable.clickFilterInputById('g.gg');
-        DashTable.focusedType(`gt 1000${Key.Enter}`);
-        DashTable.clickFilterInputById('b+bb');
-
-        DashTable.getCellById(0, 'rows').within(() => cy.get('.dash-cell-value').should('have.html', '101'));
-        DashTable.getCellById(1, 'rows').should('not.exist');
-        DashTable.getFilterInputById('b+bb').should('have.value', 'Wet');
-        DashTable.getFilterInputById('c cc').should('have.value', 'gt 90');
-        DashTable.getFilterInputById('d:dd').should('have.value', 'lt 12500');
-        DashTable.getFilterInputById('e-ee').should('have.value', 'is prime');
-        DashTable.getFilterInputById('f_ff').should('have.value', 'le 106');
-        DashTable.getFilterInputById('g.gg').should('have.value', 'gt 1000');
-    });
-});
-
 describe('filter', () => {
     beforeEach(() => {
         cy.visit(`http://localhost:8080?mode=${AppMode.Default}&flavor=${AppFlavor.FilterNative}`);
