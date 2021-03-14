@@ -3,69 +3,6 @@ import Key from 'cypress/Key';
 
 import { AppMode } from 'demo/AppMode';
 
-describe(`edit, mode=${AppMode.Typed}`, () => {
-    beforeEach(() => {
-        cy.visit(`http://localhost:8080?mode=${AppMode.Typed}`);
-        DashTable.toggleScroll(false);
-    });
-
-    it('can edit number cell with a number string', () => {
-        DashTable.clickCellById(0, 'ccc');
-        DashTable.focusedType(`123${Key.Enter}`);
-        DashTable.getCellById(0, 'ccc').within(() => cy.get('.dash-cell-value').should('have.html', `123`));
-    });
-
-    it('cannot edit number cell with a non-number string', () => {
-        DashTable.clickCellById(0, 'ccc');
-        DashTable.focusedType(`abc${Key.Enter}`);
-        DashTable.getCellById(0, 'ccc').within(() => cy.get('.dash-cell-value').should('not.have.html', `abc`));
-    });
-
-    describe('copy/paste', () => {
-        describe('string into a number', () => {
-            let copiedValue;
-
-            beforeEach(() => {
-                DashTable.getCellById(0, 'bbb-readonly').within(
-                    () => cy.get('.dash-cell-value').then($cells => copiedValue = $cells[0].innerHTML)
-                );
-
-                DashTable.clickCellById(0, 'bbb-readonly');
-                DashTable.focusedType(`${Key.Meta}c`);
-            });
-
-            it('does nothing', () => {
-                DashTable.clickCellById(0, 'ccc');
-                DashTable.focusedType(`${Key.Meta}v`);
-                DashTable.getCellById(0, 'ccc').within(
-                    () => cy.get('.dash-cell-value').should('not.have.value', copiedValue)
-                );
-            });
-        });
-
-        describe('number into a number', () => {
-            let copiedValue;
-
-            beforeEach(() => {
-                DashTable.getCellById(0, 'ddd').within(
-                    () => cy.get('.dash-cell-value').then($cells => copiedValue = $cells[0].innerHTML)
-                );
-
-                DashTable.clickCellById(0, 'ddd');
-                DashTable.focusedType(`${Key.Meta}c`);
-            });
-
-            it('copies value', () => {
-                DashTable.clickCellById(0, 'ccc');
-                DashTable.focusedType(`${Key.Meta}v`);
-                DashTable.getCellById(0, 'ccc').within(
-                    () => cy.get('.dash-cell-value').should('have.value', copiedValue)
-                );
-            });
-        });
-    });
-});
-
 describe(`edit, mode=${AppMode.Date}`, () => {
     beforeEach(() => {
         cy.visit(`http://localhost:8080?mode=${AppMode.Date}`);
