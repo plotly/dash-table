@@ -1,4 +1,5 @@
 import dash
+from dash.testing import wait
 
 from utils import (
     basic_modes,
@@ -37,9 +38,11 @@ def test_mnav001_navigate_to_self(test, props, data_fn):
     cell = target.cell(3, 1)
 
     cell.click()
-    cell.click()
+    wait.until(lambda: cell.is_focused(), 3)
 
-    assert cell.is_focused()
+    cell.click()
+    wait.until(lambda: cell.is_focused(), 3)
+
     assert test.get_log_errors() == []
 
 
@@ -56,8 +59,10 @@ def test_mnav002_navigate_to_other(test, props, data_fn):
     cell2 = target.cell(4, 2)
 
     cell1.click()
-    cell2.click()
+    wait.until(lambda: cell1.is_focused(), 3)
 
-    assert not cell1.is_focused()
-    assert cell2.is_focused()
+    cell2.click()
+    wait.until(lambda: cell2.is_focused(), 3)
+    wait.until(lambda: not cell1.is_focused(), 3)
+
     assert test.get_log_errors() == []
