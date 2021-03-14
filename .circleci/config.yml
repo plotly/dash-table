@@ -7,7 +7,6 @@ jobs:
               environment:
                 PERCY_PARALLEL_TOTAL: -1
             - image: cypress/base:10
-        parallelism: 4
         steps:
             - checkout
             - run:
@@ -40,8 +39,7 @@ jobs:
                 name: Run tests
                 command: |
                     . venv/bin/activate
-                    TESTFILES=$(circleci tests glob tests/selenium/**/*.py | circleci tests split --split-by=timings)
-                    pytest --headless --nopercyfinalize --junitxml=test-reports/junit_intg.xml ${TESTFILES}
+                    npm run test.server
             - store_artifacts:
                 path: test-reports
             - store_test_results:
