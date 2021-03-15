@@ -69,15 +69,9 @@ def test_filt001_basic(test, props, expect):
 
     target = test.table("table")
 
-    target.column("a").filter_click()
-    test.send_keys("gt 3")
-
-    target.column("b").filter_click()
-    test.send_keys("is prime")
-
-    target.column("c").filter_click()
-    test.send_keys("ne 113")
-
+    target.column("a").filter_value("gt 3")
+    target.column("b").filter_value("is prime")
+    target.column("c").filter_value("ne 113")
     target.column("a").filter_click()
 
     for index, value in enumerate(expect):

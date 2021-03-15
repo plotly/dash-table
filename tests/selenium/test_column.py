@@ -3,7 +3,6 @@ import dash
 from utils import get_props
 
 from dash_table import DataTable
-from selenium.webdriver.common.keys import Keys
 
 
 def get_app(props=dict()):
@@ -91,8 +90,7 @@ def test_colm003_can_clear(test):
     target = test.table("table")
 
     for i in range(5):
-        target.column(i).filter_click()
-        test.send_keys("is num" + Keys.ENTER)
+        target.column(i).filter_value("is num")
 
     target.column("rows").clear(0)  # rows
     target.column("ccc").clear(1)  # Canada

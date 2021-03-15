@@ -254,10 +254,19 @@ class DataTableColumnFacade(object):
     def filter_click(self):
         self.filter().click()
 
-    def filter_value(self):
-        return (
-            self.filter().find_element_by_css_selector("input").get_attribute("value")
-        )
+    def filter_invalid(self):
+        return "invalid" in self.filter().get_attribute("class").split(" ")
+
+    def filter_value(self, value=None):
+        if value is None:
+            return (
+                self.filter()
+                .find_element_by_css_selector("input")
+                .get_attribute("value")
+            )
+        else:
+            self.filter_click()
+            self.mixin.driver.switch_to.active_element.send_keys(value)
 
 
 class DataTableRowFacade(object):
