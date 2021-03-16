@@ -266,7 +266,7 @@ class DataTableColumnFacade(object):
             )
         else:
             self.filter_click()
-            self.mixin.driver.switch_to.active_element.send_keys(value)
+            self.mixin.driver.switch_to.active_element.send_keys(value + Keys.ENTER)
 
 
 class DataTableRowFacade(object):

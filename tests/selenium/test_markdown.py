@@ -1,8 +1,10 @@
 import dash
+from dash.testing import wait
 
 from utils import get_props, generate_markdown_mock_data
 
 from dash_table import DataTable
+import pytest
 
 
 def get_app(props=dict(), data_fn=generate_markdown_mock_data):
@@ -10,7 +12,7 @@ def get_app(props=dict(), data_fn=generate_markdown_mock_data):
 
     baseProps = get_props(data_fn=data_fn)
 
-    baseProps.update(dict(sort_action="native"))
+    baseProps.update(dict(filter_action="native", sort_action="native"))
     baseProps.update(props)
 
     app.layout = DataTable(**baseProps)
@@ -136,3 +138,54 @@ def test_mark005_table(test):
         .get_attribute("innerHTML")
         == "99"
     )
+
+
+@pytest.mark.parametrize(
+    "filter", ["Learn about 97", "/wiki/97"],
+)
+def test_mark006_filter_link_text(test, filter):
+    test.start_server(get_app())
+
+    target = test.table("table")
+    target.column("markdown-links").filter_value(filter)
+
+    assert (
+        target.cell(0, "markdown-links")
+        .get()
+        .find_element_by_css_selector(".dash-cell-value > p > a")
+        .get_attribute("href")
+        == "http://en.wikipedia.org/wiki/97"
+    )
+    assert not target.cell(1, "markdown-links").exists()
+
+
+def test_mark007_filter_image_alt_text(test):
+    test.start_server(get_app())
+
+    target = test.table("table")
+    target.column("markdown-images").filter_value("97")
+
+    assert (
+        target.cell(0, "markdown-images")
+        .get()
+        .find_element_by_css_selector(".dash-cell-value > p > img")
+        .get_attribute("alt")
+        == "image 97 alt text"
+    )
+    assert not target.cell(1, "markdown-images").exists()
+
+
+def test_mark008_loads_highlightjs(test):
+    test.start_server(get_app())
+
+    target = test.table("table")
+    wait.until(
+        lambda: len(
+            target.cell(0, "markdown-code-blocks")
+            .get()
+            .find_elements_by_css_selector("code.language-python")
+        )
+        == 1,
+        3,
+    )
+    assert not test.driver.execute_script("return !!window.hljs")
