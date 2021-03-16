@@ -1,13 +1,15 @@
 import dash
+from dash.dependencies import Input, Output
 
 from utils import get_props
 
 from dash_table import DataTable
+from dash_html_components import Div, Button
 from selenium.webdriver.common.action_chains import ActionChains
 import pytest
 
 
-def get_app(props=dict(), special=False):
+def get_app(props=dict(), special=False, clear=False):
     app = dash.Dash(__name__)
 
     baseProps = get_props(rows=200)
@@ -39,7 +41,17 @@ def get_app(props=dict(), special=False):
     baseProps.update(dict(filter_action="native"))
     baseProps.update(props)
 
-    app.layout = DataTable(**baseProps)
+    if clear:
+        app.layout = Div(
+            [DataTable(**baseProps), Button(id="btn", children=["Clear filters"])]
+        )
+
+        @app.callback(Output("table", "filter_query"), Input("btn", "n_clicks"))
+        def get_filter(n_clicks):
+            return ""
+
+    else:
+        app.layout = DataTable(**baseProps)
 
     return app
 
@@ -153,3 +165,47 @@ def test_spfi006_relational_operator_space(test, filter, success):
         assert target.cell(4, "ccc").get_text() == "4"
     else:
         assert not target.cell(0, "ccc").exists()
+
+
+def test_spfi007_invalid_and_valid_no_reset(test):
+    test.start_server(get_app())
+
+    target = test.table("table")
+    target.column("ccc").filter_value("is prime2")
+    target.column("ddd").filter_value("lt 20000")
+    target.column("eee").filter_click()
+
+    assert target.column("ccc").filter_value() == "is prime2"
+    assert target.column("ddd").filter_value() == "lt 20000"
+
+
+def test_spfi008_reset_updates(test):
+    test.start_server(get_app(clear=True))
+
+    target = test.table("table")
+    ccc0 = target.cell(0, "ccc").get_text()
+    ccc1 = target.cell(1, "ccc").get_text()
+
+    target.column("bbb").filter_value("Wet")
+    target.column("ccc").filter_value("gt 80")
+    target.column("ddd").filter_value("lt 12500")
+    target.column("eee").filter_value("is prime")
+    target.column("ccc").filter_click()
+
+    assert target.cell(0, "ccc").get_text() == "89"
+    assert target.cell(1, "ccc").get_text() == "97"
+
+    assert target.column("bbb").filter_value() == "Wet"
+    assert target.column("ccc").filter_value() == "gt 80"
+    assert target.column("ddd").filter_value() == "lt 12500"
+    assert target.column("eee").filter_value() == "is prime"
+
+    test.driver.find_element_by_css_selector("#btn").click()
+
+    assert target.cell(0, "ccc").get_text() == ccc0
+    assert target.cell(1, "ccc").get_text() == ccc1
+
+    assert target.column("bbb").filter_value() == ""
+    assert target.column("ccc").filter_value() == ""
+    assert target.column("ddd").filter_value() == ""
+    assert target.column("eee").filter_value() == ""
