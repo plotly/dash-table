@@ -96,6 +96,7 @@ def test_spfi002_handles_hovering(test):
 
     assert target.column("ccc").filter_value() == "gt 100"
     assert target.column("ddd").filter_value() == "lt 20000"
+    assert test.get_log_errors() == []
 
 
 def test_spfi003_handles_invalid_queries(test):
@@ -121,6 +122,7 @@ def test_spfi003_handles_invalid_queries(test):
     assert target.column("ddd").filter_invalid()
     assert target.column("eee").filter_invalid()
     assert target.column("bbb").filter_invalid()
+    assert test.get_log_errors() == []
 
 
 def test_spfi004_defaults_to_contains_on_text_column(test):
@@ -132,6 +134,7 @@ def test_spfi004_defaults_to_contains_on_text_column(test):
 
     assert target.column("bbb").filter_value() == "Tr"
     assert target.cell(0, "bbb-readonly").get_text() == "label Tropical Beaches"
+    assert test.get_log_errors() == []
 
 
 def test_spfi005_defaults_to_equal_on_numeric_column(test):
@@ -143,6 +146,7 @@ def test_spfi005_defaults_to_equal_on_numeric_column(test):
 
     assert target.column("ccc").filter_value() == "100"
     assert target.cell(0, "ccc").get_text() == "100"
+    assert test.get_log_errors() == []
 
 
 @pytest.mark.parametrize(
@@ -166,6 +170,8 @@ def test_spfi006_relational_operator_space(test, filter, success):
     else:
         assert not target.cell(0, "ccc").exists()
 
+    assert test.get_log_errors() == []
+
 
 def test_spfi007_invalid_and_valid_no_reset(test):
     test.start_server(get_app())
@@ -177,6 +183,7 @@ def test_spfi007_invalid_and_valid_no_reset(test):
 
     assert target.column("ccc").filter_value() == "is prime2"
     assert target.column("ddd").filter_value() == "lt 20000"
+    assert test.get_log_errors() == []
 
 
 def test_spfi008_reset_updates(test):
@@ -209,3 +216,4 @@ def test_spfi008_reset_updates(test):
     assert target.column("ccc").filter_value() == ""
     assert target.column("ddd").filter_value() == ""
     assert target.column("eee").filter_value() == ""
+    assert test.get_log_errors() == []
