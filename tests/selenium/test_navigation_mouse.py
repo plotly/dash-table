@@ -6,7 +6,7 @@ from utils import (
     get_props,
     generate_mock_data,
     generate_markdown_mock_data,
-    generate_sparse_markdown_data,
+    generate_mixed_markdown_data,
 )
 
 from dash_table import DataTable
@@ -29,7 +29,7 @@ def get_app(props, data_fn):
 @pytest.mark.parametrize("props", basic_modes)
 @pytest.mark.parametrize(
     "data_fn",
-    [generate_mock_data, generate_markdown_mock_data, generate_sparse_markdown_data],
+    [generate_mock_data, generate_markdown_mock_data, generate_mixed_markdown_data],
 )
 def test_mnav001_navigate_to_self(test, props, data_fn):
     test.start_server(get_app(props, data_fn))
@@ -49,7 +49,7 @@ def test_mnav001_navigate_to_self(test, props, data_fn):
 @pytest.mark.parametrize("props", basic_modes)
 @pytest.mark.parametrize(
     "data_fn",
-    [generate_mock_data, generate_markdown_mock_data, generate_sparse_markdown_data],
+    [generate_mock_data, generate_markdown_mock_data, generate_mixed_markdown_data],
 )
 def test_mnav002_navigate_to_other(test, props, data_fn):
     test.start_server(get_app(props, data_fn))

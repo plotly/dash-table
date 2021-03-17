@@ -6,7 +6,7 @@ from utils import (
     get_props,
     generate_mock_data,
     generate_markdown_mock_data,
-    generate_sparse_markdown_data,
+    generate_mixed_markdown_data,
 )
 
 from dash.dependencies import Input, Output
@@ -343,7 +343,7 @@ def test_szng003_on_prop_change(
 @pytest.mark.parametrize("props", basic_modes)
 @pytest.mark.parametrize(
     "data_fn",
-    [generate_mock_data, generate_markdown_mock_data, generate_sparse_markdown_data],
+    [generate_mock_data, generate_markdown_mock_data, generate_mixed_markdown_data],
 )
 def test_szng004_on_focus(test, props, data_fn):
     app = dash.Dash(__name__)

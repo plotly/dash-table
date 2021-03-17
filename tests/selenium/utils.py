@@ -63,8 +63,44 @@ def generate_markdown_mock_data(rows=100):
     )
 
 
-def generate_sparse_markdown_data(rows=100):
-    return dict(columns=[], data=[{} for i in range(rows)])
+def generate_mixed_markdown_data(rows=100):
+    return dict(
+        columns=[
+            dict(id="not-markdown-column", name=["Not Markdown"], editable=True),
+            dict(
+                id="markdown-column",
+                name=["Markdown"],
+                type="text",
+                presentation="markdown",
+            ),
+            dict(
+                id="also-not-markdown-column",
+                name=["Also Not Markdown"],
+                editable=False,
+            ),
+            dict(
+                id="also-also-not-markdown-column",
+                name=["Also Also Not Markdown"],
+                editable=True,
+            ),
+        ],
+        data=[
+            {
+                "not-markdown-column": "this is not a markdown cell",
+                "markdown-column": """```javascript
+console.warn("this is a markdown cell")
+```"""
+                if i % 2 == 0
+                else """```javascript
+console.log("logging things")
+console.warn("this is a markdown cell")
+```""",
+                "also-not-markdown-column": i,
+                "also-also-not-markdown-column": "this is also also not a markdown cell",
+            }
+            for i in range(rows)
+        ],
+    )
 
 
 def generate_mock_data(rows=100):
