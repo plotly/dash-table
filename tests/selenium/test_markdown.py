@@ -7,8 +7,12 @@ from dash_table import DataTable
 import pytest
 
 
-def get_app(props=dict(), data_fn=generate_markdown_mock_data):
-    app = dash.Dash(__name__)
+def get_app(props=dict(), data_fn=generate_markdown_mock_data, assets_folder=None):
+    app = (
+        dash.Dash(__name__)
+        if assets_folder is None
+        else dash.Dash(__name__, assets_folder=assets_folder)
+    )
 
     baseProps = get_props(data_fn=data_fn)
 
@@ -188,4 +192,34 @@ def test_mark008_loads_highlightjs(test):
         == 1,
         3,
     )
-    assert not test.driver.execute_script("return !!window.hljs")
+
+    # table loads a private instance of hljs that isn't shared globally
+    wait.until(lambda: not test.driver.execute_script("return !!window.hljs"), 3)
+    assert test.get_log_errors() == []
+
+
+def test_mark009_loads_custom_highlightjs(test):
+    test.start_server(get_app(assets_folder="./test_markdown_assets"))
+
+    target = test.table("table")
+    wait.until(
+        lambda: len(
+            target.cell(0, "markdown-code-blocks")
+            .get()
+            .find_elements_by_css_selector("code.language-python")
+        )
+        == 1,
+        3,
+    )
+
+    wait.until(
+        lambda: target.cell(0, "markdown-code-blocks")
+        .get()
+        .find_element_by_css_selector("code.language-python")
+        .get_attribute("innerHTML")
+        == "hljs override",
+        3,
+    )
+
+    wait.until(lambda: test.driver.execute_script("return !!window.hljs"), 3)
+    assert test.get_log_errors() == []
