@@ -24,6 +24,23 @@ def get_app(props=dict()):
     return app
 
 
+def get_sigle_row_app(props=dict()):
+    app = dash.Dash(__name__)
+
+    baseProps = get_props()
+    baseProps.update(
+        dict(
+            columns=[dict(c, hideable=True, name=c["id"]) for c in baseProps["columns"]]
+        )
+    )
+
+    baseProps.update(props)
+
+    app.layout = DataTable(**baseProps)
+
+    return app
+
+
 @pytest.mark.parametrize("row", [0, 1, 2])
 def test_head001_renames_only_row(test, row):
     test.start_server(get_app())
@@ -66,8 +83,6 @@ def test_head002_preserves_hidden_columns_on_rename(test):
     target.column(6).hide(2)
     target.column(1).hide(2)
 
-    assert test.get_log_errors() == []
-
     target.column(5).edit()
 
     alert = test.driver.switch_to.alert
@@ -84,3 +99,36 @@ def test_head002_preserves_hidden_columns_on_rename(test):
     wait.until(lambda: target.column(6).get().get_attribute("colspan") == "4", 3)
 
     assert target.column(6).get_text() == "Chill"
+    assert test.get_log_errors() == []
+
+
+def test_head003_preserves_column_name_on_cancel(test):
+    test.start_server(get_app())
+
+    target = test.table("table")
+
+    target.column("rows").edit(0)
+
+    alert = test.driver.switch_to.alert
+    time.sleep(2)
+    alert.send_keys("Chill")
+    alert.dismiss()
+
+    assert target.column("rows").get_text(0) == "rows"
+    assert test.get_log_errors() == []
+
+
+def test_head004_change_single_row_header(test):
+    test.start_server(get_sigle_row_app())
+
+    target = test.table("table")
+
+    target.column("rows").edit(0)
+
+    alert = test.driver.switch_to.alert
+    time.sleep(2)
+    alert.send_keys("Chill")
+    alert.accept()
+
+    assert target.column("rows").get_text(0) == "Chill"
+    assert test.get_log_errors() == []
