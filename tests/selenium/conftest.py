@@ -109,7 +109,7 @@ class DataTableCellFacade(object):
         return len(el) == 1
 
     def is_input(self):
-        el = self._get_cell_value()
+        el = self.get().find_elements_by_css_selector(".dash-cell-value")
 
         return len(el) == 1 and el[0].get_attribute("type") is not None
 
