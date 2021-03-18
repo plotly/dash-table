@@ -208,6 +208,10 @@ class DataTableColumnFacade(object):
         self.get(row).find_element_by_css_selector(".column-header--delete").click()
 
     @preconditions(_validate_row)
+    def edit(self, row=0):
+        self.get(row).find_element_by_css_selector(".column-header--edit").click()
+
+    @preconditions(_validate_row)
     def get_text(self, row=0):
         el = self.get(row).find_element_by_css_selector("span.column-header-name")
 

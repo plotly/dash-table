@@ -32,6 +32,8 @@ def test_edit001_can_delete_dropdown(test, props):
     cell.get().find_element_by_css_selector(".Select-clear").click()
     assert cell.get().find_element_by_css_selector(".Select-placeholder") is not None
 
+    assert test.get_log_errors() == []
+
 
 @pytest.mark.parametrize("props", read_write_modes)
 def test_edit002_can_delete_dropown_and_set(test, props):
@@ -50,6 +52,8 @@ def test_edit002_can_delete_dropown_and_set(test, props):
     cell.get().find_element_by_css_selector(".Select-option").click()
 
     assert len(cell.get().find_elements_by_css_selector(".Select-placeholder")) == 0
+
+    assert test.get_log_errors() == []
 
 
 @pytest.mark.parametrize("props", read_write_modes)
@@ -75,6 +79,8 @@ def test_edit003_can_edit_dropdown(test, props):
             == value
         )
         cell.get().find_element_by_css_selector(".Select-arrow").click()
+
+    assert test.get_log_errors() == []
 
 
 @pytest.mark.parametrize("props", read_write_modes)
