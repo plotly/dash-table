@@ -67,6 +67,7 @@ def test_knav002_can_move(test, props, key, d_column, d_row):
 
     assert not target.cell(3, 1).is_focused()
     assert target.cell(3 + d_row, 1 + d_column).is_focused()
+    assert test.get_log_errors() == []
 
 
 # Issue: https://github.com/plotly/dash-table/issues/49
@@ -81,6 +82,7 @@ def test_knav003_can_move_after_copy(test, props):
     test.send_keys(Keys.ARROW_DOWN)
     assert not target.cell(3, 1).is_focused()
     assert target.cell(4, 1).is_focused()
+    assert test.get_log_errors() == []
 
 
 def test_knav004_can_move_out_of_viewport(test):
@@ -95,3 +97,4 @@ def test_knav004_can_move_out_of_viewport(test):
     test.send_keys(Keys.ARROW_RIGHT)
 
     assert target.cell(28, 2).is_focused()
+    assert test.get_log_errors() == []
