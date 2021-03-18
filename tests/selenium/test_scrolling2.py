@@ -38,7 +38,7 @@ def get_app(props, data_fn):
     "data_fn",
     [generate_mock_data, generate_markdown_mock_data, generate_mixed_markdown_data],
 )
-def test_scrv001_select_an_scroll(test, props, data_fn):
+def test_scrv001_select_on_scroll(test, props, data_fn):
     test.start_server(get_app(props, data_fn))
 
     target = test.table("table")
@@ -49,5 +49,5 @@ def test_scrv001_select_an_scroll(test, props, data_fn):
     test.driver.find_element_by_css_selector(
         "tr:last-of-type td:not(.phantom-cell)"
     ).click()
-    assert not target.cell(2, 2).is_focused()
+    assert not target.cell(2, 2).exists() or not target.cell(2, 2).is_focused()
     assert test.get_log_errors() == []
