@@ -25,7 +25,6 @@ module.exports = (options = {}) => {
         mode: mode,
         output: {
             path: path.resolve(__dirname, `./../../${dashLibraryName}`),
-            chunkFilename: '[name].js',
             filename: '[name].js',
             library: dashLibraryName,
             libraryTarget: 'window'
@@ -40,7 +39,10 @@ module.exports = (options = {}) => {
             rules: [
                 {
                     test: /demo[\\\/]index.html?$/,
-                    loader: 'file-loader?name=index.[ext]'
+                    loader: 'file-loader',
+                    options: {
+                        name: 'index.[ext]'
+                    }
                 },
                 {
                     test: /\.csv$/,
@@ -108,7 +110,7 @@ module.exports = (options = {}) => {
         optimization: {
             splitChunks: {
                 chunks: 'async',
-                name: true,
+                name: '[name].js',
                 cacheGroups: {
                     async: {
                         chunks: 'async',
