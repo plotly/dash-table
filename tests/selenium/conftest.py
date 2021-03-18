@@ -109,7 +109,7 @@ class DataTableCellFacade(object):
         return len(el) == 1
 
     def is_input(self):
-        el = self.get().find_elements_by_css_selector(".dash-cell-value")
+        el = self._get_cell_value()
 
         return len(el) == 1 and el[0].get_attribute("type") is not None
 
@@ -142,6 +142,11 @@ class DataTableCellFacade(object):
         cell = self.get()
 
         return "focused" in cell.get_attribute("class").split(" ")
+
+    def is_value_focused(self):
+        el = self._get_cell_value()
+
+        return "focused" in el.get_attribute("class").split(" ")
 
     def open_dropdown(self):
         cell = self.get()

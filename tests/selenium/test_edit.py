@@ -75,3 +75,22 @@ def test_edit003_can_edit_dropdown(test, props):
             == value
         )
         cell.get().find_element_by_css_selector(".Select-arrow").click()
+
+
+@pytest.mark.parametrize("props", read_write_modes)
+def test_edit004_edit_focused(test, props):
+    test.start_server(get_app(props))
+
+    target = test.table("table")
+
+    c1 = target.cell(3, 1)
+    c1.click()
+
+    test.send_keys("abc")
+    # Selected everything again on click
+    c1.click()
+    test.send_keys("def")
+
+    assert c1.get_text() == "def"
+
+    assert test.get_log_errors() == []

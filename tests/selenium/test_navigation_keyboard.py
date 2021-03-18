@@ -1,6 +1,6 @@
 import dash
 
-from utils import basic_modes, get_props, generate_mock_data
+from utils import basic_modes, get_props, generate_mock_data, read_write_modes
 
 from dash_table import DataTable
 
@@ -154,5 +154,127 @@ def test_knav007_can_select_down_then_right(test, props):
             assert target.cell(row, col).is_selected() == (
                 row in [3, 4] and col in [1, 2]
             )
+
+    assert test.get_log_errors() == []
+
+
+@pytest.mark.parametrize("props", read_write_modes)
+@pytest.mark.parametrize(
+    "keys,row,col", [(Keys.ENTER, 4, 1), ("abc" + Keys.ENTER, 4, 1), (Keys.TAB, 3, 2),]
+)
+def test_knav008_focus_cell_on_enter(test, props, keys, row, col):
+    test.start_server(get_app(props))
+
+    target = test.table("table")
+
+    c1 = target.cell(3, 1)
+    c2 = target.cell(row, col)
+
+    # focus on cell content
+    c1.double_click()
+    assert c1.is_focused()
+    assert c1.is_value_focused()
+
+    # moves to next cell
+    test.send_keys(keys)
+
+    # unfocus previous cell & content, focus new cell but not content
+    assert not c1.is_focused()
+    assert not c1.is_value_focused()
+
+    assert c2.is_focused()
+    assert not c2.is_value_focused()
+
+    assert test.get_log_errors() == []
+
+
+@pytest.mark.parametrize("props", read_write_modes)
+def test_knav009_arrows_move_caret(test, props):
+    test.start_server(get_app(props))
+
+    target = test.table("table")
+
+    c1 = target.cell(3, 1)
+    c1.double_click()
+
+    assert c1.is_focused()
+    assert c1.is_value_focused()
+
+    test.send_keys(Keys.ARROW_LEFT)
+
+    assert c1.is_focused()
+    assert c1.is_value_focused()
+
+    text_length = len(c1.get_text())
+    selection_start = test.driver.execute_script(
+        "return document.activeElement.selectionStart"
+    )
+    selection_end = test.driver.execute_script(
+        "return document.activeElement.selectionEnd"
+    )
+
+    assert selection_start == text_length - 1
+    assert selection_end == text_length - 1
+
+    test.send_keys(Keys.ARROW_RIGHT)
+
+    assert c1.is_focused()
+    assert c1.is_value_focused()
+
+    selection_start = test.driver.execute_script(
+        "return document.activeElement.selectionStart"
+    )
+    selection_end = test.driver.execute_script(
+        "return document.activeElement.selectionEnd"
+    )
+
+    assert selection_start == text_length
+    assert selection_end == text_length
+
+    assert test.get_log_errors() == []
+
+
+@pytest.mark.parametrize("props", read_write_modes)
+def test_knav010_arrows_do_not_change_focus(test, props):
+    test.start_server(get_app(props))
+
+    target = test.table("table")
+
+    c1 = target.cell(3, 1)
+    c1.double_click()
+
+    assert c1.is_focused()
+    assert c1.is_value_focused()
+
+    test.send_keys(Keys.ARROW_UP)
+
+    assert c1.is_focused()
+    assert c1.is_value_focused()
+
+    text_length = len(c1.get_text())
+    selection_start = test.driver.execute_script(
+        "return document.activeElement.selectionStart"
+    )
+    selection_end = test.driver.execute_script(
+        "return document.activeElement.selectionEnd"
+    )
+
+    assert selection_start == text_length - 1
+    assert selection_end == text_length - 1
+
+    test.send_keys(Keys.ARROW_DOWN)
+
+    assert c1.is_focused()
+    assert c1.is_value_focused()
+
+    selection_start = test.driver.execute_script(
+        "return document.activeElement.selectionStart"
+    )
+    selection_end = test.driver.execute_script(
+        "return document.activeElement.selectionEnd"
+    )
+
+    assert selection_start == text_length
+    assert selection_end == text_length
 
     assert test.get_log_errors() == []
