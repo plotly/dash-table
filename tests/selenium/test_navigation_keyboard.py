@@ -98,3 +98,61 @@ def test_knav004_can_move_out_of_viewport(test):
 
     assert target.cell(28, 2).is_focused()
     assert test.get_log_errors() == []
+
+
+@pytest.mark.parametrize("props", basic_modes)
+def test_knav005_can_select_down_twice(test, props):
+    test.start_server(get_app(props))
+
+    target = test.table("table")
+
+    target.cell(3, 1).click()
+
+    with test.hold(Keys.SHIFT):
+        test.send_keys(Keys.ARROW_DOWN + Keys.ARROW_DOWN)
+
+    for row in range(2, 7):
+        for col in range(0, 2):
+            assert target.cell(row, col).is_selected() == (
+                row in [3, 4, 5] and col in [1]
+            )
+
+    assert test.get_log_errors() == []
+
+
+@pytest.mark.parametrize("props", basic_modes)
+def test_knav006_can_select_down_then_up(test, props):
+    test.start_server(get_app(props))
+
+    target = test.table("table")
+
+    target.cell(3, 1).click()
+
+    with test.hold(Keys.SHIFT):
+        test.send_keys(Keys.ARROW_DOWN + Keys.ARROW_UP)
+
+    for row in range(2, 5):
+        for col in range(0, 2):
+            assert target.cell(row, col).is_selected() == (row in [3] and col in [1])
+
+    assert test.get_log_errors() == []
+
+
+@pytest.mark.parametrize("props", basic_modes)
+def test_knav007_can_select_down_then_right(test, props):
+    test.start_server(get_app(props))
+
+    target = test.table("table")
+
+    target.cell(3, 1).click()
+
+    with test.hold(Keys.SHIFT):
+        test.send_keys(Keys.ARROW_DOWN + Keys.ARROW_RIGHT)
+
+    for row in range(2, 6):
+        for col in range(0, 3):
+            assert target.cell(row, col).is_selected() == (
+                row in [3, 4] and col in [1, 2]
+            )
+
+    assert test.get_log_errors() == []
