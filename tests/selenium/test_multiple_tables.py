@@ -36,7 +36,7 @@ def get_app(props=dict()):
     return app
 
 
-def test_tbmu001_select_row(test, run):
+def test_tbmu001_select_row(test):
     test.start_server(get_app())
 
     wait.until(lambda: len(test.get_table_ids()) == 2, 3)
