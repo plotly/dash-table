@@ -55,9 +55,7 @@ const INNER_STYLE = {
     minWidth: '100%'
 };
 
-export default class ControlledTable extends PureComponent<
-    ControlledTableProps
-> {
+export default class ControlledTable extends PureComponent<ControlledTableProps> {
     private readonly menuRef = React.createRef<HTMLDivElement>();
     private readonly stylesheet: Stylesheet = new Stylesheet(
         `#${CSS.escape(this.props.id)}`
