@@ -117,7 +117,7 @@ describe('formatting', () => {
                 assert.isOk(formatter);
 
                 expect(formatter(-1299)).to.equal('−1299.00');
-                expect(formatter(-1299431)).to.equal('-1,2,99,4,31.00');
+                expect(formatter(-1299431)).to.equal('−1,2,99,4,31.00');
                 expect(formatter(1299)).to.equal('1299.00');
                 expect(formatter(1299431)).to.equal('1,2,99,4,31.00');
             });
