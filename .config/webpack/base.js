@@ -50,7 +50,7 @@ module.exports = (options = {}) => {
                 },
                 {
                     test: /\.ts(x?)$/,
-                    include: /node_modules[\\\/](highlight[.]js)[\\\/]/,
+                    include: /node_modules[\\\/](highlight[.]js|d3-format)[\\\/]/,
                     use: [
                         { loader: 'babel-loader', options: babel },
                         { loader: 'ts-loader', options: ts },
@@ -67,7 +67,7 @@ module.exports = (options = {}) => {
                 },
                 {
                     test: /\.js$/,
-                    include: /node_modules[\\\/](highlight[.]js)[\\\/]/,
+                    include: /node_modules[\\\/](highlight[.]js|d3-format)[\\\/]/,
                     use: [
                         { loader: 'babel-loader', options: babel }
                     ]
