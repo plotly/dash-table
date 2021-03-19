@@ -6,7 +6,6 @@ from utils import get_props
 from dash_table import DataTable
 
 import pytest
-import time
 
 
 def get_app(props=dict()):
@@ -56,7 +55,6 @@ def test_head001_renames_only_row(test, row):
     target.column("rows").edit(row)
 
     alert = test.driver.switch_to.alert
-    time.sleep(2)
     alert.send_keys("modified")
     alert.accept()
 
@@ -86,7 +84,6 @@ def test_head002_preserves_hidden_columns_on_rename(test):
     target.column(5).edit()
 
     alert = test.driver.switch_to.alert
-    time.sleep(2)
     alert.send_keys("Chill")
     alert.accept()
 
@@ -110,7 +107,6 @@ def test_head003_preserves_column_name_on_cancel(test):
     target.column("rows").edit(0)
 
     alert = test.driver.switch_to.alert
-    time.sleep(2)
     alert.send_keys("Chill")
     alert.dismiss()
 
@@ -126,7 +122,6 @@ def test_head004_change_single_row_header(test):
     target.column("rows").edit(0)
 
     alert = test.driver.switch_to.alert
-    time.sleep(2)
     alert.send_keys("Chill")
     alert.accept()
 
