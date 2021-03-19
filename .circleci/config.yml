@@ -6,7 +6,6 @@ jobs:
             - image: circleci/python:3.9.2-buster-node-browsers
               environment:
                 PERCY_PARALLEL_TOTAL: -1
-            - image: cypress/base:10
         steps:
             - checkout
             - run:
@@ -44,24 +43,6 @@ jobs:
                 name: 🦔 percy finalize
                 command: npx percy finalize --all
                 when: always
-
-    "standalone-test":
-        docker:
-            - image: circleci/python:3.9.2-buster-node-browsers
-            - image: cypress/base:10
-        steps:
-            - checkout
-            - run:
-                name: Install npm packages
-                command: npm ci
-            - run:
-                name: Cypress Install
-                command: |
-                    $(npm bin)/cypress install
-            - run:
-                name: Run tests
-                command: |
-                    npm run test.standalone
 
     "unit-test":
         docker:
@@ -132,6 +113,5 @@ workflows:
         jobs:
             - "node"
             - "server-test"
-            - "standalone-test"
             - "unit-test"
             - "visual-test"
