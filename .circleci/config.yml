@@ -114,6 +114,8 @@ jobs:
                 command: npm ci
             - save_cache:
                 key: dep-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}
+                paths:
+                    - node_modules
             - run:
                 name: Install requirements
                 command: |
