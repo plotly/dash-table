@@ -1,9 +1,8 @@
-import { assert, expect } from 'chai';
+import {expect} from 'chai';
 
 import dataLoading from 'dash-table/derived/table/data_loading';
 
 describe('loading state uneditable', () => {
-
     it('returns true when data are loading', () => {
         const loading = dataLoading({
             is_loading: true,
@@ -33,5 +32,4 @@ describe('loading state uneditable', () => {
 
         expect(loading).to.equal(false);
     });
-
 });

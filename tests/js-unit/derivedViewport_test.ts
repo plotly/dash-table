@@ -1,8 +1,8 @@
-import { assert, expect } from 'chai';
+import {expect} from 'chai';
 import * as R from 'ramda';
 
 import derivedViewportData from 'dash-table/derived/data/viewport';
-import { TableAction } from 'dash-table/components/Table/props';
+import {TableAction} from 'dash-table/components/Table/props';
 
 describe('derived viewport', () => {
     const viewportData = derivedViewportData();
@@ -14,7 +14,7 @@ describe('derived viewport', () => {
                     TableAction.None,
                     0,
                     250,
-                    R.map(() => { }, R.range(0, 5)),
+                    R.map(() => {}, R.range(0, 5)),
                     R.range(0, 5)
                 );
 
@@ -29,7 +29,7 @@ describe('derived viewport', () => {
                     TableAction.Native,
                     0,
                     250,
-                    R.map(() => { }, R.range(0, 5)),
+                    R.map(() => {}, R.range(0, 5)),
                     R.range(0, 5)
                 );
 
@@ -44,7 +44,7 @@ describe('derived viewport', () => {
                     TableAction.Custom,
                     0,
                     250,
-                    R.map(() => { }, R.range(0, 5)),
+                    R.map(() => {}, R.range(0, 5)),
                     R.range(0, 5)
                 );
 
@@ -61,7 +61,7 @@ describe('derived viewport', () => {
                     TableAction.Native,
                     0,
                     250,
-                    R.map(idx => ({ idx }), R.range(0, 500)),
+                    R.map(idx => ({idx}), R.range(0, 500)),
                     R.range(0, 500)
                 );
 

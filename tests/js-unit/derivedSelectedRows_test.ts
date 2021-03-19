@@ -1,4 +1,4 @@
-import { assert, expect } from 'chai';
+import {expect} from 'chai';
 import * as R from 'ramda';
 
 import derivedSelectedRows from 'dash-table/derived/selects/rows';
@@ -11,16 +11,13 @@ describe('derived selected rows', () => {
     });
 
     describe('with dense derived indices', () => {
-        let indices = R.range(0, 10);
+        const indices = R.range(0, 10);
 
         it('when all rows are selected', () => {
             const result = derive(indices, indices);
 
             expect(result.length).to.equal(indices.length);
-            R.forEach(
-                index => expect(result[index]).to.equal(index),
-                result
-            );
+            R.forEach(index => expect(result[index]).to.equal(index), result);
         });
 
         it('when some rows are selected', () => {
@@ -35,25 +32,19 @@ describe('derived selected rows', () => {
         });
 
         it('when derived indices are shifted', () => {
-            let shiftedIndices = R.range(2, 12);
+            const shiftedIndices = R.range(2, 12);
             const result = derive(shiftedIndices, shiftedIndices);
 
             expect(result.length).to.equal(shiftedIndices.length);
-            R.forEach(
-                index => expect(result[index]).to.equal(index),
-                result
-            );
+            R.forEach(index => expect(result[index]).to.equal(index), result);
         });
 
         it('when derived indices are shifted and negative', () => {
-            let shiftedIndices = R.range(-10, 10);
+            const shiftedIndices = R.range(-10, 10);
             const result = derive(shiftedIndices, shiftedIndices);
 
             expect(result.length).to.equal(shiftedIndices.length);
-            R.forEach(
-                index => expect(result[index]).to.equal(index),
-                result
-            );
+            R.forEach(index => expect(result[index]).to.equal(index), result);
         });
 
         it('when no row is selected', () => {
@@ -72,16 +63,13 @@ describe('derived selected rows', () => {
     });
 
     describe('with sparse derived indices', () => {
-        let indices = R.map(i => i * 2, R.range(0, 10));
+        const indices = R.map(i => i * 2, R.range(0, 10));
 
         it('when all rows are selected', () => {
             const result = derive(indices, indices);
 
             expect(result.length).to.equal(indices.length);
-            R.forEach(
-                index => expect(result[index]).to.equal(index),
-                result
-            );
+            R.forEach(index => expect(result[index]).to.equal(index), result);
         });
 
         it('when some rows are selected', () => {
@@ -96,25 +84,19 @@ describe('derived selected rows', () => {
         });
 
         it('when derived indices are shifted', () => {
-            let shiftedIndices = R.map(i => i * 2, R.range(2, 12));
+            const shiftedIndices = R.map(i => i * 2, R.range(2, 12));
             const result = derive(shiftedIndices, shiftedIndices);
 
             expect(result.length).to.equal(shiftedIndices.length);
-            R.forEach(
-                index => expect(result[index]).to.equal(index),
-                result
-            );
+            R.forEach(index => expect(result[index]).to.equal(index), result);
         });
 
         it('when derived indices are shifted and negative', () => {
-            let shiftedIndices = R.map(i => i * 2, R.range(-10, 10));
+            const shiftedIndices = R.map(i => i * 2, R.range(-10, 10));
             const result = derive(shiftedIndices, shiftedIndices);
 
             expect(result.length).to.equal(shiftedIndices.length);
-            R.forEach(
-                index => expect(result[index]).to.equal(index),
-                result
-            );
+            R.forEach(index => expect(result[index]).to.equal(index), result);
         });
 
         it('when no row is selected', () => {

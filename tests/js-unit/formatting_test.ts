@@ -1,7 +1,7 @@
-import { assert, expect } from 'chai';
+import {assert, expect} from 'chai';
 
-import { getFormatter } from 'dash-table/type/number';
-import { getLocale, getNully, getSpecifier } from 'dash-table/dash/Sanitizer';
+import {getFormatter} from 'dash-table/type/number';
+import {getLocale, getNully, getSpecifier} from 'dash-table/dash/Sanitizer';
 
 describe('formatting', () => {
     describe('number', () => {
@@ -67,7 +67,9 @@ describe('formatting', () => {
                 expect(formatter(Infinity), 'Infinity case').to.equal('42');
                 expect(formatter(-Infinity), '-Infinity case').to.equal('42');
                 expect(formatter(null as any), 'null case').to.equal('42');
-                expect(formatter(undefined as any), 'undef case').to.equal('42');
+                expect(formatter(undefined as any), 'undef case').to.equal(
+                    '42'
+                );
             });
         });
 
@@ -96,10 +98,16 @@ describe('formatting', () => {
                 expect(formatter('foo'), 'Foo string case').to.equal('foo');
                 expect(formatter(true)).to.equal(true);
                 expect(formatter(NaN), 'NaN case').to.equal('42.4242');
-                expect(formatter(Infinity), 'Infinity case').to.equal('42.4242');
-                expect(formatter(-Infinity), '-Infinity case').to.equal('42.4242');
+                expect(formatter(Infinity), 'Infinity case').to.equal(
+                    '42.4242'
+                );
+                expect(formatter(-Infinity), '-Infinity case').to.equal(
+                    '42.4242'
+                );
                 expect(formatter(null as any), 'null case').to.equal('42.4242');
-                expect(formatter(undefined as any), 'undef case').to.equal('42.4242');
+                expect(formatter(undefined as any), 'undef case').to.equal(
+                    '42.4242'
+                );
             });
         });
 

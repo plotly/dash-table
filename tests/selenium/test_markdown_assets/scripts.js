@@ -1,4 +1,6 @@
 window.hljs = {
-    getLanguage: lang => false, // force auto-highlight
-    highlightAuto: str => { return { value: 'hljs override' } }
+    getLanguage: _ => false, // force auto-highlight
+    highlightAuto: _ => {
+        return {value: 'hljs override'};
+    }
 };

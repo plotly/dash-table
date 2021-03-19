@@ -1,4 +1,4 @@
-import { assert, expect } from 'chai';
+import {expect} from 'chai';
 
 import derivedFragmentStyles from 'dash-table/derived/table/fragmentStyles';
 
@@ -14,12 +14,12 @@ function validate(style, width) {
 }
 
 describe('fragment styles', () => {
-    const cell = { height: 30 };
+    const cell = {height: 30};
     const headers = [];
-    const padding = { before: 0, after: 0 };
+    const padding = {before: 0, after: 0};
     const scrollbarWidth = 20;
-    const uiViewport = { scrollTop: 0, scrollLeft: 0, height: 0, width: 0 };
-    const viewport = { data: [], indices: [] };
+    const uiViewport = {scrollTop: 0, scrollLeft: 0, height: 0, width: 0};
+    const viewport = {data: [], indices: []};
 
     describe('of "ready" virtualized table', () => {
         it('includes scrollbar width styling', () => {

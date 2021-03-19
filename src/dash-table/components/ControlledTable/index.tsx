@@ -358,7 +358,7 @@ export default class ControlledTable extends PureComponent<ControlledTableProps>
         this.handleResize();
     });
 
-    handleResize = (previousWidth: number = NaN, cycle: boolean = false) => {
+    handleResize = (previousWidth = NaN, cycle = false) => {
         const {fixed_columns, fixed_rows, setState} = this.props;
 
         const {r1, r1c1} = this.refs as Refs;
