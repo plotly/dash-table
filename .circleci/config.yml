@@ -6,7 +6,6 @@ jobs:
             - image: circleci/python:3.9.2-buster-node-browsers
               environment:
                 PERCY_PARALLEL_TOTAL: -1
-        parallelism: 2
         steps:
             - checkout
             - run:
@@ -39,12 +38,7 @@ jobs:
                 name: Run tests
                 command: |
                     . venv/bin/activate
-                    TESTFILES=$(circleci tests glob "tests/selenium/**/test_*.py" | circleci tests split --split-by=timings)
-                    pytest --headless --nopercyfinalize --junitxml=test-reports/junit_intg.xml ${TESTFILES}
-            - store_artifacts:
-                path: test-reports
-            - store_test_results:
-                path: test-reports
+                    npm run test.server
             - run:
                 name: 🦔 percy finalize
                 command: npx percy finalize --all
