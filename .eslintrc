@@ -7,7 +7,7 @@
         "@typescript-eslint"
     ],
     "parserOptions": {
-        "project": "./tsconfig.json"
+        "project": "./tsconfig.lint.json"
     },
     "rules": {
         "arrow-parens": [
