@@ -27,7 +27,7 @@ describe('formatting', () => {
 
                 expect(formatter(0)).to.equal('$0.00');
                 expect(formatter(1)).to.equal('$1.00');
-                expect(formatter(-1)).to.equal('-$1.00');
+                expect(formatter(-1)).to.equal('−$1.00');
                 expect(formatter(1.23)).to.equal('$1.23');
                 expect(formatter(1.232)).to.equal('$1.23');
                 expect(formatter(1.239)).to.equal('$1.24');
@@ -116,7 +116,7 @@ describe('formatting', () => {
 
                 assert.isOk(formatter);
 
-                expect(formatter(-1299)).to.equal('-1299.00');
+                expect(formatter(-1299)).to.equal('−1299.00');
                 expect(formatter(-1299431)).to.equal('-1,2,99,4,31.00');
                 expect(formatter(1299)).to.equal('1299.00');
                 expect(formatter(1299431)).to.equal('1,2,99,4,31.00');
@@ -136,7 +136,7 @@ describe('formatting', () => {
 
                 expect(formatter(0)).to.equal('0m');
                 expect(formatter(1)).to.equal('1000m');
-                expect(formatter(-1)).to.equal('-1000m');
+                expect(formatter(-1)).to.equal('−1000m');
                 expect(formatter(1.23)).to.equal('1230m');
                 expect(formatter(1.232)).to.equal('1232m');
                 expect(formatter(1.239)).to.equal('1239m');
