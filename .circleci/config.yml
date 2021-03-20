@@ -6,6 +6,7 @@ jobs:
             - image: circleci/python:3.9.2-buster-node-browsers
               environment:
                 PERCY_PARALLEL_TOTAL: -1
+        resource_class: xlarge
         steps:
             - checkout
             - run:
@@ -43,7 +44,7 @@ jobs:
                 name: Run tests
                 command: |
                     . venv/bin/activate
-                    npm run test.server
+                    pytest -n auto --nopercyfinalize tests/selenium
             - run:
                 name: 🦔 percy finalize
                 command: npx percy finalize --all
