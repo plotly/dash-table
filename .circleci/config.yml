@@ -6,7 +6,7 @@ jobs:
             - image: circleci/python:3.9.2-buster-node-browsers
               environment:
                 PERCY_PARALLEL_TOTAL: -1
-        parallelism: 2
+        parallelism: 4
         steps:
             - checkout
             - run:
