@@ -44,7 +44,7 @@ jobs:
                 name: Run tests
                 command: |
                     . venv/bin/activate
-                    pytest -n auto --nopercyfinalize tests/selenium
+                    pytest -n 8 --nopercyfinalize tests/selenium
             - run:
                 name: 🦔 percy finalize
                 command: npx percy finalize --all
