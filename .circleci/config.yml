@@ -5,7 +5,10 @@ jobs:
         docker:
             - image: percyio/agent
         steps:
-            - run: echo 'export PERCY_TOKEN="$PERCY_TOKEN_E2E"' >> $BASH_ENV
+            - run:
+                name: Inject Percy Environment variables
+                command: |
+                  echo 'export PERCY_TOKEN="$PERCY_TOKEN_E2E"' >> $BASH_ENV
             - run: percy finalize --all
 
     server-test:
