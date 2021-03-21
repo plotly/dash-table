@@ -151,3 +151,6 @@ workflows:
             - "server-test"
             - "unit-test"
             - "visual-test"
+            - percy-finalize:
+                requires:
+                    - server-test
