@@ -147,10 +147,10 @@ workflows:
     version: 2
     build:
         jobs:
-            - node
-            - server-test
-            - unit-test
-            - visual-test
+            - "node"
+            - "server-test"
+            - "unit-test"
+            - "visual-test"
             - percy-finalize:
               requires:
-                - server-test
+                - "server-test"
