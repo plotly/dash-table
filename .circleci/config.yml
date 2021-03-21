@@ -118,7 +118,7 @@ jobs:
             - checkout
             - run:
                   name: Create virtual env
-                  command: python -m venv || virtualenv venv
+                  command: python -m venv
             - restore_cache:
                 key: dep-{{ .Branch }}-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}
             - run:
