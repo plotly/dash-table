@@ -95,6 +95,35 @@ def cells_are_same_width(target, table):
         assert abs(target_cell.size["width"] - table_r1c0_cells[i].size["width"]) <= 1
 
 
+def szng003_on_prop_change_impl(
+    test, fixed_columns, fixed_rows, merge_duplicate_headers, callback_props
+):
+    props = {**base_props, **fixed_columns, **fixed_rows, **merge_duplicate_headers}
+
+    table = DataTable(**props, id="table")
+
+    app = dash.Dash(__name__)
+    app.layout = Div([Button(id="btn", children=["Update"]), table])
+
+    @app.callback(
+        [Output("table", key) for key in callback_props.keys()],
+        [Input("btn", "n_clicks")],
+        prevent_initial_call=True,
+    )
+    def callback(n_clicks):
+        return [callback_props.get(key) for key in callback_props.keys()]
+
+    test.start_server(app)
+
+    target = test.driver.find_element_by_css_selector("#table")
+    cells_are_same_width(target, target)
+
+    test.driver.find_element_by_css_selector("#btn").click()
+    cells_are_same_width(target, target)
+
+    assert test.get_log_errors() == []
+
+
 def test_szng001_widths_on_style_change(test):
     base_props = dict(
         data=[
@@ -302,42 +331,144 @@ def test_szng002_percentages_result_in_same_widths(test):
                 {"_": 0, "a": 89, "b": 560, "c": 582},
                 {"_": 0, "a": 809, "b": 591, "c": 511},
             ]
-        ),
-        dict(merge_duplicate_headers=True),
+        )
+    ],
+)
+def test_szng003_a_on_prop_change(
+    test, fixed_columns, fixed_rows, merge_duplicate_headers, callback_props
+):
+    szng003_on_prop_change_impl(
+        test, fixed_columns, fixed_rows, merge_duplicate_headers, callback_props
+    )
+
+
+@pytest.mark.parametrize(
+    "fixed_columns",
+    [
+        # dict(),
+        dict(fixed_columns=dict(headers=True)),
+        dict(fixed_columns=dict(headers=True, data=1)),
+    ],
+)
+@pytest.mark.parametrize(
+    "fixed_rows",
+    [
+        # dict(),
+        dict(fixed_rows=dict(headers=True)),
+        dict(fixed_rows=dict(headers=True, data=1)),
+    ],
+)
+@pytest.mark.parametrize(
+    "merge_duplicate_headers",
+    [dict(merge_duplicate_headers=True), dict(merge_duplicate_headers=False)],
+)
+@pytest.mark.parametrize(
+    "callback_props", [dict(merge_duplicate_headers=True),],
+)
+def test_szng003_b_on_prop_change(
+    test, fixed_columns, fixed_rows, merge_duplicate_headers, callback_props
+):
+    szng003_on_prop_change_impl(
+        test, fixed_columns, fixed_rows, merge_duplicate_headers, callback_props
+    )
+
+
+@pytest.mark.parametrize(
+    "fixed_columns",
+    [
+        # dict(),
+        dict(fixed_columns=dict(headers=True)),
+        dict(fixed_columns=dict(headers=True, data=1)),
+    ],
+)
+@pytest.mark.parametrize(
+    "fixed_rows",
+    [
+        # dict(),
+        dict(fixed_rows=dict(headers=True)),
+        dict(fixed_rows=dict(headers=True, data=1)),
+    ],
+)
+@pytest.mark.parametrize(
+    "merge_duplicate_headers",
+    [dict(merge_duplicate_headers=True), dict(merge_duplicate_headers=False)],
+)
+@pytest.mark.parametrize(
+    "callback_props",
+    [
         # dict(fixed_rows=dict(headers=True)),
         # dict(fixed_columns=dict(headers=True)),
         dict(fixed_columns=dict(headers=True), fixed_rows=dict(headers=True)),
-        dict(style_cell=dict(width=200, minWidth=200, maxWidth=200)),
-        dict(style_table=dict(width=500, minWidth=500, maxWidth=500)),
     ],
 )
-def test_szng003_on_prop_change(
+def test_szng003_c_on_prop_change(
     test, fixed_columns, fixed_rows, merge_duplicate_headers, callback_props
 ):
-    props = {**base_props, **fixed_columns, **fixed_rows, **merge_duplicate_headers}
-
-    table = DataTable(**props, id="table")
-
-    app = dash.Dash(__name__)
-    app.layout = Div([Button(id="btn", children=["Update"]), table])
-
-    @app.callback(
-        [Output("table", key) for key in callback_props.keys()],
-        [Input("btn", "n_clicks")],
-        prevent_initial_call=True,
+    szng003_on_prop_change_impl(
+        test, fixed_columns, fixed_rows, merge_duplicate_headers, callback_props
     )
-    def callback(n_clicks):
-        return [callback_props.get(key) for key in callback_props.keys()]
 
-    test.start_server(app)
 
-    target = test.driver.find_element_by_css_selector("#table")
-    cells_are_same_width(target, target)
+@pytest.mark.parametrize(
+    "fixed_columns",
+    [
+        # dict(),
+        dict(fixed_columns=dict(headers=True)),
+        dict(fixed_columns=dict(headers=True, data=1)),
+    ],
+)
+@pytest.mark.parametrize(
+    "fixed_rows",
+    [
+        # dict(),
+        dict(fixed_rows=dict(headers=True)),
+        dict(fixed_rows=dict(headers=True, data=1)),
+    ],
+)
+@pytest.mark.parametrize(
+    "merge_duplicate_headers",
+    [dict(merge_duplicate_headers=True), dict(merge_duplicate_headers=False)],
+)
+@pytest.mark.parametrize(
+    "callback_props", [dict(style_cell=dict(width=200, minWidth=200, maxWidth=200)),],
+)
+def test_szng003_d_on_prop_change(
+    test, fixed_columns, fixed_rows, merge_duplicate_headers, callback_props
+):
+    szng003_on_prop_change_impl(
+        test, fixed_columns, fixed_rows, merge_duplicate_headers, callback_props
+    )
 
-    test.driver.find_element_by_css_selector("#btn").click()
-    cells_are_same_width(target, target)
 
-    assert test.get_log_errors() == []
+@pytest.mark.parametrize(
+    "fixed_columns",
+    [
+        # dict(),
+        dict(fixed_columns=dict(headers=True)),
+        dict(fixed_columns=dict(headers=True, data=1)),
+    ],
+)
+@pytest.mark.parametrize(
+    "fixed_rows",
+    [
+        # dict(),
+        dict(fixed_rows=dict(headers=True)),
+        dict(fixed_rows=dict(headers=True, data=1)),
+    ],
+)
+@pytest.mark.parametrize(
+    "merge_duplicate_headers",
+    [dict(merge_duplicate_headers=True), dict(merge_duplicate_headers=False)],
+)
+@pytest.mark.parametrize(
+    "callback_props", [dict(style_table=dict(width=500, minWidth=500, maxWidth=500)),],
+)
+def test_szng003_e_on_prop_change(
+    test, fixed_columns, fixed_rows, merge_duplicate_headers, callback_props
+):
+    szng003_on_prop_change_impl(
+        test, fixed_columns, fixed_rows, merge_duplicate_headers, callback_props
+    )
 
 
 @pytest.mark.parametrize("props", basic_modes)
