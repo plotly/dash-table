@@ -11,7 +11,7 @@ jobs:
                   echo 'export PERCY_TOKEN="$PERCY_TOKEN_E2E"' >> $BASH_ENV
             - run: percy finalize --all
 
-    server-test:
+    "server-test":
         docker:
             - image: circleci/python:3.9.2-buster-node-browsers
               environment:
@@ -63,7 +63,7 @@ jobs:
             - store_artifacts:
                 path: /tmp/dash_artifacts
 
-    unit-test:
+    "unit-test":
         docker:
             - image: circleci/python:3.9.2-buster-node-browsers
         steps:
@@ -90,7 +90,7 @@ jobs:
                     . venv/bin/activate
                     npm run test.unit
 
-    visual-test:
+    "visual-test":
         docker:
             - image: circleci/node:14-browsers
         steps:
@@ -113,7 +113,7 @@ jobs:
             - store_artifacts:
                 path: storybook-static
 
-    node:
+    "node":
         docker:
             - image: circleci/python:3.9.2-node
         steps:
@@ -151,6 +151,3 @@ workflows:
             - "server-test"
             - "unit-test"
             - "visual-test"
-            - percy-finalize:
-              requires:
-                - "server-test"
