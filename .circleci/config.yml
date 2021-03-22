@@ -55,7 +55,7 @@ jobs:
                 command: |
                     . venv/bin/activate
                     TESTFILES=$(circleci tests glob "tests/selenium/**/test_*.py" | circleci tests split --split-by=timings)
-                    pytest --nopercyfinalize --junitxml=test-reports/junit_intg.xml ${TESTFILES}
+                    pytest --headless --nopercyfinalize --junitxml=test-reports/junit_intg.xml ${TESTFILES}
             - store_artifacts:
                 path: test-reports
             - store_test_results:
