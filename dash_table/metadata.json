@@ -204,14 +204,17 @@
                         "value": {
                           "name": "string"
                         },
+                        "description": "(default: ['$', '']).  A list of two strings representing the\n prefix and suffix symbols. Typically used for currency, and implemented using d3's\n currency format, but you can use this for other symbols such as measurement units",
                         "required": false
                       },
                       "decimal": {
                         "name": "string",
+                        "description": "(default: '.').  The string used for the decimal separator",
                         "required": false
                       },
                       "group": {
                         "name": "string",
+                        "description": "(default: ',').  The string used for the groups separator",
                         "required": false
                       },
                       "grouping": {
@@ -219,6 +222,7 @@
                         "value": {
                           "name": "number"
                         },
+                        "description": "(default: [3]).  A list of integers representing the grouping pattern. The default is\n3 for thousands.",
                         "required": false
                       },
                       "numerals": {
@@ -226,38 +230,45 @@
                         "value": {
                           "name": "string"
                         },
+                        "description": "A list of ten strings used as replacements for numbers 0-9",
                         "required": false
                       },
                       "percent": {
                         "name": "string",
+                        "description": "(default: '%').  The string used for the percentage symbol",
                         "required": false
                       },
                       "separate_4digits": {
                         "name": "bool",
+                        "description": "(default: True). Separates integers with 4-digits or less",
                         "required": false
                       }
                     },
+                    "description": "Represents localization specific formatting information.\nWhen left unspecified, will use the default value provided by d3-format.",
                     "required": false
                   },
                   "nully": {
                     "name": "any",
+                    "description": "A value that will be used in place of the nully value during formatting.\n  If the value type matches the column type, it will be formatted normally.",
                     "required": false
                   },
                   "prefix": {
                     "name": "number",
+                    "description": "A number representing the SI unit to use during formatting.\n  See `dash_table.Format.Prefix` enumeration for the list of valid values",
                     "required": false
                   },
                   "specifier": {
                     "name": "string",
+                    "description": "(default: '').  Represents the d3 rules to apply when formatting the number.",
                     "required": false
                   }
                 },
-                "description": "The formatting applied to the column's data.\nThis prop is derived from the [d3-format](https://github.com/d3/d3-format) library specification. Apart from\nbeing structured slightly differently (under a single prop), the usage\nis the same.\n'locale': represents localization specific formatting information.\n When left unspecified, will use the default value provided by d3-format.\n The keys are as follows:\n 'symbol': (default: ['$', '']) a list of two strings representing the\n prefix and suffix symbols. Typically used for currency, and implemented using d3's\n currency format, but you can use this for other symbols such as measurement units;\n 'decimal': (default: '.') the string used for the decimal separator;\n 'group': (default: ',') the string used for the groups separator;\n 'grouping': (default: [3]) a list of integers representing the grouping pattern.\n 'numerals': a list of ten strings used as replacements for numbers 0-9;\n 'percent': (default: '%') the string used for the percentage symbol;\n 'separate_4digits': (default: True) separate integers with 4-digits or less.\n'nully': a value that will be used in place of the nully value during formatting.\n  If the value type matches the column type, it will be formatted normally.\n'prefix': a number representing the SI unit to use during formatting.\n  See `dash_table.Format.Prefix` enumeration for the list of valid values\n'specifier': (default: '') represents the rules to apply when formatting the number.\ndash_table.FormatTemplate contains helper functions to rapidly use certain\ntypical number formats.",
+                "description": "The formatting applied to the column's data.\nThis prop is derived from the [d3-format](https://github.com/d3/d3-format) library specification. Apart from\nbeing structured slightly differently (under a single prop), the usage is the same.\nSee also dash_table.FormatTemplate.  It contains helper functions for typical number formats.",
                 "required": false
               },
               "id": {
                 "name": "string",
-                "description": "The `id` of the column.\nThe column `id` is used to match cells in data\nwith particular columns.\nThe `id` is not visible in the table.",
+                "description": "The `id` of the column.\nThe column `id` is used to match cells in data with particular columns.\nThe `id` is not visible in the table.",
                 "required": true
               },
               "name": {
@@ -273,7 +284,7 @@
                     }
                   }
                 ],
-                "description": "The `name` of the column,\nas it appears in the column header.\nIf `name` is a list of strings, then the columns\nwill render with multiple headers rows.",
+                "description": "The `name` of the column, as it appears in the column header.\nIf `name` is a list of strings, then the columns\nwill render with multiple headers rows.",
                 "required": true
               },
               "presentation": {
@@ -292,7 +303,7 @@
                     "computed": false
                   }
                 ],
-                "description": "The `presentation` to use to display the value.\nDefaults to 'input' for ['datetime', 'numeric', 'text', 'any'].",
+                "description": "The `presentation` to use to display data. Markdown can be used on\ncolumns with type 'text'.  See 'dropdown' for more info.\nDefaults to 'input' for ['datetime', 'numeric', 'text', 'any'].",
                 "required": false
               },
               "on_change": {
@@ -314,6 +325,7 @@
                         "computed": false
                       }
                     ],
+                    "description": "(default 'coerce'):  'none': do not validate data;\n 'coerce': check if the data corresponds to the destination type and\n attempts to coerce it into the destination type if not;\n 'validate': check if the data corresponds to the destination type (no coercion).",
                     "required": false
                   },
                   "failure": {
@@ -332,10 +344,11 @@
                         "computed": false
                       }
                     ],
+                    "description": "(default 'reject'):  What to do with the value if the action fails.\n 'accept': use the invalid value;\n 'default': replace the provided value with `validation.default`;\n 'reject': do not modify the existing value.",
                     "required": false
                   }
                 },
-                "description": "The `on_change` behavior of the column for user-initiated modifications.\n'action' (default 'coerce'):\n none: do not validate data;\n coerce: check if the data corresponds to the destination type and\n attempts to coerce it into the destination type if not;\n validate: check if the data corresponds to the destination type (no coercion).\n'failure' (default 'reject'): what to do with the value if the action fails:\n accept: use the invalid value;\n default: replace the provided value with `validation.default`;\n reject: do not modify the existing value.",
+                "description": "The `on_change` behavior of the column for user-initiated modifications.",
                 "required": false
               },
               "sort_as_null": {
@@ -362,18 +375,21 @@
                 "value": {
                   "allow_null": {
                     "name": "bool",
+                    "description": "Allow the use of nully values. (undefined, null, NaN) (default: False)",
                     "required": false
                   },
                   "default": {
                     "name": "any",
+                    "description": "The default value to apply with on_change.failure = 'default'. (default: None)",
                     "required": false
                   },
                   "allow_YY": {
                     "name": "bool",
+                    "description": "This is for `datetime` columns only.  Allow 2-digit years (default: False).\n  If True, we interpret years as ranging from now-70 to now+29 - in 2019\n  this is 1949 to 2048 but in 2020 it will be different. If used with\n  `action: 'coerce'`, will convert user input to a 4-digit year.",
                     "required": false
                   }
                 },
-                "description": "The `validation` options.\n'allow_null': Allow the use of nully values. (undefined, null, NaN) (default: false)\n'default': The default value to apply with on_change.failure = 'default'. (default: null)\n'allow_YY': `datetime` columns only, allow 2-digit years (default: false).\n  If true, we interpret years as ranging from now-70 to now+29 - in 2019\n  this is 1949 to 2048 but in 2020 it will be different. If used with\n  `action: 'coerce'`, will convert user input to a 4-digit year.",
+                "description": "The `validation` options for user input processing that can accept, reject or apply a\ndefault value.",
                 "required": false
               },
               "type": {
@@ -396,7 +412,7 @@
                     "computed": false
                   }
                 ],
-                "description": "The data-type of the column's data.\n'numeric': represents both floats and ints.\n'text': represents a string.\n'datetime': a string representing a date or date-time, in the form:\n  'YYYY-MM-DD HH:MM:SS.ssssss' or some truncation thereof. Years must\n  have 4 digits, unless you use `validation.allow_YY: true`. Also\n  accepts 'T' or 't' between date and time, and allows timezone info\n  at the end. To convert these strings to Python `datetime` objects,\n  use `dateutil.parser.isoparse`. In R use `parse_iso_8601` from the\n  `parsedate` library.\n  WARNING: these parsers do not work with 2-digit years, if you use\n  `validation.allow_YY: true` and do not coerce to 4-digit years.\n  And parsers that do work with 2-digit years may make a different\n  guess about the century than we make on the front end.\n'any': represents any type of data.\nDefaults to 'any' if undefined.\nNOTE: This feature has not been fully implemented.\nIn the future, it's data types will impact things like\ntext formatting options in the cell (e.g. display 2 decimals\nfor a number), filtering options and behavior, and editing\nbehavior.\nStay tuned by following [https://github.com/plotly/dash-table/issues/166](https://github.com/plotly/dash-table/issues/166)",
+                "description": "The data-type provides support for per column typing and allows for data\nvalidation and coercion.\n'numeric': represents both floats and ints.\n'text': represents a string.\n'datetime': a string representing a date or date-time, in the form:\n  'YYYY-MM-DD HH:MM:SS.ssssss' or some truncation thereof. Years must\n  have 4 digits, unless you use `validation.allow_YY: true`. Also\n  accepts 'T' or 't' between date and time, and allows timezone info\n  at the end. To convert these strings to Python `datetime` objects,\n  use `dateutil.parser.isoparse`. In R use `parse_iso_8601` from the\n  `parsedate` library.\n  WARNING: these parsers do not work with 2-digit years, if you use\n  `validation.allow_YY: true` and do not coerce to 4-digit years.\n  And parsers that do work with 2-digit years may make a different\n  guess about the century than we make on the front end.\n'any': represents any type of data.\nDefaults to 'any' if undefined.",
                 "required": false
               }
             }
@@ -425,14 +441,17 @@
               "value": {
                 "name": "string"
               },
+              "description": "(default: ['$', '']). A  list of two strings representing the\n  prefix and suffix symbols. Typically used for currency, and implemented using d3's\n  currency format, but you can use this for other symbols such as measurement units.",
               "required": false
             },
             "decimal": {
               "name": "string",
+              "description": "(default: '.'). The string used for the decimal separator.",
               "required": false
             },
             "group": {
               "name": "string",
+              "description": "(default: ','). The string used for the groups separator.",
               "required": false
             },
             "grouping": {
@@ -440,6 +459,7 @@
               "value": {
                 "name": "number"
               },
+              "description": "(default: [3]). A  list of integers representing the grouping pattern.",
               "required": false
             },
             "numerals": {
@@ -447,20 +467,23 @@
               "value": {
                 "name": "string"
               },
+              "description": "A list of ten strings used as replacements for numbers 0-9.",
               "required": false
             },
             "percent": {
               "name": "string",
+              "description": "(default: '%'). The string used for the percentage symbol.",
               "required": false
             },
             "separate_4digits": {
               "name": "bool",
+              "description": "(default: True). Separate integers with 4-digits or less.",
               "required": false
             }
           }
         },
         "required": false,
-        "description": "The localization specific formatting information applied to all columns in the table.\nThis prop is derived from the [d3.formatLocale](https://github.com/d3/d3-format#formatLocale) data structure specification.\nWhen left unspecified, each individual nested prop will default to a pre-determined value.\n  'symbol': (default: ['$', '']) a list of two strings representing the\n  prefix and suffix symbols. Typically used for currency, and implemented using d3's\n  currency format, but you can use this for other symbols such as measurement units.\n  'decimal': (default: '.') the string used for the decimal separator.\n  'group': (default: ',') the string used for the groups separator.\n  'grouping': (default: [3]) a list of integers representing the grouping pattern.\n  'numerals': a list of ten strings used as replacements for numbers 0-9.\n  'percent': (default: '%') the string used for the percentage symbol.\n  'separate_4digits': (default: True) separate integers with 4-digits or less."
+        "description": "The localization specific formatting information applied to all columns in the table.\nThis prop is derived from the [d3.formatLocale](https://github.com/d3/d3-format#formatLocale) data structure specification.\nWhen left unspecified, each individual nested prop will default to a pre-determined value."
       },
       "markdown_options": {
         "type": {
@@ -494,12 +517,13 @@
                   ]
                 }
               ],
+              "description": "(default: '_blank').  The link's behavior (_blank opens the link in a\nnew tab, _parent opens the link in the parent frame, _self opens the link in the\ncurrent tab, and _top opens the link in the top frame) or a string",
               "required": true
             }
           }
         },
         "required": false,
-        "description": "The `markdown_options` property allows customization of the markdown cells behavior.\n 'link_target': (default: '_blank') the link's behavior (_blank opens the link in a\nnew tab, _parent opens the link in the parent frame, _self opens the link in the\ncurrent tab, and _top opens the link in the top frame) or a string",
+        "description": "The `markdown_options` property allows customization of the markdown cells behavior.",
         "defaultValue": {
           "value": "{\n    link_target: '_blank'\n}",
           "computed": false
@@ -720,21 +744,22 @@
             {
               "name": "exact",
               "value": {
-                "headers": {
-                  "name": "enum",
-                  "value": [
-                    {
-                      "value": "false",
-                      "computed": false
-                    }
-                  ],
-                  "required": false
-                },
                 "data": {
                   "name": "enum",
                   "value": [
                     {
                       "value": "0",
+                      "computed": false
+                    }
+                  ],
+                  "description": "Example `{'headers':False, 'data':0}` No columns are fixed (the default)",
+                  "required": false
+                },
+                "headers": {
+                  "name": "enum",
+                  "value": [
+                    {
+                      "value": "false",
                       "computed": false
                     }
                   ],
@@ -745,6 +770,11 @@
             {
               "name": "exact",
               "value": {
+                "data": {
+                  "name": "number",
+                  "description": "Example `{'headers':True, 'data':1}` one column is fixed.",
+                  "required": false
+                },
                 "headers": {
                   "name": "enum",
                   "value": [
@@ -754,17 +784,13 @@
                     }
                   ],
                   "required": true
-                },
-                "data": {
-                  "name": "number",
-                  "required": false
                 }
               }
             }
           ]
         },
         "required": false,
-        "description": "`fixed_columns` will \"fix\" the set of columns so that\nthey remain visible when scrolling horizontally across\nthe unfixed columns. `fixed_columns` fixes columns\nfrom left-to-right.\nIf `headers` is False, no columns are fixed.\nIf `headers` is True, all operation columns (see `row_deletable` and `row_selectable`)\nare fixed. Additional data columns can be fixed by\nassigning a number to `data`.\nDefaults to `{ headers: False }`.\nNote that fixing columns introduces some changes to the\nunderlying markup of the table and may impact the\nway that your columns are rendered or sized.\nView the documentation examples to learn more.",
+        "description": "`fixed_columns` will \"fix\" the set of columns so that\nthey remain visible when scrolling horizontally across\nthe unfixed columns. `fixed_columns` fixes columns\nfrom left-to-right.\nIf `headers` is False, no columns are fixed.\nIf `headers` is True, all operation columns (see `row_deletable` and `row_selectable`)\nare fixed. Additional data columns can be fixed by\nassigning a number to `data`.\n\nNote that fixing columns introduces some changes to the\nunderlying markup of the table and may impact the\nway that your columns are rendered or sized.\nView the documentation examples to learn more.",
         "defaultValue": {
           "value": "{\n    headers: false,\n    data: 0\n}",
           "computed": false
@@ -777,21 +803,22 @@
             {
               "name": "exact",
               "value": {
-                "headers": {
-                  "name": "enum",
-                  "value": [
-                    {
-                      "value": "false",
-                      "computed": false
-                    }
-                  ],
-                  "required": false
-                },
                 "data": {
                   "name": "enum",
                   "value": [
                     {
                       "value": "0",
+                      "computed": false
+                    }
+                  ],
+                  "description": "Example `{'headers':False, 'data':0}` No rows are fixed (the default)",
+                  "required": false
+                },
+                "headers": {
+                  "name": "enum",
+                  "value": [
+                    {
+                      "value": "false",
                       "computed": false
                     }
                   ],
@@ -802,6 +829,11 @@
             {
               "name": "exact",
               "value": {
+                "data": {
+                  "name": "number",
+                  "description": "Example `{'headers':True, 'data':1}` one row is fixed.",
+                  "required": false
+                },
                 "headers": {
                   "name": "enum",
                   "value": [
@@ -811,17 +843,13 @@
                     }
                   ],
                   "required": true
-                },
-                "data": {
-                  "name": "number",
-                  "required": false
                 }
               }
             }
           ]
         },
         "required": false,
-        "description": "`fixed_rows` will \"fix\" the set of rows so that\nthey remain visible when scrolling vertically down\nthe table. `fixed_rows` fixes rows\nfrom top-to-bottom, starting from the headers.\nIf `headers` is False, no rows are fixed.\nIf `headers` is True, all header and filter rows (see `filter_action`) are\nfixed. Additional data rows can be fixed by assigning\na number to `data`.\nDefaults to `{ headers: False }`.\nNote that fixing rows introduces some changes to the\nunderlying markup of the table and may impact the\nway that your columns are rendered or sized.\nView the documentation examples to learn more.",
+        "description": "`fixed_rows` will \"fix\" the set of rows so that\nthey remain visible when scrolling vertically down\nthe table. `fixed_rows` fixes rows\nfrom top-to-bottom, starting from the headers.\nIf `headers` is False, no rows are fixed.\nIf `headers` is True, all header and filter rows (see `filter_action`) are\nfixed. Additional data rows can be fixed by assigning\na number to `data`.  Note that fixing rows introduces some changes to the\nunderlying markup of the table and may impact the\nway that your columns are rendered or sized.\nView the documentation examples to learn more.",
         "defaultValue": {
           "value": "{\n    headers: false,\n    data: 0\n}",
           "computed": false
@@ -846,7 +874,7 @@
           ]
         },
         "required": false,
-        "description": "If `single`, then the uer can select a single column or group\nof merged columns via the radio button that will appear in the\nheader rows.\nIf `multi`, then the user can select multiple columns or groups\nof merged columns via the checkbox that will appear in the header\nrows.\nIf false, then the user will not be able to select columns and no\ninput will appear in the header rows.\nWhen a column is selected, its id will be contained in `selected_columns`\nand `derived_viewport_selected_columns`.",
+        "description": "If `single`, then the user can select a single column or group\nof merged columns via the radio button that will appear in the\nheader rows.\nIf `multi`, then the user can select multiple columns or groups\nof merged columns via the checkbox that will appear in the header\nrows.\nIf false, then the user will not be able to select columns and no\ninput will appear in the header rows.\nWhen a column is selected, its id will be contained in `selected_columns`\nand `derived_viewport_selected_columns`.",
         "defaultValue": {
           "value": "false",
           "computed": false
@@ -1055,7 +1083,7 @@
           ]
         },
         "required": false,
-        "description": "`page_action` refers to a mode of the table where\nnot all of the rows are displayed at once: only a subset\nare displayed (a \"page\") and the next subset of rows\ncan viewed by clicking \"Next\" or \"Previous\" buttons\nat the bottom of the page.\nPagination is used to improve performance: instead of\nrendering all of the rows at once (which can be expensive),\nwe only display a subset of them.\nWith pagination, we can either page through data that exists\nin the table (e.g. page through `10,000` rows in `data` `100` rows at a time)\nor we can update the data on-the-fly with callbacks\nwhen the user clicks on the \"Previous\" or \"Next\" buttons.\nThese modes can be toggled with this `page_action` parameter:\n`'native'`: all data is passed to the table up-front, paging logic is\nhandled by the table;\n`'custom'`: data is passed to the table one page at a time, paging logic\nis handled via callbacks;\n`none`: disables paging, render all of the data at once.",
+        "description": "`page_action` refers to a mode of the table where\nnot all of the rows are displayed at once: only a subset\nare displayed (a \"page\") and the next subset of rows\ncan viewed by clicking \"Next\" or \"Previous\" buttons\nat the bottom of the page.\nPagination is used to improve performance: instead of\nrendering all of the rows at once (which can be expensive),\nwe only display a subset of them.\nWith pagination, we can either page through data that exists\nin the table (e.g. page through `10,000` rows in `data` `100` rows at a time)\nor we can update the data on-the-fly with callbacks\nwhen the user clicks on the \"Previous\" or \"Next\" buttons.\nThese modes can be toggled with this `page_action` parameter:\n`'native'`: all data is passed to the table up-front, paging logic is\nhandled by the table;\n`'custom'`: data is passed to the table one page at a time, paging logic\nis handled via callbacks;\n`'none'`: disables paging, render all of the data at once.",
         "defaultValue": {
           "value": "'native'",
           "computed": false
@@ -1265,10 +1293,12 @@
                 "value": {
                   "delay": {
                     "name": "number",
+                    "description": "Represents the delay in milliseconds before\nthe tooltip is shown when hovering a cell. This overrides\nthe table's `tooltip_delay` property. If set to `None`,\nthe tooltip will be shown immediately.",
                     "required": false
                   },
                   "duration": {
                     "name": "number",
+                    "description": "represents the duration in milliseconds\nduring which the tooltip is shown when hovering a cell.\nThis overrides the table's `tooltip_duration` property.\nIf set to `None`, the tooltip will not disappear.",
                     "required": false
                   },
                   "type": {
@@ -1283,6 +1313,7 @@
                         "computed": false
                       }
                     ],
+                    "description": "refers to the type of tooltip syntax used\nfor the tooltip generation. Can either be `markdown`\nor `text`. Defaults to `text`.",
                     "required": false
                   },
                   "use_with": {
@@ -1301,10 +1332,12 @@
                         "computed": false
                       }
                     ],
+                    "description": "Refers to whether the tooltip will be shown\nonly on data or headers. Can be `both`, `data`, `header`.\nDefaults to `both`.",
                     "required": false
                   },
                   "value": {
                     "name": "string",
+                    "description": "refers to the syntax-based content of\nthe tooltip. This value is required. Alternatively, the value of the\nproperty can also be  a plain string. The `text` syntax will be used in\nthat case.",
                     "required": true
                   }
                 }
@@ -1313,7 +1346,7 @@
           }
         },
         "required": false,
-        "description": "`tooltip` represents the tooltip shown\nfor different columns.\nThe `property` name refers to the column ID.\nThe `type` refers to the type of tooltip syntax used\nfor the tooltip generation. Can either be `markdown`\nor `text`. Defaults to `text`.\nThe `value` refers to the syntax-based content of\nthe tooltip. This value is required.\nThe `use_with` refers to whether the tooltip will be shown\nonly on data or headers. Can be `both`, `data`, `header`.\nDefaults to `both`.\nThe `delay` represents the delay in milliseconds before\nthe tooltip is shown when hovering a cell. This overrides\nthe table's `tooltip_delay` property. If set to `null`,\nthe tooltip will be shown immediately.\nThe `duration` represents the duration in milliseconds\nduring which the tooltip is shown when hovering a cell.\nThis overrides the table's `tooltip_duration` property.\nIf set to `null`, the tooltip will not disappear.\nAlternatively, the value of the property can also be\na plain string. The `text` syntax will be used in\nthat case.",
+        "description": "`tooltip` is the column based tooltip configuration applied to all rows. The key is the column\n id and the value is a tooltip configuration.\nExample: {i: {'value': i, 'use_with: 'both'} for i in df.columns}",
         "defaultValue": {
           "value": "{}",
           "computed": false
@@ -1327,10 +1360,12 @@
             "value": {
               "delay": {
                 "name": "number",
+                "description": "The `delay` represents the delay in milliseconds before\nthe tooltip is shown when hovering a cell. This overrides\nthe table's `tooltip_delay` property. If set to `None`,\nthe tooltip will be shown immediately.",
                 "required": false
               },
               "duration": {
                 "name": "number",
+                "description": "The `duration` represents the duration in milliseconds\nduring which the tooltip is shown when hovering a cell.\nThis overrides the table's `tooltip_duration` property.\nIf set to `None`, the tooltip will not disappear.",
                 "required": false
               },
               "if": {
@@ -1338,10 +1373,12 @@
                 "value": {
                   "column_id": {
                     "name": "string",
+                    "description": "`column_id` refers to the column ID that must be matched.",
                     "required": false
                   },
                   "filter_query": {
                     "name": "string",
+                    "description": "`filter_query` refers to the query that must evaluate to True.",
                     "required": false
                   },
                   "row_index": {
@@ -1364,9 +1401,11 @@
                         ]
                       }
                     ],
+                    "description": "`row_index` refers to the index of the row in the source `data`.",
                     "required": false
                   }
                 },
+                "description": "The `if` refers to the condition that needs to be fulfilled\nin order for the associated tooltip configuration to be\nused. If multiple conditions are defined, all conditions\nmust be met for the tooltip to be used by a cell.",
                 "required": true
               },
               "type": {
@@ -1381,17 +1420,19 @@
                     "computed": false
                   }
                 ],
+                "description": "The `type` refers to the type of tooltip syntax used\nfor the tooltip generation. Can either be `markdown`\nor `text`. Defaults to `text`.",
                 "required": false
               },
               "value": {
                 "name": "string",
+                "description": "The `value` refers to the syntax-based content of the tooltip. This value is required.",
                 "required": true
               }
             }
           }
         },
         "required": false,
-        "description": "`tooltip_conditional` represents the tooltip shown\nfor different columns and cells.\nThis property allows you to specify different tooltips for\ndepending on certain conditions. For example, you may have\ndifferent tooltips in the same column based on the value\nof a certain data property.\nPriority is from first to last defined conditional tooltip\nin the list. Higher priority (more specific) conditional\ntooltips should be put at the beginning of the list.\nThe `if` refers to the condition that needs to be fulfilled\nin order for the associated tooltip configuration to be\nused. If multiple conditions are defined, all conditions\nmust be met for the tooltip to be used by a cell.\nThe `if` nested property `column_id` refers to the column\nID that must be matched.\nThe `if` nested property `row_index` refers to the index\nof the row in the source `data`.\nThe `if` nested property `filter_query` refers to the query that\nmust evaluate to True.\nThe `type` refers to the type of tooltip syntax used\nfor the tooltip generation. Can either be `markdown`\nor `text`. Defaults to `text`.\nThe `value` refers to the syntax-based content of\nthe tooltip. This value is required.\nThe `delay` represents the delay in milliseconds before\nthe tooltip is shown when hovering a cell. This overrides\nthe table's `tooltip_delay` property. If set to `null`,\nthe tooltip will be shown immediately.\nThe `duration` represents the duration in milliseconds\nduring which the tooltip is shown when hovering a cell.\nThis overrides the table's `tooltip_duration` property.\nIf set to `null`, the tooltip will not disappear.",
+        "description": "`tooltip_conditional` represents the tooltip shown\nfor different columns and cells.\nThis property allows you to specify different tooltips\ndepending on certain conditions. For example, you may have\ndifferent tooltips in the same column based on the value\nof a certain data property.\nPriority is from first to last defined conditional tooltip\nin the list. Higher priority (more specific) conditional\ntooltips should be put at the beginning of the list.",
         "defaultValue": {
           "value": "[]",
           "computed": false
@@ -1413,10 +1454,12 @@
                   "value": {
                     "delay": {
                       "name": "number",
+                      "description": "The `delay` represents the delay in milliseconds before\nthe tooltip is shown when hovering a cell. This overrides\nthe table's `tooltip_delay` property. If set to `None`,\nthe tooltip will be shown immediately.",
                       "required": false
                     },
                     "duration": {
                       "name": "number",
+                      "description": "The `duration` represents the duration in milliseconds\nduring which the tooltip is shown when hovering a cell.\nThis overrides the table's `tooltip_duration` property.\nIf set to `None`, the tooltip will not disappear.\nAlternatively, the value of the property can also be\na plain string. The `text` syntax will be used in\nthat case.",
                       "required": false
                     },
                     "type": {
@@ -1431,10 +1474,12 @@
                           "computed": false
                         }
                       ],
+                      "description": "For each tooltip configuration,\nThe `type` refers to the type of tooltip syntax used\nfor the tooltip generation. Can either be `markdown`\nor `text`. Defaults to `text`.",
                       "required": false
                     },
                     "value": {
                       "name": "string",
+                      "description": "The `value` refers to the syntax-based content of the tooltip. This value is required.",
                       "required": true
                     }
                   }
@@ -1444,7 +1489,7 @@
           }
         },
         "required": false,
-        "description": "`tooltip_data` represents the tooltip shown\nfor different columns and cells.\nA list of objects for which each key is\na column id and the value a tooltip configuration.\nFor each tooltip configuration,\nThe `type` refers to the type of tooltip syntax used\nfor the tooltip generation. Can either be `markdown`\nor `text`. Defaults to `text`.\nThe `value` refers to the syntax-based content of\nthe tooltip. This value is required.\nThe `delay` represents the delay in milliseconds before\nthe tooltip is shown when hovering a cell. This overrides\nthe table's `tooltip_delay` property. If set to `null`,\nthe tooltip will be shown immediately.\nThe `duration` represents the duration in milliseconds\nduring which the tooltip is shown when hovering a cell.\nThis overrides the table's `tooltip_duration` property.\nIf set to `null`, the tooltip will not disappear.\nAlternatively, the value of the property can also be\na plain string. The `text` syntax will be used in\nthat case.",
+        "description": "`tooltip_data` represents the tooltip shown\nfor different columns and cells.\nA list of dicts for which each key is\na column id and the value is a tooltip configuration.",
         "defaultValue": {
           "value": "[]",
           "computed": false
@@ -1464,10 +1509,12 @@
                 "value": {
                   "delay": {
                     "name": "number",
+                    "description": "The `delay` represents the delay in milliseconds before\nthe tooltip is shown when hovering a cell. This overrides\nthe table's `tooltip_delay` property. If set to `None`,\nthe tooltip will be shown immediately.",
                     "required": false
                   },
                   "duration": {
                     "name": "number",
+                    "description": "The `duration` represents the duration in milliseconds\nduring which the tooltip is shown when hovering a cell.\nThis overrides the table's `tooltip_duration` property.\nIf set to `None`, the tooltip will not disappear.\nAlternatively, the value of the property can also be\na plain string. The `text` syntax will be used in\nthat case.",
                     "required": false
                   },
                   "type": {
@@ -1482,10 +1529,12 @@
                         "computed": false
                       }
                     ],
+                    "description": "For each tooltip configuration,\nThe `type` refers to the type of tooltip syntax used\nfor the tooltip generation. Can either be `markdown`\nor `text`. Defaults to `text`.",
                     "required": false
                   },
                   "value": {
                     "name": "string",
+                    "description": "The `value` refers to the syntax-based content of the tooltip. This value is required.",
                     "required": true
                   }
                 }
@@ -1545,7 +1594,7 @@
           }
         },
         "required": false,
-        "description": "`tooltip_header` represents the tooltip shown\nfor different columns and cells.\nAn object for which each key is a column id and the value\na list of tooltip configurations or a toolttip configuration.\nIf the value is tooltip configuration, the same tooltip will\nbe used for all header rows of the corresponding column.\nFor each tooltip configuration,\nThe `type` refers to the type of tooltip syntax used\nfor the tooltip generation. Can either be `markdown`\nor `text`. Defaults to `text`.\nThe `value` refers to the syntax-based content of\nthe tooltip. This value is required.\nThe `delay` represents the delay in milliseconds before\nthe tooltip is shown when hovering a cell. This overrides\nthe table's `tooltip_delay` property. If set to `null`,\nthe tooltip will be shown immediately.\nThe `duration` represents the duration in milliseconds\nduring which the tooltip is shown when hovering a cell.\nThis overrides the table's `tooltip_duration` property.\nIf set to `null`, the tooltip will not disappear.\nAlternatively, the value of the property can also be\na plain string or a nully value to . The `text` syntax will be used in\nthat case.",
+        "description": "`tooltip_header` represents the tooltip shown\nfor each header column and optionally each header row.\nExample to show long column names in a tooltip: {i: i for i in df.columns}.\nExample to show different column names in a tooltip: {'Rep': 'Republican', 'Dem': 'Democrat'}.\nIf the table has multiple rows of headers, then use a list as the value of the\n`tooltip_header` items.",
         "defaultValue": {
           "value": "{}",
           "computed": false
@@ -1556,7 +1605,7 @@
           "name": "number"
         },
         "required": false,
-        "description": "`tooltip_delay` represents the table-wide delay in milliseconds before\nthe tooltip is shown when hovering a cell. If set to `null`, the tooltip\nwill be shown immediately.\nDefaults to 350.",
+        "description": "`tooltip_delay` represents the table-wide delay in milliseconds before\nthe tooltip is shown when hovering a cell. If set to `None`, the tooltip\nwill be shown immediately.\nDefaults to 350.",
         "defaultValue": {
           "value": "350",
           "computed": false
@@ -1567,7 +1616,7 @@
           "name": "number"
         },
         "required": false,
-        "description": "`tooltip_duration` represents the table-wide duration in milliseconds\nduring which the tooltip will be displayed when hovering a cell. If\nset to `null`, the tooltip will not disappear.\nDefaults to 2000.",
+        "description": "`tooltip_duration` represents the table-wide duration in milliseconds\nduring which the tooltip will be displayed when hovering a cell. If\nset to `None`, the tooltip will not disappear.\nDefaults to 2000.",
         "defaultValue": {
           "value": "2000",
           "computed": false
@@ -1666,7 +1715,7 @@
           ]
         },
         "required": false,
-        "description": "The `sort_action` property enables data to be\nsorted on a per-column basis.\nIf `'none'`, then the sorting UI is not displayed.\nIf `'native'`, then the sorting UI is displayed and the sorting\nlogic is hanled by the table. That is, it is performed on the data\nthat exists in the `data` property.\nIf `'custom'`, the the sorting UI is displayed but it is the\nresponsibility of the developer to program the sorting\nthrough a callback (where `sort_by` would be the input and `data`\nwould be the output).\nClicking on the sort arrows will update the\n`sort_by` property.",
+        "description": "The `sort_action` property enables data to be\nsorted on a per-column basis.\nIf `'none'`, then the sorting UI is not displayed.\nIf `'native'`, then the sorting UI is displayed and the sorting\nlogic is handled by the table. That is, it is performed on the data\nthat exists in the `data` property.\nIf `'custom'`, the the sorting UI is displayed but it is the\nresponsibility of the developer to program the sorting\nthrough a callback (where `sort_by` would be the input and `data`\nwould be the output).\nClicking on the sort arrows will update the\n`sort_by` property.",
         "defaultValue": {
           "value": "'none'",
           "computed": false
@@ -1746,7 +1795,7 @@
           }
         },
         "required": false,
-        "description": "An array of string, number and boolean values that are treated as `null`\n(i.e. ignored and always displayed last) when sorting.\nThis value will be used by columns without `sort_as_null`.\nDefaults to `[]`.",
+        "description": "An array of string, number and boolean values that are treated as `None`\n(i.e. ignored and always displayed last) when sorting.\nThis value will be used by columns without `sort_as_null`.\nDefaults to `[]`.",
         "defaultValue": {
           "value": "[]",
           "computed": false
@@ -2129,7 +2178,7 @@
           "name": "object"
         },
         "required": false,
-        "description": "This property represents the current structure of\n`filter_query` as a tree structure. Each node of the\nquery structure has:\ntype (string; required):\n  'open-block',\n  'logical-operator',\n  'relational-operator',\n  'unary-operator', or\n  'expression';\nsubType (string; optional):\n  'open-block': '()',\n  'logical-operator': '&&', '||',\n  'relational-operator': '=', '>=', '>', '<=', '<', '!=', 'contains',\n  'unary-operator': '!', 'is bool', 'is even', 'is nil', 'is num', 'is object', 'is odd', 'is prime', 'is str',\n  'expression': 'value', 'field';\nvalue (any):\n  'expression, value': passed value,\n  'expression, field': the field/prop name.\nblock (nested query structure; optional).\nleft (nested query structure; optional).\nright (nested query structure; optional).\nIf the query is invalid or empty, the `derived_filter_query_structure` will\nbe null."
+        "description": "This property represents the current structure of\n`filter_query` as a tree structure. Each node of the\nquery structure has:\ntype (string; required):\n  'open-block',\n  'logical-operator',\n  'relational-operator',\n  'unary-operator', or\n  'expression';\nsubType (string; optional):\n  'open-block': '()',\n  'logical-operator': '&&', '||',\n  'relational-operator': '=', '>=', '>', '<=', '<', '!=', 'contains',\n  'unary-operator': '!', 'is bool', 'is even', 'is nil', 'is num', 'is object', 'is odd', 'is prime', 'is str',\n  'expression': 'value', 'field';\nvalue (any):\n  'expression, value': passed value,\n  'expression, field': the field/prop name.\nblock (nested query structure; optional).\nleft (nested query structure; optional).\nright (nested query structure; optional).\nIf the query is invalid or empty, the `derived_filter_query_structure` will\nbe `None`."
       },
       "derived_viewport_data": {
         "type": {
@@ -2395,7 +2444,7 @@
         "required": false,
         "description": "Properties whose user interactions will persist after refreshing the\ncomponent or the page.",
         "defaultValue": {
-          "value": "[\n    'columns.name',\n    // data is not included by default\n    'filter_query',\n    'hidden_columns',\n    'selected_columns',\n    'selected_rows',\n    'sort_by'\n]",
+          "value": "[\n    'columns.name',\n    'filter_query',\n    'hidden_columns',\n    'selected_columns',\n    'selected_rows',\n    'sort_by'\n]",
           "computed": false
         }
       },
