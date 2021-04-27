@@ -38,6 +38,11 @@ export enum ExportHeaders {
     Display = 'display'
 }
 
+export enum FilterCase {
+    Insensitive = 'insensitive',
+    Sensitive = 'sensitive'
+}
+
 export enum SortMode {
     Single = 'single',
     Multi = 'multi'
@@ -193,6 +198,7 @@ export interface IBaseColumn {
     clearable?: boolean | boolean[] | 'first' | 'last';
     deletable?: boolean | boolean[] | 'first' | 'last';
     editable: boolean;
+    filter_option: FilterCase;
     hideable?: boolean | boolean[] | 'first' | 'last';
     renamable?: boolean | boolean[] | 'first' | 'last';
     selectable?: boolean | boolean[] | 'first' | 'last';
@@ -327,6 +333,7 @@ export interface IProps {
     data?: Data;
     editable?: boolean;
     fill_width?: boolean;
+    filter_option?: FilterCase;
     filter_query?: string;
     filter_action?: TableAction | IFilterAction;
     hidden_columns?: string[];
@@ -381,6 +388,7 @@ interface IDefaultProps {
     export_format: ExportFormat;
     export_headers: ExportHeaders;
     fill_width: boolean;
+    filter_option: FilterCase;
     filter_query: string;
     filter_action: TableAction;
     fixed_columns: Fixed;

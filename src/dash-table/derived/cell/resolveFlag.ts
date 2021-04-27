@@ -1,2 +1,2 @@
-export default (tableFlag: boolean, columnFlag: boolean | undefined): boolean =>
+export default <T>(tableFlag: T, columnFlag: T | undefined): T =>
     columnFlag === undefined ? tableFlag : columnFlag;

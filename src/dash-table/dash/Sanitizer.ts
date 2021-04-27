@@ -16,7 +16,8 @@ import {
     ExportHeaders,
     IFilterAction,
     FilterLogicalOperator,
-    SelectedCells
+    SelectedCells,
+    FilterCase
 } from 'dash-table/components/Table/props';
 import headerRows from 'dash-table/derived/header/headerRows';
 import resolveFlag from 'dash-table/derived/cell/resolveFlag';
@@ -63,11 +64,13 @@ const applyDefaultsToColumns = (
     defaultLocale: INumberLocale,
     defaultSort: SortAsNull,
     columns: Columns,
-    editable: boolean
+    editable: boolean,
+    filterCase: FilterCase
 ) =>
     R.map(column => {
         const c = R.clone(column);
         c.editable = resolveFlag(editable, column.editable);
+        c.filter_option = resolveFlag(filterCase, column.filter_option);
         c.sort_as_null = c.sort_as_null || defaultSort;
 
         if (c.type === ColumnType.Numeric && c.format) {
@@ -105,7 +108,8 @@ export default class Sanitizer {
                   locale_format,
                   props.sort_as_null,
                   props.columns,
-                  props.editable
+                  props.editable,
+                  props.filter_option
               )
             : [];
         const data = props.data ?? [];

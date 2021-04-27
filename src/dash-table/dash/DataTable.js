@@ -182,6 +182,17 @@ export const propTypes = {
             editable: PropTypes.bool,
 
             /**
+             * There are two `filter_option` props in the table.
+             * This is the column-level filter_option prop and there is
+             * also the table-level `filter_option` prop.
+             * These props determine whether the applicable filter relational
+             * operators will default to `sensitive` or `insensitive` comparison.
+             * If the column-level `filter_option` prop is set it overrides
+             * the table-level `filter_option` prop for that column.
+             */
+            filter_option: PropTypes.oneOf(['sensitive', 'insensitive']),
+
+            /**
              * If true, the user can hide the column by clicking on the `hide`
              * action button on the column. If there are multiple header rows, true
              * will display the action button on each row.
@@ -1141,6 +1152,17 @@ export const propTypes = {
             operator: PropTypes.oneOf(['and', 'or'])
         })
     ]),
+
+    /**
+     * There are two `filter_option` props in the table.
+     * This is the table-level filter_option prop and there is
+     * also the column-level `filter_option` prop.
+     * These props determine whether the applicable filter relational
+     * operators will default to `sensitive` or `insensitive` comparison.
+     * If the column-level `filter_option` prop is set it overrides
+     * the table-level `filter_option` prop for that column.
+     */
+    filter_option: PropTypes.oneOf(['sensitive', 'insensitive']),
 
     /**
      * The `sort_action` property enables data to be

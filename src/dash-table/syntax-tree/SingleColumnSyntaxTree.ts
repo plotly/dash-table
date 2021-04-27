@@ -1,9 +1,15 @@
+import * as R from 'ramda';
+
 import {RequiredPluck, OptionalPluck} from 'core/type';
 import SyntaxTree from 'core/syntax-tree';
 import {ILexemeResult, ILexerResult} from 'core/syntax-tree/lexer';
 import {LexemeType, boundLexeme} from 'core/syntax-tree/lexicon';
 
-import {ColumnType, IColumn} from 'dash-table/components/Table/props';
+import {
+    ColumnType,
+    FilterCase,
+    IColumn
+} from 'dash-table/components/Table/props';
 
 import {fieldExpression} from './lexeme/expression';
 import {
@@ -53,12 +59,44 @@ function isUnary(lexemes: ILexemeResult[]) {
     );
 }
 
+function isUnflaggedRelational(lexemes: ILexemeResult[]): boolean {
+    const [op] = lexemes;
+    return (
+        Boolean(lexemes.length) &&
+        op.lexeme.type === LexemeType.RelationalOperator &&
+        !R.isNil(op.lexeme.regexpFlags) &&
+        !Boolean(op.flags?.length)
+    );
+}
+
 function modifyLex(config: SingleColumnConfig, res: ILexerResult) {
     if (!res.valid) {
         return res;
     }
 
-    if (isBinary(res.lexemes) || isUnary(res.lexemes)) {
+    if (isUnflaggedRelational(res.lexemes)) {
+        const {filter_option, id} = config;
+        const [op, rhs] = res.lexemes;
+
+        const flags = R.isNil(filter_option)
+            ? ''
+            : filter_option === FilterCase.Insensitive
+            ? 'i'
+            : 's';
+
+        res.lexemes = [
+            {
+                lexeme: boundLexeme(fieldExpression),
+                value: `{${id}}`
+            },
+            {
+                ...op,
+                flags,
+                value: `${flags}${op.lexeme.subType}`
+            },
+            rhs
+        ];
+    } else if (isBinary(res.lexemes) || isUnary(res.lexemes)) {
         res.lexemes = [
             {lexeme: boundLexeme(fieldExpression), value: `{${config.id}}`},
             ...res.lexemes
@@ -75,6 +113,7 @@ function modifyLex(config: SingleColumnConfig, res: ILexerResult) {
 }
 
 export type SingleColumnConfig = RequiredPluck<IColumn, 'id'> &
+    OptionalPluck<IColumn, 'filter_option'> &
     OptionalPluck<IColumn, 'type'>;
 
 export default class SingleColumnSyntaxTree extends SyntaxTree {
