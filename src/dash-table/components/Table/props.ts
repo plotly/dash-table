@@ -198,7 +198,7 @@ export interface IBaseColumn {
     clearable?: boolean | boolean[] | 'first' | 'last';
     deletable?: boolean | boolean[] | 'first' | 'last';
     editable: boolean;
-    filter_option: FilterCase;
+    filter_options: FilterCase;
     hideable?: boolean | boolean[] | 'first' | 'last';
     renamable?: boolean | boolean[] | 'first' | 'last';
     selectable?: boolean | boolean[] | 'first' | 'last';
@@ -333,7 +333,7 @@ export interface IProps {
     data?: Data;
     editable?: boolean;
     fill_width?: boolean;
-    filter_option?: FilterCase;
+    filter_options?: FilterCase;
     filter_query?: string;
     filter_action?: TableAction | IFilterAction;
     hidden_columns?: string[];
@@ -388,7 +388,7 @@ interface IDefaultProps {
     export_format: ExportFormat;
     export_headers: ExportHeaders;
     fill_width: boolean;
-    filter_option: FilterCase;
+    filter_options: FilterCase;
     filter_query: string;
     filter_action: TableAction;
     fixed_columns: Fixed;
@@ -490,6 +490,7 @@ export type SetFilter = (
 export interface IFilterFactoryProps {
     filter_query: string;
     filter_action: IFilterAction;
+    filter_options: FilterCase;
     id: string;
     map: Map<string, SingleColumnSyntaxTree>;
     rawFilterQuery: string;
@@ -500,6 +501,7 @@ export interface IFilterFactoryProps {
     style_cell_conditional: Cells;
     style_filter: Style;
     style_filter_conditional: BasicFilters;
+    toggleFilterOptions: (column: IColumn) => IColumn;
     visibleColumns: Columns;
 }
 

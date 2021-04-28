@@ -481,6 +481,21 @@
                     top: 0;
                     height: 100%;
                     width: 100%;
+
+                    &.dash-filter--case {
+                        position: relative;
+                        left: auto;
+                        top: auto;
+                        width: auto;
+                        height: 16px;
+                        line-height: 0px;
+                        padding: 1px;
+                    }
+                    &.dash-filter--case--sensitive {
+                        border-width: 1px;
+                        border-style: solid;
+                        border-radius: 3px;
+                    }
                 }
             }
 
@@ -670,7 +685,7 @@
     	}
 
 	    .dash-spreadsheet-inner {
-            [class^='column-header--'] {
+            [class^='column-header--'], [class^='dash-filter--'] {
                 cursor: pointer;
                 float: left;
             }
@@ -685,6 +700,7 @@
             }
 
 
+            .dash-filter--case,
             .column-header--clear,
             .column-header--delete,
             .column-header--edit,
@@ -695,10 +711,22 @@
             }
 
             th:hover {
-        		[class^='column-header--']:not(.disabled) {
-                    color: var(--accent);
-                    opacity: 1;
-		        }
+        		[class^='column-header--'], [class^='dash-filter--'] {
+                    &:not(.disabled) {
+                        color: var(--accent);
+                        opacity: 1;
+                    }
+                }
+            }
+
+            .dash-filter--case {
+                font-size: 10px;
+            }
+
+            .dash-filter--case--sensitive {
+                border-width: 1px;
+                border-style: solid;
+                border-radius: 3px;
             }
 	    }
     }

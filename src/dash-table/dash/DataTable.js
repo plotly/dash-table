@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {asyncDecorator} from '@plotly/dash-component-plugins';
 
 import LazyLoader from 'dash-table/LazyLoader';
+import {FilterCase} from 'dash-table/components/Table/props';
 
 /**
  * Dash DataTable is an interactive table component designed for
@@ -56,6 +57,7 @@ export const defaultProps = {
     dropdown_data: [],
 
     fill_width: true,
+    filter_options: FilterCase.Sensitive,
     fixed_columns: {
         headers: false,
         data: 0
@@ -182,15 +184,15 @@ export const propTypes = {
             editable: PropTypes.bool,
 
             /**
-             * There are two `filter_option` props in the table.
-             * This is the column-level filter_option prop and there is
-             * also the table-level `filter_option` prop.
+             * There are two `filter_options` props in the table.
+             * This is the column-level filter_options prop and there is
+             * also the table-level `filter_options` prop.
              * These props determine whether the applicable filter relational
              * operators will default to `sensitive` or `insensitive` comparison.
-             * If the column-level `filter_option` prop is set it overrides
-             * the table-level `filter_option` prop for that column.
+             * If the column-level `filter_options` prop is set it overrides
+             * the table-level `filter_options` prop for that column.
              */
-            filter_option: PropTypes.oneOf(['sensitive', 'insensitive']),
+            filter_options: PropTypes.oneOf(['sensitive', 'insensitive']),
 
             /**
              * If true, the user can hide the column by clicking on the `hide`
@@ -1154,15 +1156,15 @@ export const propTypes = {
     ]),
 
     /**
-     * There are two `filter_option` props in the table.
-     * This is the table-level filter_option prop and there is
-     * also the column-level `filter_option` prop.
+     * There are two `filter_options` props in the table.
+     * This is the table-level filter_options prop and there is
+     * also the column-level `filter_options` prop.
      * These props determine whether the applicable filter relational
      * operators will default to `sensitive` or `insensitive` comparison.
-     * If the column-level `filter_option` prop is set it overrides
-     * the table-level `filter_option` prop for that column.
+     * If the column-level `filter_options` prop is set it overrides
+     * the table-level `filter_options` prop for that column.
      */
-    filter_option: PropTypes.oneOf(['sensitive', 'insensitive']),
+    filter_options: PropTypes.oneOf(['sensitive', 'insensitive']),
 
     /**
      * The `sort_action` property enables data to be

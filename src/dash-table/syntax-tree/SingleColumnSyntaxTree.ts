@@ -21,13 +21,22 @@ import {
 
 import columnLexicon from './lexicon/column';
 
-function getImplicitLexeme(type: ColumnType = ColumnType.Any): ILexemeResult {
+function getImplicitLexeme(
+    filterOptions: FilterCase | undefined,
+    type: ColumnType = ColumnType.Any
+): ILexemeResult {
+    const flags = R.isNil(filterOptions)
+        ? ''
+        : filterOptions === FilterCase.Insensitive
+        ? 'i'
+        : 's';
+
     switch (type) {
         case ColumnType.Any:
         case ColumnType.Text:
             return {
                 lexeme: boundLexeme(contains),
-                value: RelationalOperator.Contains
+                value: `${flags}${RelationalOperator.Contains}`
             };
         case ColumnType.Datetime:
             return {
@@ -37,7 +46,7 @@ function getImplicitLexeme(type: ColumnType = ColumnType.Any): ILexemeResult {
         case ColumnType.Numeric:
             return {
                 lexeme: boundLexeme(equal),
-                value: RelationalOperator.Equal
+                value: `${flags}${RelationalOperator.Equal}`
             };
     }
 }
@@ -59,44 +68,12 @@ function isUnary(lexemes: ILexemeResult[]) {
     );
 }
 
-function isUnflaggedRelational(lexemes: ILexemeResult[]): boolean {
-    const [op] = lexemes;
-    return (
-        Boolean(lexemes.length) &&
-        op.lexeme.type === LexemeType.RelationalOperator &&
-        !R.isNil(op.lexeme.regexpFlags) &&
-        !Boolean(op.flags?.length)
-    );
-}
-
 function modifyLex(config: SingleColumnConfig, res: ILexerResult) {
     if (!res.valid) {
         return res;
     }
 
-    if (isUnflaggedRelational(res.lexemes)) {
-        const {filter_option, id} = config;
-        const [op, rhs] = res.lexemes;
-
-        const flags = R.isNil(filter_option)
-            ? ''
-            : filter_option === FilterCase.Insensitive
-            ? 'i'
-            : 's';
-
-        res.lexemes = [
-            {
-                lexeme: boundLexeme(fieldExpression),
-                value: `{${id}}`
-            },
-            {
-                ...op,
-                flags,
-                value: `${flags}${op.lexeme.subType}`
-            },
-            rhs
-        ];
-    } else if (isBinary(res.lexemes) || isUnary(res.lexemes)) {
+    if (isBinary(res.lexemes) || isUnary(res.lexemes)) {
         res.lexemes = [
             {lexeme: boundLexeme(fieldExpression), value: `{${config.id}}`},
             ...res.lexemes
@@ -104,7 +81,7 @@ function modifyLex(config: SingleColumnConfig, res: ILexerResult) {
     } else if (isExpression(res.lexemes)) {
         res.lexemes = [
             {lexeme: boundLexeme(fieldExpression), value: `{${config.id}}`},
-            getImplicitLexeme(config.type),
+            getImplicitLexeme(config.filter_options, config.type),
             ...res.lexemes
         ];
     }
@@ -113,7 +90,7 @@ function modifyLex(config: SingleColumnConfig, res: ILexerResult) {
 }
 
 export type SingleColumnConfig = RequiredPluck<IColumn, 'id'> &
-    OptionalPluck<IColumn, 'filter_option'> &
+    OptionalPluck<IColumn, 'filter_options'> &
     OptionalPluck<IColumn, 'type'>;
 
 export default class SingleColumnSyntaxTree extends SyntaxTree {

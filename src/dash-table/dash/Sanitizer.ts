@@ -70,7 +70,7 @@ const applyDefaultsToColumns = (
     R.map(column => {
         const c = R.clone(column);
         c.editable = resolveFlag(editable, column.editable);
-        c.filter_option = resolveFlag(filterCase, column.filter_option);
+        c.filter_options = resolveFlag(filterCase, column.filter_options);
         c.sort_as_null = c.sort_as_null || defaultSort;
 
         if (c.type === ColumnType.Numeric && c.format) {
@@ -109,7 +109,7 @@ export default class Sanitizer {
                   props.sort_as_null,
                   props.columns,
                   props.editable,
-                  props.filter_option
+                  props.filter_options
               )
             : [];
         const data = props.data ?? [];

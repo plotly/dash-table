@@ -13,7 +13,8 @@ import {
     TableAction,
     IFilterFactoryProps,
     SetFilter,
-    FilterLogicalOperator
+    FilterLogicalOperator,
+    FilterCase
 } from 'dash-table/components/Table/props';
 import derivedFilterStyles, {
     derivedFilterOpStyles
@@ -57,13 +58,28 @@ export default class FilterFactory {
         updateColumnFilter(map, column, operator, value, setFilter);
     };
 
+    private onToggleChange = (
+        column: IColumn,
+        map: Map<string, SingleColumnSyntaxTree>,
+        operator: FilterLogicalOperator,
+        setFilter: SetFilter,
+        toggleFilterOptions: (column: IColumn) => IColumn,
+        value: any
+    ) => {
+        const newColumn = toggleFilterOptions(column);
+
+        updateColumnFilter(map, newColumn, operator, value, setFilter);
+    };
+
     private filter = memoizerCache<[ColumnId, number]>()(
         (
             column: IColumn,
+            filterOptions: FilterCase,
             index: number,
             map: Map<string, SingleColumnSyntaxTree>,
             operator: FilterLogicalOperator,
-            setFilter: SetFilter
+            setFilter: SetFilter,
+            toggleFilterOptions: (column: IColumn) => IColumn
         ) => {
             const ast = map.get(column.id.toString());
 
@@ -72,6 +88,7 @@ export default class FilterFactory {
                     key={`column-${index}`}
                     className={`dash-filter column-${index}`}
                     columnId={column.id}
+                    filterOptions={filterOptions}
                     isValid={!ast || ast.isValid}
                     setFilter={this.onChange.bind(
                         this,
@@ -80,6 +97,11 @@ export default class FilterFactory {
                         operator,
                         setFilter
                     )}
+                    // Running into TypeScript binding issues with many parameters..
+                    // bind with no more than 4 params each time.. sigh..
+                    toggleFilterOptions={this.onToggleChange
+                        .bind(this, column, map, operator, setFilter)
+                        .bind(this, toggleFilterOptions, ast && ast.query)}
                     value={ast && ast.query}
                 />
             );
@@ -99,6 +121,7 @@ export default class FilterFactory {
     ) {
         const {
             filter_action,
+            filter_options,
             map,
             row_deletable,
             row_selectable,
@@ -107,6 +130,7 @@ export default class FilterFactory {
             style_cell_conditional,
             style_filter,
             style_filter_conditional,
+            toggleFilterOptions,
             visibleColumns
         } = this.props;
 
@@ -136,10 +160,12 @@ export default class FilterFactory {
             (column, index) => {
                 return this.filter.get(column.id, index)(
                     column,
+                    filter_options,
                     index,
                     map,
                     filter_action.operator,
-                    setFilter
+                    setFilter,
+                    toggleFilterOptions
                 );
             },
             visibleColumns
