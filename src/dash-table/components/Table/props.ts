@@ -490,7 +490,6 @@ export type SetFilter = (
 export interface IFilterFactoryProps {
     filter_query: string;
     filter_action: IFilterAction;
-    filter_options: FilterCase;
     id: string;
     map: Map<string, SingleColumnSyntaxTree>;
     rawFilterQuery: string;

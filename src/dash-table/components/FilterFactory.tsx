@@ -13,8 +13,7 @@ import {
     TableAction,
     IFilterFactoryProps,
     SetFilter,
-    FilterLogicalOperator,
-    FilterCase
+    FilterLogicalOperator
 } from 'dash-table/components/Table/props';
 import derivedFilterStyles, {
     derivedFilterOpStyles
@@ -74,7 +73,6 @@ export default class FilterFactory {
     private filter = memoizerCache<[ColumnId, number]>()(
         (
             column: IColumn,
-            filterOptions: FilterCase,
             index: number,
             map: Map<string, SingleColumnSyntaxTree>,
             operator: FilterLogicalOperator,
@@ -88,7 +86,7 @@ export default class FilterFactory {
                     key={`column-${index}`}
                     className={`dash-filter column-${index}`}
                     columnId={column.id}
-                    filterOptions={filterOptions}
+                    filterOptions={column.filter_options}
                     isValid={!ast || ast.isValid}
                     setFilter={this.onChange.bind(
                         this,
@@ -121,7 +119,6 @@ export default class FilterFactory {
     ) {
         const {
             filter_action,
-            filter_options,
             map,
             row_deletable,
             row_selectable,
@@ -160,7 +157,6 @@ export default class FilterFactory {
             (column, index) => {
                 return this.filter.get(column.id, index)(
                     column,
-                    filter_options,
                     index,
                     map,
                     filter_action.operator,
