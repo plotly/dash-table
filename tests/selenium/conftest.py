@@ -260,8 +260,19 @@ class DataTableColumnFacade(object):
             )
         )
 
+    def filter_clear(self):
+        self.filter_double_click()
+        self.mixin.driver.switch_to.active_element.send_keys(Keys.DELETE)
+
     def filter_click(self):
         self.filter().click()
+
+    def filter_double_click(self):
+        ac = ActionChains(self.mixin.driver)
+        ac.move_to_element(self.filter())
+        ac.pause(1)  # sometimes experiencing incorrect behavior on scroll otherwise
+        ac.double_click()
+        return ac.perform()
 
     def filter_invalid(self):
         return "invalid" in self.filter().get_attribute("class").split(" ")
@@ -273,8 +284,10 @@ class DataTableColumnFacade(object):
                 .find_element_by_css_selector("input")
                 .get_attribute("value")
             )
+        elif value == "":
+            self.filter_clear()
         else:
-            self.filter_click()
+            self.filter_double_click()
             self.mixin.driver.switch_to.active_element.send_keys(value + Keys.ENTER)
 
 
