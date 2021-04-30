@@ -10,12 +10,15 @@ interface IFilterCaseButtonProps {
 export default ({
     filterOptions,
     toggleFilterOptions
-}: IFilterCaseButtonProps) => (<input
-    type='button'
-    className={`dash-filter--case ${filterOptions === FilterCase.Sensitive
-            ? 'dash-filter--case--sensitive'
-            : 'dash-filter--case--insensitive'
+}: IFilterCaseButtonProps) => (
+    <input
+        type='button'
+        className={`dash-filter--case ${
+            filterOptions === FilterCase.Sensitive
+                ? 'dash-filter--case--sensitive'
+                : 'dash-filter--case--insensitive'
         }`}
-    onClick={toggleFilterOptions}
-    value='Aa'
-/>);
+        onClick={toggleFilterOptions}
+        value='Aa'
+    />
+);
