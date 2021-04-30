@@ -114,7 +114,7 @@ def test_filt002_sensitivity(test, filter_options, column_filter_options):
     test.start_server(get_app(props))
 
     target = test.table("table")
-    # time.sleep(5000)
+
     # any -> implicit contains
     target.column("a").filter_value("A")
     if sensitivity == "sensitive":
