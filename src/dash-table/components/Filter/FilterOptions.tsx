@@ -19,6 +19,7 @@ export default ({
                 : 'dash-filter--case--insensitive'
         }`}
         onClick={toggleFilterOptions}
+        title='Toggle filter case sensitivity'
         value='Aa'
     />
 );
