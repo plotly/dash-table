@@ -21,6 +21,42 @@ import {
 
 import columnLexicon from './lexicon/column';
 
+const sensitiveRelationalOperators: string[] = [
+    RelationalOperator.Contains,
+    RelationalOperator.Equal,
+    RelationalOperator.GreaterOrEqual,
+    RelationalOperator.GreaterThan,
+    RelationalOperator.LessOrEqual,
+    RelationalOperator.LessThan,
+    RelationalOperator.NotEqual
+];
+
+function getFilterLexeme(
+    filterOptions: FilterCase | undefined,
+    lexeme: ILexemeResult
+): ILexemeResult {
+    const flags = R.isNil(filterOptions)
+        ? ''
+        : filterOptions === FilterCase.Insensitive
+        ? 'i'
+        : 's';
+
+    if (
+        lexeme.lexeme.type === LexemeType.RelationalOperator &&
+        lexeme.lexeme.subType &&
+        sensitiveRelationalOperators.indexOf(lexeme.lexeme.subType) !== -1 &&
+        lexeme.value &&
+        ['i', 's'].indexOf(lexeme.value[0]) === -1
+    ) {
+        return {
+            ...lexeme,
+            value: `${flags}${lexeme.value}`
+        };
+    }
+
+    return lexeme;
+}
+
 function getImplicitLexeme(
     filterOptions: FilterCase | undefined,
     type: ColumnType = ColumnType.Any
@@ -73,7 +109,13 @@ function modifyLex(config: SingleColumnConfig, res: ILexerResult) {
         return res;
     }
 
-    if (isBinary(res.lexemes) || isUnary(res.lexemes)) {
+    if (isBinary(res.lexemes)) {
+        res.lexemes = [
+            {lexeme: boundLexeme(fieldExpression), value: `{${config.id}}`},
+            getFilterLexeme(config.filter_options, res.lexemes[0]),
+            res.lexemes[1]
+        ];
+    } else if (isUnary(res.lexemes)) {
         res.lexemes = [
             {lexeme: boundLexeme(fieldExpression), value: `{${config.id}}`},
             ...res.lexemes
