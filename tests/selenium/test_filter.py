@@ -173,3 +173,89 @@ def test_filt002_sensitivity(test, filter_options, column_filter_options):
     else:
         assert target.cell(0, "c").get_text() == "abc"
         assert target.cell(1, "c").get_text() == "ABC"
+
+
+@pytest.mark.parametrize(
+    "filter_options,column_filter_options",
+    [
+        ("sensitive", None),
+        ("sensitive", None),
+        ("sensitive", None),
+        ("insensitive", None),
+        ("sensitive", "insensitive"),
+        ("insensitive", "sensitive"),
+    ],
+)
+def test_filt003_sensitivity(test, filter_options, column_filter_options):
+    props = dict(
+        id="table",
+        data=[dict(a="abc", b="abc", c="abc"), dict(a="ABC", b="ABC", c="ABC")],
+        columns=[
+            dict(id="a", name="a", filter_options=column_filter_options, type="any"),
+            dict(id="b", name="b", filter_options=column_filter_options, type="text"),
+            dict(
+                id="c", name="c", filter_options=column_filter_options, type="numeric"
+            ),
+        ],
+        filter_action="native",
+        filter_options=filter_options,
+        style_cell=dict(width=100, min_width=100, max_width=100),
+    )
+
+    sensitivity = (
+        filter_options if column_filter_options is None else column_filter_options
+    )
+
+    test.start_server(get_app(props))
+
+    target = test.table("table")
+
+    target.column("a").filter_value("contains A")
+    if sensitivity == "sensitive":
+        assert target.cell(0, "a").get_text() == "ABC"
+        assert not target.cell(1, "a").exists()
+    else:
+        assert target.cell(0, "a").get_text() == "abc"
+        assert target.cell(1, "a").get_text() == "ABC"
+
+    target.column("a").filter_value("contains a")
+    if sensitivity == "sensitive":
+        assert target.cell(0, "a").get_text() == "abc"
+        assert not target.cell(1, "a").exists()
+    else:
+        assert target.cell(0, "a").get_text() == "abc"
+        assert target.cell(1, "a").get_text() == "ABC"
+
+    target.column("a").filter_value("")
+    target.column("b").filter_value("contains A")
+    if sensitivity == "sensitive":
+        assert target.cell(0, "b").get_text() == "ABC"
+        assert not target.cell(1, "b").exists()
+    else:
+        assert target.cell(0, "b").get_text() == "abc"
+        assert target.cell(1, "b").get_text() == "ABC"
+
+    target.column("b").filter_value("contains a")
+    if sensitivity == "sensitive":
+        assert target.cell(0, "b").get_text() == "abc"
+        assert not target.cell(1, "b").exists()
+    else:
+        assert target.cell(0, "b").get_text() == "abc"
+        assert target.cell(1, "b").get_text() == "ABC"
+
+    target.column("b").filter_value("")
+    target.column("c").filter_value("contains A")
+    if sensitivity == "sensitive":
+        assert target.cell(0, "c").get_text() == "ABC"
+        assert not target.cell(1, "c").exists()
+    else:
+        assert target.cell(0, "c").get_text() == "abc"
+        assert target.cell(1, "c").get_text() == "ABC"
+
+    target.column("c").filter_value("contains a")
+    if sensitivity == "sensitive":
+        assert target.cell(0, "c").get_text() == "abc"
+        assert not target.cell(1, "c").exists()
+    else:
+        assert target.cell(0, "c").get_text() == "abc"
+        assert target.cell(1, "c").get_text() == "ABC"
