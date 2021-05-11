@@ -2,7 +2,7 @@ import React, {CSSProperties, PureComponent} from 'react';
 
 import IsolatedInput from 'core/components/IsolatedInput';
 
-import {ColumnId, FilterCase} from 'dash-table/components/Table/props';
+import {ColumnId, IFilterOptions} from 'dash-table/components/Table/props';
 import TableClipboardHelper from 'dash-table/utils/TableClipboardHelper';
 import FilterOptions from 'dash-table/components/Filter/FilterOptions';
 
@@ -11,7 +11,7 @@ type SetFilter = (ev: any) => void;
 interface IColumnFilterProps {
     className: string;
     columnId: ColumnId;
-    filterOptions: FilterCase;
+    filterOptions: IFilterOptions;
     isValid: boolean;
     setFilter: SetFilter;
     style?: CSSProperties;

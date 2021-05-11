@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import {asyncDecorator} from '@plotly/dash-component-plugins';
 
 import LazyLoader from 'dash-table/LazyLoader';
-import {FilterCase} from 'dash-table/components/Table/props';
 
 /**
  * Dash DataTable is an interactive table component designed for
@@ -57,7 +56,7 @@ export const defaultProps = {
     dropdown_data: [],
 
     fill_width: true,
-    filter_options: FilterCase.Sensitive,
+    filter_options: {},
     fixed_columns: {
         headers: false,
         data: 0
@@ -192,7 +191,9 @@ export const propTypes = {
              * If the column-level `filter_options` prop is set it overrides
              * the table-level `filter_options` prop for that column.
              */
-            filter_options: PropTypes.oneOf(['sensitive', 'insensitive']),
+            filter_options: PropTypes.shape({
+                case: PropTypes.oneOf(['sensitive', 'insensitive'])
+            }),
 
             /**
              * If true, the user can hide the column by clicking on the `hide`

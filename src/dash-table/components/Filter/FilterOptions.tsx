@@ -1,9 +1,9 @@
 import React from 'react';
 
-import {FilterCase} from 'dash-table/components/Table/props';
+import {FilterCase, IFilterOptions} from 'dash-table/components/Table/props';
 
 interface IFilterCaseButtonProps {
-    filterOptions: FilterCase;
+    filterOptions: IFilterOptions;
     toggleFilterOptions: () => void;
 }
 
@@ -14,7 +14,7 @@ export default ({
     <input
         type='button'
         className={`dash-filter--case ${
-            filterOptions === FilterCase.Sensitive
+            filterOptions.case === FilterCase.Sensitive
                 ? 'dash-filter--case--sensitive'
                 : 'dash-filter--case--insensitive'
         }`}

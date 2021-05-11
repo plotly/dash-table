@@ -53,10 +53,13 @@ export default (propsFn: () => ControlledTableProps) => {
             const iColumn = columns.indexOf(column);
 
             const newColumn = {...newColumns[iColumn]};
-            newColumn.filter_options =
-                newColumn.filter_options === FilterCase.Insensitive
-                    ? FilterCase.Sensitive
-                    : FilterCase.Insensitive;
+            newColumn.filter_options = {
+                ...newColumn.filter_options,
+                case:
+                    newColumn.filter_options.case === FilterCase.Insensitive
+                        ? FilterCase.Sensitive
+                        : FilterCase.Insensitive
+            };
 
             newColumns.splice(iColumn, 1, newColumn);
 

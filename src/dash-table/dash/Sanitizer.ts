@@ -17,7 +17,8 @@ import {
     IFilterAction,
     FilterLogicalOperator,
     SelectedCells,
-    FilterCase
+    FilterCase,
+    IFilterOptions
 } from 'dash-table/components/Table/props';
 import headerRows from 'dash-table/derived/header/headerRows';
 import resolveFlag from 'dash-table/derived/cell/resolveFlag';
@@ -35,6 +36,10 @@ const D3_DEFAULT_LOCALE: INumberLocale = {
 const DEFAULT_NULLY = '';
 const DEFAULT_SPECIFIER = '';
 const NULL_SELECTED_CELLS: SelectedCells = [];
+
+const DEFAULT_FILTER_OPTIONS = {
+    case: FilterCase.Sensitive
+};
 
 const data2number = (data?: any) => +data || 0;
 
@@ -65,12 +70,16 @@ const applyDefaultsToColumns = (
     defaultSort: SortAsNull,
     columns: Columns,
     editable: boolean,
-    filterCase: FilterCase
+    filterOptions: IFilterOptions | undefined
 ) =>
     R.map(column => {
         const c = R.clone(column);
         c.editable = resolveFlag(editable, column.editable);
-        c.filter_options = resolveFlag(filterCase, column.filter_options);
+        c.filter_options = {
+            ...DEFAULT_FILTER_OPTIONS,
+            ...(c.filter_options ?? {}),
+            ...(filterOptions ?? {})
+        };
         c.sort_as_null = c.sort_as_null || defaultSort;
 
         if (c.type === ColumnType.Numeric && c.format) {

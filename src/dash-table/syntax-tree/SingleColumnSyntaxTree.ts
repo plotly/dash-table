@@ -8,7 +8,8 @@ import {LexemeType, boundLexeme} from 'core/syntax-tree/lexicon';
 import {
     ColumnType,
     FilterCase,
-    IColumn
+    IColumn,
+    IFilterOptions
 } from 'dash-table/components/Table/props';
 
 import {fieldExpression} from './lexeme/expression';
@@ -32,12 +33,12 @@ const sensitiveRelationalOperators: string[] = [
 ];
 
 function getFilterLexeme(
-    filterOptions: FilterCase | undefined,
+    filterOptions: IFilterOptions | undefined,
     lexeme: ILexemeResult
 ): ILexemeResult {
     const flags = R.isNil(filterOptions)
         ? ''
-        : filterOptions === FilterCase.Insensitive
+        : filterOptions.case === FilterCase.Insensitive
         ? 'i'
         : 's';
 
@@ -58,12 +59,12 @@ function getFilterLexeme(
 }
 
 function getImplicitLexeme(
-    filterOptions: FilterCase | undefined,
+    filterOptions: IFilterOptions | undefined,
     type: ColumnType = ColumnType.Any
 ): ILexemeResult {
     const flags = R.isNil(filterOptions)
         ? ''
-        : filterOptions === FilterCase.Insensitive
+        : filterOptions.case === FilterCase.Insensitive
         ? 'i'
         : 's';
 

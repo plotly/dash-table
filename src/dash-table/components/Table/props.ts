@@ -54,6 +54,10 @@ export enum TableAction {
     None = 'none'
 }
 
+export interface IFilterOptions {
+    case?: FilterCase;
+}
+
 export interface IDerivedData {
     data: Data;
     indices: Indices;
@@ -198,7 +202,7 @@ export interface IBaseColumn {
     clearable?: boolean | boolean[] | 'first' | 'last';
     deletable?: boolean | boolean[] | 'first' | 'last';
     editable: boolean;
-    filter_options: FilterCase;
+    filter_options: IFilterOptions;
     hideable?: boolean | boolean[] | 'first' | 'last';
     renamable?: boolean | boolean[] | 'first' | 'last';
     selectable?: boolean | boolean[] | 'first' | 'last';
@@ -333,7 +337,7 @@ export interface IProps {
     data?: Data;
     editable?: boolean;
     fill_width?: boolean;
-    filter_options?: FilterCase;
+    filter_options?: IFilterOptions;
     filter_query?: string;
     filter_action?: TableAction | IFilterAction;
     hidden_columns?: string[];
@@ -388,7 +392,7 @@ interface IDefaultProps {
     export_format: ExportFormat;
     export_headers: ExportHeaders;
     fill_width: boolean;
-    filter_options: FilterCase;
+    filter_options?: IFilterOptions;
     filter_query: string;
     filter_action: TableAction;
     fixed_columns: Fixed;
