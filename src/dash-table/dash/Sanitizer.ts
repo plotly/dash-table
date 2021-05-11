@@ -77,8 +77,8 @@ const applyDefaultsToColumns = (
         c.editable = resolveFlag(editable, column.editable);
         c.filter_options = {
             ...DEFAULT_FILTER_OPTIONS,
-            ...(c.filter_options ?? {}),
-            ...(filterOptions ?? {})
+            ...(filterOptions ?? {}),
+            ...(c.filter_options ?? {})
         };
         c.sort_as_null = c.sort_as_null || defaultSort;
 

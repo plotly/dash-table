@@ -99,24 +99,32 @@ def test_filt002_sensitivity(test, filter_options, column_filter_options):
             dict(
                 id="a",
                 name="a",
-                filter_options=dict(case=column_filter_options),
+                filter_options=dict(case=column_filter_options)
+                if column_filter_options is not None
+                else None,
                 type="any",
             ),
             dict(
                 id="b",
                 name="b",
-                filter_options=dict(case=column_filter_options),
+                filter_options=dict(case=column_filter_options)
+                if column_filter_options is not None
+                else None,
                 type="text",
             ),
             dict(
                 id="c",
                 name="c",
-                filter_options=dict(case=column_filter_options),
+                filter_options=dict(case=column_filter_options)
+                if column_filter_options is not None
+                else None,
                 type="numeric",
             ),
         ],
         filter_action="native",
-        filter_options=dict(case=filter_options),
+        filter_options=dict(case=filter_options)
+        if filter_options is not None
+        else None,
         style_cell=dict(width=100, min_width=100, max_width=100),
     )
 
@@ -207,24 +215,32 @@ def test_filt003_sensitivity(test, filter_options, column_filter_options):
             dict(
                 id="a",
                 name="a",
-                filter_options=dict(case=column_filter_options),
+                filter_options=dict(case=column_filter_options)
+                if column_filter_options is not None
+                else None,
                 type="any",
             ),
             dict(
                 id="b",
                 name="b",
-                filter_options=dict(case=column_filter_options),
+                filter_options=dict(case=column_filter_options)
+                if column_filter_options is not None
+                else None,
                 type="text",
             ),
             dict(
                 id="c",
                 name="c",
-                filter_options=dict(case=column_filter_options),
+                filter_options=dict(case=column_filter_options)
+                if column_filter_options is not None
+                else None,
                 type="numeric",
             ),
         ],
         filter_action="native",
-        filter_options=dict(case=filter_options),
+        filter_options=dict(case=filter_options)
+        if filter_options is not None
+        else None,
         style_cell=dict(width=100, min_width=100, max_width=100),
     )
 
