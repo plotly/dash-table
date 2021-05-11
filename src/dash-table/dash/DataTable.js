@@ -1165,8 +1165,9 @@ export const propTypes = {
      * If the column-level `filter_options` prop is set it overrides
      * the table-level `filter_options` prop for that column.
      */
-    filter_options: PropTypes.oneOf(['sensitive', 'insensitive']),
-
+    filter_options: PropTypes.shape({
+        case: PropTypes.oneOf(['sensitive', 'insensitive'])
+    }),
     /**
      * The `sort_action` property enables data to be
      * sorted on a per-column basis.

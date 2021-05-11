@@ -96,14 +96,27 @@ def test_filt002_sensitivity(test, filter_options, column_filter_options):
         id="table",
         data=[dict(a="abc", b="abc", c="abc"), dict(a="ABC", b="ABC", c="ABC")],
         columns=[
-            dict(id="a", name="a", filter_options=column_filter_options, type="any"),
-            dict(id="b", name="b", filter_options=column_filter_options, type="text"),
             dict(
-                id="c", name="c", filter_options=column_filter_options, type="numeric"
+                id="a",
+                name="a",
+                filter_options=dict(case=column_filter_options),
+                type="any",
+            ),
+            dict(
+                id="b",
+                name="b",
+                filter_options=dict(case=column_filter_options),
+                type="text",
+            ),
+            dict(
+                id="c",
+                name="c",
+                filter_options=dict(case=column_filter_options),
+                type="numeric",
             ),
         ],
         filter_action="native",
-        filter_options=filter_options,
+        filter_options=dict(case=filter_options),
         style_cell=dict(width=100, min_width=100, max_width=100),
     )
 
@@ -191,14 +204,27 @@ def test_filt003_sensitivity(test, filter_options, column_filter_options):
         id="table",
         data=[dict(a="abc", b="abc", c="abc"), dict(a="ABC", b="ABC", c="ABC")],
         columns=[
-            dict(id="a", name="a", filter_options=column_filter_options, type="any"),
-            dict(id="b", name="b", filter_options=column_filter_options, type="text"),
             dict(
-                id="c", name="c", filter_options=column_filter_options, type="numeric"
+                id="a",
+                name="a",
+                filter_options=dict(case=column_filter_options),
+                type="any",
+            ),
+            dict(
+                id="b",
+                name="b",
+                filter_options=dict(case=column_filter_options),
+                type="text",
+            ),
+            dict(
+                id="c",
+                name="c",
+                filter_options=dict(case=column_filter_options),
+                type="numeric",
             ),
         ],
         filter_action="native",
-        filter_options=filter_options,
+        filter_options=dict(case=filter_options),
         style_cell=dict(width=100, min_width=100, max_width=100),
     )
 
