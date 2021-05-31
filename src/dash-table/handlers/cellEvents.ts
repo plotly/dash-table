@@ -165,13 +165,13 @@ export const handleEnter = (
     idx: number,
     i: number
 ) => {
-    const {setState, virtualized, visibleColumns} = propsFn();
+    const {setState, visibleColumns} = propsFn();
 
     setState({
         currentTooltip: {
             header: false,
             id: visibleColumns[i].id,
-            row: virtualized.indices[idx - virtualized.offset.rows]
+            row: idx
         }
     });
 };
@@ -207,15 +207,14 @@ export const handleMove = (
     idx: number,
     i: number
 ) => {
-    const {currentTooltip, setState, virtualized, visibleColumns} = propsFn();
+    const {currentTooltip, setState, visibleColumns} = propsFn();
 
     const c = visibleColumns[i];
-    const realIdx = virtualized.indices[idx - virtualized.offset.rows];
 
     if (
         currentTooltip &&
         currentTooltip.id === c.id &&
-        currentTooltip.row === realIdx &&
+        currentTooltip.row === idx &&
         !currentTooltip.header
     ) {
         return;
@@ -225,7 +224,7 @@ export const handleMove = (
         currentTooltip: {
             header: false,
             id: c.id,
-            row: realIdx
+            row: idx
         }
     });
 };
