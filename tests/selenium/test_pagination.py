@@ -2,6 +2,7 @@ import dash
 from dash.dependencies import Input, Output
 from dash.exceptions import PreventUpdate
 import dash_html_components as html
+import dash_core_components as dcc
 
 from dash_table import DataTable
 
@@ -221,6 +222,7 @@ def get_app2():
                 data=[{"i": i, "square": i ** 2} for i in range(50 + 1)],
                 page_current=5,
             ),
+            dcc.Graph(),
         ]
     )
 
@@ -243,3 +245,11 @@ def test_tpag011_valid_page(test):
 
     assert target.paging.current.get_value() == "1"
     assert test.get_log_errors() == []
+
+
+def test_tpage012_pagination_row_visible(test):
+    test.start_server((get_app2()))
+
+    test.table("table").is_ready()
+
+    test.percy_snapshot("test_tpage012 Pagination row visible")
