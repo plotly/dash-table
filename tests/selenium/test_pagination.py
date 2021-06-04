@@ -247,4 +247,4 @@ def test_tpag011_valid_page(test):
     assert test.get_log_errors() == []
 
     test.table("table").is_ready()
-    test.percy_snapshot("test_tpage011 Pagination row visible")
+    test.percy_snapshot("test_tpag011 Pagination row visible")
