@@ -67,7 +67,8 @@ export const defaultProps = {
     },
 
     markdown_options: {
-        link_target: '_blank'
+        link_target: '_blank',
+        html: false
     },
 
     tooltip: {},
@@ -483,7 +484,11 @@ export const propTypes = {
         link_target: PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.oneOf(['_blank', '_parent', '_self', '_top'])
-        ]).isRequired
+        ]),
+        /**
+         * (default: False)  If True, html may be used in markdown cells
+         */
+        html: PropTypes.bool
     }),
 
     /**
