@@ -487,6 +487,8 @@ export const propTypes = {
         ]),
         /**
          * (default: False)  If True, html may be used in markdown cells
+         * Be careful enabling html if the content being rendered can come
+         * from an untrusted user, as this may create an XSS vulnerability.
          */
         html: PropTypes.bool
     }),
