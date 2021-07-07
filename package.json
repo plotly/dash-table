@@ -62,7 +62,7 @@
     "@storybook/semver": "^7.3.2",
     "@types/chai": "^4.2.20",
     "@types/d3-format": "^3.0.1",
-    "@types/mocha": "^8.2.2",
+    "@types/mocha": "^8.2.3",
     "@types/papaparse": "^5.2.5",
     "@types/ramda": "^0.27.42",
     "@types/react": "^16.14.8",
