@@ -178,7 +178,7 @@ variants.forEach(variant => {
                     },
                     {
                         a: [
-                            '```http',
+                            '```html',
                             '<html>',
                             '  <body>',
                             '    <div>Hello World</div>',
@@ -186,7 +186,7 @@ variants.forEach(variant => {
                             '</html>',
                             '```'
                         ].join('\n'),
-                        b: 'http'
+                        b: 'html'
                     },
                     {
                         a: [
