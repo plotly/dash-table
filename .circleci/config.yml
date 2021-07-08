@@ -38,7 +38,7 @@ jobs:
                     python -m venv venv
                     . venv/bin/activate
                     pip install -r dev-requirements.txt --quiet
-                    git clone --depth 1 -b deps-update-20210628 git@github.com:plotly/dash.git dash-main
+                    git clone --depth 1 -b dev git@github.com:plotly/dash.git dash-main
                     pip install -e ./dash-main[dev,testing] --quiet
                     renderer build
             - run:
@@ -83,7 +83,7 @@ jobs:
                     python -m venv venv
                     . venv/bin/activate
                     pip install -r dev-requirements.txt --quiet
-                    pip install --progress-bar off -e git+https://github.com/plotly/dash.git@deps-update-20210628#egg=dash[dev,testing]
+                    pip install --progress-bar off -e git+https://github.com/plotly/dash.git@dev#egg=dash[dev,testing]
             - run:
                 name: Run tests
                 command: |
@@ -135,7 +135,7 @@ jobs:
                 command: |
                     . venv/bin/activate
                     pip install -r dev-requirements.txt --quiet
-                    pip install --progress-bar off -e git+https://github.com/plotly/dash.git@deps-update-20210628#egg=dash[dev,testing]
+                    pip install --progress-bar off -e git+https://github.com/plotly/dash.git@dev#egg=dash[dev,testing]
             - run:
                 name: Run eslint
                 command: |
