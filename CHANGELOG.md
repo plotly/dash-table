@@ -2,6 +2,26 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.12.0] - 2021-07-09
+### Fixed
+- [#907](https://github.com/plotly/dash-table/pull/907)
+  - Fix a bug where pagination did not work or was not visible. [#834](https://github.com/plotly/dash-table/issues/834)
+  - Fix a bug where if you are on a page that no longer exists after the data is updated, no data is displayed. [#892](https://github.com/plotly/dash-table/issues/892)
+
+
+### Added
+- [#916](https://github.com/plotly/dash-table/pull/916)
+  - Added `html` option to `markdown_options` prop. This enables the use of html tags in markdown text.
+
+- [#545](https://github.com/plotly/dash-table/issues/545)
+    - Case insensitive filtering
+    - New props: `filter_options` - to control case of all filters, `columns.filter_options` - to control filter case for each column
+    - New operators: `i=`, `ieq`, `i>=`, `ige`, `i>`, `igt`, `i<=`, `ile`, `i<`, `ilt`, `i!=`, `ine`, `icontains` - for case-insensitive filtering, `s=`, `seq`, `s>=`, `sge`, `s>`, `sgt`, `s<=`, `sle`, `s<`, `slt`, `s!=`, `sne`, `scontains` - to force case-sensitive filtering on case-insensitive columns
+
+### Changed
+- [#918](https://github.com/plotly/dash-core-components/pull/918) Updated all dependencies. In particular the `highlight.js` upgrade changes code highlighting in markdown: we have long used their "github" style, this has been updated to more closely match current github styles.
+- [#901](https://github.com/plotly/dash-core-components/pull/901) Updated R package `dash-info.yaml` to regenerate example without attaching now-deprecated core component packages (`dashHtmlComponents`, `dashCoreComponents`, or `dashTable`).
+
 ## [4.11.3] - 2021-04-08
 ### Changed
 - [#862](https://github.com/plotly/dash-table/pull/862) - update docstrings per https://github.com/plotly/dash/issues/1205

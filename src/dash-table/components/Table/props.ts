@@ -38,6 +38,11 @@ export enum ExportHeaders {
     Display = 'display'
 }
 
+export enum FilterCase {
+    Insensitive = 'insensitive',
+    Sensitive = 'sensitive'
+}
+
 export enum SortMode {
     Single = 'single',
     Multi = 'multi'
@@ -47,6 +52,10 @@ export enum TableAction {
     Custom = 'custom',
     Native = 'native',
     None = 'none'
+}
+
+export interface IFilterOptions {
+    case?: FilterCase;
 }
 
 export interface IDerivedData {
@@ -154,6 +163,7 @@ export interface INumberLocale {
 
 export interface IMarkdownOptions {
     link_target: '_blank' | '_parent' | '_self' | '_top' | string;
+    html?: boolean;
 }
 
 export type NumberFormat =
@@ -193,6 +203,7 @@ export interface IBaseColumn {
     clearable?: boolean | boolean[] | 'first' | 'last';
     deletable?: boolean | boolean[] | 'first' | 'last';
     editable: boolean;
+    filter_options: IFilterOptions;
     hideable?: boolean | boolean[] | 'first' | 'last';
     renamable?: boolean | boolean[] | 'first' | 'last';
     selectable?: boolean | boolean[] | 'first' | 'last';
@@ -327,6 +338,7 @@ export interface IProps {
     data?: Data;
     editable?: boolean;
     fill_width?: boolean;
+    filter_options?: IFilterOptions;
     filter_query?: string;
     filter_action?: TableAction | IFilterAction;
     hidden_columns?: string[];
@@ -381,6 +393,7 @@ interface IDefaultProps {
     export_format: ExportFormat;
     export_headers: ExportHeaders;
     fill_width: boolean;
+    filter_options?: IFilterOptions;
     filter_query: string;
     filter_action: TableAction;
     fixed_columns: Fixed;
@@ -492,6 +505,7 @@ export interface IFilterFactoryProps {
     style_cell_conditional: Cells;
     style_filter: Style;
     style_filter_conditional: BasicFilters;
+    toggleFilterOptions: (column: IColumn) => IColumn;
     visibleColumns: Columns;
 }
 

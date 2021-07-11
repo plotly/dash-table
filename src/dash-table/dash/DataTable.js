@@ -56,6 +56,7 @@ export const defaultProps = {
     dropdown_data: [],
 
     fill_width: true,
+    filter_options: {},
     fixed_columns: {
         headers: false,
         data: 0
@@ -66,7 +67,8 @@ export const defaultProps = {
     },
 
     markdown_options: {
-        link_target: '_blank'
+        link_target: '_blank',
+        html: false
     },
 
     tooltip: {},
@@ -180,6 +182,19 @@ export const propTypes = {
              * the table-level `editable` flag for that column.
              */
             editable: PropTypes.bool,
+
+            /**
+             * There are two `filter_options` props in the table.
+             * This is the column-level filter_options prop and there is
+             * also the table-level `filter_options` prop.
+             * These props determine whether the applicable filter relational
+             * operators will default to `sensitive` or `insensitive` comparison.
+             * If the column-level `filter_options` prop is set it overrides
+             * the table-level `filter_options` prop for that column.
+             */
+            filter_options: PropTypes.shape({
+                case: PropTypes.oneOf(['sensitive', 'insensitive'])
+            }),
 
             /**
              * If true, the user can hide the column by clicking on the `hide`
@@ -469,7 +484,13 @@ export const propTypes = {
         link_target: PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.oneOf(['_blank', '_parent', '_self', '_top'])
-        ]).isRequired
+        ]),
+        /**
+         * (default: False)  If True, html may be used in markdown cells
+         * Be careful enabling html if the content being rendered can come
+         * from an untrusted user, as this may create an XSS vulnerability.
+         */
+        html: PropTypes.bool
     }),
 
     /**
@@ -1142,6 +1163,18 @@ export const propTypes = {
         })
     ]),
 
+    /**
+     * There are two `filter_options` props in the table.
+     * This is the table-level filter_options prop and there is
+     * also the column-level `filter_options` prop.
+     * These props determine whether the applicable filter relational
+     * operators will default to `sensitive` or `insensitive` comparison.
+     * If the column-level `filter_options` prop is set it overrides
+     * the table-level `filter_options` prop for that column.
+     */
+    filter_options: PropTypes.shape({
+        case: PropTypes.oneOf(['sensitive', 'insensitive'])
+    }),
     /**
      * The `sort_action` property enables data to be
      * sorted on a per-column basis.
