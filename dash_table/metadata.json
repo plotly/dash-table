@@ -106,6 +106,27 @@
                 "description": "There are two `editable` flags in the table.\nThis is the  column-level editable flag and there is\nalso the table-level `editable` flag.\nThese flags determine whether the contents of the table\nare editable or not.\nIf the column-level `editable` flag is set it overrides\nthe table-level `editable` flag for that column.",
                 "required": false
               },
+              "filter_options": {
+                "name": "shape",
+                "value": {
+                  "case": {
+                    "name": "enum",
+                    "value": [
+                      {
+                        "value": "'sensitive'",
+                        "computed": false
+                      },
+                      {
+                        "value": "'insensitive'",
+                        "computed": false
+                      }
+                    ],
+                    "required": false
+                  }
+                },
+                "description": "There are two `filter_options` props in the table.\nThis is the column-level filter_options prop and there is\nalso the table-level `filter_options` prop.\nThese props determine whether the applicable filter relational\noperators will default to `sensitive` or `insensitive` comparison.\nIf the column-level `filter_options` prop is set it overrides\nthe table-level `filter_options` prop for that column.",
+                "required": false
+              },
               "hideable": {
                 "name": "union",
                 "value": [
@@ -518,14 +539,19 @@
                 }
               ],
               "description": "(default: '_blank').  The link's behavior (_blank opens the link in a\nnew tab, _parent opens the link in the parent frame, _self opens the link in the\ncurrent tab, and _top opens the link in the top frame) or a string",
-              "required": true
+              "required": false
+            },
+            "html": {
+              "name": "bool",
+              "description": "(default: False)  If True, html may be used in markdown cells\nBe careful enabling html if the content being rendered can come\nfrom an untrusted user, as this may create an XSS vulnerability.",
+              "required": false
             }
           }
         },
         "required": false,
         "description": "The `markdown_options` property allows customization of the markdown cells behavior.",
         "defaultValue": {
-          "value": "{\n    link_target: '_blank'\n}",
+          "value": "{\n    link_target: '_blank',\n    html: false\n}",
           "computed": false
         }
       },
@@ -1693,6 +1719,33 @@
         "description": "The `filter_action` property controls the behavior of the `filtering` UI.\nIf `'none'`, then the filtering UI is not displayed.\nIf `'native'`, then the filtering UI is displayed and the filtering\nlogic is handled by the table. That is, it is performed on the data\nthat exists in the `data` property.\nIf `'custom'`, then the filtering UI is displayed but it is the\nresponsibility of the developer to program the filtering\nthrough a callback (where `filter_query` or `derived_filter_query_structure` would be the input\nand `data` would be the output).",
         "defaultValue": {
           "value": "'none'",
+          "computed": false
+        }
+      },
+      "filter_options": {
+        "type": {
+          "name": "shape",
+          "value": {
+            "case": {
+              "name": "enum",
+              "value": [
+                {
+                  "value": "'sensitive'",
+                  "computed": false
+                },
+                {
+                  "value": "'insensitive'",
+                  "computed": false
+                }
+              ],
+              "required": false
+            }
+          }
+        },
+        "required": false,
+        "description": "There are two `filter_options` props in the table.\nThis is the table-level filter_options prop and there is\nalso the column-level `filter_options` prop.\nThese props determine whether the applicable filter relational\noperators will default to `sensitive` or `insensitive` comparison.\nIf the column-level `filter_options` prop is set it overrides\nthe table-level `filter_options` prop for that column.",
+        "defaultValue": {
+          "value": "{}",
           "computed": false
         }
       },
