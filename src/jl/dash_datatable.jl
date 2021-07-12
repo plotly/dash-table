@@ -35,7 +35,7 @@ input will appear in the header rows.
 When a column is selected, its id will be contained in `selected_columns`
 and `derived_viewport_selected_columns`.
 - `columns` (optional): Columns describes various aspects about each individual column.
-`name` and `id` are the only required parameters.. columns has the following type: Array of lists containing elements 'clearable', 'deletable', 'editable', 'hideable', 'renamable', 'selectable', 'format', 'id', 'name', 'presentation', 'on_change', 'sort_as_null', 'validation', 'type'.
+`name` and `id` are the only required parameters.. columns has the following type: Array of lists containing elements 'clearable', 'deletable', 'editable', 'filter_options', 'hideable', 'renamable', 'selectable', 'format', 'id', 'name', 'presentation', 'on_change', 'sort_as_null', 'validation', 'type'.
 Those elements have the following types:
   - `clearable` (a value equal to: 'first', 'last' | Bool | Array of Bools; optional): If true, the user can clear the column by clicking on the `clear`
 action button on the column. If there are multiple header rows, true
@@ -74,6 +74,15 @@ These flags determine whether the contents of the table
 are editable or not.
 If the column-level `editable` flag is set it overrides
 the table-level `editable` flag for that column.
+  - `filter_options` (optional): There are two `filter_options` props in the table.
+This is the column-level filter_options prop and there is
+also the table-level `filter_options` prop.
+These props determine whether the applicable filter relational
+operators will default to `sensitive` or `insensitive` comparison.
+If the column-level `filter_options` prop is set it overrides
+the table-level `filter_options` prop for that column.. filter_options has the following type: lists containing elements 'case'.
+Those elements have the following types:
+  - `case` (a value equal to: 'sensitive', 'insensitive'; optional)
   - `hideable` (a value equal to: 'first', 'last' | Bool | Array of Bools; optional): If true, the user can hide the column by clicking on the `hide`
 action button on the column. If there are multiple header rows, true
 will display the action button on each row.
@@ -353,6 +362,15 @@ and `data` would be the output).. filter_action has the following type: a value 
 Those elements have the following types:
   - `type` (a value equal to: 'custom', 'native'; required)
   - `operator` (a value equal to: 'and', 'or'; optional)
+- `filter_options` (optional): There are two `filter_options` props in the table.
+This is the table-level filter_options prop and there is
+also the column-level `filter_options` prop.
+These props determine whether the applicable filter relational
+operators will default to `sensitive` or `insensitive` comparison.
+If the column-level `filter_options` prop is set it overrides
+the table-level `filter_options` prop for that column.. filter_options has the following type: lists containing elements 'case'.
+Those elements have the following types:
+  - `case` (a value equal to: 'sensitive', 'insensitive'; optional)
 - `filter_query` (String; optional): If `filter_action` is enabled, then the current filtering
 string is represented in this `filter_query`
 property.
@@ -416,11 +434,14 @@ Those elements have the following types:
   - `numerals` (Array of Strings; optional): A list of ten strings used as replacements for numbers 0-9.
   - `percent` (String; optional): (default: '%'). The string used for the percentage symbol.
   - `separate_4digits` (Bool; optional): (default: True). Separate integers with 4-digits or less.
-- `markdown_options` (optional): The `markdown_options` property allows customization of the markdown cells behavior.. markdown_options has the following type: lists containing elements 'link_target'.
+- `markdown_options` (optional): The `markdown_options` property allows customization of the markdown cells behavior.. markdown_options has the following type: lists containing elements 'link_target', 'html'.
 Those elements have the following types:
-  - `link_target` (String | a value equal to: '_blank', '_parent', '_self', '_top'; required): (default: '_blank').  The link's behavior (_blank opens the link in a
+  - `link_target` (String | a value equal to: '_blank', '_parent', '_self', '_top'; optional): (default: '_blank').  The link's behavior (_blank opens the link in a
 new tab, _parent opens the link in the parent frame, _self opens the link in the
 current tab, and _top opens the link in the top frame) or a string
+  - `html` (Bool; optional): (default: False)  If True, html may be used in markdown cells
+Be careful enabling html if the content being rendered can come
+from an untrusted user, as this may create an XSS vulnerability.
 - `merge_duplicate_headers` (Bool; optional): If True, then column headers that have neighbors with duplicate names
 will be merged into a single cell.
 This will be applied for single column headers and multi-column
@@ -704,7 +725,7 @@ the height of the rows is always the same; and
 runtime styling changes will not affect width and height vs. first rendering
 """
 function dash_datatable(; kwargs...)
-        available_props = Symbol[:id, :active_cell, :cell_selectable, :column_selectable, :columns, :css, :data, :data_previous, :data_timestamp, :derived_filter_query_structure, :derived_viewport_data, :derived_viewport_indices, :derived_viewport_row_ids, :derived_viewport_selected_columns, :derived_viewport_selected_row_ids, :derived_viewport_selected_rows, :derived_virtual_data, :derived_virtual_indices, :derived_virtual_row_ids, :derived_virtual_selected_row_ids, :derived_virtual_selected_rows, :dropdown, :dropdown_conditional, :dropdown_data, :editable, :end_cell, :export_columns, :export_format, :export_headers, :fill_width, :filter_action, :filter_query, :fixed_columns, :fixed_rows, :hidden_columns, :include_headers_on_copy_paste, :is_focused, :loading_state, :locale_format, :markdown_options, :merge_duplicate_headers, :page_action, :page_count, :page_current, :page_size, :persisted_props, :persistence, :persistence_type, :row_deletable, :row_selectable, :selected_cells, :selected_columns, :selected_row_ids, :selected_rows, :sort_action, :sort_as_null, :sort_by, :sort_mode, :start_cell, :style_as_list_view, :style_cell, :style_cell_conditional, :style_data, :style_data_conditional, :style_filter, :style_filter_conditional, :style_header, :style_header_conditional, :style_table, :tooltip, :tooltip_conditional, :tooltip_data, :tooltip_delay, :tooltip_duration, :tooltip_header, :virtualization]
+        available_props = Symbol[:id, :active_cell, :cell_selectable, :column_selectable, :columns, :css, :data, :data_previous, :data_timestamp, :derived_filter_query_structure, :derived_viewport_data, :derived_viewport_indices, :derived_viewport_row_ids, :derived_viewport_selected_columns, :derived_viewport_selected_row_ids, :derived_viewport_selected_rows, :derived_virtual_data, :derived_virtual_indices, :derived_virtual_row_ids, :derived_virtual_selected_row_ids, :derived_virtual_selected_rows, :dropdown, :dropdown_conditional, :dropdown_data, :editable, :end_cell, :export_columns, :export_format, :export_headers, :fill_width, :filter_action, :filter_options, :filter_query, :fixed_columns, :fixed_rows, :hidden_columns, :include_headers_on_copy_paste, :is_focused, :loading_state, :locale_format, :markdown_options, :merge_duplicate_headers, :page_action, :page_count, :page_current, :page_size, :persisted_props, :persistence, :persistence_type, :row_deletable, :row_selectable, :selected_cells, :selected_columns, :selected_row_ids, :selected_rows, :sort_action, :sort_as_null, :sort_by, :sort_mode, :start_cell, :style_as_list_view, :style_cell, :style_cell_conditional, :style_data, :style_data_conditional, :style_filter, :style_filter_conditional, :style_header, :style_header_conditional, :style_table, :tooltip, :tooltip_conditional, :tooltip_data, :tooltip_delay, :tooltip_duration, :tooltip_header, :virtualization]
         wild_props = Symbol[]
         return Component("dash_datatable", "DataTable", "dash_table", available_props, wild_props; kwargs...)
 end

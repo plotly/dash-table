@@ -71,51 +71,54 @@ describe('Query Syntax Tree', () => {
     };
 
     describe('special whitespace characters are valid', () => {
-        processCases((query: string) => new QuerySyntaxTree(query), [
-            {
-                name: 'suports new line',
-                query: '{a}\neq\n"0"',
-                target: data0,
-                valid: true,
-                evaluate: true
-            },
-            {
-                name: 'suports carriage return',
-                query: '{a}\req\r"0"',
-                target: data0,
-                valid: true,
-                evaluate: true
-            },
-            {
-                name: 'suports new line ad carriage return combination',
-                target: data0,
-                query: '{a}\r\neq\r\n"0"',
-                valid: true,
-                evaluate: true
-            },
-            {
-                name: 'supports tab',
-                query: '{a}\teq\t"0"',
-                target: data0,
-                valid: true,
-                evaluate: true
-            },
-            // some random non-standard whitespace character from https://en.wikipedia.org/wiki/Whitespace_character
-            {
-                name: 'supports ogham space mark',
-                query: '{a}\u1680eq\u1680"0"',
-                target: data0,
-                valid: true,
-                evaluate: true
-            },
-            {
-                name: 'supports all',
-                query: '{a}\r\n\t\u1680eq\r\n\t\u1680"0"',
-                target: data0,
-                valid: true,
-                evaluate: true
-            }
-        ]);
+        processCases(
+            (query: string) => new QuerySyntaxTree(query),
+            [
+                {
+                    name: 'suports new line',
+                    query: '{a}\neq\n"0"',
+                    target: data0,
+                    valid: true,
+                    evaluate: true
+                },
+                {
+                    name: 'suports carriage return',
+                    query: '{a}\req\r"0"',
+                    target: data0,
+                    valid: true,
+                    evaluate: true
+                },
+                {
+                    name: 'suports new line ad carriage return combination',
+                    target: data0,
+                    query: '{a}\r\neq\r\n"0"',
+                    valid: true,
+                    evaluate: true
+                },
+                {
+                    name: 'supports tab',
+                    query: '{a}\teq\t"0"',
+                    target: data0,
+                    valid: true,
+                    evaluate: true
+                },
+                // some random non-standard whitespace character from https://en.wikipedia.org/wiki/Whitespace_character
+                {
+                    name: 'supports ogham space mark',
+                    query: '{a}\u1680eq\u1680"0"',
+                    target: data0,
+                    valid: true,
+                    evaluate: true
+                },
+                {
+                    name: 'supports all',
+                    query: '{a}\r\n\t\u1680eq\r\n\t\u1680"0"',
+                    target: data0,
+                    valid: true,
+                    evaluate: true
+                }
+            ]
+        );
     });
 
     describe('expressions', () => {
@@ -646,6 +649,22 @@ describe('Query Syntax Tree', () => {
             expect(tree.evaluate(data3)).to.equal(false);
         });
 
+        it('can do equality (ieq) test', () => {
+            const tree = new QuerySyntaxTree('{a} ieq "abc"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({a: 'abc'})).to.equal(true);
+            expect(tree.evaluate({a: 'ABC'})).to.equal(true);
+        });
+
+        it('can do equality (seq) test', () => {
+            const tree = new QuerySyntaxTree('{a} seq "abc"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({a: 'abc'})).to.equal(true);
+            expect(tree.evaluate({a: 'ABC'})).to.equal(false);
+        });
+
         it('can do equality (=) test', () => {
             const tree = new QuerySyntaxTree('{a} = "1"');
 
@@ -654,6 +673,22 @@ describe('Query Syntax Tree', () => {
             expect(tree.evaluate(data1)).to.equal(true);
             expect(tree.evaluate(data2)).to.equal(false);
             expect(tree.evaluate(data3)).to.equal(false);
+        });
+
+        it('can do equality (i=) test', () => {
+            const tree = new QuerySyntaxTree('{a} i= "abc"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({a: 'abc'})).to.equal(true);
+            expect(tree.evaluate({a: 'ABC'})).to.equal(true);
+        });
+
+        it('can do equality (s=) test', () => {
+            const tree = new QuerySyntaxTree('{a} s= "abc"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({a: 'abc'})).to.equal(true);
+            expect(tree.evaluate({a: 'ABC'})).to.equal(false);
         });
 
         it('can do difference (ne) test', () => {
@@ -666,6 +701,22 @@ describe('Query Syntax Tree', () => {
             expect(tree.evaluate(data3)).to.equal(true);
         });
 
+        it('can do difference (ine) test', () => {
+            const tree = new QuerySyntaxTree('{a} ine "abc"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({a: 'abc'})).to.equal(false);
+            expect(tree.evaluate({a: 'ABC'})).to.equal(false);
+        });
+
+        it('can do difference (sne) test', () => {
+            const tree = new QuerySyntaxTree('{a} sne "abc"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({a: 'abc'})).to.equal(false);
+            expect(tree.evaluate({a: 'ABC'})).to.equal(true);
+        });
+
         it('can do difference (!=) test', () => {
             const tree = new QuerySyntaxTree('{a} != "1"');
 
@@ -674,6 +725,22 @@ describe('Query Syntax Tree', () => {
             expect(tree.evaluate(data1)).to.equal(false);
             expect(tree.evaluate(data2)).to.equal(true);
             expect(tree.evaluate(data3)).to.equal(true);
+        });
+
+        it('can do difference (i!=) test', () => {
+            const tree = new QuerySyntaxTree('{a} i!= "abc"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({a: 'abc'})).to.equal(false);
+            expect(tree.evaluate({a: 'ABC'})).to.equal(false);
+        });
+
+        it('can do difference (s!=) test', () => {
+            const tree = new QuerySyntaxTree('{a} s!= "abc"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({a: 'abc'})).to.equal(false);
+            expect(tree.evaluate({a: 'ABC'})).to.equal(true);
         });
 
         it('can do greater than (gt) test', () => {
@@ -686,6 +753,30 @@ describe('Query Syntax Tree', () => {
             expect(tree.evaluate(data3)).to.equal(true);
         });
 
+        it('can do greater than (igt) test', () => {
+            const tree = new QuerySyntaxTree('{a} igt "abc"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({a: 'abb'})).to.equal(false);
+            expect(tree.evaluate({a: 'ABB'})).to.equal(false);
+            expect(tree.evaluate({a: 'abc'})).to.equal(false);
+            expect(tree.evaluate({a: 'ABC'})).to.equal(false);
+            expect(tree.evaluate({a: 'abd'})).to.equal(true);
+            expect(tree.evaluate({a: 'ABD'})).to.equal(true);
+        });
+
+        it('can do greater than (sgt) test', () => {
+            const tree = new QuerySyntaxTree('{a} sgt "abc"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({a: 'abb'})).to.equal(false);
+            expect(tree.evaluate({a: 'ABB'})).to.equal(false);
+            expect(tree.evaluate({a: 'abc'})).to.equal(false);
+            expect(tree.evaluate({a: 'ABC'})).to.equal(false);
+            expect(tree.evaluate({a: 'abd'})).to.equal(true);
+            expect(tree.evaluate({a: 'ABD'})).to.equal(false);
+        });
+
         it('can do greater than (>) test', () => {
             const tree = new QuerySyntaxTree('{a} > "1"');
 
@@ -694,6 +785,30 @@ describe('Query Syntax Tree', () => {
             expect(tree.evaluate(data1)).to.equal(false);
             expect(tree.evaluate(data2)).to.equal(true);
             expect(tree.evaluate(data3)).to.equal(true);
+        });
+
+        it('can do greater than (i>) test', () => {
+            const tree = new QuerySyntaxTree('{a} i> "abc"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({a: 'abb'})).to.equal(false);
+            expect(tree.evaluate({a: 'ABB'})).to.equal(false);
+            expect(tree.evaluate({a: 'abc'})).to.equal(false);
+            expect(tree.evaluate({a: 'ABC'})).to.equal(false);
+            expect(tree.evaluate({a: 'abd'})).to.equal(true);
+            expect(tree.evaluate({a: 'ABD'})).to.equal(true);
+        });
+
+        it('can do greater than (s>) test', () => {
+            const tree = new QuerySyntaxTree('{a} s> "abc"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({a: 'abb'})).to.equal(false);
+            expect(tree.evaluate({a: 'ABB'})).to.equal(false);
+            expect(tree.evaluate({a: 'abc'})).to.equal(false);
+            expect(tree.evaluate({a: 'ABC'})).to.equal(false);
+            expect(tree.evaluate({a: 'abd'})).to.equal(true);
+            expect(tree.evaluate({a: 'ABD'})).to.equal(false);
         });
 
         it('can do less than (lt) test', () => {
@@ -706,6 +821,30 @@ describe('Query Syntax Tree', () => {
             expect(tree.evaluate(data3)).to.equal(false);
         });
 
+        it('can do less than (igt) test', () => {
+            const tree = new QuerySyntaxTree('{a} ilt "abc"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({a: 'abb'})).to.equal(true);
+            expect(tree.evaluate({a: 'ABB'})).to.equal(true);
+            expect(tree.evaluate({a: 'abc'})).to.equal(false);
+            expect(tree.evaluate({a: 'ABC'})).to.equal(false);
+            expect(tree.evaluate({a: 'abd'})).to.equal(false);
+            expect(tree.evaluate({a: 'ABD'})).to.equal(false);
+        });
+
+        it('can do less than (sgt) test', () => {
+            const tree = new QuerySyntaxTree('{a} slt "abc"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({a: 'abb'})).to.equal(true);
+            expect(tree.evaluate({a: 'ABB'})).to.equal(true);
+            expect(tree.evaluate({a: 'abc'})).to.equal(false);
+            expect(tree.evaluate({a: 'ABC'})).to.equal(true);
+            expect(tree.evaluate({a: 'abd'})).to.equal(false);
+            expect(tree.evaluate({a: 'ABD'})).to.equal(true);
+        });
+
         it('can do less than (<) test', () => {
             const tree = new QuerySyntaxTree('{a} < "1"');
 
@@ -714,6 +853,30 @@ describe('Query Syntax Tree', () => {
             expect(tree.evaluate(data1)).to.equal(false);
             expect(tree.evaluate(data2)).to.equal(false);
             expect(tree.evaluate(data3)).to.equal(false);
+        });
+
+        it('can do less than (i<) test', () => {
+            const tree = new QuerySyntaxTree('{a} i< "abc"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({a: 'abb'})).to.equal(true);
+            expect(tree.evaluate({a: 'ABB'})).to.equal(true);
+            expect(tree.evaluate({a: 'abc'})).to.equal(false);
+            expect(tree.evaluate({a: 'ABC'})).to.equal(false);
+            expect(tree.evaluate({a: 'abd'})).to.equal(false);
+            expect(tree.evaluate({a: 'ABD'})).to.equal(false);
+        });
+
+        it('can do less than (s<) test', () => {
+            const tree = new QuerySyntaxTree('{a} s< "abc"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({a: 'abb'})).to.equal(true);
+            expect(tree.evaluate({a: 'ABB'})).to.equal(true);
+            expect(tree.evaluate({a: 'abc'})).to.equal(false);
+            expect(tree.evaluate({a: 'ABC'})).to.equal(true);
+            expect(tree.evaluate({a: 'abd'})).to.equal(false);
+            expect(tree.evaluate({a: 'ABD'})).to.equal(true);
         });
 
         it('can do greater or equal to (ge) test', () => {
@@ -726,6 +889,30 @@ describe('Query Syntax Tree', () => {
             expect(tree.evaluate(data3)).to.equal(true);
         });
 
+        it('can do greater or equal to (ige) test', () => {
+            const tree = new QuerySyntaxTree('{a} ige "abc"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({a: 'abb'})).to.equal(false);
+            expect(tree.evaluate({a: 'ABB'})).to.equal(false);
+            expect(tree.evaluate({a: 'abc'})).to.equal(true);
+            expect(tree.evaluate({a: 'ABC'})).to.equal(true);
+            expect(tree.evaluate({a: 'abd'})).to.equal(true);
+            expect(tree.evaluate({a: 'ABD'})).to.equal(true);
+        });
+
+        it('can do greater or equal to (sge) test', () => {
+            const tree = new QuerySyntaxTree('{a} sge "abc"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({a: 'abb'})).to.equal(false);
+            expect(tree.evaluate({a: 'ABB'})).to.equal(false);
+            expect(tree.evaluate({a: 'abc'})).to.equal(true);
+            expect(tree.evaluate({a: 'ABC'})).to.equal(false);
+            expect(tree.evaluate({a: 'abd'})).to.equal(true);
+            expect(tree.evaluate({a: 'ABD'})).to.equal(false);
+        });
+
         it('can do greater or equal to (>=) test', () => {
             const tree = new QuerySyntaxTree('{a} >= "1"');
 
@@ -734,6 +921,30 @@ describe('Query Syntax Tree', () => {
             expect(tree.evaluate(data1)).to.equal(true);
             expect(tree.evaluate(data2)).to.equal(true);
             expect(tree.evaluate(data3)).to.equal(true);
+        });
+
+        it('can do greater or equal to (i>=) test', () => {
+            const tree = new QuerySyntaxTree('{a} i>= "abc"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({a: 'abb'})).to.equal(false);
+            expect(tree.evaluate({a: 'ABB'})).to.equal(false);
+            expect(tree.evaluate({a: 'abc'})).to.equal(true);
+            expect(tree.evaluate({a: 'ABC'})).to.equal(true);
+            expect(tree.evaluate({a: 'abd'})).to.equal(true);
+            expect(tree.evaluate({a: 'ABD'})).to.equal(true);
+        });
+
+        it('can do greater or equal to (s>=) test', () => {
+            const tree = new QuerySyntaxTree('{a} s>= "abc"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({a: 'abb'})).to.equal(false);
+            expect(tree.evaluate({a: 'ABB'})).to.equal(false);
+            expect(tree.evaluate({a: 'abc'})).to.equal(true);
+            expect(tree.evaluate({a: 'ABC'})).to.equal(false);
+            expect(tree.evaluate({a: 'abd'})).to.equal(true);
+            expect(tree.evaluate({a: 'ABD'})).to.equal(false);
         });
 
         it('can do less or equal to (le) test', () => {
@@ -746,6 +957,30 @@ describe('Query Syntax Tree', () => {
             expect(tree.evaluate(data3)).to.equal(false);
         });
 
+        it('can do less or equal to (ile) test', () => {
+            const tree = new QuerySyntaxTree('{a} ile "abc"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({a: 'abb'})).to.equal(true);
+            expect(tree.evaluate({a: 'ABB'})).to.equal(true);
+            expect(tree.evaluate({a: 'abc'})).to.equal(true);
+            expect(tree.evaluate({a: 'ABC'})).to.equal(true);
+            expect(tree.evaluate({a: 'abd'})).to.equal(false);
+            expect(tree.evaluate({a: 'ABD'})).to.equal(false);
+        });
+
+        it('can do less or equal to (sle) test', () => {
+            const tree = new QuerySyntaxTree('{a} sle "abc"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({a: 'abb'})).to.equal(true);
+            expect(tree.evaluate({a: 'ABB'})).to.equal(true);
+            expect(tree.evaluate({a: 'abc'})).to.equal(true);
+            expect(tree.evaluate({a: 'ABC'})).to.equal(true);
+            expect(tree.evaluate({a: 'abd'})).to.equal(false);
+            expect(tree.evaluate({a: 'ABD'})).to.equal(true);
+        });
+
         it('can do less or equal to (<=) test', () => {
             const tree = new QuerySyntaxTree('{a} <= "1"');
 
@@ -756,12 +991,54 @@ describe('Query Syntax Tree', () => {
             expect(tree.evaluate(data3)).to.equal(false);
         });
 
+        it('can do less or equal to (i<=) test', () => {
+            const tree = new QuerySyntaxTree('{a} i<= "abc"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({a: 'abb'})).to.equal(true);
+            expect(tree.evaluate({a: 'ABB'})).to.equal(true);
+            expect(tree.evaluate({a: 'abc'})).to.equal(true);
+            expect(tree.evaluate({a: 'ABC'})).to.equal(true);
+            expect(tree.evaluate({a: 'abd'})).to.equal(false);
+            expect(tree.evaluate({a: 'ABD'})).to.equal(false);
+        });
+
+        it('can do less or equal to (s<=) test', () => {
+            const tree = new QuerySyntaxTree('{a} s<= "abc"');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({a: 'abb'})).to.equal(true);
+            expect(tree.evaluate({a: 'ABB'})).to.equal(true);
+            expect(tree.evaluate({a: 'abc'})).to.equal(true);
+            expect(tree.evaluate({a: 'ABC'})).to.equal(true);
+            expect(tree.evaluate({a: 'abd'})).to.equal(false);
+            expect(tree.evaluate({a: 'ABD'})).to.equal(true);
+        });
+
         it('can do contains (contains) test', () => {
             const tree = new QuerySyntaxTree('{a} contains v');
 
             expect(tree.isValid).to.equal(true);
             expect(tree.evaluate({a: 'abc v'})).to.equal(true);
             expect(tree.evaluate({a: 'abc w'})).to.equal(false);
+        });
+
+        it('can do contains (icontains) test', () => {
+            const tree = new QuerySyntaxTree('{a} icontains v');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({a: 'abc v'})).to.equal(true);
+            expect(tree.evaluate({a: 'abc w'})).to.equal(false);
+            expect(tree.evaluate({a: 'abc V'})).to.equal(true);
+        });
+
+        it('can do contains (scontains) test', () => {
+            const tree = new QuerySyntaxTree('{a} scontains v');
+
+            expect(tree.isValid).to.equal(true);
+            expect(tree.evaluate({a: 'abc v'})).to.equal(true);
+            expect(tree.evaluate({a: 'abc w'})).to.equal(false);
+            expect(tree.evaluate({a: 'abc V'})).to.equal(false);
         });
 
         it('correctly interprets text-based with no spaces as invalid', () => {

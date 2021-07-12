@@ -95,6 +95,19 @@ Keyword arguments:
         flag is set it overrides the table-level `editable` flag for
         that column.
 
+    - filter_options (dict; optional):
+        There are two `filter_options` props in the table. This is the
+        column-level filter_options prop and there is also the
+        table-level `filter_options` prop. These props determine
+        whether the applicable filter relational operators will
+        default to `sensitive` or `insensitive` comparison. If the
+        column-level `filter_options` prop is set it overrides the
+        table-level `filter_options` prop for that column.
+
+        `filter_options` is a dict with keys:
+
+        - case (a value equal to: 'sensitive', 'insensitive'; optional)
+
     - format (dict; optional):
         The formatting applied to the column's data. This prop is
         derived from the [d3-format](https://github.com/d3/d3-format)
@@ -523,6 +536,19 @@ Keyword arguments:
 
     - type (a value equal to: 'custom', 'native'; required)
 
+- filter_options (dict; optional):
+    There are two `filter_options` props in the table. This is the
+    table-level filter_options prop and there is also the column-level
+    `filter_options` prop. These props determine whether the
+    applicable filter relational operators will default to `sensitive`
+    or `insensitive` comparison. If the column-level `filter_options`
+    prop is set it overrides the table-level `filter_options` prop for
+    that column.
+
+    `filter_options` is a dict with keys:
+
+    - case (a value equal to: 'sensitive', 'insensitive'; optional)
+
 - filter_query (string; default ''):
     If `filter_action` is enabled, then the current filtering string
     is represented in this `filter_query` property.
@@ -642,13 +668,19 @@ Keyword arguments:
         implemented using d3's   currency format, but you can use this
         for other symbols such as measurement units.
 
-- markdown_options (dict; default {    link_target: '_blank'}):
+- markdown_options (dict; default {    link_target: '_blank',    html: False}):
     The `markdown_options` property allows customization of the
     markdown cells behavior.
 
     `markdown_options` is a dict with keys:
 
-    - link_target (string | a value equal to: '_blank', '_parent', '_self', '_top'; required):
+    - html (boolean; optional):
+        (default: False)  If True, html may be used in markdown cells
+        Be careful enabling html if the content being rendered can
+        come from an untrusted user, as this may create an XSS
+        vulnerability.
+
+    - link_target (string | a value equal to: '_blank', '_parent', '_self', '_top'; optional):
         (default: '_blank').  The link's behavior (_blank opens the
         link in a new tab, _parent opens the link in the parent frame,
         _self opens the link in the current tab, and _top opens the
@@ -1087,12 +1119,12 @@ Keyword arguments:
     styling changes will not affect width and height vs. first
     rendering."""
     @_explicitize_args
-    def __init__(self, active_cell=Component.UNDEFINED, columns=Component.UNDEFINED, include_headers_on_copy_paste=Component.UNDEFINED, locale_format=Component.UNDEFINED, markdown_options=Component.UNDEFINED, css=Component.UNDEFINED, data=Component.UNDEFINED, data_previous=Component.UNDEFINED, data_timestamp=Component.UNDEFINED, editable=Component.UNDEFINED, end_cell=Component.UNDEFINED, export_columns=Component.UNDEFINED, export_format=Component.UNDEFINED, export_headers=Component.UNDEFINED, fill_width=Component.UNDEFINED, hidden_columns=Component.UNDEFINED, id=Component.UNDEFINED, is_focused=Component.UNDEFINED, merge_duplicate_headers=Component.UNDEFINED, fixed_columns=Component.UNDEFINED, fixed_rows=Component.UNDEFINED, column_selectable=Component.UNDEFINED, row_deletable=Component.UNDEFINED, cell_selectable=Component.UNDEFINED, row_selectable=Component.UNDEFINED, selected_cells=Component.UNDEFINED, selected_rows=Component.UNDEFINED, selected_columns=Component.UNDEFINED, selected_row_ids=Component.UNDEFINED, start_cell=Component.UNDEFINED, style_as_list_view=Component.UNDEFINED, page_action=Component.UNDEFINED, page_current=Component.UNDEFINED, page_count=Component.UNDEFINED, page_size=Component.UNDEFINED, dropdown=Component.UNDEFINED, dropdown_conditional=Component.UNDEFINED, dropdown_data=Component.UNDEFINED, tooltip=Component.UNDEFINED, tooltip_conditional=Component.UNDEFINED, tooltip_data=Component.UNDEFINED, tooltip_header=Component.UNDEFINED, tooltip_delay=Component.UNDEFINED, tooltip_duration=Component.UNDEFINED, filter_query=Component.UNDEFINED, filter_action=Component.UNDEFINED, sort_action=Component.UNDEFINED, sort_mode=Component.UNDEFINED, sort_by=Component.UNDEFINED, sort_as_null=Component.UNDEFINED, style_table=Component.UNDEFINED, style_cell=Component.UNDEFINED, style_data=Component.UNDEFINED, style_filter=Component.UNDEFINED, style_header=Component.UNDEFINED, style_cell_conditional=Component.UNDEFINED, style_data_conditional=Component.UNDEFINED, style_filter_conditional=Component.UNDEFINED, style_header_conditional=Component.UNDEFINED, virtualization=Component.UNDEFINED, derived_filter_query_structure=Component.UNDEFINED, derived_viewport_data=Component.UNDEFINED, derived_viewport_indices=Component.UNDEFINED, derived_viewport_row_ids=Component.UNDEFINED, derived_viewport_selected_columns=Component.UNDEFINED, derived_viewport_selected_rows=Component.UNDEFINED, derived_viewport_selected_row_ids=Component.UNDEFINED, derived_virtual_data=Component.UNDEFINED, derived_virtual_indices=Component.UNDEFINED, derived_virtual_row_ids=Component.UNDEFINED, derived_virtual_selected_rows=Component.UNDEFINED, derived_virtual_selected_row_ids=Component.UNDEFINED, loading_state=Component.UNDEFINED, persistence=Component.UNDEFINED, persisted_props=Component.UNDEFINED, persistence_type=Component.UNDEFINED, **kwargs):
-        self._prop_names = ['id', 'active_cell', 'cell_selectable', 'column_selectable', 'columns', 'css', 'data', 'data_previous', 'data_timestamp', 'derived_filter_query_structure', 'derived_viewport_data', 'derived_viewport_indices', 'derived_viewport_row_ids', 'derived_viewport_selected_columns', 'derived_viewport_selected_row_ids', 'derived_viewport_selected_rows', 'derived_virtual_data', 'derived_virtual_indices', 'derived_virtual_row_ids', 'derived_virtual_selected_row_ids', 'derived_virtual_selected_rows', 'dropdown', 'dropdown_conditional', 'dropdown_data', 'editable', 'end_cell', 'export_columns', 'export_format', 'export_headers', 'fill_width', 'filter_action', 'filter_query', 'fixed_columns', 'fixed_rows', 'hidden_columns', 'include_headers_on_copy_paste', 'is_focused', 'loading_state', 'locale_format', 'markdown_options', 'merge_duplicate_headers', 'page_action', 'page_count', 'page_current', 'page_size', 'persisted_props', 'persistence', 'persistence_type', 'row_deletable', 'row_selectable', 'selected_cells', 'selected_columns', 'selected_row_ids', 'selected_rows', 'sort_action', 'sort_as_null', 'sort_by', 'sort_mode', 'start_cell', 'style_as_list_view', 'style_cell', 'style_cell_conditional', 'style_data', 'style_data_conditional', 'style_filter', 'style_filter_conditional', 'style_header', 'style_header_conditional', 'style_table', 'tooltip', 'tooltip_conditional', 'tooltip_data', 'tooltip_delay', 'tooltip_duration', 'tooltip_header', 'virtualization']
+    def __init__(self, active_cell=Component.UNDEFINED, columns=Component.UNDEFINED, include_headers_on_copy_paste=Component.UNDEFINED, locale_format=Component.UNDEFINED, markdown_options=Component.UNDEFINED, css=Component.UNDEFINED, data=Component.UNDEFINED, data_previous=Component.UNDEFINED, data_timestamp=Component.UNDEFINED, editable=Component.UNDEFINED, end_cell=Component.UNDEFINED, export_columns=Component.UNDEFINED, export_format=Component.UNDEFINED, export_headers=Component.UNDEFINED, fill_width=Component.UNDEFINED, hidden_columns=Component.UNDEFINED, id=Component.UNDEFINED, is_focused=Component.UNDEFINED, merge_duplicate_headers=Component.UNDEFINED, fixed_columns=Component.UNDEFINED, fixed_rows=Component.UNDEFINED, column_selectable=Component.UNDEFINED, row_deletable=Component.UNDEFINED, cell_selectable=Component.UNDEFINED, row_selectable=Component.UNDEFINED, selected_cells=Component.UNDEFINED, selected_rows=Component.UNDEFINED, selected_columns=Component.UNDEFINED, selected_row_ids=Component.UNDEFINED, start_cell=Component.UNDEFINED, style_as_list_view=Component.UNDEFINED, page_action=Component.UNDEFINED, page_current=Component.UNDEFINED, page_count=Component.UNDEFINED, page_size=Component.UNDEFINED, dropdown=Component.UNDEFINED, dropdown_conditional=Component.UNDEFINED, dropdown_data=Component.UNDEFINED, tooltip=Component.UNDEFINED, tooltip_conditional=Component.UNDEFINED, tooltip_data=Component.UNDEFINED, tooltip_header=Component.UNDEFINED, tooltip_delay=Component.UNDEFINED, tooltip_duration=Component.UNDEFINED, filter_query=Component.UNDEFINED, filter_action=Component.UNDEFINED, filter_options=Component.UNDEFINED, sort_action=Component.UNDEFINED, sort_mode=Component.UNDEFINED, sort_by=Component.UNDEFINED, sort_as_null=Component.UNDEFINED, style_table=Component.UNDEFINED, style_cell=Component.UNDEFINED, style_data=Component.UNDEFINED, style_filter=Component.UNDEFINED, style_header=Component.UNDEFINED, style_cell_conditional=Component.UNDEFINED, style_data_conditional=Component.UNDEFINED, style_filter_conditional=Component.UNDEFINED, style_header_conditional=Component.UNDEFINED, virtualization=Component.UNDEFINED, derived_filter_query_structure=Component.UNDEFINED, derived_viewport_data=Component.UNDEFINED, derived_viewport_indices=Component.UNDEFINED, derived_viewport_row_ids=Component.UNDEFINED, derived_viewport_selected_columns=Component.UNDEFINED, derived_viewport_selected_rows=Component.UNDEFINED, derived_viewport_selected_row_ids=Component.UNDEFINED, derived_virtual_data=Component.UNDEFINED, derived_virtual_indices=Component.UNDEFINED, derived_virtual_row_ids=Component.UNDEFINED, derived_virtual_selected_rows=Component.UNDEFINED, derived_virtual_selected_row_ids=Component.UNDEFINED, loading_state=Component.UNDEFINED, persistence=Component.UNDEFINED, persisted_props=Component.UNDEFINED, persistence_type=Component.UNDEFINED, **kwargs):
+        self._prop_names = ['id', 'active_cell', 'cell_selectable', 'column_selectable', 'columns', 'css', 'data', 'data_previous', 'data_timestamp', 'derived_filter_query_structure', 'derived_viewport_data', 'derived_viewport_indices', 'derived_viewport_row_ids', 'derived_viewport_selected_columns', 'derived_viewport_selected_row_ids', 'derived_viewport_selected_rows', 'derived_virtual_data', 'derived_virtual_indices', 'derived_virtual_row_ids', 'derived_virtual_selected_row_ids', 'derived_virtual_selected_rows', 'dropdown', 'dropdown_conditional', 'dropdown_data', 'editable', 'end_cell', 'export_columns', 'export_format', 'export_headers', 'fill_width', 'filter_action', 'filter_options', 'filter_query', 'fixed_columns', 'fixed_rows', 'hidden_columns', 'include_headers_on_copy_paste', 'is_focused', 'loading_state', 'locale_format', 'markdown_options', 'merge_duplicate_headers', 'page_action', 'page_count', 'page_current', 'page_size', 'persisted_props', 'persistence', 'persistence_type', 'row_deletable', 'row_selectable', 'selected_cells', 'selected_columns', 'selected_row_ids', 'selected_rows', 'sort_action', 'sort_as_null', 'sort_by', 'sort_mode', 'start_cell', 'style_as_list_view', 'style_cell', 'style_cell_conditional', 'style_data', 'style_data_conditional', 'style_filter', 'style_filter_conditional', 'style_header', 'style_header_conditional', 'style_table', 'tooltip', 'tooltip_conditional', 'tooltip_data', 'tooltip_delay', 'tooltip_duration', 'tooltip_header', 'virtualization']
         self._type = 'DataTable'
         self._namespace = 'dash_table'
         self._valid_wildcard_attributes =            []
-        self.available_properties = ['id', 'active_cell', 'cell_selectable', 'column_selectable', 'columns', 'css', 'data', 'data_previous', 'data_timestamp', 'derived_filter_query_structure', 'derived_viewport_data', 'derived_viewport_indices', 'derived_viewport_row_ids', 'derived_viewport_selected_columns', 'derived_viewport_selected_row_ids', 'derived_viewport_selected_rows', 'derived_virtual_data', 'derived_virtual_indices', 'derived_virtual_row_ids', 'derived_virtual_selected_row_ids', 'derived_virtual_selected_rows', 'dropdown', 'dropdown_conditional', 'dropdown_data', 'editable', 'end_cell', 'export_columns', 'export_format', 'export_headers', 'fill_width', 'filter_action', 'filter_query', 'fixed_columns', 'fixed_rows', 'hidden_columns', 'include_headers_on_copy_paste', 'is_focused', 'loading_state', 'locale_format', 'markdown_options', 'merge_duplicate_headers', 'page_action', 'page_count', 'page_current', 'page_size', 'persisted_props', 'persistence', 'persistence_type', 'row_deletable', 'row_selectable', 'selected_cells', 'selected_columns', 'selected_row_ids', 'selected_rows', 'sort_action', 'sort_as_null', 'sort_by', 'sort_mode', 'start_cell', 'style_as_list_view', 'style_cell', 'style_cell_conditional', 'style_data', 'style_data_conditional', 'style_filter', 'style_filter_conditional', 'style_header', 'style_header_conditional', 'style_table', 'tooltip', 'tooltip_conditional', 'tooltip_data', 'tooltip_delay', 'tooltip_duration', 'tooltip_header', 'virtualization']
+        self.available_properties = ['id', 'active_cell', 'cell_selectable', 'column_selectable', 'columns', 'css', 'data', 'data_previous', 'data_timestamp', 'derived_filter_query_structure', 'derived_viewport_data', 'derived_viewport_indices', 'derived_viewport_row_ids', 'derived_viewport_selected_columns', 'derived_viewport_selected_row_ids', 'derived_viewport_selected_rows', 'derived_virtual_data', 'derived_virtual_indices', 'derived_virtual_row_ids', 'derived_virtual_selected_row_ids', 'derived_virtual_selected_rows', 'dropdown', 'dropdown_conditional', 'dropdown_data', 'editable', 'end_cell', 'export_columns', 'export_format', 'export_headers', 'fill_width', 'filter_action', 'filter_options', 'filter_query', 'fixed_columns', 'fixed_rows', 'hidden_columns', 'include_headers_on_copy_paste', 'is_focused', 'loading_state', 'locale_format', 'markdown_options', 'merge_duplicate_headers', 'page_action', 'page_count', 'page_current', 'page_size', 'persisted_props', 'persistence', 'persistence_type', 'row_deletable', 'row_selectable', 'selected_cells', 'selected_columns', 'selected_row_ids', 'selected_rows', 'sort_action', 'sort_as_null', 'sort_by', 'sort_mode', 'start_cell', 'style_as_list_view', 'style_cell', 'style_cell_conditional', 'style_data', 'style_data_conditional', 'style_filter', 'style_filter_conditional', 'style_header', 'style_header_conditional', 'style_table', 'tooltip', 'tooltip_conditional', 'tooltip_data', 'tooltip_delay', 'tooltip_duration', 'tooltip_header', 'virtualization']
         self.available_wildcard_properties =            []
         _explicit_args = kwargs.pop('_explicit_args')
         _locals = locals()

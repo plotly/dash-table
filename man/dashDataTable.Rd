@@ -26,8 +26,8 @@ derived_virtual_selected_rows=NULL, dropdown=NULL,
 dropdown_conditional=NULL, dropdown_data=NULL,
 editable=NULL, end_cell=NULL, export_columns=NULL,
 export_format=NULL, export_headers=NULL, fill_width=NULL,
-filter_action=NULL, filter_query=NULL, fixed_columns=NULL,
-fixed_rows=NULL, hidden_columns=NULL,
+filter_action=NULL, filter_options=NULL, filter_query=NULL,
+fixed_columns=NULL, fixed_rows=NULL, hidden_columns=NULL,
 include_headers_on_copy_paste=NULL, is_focused=NULL,
 loading_state=NULL, locale_format=NULL,
 markdown_options=NULL, merge_duplicate_headers=NULL,
@@ -73,7 +73,7 @@ input will appear in the header rows.
 When a column is selected, its id will be contained in `selected_columns`
 and `derived_viewport_selected_columns`.}
 
-\item{columns}{List of lists containing elements 'clearable', 'deletable', 'editable', 'hideable', 'renamable', 'selectable', 'format', 'id', 'name', 'presentation', 'on_change', 'sort_as_null', 'validation', 'type'.
+\item{columns}{List of lists containing elements 'clearable', 'deletable', 'editable', 'filter_options', 'hideable', 'renamable', 'selectable', 'format', 'id', 'name', 'presentation', 'on_change', 'sort_as_null', 'validation', 'type'.
 those elements have the following types:
   - clearable (a value equal to: 'first', 'last' | logical | list of logicals; optional): if true, the user can clear the column by clicking on the `clear`
 action button on the column. if there are multiple header rows, true
@@ -112,6 +112,15 @@ these flags determine whether the contents of the table
 are editable or not.
 if the column-level `editable` flag is set it overrides
 the table-level `editable` flag for that column.
+  - filter_options (optional): there are two `filter_options` props in the table.
+this is the column-level filter_options prop and there is
+also the table-level `filter_options` prop.
+these props determine whether the applicable filter relational
+operators will default to `sensitive` or `insensitive` comparison.
+if the column-level `filter_options` prop is set it overrides
+the table-level `filter_options` prop for that column.. filter_options has the following type: lists containing elements 'case'.
+those elements have the following types:
+  - case (a value equal to: 'sensitive', 'insensitive'; optional)
   - hideable (a value equal to: 'first', 'last' | logical | list of logicals; optional): if true, the user can hide the column by clicking on the `hide`
 action button on the column. if there are multiple header rows, true
 will display the action button on each row.
@@ -419,6 +428,16 @@ responsibility of the developer to program the filtering
 through a callback (where `filter_query` or `derived_filter_query_structure` would be the input
 and `data` would be the output).}
 
+\item{filter_options}{Lists containing elements 'case'.
+those elements have the following types:
+  - case (a value equal to: 'sensitive', 'insensitive'; optional). There are two `filter_options` props in the table.
+This is the table-level filter_options prop and there is
+also the column-level `filter_options` prop.
+These props determine whether the applicable filter relational
+operators will default to `sensitive` or `insensitive` comparison.
+If the column-level `filter_options` prop is set it overrides
+the table-level `filter_options` prop for that column.}
+
 \item{filter_query}{Character. If `filter_action` is enabled, then the current filtering
 string is represented in this `filter_query`
 property.}
@@ -490,11 +509,14 @@ those elements have the following types:
 This prop is derived from the [d3.formatLocale](https://github.com/d3/d3-format#formatLocale) data structure specification.
 When left unspecified, each individual nested prop will default to a pre-determined value.}
 
-\item{markdown_options}{Lists containing elements 'link_target'.
+\item{markdown_options}{Lists containing elements 'link_target', 'html'.
 those elements have the following types:
-  - link_target (character | a value equal to: '_blank', '_parent', '_self', '_top'; required): (default: '_blank').  the link's behavior (_blank opens the link in a
+  - link_target (character | a value equal to: '_blank', '_parent', '_self', '_top'; optional): (default: '_blank').  the link's behavior (_blank opens the link in a
 new tab, _parent opens the link in the parent frame, _self opens the link in the
-current tab, and _top opens the link in the top frame) or a string. The `markdown_options` property allows customization of the markdown cells behavior.}
+current tab, and _top opens the link in the top frame) or a string
+  - html (logical; optional): (default: false)  if true, html may be used in markdown cells
+be careful enabling html if the content being rendered can come
+from an untrusted user, as this may create an xss vulnerability.. The `markdown_options` property allows customization of the markdown cells behavior.}
 
 \item{merge_duplicate_headers}{Logical. If True, then column headers that have neighbors with duplicate names
 will be merged into a single cell.
@@ -829,7 +851,6 @@ runtime styling changes will not affect width and height vs. first rendering}
 # maintainers.
 if (interactive() && require(dash)) {
   library(dash)
-  library(dashTable)
 
   app <- Dash$new()
 
@@ -854,7 +875,7 @@ if (interactive() && require(dash)) {
   )
 
   app$run_server()
-  
+
   app <- Dash$new()
 
   # We can also make rows and columns selectable/deletable

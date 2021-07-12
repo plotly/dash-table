@@ -265,6 +265,20 @@ describe('Dash Table Queries', () => {
                                 target: {a: '\r\n1\r\n'},
                                 valid: true,
                                 evaluate: true
+                            },
+                            {
+                                name: "compare 'abc' to 'ABC' (insensitive)",
+                                query: `${c.hideOperand ? '' : '{a} '}ieq ABC`,
+                                target: {a: 'abc'},
+                                valid: true,
+                                evaluate: true
+                            },
+                            {
+                                name: "compare 'abc' to 'ABC' (sensitive)",
+                                query: `${c.hideOperand ? '' : '{a} '}seq ABC`,
+                                target: {a: 'abc'},
+                                valid: true,
+                                evaluate: false
                             }
                         ]);
                     });
@@ -277,6 +291,15 @@ describe('Dash Table Queries', () => {
                                     c.hideOperand ? '' : '{a} '
                                 }contains 1`,
                                 target: {a: '11'},
+                                valid: true,
+                                evaluate: true
+                            },
+                            {
+                                name: 'insensitive compares "abc" to A',
+                                query: `${
+                                    c.hideOperand ? '' : '{a} '
+                                }icontains A`,
+                                target: {a: 'abc'},
                                 valid: true,
                                 evaluate: true
                             },
@@ -367,6 +390,42 @@ describe('Dash Table Queries', () => {
                                 query: `${
                                     c.hideOperand ? '' : '{a} '
                                 }contains "b "`,
+                                target: {a: 'ab c'},
+                                valid: true,
+                                evaluate: true
+                            },
+                            {
+                                name: "compare 'ab c' to 'B' (insensitive)",
+                                query: `${
+                                    c.hideOperand ? '' : '{a} '
+                                }icontains B`,
+                                target: {a: 'ab c'},
+                                valid: true,
+                                evaluate: true
+                            },
+                            {
+                                name: "compare 'ab c' to 'b' (insensitive)",
+                                query: `${
+                                    c.hideOperand ? '' : '{a} '
+                                }icontains b`,
+                                target: {a: 'ab c'},
+                                valid: true,
+                                evaluate: true
+                            },
+                            {
+                                name: "compare 'ab c' to 'B' (sensitive)",
+                                query: `${
+                                    c.hideOperand ? '' : '{a} '
+                                }scontains B`,
+                                target: {a: 'ab c'},
+                                valid: true,
+                                evaluate: false
+                            },
+                            {
+                                name: "compare 'ab c' to 'b' (sensitive)",
+                                query: `${
+                                    c.hideOperand ? '' : '{a} '
+                                }scontains b`,
                                 target: {a: 'ab c'},
                                 valid: true,
                                 evaluate: true
@@ -566,8 +625,7 @@ describe('Dash Table Queries', () => {
                                 evaluate: true
                             },
                             {
-                                name:
-                                    'yyyy-mm-dd hh:mm:ss.xxxxxxxxx in yyyy-mm',
+                                name: 'yyyy-mm-dd hh:mm:ss.xxxxxxxxx in yyyy-mm',
                                 query: `${
                                     c.hideOperand ? '' : '{a} '
                                 }datestartswith 2005-01`,
@@ -576,8 +634,7 @@ describe('Dash Table Queries', () => {
                                 evaluate: true
                             },
                             {
-                                name:
-                                    'yyyy-mm-dd hh:mm:ss.xxx in yyyy-mm-ddThh:mm:ss.xxx',
+                                name: 'yyyy-mm-dd hh:mm:ss.xxx in yyyy-mm-ddThh:mm:ss.xxx',
                                 query: `${
                                     c.hideOperand ? '' : '{a} '
                                 }datestartswith 2005-01-01T10:00:00.000`,
@@ -586,8 +643,7 @@ describe('Dash Table Queries', () => {
                                 evaluate: true
                             },
                             {
-                                name:
-                                    'yyyy-mm-dd hh:mm:ss.xxx in yyyy-mm-ddThh:mm:ss.xxx000',
+                                name: 'yyyy-mm-dd hh:mm:ss.xxx in yyyy-mm-ddThh:mm:ss.xxx000',
                                 query: `${
                                     c.hideOperand ? '' : '{a} '
                                 }datestartswith 2005-01-01T10:00:00.000000`,
@@ -596,8 +652,7 @@ describe('Dash Table Queries', () => {
                                 evaluate: false
                             },
                             {
-                                name:
-                                    'yyyy-mm-dd hh:mm:ss.xxx in yyyy-mm-ddThh:mm:ss.xxx111',
+                                name: 'yyyy-mm-dd hh:mm:ss.xxx in yyyy-mm-ddThh:mm:ss.xxx111',
                                 query: `${
                                     c.hideOperand ? '' : '{a} '
                                 }datestartswith 2005-01-01T10:00:00.000111`,
@@ -643,8 +698,7 @@ describe('Dash Table Queries', () => {
                                 evaluate: false
                             },
                             {
-                                name:
-                                    'yyyy-mm-dd hh:mm:00 in yyyy-mm-dd hh:mm:01',
+                                name: 'yyyy-mm-dd hh:mm:00 in yyyy-mm-dd hh:mm:01',
                                 query: `${
                                     c.hideOperand ? '' : '{a} '
                                 }datestartswith 2005-01-01T00:00:01`,
@@ -653,8 +707,7 @@ describe('Dash Table Queries', () => {
                                 evaluate: false
                             },
                             {
-                                name:
-                                    'yyyy-mm-dd hh:mm:ss.000 in yyyy-mm-dd hh:mm:ss.001',
+                                name: 'yyyy-mm-dd hh:mm:ss.000 in yyyy-mm-dd hh:mm:ss.001',
                                 query: `${
                                     c.hideOperand ? '' : '{a} '
                                 }datestartswith 2005-01-01T00:00:00.001`,
