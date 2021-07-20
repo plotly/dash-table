@@ -45,7 +45,7 @@ function getSelectedTooltip(
                       ifRowIndex(tt.if, row) &&
                       ifFilter(
                           tt.if,
-                          virtualized.data[row - virtualized.offset.rows]
+                          virtualized.data[virtualized.indices.indexOf(row) - virtualized.offset.rows]
                       ))
               );
           }, tooltip_conditional);
