@@ -64,8 +64,11 @@ const fnEval = (
     relOp: string
 ): boolean =>
     relOp[0] == 'i'
-        ? fn(lhs.toString().toUpperCase(), rhs.toString().toUpperCase())
+        ? fn(safeToUpperCase(lhs), safeToUpperCase(rhs))
         : fn(lhs, rhs);
+
+const safeToUpperCase = (v: any): string =>
+    R.isNil(v) ? '' : v.toString().toUpperCase()
 
 export const contains: IUnboundedLexeme = R.merge(
     {
