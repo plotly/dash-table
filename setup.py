@@ -1,18 +1,15 @@
+import io
 from setuptools import setup
-import json
-
-with open("package.json") as f:
-    package = json.load(f)
-
-package_name = str(package["name"].replace(" ", "_").replace("-", "_"))
 
 setup(
-    name=package_name,
-    version=package["version"],
-    author=package["author"],
-    packages=[package_name],
+    name="dash_table",
+    version="5.0.0rc1",
+    author="Chris Parmer <chris@plotly.com>",
+    packages=["dash_table"],
     include_package_data=True,
-    license=package["license"],
-    description=package["description"] if "description" in package else package_name,
+    license="MIT",
+    description="Dash table",
+    long_description=io.open("README.md", encoding="utf-8").read(),
+    long_description_content_type="text/markdown",
     install_requires=[],
 )
