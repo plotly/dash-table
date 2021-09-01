@@ -4,6 +4,10 @@ import warnings
 warnings.warn(
     """
 The dash_table package is deprecated. Please replace
-`import dash_table` with `from dash import dash_table`""",
+`import dash_table` with `from dash import dash_table`
+
+Also, if you're using any of the table format helpers (e.g. Group), replace 
+`from dash_table.Format import Group` with 
+`from dash.dash_table.Format import Group`""",
     stacklevel=2,
 )
