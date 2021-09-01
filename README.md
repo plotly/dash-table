@@ -1,3 +1,11 @@
+# Notice
+
+As of Dash 2, the development of Dash Table has been moved to the [main Dash repo](https://github.com/plotly/dash)
+
+This package exists for backward compatibility
+
+---
+
 # Dash Table
 
 An interactive `DataTable` for [Dash](https://dash.plotly.com/).
