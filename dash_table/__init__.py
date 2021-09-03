@@ -1,4 +1,5 @@
 from dash.dash_table import *  # noqa: F401, F403, E402
+from dash.dash_table import __version__  # noqa: F401, F403, E402y
 import warnings
 
 warnings.warn(
