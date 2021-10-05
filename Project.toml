@@ -1,7 +1,7 @@
 name = "DashTable"
-uuid = "1b08a953-4be3-4667-9a23-9da06441d987"
+uuid = "1b08a953-4be3-4667-9a23-f0e2ba4deb9a"
 authors = ["Chris Parmer <chris@plotly.com>"]
-version = "2.0.0"
+version = "5.0.0"
 
 [compat]
 julia = "1.3"
