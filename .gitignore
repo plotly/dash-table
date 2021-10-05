@@ -9,11 +9,9 @@
 /inst
 /man
 /R
-/src/*.jl
-/src/jl/
 DESCRIPTION
 NAMESPACE
-Project.toml
+Manifest.toml
 
 # testing
 /coverage
