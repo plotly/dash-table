@@ -1,5 +1,5 @@
 module DashTable
     function __init__()
-        @warn "`using DashTable` is deprecated, all DashTable functions have been moved to Dash package. Use `using Dash` instead"
+        @warn "The `DashTable` package is deprecated. All DashTable functions have been moved to the Dash package. Please switch to `using Dash` instead."
     end
 end
